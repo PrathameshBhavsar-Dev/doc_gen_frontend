@@ -1,0 +1,24 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="150" cy="150" r="140" fill="none" stroke="#e0e0e0" stroke-width="2" opacity="0.3"/>
+  
+  <!-- JDIT Logo Text -->
+  <text x="150" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#f0f0f0" opacity="0.4">
+    JDIT
+  </text>
+  
+  <!-- Business Solutions Text -->
+  <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#e0e0e0" opacity="0.3">
+    Business Solutions
+  </text>
+  
+  <!-- Pvt. Ltd. Text -->
+  <text x="150" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="normal" fill="#e0e0e0" opacity="0.3">
+    Pvt. Ltd.
+  </text>
+  
+  <!-- Decorative elements -->
+  <line x1="80" y1="200" x2="220" y2="200" stroke="#e0e0e0" stroke-width="1" opacity="0.2"/>
+  <circle cx="90" cy="200" r="2" fill="#e0e0e0" opacity="0.2"/>
+  <circle cx="210" cy="200" r="2" fill="#e0e0e0" opacity="0.2"/>
+</svg>

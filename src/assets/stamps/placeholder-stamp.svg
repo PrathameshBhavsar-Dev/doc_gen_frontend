@@ -1,0 +1,20 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer circle -->
+  <circle cx="40" cy="40" r="38" fill="#ffffff" stroke="#007bff" stroke-width="2"/>
+  
+  <!-- Inner circle -->
+  <circle cx="40" cy="40" r="30" fill="none" stroke="#007bff" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Company text -->
+  <text x="40" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#007bff">COMPANY</text>
+  <text x="40" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#007bff">OFFICIAL</text>
+  <text x="40" y="52" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#007bff">STAMP</text>
+  
+  <!-- Decorative stars -->
+  <polygon points="40,15 41,18 44,18 42,20 43,23 40,21 37,23 38,20 36,18 39,18" fill="#007bff" opacity="0.7"/>
+  <polygon points="40,57 41,60 44,60 42,62 43,65 40,63 37,65 38,62 36,60 39,60" fill="#007bff" opacity="0.7"/>
+  
+  <!-- Side decorations -->
+  <circle cx="15" cy="40" r="1.5" fill="#007bff" opacity="0.6"/>
+  <circle cx="65" cy="40" r="1.5" fill="#007bff" opacity="0.6"/>
+</svg>

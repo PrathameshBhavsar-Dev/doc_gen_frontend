@@ -1,0 +1,25 @@
+<svg width="794" height="151" viewBox="0 0 794 151" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="794" height="151" fill="#f8f9fa"/>
+  
+  <!-- Top border -->
+  <rect width="794" height="3" fill="#007bff"/>
+  
+  <!-- Company logo placeholder -->
+  <circle cx="80" cy="75" r="35" fill="#e9ecef" stroke="#6c757d" stroke-width="2"/>
+  <text x="80" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6c757d">LOGO</text>
+  
+  <!-- Company name placeholder -->
+  <text x="140" y="60" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#212529">Company Name</text>
+  <text x="140" y="80" font-family="Arial, sans-serif" font-size="14" fill="#6c757d">Professional Document Header</text>
+  <text x="140" y="100" font-family="Arial, sans-serif" font-size="12" fill="#6c757d">Address • Phone • Email • Website</text>
+  
+  <!-- Decorative elements -->
+  <rect x="650" y="30" width="120" height="2" fill="#007bff"/>
+  <rect x="650" y="40" width="80" height="1" fill="#6c757d"/>
+  <rect x="650" y="110" width="120" height="2" fill="#007bff"/>
+  <rect x="650" y="120" width="80" height="1" fill="#6c757d"/>
+  
+  <!-- Bottom border -->
+  <rect y="148" width="794" height="3" fill="#007bff"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg width="794" height="94" viewBox="0 0 794 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="794" height="94" fill="#f8f9fa"/>
+  
+  <!-- Top border -->
+  <rect width="794" height="2" fill="#007bff"/>
+  
+  <!-- Decorative line -->
+  <rect y="10" width="794" height="1" fill="#dee2e6"/>
+  
+  <!-- Footer content -->
+  <text x="397" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6c757d">© 2024 Company Name. All rights reserved.</text>
+  <text x="397" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6c757d">Address Line 1, Address Line 2, City, State, ZIP Code</text>
+  <text x="397" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6c757d">Phone: +1 (XXX) XXX-XXXX | Email: info@company.com | Website: www.company.com</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="47" r="2" fill="#007bff"/>
+  <circle cx="694" cy="47" r="2" fill="#007bff"/>
+  
+  <!-- Bottom border -->
+  <rect y="92" width="794" height="2" fill="#007bff"/>
+</svg>

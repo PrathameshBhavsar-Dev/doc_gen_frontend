@@ -1,0 +1,14 @@
+<svg width="120" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="120" height="60" fill="#ffffff" stroke="#dee2e6" stroke-width="1" rx="4"/>
+  
+  <!-- Signature line -->
+  <path d="M15 35 Q30 25, 45 35 T75 30 Q90 35, 105 30" stroke="#495057" stroke-width="2" fill="none" opacity="0.7"/>
+  
+  <!-- Name placeholder -->
+  <text x="60" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#6c757d">Authorized Signatory</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="10" cy="10" r="1" fill="#007bff" opacity="0.3"/>
+  <circle cx="110" cy="10" r="1" fill="#007bff" opacity="0.3"/>
+</svg>

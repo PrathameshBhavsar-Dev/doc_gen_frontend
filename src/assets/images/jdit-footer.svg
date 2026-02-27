@@ -1,0 +1,30 @@
+<svg width="794" height="95" viewBox="0 0 794 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red gradient background -->
+  <defs>
+    <linearGradient id="redGradientFooter" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B0000;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#DC143C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF0000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rectangle -->
+  <rect width="794" height="95" fill="url(#redGradientFooter)"/>
+  
+  <!-- Contact Information -->
+  <text x="20" y="20" font-family="Arial, sans-serif" font-size="9" fill="white">
+    📧 hr@jditbs.com    🌐 www.jditbs.com
+  </text>
+  
+  <text x="20" y="35" font-family="Arial, sans-serif" font-size="9" fill="white">
+    📞 Contact Details: +91 020-27212597 | 8380930580 | 7057676132
+  </text>
+  
+  <text x="20" y="50" font-family="Arial, sans-serif" font-size="9" fill="white">
+    🏢 Reg. Address: 401, 4th Floor, Sai Villa Commercial Apartment, Sr. No. 166, Malwadi Road, Opp. Sahyadri Hospital, Hadapsar, Pune 28.
+  </text>
+  
+  <text x="600" y="35" font-family="Arial, sans-serif" font-size="9" fill="white" text-anchor="end">
+    U72900PN2022PTC215539
+  </text>
+</svg>
