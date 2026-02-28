@@ -8,8 +8,8 @@ const UserDashboardPage = () => {
   return (
     <div className='min-h-screen'>
       <HeroDashBoardSection />
-      <AnalyticSection />
       <DocumentSection />
+      <AnalyticSection />
       <GeneratedDocumentSection />
     </div>
   )
