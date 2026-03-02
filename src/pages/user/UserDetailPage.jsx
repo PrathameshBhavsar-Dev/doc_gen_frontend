@@ -19,7 +19,7 @@ const UserDetailPage = () => {
     <div className="min-h-screen bg-gray-100">
 
       {/* ================= TOP USER BAR ================= */}
-      <div className="w-full bg-white shadow-sm px-4 sm:px-6 py-3 flex justify-end items-center">
+      {/* <div className="w-full bg-white shadow-sm px-4 sm:px-6 py-3 flex justify-end items-center">
         <div className="flex items-center gap-3 cursor-pointer">
           <span className="text-sm text-gray-600 hidden sm:block">
             User
@@ -30,7 +30,7 @@ const UserDetailPage = () => {
             {user.name.charAt(0)}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* ================= PAGE CONTENT ================= */}
       <div className="p-4 sm:p-6">
