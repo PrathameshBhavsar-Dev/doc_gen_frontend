@@ -59,8 +59,7 @@ const Login = () => {
       {/* <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8"> */}
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
         {/* LEFT SIDE */}
-        {/* <div className="relative rounded-3xl overflow-hidden min-h-[600px] text-white flex flex-col justify-between p-10 bg-[#07061a]"> */}
-        <div className="relative hidden lg:flex rounded-3xl overflow-hidden min-h-[600px] text-white flex-col justify-between p-10 bg-[#07061a]">
+        <div className="relative rounded-3xl overflow-hidden min-h-[600px] text-white flex flex-col justify-between p-10 bg-[#07061a]">
           {/* Silk Shader Background */}
           <div className="absolute inset-0">
             <SilkBackground />
@@ -79,32 +78,28 @@ const Login = () => {
 
           {/* Bottom Text */}
           <div className="relative z-10">
-            <p className="text-sm opacity-80 mb-3">
-              Professional Document Suite
-            </p>
-            <h2 className="text-2xl font-semibold leading-snug">
-              Create official company documents in minutes with our smart
-              document generator.
-            </h2>
-          </div>
+  <p className="text-xs sm:text-sm opacity-80 mb-2 sm:mb-3">
+    Professional Document Suite
+  </p>
+
+  <h2 className="text-lg sm:text-xl md:text-2xl font-semibold leading-snug sm:leading-relaxed">
+    Create official company documents in minutes with our smart
+    document generator.
+  </h2>
+</div>
         </div>
 
         {/* RIGHT SIDE */}
-        {/* <div className="flex items-center justify-center"> */}
-        <div className="flex items-center justify-center bg-white rounded-2xl shadow-lg lg:shadow-none p-6 sm:p-8 lg:p-0">
-          {/* <div className="w-full max-w-md"> */}
-          <div className="w-full max-w-sm sm:max-w-md">
+        <div className="flex items-center justify-center">
+          <div className="w-full max-w-md">
             <p className="text-sm text-gray-600 mb-2">
               Welcome to{" "}
               <span className="text-purple-600 font-medium">Doc Gen</span>
             </p>
 
-            {/* <h1 className="text-3xl font-bold mb-6 mt-7">Sign in</h1> */}
-            <h1 className="text-2xl sm:text-3xl font-bold mb-6 mt-6 sm:mt-7">
-              Sign in
-            </h1>
+            <h1 className="text-3xl font-bold mb-6 mt-7">Sign in</h1>
 
-            <button className="w-full bg-gray-200 hover:bg-gray-300 transition rounded-lg py-2.5 text-sm font-medium mb-6 flex items-center justify-center gap-2">
+            <button className="w-full bg-gray-200 hover:bg-gray-300 transition rounded-lg py-2.5 text-sm font-medium mb-6 flex items-center justify-center gap-2 cursor-pointer">
               <span className="text-red-500 text-lg">
                 <img src={google}></img>
               </span>
