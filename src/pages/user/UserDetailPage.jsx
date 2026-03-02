@@ -1,9 +1,196 @@
-import React from 'react'
+import React from "react";
+import {
+  ArrowLeft,
+  FileText,
+  User,
+  Building2,
+  FileCheck,
+  Download,
+  Eye,
+  CheckCircle,
+} from "lucide-react";
 
 const UserDetailPage = () => {
-  return (
-    <div>UserDetailPage</div>
-  )
-}
+  const user = {
+    name: "Aditi",
+  };
 
-export default UserDetailPage
+  return (
+    <div className="min-h-screen bg-gray-100">
+
+      {/* ================= TOP USER BAR ================= */}
+      <div className="w-full bg-white shadow-sm px-4 sm:px-6 py-3 flex justify-end items-center">
+        <div className="flex items-center gap-3 cursor-pointer">
+          <span className="text-sm text-gray-600 hidden sm:block">
+            User
+          </span>
+
+          <div className="w-9 h-9 rounded-full text-white flex items-center justify-center font-semibold shadow
+            bg-gradient-to-r from-[#0E145E] to-[#B37BD6]">
+            {user.name.charAt(0)}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= PAGE CONTENT ================= */}
+      <div className="p-4 sm:p-6">
+
+        {/* Back */}
+        <div className="flex items-center gap-2 text-gray-600 mb-6 cursor-pointer text-sm">
+          <ArrowLeft size={18} />
+          <span className="font-medium">
+            Back to Document History
+          </span>
+        </div>
+
+        {/* ================= HEADER ================= */}
+        <div
+          className="text-white rounded-2xl p-5 sm:p-6 shadow-md
+          flex flex-col sm:flex-row sm:items-center gap-4"
+          style={{
+            background: "linear-gradient(to right, #0E145E, #B37BD6)",
+          }}
+        >
+          <div className="bg-white/20 p-3 rounded-xl w-fit">
+            <FileText size={28} />
+          </div>
+
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold">
+              Document Details
+            </h1>
+
+            <div className="flex flex-wrap gap-3 mt-2 text-sm items-center">
+              <span className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
+                <CheckCircle size={14} />
+                Completed
+              </span>
+
+              <span>Generated on February 15, 2026</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= CARDS ================= */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+
+          {/* Employee */}
+          <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="p-2 rounded-lg"
+                style={{ backgroundColor: "#E7E9FF" }}
+              >
+                <User size={18} color="#0E145E" />
+              </div>
+
+              <h2 className="font-semibold text-lg">
+                Employee Information
+              </h2>
+            </div>
+
+            <p className="text-sm text-gray-500">Employee Name</p>
+            <p className="font-medium mb-4">Anushka Sharma</p>
+
+            <p className="text-sm text-gray-500">Employee ID</p>
+            <p className="font-medium">EMP001</p>
+          </div>
+
+          {/* Company */}
+          <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="p-2 rounded-lg"
+                style={{ backgroundColor: "#F2E7FA" }}
+              >
+                <Building2 size={18} color="#B37BD6" />
+              </div>
+
+              <h2 className="font-semibold text-lg">
+                Company Information
+              </h2>
+            </div>
+
+            <p className="text-sm text-gray-500">Company Name</p>
+            <p className="font-medium">
+              Nimbja Security Solutions pvt ltd
+            </p>
+          </div>
+        </div>
+
+        {/* ================= DOCUMENT INFO ================= */}
+        <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm mt-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div
+              className="p-2 rounded-lg"
+              style={{ backgroundColor: "#E8F7EE" }}
+            >
+              <FileCheck size={18} color="#16A34A" />
+            </div>
+
+            <h2 className="font-semibold text-lg">
+              Document Information
+            </h2>
+          </div>
+
+          {/* Responsive Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-sm">
+            <div>
+              <p className="text-gray-500">Document Type</p>
+              <p className="font-medium">Offer Letter</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500">File Size</p>
+              <p className="font-medium">245 KB</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500">Date</p>
+              <p className="font-medium">February 15, 2026</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500">Generated By</p>
+              <p className="font-medium">Aditi Khade</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500">Payment Status</p>
+              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                ✔ Completed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= BUTTONS ================= */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+
+          <button
+            className="w-full sm:w-auto flex justify-center items-center gap-2
+            text-white px-6 py-3 rounded-xl shadow transition
+            bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
+            hover:opacity-90"
+          >
+            <Download size={18} />
+            Download PDF
+          </button>
+
+          <button
+            className="w-full sm:w-auto flex justify-center items-center gap-2
+            bg-gray-200 text-gray-700 px-6 py-3 rounded-xl
+            hover:bg-gray-300 transition"
+          >
+            <Eye size={18} />
+            Preview All Document
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default UserDetailPage;
