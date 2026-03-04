@@ -1,10 +1,27 @@
 import React from "react";
-import { Search, Download, Eye } from "lucide-react";
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Chip,
+  IconButton,
+} from "@mui/material";
+
+import { Download, Visibility } from "@mui/icons-material";
 import profile from "../../assets/images/profile.png";
 import company_icon from "../../assets/images/companies_icon.png";
 
-import { ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
 const tableData = [
   {
     name: "Rahul Sharma",
@@ -95,392 +112,281 @@ const tableData = [
     status: "Completed",
   },
 ];
-
-const CustomDropdown = ({ label, options }) => {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
-  const dropdownRef = useRef(null);
-
-  // Close on outside click
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="relative w-full" ref={dropdownRef}>
-      <label className="block text-sm font-medium text-[#344054] mb-2">
-        {label}
-      </label>
-
-      {/* Selected Box */}
-      <div
-        onClick={() => setOpen(!open)}
-        className="w-full h-11 bg-[#F9FAFB] border border-gray-200 
-                   rounded-xl px-4 flex items-center justify-between
-                   cursor-pointer hover:border-[#6D5DF6]
-                   transition-all duration-200"
-      >
-        <span className="text-sm text-gray-600">{selected}</span>
-
-        <ChevronDown
-          size={18}
-          className={`text-gray-400 transition-transform duration-300 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
-      </div>
-
-      {/* Dropdown List */}
-      <div
-        className={`absolute left-0 right-0 mt-2 bg-white rounded-xl 
-                    shadow-lg border border-gray-100 overflow-hidden
-                    transition-all duration-200 z-50
-                    ${
-                      open
-                        ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }`}
-      >
-        {options.map((option, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              setSelected(option);
-              setOpen(false);
-            }}
-            className="px-4 py-3 text-sm text-gray-600 
-                       hover:bg-[#F3F4FF] cursor-pointer 
-                       transition"
-          >
-            {option}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ModernSelect = ({ label, options }) => {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="relative w-full" ref={ref}>
-      <label className="block text-sm font-medium text-[#344054] mb-2">
-        {label}
-      </label>
-
-      {/* Select Box */}
-      <div
-        onClick={() => setOpen(!open)}
-        className="w-full h-12 bg-[#F9FAFB] border border-gray-200 rounded-xl
-                   px-4 flex items-center justify-between
-                   cursor-pointer transition-all duration-200
-                   hover:border-[#6D5DF6]
-                   focus-within:ring-2 focus-within:ring-[#6D5DF6]"
-      >
-        <span className="text-sm text-gray-700">{selected}</span>
-
-        <ChevronDown
-          size={18}
-          className={`text-gray-400 transition-transform duration-300 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
-      </div>
-
-      {/* Dropdown List */}
-      <div
-        className={`absolute left-0 right-0 mt-2 bg-white rounded-xl
-                    shadow-xl border border-gray-100 overflow-hidden
-                    transition-all duration-200 z-50
-                    ${
-                      open
-                        ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                    }`}
-      >
-        {options.map((option, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              setSelected(option);
-              setOpen(false);
-            }}
-            className={`px-4 py-3 text-sm flex items-center justify-between
-                        cursor-pointer transition
-                        ${
-                          selected === option
-                            ? "bg-[#F3F4FF] text-[#6D5DF6]"
-                            : "hover:bg-[#F9FAFB] text-gray-600"
-                        }`}
-          >
-            {option}
-            {selected === option && <Check size={16} />}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 const UserHistoryPage = () => {
   return (
-    <div className=" min-h-screen font-inter">
+    <Box sx={{ minHeight: "100vh", width: "100%" }}>
       {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-        <h1 className="text-xl lg:text-2xl font-semibold text-[#1D293D]">
-          <i class="fa-solid fa-arrow-left"></i> Document History
-        </h1>
-
-        <button
-          className="bg-gradient-to-r from-[#21206C] to-[#B27AD5] 
-                           text-white text-sm px-4 py-2 rounded-lg 
-                           flex items-center gap-2 shadow-md hover:opacity-90 transition"
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: 600,
+            color: "#1D293D",
+            fontSize: { xs: "18px", md: "22px" },
+          }}
         >
-          <Download size={16} />
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Document History
+        </Typography>
+
+        <Button
+          variant="contained"
+          startIcon={<Download />}
+          sx={{
+            background: "linear-gradient(to right, #21206C, #B27AD5)",
+            textTransform: "none",
+            borderRadius: "10px",
+            height: 40,
+            px: 3,
+            whiteSpace: "nowrap",
+            "&:hover": { opacity: 0.9 },
+          }}
+        >
           Export All
-        </button>
-      </div>
+        </Button>
+      </Box>
 
       {/* FILTER SECTION */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
-        {/* Search */}
-        <div className="relative mb-6">
-          <Search
-            size={16}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Search by employee name, ID, or document type..."
-            className="w-full pl-11 pr-4 h-11 bg-[#F9FAFB] border border-gray-200 rounded-xl 
-                 text-sm text-gray-600 placeholder-gray-400
-                 focus:outline-none focus:ring-2 focus:ring-[#6D5DF6]"
-          />
-        </div>
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Document Type */}
-          <div>
-            <label className="block text-sm font-semibold text-[#344054] mb-2">
+      <Paper
+        sx={{
+          p: 3,
+          mb: 4,
+          borderRadius: "16px",
+          border: "1px solid #E4E7EC",
+          backgroundColor: "#F9FAFB",
+        }}
+      >
+        {/* SEARCH */}
+        <TextField
+          fullWidth
+          placeholder="Search by employee name, ID, or document type..."
+          variant="outlined"
+          sx={{
+            mb: 3,
+            "& .MuiOutlinedInput-root": {
+              height: 48,
+              borderRadius: "14px",
+              backgroundColor: "#F3F4F6",
+              fontSize: "14px",
+            },
+            "& input::placeholder": {
+              fontSize: "14px",
+              color: "#9CA3AF",
+              opacity: 1,
+            },
+          }}
+        />
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              md: "1fr 1fr",
+            },
+            gap: 3,
+          }}
+        >
+          {/* DOCUMENT TYPE */}
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: 500,
+
+                mb: 1,
+              }}
+            >
               Document Type
-            </label>
+            </Typography>
 
-            <div className="relative group">
-              <select
-                className="appearance-none w-full h-12 
-                   bg-white
-                   border border-[#E4E7EC] 
-                   rounded-xl 
-                   px-4 pr-11
-                   text-sm text-[#344054]
-                   shadow-sm
-                   transition-all duration-200 ease-in-out
-                   hover:border-[#6D5DF6]
-                   focus:outline-none 
-                   focus:ring-2 focus:ring-[#6D5DF6]/20
-                   focus:border-[#6D5DF6]"
-              >
-                <option value="">Select Document Type</option>
-                <option value="salary">Salary Slip</option>
-                <option value="offer">Offer Letter</option>
-                <option value="experience">Experience Letter</option>
-                <option value="relieving">Relieving Letter</option>
-                <option value="others">Others</option>
-              </select>
+            <Select
+              fullWidth
+              displayEmpty
+              defaultValue=""
+              sx={{
+                height: 48,
+                borderRadius: "14px",
+                backgroundColor: "#F3F4F6",
+                fontSize: "14px",
+                "& .MuiSelect-select": {
+                  color: "#9CA3AF",
+                },
+              }}
+              renderValue={(selected) => {
+                if (!selected) {
+                  return "Select Document Type";
+                }
+                return selected;
+              }}
+            >
+              <MenuItem value="">
+                <em>Select Document Type</em>
+              </MenuItem>
+              <MenuItem value="salary">Salary Slip</MenuItem>
+              <MenuItem value="offer">Offer Letter</MenuItem>
+              <MenuItem value="experience">Experience Letter</MenuItem>
+              <MenuItem value="relieving">Relieving Letter</MenuItem>
+              <MenuItem value="others">Others</MenuItem>
+            </Select>
+          </Box>
 
-              {/* Animated Arrow */}
-              <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-                <svg
-                  className="w-4 h-4 text-gray-400 transition-transform duration-200 group-focus-within:rotate-180"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Company */}
-          <div>
-            <label className="block text-sm font-semibold text-[#344054] mb-2">
+          {/* COMPANY */}
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: 500,
+                mb: 1,
+              }}
+            >
               Company
-            </label>
+            </Typography>
 
-            <div className="relative group">
-              <select
-                className="appearance-none w-full h-12 
-                   bg-white
-                   border border-[#E4E7EC] 
-                   rounded-xl 
-                   px-4 pr-11
-                   text-sm text-[#344054]
-                   shadow-sm
-                   transition-all duration-200 ease-in-out
-                   hover:border-[#6D5DF6]
-                   focus:outline-none 
-                   focus:ring-2 focus:ring-[#6D5DF6]/20
-                   focus:border-[#6D5DF6]"
-              >
-                <option value="">Select Company</option>
-                <option value="nimbja">Nimbja Security</option>
-                <option value="penta">Penta Software</option>
-                <option value="cubeage">Cubeage Tech</option>
-                <option value="quick">Quick Management</option>
-                <option value="smart">Smart Software</option>
-                <option value="newage">Newage Cloud</option>
-              </select>
-
-              {/* Animated Arrow */}
-              <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-                <svg
-                  className="w-4 h-4 text-gray-400 transition-transform duration-200 group-focus-within:rotate-180"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            <Select
+              fullWidth
+              displayEmpty
+              defaultValue=""
+              sx={{
+                height: 48,
+                borderRadius: "14px",
+                backgroundColor: "#F3F4F6",
+                fontSize: "14px",
+                "& .MuiSelect-select": {
+                  color: "#9CA3AF",
+                },
+              }}
+              renderValue={(selected) => {
+                if (!selected) {
+                  return "Select Company";
+                }
+                return selected;
+              }}
+            >
+              <MenuItem value="">
+                <em>Select Company</em>
+              </MenuItem>
+              <MenuItem value="nimbja">Nimbja Security</MenuItem>
+              <MenuItem value="penta">Penta Software</MenuItem>
+              <MenuItem value="cubeage">Cubeage Tech</MenuItem>
+              <MenuItem value="quick">Quick Management</MenuItem>
+              <MenuItem value="smart">Smart Software</MenuItem>
+              <MenuItem value="newage">Newage Cloud</MenuItem>
+            </Select>
+          </Box>
+        </Box>
+      </Paper>
 
       {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left">
-            {/* TABLE HEAD */}
-            <thead className="bg-[#f0f4ff] text-[#344054] text-xs uppercase tracking-wider">
-              <tr>
-                <th className="px-6 py-4">Employee Name</th>
-                <th className="px-6 py-4">Employee ID</th>
-                <th className="px-6 py-4">Company Name</th>
-                <th className="px-6 py-4">Generated By</th>
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4">Payment Status</th>
-                <th className="px-6 py-4 text-center">Actions</th>
-              </tr>
-            </thead>
+      <Paper
+        sx={{
+          borderRadius: "16px",
+          border: "1px solid #E4E7EC",
+          overflow: "hidden",
+        }}
+      >
+        <Box sx={{ overflowX: "auto" }}>
+          <Table sx={{ minWidth: 900 }}>
+            <TableHead sx={{ background: "#f0f4ff" }}>
+              <TableRow>
+                <TableCell>Employee Name</TableCell>
+                <TableCell>Employee ID</TableCell>
+                <TableCell>Company Name</TableCell>
+                <TableCell>Generated By</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Payment Status</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
 
-            {/* TABLE BODY */}
-            <tbody className="divide-y divide-gray-100">
+            <TableBody>
               {tableData.map((row, index) => (
-                <tr key={index} className="hover:bg-gray-50 transition">
-                  {/* EMPLOYEE COLUMN */}
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-3">
-                      {/* Profile Icon */}
-                      <div
-                        className="w-10 h-10 rounded-xl bg-gradient-to-r 
-                          from-[#393B8B] to-[#AD78D2] 
-                          flex items-center justify-center shadow-sm"
+                <TableRow key={index} hover>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "12px",
+                          background:
+                            "linear-gradient(to right, #393B8B, #AD78D2)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
-                        <img
-                          src={profile}
-                          alt=""
-                          className="w-5 h-5 object-contain"
-                        />
-                      </div>
+                        <img src={profile} alt="" width={20} />
+                      </Box>
 
-                      {/* Name + File Size */}
-                      <div>
-                        <p className="font-medium text-[#1D293D] text-sm">
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            color: "#1D293D",
+                            fontSize: "14px",
+                          }}
+                        >
                           {row.name}
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">245 KB</p>
-                      </div>
-                    </div>
-                  </td>
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: "#9CA3AF" }}>
+                          245 KB
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </TableCell>
 
-                  {/* EMPLOYEE ID */}
-                  <td className="px-6 py-5 text-gray-600 font-medium">
-                    {row.id}
-                  </td>
+                  <TableCell sx={{ fontWeight: 500 }}>{row.id}</TableCell>
 
-                  {/* COMPANY COLUMN */}
-                  <td className="px-6 py-5">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <img
-                        src={company_icon}
-                        alt=""
-                        className="w-4 h-4 object-contain opacity-70"
-                      />
-                      <span className="text-sm">{row.company}</span>
-                    </div>
-                  </td>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <img src={company_icon} alt="" width={16} />
+                      <Typography fontSize={14}>{row.company}</Typography>
+                    </Box>
+                  </TableCell>
 
-                  {/* GENERATED BY */}
-                  <td className="px-6 py-5 text-gray-600 text-sm">
-                    {row.generatedBy}
-                  </td>
+                  <TableCell>{row.generatedBy}</TableCell>
+                  <TableCell sx={{ color: "#6B7280" }}>{row.date}</TableCell>
 
-                  {/* DATE */}
-                  <td className="px-6 py-5 text-gray-500 text-sm">
-                    {row.date}
-                  </td>
+                  <TableCell>
+                    <Chip
+                      label={row.status}
+                      sx={{
+                        backgroundColor:
+                          row.status === "Completed" ? "#DCFCE7" : "#FEF9C3",
+                        color:
+                          row.status === "Completed" ? "#16A34A" : "#CA8A04",
+                        fontWeight: 500,
+                        borderRadius: "8px",
+                      }}
+                    />
+                  </TableCell>
 
-                  {/* STATUS */}
-                  <td className="px-6 py-5">
-                    <span
-                      className={`px-3 py-1 text-xs rounded-full font-medium
-          ${
-            row.status === "Completed"
-              ? "bg-green-100 text-green-600"
-              : "bg-yellow-100 text-yellow-600"
-          }`}
+                  <TableCell align="center">
+                    <IconButton
+                      sx={{
+                        backgroundColor: "#EEF2FF",
+                        "&:hover": { backgroundColor: "#E0E7FF" },
+                      }}
                     >
-                      {row.status}
-                    </span>
-                  </td>
-
-                  {/* ACTIONS */}
-                  <td className="px-6 py-5 text-center">
-                    <button
-                      className="w-8 h-8 flex items-center justify-center 
-                           rounded-full bg-[#EEF2FF] 
-                           hover:bg-[#E0E7FF] transition"
-                    >
-                      <Eye size={15} className="text-[#6D5DF6]" />
-                    </button>
-                  </td>
-                </tr>
+                      <Visibility sx={{ color: "#6D5DF6" }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+            </TableBody>
+          </Table>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 
