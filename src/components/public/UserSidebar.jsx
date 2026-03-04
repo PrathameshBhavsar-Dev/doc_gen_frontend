@@ -82,12 +82,12 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   )}
 
   {/* Toggle Button */}
-  <button
-    onClick={() => setCollapsed(!collapsed)}
-    className="p-2 rounded-md hover:bg-gray-100"
-  >
-    <PanelLeft size={20} />
-  </button>
+ <button
+  onClick={() => setCollapsed(!collapsed)}
+  className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
+>
+  <PanelLeft size={20} />
+</button>
 </div>
 
       
