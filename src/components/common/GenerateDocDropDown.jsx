@@ -25,11 +25,14 @@ const docItems = [
   { id: 10, title: "Completion Certificate", hasPF: false, icon: ClipboardList, bg: "bg-teal-500" },
 ];
 
-const GenerateDocDropDown = () => {
+const GenerateDocDropDown = ({ onClose, compact }) => {
   const [selected, setSelected] = useState(null);
 
   return (
-    <div className="w-64 bg-white rounded-2xl border border-gray-100 overflow-hidden inset-shadow-sm">
+    <div className={`bg-white rounded-2xl border border-gray-100 overflow-hidden inset-shadow-sm
+    ${compact ? "w-20" : "w-64"}
+  `}
+>
       <div className="flex flex-col divide-y divide-gray-100">
         {docItems.map((item) => {
           const Icon = item.icon;
@@ -50,12 +53,19 @@ const GenerateDocDropDown = () => {
               </div>
 
               {/* Text */}
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-gray-800">{item.title}</span>
-                {item.hasPF && (
-                  <span className="text-xs text-purple-500 font-medium">Includes PF</span>
-                )}
-              </div>
+              {/* Text */}
+{!compact && (
+  <div className="flex flex-col">
+    <span className="text-sm font-semibold text-gray-800">
+      {item.title}
+    </span>
+    {item.hasPF && (
+      <span className="text-xs text-purple-500 font-medium">
+        Includes PF
+      </span>
+    )}
+  </div>
+)}
             </div>
           );
         })}
@@ -65,3 +75,5 @@ const GenerateDocDropDown = () => {
 };
 
 export default GenerateDocDropDown;
+
+
