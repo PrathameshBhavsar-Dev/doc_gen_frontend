@@ -97,7 +97,7 @@ const JDITExperience = ({ company, data }) => {
       {/* ================= SIGNATURE & STAMP ================= */}
       {(signature || stamp) && (
         <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
-          {signature && <img src={signature} alt="Signature" style={{ width: 120, height: "auto" }} />}
+          {signature && <img src={signature} alt="Signature" style={{ width: 160, height: "auto" }} />}
           {stamp && <img src={stamp} alt="Company Stamp" style={{ width: 100, height: "auto" }} />}
         </Box>
       )}

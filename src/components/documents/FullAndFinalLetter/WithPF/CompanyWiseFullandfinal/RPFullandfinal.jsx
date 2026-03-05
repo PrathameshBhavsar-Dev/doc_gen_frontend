@@ -7,6 +7,9 @@ import {
   TableRow,
 } from "@mui/material";
 
+import A4Page from "../../../../layout/A4Page";
+
+
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
@@ -59,26 +62,26 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
 
   const gross = Number(data.totalSalary || 0);
 
-  const basic = +(gross * 0.4).toFixed(2);
-  const hra = +(gross * 0.18).toFixed(2);
-  const da = +(gross * 0.12).toFixed(2);
-  const special = +(gross * 0.16).toFixed(2);
-  const food = +(gross * 0.06).toFixed(2);
+  const basic = +(gross * 0.48);
+  const hra = +(gross * 0.18);
+  const da = +(gross * 0.12);
+  const special = +(gross * 0.16);
+  const food = +(gross * 0.06);
 
   const pfAllowance = 3750; // Static PF Allowance
 
-  const earned = (v) => +(v * ratio).toFixed(2);
+  const earned = (v) => +(v * ratio);
 
   const totalActual =
-    basic + hra + da + special + food + pfAllowance;
+    basic + hra + da + special + food;
 
   const totalEarned =
     earned(basic) +
     earned(hra) +
     earned(da) +
     earned(special) +
-    earned(food) +
-    pfAllowance;
+    earned(food)
+    // pfAllowance;
 
   /* ---------- DEDUCTIONS ---------- */
   const pf = 3750;
@@ -90,10 +93,10 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
   const netPay = totalEarned - totalDeductions;
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Segoe UI" }}>
-      {company.header && <img src={company.header} width="100%" alt="" />}
+        <A4Page headerSrc={company.header} footerSrc={company.footer}>
+    
 
-      <Box p="10mm">
+    
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
 
@@ -228,14 +231,14 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
                         </TableRow>
             
                         <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Leave encashment (Days)</TableCell>
+                          <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
                           <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                             00
                           </TableCell>
                         </TableRow>
             
                         <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Total (Days)</TableCell>
+                          <TableCell colSpan={2} sx={cell}>Total </TableCell>
                           <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                             {formatAmt(totalEarned)}
                           </TableCell>
@@ -273,10 +276,9 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
 
           </TableBody>
         </Table>
-      </Box>
+      
 
-      {company.footer && <img src={company.footer} width="100%" alt="" />}
-    </Box>
+     </A4Page>  
   );
 };
 

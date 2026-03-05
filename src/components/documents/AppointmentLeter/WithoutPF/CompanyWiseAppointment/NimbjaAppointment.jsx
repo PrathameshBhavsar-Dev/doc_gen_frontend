@@ -12,46 +12,74 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
+import SalaryStructureTable from "../../../../common/SalaryStructureTable";
 
-// ================= TABLE CELL STYLES =================
-const headCell = {
-  fontWeight: 700,
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
 
-const bodyCell = {
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
+const NimbjaAppointment = ({ company, data }) => {
+  if (!company || !data) return null;
 
-const totalCell = {
-  fontWeight: 700,
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
+  /* ================= HELPERS ================= */
+  const firstName = data.employeeName?.split(" ")[0] || "";
 
-/* ================= DATE FORMAT ================= */
-const formatDate = (date) => {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-};
-const formatOneCurrency = (salary) => {
-  if (!salary) return "";
+  const formatDate = (date) =>
+    date
+      ? new Date(date).toLocaleDateString("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+        })
+      : "";
 
-  const valueInLakhs = salary / 100000;
+  /* ================= SALARY LOGIC ================= */
 
-  // remove .0 if number is whole
-  return valueInLakhs % 1 === 0
-    ? valueInLakhs.toString()
-    : valueInLakhs.toFixed(1);
-};
-const NimbjaAppointment = ({ data, company }) => {
-  if (!data || !company) return null;
+  // 🔹 Round to whole number (no decimals)
+  const round0 = (num) => Math.round(num);
+
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(Number(data.salary || 0));
+
+  // ================= PERCENTAGE BREAKUP =================
+  const basicMonthly = round0(monthlyCTC * 0.4);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+  const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const miscAnnual = round0(miscMonthly * 12);
+
+  // ================= SALARY TABLE STRUCTURE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
+    ["HRA", daMonthly, daAnnual],
+    ["City Allowance", specialMonthly, specialAnnual],
+    ["Superannuation Fund", foodMonthly, foodAnnual],
+    ["Performance Bonus", miscMonthly, miscAnnual],
+  ];
+
+  // ================= TOTALS =================
+  const totalMonthly = round0(salaryRows.reduce((sum, row) => sum + row[1], 0));
+
+  const totalAnnual = round0(salaryRows.reduce((sum, row) => sum + row[2], 0));
+
+  /* ================= TERMS SPLIT ================= */
+  const page1Terms = (data.terms || []).slice(0, 8);
+  const page2Terms = (data.terms || []).slice(8);
+
+  const formatLakhsPerAnnum = (amount) => {
+    if (!amount || isNaN(amount)) return "";
+
+    const lakhs = amount / 100000;
+
+    return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
+  };
 
   return (
     <>
@@ -76,7 +104,7 @@ const NimbjaAppointment = ({ data, company }) => {
             sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
           >
             <strong>
-              Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\NSS0757 {data.employeeId}
+              Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
             </strong>
           </Typography>
 
@@ -161,7 +189,7 @@ const NimbjaAppointment = ({ data, company }) => {
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
                 Your total emoluments will be{" "}
-                <strong>Rs. {formatOneCurrency(data.salary)}</strong> Lakh per
+                <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong> Lakh per
                 annum.
               </Typography>
             </li>
@@ -466,226 +494,68 @@ const NimbjaAppointment = ({ data, company }) => {
         </div>
       </A4Page>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        {(() => {
-          /* ===== helpers ===== */
-          const round2 = (num) => Number(num.toFixed(2)); // monthly
-          const round0 = (num) => Math.round(num); // annual
+        <Box className="a4-content-only">
+          <Typography
+            sx={{
+              textAlign: "right",
+              mb: "5mm",
+              mt: "-12mm",
+              fontSize: "11pt",
+              fontFamily: "Bahnschrift",
+            }}
+          >
+            {formatDate(data.issueDate)}
+          </Typography>
 
-          /* ===== SOURCE OF TRUTH ===== */
-          const annualCTC = round0(
-            Number(data.salary || data.ctc || data.annualSalary || 0),
-          );
+          <Typography
+            sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+          >
+            <strong>
+              Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
+            </strong>
+          </Typography>
 
-          const grossMonthly = round2(annualCTC / 12);
+          {/* 🔥 ONLY THIS PART IS REPLACED */}
+          <SalaryStructureTable
+            salaryRows={salaryRows}
+            totalMonthly={totalMonthly}
+            totalAnnual={totalAnnual}
+            data={data}
+            formatDate={formatDate}
+          />
+        </Box>
+        {/* Signature Block */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
+          <Box>
+            <Box sx={{ display: "flex", gap: 3 }}>
+              {company?.signature && (
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{ height: 45 }}
+                />
+              )}
+              {company?.stamp && (
+                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+              )}
+            </Box>
+            <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
+              {company.hrName}
+            </Typography>
+            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+              HR Relations Lead
+            </Typography>
+          </Box>
 
-          /* ===== PERCENT CONFIG (100%) ===== */
-          const PERCENT = {
-            basic: 0.4,
-            hra: 0.18,
-            da: 0.12,
-            special: 0.16,
-            food: 0.06,
-          };
-
-          /* ===== MONTHLY CALCULATION (ROUND HERE ONLY) ===== */
-          const basicMonthly = round2(grossMonthly * PERCENT.basic);
-          const hraMonthly = round2(grossMonthly * PERCENT.hra);
-          const daMonthly = round2(grossMonthly * PERCENT.da);
-          const specialMonthly = round2(grossMonthly * PERCENT.special);
-          const foodMonthly = round2(grossMonthly * PERCENT.food);
-
-          const usedMonthly =
-            basicMonthly +
-            hraMonthly +
-            daMonthly +
-            specialMonthly +
-            foodMonthly;
-
-          /* ===== ADJUSTMENT BUCKET ===== */
-          const miscMonthly = round2(grossMonthly - usedMonthly);
-
-          /* ===== FINAL SALARY COMPONENTS ===== */
-          const rows = [
-            {
-              name: "Basic",
-              monthly: basicMonthly,
-              annual: round0(basicMonthly * 12),
-            },
-            {
-              name: "Bouquet Of Benefits",
-              monthly: hraMonthly,
-              annual: round0(hraMonthly * 12),
-            },
-            {
-              name: "HRA",
-              monthly: daMonthly,
-              annual: round0(daMonthly * 12),
-            },
-            {
-              name: "City Allowance",
-              monthly: specialMonthly,
-              annual: round0(specialMonthly * 12),
-            },
-            {
-              name: "Superannuation Fund",
-              monthly: foodMonthly,
-              annual: round0(foodMonthly * 12),
-            },
-            {
-              name: "Performance Bonus",
-              monthly: miscMonthly,
-              annual: round0(miscMonthly * 12),
-            },
-          ];
-
-          /* ===== TOTALS (MATCH CTC ALWAYS) ===== */
-          //
-          const totalMonthly = round2(
-            rows.reduce((sum, r) => sum + r.monthly, 0),
-          );
-
-          const totalAnnual = round0(
-            rows.reduce((sum, r) => sum + r.annual, 0),
-          );
-
-          /* ================= TABLE STYLES (UNCHANGED) ================= */
-          const CELL = {
-            border: "1px solid #000",
-            fontFamily: '"Bahnschrift", "Segoe UI", sans-serif',
-            fontSize: "11pt",
-            padding: "6px 8px",
-            lineHeight: 1.4,
-          };
-
-          const GREEN_ROW = {
-            backgroundColor: "#9BBB59",
-          };
-
-          return (
-            <>
-              {/* ================= ROOT WRAPPER ================= */}
-              <Box
-                sx={{
-                  fontFamily: "Bahnschrift",
-                  position: "relative",
-                }}
-              >
-                {/* ================= ISSUE DATE ================= */}
-                <Box
-                  sx={{
-                    position: "absolute",
-                    right: "18mm",
-                    mt: "-10mm",
-                    fontFamily: "Bahnschrift",
-                  }}
-                >
-                  {formatDate(data.issueDate)}
-                </Box>
-
-                {/* ================= EMPLOYEE DETAILS ================= */}
-                <Box sx={{ fontSize: "8pt" }}>
-                  <Typography
-                    sx={{ fontSize: "11pt", fontFamily: "Bahnschrift" }}
-                  >
-                    Ref: {company.regNo}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontWeight: "bold",
-                      mt: "6mm",
-                      textDecoration: "underline",
-                      fontFamily: "Bahnschrift",
-                      fontSize: "12pt",
-                      textAlign: "center",
-                    }}
-                  >
-                    Salary Structure - Break Up
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: "10pt",
-                      mt: "8mm",
-                      fontFamily: "Bahnschrift",
-                    }}
-                  >
-                    Name : {data.mrms} {data.employeeName}
-                  </Typography>
-
-                  <Typography
-                    sx={{ fontSize: "10pt", fontFamily: "Bahnschrift" }}
-                  >
-                    Designation : {data.position}
-                  </Typography>
-
-                  <Typography
-                    sx={{ fontSize: "10pt", fontFamily: "Bahnschrift" }}
-                  >
-                    Date of Joining : {formatDate(data.joiningDate)}
-                  </Typography>
-
-                  <Typography
-                    sx={{ fontSize: "10pt", fontFamily: "Bahnschrift" }}
-                  >
-                    Employee ID : {data.employeeId}
-                  </Typography>
-                </Box>
-                <br />
-
-                {/* ================= SALARY TABLE ================= */}
-                <TableContainer>
-                  <Table sx={{ borderCollapse: "collapse" }}>
-                    <TableHead>
-                      <TableRow sx={GREEN_ROW}>
-                        <TableCell sx={{ ...CELL, fontWeight: "bold" }}>
-                          Salary Components
-                        </TableCell>
-                        <TableCell
-                          sx={{ ...CELL, fontWeight: "bold" }}
-                          align="right"
-                        >
-                          Per Month (Rs.)
-                        </TableCell>
-                        <TableCell
-                          sx={{ ...CELL, fontWeight: "bold" }}
-                          align="right"
-                        >
-                          Per Annum (Rs.)
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                      {rows.map((row, i) => (
-                        <TableRow key={i}>
-                          <TableCell sx={CELL}>{row.name}</TableCell>
-                          <TableCell sx={CELL} align="right">
-                            {formatCurrency(row.monthly)}
-                          </TableCell>
-                          <TableCell sx={CELL} align="right">
-                            {formatCurrency(row.annual)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-
-                      {/* ================= TOTAL ================= */}
-                      <TableRow sx={{ ...GREEN_ROW, fontWeight: "bold" }}>
-                        <TableCell sx={CELL}>Total Salary</TableCell>
-                        <TableCell sx={CELL} align="right">
-                          {formatCurrency(totalMonthly)}
-                        </TableCell>
-                        <TableCell sx={CELL} align="right">
-                          {formatCurrency(totalAnnual)}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            </>
-          );
-        })()}
+          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+              Signature: __________________
+            </Typography>
+            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+              Candidate Name: {data.employeeName}
+            </Typography>
+          </Box>
+        </Box>
       </A4Page>
     </>
   );

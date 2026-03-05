@@ -896,16 +896,8 @@ export const documentTypes = [
                 options: ['withPF', 'withoutPF'],
                 required: true
             },
-
-
-
-           
-            
-           
         ]
     }
-
-
 ];
 
 // Mock user data for authentication
