@@ -22,41 +22,48 @@ const JditCertification = ({ company, data }) => {
           align="center"
           sx={{ fontWeight: 700, letterSpacing: 1 }}
         >
-          LETTER OF INTERNSHIP
+         INTERNSHIP COMPLETION LETTER
         </Typography>
 
         <Divider sx={{ my: 3 }} />
 
         {/* ================= CONTENT ================= */}
-        <Typography sx={{ fontSize: "14px", lineHeight: 2 }}>
+        <Typography sx={{ fontSize: "15px", lineHeight: 2 }}>
           This is to certify that{" "}
           <strong>
             {data.mrms} {data.employeeName}
           </strong>{" "}
-          has successfully completed {pronouns.possessive} internship at{" "}
+          has done {pronouns.possessive} internship at{" "}
           <strong>JDIT SOFTWARE SOLUTIONS PVT. LTD.</strong> from{" "}
           <strong>{data.startDate}</strong> to{" "}
           <strong>{data.completionDate}</strong>.{" "}
-          {pronouns.subject} was designated as{" "}
-          <strong>{data.role}</strong>.
-        </Typography>
+          
+        </Typography> 
 
         <Box mt={3}>
-          <Typography sx={{ fontSize: "14px", lineHeight: 2 }}>
+          <Typography sx={{ fontSize: "15px", lineHeight: 2 }}>
             During the internship, {pronouns.subject.toLowerCase()} demonstrated{" "}
             strong technical skills along with self-motivation to learn new
             skills. {pronouns.possessive.charAt(0).toUpperCase() +
               pronouns.possessive.slice(1)}{" "}
             performance exceeded our expectations and{" "}
-            {pronouns.subject.toLowerCase()} was able to complete the assigned
-            tasks on time. We wish {pronouns.object} all the best for{" "}
-            {pronouns.possessive} upcoming career.
+            {pronouns.subject.toLowerCase()} was able to complete the given
+            tasks on time.   
+            
           </Typography>
+
+          <Typography sx={{ fontSize: "15px", lineHeight: 2 }}>{pronouns.subject} was designated as{" "}<strong>{data.role}</strong>.</Typography>
+
+
+           <Typography sx={{ fontSize: "15px", lineHeight: 2, mt: 6 }}>We wish {pronouns.object} all the best for{" "}
+            {pronouns.possessive} upcoming career.</Typography>
+
+
         </Box>
 
         {/* ================= SIGNATURE ================= */}
         <Box mt={8}>
-          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
+          <Typography sx={{ fontSize: "15px", fontWeight: 600 }}>
             For JDIT SOFTWARE SOLUTIONS PVT. LTD.
           </Typography>
 
@@ -76,11 +83,11 @@ const JditCertification = ({ company, data }) => {
             )}
           </Box>
 
-          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
+          <Typography sx={{ fontSize: "15px", fontWeight: 600, mt: 4 }}>
             {company.hrName}
           </Typography>
 
-          <Typography sx={{ fontSize: "13px" }}>
+          <Typography sx={{ fontSize: "15px" }}>
             HR Department, Pune
           </Typography>
         </Box>

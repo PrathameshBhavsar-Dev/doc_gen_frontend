@@ -11,7 +11,6 @@ import SmartsoftwareFullandfinal from "../WithoutPF/CompanyWiseFullandfinal/Smar
 import QuickFullandfinal from "../WithoutPF/CompanyWiseFullandfinal/QuickFullandfinal";
 import NimbjaFullandfinal from "../WithoutPF/CompanyWiseFullandfinal/NimbjaFullandfinal";
 
-
 // map company shortName OR id to component
 const companyComponentMap = {
   1: CubeageFullandfinal,

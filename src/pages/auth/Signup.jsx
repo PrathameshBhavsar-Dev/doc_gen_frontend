@@ -49,7 +49,7 @@
 
 import React from "react";
 
-import SilkBackground from "../../components/silkBackground";
+import SilkBackground from "../../components/common/silkBackground";
 import logo from "../../assets/logos/logo.png";
 import google from "../../assets/logos/google.png";
 const Login = () => {

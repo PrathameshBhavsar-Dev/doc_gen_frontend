@@ -10,23 +10,29 @@ import {
   TableBody,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
-import { generateOfferLetterComponents, formatCurrency } from "../../../../../utils/salaryCalculations";
+import {
+  generateOfferLetterComponents,
+  formatCurrency,
+} from "../../../../../utils/salaryCalculations";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
     : "";
 
 /* ================= STYLES ================= */
 const TEXT = {
-  fontFamily: "Times New Roman, serif",
-  fontSize: "14px",
-  lineHeight: 1.8,
+  fontFamily: '"Times New Roman", Times, serif',
+  fontSize: "12pt", // Real document size
+  lineHeight: 1.6, // Professional spacing
+  textAlign: "justify", // IMPORTANT (matches letter style)
+  letterSpacing: "0.2px",
+  color: "#000",
 };
 
 /* 🔽 Smaller table cells */
@@ -47,42 +53,73 @@ const SALARY_COMPONENTS = [
 ];
 
 const NeweageOffer = ({ company, data }) => {
-  // Use auto-calculation if CTC is provided, otherwise use manual components
-  const ctc = parseFloat(data.ctc || data.annualSalary || 350000); // Default to 3.5 LPA
-  const autoComponents = generateOfferLetterComponents(ctc);
+  /* ======================================================
+   ✅ SMARTMATRIX LOGIC (INPUT IS MONTHLY) – NO PF
+====================================================== */
 
-  // === Total Salary ===
-  const totalSalaryAnually = parseFloat(data.salary); // annual salary
+  const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
 
-  // === Annual components (percentages of totalSalaryAnually) ===
-  const basicAnnual = totalSalaryAnually * 0.4013;
-  const hraAnnual = totalSalaryAnually * 0.1798;
-  const conveyanceAnnual = totalSalaryAnually * 0.1599;
-  const specialAnnual = totalSalaryAnually * 0.1196;
-  const foodAnnual = totalSalaryAnually * 0.0929;
-  const medicAnnual = totalSalaryAnually * 0.0464;
+  /* 🔥 INPUT IS MONTHLY */
+  const monthlyGross = round2(data.salary || 0);
 
-  // === Monthly components ===
-  const basicMonthly = Math.round(basicAnnual / 12);
-  const hraMonthly = Math.round(hraAnnual / 12);
-  const conveyanceMonthly = Math.round(conveyanceAnnual / 12);
-  const specialMonthly = Math.round(specialAnnual / 12);
-  const foodMonthly = Math.round(foodAnnual / 12);
-  const medicMonthly = Math.round(medicAnnual / 12);
+  /* Annual Derived */
+  const annualCTC = round2(monthlyGross * 12);
 
-  // === Components array for table ===
+  /* Same Percentage Structure as SmartMatrix */
+  const PERCENT = {
+    basic: 0.4,
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+  };
+
+  /* Monthly Calculation */
+  const basicMonthly = round2(monthlyGross * PERCENT.basic);
+  const hraMonthly = round2(monthlyGross * PERCENT.hra);
+  const daMonthly = round2(monthlyGross * PERCENT.da);
+  const specialMonthly = round2(monthlyGross * PERCENT.special);
+  const foodMonthly = round2(monthlyGross * PERCENT.food);
+
+  /* Adjustment to prevent ₹1 mismatch */
+  const miscMonthly = round2(
+    monthlyGross -
+      (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly),
+  );
+
+  /* Salary Rows */
   const salaryComponents = [
-    { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
-    { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
-    { name: "Dearness Allowance", monthly: conveyanceMonthly, annual: conveyanceAnnual },
-    { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
-    { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
-    { name: "Misc. Allowance", monthly: medicMonthly, annual: medicAnnual },
+    { name: "Basic", monthly: basicMonthly, annual: round2(basicMonthly * 12) },
+    {
+      name: "House Rent Allowance",
+      monthly: hraMonthly,
+      annual: round2(hraMonthly * 12),
+    },
+    {
+      name: "Dearness Allowance",
+      monthly: daMonthly,
+      annual: round2(daMonthly * 12),
+    },
+    {
+      name: "Special Allowance",
+      monthly: specialMonthly,
+      annual: round2(specialMonthly * 12),
+    },
+    {
+      name: "Food Allowance",
+      monthly: foodMonthly,
+      annual: round2(foodMonthly * 12),
+    },
+    {
+      name: "Misc. Allowance",
+      monthly: miscMonthly,
+      annual: round2(miscMonthly * 12),
+    },
   ];
 
-  // === Totals ===
-  const totalMonthly = salaryComponents.reduce((acc, c) => acc + c.monthly, 0);
-  const totalAnnual = salaryComponents.reduce((acc, c) => acc + c.annual, 0);
+  /* Totals */
+  const totalMonthly = monthlyGross;
+  const totalAnnual = annualCTC;
 
   if (!company || !data) return null;
 
@@ -111,26 +148,19 @@ const NeweageOffer = ({ company, data }) => {
   return (
     <>
       {/* ================= PAGE 1 : OFFER LETTER ================= */}
-      <A4Layout
-        headerSrc={company.headerImage}
-        footerSrc={company.footerImage}
-
-      >
-        <Typography sx={{ ...TEXT, mb: 2 }}>
-          {formatDate(issueDate)}
-        </Typography>
+      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
+        <Typography sx={{ ...TEXT, mb: 2 }}>{formatDate(issueDate)}</Typography>
 
         <Typography sx={TEXT}>
-          <b>Name</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {mrms} {candidateName}
+          <b>Name</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {mrms}{" "}
+          {candidateName}
         </Typography>
 
         <Typography sx={{ ...TEXT, mb: 2 }}>
           <b>Address</b> &nbsp;&nbsp;&nbsp;: {address}
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2 }}>
-          Dear {candidateName},
-        </Typography>
+        <Typography sx={{ ...TEXT, mb: 2 }}>Dear {candidateName},</Typography>
 
         <Typography sx={{ ...TEXT, mb: 2 }}>
           Congratulations! <b>{COMPANY_NAME}</b> is excited to call you our new{" "}
@@ -140,8 +170,8 @@ const NeweageOffer = ({ company, data }) => {
         <Typography sx={{ ...TEXT, mb: 2 }}>
           We’ll focus on wrapping up a few more formalities, including the
           successful completion of your [background check, drug screening,
-          reference check, etc.], and aim to get you settled into your new role by{" "}
-          <b>{formatDate(joiningDate)}</b>.
+          reference check, etc.], and aim to get you settled into your new role
+          by <b>{formatDate(joiningDate)}</b>.
         </Typography>
 
         <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -162,25 +192,36 @@ const NeweageOffer = ({ company, data }) => {
         <Typography sx={{ ...TEXT, mb: 2 }}>
           Please keep in mind, this employment offer is in no way a legally
           binding contract. As an at-will employee, both you and{" "}
-          <b>{COMPANY_NAME}</b> are able to terminate employment for any reason at
-          any time.
+          <b>{COMPANY_NAME}</b> are able to terminate employment for any reason
+          at any time.
         </Typography>
 
         <Typography sx={{ ...TEXT, mb: 2 }}>
-          <b>{COMPANY_NAME}</b> looks forward to bringing you on board!
+          <b>{COMPANY_NAME}</b> looks forward to bringing you on board!If you
+          have any questions,please feel free to reach out at any time and we'll
+          be more happy to help you.
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2 }}>
-          Yours Sincerely,
-        </Typography>
+        <Typography sx={{ ...TEXT, mb: 2 }}>Yours Sincerely,</Typography>
         <Typography sx={TEXT}>
           For <b>{COMPANY_NAME}</b>
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", mt: 2, marginRight: "-20px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            mt: 2,
+            marginRight: "-20px",
+          }}
+        >
           <Box>
-
-            <img src={company.signature} alt="Signature" style={{ height: '50px' }} />
-            <img src={company.stamp} alt="Stamp" style={{ height: '100px' }} />
+            <img
+              src={company.signature}
+              alt="Signature"
+              style={{ height: "50px" }}
+            />
+            <img src={company.stamp} alt="Stamp" style={{ height: "100px" }} />
             <Typography>{company.hrName}</Typography>
             <Typography>HR Relations Lead</Typography>
           </Box>
@@ -190,15 +231,10 @@ const NeweageOffer = ({ company, data }) => {
             <Typography>Candidate Name:{candidateName}</Typography>
           </Box>
         </Box>
-
       </A4Layout>
 
       {/* ================= PAGE 2 : SALARY ANNEXURE ================= */}
-      <A4Layout
-        headerSrc={company.headerImage}
-        footerSrc={company.footerImage}
-
-      >
+      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
         <Typography align="center" sx={{ ...TEXT, mb: 3 }}>
           <b>Annexure A Salary Structure</b>
         </Typography>
@@ -206,7 +242,7 @@ const NeweageOffer = ({ company, data }) => {
           <Table
             size="small"
             sx={{
-              border: "1px solid #333",       // 🔽 thinner outer border
+              border: "1px solid #333", // 🔽 thinner outer border
               borderCollapse: "collapse",
               width: "100%",
             }}
@@ -217,9 +253,9 @@ const NeweageOffer = ({ company, data }) => {
                   sx={{
                     fontWeight: 600,
                     border: "1px solid #333",
-                    fontSize: "10pt",          // 🔽 smaller font
+                    fontSize: "10pt", // 🔽 smaller font
                     color: "white",
-                    py: "0.4mm",               // 🔽 compact header height
+                    py: "0.4mm", // 🔽 compact header height
                   }}
                 >
                   Salary Components
@@ -261,8 +297,8 @@ const NeweageOffer = ({ company, data }) => {
                   <TableCell
                     sx={{
                       border: "1px solid #333",
-                      fontSize: "9.75pt",       // 🔽 smaller body text
-                      py: "0.35mm",             // 🔽 tight rows
+                      fontSize: "9.75pt", // 🔽 smaller body text
+                      py: "0.35mm", // 🔽 tight rows
                     }}
                   >
                     {row.name}
@@ -296,7 +332,6 @@ const NeweageOffer = ({ company, data }) => {
               <TableRow sx={{ backgroundColor: "rgba(3, 171, 197, 0.95)" }}>
                 <TableCell
                   sx={{
-                    
                     fontWeight: 600,
                     border: "1px solid #333",
                     fontSize: "10pt",
@@ -334,11 +369,22 @@ const NeweageOffer = ({ company, data }) => {
           </Table>
         </TableContainer>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", mt: 2, marginRight: "-20px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            mt: 2,
+            marginRight: "-20px",
+          }}
+        >
           <Box>
-
-            <img src={company.signature} alt="Signature" style={{ height: '50px' }} />
-            <img src={company.stamp} alt="Stamp" style={{ height: '100px' }} />
+            <img
+              src={company.signature}
+              alt="Signature"
+              style={{ height: "50px" }}
+            />
+            <img src={company.stamp} alt="Stamp" style={{ height: "100px" }} />
             <Typography>{company.hrName}</Typography>
             <Typography>HR Relations Lead</Typography>
           </Box>

@@ -31,28 +31,34 @@ const formatCurrency = (v) =>
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
-  const basic = round2(annualCTC * 0.35);
-  const hra = round2(annualCTC * 0.20);
-  const da =round2(annualCTC * 0.20);
-  const special = round2(annualCTC * 0.35);
-  const food = round2(annualCTC * 0.05);
+  const monthlyCTC = Math.round(annualCTC / 12);
 
-  // PF Fixed
+  // Apply percentages directly on full monthly CTC
+  let basic = Math.round(monthlyCTC * 0.48);
+  let hra = Math.round(monthlyCTC * 0.18);
+  let da = Math.round(monthlyCTC * 0.12);
+  let special = Math.round(monthlyCTC * 0.16);
+  let food = Math.round(monthlyCTC * 0.06);
+
+  // Fix rounding difference
+  const calculated =
+    basic + hra + da + special + food;
+
+  const diff = monthlyCTC - calculated;
+
+  basic += diff; // adjust only Basic
+
+  // PF Static (NOT calculated)
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
-  // Remaining amount goes to Other Allowances
-  const pf = round2(
-    annualCTC - (basic + hra + special + food + pfAnnual)
-  );
-
   return [
-    ["Basic Salary", basic / 12, basic],
-    ["House Rent Allowance (HRA)", hra / 12, hra],
-    ["Dearness Allowance", da / 12, da],
-    ["Special Allowance", special / 12, special],
-    ["Food Allowance", food / 12, food],
-    ["Provider PF ", pfMonthly, pfAnnual],  // ✅ Added PF
+    ["Basic Salary ", basic, basic * 12],
+    ["House Rent Allowance ", hra, hra * 12],
+    ["Dearness Allowance ", da, da * 12],
+    ["Special Allowance ", special, special * 12],
+    ["Food Allowance ", food, food * 12],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 };
 
@@ -69,9 +75,9 @@ const PentaAppointment = ({ company, data }) => {
     <>
       Your Designation will be <strong>"{data.position}"</strong>.
     </>,
-    <>Your total emoluments will be <strong>Rs.{
+    <>Your total emoluments will be <strong>Rs. {
       annualCTC / 100000
-    } </strong>Lakhs per annum.</>,
+    } </strong>Lakhs Per Annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
     `You shall be due for salary revision not before one year from your date of joining.`,

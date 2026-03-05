@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext } from 'react';
 import { documentTypes } from '../../components/constant/publicData/mockData.js';
 
 const DocumentContext = createContext();
@@ -13,6 +13,12 @@ export const DocumentProvider = ({ children }) => {
   const selectDocumentType = (docTypeId) => {
     const docType = documentTypes.find((type) => type.id === docTypeId);
     setSelectedDocType(docType);
+    setDocumentData({}); // ✅ Reset form data when doc type changes
+  };
+
+  // ✅ Call this from CompanyContext (or DocumentCreate) when company changes
+  const resetOnCompanyChange = () => {
+    setSelectedDocType(null);
     setDocumentData({});
   };
 
@@ -20,7 +26,7 @@ export const DocumentProvider = ({ children }) => {
     setDocumentData((prevData) => {
       const newData = { ...prevData, [fieldName]: value };
 
-      // 🔹 Auto-calculate Increment Percentage
+      // Auto-calculate Increment Percentage
       if (newData.currentCTC && newData.newCTC) {
         const oldCtc = parseFloat(newData.currentCTC);
         const newCtc = parseFloat(newData.newCTC);
@@ -42,6 +48,7 @@ export const DocumentProvider = ({ children }) => {
     documentTypes,
     selectedDocType,
     selectDocumentType,
+    resetOnCompanyChange,
     documentData,
     updateDocumentData,
     resetDocumentData

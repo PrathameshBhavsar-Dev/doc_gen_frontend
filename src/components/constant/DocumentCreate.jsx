@@ -1,24 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-  Typography,
-  Alert
-} from '@mui/material';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { useCompany } from '../../core/contexts/CompanyContext';
-import { useDocument } from '../../core/contexts/DocumentContext';
-import { useAuth } from '../../core/contexts/AuthContext';
-import { validateForm } from '../../utils/validationUtils';
+// React Icons
+import { IoArrowBack } from "react-icons/io5";
+import { MdOutlinePreview, MdOutlineCancel } from "react-icons/md";
+import { BiSolidError } from "react-icons/bi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { MdWarningAmber } from "react-icons/md";
+import { RiBuilding2Line } from "react-icons/ri";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
+import { useCompany } from "../../core/contexts/CompanyContext";
+import { useDocument } from "../../core/contexts/DocumentContext";
+import { useAuth } from "../../core/contexts/AuthContext";
+import { validateForm } from "../../utils/validationUtils";
+import ROUTES from "../../core/constants/routes.constant";
+
+/* ========================= */
+/*     Reusable Field Label  */
+/* ========================= */
+const FieldLabel = ({ label, required, htmlFor }) => (
+  <label
+    htmlFor={htmlFor}
+    className="block text-xs font-semibold text-gray-600 mb-1.5 tracking-wide"
+  >
+    {label}
+    {required && <span className="text-red-500 ml-0.5">*</span>}
+  </label>
+);
+
+/* ========================= */
+/*     Input Class Helper    */
+/* ========================= */
+const inputClass = (hasError) =>
+  `w-full rounded-lg border px-3 py-2.5 text-sm text-gray-800 bg-white
+   focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition
+   placeholder:text-gray-400
+   ${hasError ? "border-red-400 bg-red-50" : "border-gray-300 hover:border-gray-400"}`;
+
+const selectClass = (hasError) =>
+  `w-full rounded-lg border px-3 py-2.5 text-sm text-gray-800 bg-white
+   focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition
+   appearance-none cursor-pointer
+   ${hasError ? "border-red-400 bg-red-50" : "border-gray-300 hover:border-gray-400"}`;
+
+/* ========================= */
+/*     Field Error Message   */
+/* ========================= */
+const FieldError = ({ message }) => (
+  <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+    <MdWarningAmber className="w-3.5 h-3.5 shrink-0" />
+    {message}
+  </p>
+);
+
+/* ========================= */
+/*     Select Wrapper        */
+/* ========================= */
+const SelectWrapper = ({ children }) => (
+  <div className="relative">
+    {children}
+    <MdKeyboardArrowDown
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none w-4 h-4"
+    />
+  </div>
+);
+
+/* ========================= */
+/*         Main Form         */
+/* ========================= */
 const DocumentCreate = () => {
   const { selectedCompany, selectCompany, companies } = useCompany();
   const {
@@ -26,249 +76,283 @@ const DocumentCreate = () => {
     selectDocumentType,
     documentTypes,
     documentData,
-    updateDocumentData
+    updateDocumentData,
+    resetOnCompanyChange,
   } = useDocument();
 
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const [formErrors, setFormErrors] = useState({});
+  const navStateApplied = useRef(false);
 
-  /* ---------------- AUTH CHECK ---------------- */
+  /* ================= AUTH CHECK ================= */
   useEffect(() => {
-    if (!currentUser) {
-      navigate('/login');
-    }
-  }, [currentUser, navigate]);
+    if (!user) navigate("/login");
+  }, [user]);
 
-  /* ---------------- NAVIGATION STATE ---------------- */
+  /* ================= READ NAVIGATION STATE ================= */
   useEffect(() => {
-    if (location.state) {
-      const { companyId, documentType } = location.state;
+    if (navStateApplied.current) return;
+    if (!location.state) return;
+    if (!companies.length || !documentTypes.length) return;
 
-      if (companyId && companies.length > 0) {
-        selectCompany(companyId);
-      }
+    const { companyId, documentType } = location.state;
+    if (companyId) selectCompany(Number(companyId));
+    if (documentType) selectDocumentType(Number(documentType));
 
-      if (documentType && documentTypes.length > 0) {
-        selectDocumentType(documentType);
-      }
-    }
-  }, [location.state, companies.length, documentTypes.length]);
+    navStateApplied.current = true;
+  }, [companies.length, documentTypes.length]);
 
-  /* ---------------- REDIRECT ---------------- */
+  /* ================= SAFE REDIRECT ================= */
   useEffect(() => {
+    if (location.state) return;
+    if (!companies.length || !documentTypes.length) return;
     if (!selectedCompany || !selectedDocType) {
-      if (!location.state) {
-        navigate('/dashboard');
-      }
+      navigate(ROUTES.USER_DASHBOARD, { replace: true });
     }
-  }, [selectedCompany, selectedDocType, location.state, navigate]);
+  }, [selectedCompany, selectedDocType]);
 
-  /* ---------------- INPUT CHANGE ---------------- */
+  /* ================= COMPANY CHANGE ================= */
+  const handleCompanyChange = (companyId) => {
+    const currentDocTypeId = selectedDocType?.id;
+    selectCompany(Number(companyId));
+    resetOnCompanyChange();
+    setFormErrors({});
+    if (currentDocTypeId) selectDocumentType(currentDocTypeId);
+  };
+
+  /* ================= FIELD VISIBILITY ================= */
+  const shouldShowField = (field) => {
+    if (!field.dependsOn) return true;
+    return documentData[field.dependsOn.field] === field.dependsOn.value;
+  };
+
+  /* ================= INPUT HANDLER ================= */
   const handleInputChange = (field, value) => {
     updateDocumentData(field, value);
-
-    if (field === 'internshipType' && value === 'unpaid') {
-      updateDocumentData('stipend', '');
+    if (field === "internshipType" && value === "unpaid") {
+      updateDocumentData("stipend", "");
     }
-
     if (formErrors[field]) {
-      setFormErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
+      setFormErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[field];
+        return copy;
       });
     }
   };
 
-  /* ---------------- FIELD VISIBILITY ---------------- */
-  const shouldShowField = (field) => {
-    if (!field.dependsOn) return true;
-
-    return (
-      documentData[field.dependsOn.field] === field.dependsOn.value
-    );
-  };
-
-  /* ---------------- VALIDATION ---------------- */
+  /* ================= VALIDATION ================= */
   const validateDocumentForm = () => {
     if (!selectedDocType) return true;
 
     const rules = {};
-
-    selectedDocType.fields.forEach(field => {
+    selectedDocType.fields.forEach((field) => {
       if (!shouldShowField(field)) return;
-
-      if (field.required) {
-        rules[field.name] = {
-          required: true,
-          message: `${field.label} is required`
-        };
+      rules[field.name] = rules[field.name] || {};
+      const isRequired = field.required === true || field.require === true;
+      if (isRequired) {
+        rules[field.name].required = true;
+        rules[field.name].message = `${field.label} is required`;
       }
-
-      if (field.type === 'email') rules[field.name].email = true;
-      if (field.type === 'date') rules[field.name].date = true;
-      if (field.type === 'number') rules[field.name].number = true;
+      if (field.type === "email") rules[field.name].email = true;
+      if (field.type === "date" || field.type === "month") rules[field.name].date = true;
+      if (field.type === "number") rules[field.name].number = true;
     });
 
     const errors = validateForm(documentData, rules);
     setFormErrors(errors);
-
     return Object.keys(errors).length === 0;
   };
 
-  /* ---------------- SUBMIT ---------------- */
+  /* ================= SUBMIT ================= */
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (validateDocumentForm()) {
-      navigate('/documents/preview');
+      navigate(ROUTES.DOCUMENT_PREVIEW, { state: { fromCreate: true } });
     }
   };
 
-  if (!selectedCompany || !selectedDocType) return null;
+  /* ================= LOADING GUARD ================= */
+  if (!companies.length || !documentTypes.length) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center gap-3 text-gray-400">
+          <AiOutlineLoading3Quarters className="w-8 h-8 animate-spin" />
+          <p className="text-sm">Loading document setup...</p>
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= RENDER FIELD ================= */
+  const renderField = (field) => {
+    const hasError = !!formErrors[field.name];
+    const isRequired = field.required || field.require;
+
+    if (field.type === "select") {
+      return (
+        <div key={field.name}>
+          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+          <SelectWrapper>
+            <select
+              id={field.name}
+              name={field.name}
+              value={documentData[field.name] || ""}
+              onChange={(e) => handleInputChange(field.name, e.target.value)}
+              className={selectClass(hasError)}
+            >
+              <option value="" disabled>Select {field.label}</option>
+              {field.options?.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </SelectWrapper>
+          {hasError && <FieldError message={formErrors[field.name]} />}
+        </div>
+      );
+    }
+
+    if (field.type === "textarea") {
+      return (
+        <div key={field.name} className="col-span-1 md:col-span-2 lg:col-span-3">
+          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+          <textarea
+            id={field.name}
+            name={field.name}
+            rows={3}
+            value={documentData[field.name] ?? ""}
+            onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+            className={`${inputClass(hasError)} resize-none`}
+          />
+          {hasError && <FieldError message={formErrors[field.name]} />}
+        </div>
+      );
+    }
+
+    // text, number, date, month, email
+    return (
+      <div key={field.name}>
+        <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+        <input
+          id={field.name}
+          name={field.name}
+          type={field.type}
+          value={documentData[field.name] ?? ""}
+          onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+          placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+          className={inputClass(hasError)}
+        />
+        {hasError && <FieldError message={formErrors[field.name]} />}
+      </div>
+    );
+  };
 
   /* ================= UI ================= */
-
   return (
-    <div className="w-full flex justify-center px-3 sm:px-6 lg:px-10 py-6">
-      
-      {/* Responsive Wrapper */}
-      <div className="w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
-        <Paper elevation={3} className="p-4 sm:p-6 lg:p-8">
-
-          {/* Header */}
-          <Typography
-            variant="h4"
-            className="!text-center sm:!text-left !mb-2"
+        {/* ── HEADER ── */}
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="p-1 text-gray-500 hover:text-gray-900 transition"
           >
-            Create {selectedDocType.name}
-          </Typography>
+            <IoArrowBack className="w-5 h-5" />
+          </button>
+          <h1 className="text-xl font-bold text-gray-900">
+            {selectedDocType?.name || "Create Document"}
+          </h1>
+        </div>
 
-          <Typography
-            variant="subtitle1"
-            className="!text-center sm:!text-left !mb-4"
-          >
-            Company: {selectedCompany.name}
-          </Typography>
+        {/* ── MAIN CARD ── */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
 
+          {/* Company Dropdown */}
+          <div className="mb-8">
+            <FieldLabel label="Company" required htmlFor="company" />
+            <SelectWrapper>
+              <select
+                id="company"
+                value={selectedCompany?.id || ""}
+                onChange={(e) => handleCompanyChange(e.target.value)}
+                className={selectClass(false)}
+                style={{ maxWidth: "320px" }}
+              >
+                <option value="" disabled>Select Company</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+            </SelectWrapper>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-100 mb-8" />
+
+          {/* Validation Error Banner */}
           {Object.keys(formErrors).length > 0 && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              Please fill in all required fields
-            </Alert>
+            <div className="flex items-start gap-2 bg-red-50 border border-red-200
+                            text-red-600 rounded-lg px-4 py-3 mb-6 text-sm">
+              <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>Please fill in all required fields before previewing.</span>
+            </div>
           )}
 
-          {/* FORM */}
-          <Box component="form" onSubmit={handleSubmit}>
+          {/* Form Fields */}
+          {selectedCompany ? (
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
+                {selectedDocType?.fields?.length > 0 ? (
+                  selectedDocType.fields.map(
+                    (field) => shouldShowField(field) && renderField(field)
+                  )
+                ) : (
+                  <div className="col-span-3 flex items-center justify-center py-10 text-gray-400">
+                    <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin mr-2" />
+                    <span className="text-sm">Loading fields...</span>
+                  </div>
+                )}
+              </div>
 
-            <Grid container spacing={3}>
-              {selectedDocType.fields.map((field) => {
-
-                if (!shouldShowField(field)) return null;
-
-                return (
-                  <Grid
-                    item
-                    xs={12}
-                    md={field.type === 'textarea' ? 12 : 6}
-                    key={field.name}
-                  >
-
-                    {/* SELECT */}
-                    {field.type === 'select' ? (
-                      <FormControl fullWidth error={!!formErrors[field.name]}>
-                        <InputLabel>{field.label}</InputLabel>
-
-                        <Select
-                          value={documentData[field.name] || ''}
-                          label={field.label}
-                          onChange={(e) =>
-                            handleInputChange(field.name, e.target.value)
-                          }
-                          required={field.required}
-                        >
-                          {field.options.map((option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </Select>
-
-                        {formErrors[field.name] && (
-                          <Typography variant="caption" color="error">
-                            {formErrors[field.name]}
-                          </Typography>
-                        )}
-                      </FormControl>
-                    ) : field.type === 'textarea' ? (
-
-                      /* TEXTAREA */
-                      <TextField
-                        label={field.label}
-                        multiline
-                        rows={4}
-                        fullWidth
-                        value={documentData[field.name] || ''}
-                        onChange={(e) =>
-                          handleInputChange(field.name, e.target.value)
-                        }
-                        required={field.required}
-                        error={!!formErrors[field.name]}
-                        helperText={formErrors[field.name]}
-                      />
-
-                    ) : (
-
-                      /* INPUT */
-                      <TextField
-                        label={field.label}
-                        type={field.type}
-                        fullWidth
-                        value={documentData[field.name] || ''}
-                        onChange={(e) =>
-                          handleInputChange(field.name, e.target.value)
-                        }
-                        required={field.required}
-                        error={!!formErrors[field.name]}
-                        helperText={formErrors[field.name]}
-                        InputLabelProps={
-                          field.type === 'date' || field.type === 'month'
-                            ? { shrink: true }
-                            : undefined
-                        }
-                      />
-                    )}
-                  </Grid>
-                );
-              })}
-            </Grid>
-
-            {/* BUTTONS */}
-            <div className="flex flex-col sm:flex-row justify-between gap-3 mt-8">
-
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/dashboard')}
-                className="w-full sm:w-auto"
-              >
-                Cancel
-              </Button>
-
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className="w-full sm:w-auto"
-              >
-                Preview Document
-              </Button>
-
+              {/* Actions */}
+              <div className="flex items-center justify-between mt-10 pt-6 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => navigate(ROUTES.USER_DASHBOARD)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
+                             border border-gray-300 text-gray-600 text-sm font-medium
+                             hover:bg-gray-50 transition"
+                >
+                  <MdOutlineCancel className="w-4 h-4" />
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
+                             bg-gray-200 text-gray-700 text-sm font-medium
+                             hover:bg-gray-300 transition"
+                >
+                  <MdOutlinePreview className="w-4 h-4" />
+                  Preview Document
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+              <RiBuilding2Line className="w-10 h-10 mb-3 text-gray-300" />
+              <p className="text-sm font-medium text-gray-500">No company selected</p>
+              <p className="text-xs text-gray-400 mt-1">
+                Select a company above to fill in the form.
+              </p>
             </div>
-          </Box>
-        </Paper>
+          )}
+        </div>
       </div>
     </div>
   );

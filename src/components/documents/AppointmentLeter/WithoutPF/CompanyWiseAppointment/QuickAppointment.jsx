@@ -22,23 +22,22 @@ const formatCurrency = (v) =>
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
-  const basic = round2(annualCTC * 0.34);
-  const hra = round2(annualCTC * 0.20);
-  const da = round2(annualCTC * 0.035);
-  const special = round2(annualCTC * 0.345);
-  const food = round2(annualCTC * 0.06);
+  const round2 = (n) => Number(n.toFixed(2));
 
-  const misc = round2(
-    annualCTC - (basic + hra + da + special + food)
-  );
+  const basic   = round2(annualCTC * 0.40);
+  const hra     = round2(annualCTC * 0.18);
+  const da      = round2(annualCTC * 0.12);
+  const special = round2(annualCTC * 0.16);
+  const food    = round2(annualCTC * 0.06);
+  const misc    = round2(annualCTC * 0.08);
 
   return [
-    ["Basic", basic / 12, basic],
-    ["House Rent Allowance", hra / 12, hra],
-    ["Dearness Allowance", da / 12, da],
-    ["Special Allowance", special / 12, special],
-    ["Food Allowance", food / 12, food],
-    ["Misc. Allowance", misc / 12, misc],
+    ["Basic ", basic / 12, basic],
+    ["House Rent Allowance ", hra / 12, hra],
+    ["Dearness Allowance ", da / 12, da],
+    ["Special Allowance ", special / 12, special],
+    ["Food Allowance ", food / 12, food],
+    ["Misc. Allowance ", misc / 12, misc],
   ];
 };
 
@@ -53,7 +52,7 @@ const QuickAppointment = ({ company, data }) => {
   /* ================= TERMS ================= */
   const terms = [
     <> Your Designation will be <strong>"{data.position}"</strong>.   </>,
-    <>Your total emoluments will be <strong>Rs. {annualCTC / 100000} </strong>Lakhs per annum.</>,
+    <>Your total emoluments will be <strong>Rs. {annualCTC / 100000} </strong>Lakhs Per Annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
     `You shall be due for salary revision not before one year from your date of joining.`,
@@ -84,7 +83,7 @@ const QuickAppointment = ({ company, data }) => {
           </Typography>
 
           <Typography fontSize={15} mt={1}>
-            <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/
+            <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
             {String(data.employeeId).padStart(4, "0")}
           </Typography>
 
@@ -201,7 +200,7 @@ const QuickAppointment = ({ company, data }) => {
       <A4Page headerSrc={company.header}>
 
            <Typography fontSize={15} mt={2}>
-            <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/
+            <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
             {String(data.employeeId).padStart(4, "0")}
           </Typography>
         <Typography align="center" fontWeight={700} mb={3} mt={5}>
