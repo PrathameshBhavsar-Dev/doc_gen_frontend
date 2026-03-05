@@ -208,16 +208,22 @@ const NimbjaRelieving = ({ company, data }) => {
       )}
       <div
         style={{
-          textAlign: "center",
-          fontWeight: "600",
+          textAlign: "Right",
+          fontWeight: "",
           fontStyle: "Verdana",
-          fontSize: "5mm",
-          marginTop: "15mm",
+          fontSize: "mm",
+          marginTop: "16mm",
           marginBottom: "14mm",
-          textDecoration: "underline",
+          textDecoration: "",
+          marginRight: "6mm"
+          
         }}
       >
-        Relieving Letter
+        {new Date(data.issueDate).toLocaleDateString("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+        })}
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -231,16 +237,12 @@ const NimbjaRelieving = ({ company, data }) => {
         {/* ================= DATE ================= */}
         <div
           style={{
-            textAlign: "right",
+            textAlign: "Center",
             marginBottom: "26mm", // ✅ matches Word spacing
             marginTop: "-20mm",
           }}
         >
-          {new Date(data.issueDate).toLocaleDateString("en-US", {
-            month: "long",
-            day: "2-digit",
-            year: "numeric",
-          })}
+          Releiving Letter.
         </div>
 
         {/* ================= RECEIVER ================= */}
@@ -306,7 +308,7 @@ const NimbjaRelieving = ({ company, data }) => {
                 src={company.signature}
                 alt="HR Signature"
                 style={{
-                  width: "220px",
+                  width: "180px",
                   display: "block",
                   marginBottom: "8px",
                 }}

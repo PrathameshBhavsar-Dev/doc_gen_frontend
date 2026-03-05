@@ -22,41 +22,114 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
         })
       : "";
 
+  const numberToWords = (num = 0) => {
+    if (!num) return "Zero Rupees Only";
+
+    const ones = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+    ];
+    const teens = [
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+    const tens = [
+      "",
+      "",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ];
+
+    const inWords = (n) => {
+      if (n < 10) return ones[n];
+      if (n < 20) return teens[n - 10];
+      if (n < 100)
+        return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+      if (n < 1000)
+        return (
+          ones[Math.floor(n / 100)] +
+          " Hundred" +
+          (n % 100 ? " " + inWords(n % 100) : "")
+        );
+      if (n < 100000)
+        return (
+          inWords(Math.floor(n / 1000)) +
+          " Thousand" +
+          (n % 1000 ? " " + inWords(n % 1000) : "")
+        );
+      if (n < 10000000)
+        return (
+          inWords(Math.floor(n / 100000)) +
+          " Lakh" +
+          (n % 100000 ? " " + inWords(n % 100000) : "")
+        );
+      return inWords(Math.floor(n / 10000000)) + " Crore";
+    };
+
+    return `${inWords(Math.round(num))} Rupees Only`;
+  };
+
   /* ================= SALARY LOGIC ================= */
 
-  const round2 = (num) => Number(num.toFixed(2));
-  const annualCTC = round2(Number(data.totalSalary || 0));
+  // 🔹 Round to whole number (no decimals)
+  const round0 = (num) => Math.round(num);
 
-  const basicAnnual = round2(annualCTC * 0.4);
-  const hraAnnual = round2(annualCTC * 0.18);
-  const daAnnual = round2(annualCTC * 0.12);
-  const specialAnnual = round2(annualCTC * 0.16);
-  const foodAnnual = round2(annualCTC * 0.06);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(Number(data.totalSalary || 0));
+  1;
 
-  const usedAnnual =
-    basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual;
+  // ================= PERCENTAGE BREAKUP =================
+  const basicMonthly = round0(monthlyCTC * 0.4);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+  const miscMonthly = round0(monthlyCTC * 0.08); // 8%
 
-  const miscAnnual = round2(annualCTC - usedAnnual);
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const miscAnnual = round0(miscMonthly * 12);
 
-  const basicMonthly = round2(basicAnnual / 12);
-  const hraMonthly = round2(hraAnnual / 12);
-  const daMonthly = round2(daAnnual / 12);
-  const specialMonthly = round2(specialAnnual / 12);
-  const foodMonthly = round2(foodAnnual / 12);
-  const miscMonthly = round2(miscAnnual / 12);
-
+  // ================= SALARY TABLE STRUCTURE =================
   const salaryRows = [
     ["Basic", basicMonthly, basicAnnual],
-    ["House Rent Allowance", hraMonthly, hraAnnual],
-    ["Dearness Allowance", daMonthly, daAnnual],
-    ["Special Allowance", specialMonthly, specialAnnual],
-    ["Food Allowance", foodMonthly, foodAnnual],
-    ["Misc. Allowance", miscMonthly, miscAnnual],
+    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
+    ["HRA", daMonthly, daAnnual],
+    ["City Allowance", specialMonthly, specialAnnual],
+    ["Superannuation Fund", foodMonthly, foodAnnual],
+    ["Performance Bonus", miscMonthly, miscAnnual],
   ];
 
-  const totalMonthly = round2(salaryRows.reduce((sum, row) => sum + row[1], 0));
+  // ================= TOTALS =================
+  const totalMonthly = round0(salaryRows.reduce((sum, row) => sum + row[1], 0));
 
-  const totalAnnual = round2(salaryRows.reduce((sum, row) => sum + row[2], 0));
+  const totalAnnual = round0(salaryRows.reduce((sum, row) => sum + row[2], 0));
 
   return (
     <>
@@ -65,6 +138,19 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
         <Box>
           <Typography align="right" mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             {formatDate(data.issueDate)}
+          </Typography>
+
+          <Typography
+            sx={{
+              textAlign: "Center",
+              marginTop: "-8mm",
+              mb: "5mm",
+              fontFamily: "Verdana",
+              textDecoration: "underline",
+              fontSize: "15px",
+            }}
+          >
+            Confirmation Letter
           </Typography>
 
           <Typography mb={1} sx={{ fontFamily: "Bahnschrift" }}>
@@ -92,8 +178,8 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             We are pleased to confirm your continued services at the position of{" "}
             <strong>{data.position}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
-            date <strong>{data.effectiveDate}</strong>, considering your
-            performance and support towards the organization.
+            date <strong>{formatDate(data.effectiveDate)}</strong>, considering
+            your performance and support towards the organization.
           </Typography>
 
           <Typography
@@ -103,7 +189,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(data.totalSalary)}</strong> per year.
+            <strong>{formatCurrency(totalAnnual)}</strong> per year.
           </Typography>
 
           <Typography
@@ -139,7 +225,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: 50 }}
+                    style={{ height: 50, marginTop: "5mm" }}
                   />
                 )}
                 {company?.stamp && (
@@ -166,6 +252,11 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
+        <Typography
+          sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+        >
+          <strong>Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}</strong>
+        </Typography>
         <Typography align="center" fontWeight={600} mb={4}>
           Annexure A – Salary Structure
         </Typography>
@@ -182,7 +273,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           }}
         >
           <TableBody>
-            <TableRow sx={{ backgroundColor: "#a3f57a" }}>
+            <TableRow sx={{ backgroundColor: "#a0ed64" }}>
               <TableCell>
                 <b>Salary Components</b>
               </TableCell>
@@ -202,7 +293,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               </TableRow>
             ))}
 
-            <TableRow sx={{ backgroundColor: "#a3f57a" }}>
+            <TableRow sx={{ backgroundColor: "#a0ed64" }}>
               <TableCell>
                 <b>Total Monthly Gross Salary</b>
               </TableCell>
@@ -223,11 +314,11 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 48 }}
+                  style={{ height: 45, marginTop: "5mm" }}
                 />
               )}
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
               )}
             </Box>
             <Typography mt={1}>{company.hrName}</Typography>

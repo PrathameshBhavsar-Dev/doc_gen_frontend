@@ -47,6 +47,10 @@ const NeweageRelieving = ({ company, data }) => {
       headerSrc={company.headerImage}
       footerSrc={company.footerImage}
     >
+
+      <Typography sx={{textAlign: "center", font: "28"}}> 
+              <b>Relieving Letter</b>
+            </Typography>
       {/* ================= DATE ================= */}
       <Typography align="right" sx={{ ...TEXT, mb: 4 }}>
         {formatDate(issueDate)}

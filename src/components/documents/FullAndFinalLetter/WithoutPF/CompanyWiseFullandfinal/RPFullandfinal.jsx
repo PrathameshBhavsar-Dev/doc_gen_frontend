@@ -9,6 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 
+import A4Page from "../../../../layout/A4Page";
+
+
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
@@ -123,10 +126,11 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
     Number(data.leaveencashment || 0);
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Segoe UI" }}>
-      {company.header && <img src={company.header} width="100%" alt="" />}
 
-      <Box p="10mm">
+    <A4Page headerSrc={company.header} footerSrc={company.footer}>
+    
+
+      <Box>
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
 
@@ -257,14 +261,14 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={cell}>Leave encashment (Days)</TableCell>
+              <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                 00
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={cell}>Total (Days)</TableCell>
+              <TableCell colSpan={2} sx={cell}>Total</TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                 {formatAmt(totalEarned)}
               </TableCell>
@@ -301,8 +305,9 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
         </Table>
       </Box>
 
-      {company.footer && <img src={company.footer} width="100%" alt="" />}
-    </Box>
+      
+    
+    </A4Page>
   );
 };
 
