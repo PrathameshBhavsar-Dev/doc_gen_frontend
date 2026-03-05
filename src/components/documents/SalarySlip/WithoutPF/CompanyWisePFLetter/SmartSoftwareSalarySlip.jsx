@@ -52,62 +52,57 @@ const SmartSoftwareSalarySlip= ({ company, data }) => {
   } = data;
 
   /* ================= SALARY CALCULATION (LOCAL) ================= */
-  const {
-    basicSalary,
-    hra,
-    dearnessAllowance,
-    foodAllowance,
-    miscAllowance,
-    pf,
-    professionalTax,
+const {
+  basicSalary,
+  hra,
+  dearnessAllowance,
+  specialAllowance,
+  foodAllowance,
+  miscAllowance,
+  pf,
+  professionalTax,
+  totalDeductions,
+  netPay,
+} = useMemo(() => {
+  const gross = Number(totalSalary) || 0;
+
+  /* ===== Earnings % Calculation ===== */
+  const basic = Math.round(gross * 0.40);      // 40%
+  const hraCalc = Math.round(gross * 0.18);    // 18%
+  const da = Math.round(gross * 0.12);         // 12%
+  const special = Math.round(gross * 0.16);    // 16%
+  const food = Math.round(gross * 0.06);       // 6%
+  const misc = Math.round(gross * 0.08);       // 8%
+
+  /* ===== Deductions ===== */
+  const pfCalc = Math.round(basic * 0.12);
+  const pt = getProfessionalTax(month, gross);
+  const otherDeduction = 2000;
+
+  const totalDeductions =
+    pfCalc + pt + otherDeduction;
+
+  const net = gross - totalDeductions;
+
+  return {
+    basicSalary: basic,
+    hra: hraCalc,
+    dearnessAllowance: da,
+    specialAllowance: special,
+    foodAllowance: food,
+    miscAllowance: misc,
+    pf: pfCalc,
+    professionalTax: pt,
     totalDeductions,
-    netPay,
-  } = useMemo(() => {
-    const gross = Number(totalSalary) || 0;
-  
-    // Calculate earnings components
-    const basic = Math.round(gross * 0.4);
-    const hraCalc = Math.round(basic * 0.4);
-    const da = Math.round(gross * 0.1);
-    const food = Math.round(gross * 0.1);
-    const misc = gross - (basic + hraCalc + da + food);
-  
-    // Calculate deductions
-    const pfCalc = Math.round(basic * 0.12);
-    const pt = getProfessionalTax(month, gross);
-    const otherDeduction = 2000;
-  
-    const deductions = [
-      { label: "PF", value: pfCalc },
-      { label: "PT", value: pt },
-      { label: "Other Deduction", value: otherDeduction },
-    ];
-  
-    // Total Deduction including all
-    const totalDeductions = deductions
-    .filter(d => d.label === "PT" || d.label === "Other Deduction")
-    .reduce((sum, d) => sum + (Number(d.value) || 0), 0);
-  
-    // Net Pay after deducting all
-    const net = gross - totalDeductions;
-  
-    return {
-      basicSalary: basic,
-      hra: hraCalc,
-      dearnessAllowance: da,
-      foodAllowance: food,
-      miscAllowance: misc,
-      pf: pfCalc,
-      professionalTax: pt,
-      totalDeductions: totalDeductions,
-      netPay: net,
-    };
-  }, [totalSalary, month]);
+    netPay: net,
+  };
+}, [totalSalary, month]);
   
     const earnings = [
       { label:<b> BASIC</b>, value: basicSalary },
       { label: <b>HRA</b>, value: hra },
       { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
+      { label: <b>SPECIAL ALLOWANCE</b>, value: foodAllowance },
       { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
       { label: <b>MISC ALLOWANCE</b>, value: miscAllowance },
     ];

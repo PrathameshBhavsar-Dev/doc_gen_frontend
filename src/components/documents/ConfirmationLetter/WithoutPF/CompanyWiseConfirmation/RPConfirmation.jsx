@@ -131,23 +131,29 @@ const totalAnnual = round0(
           </Typography>
 
           <Typography mb={2}>Dear {firstName},</Typography>
-
-          <Typography mb={3} textAlign="justify">
-                      We are pleased to confirm your continued services at the position of
-                      Software Test Engineer with DEVCONS SOFTWARE SOLUTIONS PVT. LTD.
-                      with effective date {data.effectiveDate}. 
-                      considering your performance and support towards the organization.
-                      If there is any change in the date of joining, changes can be taken under consideration.
           
+                    <Typography mb={3} textAlign="justify">
+                      We are pleased to confirm your continued services at the position of{" "}
+                      <strong>{data.position}</strong> with{" "}
+                      <strong>R P Business Solutions LLP</strong> with effective date{" "}
+                      <strong>{formatDate(data.effectiveDate)}</strong>, considering your performance
+                      and support towards the organization. If there is any change in the
+                      date of joining, changes can be taken under consideration.
                     </Typography>
           
                     <Typography mb={3} textAlign="justify">
-                      Your total Gross salary will be Rs. {formatCurrency(totalAnnual)} per year.
-                      
+                      Your total Gross salary will be Rs.{" "}
+                      <strong>{formatCurrency(totalAnnual)}</strong> per year.
                     </Typography>
           
                     <Typography mb={3} textAlign="justify">
-                      Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be Specified in your letter of appointment. We welcome you to R P BUSINESS SOLUTIONS LLP. Family and hope it would be the beginning of a long and mutually beneficial association. Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+                      Subject to various deductions as per company and government policy.
+                      The roles and responsibilities and other terms and conditions of your
+                      employment will be specified in your letter of appointment. We welcome
+                      you to R P Business Solutions LLP family and hope it would be the
+                      beginning of a long and mutually beneficial association. Kindly
+                      acknowledge the duplicate copy of this letter as an acceptance of
+                      this offer.
                     </Typography>
 
           <Typography mb={3}>For {company.name}</Typography>
