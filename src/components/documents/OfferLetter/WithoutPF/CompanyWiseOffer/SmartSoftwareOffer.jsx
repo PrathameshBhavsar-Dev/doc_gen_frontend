@@ -12,12 +12,11 @@ import A4Layout from "../../../../layout/A4Page";
 
 /* ================= SALARY UTILITIES ================= */
 import {
-  generateOfferLetterComponents,
   formatCurrency,
   numberToWords,
 } from "../../../../../utils/salaryCalculations";
 
-export default function SmartSoftwareOffer({ company, data }) {
+export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
     issueDate = new Date(),
     candidateName = "",
@@ -25,8 +24,8 @@ export default function SmartSoftwareOffer({ company, data }) {
     position = "",
     joiningDate = "",
     salary = 0,
-    mrms = "", // Title field (Mr, Ms, Mrs, Miss, Mx)
-  } = data || {};
+    mrms = "",
+  } = data;
 
   /* ================= TITLE & PRONOUNS ================= */
   const title = (mrms || "").toLowerCase().trim();
@@ -46,23 +45,40 @@ export default function SmartSoftwareOffer({ company, data }) {
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
-  /* ================= SALARY ================= */
-  const salaryComponents = useMemo(
-    () => generateOfferLetterComponents(salary),
-    [salary]
-  );
-
+  /* ================= SALARY BREAKUP ================= */
   const totalAnnual = Number(salary) || 0;
   const totalMonthly = Math.round(totalAnnual / 12);
+
+  const salaryComponents = useMemo(() => {
+    const basic = Math.round(totalAnnual * 0.40);
+    const hra = Math.round(totalAnnual * 0.18);
+    const conveyance = Math.round(totalAnnual * 0.12);
+    const special = Math.round(totalAnnual * 0.16);
+    const medical = Math.round(totalAnnual * 0.06);
+
+    // MISC = remaining balance (ensures 100%)
+    const misc =
+      totalAnnual - (basic + hra + conveyance + special + medical);
+
+    return [
+      { name: "Basic Salary ", annual: basic, monthly: Math.round(basic / 12) },
+      { name: "HRA ", annual: hra, monthly: Math.round(hra / 12) },
+      { name: "Conveyance Allowance ", annual: conveyance, monthly: Math.round(conveyance / 12) },
+      { name: "Special Allowance ", annual: special, monthly: Math.round(special / 12) },
+      { name: "Medical Allowance ", annual: medical, monthly: Math.round(medical / 12) },
+      { name: "MISC Allowance ", annual: misc, monthly: Math.round(misc / 12) },
+    ];
+  }, [totalAnnual]);
+
   const salaryInWords = numberToWords(totalAnnual);
 
-  /* ================= TYPOGRAPHY ================= */
+  /* ================= STYLES ================= */
   const baseText = {
     fontFamily: "Verdana, Geneva, sans-serif",
     fontSize: "14px",
@@ -78,7 +94,6 @@ export default function SmartSoftwareOffer({ company, data }) {
     width: "110px",
   };
 
-  /* ================= TABLE STYLES ================= */
   const tableCell = {
     fontFamily: "Verdana, Geneva, sans-serif",
     fontSize: "13px",
@@ -123,8 +138,8 @@ export default function SmartSoftwareOffer({ company, data }) {
           </Typography>
 
           <Typography sx={{ mt: "12px" }}>
-            <Box component="span" sx={labelStyle}>Subject</Box> :{" "}
-            <Box component="span" sx={{ textDecoration: "underline" }}>
+            <Box component="span" sx={labelStyle}>Subject</Box> :
+            <Box component="span" sx={{ textDecoration: "underline", ml: 1 }}>
               Letter of intent for the position of {position}.
             </Box>
           </Typography>
@@ -135,9 +150,8 @@ export default function SmartSoftwareOffer({ company, data }) {
 
           <Typography sx={para}>
             We are pleased to offer you the position of {position}. As discussed,
-            {pronouns.subject.toLowerCase()} is requested to join on {formattedJoiningDate}.
-            Your total Gross salary will be Rs. {formatCurrency(totalAnnual)} (
-            {salaryInWords}) per year.
+            you are requested to join on {formattedJoiningDate}. Your total Gross salary
+            will be Rs. {formatCurrency(totalAnnual)} ({salaryInWords}) per year.
           </Typography>
 
           <Typography sx={paraLarge}>
@@ -162,7 +176,8 @@ export default function SmartSoftwareOffer({ company, data }) {
           <Typography sx={{ mt: "24px" }}>Yours Sincerely,</Typography>
           <Typography>For <b>{company.name?.toUpperCase()}</b></Typography>
 
-          {/* SIGNATURE & STAMP – PAGE 1 */}
+
+
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
             <Box>
               <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
@@ -182,10 +197,6 @@ export default function SmartSoftwareOffer({ company, data }) {
               <Typography>Candidate Name : {candidateName}</Typography>
             </Box>
           </Box>
-
-          <Typography sx={{ mt: "24px", textAlign: "center", textDecoration: "underline" }}>
-            <b>Enclosures: Annexure A – Salary Structure</b>
-          </Typography>
         </Box>
       </A4Layout>
 
@@ -230,7 +241,6 @@ export default function SmartSoftwareOffer({ company, data }) {
             </TableBody>
           </Table>
 
-          {/* SIGNATURE & STAMP – PAGE 2 */}
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
             <Box>
               <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
@@ -242,7 +252,7 @@ export default function SmartSoftwareOffer({ company, data }) {
                 )}
               </Box>
               <Typography>{company.hrName}</Typography>
-              <Typography>HR Department Pune</Typography>
+              <Typography>HR Relations Lead</Typography>
             </Box>
 
             <Box sx={{ width: "45%", mt: 8 }}>
@@ -252,6 +262,7 @@ export default function SmartSoftwareOffer({ company, data }) {
           </Box>
         </Box>
       </A4Layout>
+
     </>
   );
 }

@@ -1,202 +1,126 @@
-// import React from "react";
-// import { Box, Typography } from "@mui/material";
-// import A4Layout from "../../../layout/A4Page";
-
-// /* ================= DATE FORMAT ================= */
-// const formatDate = (date) => {
-//   if (!date) return "";
-
-//   const d = new Date(date);
-//   const day = String(d.getDate()).padStart(2, "0");
-//   const month = String(d.getMonth() + 1).padStart(2, "0");
-//   const year = d.getFullYear();
-
-//   return `${day}/${month}/${year}`;
-// };
-
-// const SmartMatrixCertification = ({ company, data }) => {
-//   return (
-//     <A4Layout headerSrc={company.header} footerSrc={company.footer}></A4Layout>
-//   );
-// };
-
-// export default SmartMatrixCertification;
-
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import A4Layout from "../../../layout/A4Page";
-
-/* ================= DATE FORMAT ================= */
-const formatDate = (date) => {
-  if (!date) return "";
-
-  const d = new Date(date);
-
-  const day = d.getDate();
-  const year = d.getFullYear();
-
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const month = monthNames[d.getMonth()];
-
-  return `${day} ${month} ${year}`;
-};
-
+import { Typography, Box } from "@mui/material";
+import A4Page from "../../../layout/A4Page";
 
 const SmartMatrixCertification = ({ company, data }) => {
+  if (!company || !data) return null;
+
+  const formatDate = (d) =>
+    d
+      ? new Date(d).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })
+      : "";
+
+  const issueDate = formatDate(data.issueDate);
+  const startDate = formatDate(data.startDate);
+  const endDate = formatDate(data.endDate);
+
   return (
-    <A4Layout headerSrc={company.header} footerSrc={company.footer}>
-      {/* ================= ISSUE DATE ================= */}
-      <Box
+    <A4Page
+      headerSrc={company.header}
+      footerSrc={company.footer}
+      watermarkSrc={company.watermark}
+      contentTop="55mm"
+      contentBottom="35mm"
+    >
+      {/* DATE (Right aligned like image) */}
+      <Typography
         sx={{
           textAlign: "right",
-          fontSize: "13px",
-          mt: "10mm",
-          mr: "10mm",
-          fontFamily: "Bahnschrift",
-          fontWeight: "bold",
+          fontSize: "11pt",
+          mb: "8mm",
         }}
       >
-        Date: {formatDate(data.issueDate)}
-      </Box>
+        Date: {issueDate}
+      </Typography>
 
-      {/* ================= TITLE ================= */}
+      {/* TITLE */}
       <Typography
         sx={{
           textAlign: "center",
-          fontWeight: "bold",
-          fontSize: "20px",
-          mt: "15mm",
+          fontWeight: 600,
           textDecoration: "underline",
-          fontFamily: "Bahnschrift",
+          fontSize: "14pt",
+          mb: "8mm",
         }}
       >
         Internship Certificate
       </Typography>
 
-      {/* ================= CONTENT ================= */}
-      <Box sx={{ mt: "12mm", px: "5mm", textAlign: "justify" }}>
-        <Typography
-          sx={{ fontSize: "14px", mb: "6mm", fontFamily: "Bahnschrift" }}
-        >
+      {/* BODY CONTENT */}
+      <Box sx={{ fontSize: "11pt", lineHeight: 1.6 }}>
+        <Typography sx={{ mb: "6mm" }}>
           We are pleased to certify that <strong>{data.employeeName}</strong>,
-          has joined our group to work on internship with organization name{" "}
-          <strong>SmartMatrix Digital Services Pvt Ltd</strong>.<br />
-          The internship program held on{" "}
-          <strong>{formatDate(data.startDate)}</strong> to{" "}
-          <strong>{formatDate(data.completionDate)}</strong>.
+          has joined our group to work on internship with organization{" "}
+          <strong>{company.name}</strong> The internship program held on{" "}
+          <strong>{startDate}</strong> to <strong>{endDate}</strong>.
         </Typography>
 
-        <Typography
-          sx={{ fontSize: "14px", mb: "6mm", fontFamily: "Bahnschrift" }}
-        >
+        <Typography sx={{ mb: "6mm" }}>
           During the internship period, <strong>{data.employeeName}</strong> was
-          actively participated in project <br />
-          related tasks, shown their skills and abilities in{" "}
-          <strong>{data.role}</strong>.
+          actively participated in project related tasks, shown their skills and
+          abilities in <strong>{data.designation}</strong>.
         </Typography>
 
-        <Typography
-          sx={{
-            fontSize: "14px",
-            mb: "6mm",
-            px: "0mm",
-            fontFamily: "Bahnschrift",
-          }}
-        >
+        <Typography sx={{ mb: "6mm" }}>
           Through this internship experience,{" "}
-          <strong>{data.employeeName}</strong> adopted practical knowledge,{" "}
-          <br />
-          best practices and exposure to real-world scenarios,which will
-          undoubtedly
-          <br />
+          <strong>{data.employeeName}</strong> adopted practical knowledge, best
+          practices and exposure to real-world scenarios, which will undoubtedly
           enhance their academic and professional development.
         </Typography>
 
-        <Typography
-          sx={{
-            fontSize: "14px",
-            mb: "10mm",
-            px: "0mm",
-            fontFamily: "Bahnschrift",
-          }}
-        >
+        <Typography sx={{ mb: "8mm" }}>
           Thank you for your successful completion & cooperation and support in
-          <br />
           facilitating this internship opportunity.
         </Typography>
 
-        {/* ================= SIGNATURE ================= */}
-        <Typography
-          sx={{ fontSize: "14px", mt: "-5mm", fontFamily: "Bahnschrift" }}
-        >
-          Yours Sincerely,
-        </Typography>
+        <Typography sx={{ mb: "12mm" }}>Yours Sincerely,</Typography>
+      </Box>
 
-        <Typography
-          sx={{
-            fontSize: "14px",
-            mt: "10mm",
-            fontWeight: "bold",
-            fontFamily: "Verdana",
-          }}
-        >
-          SmartMatrix Digital Services Pvt Ltd.
-        </Typography>
+      {/* COMPANY NAME */}
+      <Typography sx={{ fontWeight: 600, mb: "20mm" }}>
+        {company.name}
+      </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            mt: 2,
-          }}
-        >
-          {/* HR SIGNATURE */}
-          {company.signature && (
-            <img
-              src={company.signature}
-              alt="HR Signature"
-              style={{
-                height: "40px",
-                marginBottom: "7mm",
-              }}
-            />
-          )}
-          {/* COMPANY STAMP */}
-          {company.stamp && (
-            <img
-              src={company.stamp}
-              alt="Company Stamp"
-              style={{ width: "110px", marginRight: "88mm" }}
-            />
-          )}
+      {/* SIGNATURE + STAMP BLOCK */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "30mm",
+        }}
+      >
+        {/* SIGNATURE */}
+        <Box>
+          <Box
+            component="img"
+            src={company.signature}
+            alt="Signature"
+            sx={{ width: 120, marginTop: "10mm" }}
+          />
+          <Typography sx={{ mt: "5mm", fontWeight: 600 }}>
+            {company.hrName}
+          </Typography>
+          <Typography sx={{ fontWeight: 600 }}>
+            HR Manager - HR Services
+          </Typography>
         </Box>
 
-        <Typography sx={{ fontSize: "14px", mt: "6mm", fontFamily: "Verdana" }}>
-          <strong>Shiv Lahane</strong>
-        </Typography>
-
-        <Typography sx={{ fontSize: "13px", mb: "2mm", fontFamily: "Verdana" }}>
-          <strong>HR Manager–HR Services</strong>
-        </Typography>
+        {/* STAMP */}
+        <Box>
+          <Box
+            component="img"
+            src={company.stamp}
+            alt="Stamp"
+            sx={{ width: 110, marginLeft: -20, marginTop: -10 }}
+          />
+        </Box>
       </Box>
-    </A4Layout>
+    </A4Page>
   );
 };
 
 export default SmartMatrixCertification;
-

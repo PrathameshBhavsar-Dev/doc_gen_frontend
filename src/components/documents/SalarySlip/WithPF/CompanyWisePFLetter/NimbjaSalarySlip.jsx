@@ -69,11 +69,11 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
   const monthlyGross = round2(totalSalary);
 
   const PERCENT = {
-    basic: 0.40,
+    basic: 0.48,
     hra: 0.18,
     da: 0.12,
     special: 0.16,
-    food: 0.14, // adjusted so total = 100%
+    food: 0.06, // adjusted so total = 100%
   };
 
   const BASIC = round2(monthlyGross * PERCENT.basic);
