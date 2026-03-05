@@ -82,15 +82,15 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   )}
 
   {/* Toggle Button */}
-  <button
-    onClick={() => setCollapsed(!collapsed)}
-    className="p-2 rounded-md hover:bg-gray-100"
-  >
-    <PanelLeft size={20} />
-  </button>
+ <button
+  onClick={() => setCollapsed(!collapsed)}
+  className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
+>
+  <PanelLeft size={20} />
+</button>
 </div>
 
-      {/* Generate Button */}
+      
       {/* Generate Button */}
 <div className="relative mb-6 w-full">
   <div
@@ -130,14 +130,21 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
     </span>
   </div>
 
-  {!collapsed && isVisible && (
-    <div
-      ref={dropdownRef}
-      className="absolute top-16 z-50 w-full"
-    >
-      <GenerateDocDropDown onClose={handleToggle} />
-    </div>
-  )}
+  {isVisible && (
+  <div
+    ref={dropdownRef}
+    className={`absolute z-50 ${
+      collapsed
+        ? "top-5 left-16 w-20"
+        : "top-13 left-0 w-full"
+    }`}
+  >
+    <GenerateDocDropDown
+      onClose={handleToggle}
+      compact={collapsed}   // 👈 THIS controls everything
+    />
+  </div>
+)}
 </div>
 
       {/* Navigation */}
