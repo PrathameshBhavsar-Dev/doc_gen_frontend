@@ -163,31 +163,71 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
             <strong>{formatDate(data.effectiveDate)}</strong>.
           </Typography>
 
-          <Typography mb={2} textAlign="justify">
+          {/* <Typography mb={2} textAlign="justify">
             Your total Gross salary will be Rs.{" "}
             <strong>{formatCurrency(totalAnnual)}</strong> (
             {numberToWords(totalAnnual)}) per annum, subject to deductions as
             per company and government policies.
+          </Typography> */}
+          <Typography mb={2} textAlign="justify">
+            If there is any change in the date of joining, changes can be taken
+            under consideration. Your total Gross salary will be Rs.{" "}
+            <strong>{formatCurrency(totalAnnual)}</strong> (
+            {numberToWords(totalAnnual)}) per year.
           </Typography>
-
+          <Typography mb={2}>
+            Subject to various deductions as per companies and government
+            policy.
+          </Typography>
+          <Typography mb={2}>
+            The roles and responsibilities and other terms and conditions of
+            your employment will be specified of appointment.We welcome you to
+            Neweage Cloud Solution Pvt. Ltd.. Family and hope it would be the
+            beginning of a long and mutually beneficial association. Kindly
+            acknowledge the duplicate copy of this letter as an acceptance of
+            this offer.
+          </Typography>
           <Typography mb={2}>
             We look forward to your continued growth and contribution.
           </Typography>
 
-          <Typography mt={6}>
-            <strong>For {company.name}</strong>
-          </Typography>
+          {/* Signature Section - SAME STRUCTURE AS YOUR WORKING CODE */}
+          <Box sx={{ mt: 5, display: "flex", justifyContent: "space-between" }}>
+            {/* COMPANY */}
+            <Box>
+              <Typography fontWeight={700} fontSize={15} marginTop={2}>
+                For {company.name}
+              </Typography>
 
-          <Typography mt={3}>
-            <strong>{company.hrName}</strong>
-          </Typography>
-          <Typography>HR Relations Lead</Typography>
+              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+                {company.signature && (
+                  <img src={company.signature} alt="signature" height={60} />
+                )}
+                {company.stamp && (
+                  <img src={company.stamp} alt="stamp" height={80} />
+                )}
+              </Box>
+
+              <Typography fontWeight={600} mt={1}>
+                {company.hrName}
+              </Typography>
+              <Typography fontSize={13}>
+                <strong>HR Relations Lead</strong>
+              </Typography>
+            </Box>
+
+            {/* ACCEPTANCE */}
+            <Box>
+              <Typography mt={8}>Signature: ______________</Typography>
+              <Typography mt={2}>Name: {data.employeeName}</Typography>
+            </Box>
+          </Box>
         </Box>
       </A4Page>
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography align="center" fontWeight={600} mb={4}>
+        <Typography align="center" fontWeight={600} mb={4} mt={4}>
           Annexure A – Salary Structure
         </Typography>
 
@@ -239,14 +279,39 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
           </TableBody>
         </Table>
 
-        <Typography sx={{ marginTop: "60px" }}>
-          <strong>For {company.name}</strong>
-        </Typography>
+        {/* <Typography sx={{ marginTop: "60px" }}> */}
 
-        <Typography mt={3}>
-          <strong>{company.hrName}</strong>
-        </Typography>
-        <Typography>HR Relations Lead</Typography>
+        {/* Signature Section - SAME STRUCTURE AS YOUR WORKING CODE */}
+        <Box sx={{ mt: 8, display: "flex", justifyContent: "space-between" }}>
+          {/* COMPANY */}
+          <Box>
+            <Typography fontWeight={700} fontSize={15} marginTop={2}>
+              For {company.name}
+            </Typography>
+
+            <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              {company.signature && (
+                <img src={company.signature} alt="signature" height={60} />
+              )}
+              {company.stamp && (
+                <img src={company.stamp} alt="stamp" height={80} />
+              )}
+            </Box>
+
+            <Typography fontWeight={600} mt={1}>
+              {company.hrName}
+            </Typography>
+            <Typography fontSize={13}>
+              <strong>HR Relations Lead</strong>
+            </Typography>
+          </Box>
+
+          {/* ACCEPTANCE */}
+          <Box>
+            <Typography mt={8}>Signature: ______________</Typography>
+            <Typography mt={2}>Name: {data.employeeName}</Typography>
+          </Box>
+        </Box>
       </A4Page>
     </>
   );

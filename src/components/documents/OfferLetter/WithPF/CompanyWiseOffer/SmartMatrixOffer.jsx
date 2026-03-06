@@ -14,11 +14,11 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
+import stamp from "../../../../../assets/images/smartmatrix/Smartmatrix_stamp.png";
 /* ================= NUMBER TO WORDS ================= */
 const numberToWords = (num) => {
   if (num === 0) return "Zero Rupees Only";
-
   const a = [
     "",
     "One",
@@ -41,7 +41,6 @@ const numberToWords = (num) => {
     "Eighteen",
     "Nineteen",
   ];
-
   const b = [
     "",
     "",
@@ -82,7 +81,7 @@ const numberToWords = (num) => {
         " Crore" +
         (n % 10000000 ? " " + inWords(n % 10000000) : "")
       );
-    return "Value too large";
+    return "";
   };
 
   return inWords(num) + " Rupees Only";
@@ -102,34 +101,29 @@ const SmartMatrixOffer = ({ company, data }) => {
 
   const offerDate = fmtDate(data.issueDate);
   const joiningDate = fmtDate(data.joiningDate);
-  const grossSalary = data.salary;
   const position = data.position;
 
-  /* ======================================================
-   ✅ IMAGE MATCHING LOGIC (INPUT IS MONTHLY)
-   ====================================================== */
+  /* ================= CORRECTED LOGIC ================= */
 
   const round0 = (num) => Math.round(Number(num) || 0);
 
-  /* INPUT IS MONTHLY */
-  const monthlyCTC = round0(data.salary || 0);
-  const annualCTC = round0(monthlyCTC * 12);
+  /* ✅ INPUT IS ANNUAL */
+  const annualCTC = round0(data.salary || 0);
+  const monthlyCTC = round0(annualCTC / 12);
 
-  /* Exact Image Percentages */
+  /* Salary Percentages */
   const basicMonthly = round0(monthlyCTC * 0.48);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
 
-  /* Adjustment to avoid ₹1 mismatch */
   const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
 
   const foodMonthly = round0(monthlyCTC - used);
 
-  /* PF DISPLAY ONLY (NOT INCLUDED IN TOTAL) */
+  /* PF (Display Only) */
   const pfMonthly = 3750;
 
-  /* Salary Structure */
   const salaryComponents = [
     { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
     {
@@ -147,205 +141,119 @@ const SmartMatrixOffer = ({ company, data }) => {
     { name: "Provident Fund (PF)", monthly: pfMonthly, annual: pfMonthly * 12 },
   ];
 
-  /* TOTALS (WITHOUT PF) */
   const totalMonthly = monthlyCTC;
   const totalAnnual = annualCTC;
-  const lpa = (totalAnnual / 100000).toFixed(1);
+  const lpa = (annualCTC / 100000).toFixed(1);
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
-      <A4Page
-        headerSrc={company.header}
-        footerSrc={company.footer}
-        contentTop="45mm"
-        contentBottom="28mm"
-      >
-        <Typography
-          sx={{ mb: "6mm", textAlign: "right", fontFamily: "Verdana" }}
-        >
+      <A4Page headerSrc={company.header} footerSrc={company.footer}>
+        <Typography sx={{ textAlign: "right", mb: "6mm" }}>
           {offerDate}
         </Typography>
 
-        <Typography sx={{ mb: "10mm", textAlign: "center", fontWeight: 700 }}>
+        <Typography align="center" sx={{ fontWeight: 700, mb: "8mm" }}>
           <Box component="span" sx={{ textDecoration: "underline" }}>
             Offer Letter
           </Box>
         </Typography>
+        <Box
+          sx={{
+            fontFamily: "Calibri, sans-serif",
+            fontSize: "11pt",
+            lineHeight: 1.5,
+            textAlign: "justify",
+          }}
+        >
+          <Typography sx={{ mb: "6mm" }}>Dear {data.employeeName},</Typography>
 
-        <Typography sx={{ mb: "4mm" }}>Dear {data.candidateName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
 
-        <Typography sx={{ mb: "4mm" }}>Welcome to {company.name}.</Typography>
+          <Typography sx={{ mb: "6mm" }}>
+            With reference to your application and subsequent interviews you had
+            with us, we are pleased to confirm your offer of employment to join{" "}
+            {company.name}. We value your abilities and believe that you will
+            find our work environment to be challenging as well as fulfilling.
+          </Typography>
 
-        <Typography sx={{ mb: "4mm" }}>
-          With reference to your application and subsequent interviews you had
-          with us, we are pleased to confirm your offer of employment to join{" "}
-          {company.name}. We value your abilities and believe that you will find
-          our work environment to be challenging as well as fulfilling.
-        </Typography>
+          <Typography sx={{ mb: "6mm" }}>
+            With reference to the interview you had with us, we would like to
+            offer you the post of <strong>{position}</strong>.
+          </Typography>
 
-        <Typography sx={{ mb: "4mm" }}>
-          With reference to the interview you had with us, we would like to
-          offer you the post of <strong>{position}</strong>.
-        </Typography>
+          <Typography sx={{ mb: "6mm" }}>
+            Your commencement date with us will be on or before{" "}
+            <strong>{joiningDate}</strong>.
+          </Typography>
+ 
+          <Typography sx={{ mb: "6mm" }}>
+            Your annual salary, allowances, and contributions put together will
+            be
+            <strong> INR {lpa} LPA.</strong>
+          </Typography>
 
-        <Typography sx={{ mb: "4mm" }}>
-          Your commencement date with us will be on or before{" "}
-          <strong>{joiningDate}</strong>.
-        </Typography>
-
-        <Typography sx={{ mb: "4mm" }}>
-          Your annual salary, allowances, and contributions put together will be
-          <strong> INR {lpa} LPA.</strong>
-        </Typography>
-
-        <Typography sx={{ mb: "13mm" }}>
-          The roles and responsibilities and other terms and conditions of your
-          employment will be specified in your letter of appointment.
-        </Typography>
+          <Typography sx={{ mb: "12mm" }}>
+            The roles and responsibilities and other terms and conditions of
+            your employment will be specified in your letter of appointment.
+          </Typography>
+        </Box>
 
         <Typography>
           <strong>{company.name}</strong>
         </Typography>
-        <Box
-          sx={{
-            mt: "10mm",
-            display: "flex",
-            alignItems: "flex-start",
 
-            /* 🔥 CONTROL HORIZONTAL DISTANCE HERE */
-            gap: "12mm", // signature close to stamp
+        <Box sx={{ mt: "12mm" }}>
+          <Box component="img" src={sign} sx={{ width: 120 }} />
+          <Box component="img" src={stamp} sx={{ width: 120 }} />
 
-            /* 🔥 MOVE ENTIRE BLOCK LEFT */
-            ml: "-12mm", // shifts stamp left safely
-          }}
-        >
-          {/* LEFT — STAMP + HR DETAILS */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              minWidth: "120px",
-            }}
-          >
-            <Box
-              component="img"
-              src={sign}
-              alt="Stamp"
-              sx={{
-                width: 110,
-                position: "relative",
-                left: "-8mm",
-                marginTop: "20mm",
-              }}
-            />
-
-            {/* HR DETAILS BELOW STAMP */}
-            <Box sx={{ mt: "5mm", ml: "12mm" }}>
-              <Typography>
-                <strong>{company.hrName}</strong>
-              </Typography>
-              <Typography>
-                <strong>HR Manager - HR Services</strong>
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* RIGHT — SIGNATURE */}
-          <Box
-            sx={{
-              mt: "18mm", // signature slightly lower than stamp
-              ml: "-30mm",
-            }}
-          >
-            <Box
-              component="img"
-              src={company.stamp}
-              alt="Signature"
-              sx={{
-                width: 130,
-                ml: "2mm",
-                mt: "-25mm",
-                transform: "translateX(-5mm)", // 👈 stronger left move
-              }}
-            />
-          </Box>
+          <Typography>
+            <strong>{company.hrName}</strong>
+          </Typography>
+          <Typography>
+            <strong>HR Manager - HR Services</strong>
+          </Typography>
         </Box>
       </A4Page>
 
       {/* ================= PAGE 2 ================= */}
-      <A4Page
-        headerSrc={company.header}
-        footerSrc={company.footer}
-        contentTop="45mm"
-        contentBottom="28mm"
-      >
+      <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Typography
-          sx={{
-            fontSize: "11pt",
-            fontWeight: "bold",
-            textAlign: "center",
-            mb: "6mm",
-          }}
+          align="center"
+          sx={{ fontWeight: 700, mb: "8mm", mt: "30px" }}
         >
           Annexure A Salary Structure
         </Typography>
 
-        <TableContainer
-          sx={{
-            mt: "10mm",
-            mb: "20mm",
-            fontFamily: "Times New Roman",
-          }}
-        >
+        <TableContainer>
           <Table
+            size="small"
             sx={{
               border: "2px solid #000",
               borderCollapse: "collapse",
-              tableLayout: "fixed",
               width: "100%",
+              "& th, & td": {
+                border: "1px solid #000",
+                padding: "8px 8px", // 🔥 reduces height
+                fontSize: "14px", // 🔥 smaller text
+                lineHeight: 1.3, // 🔥 tighter spacing
+              },
             }}
           >
             <TableHead>
-              <TableRow
-                sx={{
-                  backgroundColor: "#f28c28",
-                }}
-              >
-                <TableCell
-                  sx={{
-                    width: "50%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
-                >
+              <TableRow sx={{ backgroundColor: "#f28c28" }}>
+                <TableCell sx={{ border: "1px solid #000", fontWeight: 700 }}>
                   Salary Components
                 </TableCell>
-
                 <TableCell
                   align="center"
-                  sx={{
-                    width: "25%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
+                  sx={{ border: "1px solid #000", fontWeight: 700 }}
                 >
                   Per month (Rs.)
                 </TableCell>
-
                 <TableCell
                   align="center"
-                  sx={{
-                    width: "25%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
+                  sx={{ border: "1px solid #000", fontWeight: 700 }}
                 >
                   Per Annum (Rs.)
                 </TableCell>
@@ -355,77 +263,31 @@ const SmartMatrixOffer = ({ company, data }) => {
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "12px",
-                      padding: "3px 6px",
-                    }}
-                  >
+                  <TableCell sx={{ border: "1px solid #000" }}>
                     {row.name}
                   </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "12px",
-                      padding: "3px 6px",
-                    }}
-                  >
+                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
                     {formatCurrency(row.monthly)}
                   </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "12px",
-                      padding: "3px 6px",
-                    }}
-                  >
+                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
                     {formatCurrency(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
-              {/* TOTAL ROW */}
-              <TableRow
-                sx={{
-                  backgroundColor: "#f28c28",
-                }}
-              >
-                <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
-                >
+              <TableRow sx={{ backgroundColor: "#f28c28" }}>
+                <TableCell sx={{ border: "1px solid #000", fontWeight: 700 }}>
                   Total Monthly Gross Salary
                 </TableCell>
-
                 <TableCell
                   align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
+                  sx={{ border: "1px solid #000", fontWeight: 700 }}
                 >
                   {formatCurrency(totalMonthly)}
                 </TableCell>
-
                 <TableCell
                   align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "12px",
-                    padding: "4px 6px",
-                  }}
+                  sx={{ border: "1px solid #000", fontWeight: 700 }}
                 >
                   {formatCurrency(totalAnnual)}
                 </TableCell>
@@ -433,47 +295,35 @@ const SmartMatrixOffer = ({ company, data }) => {
             </TableBody>
           </Table>
         </TableContainer>
-
-        <Typography>
+        {/* Signature Block */}
+        <Typography
+          sx={{ mt: "20mm", fontFamily: "Verdana, Geneva, sans-serif" }}
+        >
           <strong>{company.name}</strong>
         </Typography>
 
-        <Box
-          sx={{
-            mt: "10mm",
-            display: "flex",
-            alignItems: "flex-start",
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ mb: "8mm" }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item>
+                <Box
+                  component="img"
+                  src={sign}
+                  alt="Sign"
+                  sx={{ width: 120, mt: "35mm" }}
+                />
+              </Grid>
+              <Grid item>
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="Signature"
+                  sx={{ width: 120, mt: "10mm", ml: "-2mm" }}
+                />
+              </Grid>
+            </Grid>
 
-            /* 🔥 CONTROL HORIZONTAL DISTANCE HERE */
-            gap: "12mm", // signature close to stamp
-
-            /* 🔥 MOVE ENTIRE BLOCK LEFT */
-            ml: "-12mm", // shifts stamp left safely
-          }}
-        >
-          {/* LEFT — STAMP + HR DETAILS */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              minWidth: "120px",
-            }}
-          >
-            <Box
-              component="img"
-              src={sign}
-              alt="Stamp"
-              sx={{
-                width: 110,
-                position: "relative",
-                left: "-8mm",
-                marginTop: "20mm",
-              }}
-            />
-
-            {/* HR DETAILS BELOW STAMP */}
-            <Box sx={{ mt: "5mm", ml: "12mm" }}>
+            <Box sx={{ mt: "2mm" }}>
               <Typography>
                 <strong>{company.hrName}</strong>
               </Typography>
@@ -481,26 +331,6 @@ const SmartMatrixOffer = ({ company, data }) => {
                 <strong>HR Manager - HR Services</strong>
               </Typography>
             </Box>
-          </Box>
-
-          {/* RIGHT — SIGNATURE */}
-          <Box
-            sx={{
-              mt: "18mm", // signature slightly lower than stamp
-              ml: "-30mm",
-            }}
-          >
-            <Box
-              component="img"
-              src={company.stamp}
-              alt="Signature"
-              sx={{
-                width: 130,
-                ml: "2mm",
-                mt: "-25mm",
-                transform: "translateX(-5mm)", // 👈 stronger left move
-              }}
-            />
           </Box>
         </Box>
       </A4Page>

@@ -14,6 +14,10 @@ const Signup = lazy(() => import("../pages/auth/Signup"));
 
 /* ======================= ADMIN ======================= */
 const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
+const AdminHistoryPage = lazy(() => import("../pages/admin/AdminHistoryPage"));
+const AdminUserManagementPage = lazy(() => import("../pages/admin/AdminUserManagementPage"));
+const AdminCompanyManagementPage = lazy(() => import("../pages/admin/AdminCompanyManagementPage"));
+const AdminSettingPage = lazy(() => import("../pages/admin/AdminSettingPage"));
 
 /* ======================= USER ======================= */
 const UserDashboardPage = lazy(() => import("../pages/user/UserDashboardPage"));
@@ -57,6 +61,10 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route path={ROUTES.ADMIN_DASHBOARD} element={<LazyLoad component={AdminDashboard} />} />
+          <Route path={ROUTES.ADMIN_COMPANY_MANAGEMENT} element={<LazyLoad component={AdminCompanyManagementPage} />} />
+          <Route path={ROUTES.ADMIN_USER_MANAGEMENT} element={<LazyLoad component={AdminUserManagementPage} />} />
+          <Route path={ROUTES.ADMIN_HISTORY} element={<LazyLoad component={AdminHistoryPage} />} />
+          <Route path={ROUTES.ADMIN_SETTINGS} element={<LazyLoad component={AdminSettingPage} />} />
         </Route>
       </Route>
 

@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 import { TableContainer, Paper } from "@mui/material";
 
 /* ================= DATE FORMAT ================= */
@@ -28,8 +28,8 @@ const round2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
 const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
   /* ================= CORRECT LOGIC (INPUT IS MONTHLY) ================= */
 
-  const monthlyGross = round2(data?.stipend || 0); // INPUT IS MONTHLY
-  const annualCTC = round2(monthlyGross * 12); // Annual derived
+  const monthlyGross = round2(data?.stipend || 0);
+  const annualCTC = round2(monthlyGross * 12);
 
   /* Percentage Structure (Same as SmartMatrix Increment) */
   const PERCENT = {
@@ -199,10 +199,10 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
                 ].map(([label, value]) => (
                   <TableRow key={label}>
                     <TableCell>{label}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       {Number(value).toLocaleString("en-IN")}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       {Number(value * 12).toLocaleString("en-IN")}
                     </TableCell>
                   </TableRow>
@@ -213,10 +213,10 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
                   <TableCell sx={{ fontWeight: "bold" }}>
                     Total Monthly Gross Salary
                   </TableCell>
-                  <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
                     {monthlyGross.toLocaleString("en-IN")}
                   </TableCell>
-                  <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                  <TableCell align="center" sx={{ fontWeight: "bold" }}>
                     {annualCTC.toLocaleString("en-IN")}
                   </TableCell>
                 </TableRow>

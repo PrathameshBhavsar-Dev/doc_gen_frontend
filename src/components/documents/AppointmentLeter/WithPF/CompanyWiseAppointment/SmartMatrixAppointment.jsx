@@ -1,5 +1,5 @@
 import React from "react";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 
 import {
   Box,
@@ -301,7 +301,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between", // ⬅️ LEFT & RIGHT alignment
+                    justifyContent: "space-between",
                     alignItems: "flex-start",
                     mt: "2mm",
                     width: "100%",
@@ -332,8 +332,8 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column", // 🔑 vertical stacking
-                      alignItems: "flex-end", // 🔑 same right edge
+                      flexDirection: "column",
+                      alignItems: "flex-end",
                     }}
                   >
                     <Typography
@@ -350,7 +350,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                       sx={{
                         fontFamily:
                           '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                        mt: "2mm", // 🔑 small Word-like gap
+                        mt: "2mm",
                         textAlign: "right",
                         ml: "42mm",
                       }}
@@ -378,7 +378,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
         {(() => {
           const round0 = (num) => Math.round(num);
 
-          // 🔥 INPUT IS MONTHLY SALARY
+          //  INPUT IS MONTHLY SALARY
           const monthlyCTC = round0(Number(data.salary || 0));
 
           // Convert to annual
@@ -505,14 +505,14 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   <TableHead>
                     <TableRow
                       sx={{
-                        backgroundColor: "#f28c28", // exact orange
+                        backgroundColor: "#f28c28",
                       }}
                     >
                       <TableCell
                         sx={{
                           width: "45%",
                           fontWeight: 700,
-                          fontSize: "12.5px",
+                          fontSize: "14px",
                           border: "1px solid #000",
                           padding: "6px 8px",
                         }}
@@ -525,7 +525,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           width: "27.5%",
                           fontWeight: 700,
-                          fontSize: "12.5px",
+                          fontSize: "14px",
                           border: "1px solid #000",
                           padding: "6px 8px",
                         }}
@@ -538,7 +538,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           width: "27.5%",
                           fontWeight: 700,
-                          fontSize: "12.5px",
+                          fontSize: "14px",
                           border: "1px solid #000",
                           padding: "6px 8px",
                         }}
@@ -554,7 +554,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         <TableCell
                           sx={{
                             border: "1px solid #000",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             padding: "5px 8px",
                           }}
                         >
@@ -565,7 +565,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           align="center"
                           sx={{
                             border: "1px solid #000",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             padding: "5px 8px",
                           }}
                         >
@@ -576,7 +576,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           align="center"
                           sx={{
                             border: "1px solid #000",
-                            fontSize: "12px",
+                            fontSize: "14px",
                             padding: "5px 8px",
                           }}
                         >
@@ -591,8 +591,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           border: "1px solid #000",
                           fontWeight: 700,
-                          fontSize: "12px",
+                          fontSize: "14px",
                           padding: "6px 8px",
+                          background: "#f28c28",
                         }}
                       >
                         Monthly Gross Salary
@@ -603,8 +604,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           border: "1px solid #000",
                           fontWeight: 700,
-                          fontSize: "12px",
+                          fontSize: "14px",
                           padding: "6px 8px",
+                          background: "#f28c28",
                         }}
                       >
                         {formatCurrency(totalMonthly)}
@@ -615,8 +617,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           border: "1px solid #000",
                           fontWeight: 700,
-                          fontSize: "12px",
+                          fontSize: "14px",
                           padding: "6px 8px",
+                          background: "#f28c28",
                         }}
                       >
                         {formatCurrency(totalAnnual)}
@@ -629,11 +632,6 @@ const SmartMatrixAppointment = ({ company, data }) => {
           );
         })()}
       </A4Page>
-
-      {/* ================= OTHER PAGES (EMPTY FOR NOW) =================
-      <A4Page headerSrc={company.header} footerSrc={company.footer} />
-      <A4Page headerSrc={company.header} footerSrc={company.footer} />
-      <A4Page headerSrc={company.header} footerSrc={company.footer} /> */}
     </>
   );
 };
