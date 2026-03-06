@@ -102,6 +102,10 @@ const AppRoutes = () => {
             path={ROUTES.ADMIN_SETTINGS}
             element={<LazyLoad component={AdminSettingPage} />}
           />
+          <Route
+            path={ROUTES.ADMIN_ADD_COMPANY}
+            element={<LazyLoad component={AdminAddCompany} />}
+          />
         </Route>
       </Route>
 
