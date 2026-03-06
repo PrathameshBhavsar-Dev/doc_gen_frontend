@@ -14,7 +14,7 @@ import A4Layout from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 
 /* ================= HELPERS ================= */
-const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
+const round2 = (num) => Number(Number(num).toFixed(2));
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) => {
@@ -29,104 +29,59 @@ const formatDate = (date) => {
 const SmartMatrixIncrement = ({ company, data }) => {
   if (!company || !data) return null;
 
-  /* =====================================================
-      ================= SALARY LOGIC ======================
-     ===================================================== */
+  const monthlyGross = round2(Number(data.newCTC || 0));
+  const annualCTC = round2(monthlyGross * 12);
 
-  const annualCTC = round2(data.newCTC);
+  /* Apply percentages on MONTHLY */
+  const basicMonthly = round2(monthlyGross * 0.48);
+  const hraMonthly = round2(monthlyGross * 0.18);
+  const daMonthly = round2(monthlyGross * 0.12);
+  const specialMonthly = round2(monthlyGross * 0.16);
 
-  /* ===== Percentage Structure (Same as Devcons) ===== */
-  const basicAnnual = round2(annualCTC * 0.4);
-  const hraAnnual = round2(annualCTC * 0.18);
-  const daAnnual = round2(annualCTC * 0.12);
-  const specialAnnual = round2(annualCTC * 0.16);
-  const foodAnnual = round2(annualCTC * 0.06);
+  // Adjustment for perfect match
+  const usedMonthly = basicMonthly + hraMonthly + daMonthly + specialMonthly;
 
-  /* Remaining Adjustment */
-  const usedAnnual =
-    basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual;
+  const foodMonthly = round2(monthlyGross - usedMonthly);
 
-  const miscAnnual = round2(annualCTC - usedAnnual);
+  /* Annual */
+  const basicAnnual = round2(basicMonthly * 12);
+  const hraAnnual = round2(hraMonthly * 12);
+  const daAnnual = round2(daMonthly * 12);
+  const specialAnnual = round2(specialMonthly * 12);
+  const foodAnnual = round2(foodMonthly * 12);
 
-  /* ===== Monthly Breakdown ===== */
-  const basicMonthly = round2(basicAnnual / 12);
-  const hraMonthly = round2(hraAnnual / 12);
-  const daMonthly = round2(daAnnual / 12);
-  const specialMonthly = round2(specialAnnual / 12);
-  const foodMonthly = round2(foodAnnual / 12);
-  const miscMonthly = round2(miscAnnual / 12);
-
-  const totalMonthly = round2(
-    basicMonthly +
-      hraMonthly +
-      daMonthly +
-      specialMonthly +
-      foodMonthly +
-      miscMonthly,
-  );
-
-  const totalAnnual = round2(
-    basicAnnual +
-      hraAnnual +
-      daAnnual +
-      specialAnnual +
-      foodAnnual +
-      miscAnnual,
-  );
-
-  /* ===== PF (Static – Same as Devcons) ===== */
+  /* PF (DISPLAY ONLY – NOT INCLUDED IN TOTAL) */
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
-  /* ===== Salary Rows (for UI mapping) ===== */
+  /* Totals WITHOUT PF */
+  const totalMonthly = round2(
+    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly,
+  );
+
+  const totalAnnual = round2(
+    basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual,
+  );
+
+  /* Salary Rows */
   const salaryRows = [
-    {
-      label: "Basic",
-      monthly: basicMonthly,
-      annual: basicAnnual,
-    },
-    {
-      label: "House Rent Allowance",
-      monthly: hraMonthly,
-      annual: hraAnnual,
-    },
-    {
-      label: "Dearness Allowance",
-      monthly: daMonthly,
-      annual: daAnnual,
-    },
+    { label: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { label: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { label: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
     {
       label: "Special Allowance",
       monthly: specialMonthly,
       annual: specialAnnual,
     },
+    { label: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { label: "Provident Fund (PF)", monthly: pfMonthly, annual: pfAnnual },
     {
-      label: "Food Allowance",
-      monthly: foodMonthly,
-      annual: foodAnnual,
-    },
-    {
-      label: "Misc. Allowance",
-      monthly: miscMonthly,
-      annual: miscAnnual,
-    },
-    {
-      label: "Provident Fund (PF)",
-      monthly: pfMonthly,
-      annual: pfAnnual,
-    },
-    {
-      label: "Total",
+      label: "Total Monthly Gross Salary",
       monthly: totalMonthly,
       annual: totalAnnual,
       type: "total",
     },
   ];
-
-  /* =====================================================
-      ================= UI (UNCHANGED) ====================
-     ===================================================== */
-
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -157,7 +112,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
             As part of our periodic salary review process, we have adjusted
             compensation across the company to reflect market trends. Effective{" "}
             {formatDate(data.effectiveDate)}, your salary will be increased to{" "}
-            {formatCurrency(annualCTC)}.
+            <strong> {formatCurrency(annualCTC)}</strong> .
           </Typography>
 
           <Typography

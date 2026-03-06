@@ -327,10 +327,7 @@ const PentaConfirmation = ({ company = {}, data = {} }) => {
   // Annual CTC
 const monthlyCTC = round0(Number(data.totalSalary || 0));1
 
-  // Monthly CTC
-  // const monthlyCTC = round0(annualCTC / 12);
-
-  // ===== Percentage Breakup =====
+    // ===== Percentage Breakup =====
   const basicMonthly = round0(monthlyCTC * 0.4);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);

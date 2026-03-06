@@ -62,31 +62,49 @@ const bold = { fontWeight: "bold" };
 /* ===================== COMPONENT ===================== */
 const PentaSalarySlip = ({ company, data }) => {
 /* ===== AUTO SALARY CALCULATION ===== */
-const totalSalary = Number(data.totalSalary || 35000);
+/* ===== SALARY BREAKUP LOGIC ===== */
 
-// Pehle sab components 2 decimal tak fix
-const basic = +(totalSalary * 0.4013).toFixed(2);
-const hra = +(totalSalary * 0.1798).toFixed(2);
-const da = +(totalSalary * 0.1524).toFixed(2);
-const special = +(totalSalary * 0.1146).toFixed(2);
-const food = +(totalSalary * 0.0762).toFixed(2);
+const totalSalary = Number(data.totalSalary || 0);
 
-// 🔥 LAST COMPONENT = AUTO BALANCE
-const misc = +(
-  totalSalary -
-  (basic + hra + da + special + food)
-).toFixed(2);
+// Percentage structure (Total = 100%)
+const PERCENT = {
+  basic: 0.40,    // 40%
+  hra: 0.18,      // 18%
+  da: 0.12,       // 12%
+  special: 0.16,  // 16%
+  food: 0.06,     // 6%
+  misc: 0.08,     // 8%
+};
+
+// Round to 2 decimals helper
+const round2 = (num) => Number(num.toFixed(2));
+
+// Calculate components
+const basic   = round2(totalSalary * PERCENT.basic);
+const hra     = round2(totalSalary * PERCENT.hra);
+const da      = round2(totalSalary * PERCENT.da);
+const special = round2(totalSalary * PERCENT.special);
+const food    = round2(totalSalary * PERCENT.food);
+
+// 🔥 Important: Auto balance last component
+const misc = round2(
+  totalSalary - (basic + hra + da + special + food)
+);
+
+// Total earnings
+const totalEarning = round2(
+  basic + hra + da + special + food + misc
+);
+
+/* ===== DEDUCTIONS ===== */
 
 const pt = Number(data.pt || 200);
 const otherDeduction = Number(data.otherDeduction || 2000);
 
-// Totals bhi fix
-const totalEarning = +(
-  basic + hra + da + special + food + misc
-).toFixed(2);
+const totalDeduction = round2(pt + otherDeduction);
 
-const totalDeduction = +(pt + otherDeduction).toFixed(2);
-const netPay = +(totalEarning - totalDeduction).toFixed(2);
+// Net salary
+const netPay = round2(totalEarning - totalDeduction);
 
 const netPayWords = numberToWords(Math.round(netPay));
 

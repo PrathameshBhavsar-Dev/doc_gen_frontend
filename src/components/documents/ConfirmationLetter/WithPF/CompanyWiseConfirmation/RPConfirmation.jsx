@@ -98,7 +98,7 @@ const totalAnnual = totalMonthly * 12;
             We are pleased to confirm your continued services at the position of{" "}
             <strong>{data.position}</strong> with{" "}
             <strong>R P Business Solutions LLP</strong> with effective date{" "}
-            <strong>{data.effectiveDate}</strong>, considering your performance
+            <strong>{formatDate(data.effectiveDate)}</strong>, considering your performance
             and support towards the organization. If there is any change in the
             date of joining, changes can be taken under consideration.
           </Typography>

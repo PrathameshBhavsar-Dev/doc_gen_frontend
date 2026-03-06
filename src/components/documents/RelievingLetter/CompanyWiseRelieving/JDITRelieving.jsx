@@ -43,7 +43,7 @@ const JDITRelieving = ({ company, data }) => {
       footerSrc={company.footerImage}
       watermarkSrc={company.watermarkImage}
     >
-      <Typography align="right" sx={{ mb: 3, textDecorationLine: "underline", fontWeight: "bold" }}>
+      <Typography align="right" sx={{ mb: 3, textDecorationLine: "underline",textAlign: "center", fontWeight: "bold" }}>
         Relieving Letter
       </Typography>
 

@@ -9,8 +9,8 @@ import PentaIncrement from "../WithPF/CompanyWiseIncrement/PentaIncrement";
 import RPIcrement from "../WithPF/CompanyWiseIncrement/RPIncrement";
 import SmartMatrixIncrement from "../WithPF/CompanyWiseIncrement/SmartMatrixIncrement";
 import SmartSoftwareIncrement from "../WithPF/CompanyWiseIncrement/SmartSoftwareIncrement";
-import NimbjaIncrement from "../WithPF/CompanyWiseIncrement/NimbjaIncrement"
-//import QuickIncrement from "./CompanyWiseIncrement/QuickIncrement";
+import NimbjaIncrement from "../WithPF/CompanyWiseIncrement/NimbjaIncrement";
+import QuickIncrement from "../WithPF/CompanyWiseIncrement/QMSIncrement";
 
 
 // same company ids, just Increment components
@@ -23,7 +23,7 @@ const companyComponentMap = {
   6: PentaIncrement,
   7: NimbjaIncrement,
   8: JDITIncrement,
-  //9: QuickIncrement,
+  9: QuickIncrement,
   10: SmartSoftwareIncrement,
   
 };

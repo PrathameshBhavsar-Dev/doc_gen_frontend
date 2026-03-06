@@ -27,22 +27,22 @@ const DevconsOffer = ({ company, data }) => {
   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
 
   // ================= UPDATED PERCENTAGES =================
-const basicAnnual = round0(monthlyCTC * 0.48); // 40% + 8%
-const hraAnnual = round0(monthlyCTC * 0.18);
-const daAnnual = round0(monthlyCTC * 0.12);
-const specialAnnual = round0(monthlyCTC * 0.16);
-const foodAnnual = round0(monthlyCTC * 0.06);
+const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+const hraMonthly = round0(monthlyCTC * 0.18);
+const daMonthly = round0(monthlyCTC * 0.12);
+const specialMonthly = round0(monthlyCTC * 0.16);
+const foodMonthly = round0(monthlyCTC * 0.06);
 
 // ================= STATIC PF =================
-const pfAnnual = 3750;
+const pfMonthly = 3750;
 
 // ================= ANNUAL VALUES =================
-const basicMonthly = basicAnnual / 12;
-const hraMonthly = hraAnnual / 12;
-const daMonthly = daAnnual / 12;
-const specialMonthly = specialAnnual / 12;
-const foodMonthly = foodAnnual / 12;
-const pfMonthly = pfAnnual / 12;
+const basicAnnual = basicMonthly * 12;
+const hraAnnual = hraMonthly * 12;
+const daAnnual = daMonthly * 12;
+const specialAnnual = specialMonthly * 12;
+const foodAnnual = foodMonthly * 12;
+const pfAnnual = pfMonthly * 12;
 
 // ================= SALARY TABLE =================
 const salaryRows = [
@@ -120,8 +120,8 @@ const totalAnnual = totalMonthly * 12;
               <b>{company.name}</b> is delighted to offer you the full-time position of{" "}
               <b>{data.position}</b> with an anticipated start date of{" "} 
               <b> {new Date(data.joiningDate).toLocaleDateString("en-US", {
-                month: "long",
                 day: "2-digit",
+                month: "long",
                 year: "numeric",
               })}</b>.
             </Typography>
