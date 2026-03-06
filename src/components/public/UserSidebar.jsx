@@ -141,7 +141,7 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   >
     <GenerateDocDropDown
       onClose={handleToggle}
-      compact={collapsed}   // 👈 THIS controls everything
+      compact={collapsed}   // 👈 THIS controls everything 
     />
   </div>
 )}

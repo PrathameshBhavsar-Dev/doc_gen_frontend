@@ -82,7 +82,7 @@ const JDITExperience = ({ company, data }) => {
       {/* ================= PARAGRAPH 3 ================= */}
       <Typography sx={{ mb: 3, textAlign: "justify" }}>
         We are sure {pronouns.possessive} passion and dedication will help {pronouns.object} excel in whatever {pronouns.subject.toLowerCase()} chooses to do next. {pronouns.subject} has shown a high level of commitment throughout {pronouns.possessive} time with our company.
-      </Typography>
+      </Typography> 
 
       {/* ================= CLOSING ================= */}
       <Typography sx={{ mb: 6, textAlign: "justify" }}>
