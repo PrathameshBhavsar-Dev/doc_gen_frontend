@@ -131,12 +131,12 @@ const SmartMatrixIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography
-            sx={{ fontWeight: 600, mb: "18mm", fontFamily: "Bahnschrift" }}
+            sx={{ fontWeight: 600, mb: "5mm", fontFamily: "Bahnschrift" }}
           >
             <strong>{company.name}</strong>
           </Typography>
 
-          <Box sx={{ mt: "4mm" }}>
+          <Box sx={{ mt: "3mm" }}>
             <Box sx={{ display: "flex", alignItems: "flex-end", gap: "10mm" }}>
               {company.stamp && (
                 <img
@@ -149,7 +149,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 <img
                   src={company.stamp}
                   alt="HR Signature"
-                  style={{ width: "38mm" }}
+                  style={{ width: "35mm" }}
                 />
               )}
             </Box>
@@ -172,6 +172,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
           sx={{
             fontWeight: "bold",
             mb: 3,
+            mt: 8,
             fontSize: "16px",
             textDecoration: "underline",
           }}
@@ -207,6 +208,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                     border: "2px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
+                    width: "40%",
                   }}
                 >
                   Salary Components

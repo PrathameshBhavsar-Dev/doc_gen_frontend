@@ -143,7 +143,7 @@ const NeweageSalarySlip = ({ company, data }) => {
 
           {/* EMPLOYEE DETAILS */}
           <TableRow>
-            <TableCell sx={CELL}>
+            <TableCell sx={{ ...CELL, width: "80%" }}>
               <b>Employee Name</b>
             </TableCell>
             <TableCell sx={CELL}>{employeeName}</TableCell>
@@ -200,7 +200,7 @@ const NeweageSalarySlip = ({ company, data }) => {
 
           {/* SALARY HEADER */}
           <TableRow>
-            <TableCell sx={CELL}>
+            <TableCell sx={CENTER_CELL}>
               <b>Earnings</b>
             </TableCell>
             <TableCell sx={CENTER_CELL}>
@@ -265,27 +265,64 @@ const NeweageSalarySlip = ({ company, data }) => {
               {numberToWords(netPay)}
             </TableCell>
           </TableRow>
-
-          {/* SIGNATURE */}
+          {/* SIGNATURE & STAMP */}
           <TableRow>
-            <TableCell colSpan={2} sx={CELL}></TableCell>
-            <TableCell sx={CELL}>
-              {company.signature && (
+            <TableCell
+              sx={{ border: "1px solid #000", paddingLeft: "150px" }}
+            ></TableCell>
+            <TableCell
+              sx={{ border: "1px solid #000", paddingLeft: "150px" }}
+            ></TableCell>
+
+            <TableCell
+              sx={{
+                border: "1px solid #000",
+                verticalAlign: "top",
+                padding: "10px",
+                width: "50%",
+              }}
+            >
+              {/* {company.signature && (
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: "60px" }}
+                  style={{ height: "60px", marginBottom: "6px" }}
                 />
-              )}
-            </TableCell>
-            <TableCell sx={{ ...CELL, textAlign: "center" }}>
+              )} */}
+
               {company.stamp && (
                 <img
                   src={company.stamp}
                   alt="Stamp"
-                  style={{ height: "90px" }}
+                  style={{ height: "100px" }}
                 />
               )}
+            </TableCell>
+
+            <TableCell
+              sx={{
+                border: "1px solid #000",
+                verticalAlign: "top",
+                padding: "10px",
+                width: "50%",
+                textAlign: "center",
+              }}
+            >
+              {company.signature && (
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{ height: "60px", marginBottom: "6px" }}
+                />
+              )}
+              <strong>Signature</strong>
+              {/* {company.stamp && (
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{ height: "100px" }}
+                />
+              )} */}
             </TableCell>
           </TableRow>
         </TableBody>

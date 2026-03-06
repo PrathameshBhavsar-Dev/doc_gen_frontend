@@ -26,6 +26,75 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(Number(num) || 0);
 
+  const numberToWords = (num = 0) => {
+    if (!num) return "Zero Rupees Only";
+
+    const a = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+    const b = [
+      "",
+      "",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ];
+
+    const inWords = (n) => {
+      if (n < 20) return a[n];
+      if (n < 100)
+        return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
+      if (n < 1000)
+        return (
+          a[Math.floor(n / 100)] +
+          " Hundred" +
+          (n % 100 ? " " + inWords(n % 100) : "")
+        );
+      if (n < 100000)
+        return (
+          inWords(Math.floor(n / 1000)) +
+          " Thousand" +
+          (n % 1000 ? " " + inWords(n % 1000) : "")
+        );
+      if (n < 10000000)
+        return (
+          inWords(Math.floor(n / 100000)) +
+          " Lakh" +
+          (n % 100000 ? " " + inWords(n % 100000) : "")
+        );
+      return (
+        inWords(Math.floor(n / 10000000)) +
+        " Crore" +
+        (n % 10000000 ? " " + inWords(n % 10000000) : "")
+      );
+    };
+
+    return `${inWords(Math.round(num))} Rupees Only`;
+  };
   /* ================= SMARTMATRIX PF LOGIC ================= */
 
   const monthlyCTC = round0(data.totalSalary || 0);
@@ -102,26 +171,71 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
             <strong>{formatDate(data.effectiveDate)}</strong>.
           </Typography>
 
+          {/* <Typography mb={2} textAlign="justify">
+                     Your total Gross salary will be Rs.{" "}
+                     <strong>{formatCurrency(totalAnnual)}</strong> (
+                     {numberToWords(totalAnnual)}) per annum, subject to deductions as
+                     per company and government policies.
+                   </Typography> */}
           <Typography mb={2} textAlign="justify">
-            Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong> per annum, subject to
-            deductions as per company and government policy.
+            If there is any change in the date of joining, changes can be taken
+            under consideration. Your total Gross salary will be Rs.{" "}
+            <strong>{formatCurrency(totalAnnual)}</strong> (
+            {numberToWords(totalAnnual)}) per year.
+          </Typography>
+          <Typography mb={2}>
+            Subject to various deductions as per companies and government
+            policy.
+          </Typography>
+          <Typography mb={2}>
+            The roles and responsibilities and other terms and conditions of
+            your employment will be specified of appointment.We welcome you to
+            Neweage Cloud Solution Pvt. Ltd.. Family and hope it would be the
+            beginning of a long and mutually beneficial association. Kindly
+            acknowledge the duplicate copy of this letter as an acceptance of
+            this offer.
+          </Typography>
+          <Typography mb={2}>
+            We look forward to your continued growth and contribution.
           </Typography>
 
-          <Typography mt={5}>
-            <strong>For {company.name}</strong>
-          </Typography>
+          {/* Signature Section - SAME STRUCTURE AS YOUR WORKING CODE */}
+          <Box sx={{ mt: 5, display: "flex", justifyContent: "space-between" }}>
+            {/* COMPANY */}
+            <Box>
+              <Typography fontWeight={700} fontSize={15} marginTop={2}>
+                For {company.name}
+              </Typography>
 
-          <Typography mt={3}>
-            <strong>{company.hrName}</strong>
-          </Typography>
-          <Typography>HR Relations Lead</Typography>
+              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+                {company.signature && (
+                  <img src={company.signature} alt="signature" height={60} />
+                )}
+                {company.stamp && (
+                  <img src={company.stamp} alt="stamp" height={80} />
+                )}
+              </Box>
+
+              <Typography fontWeight={600} mt={1}>
+                {company.hrName}
+              </Typography>
+              <Typography fontSize={13}>
+                <strong>HR Relations Lead</strong>
+              </Typography>
+            </Box>
+
+            {/* ACCEPTANCE */}
+            <Box>
+              <Typography mt={8}>Signature: ______________</Typography>
+              <Typography mt={2}>Name: {data.employeeName}</Typography>
+            </Box>
+          </Box>
         </Box>
       </A4Page>
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography align="center" fontWeight={600} mb={4}>
+        <Typography align="center" fontWeight={600} mb={4} mt={4}>
           Annexure A – Salary Structure
         </Typography>
 
@@ -171,14 +285,37 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
           </TableBody>
         </Table>
 
-        <Typography sx={{ marginTop: "50px" }}>
-          <strong>For {company.name}</strong>
-        </Typography>
+        {/* Signature Section - SAME STRUCTURE AS YOUR WORKING CODE */}
+        <Box sx={{ mt: 8, display: "flex", justifyContent: "space-between" }}>
+          {/* COMPANY */}
+          <Box>
+            <Typography fontWeight={700} fontSize={15} marginTop={2}>
+              For {company.name}
+            </Typography>
 
-        <Typography mt={3}>
-          <strong>{company.hrName}</strong>
-        </Typography>
-        <Typography>HR Relations Lead</Typography>
+            <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              {company.signature && (
+                <img src={company.signature} alt="signature" height={60} />
+              )}
+              {company.stamp && (
+                <img src={company.stamp} alt="stamp" height={80} />
+              )}
+            </Box>
+
+            <Typography fontWeight={600} mt={1}>
+              {company.hrName}
+            </Typography>
+            <Typography fontSize={13}>
+              <strong>HR Relations Lead</strong>
+            </Typography>
+          </Box>
+
+          {/* ACCEPTANCE */}
+          <Box>
+            <Typography mt={8}>Signature: ______________</Typography>
+            <Typography mt={2}>Name: {data.employeeName}</Typography>
+          </Box>
+        </Box>
       </A4Page>
     </>
   );
