@@ -367,7 +367,7 @@ const SmartSoftwarePaidInternshipLetter = ({
         : [
             { name: "Basic", monthly: Math.round(monthlyStipend * 0.4) },
             { name: "House Rent Allowance", monthly: Math.round(monthlyStipend * 0.2) },
-            { name: "Dearness Allowance", monthly: Math.round(monthlyStipend * 0.1) },
+            { name: "Conveyance Allowance", monthly: Math.round(monthlyStipend * 0.1) },
             { name: "Special Allowance", monthly: Math.round(monthlyStipend * 0.1) },
             { name: "Food Allowance", monthly: Math.round(monthlyStipend * 0.1) },
             { name: "Misc. Allowance", monthly: Math.round(monthlyStipend * 0.1) },

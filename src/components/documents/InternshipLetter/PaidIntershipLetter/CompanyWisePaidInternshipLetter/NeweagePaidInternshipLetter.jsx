@@ -159,10 +159,8 @@ const NeweagePaidInternshipLetter = ({
           </Typography>
 
           <Typography sx={{ ...TEXT, mt: 3 }}>
-            <b>
-              Subject : Letter of intent for the Internship of position as{" "}
-              {data?.designation || internshipRole}
-            </b>
+            <b>Subject </b>: Letter of intent for the Internship of position as{" "}
+            {data?.designation || internshipRole}
           </Typography>
 
           <Typography sx={{ ...TEXT, mt: 4 }}>

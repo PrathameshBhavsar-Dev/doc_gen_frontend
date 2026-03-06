@@ -86,11 +86,11 @@ const NeweageAppointment = ({ company, data }) => {
     `You shall be due for salary revision not before one year from your date of joining.`,
     `The Management reserves the right to change the different components/allowances in the total emoluments package, at its own discretion, at any time in future. However, your total monthly salary will be protected.our services are terminable with one month’s notice on either side.`,
     `You will be on probation for a period of six months from the first of the calendar month following the date of your joining, after which you will be confirmed if your work is found satisfactory. The probation period can be extended at the discretion of the Company. You shall continue to be on probation, till your services are confirmed in writing by a letter of confirmation. In case your performance is not found satisfactory during such period of probation or extended period of probation and you shall be informed of the same in writing.`,
-    `Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period`,
+    `Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period.`,
     `The Company shall have the right to terminate your service without notice, if the information given by you at a time of interview or in the application is found to be incorrect or in case of any serious misconduct or if reference check leads to an adverse report of your credentials.`,
-    `This appointment is subject to your being medically fit`,
-    `The age of retirement will be 58 years`,
-    `You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs`,
+    `This appointment is subject to your being medically fit.`,
+    `The age of retirement will be 58 years.`,
+    `You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs.`,
     `You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.`,
     `You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company/Firm/Person.`,
     `You will keep the Company informed of any change in your residential address.`,
@@ -156,7 +156,7 @@ const NeweageAppointment = ({ company, data }) => {
         <Box sx={{ mt: 2 }}>
           {/* TERMS 10–END */}
           <Box component="ol" start={11} sx={{ pl: 3 }}>
-            {terms.slice(9).map((t, i) => (
+            {terms.slice(10).map((t, i) => (
               <li key={i}>
                 <Typography fontSize={14} textAlign="justify" mb={1}>
                   {t}
@@ -174,7 +174,7 @@ const NeweageAppointment = ({ company, data }) => {
             {/* COMPANY */}
             <Box>
               <Typography fontSize={15}>Yours faithfully,</Typography>
-              <Typography fontWeight={700} fontSize={15}>
+              <Typography fontWeight={700} fontSize={15} mt={3}>
                 For {company.name}
               </Typography>
 
@@ -197,7 +197,9 @@ const NeweageAppointment = ({ company, data }) => {
 
             {/* ACCEPTANCE */}
             <Box>
-              <Typography fontWeight={600}>I ACCEPT</Typography>
+              <Typography fontWeight={600} mt={4}>
+                I ACCEPT
+              </Typography>
               <Typography mt={1}>Signature: ______________</Typography>
               <Typography mt={4}>Name: {data.employeeName}</Typography>
               <Typography mt={1}>Date: ______________</Typography>
@@ -208,7 +210,7 @@ const NeweageAppointment = ({ company, data }) => {
 
       {/* ================= PAGE 3 ================= */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Typography align="center" fontWeight={700} mb={3}>
+        <Typography align="center" fontWeight={700} mb={3} mt={5}>
           Salary Structure – Break Up
         </Typography>
 

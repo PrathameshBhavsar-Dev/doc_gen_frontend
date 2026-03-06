@@ -159,7 +159,7 @@ const NeweageSalarySlip = ({ company, data }) => {
 
           {/* EMPLOYEE DETAILS */}
           <TableRow>
-            <TableCell sx={CELL}>
+            <TableCell sx={{ ...CELL, width: "80%" }}>
               <b>Employee Name</b>
             </TableCell>
             <TableCell sx={CELL}>{employeeName}</TableCell>
@@ -214,7 +214,7 @@ const NeweageSalarySlip = ({ company, data }) => {
 
           {/* SALARY TABLE HEADER */}
           <TableRow>
-            <TableCell sx={CELL}>
+            <TableCell sx={CENTER_CELL}>
               <b>Earnings</b>
             </TableCell>
             <TableCell sx={CENTER_CELL}>
@@ -299,11 +299,19 @@ const NeweageSalarySlip = ({ company, data }) => {
                 width: "50%",
               }}
             >
-              {company.signature && (
+              {/* {company.signature && (
                 <img
                   src={company.signature}
                   alt="Signature"
                   style={{ height: "60px", marginBottom: "6px" }}
+                />
+              )} */}
+
+              {company.stamp && (
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{ height: "100px" }}
                 />
               )}
             </TableCell>
@@ -317,13 +325,21 @@ const NeweageSalarySlip = ({ company, data }) => {
                 textAlign: "center",
               }}
             >
-              {company.stamp && (
+              {company.signature && (
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{ height: "60px", marginBottom: "6px" }}
+                />
+              )}
+              <strong>Signature</strong>
+              {/* {company.stamp && (
                 <img
                   src={company.stamp}
                   alt="Stamp"
                   style={{ height: "100px" }}
                 />
-              )}
+              )} */}
             </TableCell>
           </TableRow>
         </TableBody>
