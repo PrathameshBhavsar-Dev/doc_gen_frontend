@@ -1,5 +1,5 @@
 import React from "react";
-import sign from "../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 /* ================= DATE FORMATTER ================= */
 const formatDate = (date) => {
   if (!date) return "";
@@ -174,8 +174,8 @@ const SmartMatrixExperience = ({ company, data }) => {
                 style={{
                   margin: 0,
                   fontWeight: 600,
-                  marginTop: "-20mm", // block position
-                  marginBottom: "0.5mm", // tight gap to designation
+                  marginTop: "-20mm",
+                  marginBottom: "0.5mm",
                 }}
               >
                 <strong>{company.hrName}</strong>

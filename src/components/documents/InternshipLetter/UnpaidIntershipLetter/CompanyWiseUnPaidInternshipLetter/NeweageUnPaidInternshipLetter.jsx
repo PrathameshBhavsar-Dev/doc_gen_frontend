@@ -67,49 +67,45 @@ const NeweageUnPaidInternshipLetter = ({ company, data }) => {
       {/* ================= CONTENT ================= */}
       <Box sx={{ px: "25mm", pt: "20mm", pb: "20mm", flexGrow: 1 }}>
         {/* NAME */}
-        
 
         {/* SUBJECT */}
-       <Typography
-                 sx={{
-                   textAlign: "center",
-                   fontWeight: "bold",
-                   fontSize: 17,
-                   letterSpacing: 1,
-                   mb: 10,
-                 }} >  LETTER OF INTERNSHIP
-               </Typography>
-
-                {/* BODY */}
-         <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 2, mt: 10 }}>
-                 This is to certify that{" "}
-                 <strong>
-                   {mrms} {employeeName}
-                 </strong>{" "}
-                 has done {pronoun.possessive} internship in{" "}
-                 <strong>{company.name}</strong>.
-               </Typography>
-       
-               <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 2 }}>
-                 From <strong>{formatDate(startDate)}</strong> –{" "}
-                 <strong>{formatDate(endDate)}</strong>,{" "}
-                 {pronoun.subject} was designated as{" "}
-                 <strong>{designation}</strong>.
-               </Typography>
-
-<Typography sx={{ fontSize: 15, lineHeight: 2, mb: 10 }}>
-          During the internship {pronoun.subject} demonstrated
-          strong skills with self-motivation to learn new skills.{" "}
-          {pronoun.possessive} performance exceeded our
-          expectations and {pronoun.subject} was able to
-          complete the assigned tasks on time. We wish{" "}
-          {pronoun.object} all the best for{" "}
-          {pronoun.possessive} career.
+        <Typography
+          sx={{
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 17,
+            letterSpacing: 1,
+            mb: 8,
+          }}
+        >
+          {" "}
+          LETTER OF INTERNSHIP
         </Typography>
 
-       
+        {/* BODY */}
+        <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 2, mt: 10 }}>
+          This is to certify that{" "}
+          <strong>
+            {mrms} {employeeName}
+          </strong>{" "}
+          has done {pronoun.possessive} internship in{" "}
+          <strong>{company.name}</strong>.
+        </Typography>
 
-        
+        <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 2 }}>
+          From <strong>{formatDate(startDate)}</strong> –{" "}
+          <strong>{formatDate(endDate)}</strong>, {pronoun.subject} was
+          designated as <strong>{designation}</strong>.
+        </Typography>
+
+        <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 10 }}>
+          During the internship {pronoun.subject} demonstrated strong skills
+          with self-motivation to learn new skills. {pronoun.possessive}{" "}
+          performance exceeded our expectations and {pronoun.subject} was able
+          to complete the assigned tasks on time. We wish {pronoun.object} all
+          the best for {pronoun.possessive} career.
+        </Typography>
+
         <Typography mb={3} sx={{ fontWeight: 600 }}>
           For {company.name.toUpperCase()}
         </Typography>
@@ -125,11 +121,7 @@ const NeweageUnPaidInternshipLetter = ({ company, data }) => {
           )}
 
           {company?.stamp && (
-            <img
-              src={company.stamp}
-              alt="Stamp"
-              style={{ height: 90 }}
-            />
+            <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
           )}
         </Box>
 
@@ -138,7 +130,7 @@ const NeweageUnPaidInternshipLetter = ({ company, data }) => {
           <Typography fontSize="14px">
             <strong>{company.hrName}</strong>
             <br />
-           <strong> HR Department Pune </strong>
+            <strong> HR Department Pune </strong>
           </Typography>
 
           {/* <Typography fontSize="14px">

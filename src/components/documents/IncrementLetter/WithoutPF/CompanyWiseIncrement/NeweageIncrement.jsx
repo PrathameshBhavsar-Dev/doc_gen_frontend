@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-
+import sign from "../../../../../assets/images/Newagecloud/kirti_kumar.png";
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
@@ -22,6 +22,13 @@ const formatDate = (date) =>
         year: "numeric",
       })
     : "";
+
+const TEXT = {
+  fontFamily: '"Cambria", "Georgia", serif',
+  fontSize: "14.8px",
+  lineHeight: 1.65,
+  color: "#222",
+};
 
 const NeweageIncrement = ({ company, data }) => {
   if (!company || !data) return null;
@@ -75,31 +82,104 @@ const NeweageIncrement = ({ company, data }) => {
     <>
       {/* ================= PAGE 1 – INCREMENT LETTER ================= */}
       <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Typography align="right" sx={{ mb: 6 }}>
-          {formatDate(data.issueDate)}
-        </Typography>
+        <Box
+          sx={{
+            px: 4,
+            pb: "160px",
+            minHeight: "100%",
+          }}
+        >
+          {/* Title */}
+          <Typography
+            align="center"
+            sx={{
+              fontFamily: '"Cambria", "Georgia", serif',
+              fontSize: "15px",
+              textDecoration: "underline",
+              fontWeight: 600,
+              mb: 3,
+            }}
+          >
+            Appraisal Letter
+          </Typography>
 
-        <Typography sx={{ mb: 4 }}>Dear {data.employeeName},</Typography>
+          {/* Date (Right aligned exactly like image) */}
+          <Typography
+            align="right"
+            sx={{
+              fontFamily: '"Cambria", "Georgia", serif',
+              fontSize: "14.8px",
+              mb: 4,
+            }}
+          >
+            {formatDate(data.issueDate)}
+          </Typography>
 
-        <Typography sx={{ mb: 3 }}>
-          After careful evaluation of your contributions and dedication, we are
-          pleased to inform you that you have demonstrated exceptional
-          performance.
-        </Typography>
+          {/* Body Text */}
+          <Typography sx={TEXT} mb={3}>
+            Dear {data.employeeName},
+          </Typography>
 
-        <Typography sx={{ mb: 3 }}>
-          Your new salary will be <b>₹{formatCurrency(annualCTC)}</b> per annum,
-          effective <b>{formatDate(data.effectiveDate)}</b>.
-        </Typography>
+          <Typography sx={TEXT} mb={3}>
+            After careful evaluation of your contributions, achievements, and
+            dedication to your role over the past year, I am pleased to inform
+            you that you have demonstrated exceptional performance. Your hard
+            work, commitment, and positive impact on our team have not gone
+            unnoticed.
+          </Typography>
 
-        <Typography sx={{ mb: 3 }}>
-          We appreciate your continued dedication and look forward to your
-          ongoing contributions.
-        </Typography>
+          <Typography sx={TEXT} mb={3}>
+            As a result of your outstanding performance, I am delighted to
+            inform you that you will be receiving a salary increment. This
+            increase is a reflection of your valuable contributions to our
+            organisation and the high level of professionalism you consistently
+            demonstrate.
+          </Typography>
 
-        <Typography sx={{ mb: 4 }}>Best regards,</Typography>
+          <Typography sx={TEXT} mb={3}>
+            Your new salary will be <b>₹{formatCurrency(annualCTC)}</b> per
+            annum, effective <b>{formatDate(data.effectiveDate)}</b>. Please
+            note that this adjustment will be reflected in your next pay check.
+          </Typography>
 
-        <Typography sx={{ fontWeight: "bold" }}>{company.ceoName}</Typography>
+          <Typography sx={TEXT} mb={3}>
+            I want to take this opportunity to express my appreciation for your
+            continued dedication and hard work. Your contributions are integral
+            to our success, and we look forward to your ongoing contributions to
+            our team.
+          </Typography>
+
+          <Typography sx={TEXT} mb={3}>
+            If you have any questions or would like to discuss this further,
+            please do not hesitate to reach out to me.
+          </Typography>
+
+          <Typography sx={TEXT} mb={3}>
+            Once again, congratulations on this well-deserved recognition, and
+            thank you for your continued commitment to excellence.
+          </Typography>
+
+          <Typography sx={TEXT} mb={2}>
+            Best regards,
+          </Typography>
+
+          {/* Signature + Stamp Block */}
+          <Box sx={{ mt: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+              {company.signature && (
+                <img src={sign} alt="signature" height={50} />
+              )}
+              {company.stamp && (
+                <img src={company.stamp} alt="stamp" height={90} />
+              )}
+            </Box>
+
+            <Typography sx={{ ...TEXT, fontWeight: 600, mt: 1 }}>
+              {/* {company.hrName} */}
+              CEO & Managing Director
+            </Typography>
+          </Box>
+        </Box>
       </A4Layout>
 
       {/* ================= PAGE 2 – SALARY ANNEXURE ================= */}
@@ -109,6 +189,7 @@ const NeweageIncrement = ({ company, data }) => {
           sx={{
             fontWeight: "bold",
             mb: 3,
+            mt: 10,
             fontSize: "16px",
             textDecoration: "underline",
           }}
@@ -137,7 +218,7 @@ const NeweageIncrement = ({ company, data }) => {
             boxShadow: "none",
           }}
         >
-          <Table size="small" sx={{ tableLayout: "fixed" }}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell
@@ -146,7 +227,7 @@ const NeweageIncrement = ({ company, data }) => {
                     backgroundColor: "rgba(3, 171, 197, 0.95)",
                     fontWeight: "bold",
                     fontSize: "15px",
-                    width: "55%",
+                    width: "50%",
                   }}
                 >
                   Salary Components

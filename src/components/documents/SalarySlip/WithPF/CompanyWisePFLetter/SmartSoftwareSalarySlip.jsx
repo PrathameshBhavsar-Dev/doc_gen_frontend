@@ -616,11 +616,11 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
   const monthlyGross = round2(totalSalary);
 
   const PERCENT = {
-    basic: 0.4,
+    basic: 0.48,
     hra: 0.18,
     da: 0.12,
     special: 0.16,
-    food: 0.14,
+    food: 0.06,
   };
 
   const BASIC = round2(monthlyGross * PERCENT.basic);
@@ -737,42 +737,42 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
             <TableRow>
               <TableCell>BASIC</TableCell>
-              <TableCell align="right">{formatCurrency(BASIC)}</TableCell>
-              <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
+              <TableCell align="center">PF</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>HRA</TableCell>
-              <TableCell align="right">{formatCurrency(HRA)}</TableCell>
-              <TableCell>PT</TableCell>
-              <TableCell align="right">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">{formatCurrency(HRA)}</TableCell>
+              <TableCell align="center">PT</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell>DEARNESS ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(DA)}</TableCell>
-              <TableCell>Other Deduction</TableCell>
-              <TableCell align="right">{formatCurrency(otherDeduction)}</TableCell>
+              <TableCell>CONVEYANCE ALLOWANCE</TableCell>
+              <TableCell align="center">{formatCurrency(DA)}</TableCell>
+              <TableCell align="center">Other Deduction</TableCell>
+              <TableCell align="center">{formatCurrency(otherDeduction)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>SPECIAL ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(SPECIAL)}</TableCell>
+              <TableCell align="center">{formatCurrency(SPECIAL)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>FOOD ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(FOOD)}</TableCell>
+              <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
@@ -780,14 +780,14 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
             {/* TOTAL */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>{formatCurrency(totalEarning)}</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>{formatCurrency(totalDeduction)}</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalEarning)}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="center">Total Deduction</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalDeduction)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>{formatCurrency(netPay)}</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(netPay)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>

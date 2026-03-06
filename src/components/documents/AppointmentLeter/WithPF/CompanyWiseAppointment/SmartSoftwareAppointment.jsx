@@ -16,10 +16,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
@@ -48,7 +48,7 @@ const generateSalaryBreakup = (annualCTC) => {
   const salaryComponents = [
     { name: "Basic Salary", monthly: basic / 12, annual: basic },
     { name: "House Rent Allowance", monthly: hra / 12, annual: hra },
-    { name: "Dearness Allowance", monthly: da / 12, annual: da },
+    { name: "Conveyance Allowance", monthly: da / 12, annual: da },
     { name: "Special Allowance", monthly: special / 12, annual: special },
     { name: "Food Allowance", monthly: food / 12, annual: food },
   ];
@@ -109,7 +109,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
     `The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
     `You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
   ];
-  
+
 
   return (
     <>
@@ -117,12 +117,20 @@ const SmartSoftwareAppointment = ({ company, data }) => {
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
         <Typography align="right">{formatDate(data.issueDate)}</Typography>
 
-        <Typography mt={2}>
-          {data.mrms} {data.employeeName}
+        <Typography mt={1} fontSize={13}>
+          <strong>Ref:</strong> SSS/HR/APPT/
+          {String(data.employeeId).padStart(4, "0")}
         </Typography>
 
-        <Typography mt={2}>Dear {firstName},</Typography>
+        <Typography mt={2} fontSize={13}>
+          {data.mrms} {data.employeeName}
+          <br />
+          Address:{data.address}
+        </Typography>
 
+        <Typography mt={2} fontSize={13}>
+          Dear {firstName},
+        </Typography>
         <Typography align="center" fontWeight={700} mt={3}>
           LETTER OF APPOINTMENT
         </Typography>
