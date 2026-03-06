@@ -72,7 +72,7 @@ const UserNavbar = ({ setMobileOpen }) => {
           >
             <Menu size={22} />
           </button>
-
+          
         </div>
 
         {/* RIGHT SIDE */}
