@@ -1,7 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
-import { LayoutDashboard, History, User, Settings, LogOut, Plus } from "lucide-react";
+import {
+  LayoutDashboard,
+  History,
+  User,
+  Settings,
+  LogOut,
+  Plus,
+  PanelLeft,
+} from "lucide-react";
 import ContainerIcon from "../../assets/logos/Container.png";
 import GenerateDocDropDown from "../common/GenerateDocDropDown";
 
@@ -12,7 +20,7 @@ const menuItems = [
   { label: "Settings", path: ROUTES.USER_SETTINGS, icon: <Settings size={18} /> },
 ];
 
-const UserSidebar = () => {
+const UserSidebar = ({ collapsed, setCollapsed }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const dropdownRef = useRef(null);
@@ -28,7 +36,6 @@ const UserSidebar = () => {
     }
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -45,101 +52,139 @@ const UserSidebar = () => {
   }, []);
 
   return (
-    <div className="w-64 h-screen bg-white shadow-lg flex flex-col p-4 relative">
-
-      {/* Logo */}
-      <div className="mb-6 flex items-center gap-3">
-        <img src={ContainerIcon} alt="Doc Gen Logo" className="w-20 h-20" />
-        <div>
-          <h2 className="text-xl font-bold text-[#0E145EC7]">Doc Gen</h2>
-          <p className="text-xs text-[#62748E]">Document Generator</p>
-        </div>
+    <div
+      className={`h-screen bg-white shadow-lg flex flex-col p-4 transition-all duration-300
+      ${collapsed ? "items-center" : ""}`}
+    >
+      {/* 🔹 Top Toggle + Logo Section */}
+<div
+  className={`w-full flex items-center mb-6 ${
+    collapsed ? "justify-center" : "justify-between"
+  }`}
+>
+  {/* Logo + Text */}
+  {!collapsed && (
+    <div className="flex items-center gap-3">
+      <img
+        src={ContainerIcon}
+        alt="Logo"
+        className="w-10 h-10"
+      />
+      <div>
+        <h2 className="text-xl font-bold text-[#0E145EC7]">
+          Doc Gen
+        </h2>
+        <p className="text-xs text-[#62748E]">
+          Document Generator
+        </p>
       </div>
+    </div>
+  )}
 
+  {/* Toggle Button */}
+ <button
+  onClick={() => setCollapsed(!collapsed)}
+  className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
+>
+  <PanelLeft size={20} />
+</button>
+</div>
+
+      
       {/* Generate Button */}
-      <div className="relative mb-6">
-        <div
-          ref={buttonRef}
-          onClick={handleToggle}
-          className="block rounded-xl transition-all cursor-pointer"
-          style={{
-            background: "linear-gradient(to left, #0E145E, #B37BD6)",
-            padding: "2px",
-            borderRadius: "14px",
-          }}
-        >
-          <span
-            className="flex items-center justify-center gap-2 w-full h-full px-4 py-3 hover:bg-purple-50 transition-all"
-            style={{ borderRadius: "12px", backgroundColor: "#fafaf7" }}
-          >
-            <Plus
-              size={18}
-              className={`text-[#3b2f8f] transition-transform duration-300 ${showDropdown ? "rotate-45" : "rotate-0"}`}
-            />
-            <span className="font-bold text-[#3b2f8f] text-base tracking-wide">
-              Generate Document
-            </span>
-          </span>
-        </div>
+<div className="relative mb-6 w-full">
+  <div
+    ref={buttonRef}
+    onClick={handleToggle}
+    className={`block rounded-xl cursor-pointer transition-all duration-300
+      ${collapsed ? "mx-auto w-12 h-12 flex items-center justify-center" : ""}
+    `}
+    style={{
+      background: "linear-gradient(to left, #0E145E, #B37BD6)",
+      padding: collapsed ? "0" : "2px",
+      borderRadius: "14px",
+    }}
+  >
+    <span
+      className={`flex items-center gap-2 w-full h-full
+        ${collapsed ? "justify-center" : "px-4 py-3 justify-center"}
+      `}
+      style={{
+        borderRadius: "12px",
+        backgroundColor: "#fafaf7",
+      }}
+    >
+      <Plus
+        size={18}
+        className={`text-[#3b2f8f] transition-transform duration-300 ${
+          showDropdown ? "rotate-45" : ""
+        }`}
+      />
 
-        {/* Dropdown with slide down/up animation */}
-        {isVisible && (
-          <div
-            ref={dropdownRef}
-            className="absolute top-15 z-50 overflow-hidden"
-            style={{
-              animation: showDropdown
-                ? "slideDown 0.25s ease-out forwards"
-                : "slideUp 0.25s ease-in forwards",
-            }}
-          >
-            <GenerateDocDropDown onClose={handleToggle} />
-          </div>
-        )}
-      </div>
+      {/* 👇 Only hide text when collapsed */}
+      {!collapsed && (
+        <span className="font-bold text-[#3b2f8f] text-base tracking-wide">
+          Generate Document
+        </span>
+      )}
+    </span>
+  </div>
+
+  {isVisible && (
+  <div
+    ref={dropdownRef}
+    className={`absolute z-50 ${
+      collapsed
+        ? "top-5 left-16 w-20"
+        : "top-13 left-0 w-full"
+    }`}
+  >
+    <GenerateDocDropDown
+      onClose={handleToggle}
+      compact={collapsed}   // 👈 THIS controls everything
+    />
+  </div>
+)}
+</div>
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2 w-full">
         {menuItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-semibold active:scale-95 active:brightness-90 ${
+              `flex items-center gap-3 py-3 rounded-xl transition-all font-semibold
+              ${collapsed ? "justify-center px-0" : "px-4"}
+              ${
                 isActive
-                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-lg scale-100"
-                  : "text-gray-600 hover:bg-purple-50 hover:scale-[1.02]"
+                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white"
+                  : "text-gray-600 hover:bg-purple-50"
               }`
             }
           >
             {item.icon}
-            {item.label}
+            {!collapsed && item.label}
           </NavLink>
         ))}
       </nav>
 
-      {/* Logout Bottom */}
-      <div className="mt-auto">
-        <button className="flex px-4 py-3 w-54 rounded-xl items-center bg-red-100 gap-2 text-red-500 hover:text-red-600">
+      {/* Logout */}
+      <div className="mt-auto w-full">
+        <button
+          className={`flex items-center gap-3 py-3 rounded-xl bg-red-100 text-red-500 w-full
+          ${collapsed ? "justify-center px-0" : "px-4"}`}
+        >
           <LogOut size={16} />
-          Logout
+          {!collapsed && "Logout"}
         </button>
       </div>
 
-      <div>
-        <p className="flex justify-center py-4 text-xs text-[#62748E]">© 2026 Doc Gen</p>
-      </div>
-
-      <style>{`
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-10px); max-height: 0; }
-          to   { opacity: 1; transform: translateY(0);     max-height: 600px; }
-        }
-        @keyframes slideUp {
-          from { opacity: 1; transform: translateY(0);     max-height: 600px; }
-          to   { opacity: 0; transform: translateY(-10px); max-height: 0; }
-        }
-      `}</style>
+      {!collapsed && (
+        <p className="flex justify-center py-4 text-xs text-[#62748E]">
+          © 2026 Doc Gen
+        </p>
+      )}
     </div>
   );
 };

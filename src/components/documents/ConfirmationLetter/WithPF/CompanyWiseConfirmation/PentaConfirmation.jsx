@@ -30,30 +30,30 @@ const formatCurrency = (num) =>
   });
 
 /* ================= SALARY BREAKUP ================= */
+const generateSalaryBreakup = (monthlyCTC) => {
 
-const generateSalaryBreakup = (annualCTC) => {
-  const basic = round2(annualCTC * 0.35);
-  const hra = round2(annualCTC * 0.20);
-  const da =round2(annualCTC * 0.20);
-  const special = round2(annualCTC * 0.35);
-  const food = round2(annualCTC * 0.05);
+  // Calculate salary components (100%)
+  let basic = Math.round(monthlyCTC * 0.48);
+  let hra = Math.round(monthlyCTC * 0.18);
+  let da = Math.round(monthlyCTC * 0.12);
+  let special = Math.round(monthlyCTC * 0.16);
+  let food = Math.round(monthlyCTC * 0.06);
 
-  // PF Fixed
+  // Fix rounding difference
+  const calculated = basic + hra + da + special + food;
+  basic += monthlyCTC - calculated;
+
+  // Static PF
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
-  // Remaining amount goes to Other Allowances
-  const pf = round2(
-    annualCTC - (basic + hra + special + food + pfAnnual)
-  );
-
   return [
-    ["Basic Salary", basic / 12, basic],
-    ["House Rent Allowance (HRA)", hra / 12, hra],
-    ["Dearness Allowance", da / 12, da],
-    ["Special Allowance", special / 12, special],
-    ["Food Allowance", food / 12, food],
-    ["Provider PF ", pfMonthly, pfAnnual],  // ✅ Added PF
+    ["Basic Salary", basic, basic * 12],
+    ["House Rent Allowance", hra, hra * 12],
+    ["Dearness Allowance", da, da * 12],
+    ["Special Allowance", special, special * 12],
+    ["Food Allowance", food, food * 12],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 };
 /* ================= MAIN COMPONENT ================= */
@@ -61,13 +61,14 @@ const generateSalaryBreakup = (annualCTC) => {
 const PentaConfirmation = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const annualCTC = Number(data.totalSalary || 0);
-  const salaryRows = generateSalaryBreakup(annualCTC);
+ const monthlyCTC = Number(data.totalSalary || 0);
+const annualCTC = monthlyCTC * 12;
 
-  const monthlyGross = salaryRows.reduce(
-  (sum, row) => sum + Number(row[1]),
-  0
-);
+const salaryRows = generateSalaryBreakup(monthlyCTC);
+
+  const monthlyGross = salaryRows
+  .filter(row => row[0] !== "Provident Fund (PF)")
+  .reduce((sum, row) => sum + row[1], 0);
 
   return (
     <>
@@ -124,7 +125,8 @@ const PentaConfirmation = ({ company, data }) => {
 
          
    <Typography fontSize={14} textAlign="justify" mt={2}>
-           Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be Specified in your letter of appointment. We welcome you to R P BUSINESS SOLUTIONS LLP. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+           Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be
+            Specified in your letter of appointment. We welcome you to R P BUSINESS SOLUTIONS LLP. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
           </Typography>
           {/* SIGNATURE SECTION */}
           <Box

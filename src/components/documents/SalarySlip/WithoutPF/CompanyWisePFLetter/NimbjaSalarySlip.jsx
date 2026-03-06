@@ -17,8 +17,8 @@ import {
 } from "../../../../../utils/salaryCalculations";
 
 /* 🔢 Number to Words (Indian system – up to Crores) */
-const numberToWords = (num) => {
-  if (!num || num === 0) return "Zero Rupees Only";
+const numberToWords = (num = 0) => {
+  if (!num) return "Zero Rupees Only";
 
   const ones = [
     "",
@@ -80,69 +80,68 @@ const numberToWords = (num) => {
         " Lakh" +
         (n % 100000 ? " " + inWords(n % 100000) : "")
       );
-    if (n < 1000000000)
-      return (
-        inWords(Math.floor(n / 10000000)) +
-        " Crore" +
-        (n % 10000000 ? " " + inWords(n % 10000000) : "")
-      );
-    return "";
+    return inWords(Math.floor(n / 10000000)) + " Crore";
   };
 
   return `${inWords(Math.round(num))} Rupees Only`;
 };
 
-const NimbjaSalarySlip = ({ data, company }) => {
-  /* ===== EMPLOYEE DETAILS ===== */
-  const name = data.employeeName || "-";
-  const empId = data.employeeId || "-";
-  const gender = data.gender || "-";
-  const dept = data.department || "-";
-  const desg = data.designation || "-";
-  const doj = data.doj || "-";
-  const dob = data.dob || "-";
-  const pan = data.pan || "-";
-  const bankMode = data.mode || "Bank Transfer";
-  const totalWorkdays = data.workdays || 30;
+const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
+  const round2 = (num) => Number(num.toFixed(2));
 
-  /* ===== MONTH ===== */
-  const [year, monthNum] = (data.month || "2025-01").split("-");
+  /* ===== EMPLOYEE DETAILS ===== */
+  const {
+    employeeName = "-",
+    employeeId = "-",
+    gender = "-",
+    department = "-",
+    designation = "-",
+    doj = "-",
+    dob = "-",
+    pan = "-",
+    mode = "Bank Transfer",
+    workdays = "",
+    month = "2025-02",
+    totalSalary = 0,
+    otherDeduction = 500,
+  } = data;
+
+  /* ===== MONTH FORMAT ===== */
+  const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
     month: "long",
   });
-  const month = `${monthName} ${year}`;
-  /* ===== SALARY STRUCTURE (UPDATED – PERCENTAGE WISE) ===== */
+  const salaryMonth = `${monthName} ${year}`;
 
-  const grossSalary = Number(data.totalSalary || 0);
+  /* ===== MONTHLY SALARY LOGIC (PERCENTAGE-WISE) ===== */
 
-  // percentages (total = 100%)
+  const monthlyGross = round2(Number(totalSalary || 0));
+
+  // Percentages (TOTAL = 100%)
   const PERCENT = {
     basic: 0.4,
     hra: 0.18,
-    conveyance: 0.12,
-    special: 0.16,
-    food: 0.06,
-    others: 0.08,
+    da: 0.12,
+    special: 0.06,
+    food: 0.16,
+    misc: 0.08,
   };
 
-  // earnings
-  const basic = grossSalary * PERCENT.basic;
-  const hra = grossSalary * PERCENT.hra;
-  const conveyance = grossSalary * PERCENT.conveyance;
-  const special = grossSalary * PERCENT.special;
-  const food = grossSalary * PERCENT.food;
-  const others = grossSalary * PERCENT.others;
+  // Monthly breakup
+  const basic = round2(monthlyGross * PERCENT.basic);
+  const hra = round2(monthlyGross * PERCENT.hra);
+  const conveyance = round2(monthlyGross * PERCENT.da); // DA
+  const special = round2(monthlyGross * PERCENT.special);
+  const food = round2(monthlyGross * PERCENT.food);
+  const others = round2(monthlyGross * PERCENT.misc);
 
-  // deductions (UNCHANGED FLOW)
-  const pt = getProfessionalTax(data.month, grossSalary);
-  const otherDed = 500; // 🔒 FORCE HARDCODE
+  // Totals
+  const totalEarning = basic + hra + conveyance + special + food + others;
 
-  // totals
-  const totalEarning = basic + hra + conveyance + food + special + others;
-
-  const totalDed = pt + otherDed;
-  const netPay = totalEarning - totalDed;
-  const netInWords = numberToWords(netPay);
+  // Deductions
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
 
   /* ===== ASSETS (company driven) ===== */
   const stamp = company?.stamp || "";
@@ -154,23 +153,21 @@ const NimbjaSalarySlip = ({ data, company }) => {
       footerSrc={company?.footer}
       watermarkSrc={company?.watermark}
       contentTop="35mm"
-      contentBottom="30mm"
-      company={company}
+      contentBottom="45mm"
     >
       <TableContainer
         component={Paper}
         sx={{
-          border: "1.5px solid black",
+          width: "95%",
+          margin: "0 auto",
+          border: "1px solid #000",
           borderRadius: 0,
-          mt: "5mm",
-          
-          mb: "15mm", // ⬅️ ADD THIS (lifts content away from footer)
           boxShadow: "none",
           "& .MuiTableCell-root": {
-            border: "1px solid black",
-            fontSize: "11pt",
-            padding: "6px 8px",
-            verticalAlign: "middle",
+            border: "1px solid #000",
+            padding: "5px 8px",
+            fontFamily: "Bahnschrift",
+            fontSize: "10.5pt",
           },
         }}
       >
@@ -192,31 +189,27 @@ const NimbjaSalarySlip = ({ data, company }) => {
                 {company?.name || "Nimbja Technologies Pvt. Ltd."}
               </TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>
                 {company?.address || "Company Address"}
               </TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell
                 colSpan={4}
                 align="center"
                 sx={{ fontWeight: "bold", py: 1.5 }}
               >
-                Salary Slip {month}
+                Salary Slip {salaryMonth}
               </TableCell>
             </TableRow>
-
             {/* ===== EMPLOYEE INFO ===== */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
-              <TableCell>{name}</TableCell>
+              <TableCell>{employeeName}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
-              <TableCell>{empId}</TableCell>
+              <TableCell>{employeeId}</TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", borderBottom: "none" }}>
                 Gender
@@ -225,9 +218,8 @@ const NimbjaSalarySlip = ({ data, company }) => {
               <TableCell sx={{ fontWeight: "bold", borderBottom: "none" }}>
                 Department
               </TableCell>
-              <TableCell sx={{ borderBottom: "none" }}>{dept}</TableCell>
+              <TableCell sx={{ borderBottom: "none" }}>{department}</TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", borderTop: "none" }}>
                 DOJ
@@ -238,21 +230,18 @@ const NimbjaSalarySlip = ({ data, company }) => {
               </TableCell>
               <TableCell sx={{ borderTop: "none" }}>{pan}</TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Designation</TableCell>
-              <TableCell>{desg}</TableCell>
+              <TableCell>{designation}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>DOB</TableCell>
               <TableCell>{dob}</TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
-              <TableCell>{bankMode}</TableCell>
+              <TableCell>{mode}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
-              <TableCell>{totalWorkdays}</TableCell>
+              <TableCell>{workdays}</TableCell>
             </TableRow>
-
             {/* ===== EARNINGS / DEDUCTIONS ===== */}
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>
@@ -268,52 +257,50 @@ const NimbjaSalarySlip = ({ data, company }) => {
                 Amount
               </TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                Basic 
+                Basic
               </TableCell>
               <TableCell align="right">{formatCurrency(basic)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>
-                House Rent Allowance
+                Bouquet Of Benefits
               </TableCell>
               <TableCell align="right">{formatCurrency(hra)}</TableCell>
               <TableCell>Professional Tax</TableCell>
               <TableCell align="right">{formatCurrency(pt)}</TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
-                Conveyance Allowance
+                HRA
               </TableCell>
               <TableCell align="right">{formatCurrency(conveyance)}</TableCell>
               <TableCell whiteSpace="nowrap">Other Deduction</TableCell>
-              <TableCell align="right">{formatCurrency(otherDed)}</TableCell>
+              <TableCell align="right">
+                {formatCurrency(otherDeduction)}
+              </TableCell>
             </TableRow>
-
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Food Allowance</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>City Allowance</TableCell>
               <TableCell align="right">{formatCurrency(food)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>
-                Special Allowance
+                Superannuation Fund
               </TableCell>
               <TableCell align="right">{formatCurrency(special)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
-
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Others</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Performance Bonus
+              </TableCell>
               <TableCell align="right">{formatCurrency(others)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
@@ -327,10 +314,9 @@ const NimbjaSalarySlip = ({ data, company }) => {
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
               <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                {formatCurrency(totalDed)}
+                {formatCurrency(totalDeduction)}
               </TableCell>
             </TableRow>
-
             {/* ===== NET PAY ===== */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
@@ -342,16 +328,14 @@ const NimbjaSalarySlip = ({ data, company }) => {
               </TableCell>
               <TableCell colSpan={2}></TableCell>
             </TableRow>
-
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", fontStyle: "Bahnschrift" }}>
                 In Words:
               </TableCell>
               <TableCell colSpan={3} sx={{ fontStyle: "Bahnschrift" }}>
-                {netInWords}
+                {numberToWords(netPay)}
               </TableCell>
             </TableRow>
-
             {/* ===== SIGNATURE ===== */}
             <TableRow>
               <TableCell colSpan={2}></TableCell>

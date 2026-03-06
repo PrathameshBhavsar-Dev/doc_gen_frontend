@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import {
   Box,
   Typography,
@@ -11,16 +12,14 @@ import {
   Paper,
 } from "@mui/material";
 
-import { generateSalaryComponents } from "../../../../../utils/salaryCalculations";
-
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
     : "";
 
 /* ================= CURRENCY FORMAT ================= */
@@ -37,37 +36,64 @@ const SmartSoftwareIncrement = ({ company, data }) => {
     issueDate = "",
     effectiveDate = "",
     newCTC = 0,
+    performanceBand = "Met Expectation",
   } = data;
 
-  const firstName = employeeName.split(" ")[0] || "";
+  const firstName = employeeName?.trim().split(" ")[0] || "";
 
-  /* ================= SALARY ================= */
-  const computedSalary = useMemo(
-    () => generateSalaryComponents(newCTC),
-    [newCTC]
-  );
+  /* ================= ACCURATE SALARY LOGIC ================= */
 
-  const monthlyGross = computedSalary.reduce(
-    (sum, row) => sum + Number(row.monthly || 0),
-    0
-  );
+  const round0 = (num) => Math.round(num);
 
-  const annualCTC = monthlyGross * 12;
+  const annualInput = round0(Number(newCTC || 0));
+  const monthlyCTC = round0(annualInput / 12);
+
+  // Annual breakup based on Annual CTC
+  const basicAnnual = round0(annualInput * 0.4);
+  const hraAnnual = round0(annualInput * 0.18);
+  const daAnnual = round0(annualInput * 0.12);
+  const specialAnnual = round0(annualInput * 0.16);
+  const foodAnnual = round0(annualInput * 0.06);
+
+  // Dynamic last component to avoid mismatch
+  const miscAnnual =
+    annualInput -
+    (basicAnnual +
+      hraAnnual +
+      daAnnual +
+      specialAnnual +
+      foodAnnual);
+
+  // Monthly from annual
+  const basicMonthly = round0(basicAnnual / 12);
+  const hraMonthly = round0(hraAnnual / 12);
+  const daMonthly = round0(daAnnual / 12);
+  const specialMonthly = round0(specialAnnual / 12);
+  const foodMonthly = round0(foodAnnual / 12);
+  const miscMonthly = round0(miscAnnual / 12);
+
+  const salaryRows = [
+    { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
+  ];
+
+  const monthlyGross = monthlyCTC;
+  const annualCTC = annualInput;
 
   return (
     <>
-      {/* ================= PAGE 1 : INCREMENT LETTER ================= */}
+      {/* ================= PAGE 1 ================= */}
       <Box sx={pageStyle}>
         {company.headerImage && (
           <Box component="img" src={company.headerImage} sx={headerStyle} />
         )}
 
         {company.watermarkImage && (
-          <Box
-            component="img"
-            src={company.watermarkImage}
-            sx={watermarkStyle}
-          />
+          <Box component="img" src={company.watermarkImage} sx={watermarkStyle} />
         )}
 
         <Box sx={contentStyle}>
@@ -80,14 +106,14 @@ const SmartSoftwareIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography sx={paragraph}>
-            At Smart Software Services, employee performance forms the core basis
-            for annual compensation review and career enhancement apart from
-            ensuring parity.
+            At Smart Software Services, employee performance forms the core
+            basis for annual compensation review and career enhancement apart
+            from ensuring parity.
           </Typography>
 
           <Typography sx={paragraph}>
             Your performance has been reviewed and your performance banding for
-            the year 2024–2025 is <b>"Met Expectation"</b>.
+            the year 2024–2025 is <b>"{performanceBand}"</b>.
           </Typography>
 
           <Typography sx={paragraph}>
@@ -101,20 +127,24 @@ const SmartSoftwareIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ mb: 2 }}>
-            We look forward to your very active participation and contribution in
-            our journey of scaling newer heights.
+            We look forward to your very active participation and contribution
+            in our journey of scaling newer heights.
           </Typography>
 
           <Typography sx={{ mb: 2 }}>
-            Wishing you a happy and rewarding career with Smart Software Services
-            (I) Pvt Ltd.
+            Wishing you a happy and rewarding career with Smart Software
+            Services (I) Pvt Ltd.
           </Typography>
 
           <Typography sx={{ mb: 2 }}>Yours Sincerely,</Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 3, mt: 2 }}>
             {company.incrementSignature && (
-              <Box component="img" src={company.incrementSignature} sx={{ height: 60 }} />
+              <Box
+                component="img"
+                src={company.incrementSignature}
+                sx={{ height: 60 }}
+              />
             )}
             {company.stamp && (
               <Box component="img" src={company.stamp} sx={{ height: 90 }} />
@@ -134,18 +164,14 @@ const SmartSoftwareIncrement = ({ company, data }) => {
       {/* ================= PAGE BREAK ================= */}
       <Box sx={{ pageBreakBefore: "always" }} />
 
-      {/* ================= PAGE 2 : SALARY ANNEXURE ================= */}
+      {/* ================= PAGE 2 ================= */}
       <Box sx={pageStyle}>
         {company.headerImage && (
           <Box component="img" src={company.headerImage} sx={headerStyle} />
         )}
 
         {company.watermarkImage && (
-          <Box
-            component="img"
-            src={company.watermarkImage}
-            sx={watermarkStyle}
-          />
+          <Box component="img" src={company.watermarkImage} sx={watermarkStyle} />
         )}
 
         <Box sx={contentStyle}>
@@ -157,121 +183,49 @@ const SmartSoftwareIncrement = ({ company, data }) => {
           </Typography>
 
           <Box sx={{ mb: 4 }}>
-            <Typography>
-              Employee Code : {employeeId}
-            </Typography>
-            <Typography>
-              Employee Name : {employeeName}
-            </Typography>
+            <Typography>Employee Code : {employeeId}</Typography>
+            <Typography>Employee Name : {employeeName}</Typography>
             <Typography>
               Effective Date : {formatDate(effectiveDate)}
             </Typography>
           </Box>
 
-          {/* ================= TABLE ================= */}
-         
           <TableContainer
             component={Paper}
-            sx={{
-              border: "1px solid #000",          // 🔽 thinner outer border
-              boxShadow: "none",
-              borderRadius: 0,
-              fontFamily: "Verdana, Arial, sans-serif", // ✅ Verdana applied
-            }}
+            sx={{ border: "1px solid #000", boxShadow: "none" }}
           >
-            <Table
-              size="small"
-              sx={{
-                borderCollapse: "collapse",
-                width: "100%",
-                tableLayout: "fixed",
-                fontFamily: "Verdana, Arial, sans-serif", // ✅ Verdana
-              }}
-            >
+            <Table size="small">
               <TableHead>
-                <TableRow
-                  sx={{
-                    backgroundColor: "rgba(3, 171, 197, 0.95)",
-                    "& th": {
-                      color: "#000",
-                      border: "1px solid #000",
-                      fontWeight: 600,            // 🔽 lighter than bold
-                      fontSize: "11px",           // 🔽 smaller header text
-                      padding: "4px 6px",         // 🔽 compact header
-                      fontFamily: "Verdana, Arial, sans-serif",
-                    },
-                  }}
-                >
-                  <TableCell sx={{ width: "50%" }}>Salary Components</TableCell>
-                  <TableCell sx={{ width: "25%",textAlign: "center" }}>
-                    Per month  (Rs.)
+                <TableRow sx={{ backgroundColor: "rgba(3,171,197,0.95)" }}>
+                  <TableCell sx={headerCell}>Salary Components</TableCell>
+                  <TableCell sx={headerCell} align="center">
+                    Per Month (Rs.)
                   </TableCell>
-                  <TableCell sx={{ width: "25%",textAlign: "center" }}>
-                    Per Annum  (Rs.)
+                  <TableCell sx={headerCell} align="center">
+                    Per Annum (Rs.)
                   </TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {computedSalary.map((row, i) => (
-                  <TableRow key={i}>
-                    <TableCell
-                      sx={{
-                        border: "1px solid #000",
-                        fontSize: "10.5px",        // 🔽 smaller body text
-                        padding: "4px 6px",        // 🔽 compact rows
-                        textAlign: "left",
-                        fontFamily: "Verdana, Arial, sans-serif",
-                      }}
-                    >
-                      {row.name}
-                    </TableCell>
-
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid #000",
-                        fontSize: "10.5px",
-                        padding: "4px 6px",
-                        fontFamily: "Verdana, Arial, sans-serif",
-                      }}
-                    >
+                {salaryRows.map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell sx={bodyCell}>{row.name}</TableCell>
+                    <TableCell sx={bodyCell} align="center">
                       {formatCurrency(row.monthly)}
                     </TableCell>
-
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid #000",
-                        fontSize: "10.5px",
-                        padding: "4px 6px",
-                        fontFamily: "Verdana, Arial, sans-serif",
-                      }}
-                    >
+                    <TableCell sx={bodyCell} align="center">
                       {formatCurrency(row.annual)}
                     </TableCell>
                   </TableRow>
                 ))}
 
-                {/* TOTAL ROW */}
-                <TableRow
-                  sx={{
-                    backgroundColor: "rgba(3, 171, 197, 0.95)",
-                    "& td": {
-                      color: "#000",
-                      border: "1px solid #000",
-                      fontWeight: 600,            // 🔽 not heavy bold
-                      fontSize: "11px",
-                      padding: "4px 6px",
-                      fontFamily: "Verdana, Arial, sans-serif",
-                    },
-                  }}
-                >
-                  <TableCell>Total Gross</TableCell>
-                  <TableCell align="center">
+                <TableRow sx={{ backgroundColor: "rgba(3,171,197,0.95)" }}>
+                  <TableCell sx={totalCell}>Total Gross</TableCell>
+                  <TableCell sx={totalCell} align="center">
                     {formatCurrency(monthlyGross)}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell sx={totalCell} align="center">
                     {formatCurrency(annualCTC)}
                   </TableCell>
                 </TableRow>
@@ -294,13 +248,16 @@ const SmartSoftwareIncrement = ({ company, data }) => {
 };
 
 /* ================= STYLES ================= */
+
 const pageStyle = {
   width: "210mm",
   minHeight: "297mm",
   position: "relative",
   backgroundColor: "#fff",
   fontFamily: `"Times New Roman", serif`,
-  fontSize: "14px",
+  "@media print": {
+    boxShadow: "none",
+  },
 };
 
 const contentStyle = {
@@ -335,10 +292,25 @@ const watermarkStyle = {
   opacity: 0.07,
 };
 
-const tableCell = {
+const headerCell = {
   border: "1px solid #000",
-  fontSize: "11.5px",
-  padding: "3px 6px",
+  fontWeight: 600,
+  fontSize: "12px",
+};
+
+const bodyCell = {
+  border: "1px solid #000",
+  fontSize: "11px",
+};
+
+const totalCell = {
+  border: "1px solid #000",
+  fontWeight: 600,
+};
+
+SmartSoftwareIncrement.propTypes = {
+  company: PropTypes.object,
+  data: PropTypes.object,
 };
 
 export default SmartSoftwareIncrement;

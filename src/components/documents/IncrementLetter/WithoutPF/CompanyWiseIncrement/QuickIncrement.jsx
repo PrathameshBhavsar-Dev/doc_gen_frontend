@@ -1,5 +1,6 @@
 import React from "react";
 import {  Box,  Typography,  Table,  TableBody,  TableCell,  TableHead,  TableRow,} from "@mui/material";
+// import { formatCurrency,} from "../../../../../utils/salaryCalculations";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
@@ -188,28 +189,42 @@ const QuickIncrement = ({ company, data }) => {
     data.incrementPercentage
   );
 
-  /* ===== PERFECT SALARY LOGIC ===== */
-  const annualCTC = round2(newCTC);
+const annualCTC = Number(newCTC);
 
-  const basicAnnual = round2(annualCTC * 0.4);
-  const hraAnnual = round2(annualCTC * 0.18);
-  const daAnnual = round2(annualCTC * 0.12);
-  const specialAnnual = round2(annualCTC * 0.16);
-  const foodAnnual = round2(annualCTC * 0.06);
+// Step 1: Fix Monthly FIRST (integer)
+const monthlyCTC = Math.floor(annualCTC / 12);
 
-  const usedAnnual =
-    basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual;
+// Step 2: Calculate 5 components from monthly
+const basicMonthly   = Math.floor(monthlyCTC * 0.40);
+const hraMonthly     = Math.floor(monthlyCTC * 0.18);
+const daMonthly      = Math.floor(monthlyCTC * 0.12);
+const specialMonthly = Math.floor(monthlyCTC * 0.16);
+const foodMonthly    = Math.floor(monthlyCTC * 0.06);
 
-  const miscAnnual = round2(annualCTC - usedAnnual);
+// Step 3: Balance remainder into misc
+const miscMonthly =
+  monthlyCTC -
+  (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly);
 
-  const salaryComponents = [
-    { name: "Basic", monthly: round2(basicAnnual / 12), annual: basicAnnual },
-    { name: "House Rent Allowance", monthly: round2(hraAnnual / 12), annual: hraAnnual },
-    { name: "Dearness Allowance", monthly: round2(daAnnual / 12), annual: daAnnual },
-    { name: "Special Allowance", monthly: round2(specialAnnual / 12), annual: specialAnnual },
-    { name: "Food Allowance", monthly: round2(foodAnnual / 12), annual: foodAnnual },
-    { name: "Misc. Allowance", monthly: round2(miscAnnual / 12), annual: miscAnnual },
-  ];
+// Step 4: Annual = monthly × 12 (no rounding here)
+const basicAnnual   = basicMonthly * 12;
+const hraAnnual     = hraMonthly * 12;
+const daAnnual      = daMonthly * 12;
+const specialAnnual = specialMonthly * 12;
+const foodAnnual    = foodMonthly * 12;
+const miscAnnual    = miscMonthly * 12;
+
+const finalAnnual = monthlyCTC * 12;
+
+/* 6️⃣ Salary Components */
+const salaryComponents = [
+  { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
+  { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+  { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+  { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+  { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+  { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
+];
 
   const finalData = {
     ...data,

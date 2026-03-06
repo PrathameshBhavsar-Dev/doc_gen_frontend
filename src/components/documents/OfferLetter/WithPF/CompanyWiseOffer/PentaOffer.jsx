@@ -20,31 +20,33 @@ const formatCurrency = (value) => {
 };
 
 /* ===================== SALARY CALCULATION ===================== */
-/* ===================== SALARY CALCULATION ===================== */
 const calculateSalaryBreakup = (annualCTC) => {
-  if (!annualCTC) {
+  if (!annualCTC || annualCTC <= 0) {
     return { salaryBreakup: [], totalPerMonth: 0, totalPerYear: 0 };
   }
 
   const round2 = (num) => Number(num.toFixed(2));
 
-  // Percentage Components
-  const basicAnnual = round2(annualCTC * 0.4013);
-  const hraAnnual = round2(annualCTC * 0.1798);
-  const daAnnual = round2(annualCTC * 0.1599);
-  const foodAnnual = round2(annualCTC * 0.1394);
-  const specialAnnual = round2(annualCTC * 0.1196);
+  // ✅ Monthly CTC
+  const monthlyCTC = round2(annualCTC / 12);
 
-  // ✅ PF Fixed (same like increment)
+  // ✅ 48 + 18 + 12 + 16 + 8 = 100%
+  const basicMonthly = round2(monthlyCTC * 0.48);
+  const hraMonthly = round2(monthlyCTC * 0.18);
+  const daMonthly = round2(monthlyCTC * 0.12);
+  const foodMonthly = round2(monthlyCTC * 0.16);
+  const specialMonthly = round2(monthlyCTC * 0.06);
+
+  // ✅ Annual = Monthly × 12
+  const basicAnnual = round2(basicMonthly * 12);
+  const hraAnnual = round2(hraMonthly * 12);
+  const daAnnual = round2(daMonthly * 12);
+  const foodAnnual = round2(foodMonthly * 12);
+  const specialAnnual = round2(specialMonthly * 12);
+
+  // ✅ PF Static (ONLY DISPLAY)
   const pfMonthly = 3750;
   const pfAnnual = round2(pfMonthly * 12);
-
-  // Monthly values
-  const basicMonthly = round2(basicAnnual / 12);
-  const hraMonthly = round2(hraAnnual / 12);
-  const daMonthly = round2(daAnnual / 12);
-  const foodMonthly = round2(foodAnnual / 12);
-  const specialMonthly = round2(specialAnnual / 12);
 
   const salaryBreakup = [
     { label: "Basic", perMonth: basicMonthly, perYear: basicAnnual },
@@ -52,21 +54,28 @@ const calculateSalaryBreakup = (annualCTC) => {
     { label: "Dearness Allowance", perMonth: daMonthly, perYear: daAnnual },
     { label: "Food Allowance", perMonth: foodMonthly, perYear: foodAnnual },
     { label: "Special Allowance", perMonth: specialMonthly, perYear: specialAnnual },
-    { label: "Provident Fund (PF)", perMonth: pfMonthly, perYear: pfAnnual }, // ✅ Added PF
+    { label: "Provident Fund (PF)", perMonth: pfMonthly, perYear: pfAnnual }, // show only
   ];
 
+  // ✅ Total WITHOUT PF
   const totalPerMonth = round2(
-    salaryBreakup.reduce((sum, r) => sum + r.perMonth, 0)
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    foodMonthly +
+    specialMonthly
   );
 
   const totalPerYear = round2(
-    salaryBreakup.reduce((sum, r) => sum + r.perYear, 0)
+    basicAnnual +
+    hraAnnual +
+    daAnnual +
+    foodAnnual +
+    specialAnnual
   );
 
   return { salaryBreakup, totalPerMonth, totalPerYear };
 };
-
-
 /* ===================== PAGE WRAPPER ===================== */
 const Page = ({ company, children }) => (
   <Box

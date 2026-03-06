@@ -31,20 +31,22 @@ const formatCurrency = (v) =>
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
-  const basic = round2(annualCTC * 0.35);
-  const hra = round2(annualCTC * 0.20);
-  const special = round2(annualCTC * 0.35);
-  const conveyance = round2(annualCTC * 0.05);
-  const misc = round2(
-    annualCTC - (basic + hra + special + conveyance)
-  );
+  const round2 = (n) => Number(n.toFixed(2));
+
+  const basic   = round2(annualCTC * 0.40);
+  const hra     = round2(annualCTC * 0.18);
+  const da      = round2(annualCTC * 0.12);
+  const special = round2(annualCTC * 0.16);
+  const food    = round2(annualCTC * 0.06);
+  const misc    = round2(annualCTC * 0.08);
 
   return [
-    ["Basic Salary", basic / 12, basic],
-    ["House Rent Allowance (HRA)", hra / 12, hra],
-    ["Special Allowance", special / 12, special],
-    ["Conveyance Allowance", conveyance / 12, conveyance],
-    ["Other Allowances", misc / 12, misc],
+    ["Basic Salary ", basic / 12, basic],
+    ["House Rent Allowance ", hra / 12, hra],
+    ["Dearness Allowance ", da / 12, da],
+    ["Special Allowance ", special / 12, special],
+    ["Food Allowance ", food / 12, food],
+    ["Misc. Allowance ", misc / 12, misc],
   ];
 };
 
@@ -61,9 +63,9 @@ const PentaAppointment = ({ company, data }) => {
     <>
       Your Designation will be <strong>"{data.position}"</strong>.
     </>,
-    <>Your total emoluments will be <strong>Rs.{
+    <>Your total emoluments will be <strong>Rs. {
       annualCTC / 100000
-    } </strong>Lakhs per annum.</>,
+    } </strong>Lakhs Per Annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
     `You shall be due for salary revision not before one year from your date of joining.`,

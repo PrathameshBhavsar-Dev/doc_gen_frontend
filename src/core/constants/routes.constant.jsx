@@ -20,7 +20,9 @@ class ROUTES {
   static USER_FORM = `${this.USER_BASE}/form`;
 
   // Documents
-  static DOCUMENT_DASHBOARD = `${this.DOCUMENT_BASE}/dashboard`;
+  static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
+  static DOCUMENT_PREVIEW = `${this.DOCUMENT_BASE}/preview`;
+  static DOCUMENT_GENERATE = `${this.DOCUMENT_BASE}/generate`;
   
 }
 

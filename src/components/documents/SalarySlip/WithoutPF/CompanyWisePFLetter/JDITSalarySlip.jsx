@@ -696,74 +696,88 @@ const JDITSalarySlip = ({ company, data }) => {
     totalSalary,
   } = data;
 
-  /* ================= SALARY CALCULATION ================= */
-  /* ================= SALARY CALCULATION ================= */
+  
+/* ================= SALARY CALCULATION ================= */
 const {
   basicSalary,
   hra,
   dearnessAllowance,
+  specialAllowance,
   foodAllowance,
   miscAllowance,
-  pf,
+  totalEarning,
   professionalTax,
-  totalDeductions,
+  totalDeduction,
   netPay,
 } = useMemo(() => {
-  const gross = Number(totalSalary) || 0;
 
-  // Calculate earnings components
-  const basic = Math.round(gross * 0.4);
-  const hraCalc = Math.round(basic * 0.4);
-  const da = Math.round(gross * 0.1);
-  const food = Math.round(gross * 0.1);
-  const misc = gross - (basic + hraCalc + da + food);
+  const round2 = (num) => Number(Number(num).toFixed(2));
 
-  // Calculate deductions
-  const pfCalc = Math.round(basic * 0.12);
-  const pt = getProfessionalTax(month, gross);
-  const otherDeduction = 2000;
+  const monthlyGross = round2(Number(totalSalary || 0));
 
-  const deductions = [
-    { label: "PF", value: pfCalc },
-    { label: "PT", value: pt },
-    { label: "Other Deduction", value: otherDeduction },
-  ];
+  // Percentages (TOTAL = 100%)
+  const PERCENT = {
+    basic: 0.40,
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+    misc: 0.08,
+  };
 
-  // Total Deduction including all
-  const totalDeductions = deductions
-  .filter(d => d.label === "PT" || d.label === "Other Deduction")
-  .reduce((sum, d) => sum + (Number(d.value) || 0), 0);
+  // Monthly breakup
+  const basic      = round2(monthlyGross * PERCENT.basic);
+  const hraCalc    = round2(monthlyGross * PERCENT.hra);
+  const conveyance = round2(monthlyGross * PERCENT.da);// DA
+  const special    = round2(monthlyGross * PERCENT.special);
+  const food       = round2(monthlyGross * PERCENT.food);
+  const others     = round2(monthlyGross * PERCENT.misc);
 
-  // Net Pay after deducting all
-  const net = gross - totalDeductions;
+  // Total Earnings
+  const totalEarning =
+    basic +
+    hraCalc +
+    conveyance +
+    special +
+    food +
+    others;
+
+  // Deductions
+  const otherDeduction = 2000; // you can make this dynamic if needed
+  const pt = getProfessionalTax(month, totalEarning);
+
+  const totalDeduction = round2(pt + Number(otherDeduction || 0));
+
+  const netPay = round2(totalEarning - totalDeduction);
 
   return {
     basicSalary: basic,
     hra: hraCalc,
-    dearnessAllowance: da,
+    dearnessAllowance: conveyance,
+    specialAllowance: special,
     foodAllowance: food,
-    miscAllowance: misc,
-    pf: pfCalc,
+    miscAllowance: others,
+    totalEarning,
     professionalTax: pt,
-    totalDeductions: totalDeductions,
-    netPay: net,
+    totalDeduction,
+    netPay,
   };
+
 }, [totalSalary, month]);
 
   const earnings = [
-    { label:<b> BASIC</b>, value: basicSalary },
-    { label: <b>HRA</b>, value: hra },
-    { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
-    { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
-    { label: <b>MISC ALLOWANCE</b>, value: miscAllowance },
-  ];
+  { label: <b>BASIC</b>, value: basicSalary },
+  { label: <b>HRA</b>, value: hra },
+  { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
+  { label: <b>SPECIAL ALLOWANCE</b>, value: specialAllowance },
+  { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
+  { label: <b>MISC ALLOWANCE</b>, value: miscAllowance },
+];
 
   const deductions = [
-    { label: "PF", value: pf },
-    { label: "PT", value: professionalTax },
-    { label: "Other Deduction", value: 2000 },
-  ];
-
+  { label: "PT", value: professionalTax },
+  { label: "Other Deduction", value: 2000 },
+];
   // const totalDeductions = deductions.reduce((s, d) => s + d.value, 0);
 
 // const totalDeductions = deductions
@@ -804,12 +818,12 @@ const {
               sx={{
                 ...CELL,
                 textAlign: "center",
-                fontSize: "11px",
+                fontSize: "12px",
               }}
             >
               <b>
-                301 A, 3rd Floor, Sai Villa Commercial Apartment, Sr. No. 166, Malwadi Road, 
-Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
+                401 A, 4rd Floor, Sai Villa Commercial Apartment, Sr. No. 166, Malwadi Road, 
+                Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
 
               </b>
             </TableCell>
@@ -818,7 +832,7 @@ Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
           <TableRow>
             <TableCell
               colSpan={4}
-              sx={{ ...CELL, fontSize: "10px", textAlign: "center" }}
+              sx={{ ...CELL, fontSize: "14px", textAlign: "center" }}
             >
               <b>Salary Slip {formatMonthYear(month)}</b>
             </TableCell>
@@ -876,8 +890,8 @@ Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
           <TableRow>
             <TableCell sx={CELL}><b>Total</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(totalSalary)}
-            </TableCell>
+              {formatCurrency(totalSalary)}            
+              </TableCell>
           </TableRow>
 
           {/* SMALLER GAP */}
@@ -928,7 +942,7 @@ Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
 <TableRow>
   <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
   <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-    {formatCurrency(totalDeductions)}
+    {formatCurrency(totalDeduction)}
   </TableCell>
 </TableRow>
 
@@ -953,15 +967,15 @@ Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
         <TableBody>
           <TableRow>
             <TableCell sx={{ ...CELL, width: "33%", height: "110px", textAlign: "center" }}>
-              {company.stamp && <img src={company.stamp} alt="Stamp" height="100" />}
+              {company.stamp && <img src={company.stamp} alt="Stamp" height="80" />}
             </TableCell>
 
             <TableCell sx={{ ...CELL, width: "34%", height: "110px" }} />
 
-            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "110px", textAlign: "center" }}>
+            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "100px", textAlign: "center" }}>
               {company.signature && (
                 <>
-                  <img src={company.signature} alt="Signature" height="50" />
+                  <img src={company.signature} alt="Signature" height="40" />
                   <Typography fontWeight="bold" fontSize="11px">
                     Signature
                   </Typography>

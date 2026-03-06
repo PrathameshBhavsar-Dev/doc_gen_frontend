@@ -31,23 +31,29 @@ const formatCurrency = (v) =>
 
 /* ================= SALARY BREAKUP WITH PF ================= */
 
-const generateSalaryBreakup = (annualCTC) => {
+const generateSalaryBreakup = (monthlyCTC) => {
+
+  // Calculate salary components (100%)
+  let basic = Math.round(monthlyCTC * 0.48);
+  let hra = Math.round(monthlyCTC * 0.18);
+  let da = Math.round(monthlyCTC * 0.12);
+  let special = Math.round(monthlyCTC * 0.16);
+  let food = Math.round(monthlyCTC * 0.06);
+
+  // Fix rounding difference
+  const calculated = basic + hra + da + special + food;
+  basic += monthlyCTC - calculated;
+
+  // Static PF
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
-  const basic = round2(annualCTC * 0.40);
-  const hra = round2(annualCTC * 0.20);
-  const special = round2(annualCTC * 0.25);
-
-  const otherAllowance = round2(
-    annualCTC - (basic + hra + special + pfAnnual)
-  );
-
   return [
-    ["Basic Salary", basic / 12, basic],
-    ["House Rent Allowance", hra / 12, hra],
-    ["Special Allowance", special / 12, special],
-    ["Other Allowance", otherAllowance / 12, otherAllowance],
+    ["Basic Salary", basic, basic * 12],
+    ["House Rent Allowance", hra, hra * 12],
+    ["Dearness Allowance", da, da * 12],
+    ["Special Allowance", special, special * 12],
+    ["Food Allowance", food, food * 12],
     ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 };
@@ -57,13 +63,14 @@ const generateSalaryBreakup = (annualCTC) => {
 const QuickConfirmation = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const annualCTC = Number(data.totalSalary || 0);
-  const salaryRows = generateSalaryBreakup(annualCTC);
+const monthlyCTC = Number(data.totalSalary || 0);
+const annualCTC = monthlyCTC * 12;
 
-  const monthlyGross = salaryRows.reduce(
-    (sum, row) => sum + Number(row[1]),
-    0
-  );
+const salaryRows = generateSalaryBreakup(monthlyCTC);
+
+ const monthlyGross = salaryRows
+  .filter(row => row[0] !== "Provident Fund (PF)")
+  .reduce((sum, row) => sum + row[1], 0);
 
   return (
     <>
