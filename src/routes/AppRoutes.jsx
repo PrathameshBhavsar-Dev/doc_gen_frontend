@@ -18,6 +18,7 @@ const AdminHistoryPage = lazy(() => import("../pages/admin/AdminHistoryPage"));
 const AdminUserManagementPage = lazy(() => import("../pages/admin/AdminUserManagementPage"));
 const AdminCompanyManagementPage = lazy(() => import("../pages/admin/AdminCompanyManagementPage"));
 const AdminSettingPage = lazy(() => import("../pages/admin/AdminSettingPage"));
+const AdminAddCompany = lazy(() => import("../components/admin/companyManagement/AddCompany"));
 
 /* ======================= USER ======================= */
 const UserDashboardPage = lazy(() => import("../pages/user/UserDashboardPage"));
@@ -60,6 +61,7 @@ const AppRoutes = () => {
           <Route path={ROUTES.ADMIN_USER_MANAGEMENT} element={<LazyLoad component={AdminUserManagementPage} />} />
           <Route path={ROUTES.ADMIN_HISTORY} element={<LazyLoad component={AdminHistoryPage} />} />
           <Route path={ROUTES.ADMIN_SETTINGS} element={<LazyLoad component={AdminSettingPage} />} />
+          <Route path={ROUTES.ADMIN_ADD_COMPANY} element={<LazyLoad component={AdminAddCompany  } />} />
         </Route>
       </Route>
 
