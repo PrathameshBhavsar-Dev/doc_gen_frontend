@@ -33,9 +33,18 @@ const DocumentPreview = lazy(() => import("../components/constant/DocumentPrevie
 
 const AppRoutes = () => {
 
+
   return (
     <Routes>
       {/* ================= AUTH ROUTES ================= */}
+      <Route
+        path={ROUTES.LOGIN}
+        element={<LazyLoad component={Login} />}
+      />
+      <Route
+        path={ROUTES.SIGNUP}
+        element={<LazyLoad component={Signup} />}
+      />
       <Route
         path={ROUTES.LOGIN}
         element={<LazyLoad component={Login} />}
@@ -68,6 +77,11 @@ const AppRoutes = () => {
         </Route>
       </Route>
 
+      {/* ================= DOCUMENT ROUTES ================= */}
+      <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+        <Route path={ROUTES.DOCUMENT_CREATE} element={<LazyLoad component={DocumentCreate} />} />
+        <Route path={ROUTES.DOCUMENT_PREVIEW} element={<LazyLoad component={DocumentPreview} />} />
+      </Route>
       {/* ================= DOCUMENT ROUTES ================= */}
       <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
         <Route path={ROUTES.DOCUMENT_CREATE} element={<LazyLoad component={DocumentCreate} />} />

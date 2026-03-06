@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import sign from "../../../../../assets/images/Newagecloud/Kirti Kumar.png";
+import sign from "../../../../../assets/images/Newagecloud/kirti_kumar.png";
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date

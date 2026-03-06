@@ -166,7 +166,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear {data.employeeName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
 
           <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
 
@@ -186,7 +186,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             Your commencement date with us will be on or before{" "}
             <strong>{joiningDate}</strong>.
           </Typography>
- 
+
           <Typography sx={{ mb: "6mm" }}>
             Your annual salary, allowances, and contributions put together will
             be

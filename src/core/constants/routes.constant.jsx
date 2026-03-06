@@ -27,6 +27,7 @@ class ROUTES {
   static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
   static DOCUMENT_PREVIEW = `${this.DOCUMENT_BASE}/preview`;
   static DOCUMENT_GENERATE = `${this.DOCUMENT_BASE}/generate`;
+  
 }
 
 export default ROUTES;
