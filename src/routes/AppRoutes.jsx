@@ -22,6 +22,7 @@ const AdminCompanyManagementPage = lazy(
   () => import("../pages/admin/AdminCompanyManagementPage"),
 );
 const AdminSettingPage = lazy(() => import("../pages/admin/AdminSettingPage"));
+const AdminAddCompany = lazy(() => import("../components/admin/companyManagement/AddCompany"));
 
 /* ======================= USER ======================= */
 const UserDashboardPage = lazy(() => import("../pages/user/UserDashboardPage"));
