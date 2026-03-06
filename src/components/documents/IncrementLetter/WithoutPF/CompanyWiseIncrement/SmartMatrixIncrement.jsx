@@ -189,7 +189,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
             sx={{
               fontSize: "12pt",
               fontWeight: 600,
-              mb: "18mm",
+              mb: "5mm",
               fontFamily: "Verdana",
             }}
           >
@@ -197,13 +197,13 @@ const SmartMatrixIncrement = ({ company, data }) => {
           </Typography>
 
           {/* STAMP + SIGNATURE */}
-          <Box sx={{ mt: "4mm" }}>
+          <Box sx={{ mt: "3mm" }}>
             {/* STAMP + SIGNATURE SIDE BY SIDE */}
             <Box
               sx={{
                 display: "flex",
                 alignItems: "flex-end",
-                gap: "10mm", // distance between stamp & signature
+                gap: "10mm",
                 mb: "4mm",
               }}
             >
@@ -221,7 +221,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 <img
                   src={company.stamp}
                   alt="HR Signature"
-                  style={{ width: "38mm" }}
+                  style={{ width: "35mm" }}
                 />
               )}
             </Box>
@@ -260,6 +260,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
           sx={{
             fontWeight: "bold",
             mb: 3,
+            mt: 8,
             fontSize: "16px",
             textDecoration: "underline",
           }}
@@ -303,7 +304,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     fontSize: "15px",
-                    width: "55%",
+                    width: "40%",
                     fontFamily: "Times New Roman",
                   }}
                 >

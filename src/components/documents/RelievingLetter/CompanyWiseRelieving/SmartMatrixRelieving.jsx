@@ -1,6 +1,15 @@
 import React from "react";
-import sign from "../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 const SmartMatrixRelieving = ({ company, data }) => {
+  const formatDate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    return d.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
   return (
     <div
       className="a4-content-only"
@@ -56,6 +65,15 @@ const SmartMatrixRelieving = ({ company, data }) => {
           zIndex: 1,
         }}
       >
+        <div
+          style={{
+            textAlign: "right",
+            marginBottom: "10mm",
+            fontFamily: "Bahnschrift",
+          }}
+        >
+          {formatDate(data.issueDate)}
+        </div>
         {/* ================= TITLE ================= */}
         <div
           style={{
@@ -143,7 +161,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
           style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "6mm", // minimal natural gap
+            gap: "6mm",
             marginTop: "20mm",
           }}
         >

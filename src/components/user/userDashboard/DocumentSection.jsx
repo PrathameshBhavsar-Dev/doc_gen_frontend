@@ -141,7 +141,7 @@ const DocumentCard = ({ doc, onClick }) => {
           <Icon className="text-white" size={18} />
         </div>
 
-        {doc.hasPFToggle && (
+        {/* {doc.hasPFToggle && (
           <div className="flex flex-col items-end gap-1">
             <span className="text-[10px] sm:text-xs text-[#61489A] whitespace-nowrap">
               PF/without PF
@@ -151,7 +151,7 @@ const DocumentCard = ({ doc, onClick }) => {
               onToggle={() => setPfEnabled(!pfEnabled)}
             />
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Title */}
