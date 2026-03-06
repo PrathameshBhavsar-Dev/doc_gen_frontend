@@ -16,7 +16,7 @@ const SmartMatrixCertification = ({ company, data }) => {
 
   const issueDate = formatDate(data.issueDate);
   const startDate = formatDate(data.startDate);
-  const endDate = formatDate(data.endDate);
+  const endDate = formatDate(data.completionDate);
 
   return (
     <A4Page
@@ -62,7 +62,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         <Typography sx={{ mb: "6mm" }}>
           During the internship period, <strong>{data.employeeName}</strong> was
           actively participated in project related tasks, shown their skills and
-          abilities in <strong>{data.designation}</strong>.
+          abilities as <strong>{data.role}</strong>.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>

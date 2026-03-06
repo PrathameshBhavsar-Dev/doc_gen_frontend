@@ -6,19 +6,24 @@ import AdminSidebar from "../public/AdminSidebar";
 const AdminLayout = () => {
 
   return (
-    <div>
-        <AdminNavbar />
-        <AdminSidebar />
-        {/* ---------- CONTENT ---------- */}
-        <div
-          className={`
-            w-full transition-all duration-300
-            px-5 pt-16 pb-5
-          `}
-        >
-          <Outlet />
+    <>
+      <div className="flex h-screen">
+
+        {/* Sidebar wrapper controls width */}
+        <div className="w-64 shrink-0">
+          <AdminSidebar />
         </div>
-    </div>
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col">
+          <AdminNavbar />
+          <div className="flex-1 p-6 bg-gray-100 overflow-y-auto">
+            <Outlet />
+          </div>
+        </div>
+
+      </div>
+    </>
   );
 };
 

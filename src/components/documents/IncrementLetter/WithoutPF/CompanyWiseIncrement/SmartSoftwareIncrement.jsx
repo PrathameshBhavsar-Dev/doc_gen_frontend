@@ -75,7 +75,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const salaryRows = [
     { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
     { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
-    { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { name: "Conveyance Allowance", monthly: daMonthly, annual: daAnnual },
     { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
     { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
     { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
@@ -233,7 +233,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
             </Table>
           </TableContainer>
 
-          <Typography sx={{ mt: 4, fontSize: "13px" }}>
+          <Typography sx={{ mt: 4, fontSize: "14px" }}>
             Please note that the details in this communication are confidential
             and you are requested not to share the same with others.
           </Typography>
@@ -295,12 +295,12 @@ const watermarkStyle = {
 const headerCell = {
   border: "1px solid #000",
   fontWeight: 600,
-  fontSize: "12px",
+  fontSize: "14px",
 };
 
 const bodyCell = {
   border: "1px solid #000",
-  fontSize: "11px",
+  fontSize: "14px",
 };
 
 const totalCell = {

@@ -12,28 +12,29 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
+
 const SmartMatrixOfferPage2 = ({ data, company }) => {
-  /* ======================================================
-   ✅ SMARTMATRIX IMAGE LOGIC (INPUT IS MONTHLY)
-   ====================================================== */
+  if (!data || !company) return null;
 
   const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
 
-  /* INPUT IS MONTHLY */
-  const monthlyGross = round2(data.salary || 0);
+  /* ================================
+     ✅ INPUT IS ANNUAL
+     ================================ */
 
-  /* ANNUAL DERIVED */
-  const annualCTC = round2(monthlyGross * 12);
+  const annualCTC = round2(data.salary || 0);
 
-  /* Percentage Structure (Same as Image) */
+  /* Derive Monthly */
+  const monthlyGross = round2(annualCTC / 12);
+
+  /* Percentage Structure */
   const PERCENT = {
     basic: 0.4,
     hra: 0.18,
     da: 0.12,
     special: 0.16,
     food: 0.06,
-    misc: 0.08,
   };
 
   /* Monthly Calculation */
@@ -43,11 +44,11 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
   const specialMonthly = round2(monthlyGross * PERCENT.special);
   const foodMonthly = round2(monthlyGross * PERCENT.food);
 
-  /* Adjustment to prevent ₹1 mismatch */
-  const miscMonthly = round2(
-    monthlyGross -
-      (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly),
-  );
+  /* Adjustment to avoid ₹1 mismatch */
+  const used =
+    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
+
+  const miscMonthly = round2(monthlyGross - used);
 
   /* Salary Rows */
   const salaryComponents = [
@@ -68,7 +69,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
       annual: round2(specialMonthly * 12),
     },
     {
-      name: "Facilty Allowance",
+      name: "Facility Allowance",
       monthly: miscMonthly,
       annual: round2(miscMonthly * 12),
     },
@@ -79,34 +80,25 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
     },
   ];
 
-  /* Totals (Guaranteed Correct) */
+  /* Totals */
   const totalMonthly = monthlyGross;
   const totalAnnual = annualCTC;
+
   return (
     <A4Page
-      headerSrc={company?.header || "/assets/jdit_header.png"}
-      footerSrc={company?.footer || "/assets/jdit_footer.png"}
+      headerSrc={company?.header}
+      footerSrc={company?.footer}
       contentTop="45mm"
       contentBottom="28mm"
     >
-      {/* Document Title */}
-      <Typography
-        align="center"
-        sx={{
-          fontSize: "16pt",
-          fontWeight: 700,
-          fontFamily: "Verdana",
-          textDecoration: "underline",
-          mb: "8mm",
-        }}
-      ></Typography>
-
+      {/* Title */}
       <Typography
         sx={{
           fontSize: "11pt",
           fontWeight: "bold",
           textAlign: "center",
           mb: "6mm",
+          mt: "20mm",
         }}
       >
         Annexure A Salary Structure
@@ -129,18 +121,14 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
           }}
         >
           <TableHead>
-            <TableRow
-              sx={{
-                backgroundColor: "#f28c28",
-              }}
-            >
+            <TableRow sx={{ backgroundColor: "#f28c28" }}>
               <TableCell
                 sx={{
                   width: "50%",
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 Salary Components
@@ -152,8 +140,8 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                   width: "25%",
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 Per month (Rs.)
@@ -165,8 +153,8 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                   width: "25%",
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 Per Annum (Rs.)
@@ -180,8 +168,8 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                 <TableCell
                   sx={{
                     border: "1px solid #000",
-                    fontSize: "12px",
-                    padding: "3px 6px",
+                    fontSize: "14px",
+                    padding: "10px 6px",
                   }}
                 >
                   {row.name}
@@ -191,7 +179,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                   align="center"
                   sx={{
                     border: "1px solid #000",
-                    fontSize: "12px",
+                    fontSize: "14px",
                     padding: "3px 6px",
                   }}
                 >
@@ -202,7 +190,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                   align="center"
                   sx={{
                     border: "1px solid #000",
-                    fontSize: "12px",
+                    fontSize: "14px",
                     padding: "3px 6px",
                   }}
                 >
@@ -212,17 +200,13 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
             ))}
 
             {/* TOTAL ROW */}
-            <TableRow
-              sx={{
-                backgroundColor: "#f28c28",
-              }}
-            >
+            <TableRow sx={{ backgroundColor: "#f28c28" }}>
               <TableCell
                 sx={{
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 Total Monthly Gross Salary
@@ -233,8 +217,8 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                 sx={{
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 {formatCurrency(totalMonthly)}
@@ -245,8 +229,8 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                 sx={{
                   border: "1px solid #000",
                   fontWeight: 700,
-                  fontSize: "12px",
-                  padding: "4px 6px",
+                  fontSize: "14px",
+                  padding: "7px 6px",
                 }}
               >
                 {formatCurrency(totalAnnual)}
@@ -256,12 +240,13 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
         </Table>
       </TableContainer>
 
-      {/* Signature Block (UNCHANGED) */}
+      {/* Signature Block */}
       <Typography
         sx={{ mt: "20mm", fontFamily: "Verdana, Geneva, sans-serif" }}
       >
         <strong>{company.name}</strong>
       </Typography>
+
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ mb: "8mm" }}>
           <Grid container spacing={2} alignItems="center">
@@ -270,7 +255,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                 component="img"
                 src={sign}
                 alt="Sign"
-                sx={{ width: 110, mt: "35mm" }}
+                sx={{ width: 120, mt: "35mm" }}
               />
             </Grid>
             <Grid item>
@@ -278,7 +263,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
                 component="img"
                 src={company.stamp}
                 alt="Signature"
-                sx={{ width: 130, mt: "10mm", ml: "-2mm" }}
+                sx={{ width: 120, mt: "10mm", ml: "-2mm" }}
               />
             </Grid>
           </Grid>

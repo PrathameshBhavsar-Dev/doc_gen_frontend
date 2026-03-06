@@ -43,7 +43,7 @@ const generateSalaryBreakup = (annualCTC) => {
   return [
     ["Basic Salary", basic / 12, basic],
     ["House Rent Allowance", hra / 12, hra],
-    ["Dearness Allowance", da / 12, da],
+    ["Conveyance Allowance", da / 12, da],
     ["Special Allowance", special / 12, special],
     ["Food Allowance", food / 12, food],
     ["Miscellaneous Allowance ", misc / 12, misc],

@@ -10,6 +10,10 @@ class ROUTES {
 
   // Admin Pages
   static ADMIN_DASHBOARD = `${this.ADMIN_BASE}/dashboard`;
+  static ADMIN_COMPANY_MANAGEMENT = `${this.ADMIN_BASE}/company-dashboard`;
+  static ADMIN_USER_MANAGEMENT = `${this.ADMIN_BASE}/user-management`;
+  static ADMIN_HISTORY = `${this.ADMIN_BASE}/history`;
+  static ADMIN_SETTINGS = `${this.ADMIN_BASE}/settings`;
 
   // User Pages
   static USER_DASHBOARD = `${this.USER_BASE}/dashboard`;
