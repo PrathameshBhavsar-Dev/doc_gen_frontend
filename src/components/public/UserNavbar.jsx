@@ -59,7 +59,7 @@ const UserNavbar = ({ setMobileOpen }) => {
   };
 
   return (
-    <div className="w-full bg-white border-b border-gray-200">
+    <div className="w-full bg-white shadow-md">
       <div className="h-14 sm:h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* LEFT SIDE */}
@@ -72,7 +72,7 @@ const UserNavbar = ({ setMobileOpen }) => {
           >
             <Menu size={22} />
           </button>
-
+          
         </div>
 
         {/* RIGHT SIDE */}
