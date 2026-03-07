@@ -54,99 +54,41 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
 
   return (
     <div
-      className={`h-screen bg-white shadow-lg flex flex-col p-4 transition-all duration-300
+      className={`h-screen flex flex-col p-4 transition-all duration-300
       ${collapsed ? "items-center" : ""}`}
     >
       {/* 🔹 Top Toggle + Logo Section */}
-<div
-  className={`w-full flex items-center mb-6 ${
-    collapsed ? "justify-center" : "justify-between"
-  }`}
->
-  {/* Logo + Text */}
-  {!collapsed && (
-    <div className="flex items-center gap-3">
-      <img
-        src={ContainerIcon}
-        alt="Logo"
-        className="w-10 h-10"
-      />
-      <div>
-        <h2 className="text-xl font-bold text-[#0E145EC7]">
-          Doc Gen
-        </h2>
-        <p className="text-xs text-[#62748E]">
-          Document Generator
-        </p>
+      <div
+        className={`w-full flex items-center mb-6 ${collapsed ? "justify-center" : "justify-between"
+          }`}
+      >
+        {/* Logo + Text */}
+        {!collapsed && (
+          <div className="flex items-center gap-3">
+            <img
+              src={ContainerIcon}
+              alt="Logo"
+              className="w-10 h-10"
+            />
+            <div>
+              <h2 className="text-xl font-bold text-[#0E145EC7]">
+                Doc Gen
+              </h2>
+              <p className="text-xs text-[#62748E]">
+                Document Generator
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Toggle Button */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
+        >
+          <PanelLeft size={20} />
+        </button>
       </div>
-    </div>
-  )}
-
-  {/* Toggle Button */}
- <button
-  onClick={() => setCollapsed(!collapsed)}
-  className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
->
-  <PanelLeft size={20} />
-</button>
-</div>
-
-      
-      {/* Generate Button */}
-<div className="relative mb-6 w-full">
-  <div
-    ref={buttonRef}
-    onClick={handleToggle}
-    className={`block rounded-xl cursor-pointer transition-all duration-300
-      ${collapsed ? "mx-auto w-12 h-12 flex items-center justify-center" : ""}
-    `}
-    style={{
-      background: "linear-gradient(to left, #0E145E, #B37BD6)",
-      padding: collapsed ? "0" : "2px",
-      borderRadius: "14px",
-    }}
-  >
-    <span
-      className={`flex items-center gap-2 w-full h-full
-        ${collapsed ? "justify-center" : "px-4 py-3 justify-center"}
-      `}
-      style={{
-        borderRadius: "12px",
-        backgroundColor: "#fafaf7",
-      }}
-    >
-      <Plus
-        size={18}
-        className={`text-[#3b2f8f] transition-transform duration-300 ${
-          showDropdown ? "rotate-45" : ""
-        }`}
-      />
-
-      {/* 👇 Only hide text when collapsed */}
-      {!collapsed && (
-        <span className="font-bold text-[#3b2f8f] text-base tracking-wide">
-          Generate Document
-        </span>
-      )}
-    </span>
-  </div>
-
-  {isVisible && (
-  <div
-    ref={dropdownRef}
-    className={`absolute z-50 ${
-      collapsed
-        ? "top-5 left-16 w-20"
-        : "top-13 left-0 w-full"
-    }`}
-  >
-    <GenerateDocDropDown
-      onClose={handleToggle}
-      compact={collapsed}   // 👈 THIS controls everything
-    />
-  </div>
-)}
-</div>
 
       {/* Navigation */}
       <nav className="flex flex-col gap-2 w-full">
@@ -157,10 +99,9 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
             className={({ isActive }) =>
               `flex items-center gap-3 py-3 rounded-xl transition-all font-semibold
               ${collapsed ? "justify-center px-0" : "px-4"}
-              ${
-                isActive
-                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white"
-                  : "text-gray-600 hover:bg-purple-50"
+              ${isActive
+                ? "bg-[#FFFEF8] text-black"
+                : "text-white hover:bg-[#B37BD6]"
               }`
             }
           >

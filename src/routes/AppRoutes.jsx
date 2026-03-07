@@ -126,6 +126,7 @@ const AppRoutes = () => {
           element={<LazyLoad component={DocumentPreview} />}
         />
       </Route>
+
     </Routes>
   );
 };
