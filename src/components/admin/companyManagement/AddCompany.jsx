@@ -7,6 +7,8 @@ import {
   PenTool,
   Droplet,
   ArrowLeft,
+  Save,
+  Building2
 } from "lucide-react";
 
 const AddCompany = () => {
@@ -76,7 +78,6 @@ const AddCompany = () => {
 
           <div className="flex items-center gap-3">
 
-            {/* Icon */}
             <div
               className="p-3 rounded-lg text-white"
               style={{ background: "linear-gradient(135deg,#0E145E,#B37BD6)" }}
@@ -93,7 +94,6 @@ const AddCompany = () => {
 
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-3">
 
             <button className="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100">
@@ -101,9 +101,10 @@ const AddCompany = () => {
             </button>
 
             <button
-              className="px-5 py-2 text-white rounded-lg font-medium"
+              className="flex items-center gap-2 px-5 py-2 text-white rounded-lg font-medium"
               style={{ background: "linear-gradient(90deg,#0E145E,#B37BD6)" }}
             >
+              <Save size={16} />
               Create Company
             </button>
 
@@ -116,14 +117,15 @@ const AddCompany = () => {
 
           <h3 className="text-2xl font-bold mb-2">Basic Information</h3>
 
-          <label className="text-sm text-gray-600">
+          <label className="flex items-center gap-2 text-sm text-gray-600">
+            <Building2 size={16} className="text-purple-600" />
             Company Name *
           </label>
 
           <input
             type="text"
             placeholder="Enter company name"
-            className="w-full mt-1 border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full mt-1 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
 
         </div>
@@ -143,15 +145,14 @@ const AddCompany = () => {
 
               <div
                 key={index}
-                className="bg-gray-100 rounded-xl p-4 shadow-sm"
+                className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
               >
 
-                {/* Title Section */}
                 <div className="flex items-center gap-3 mb-3">
 
                   <div
                     className="text-white p-2 rounded-lg"
-                    style={{ background: "linear-gradient(135deg,#0E145E,#B37BD6)" }}
+                    style={{ background: "linear-gradient(135deg,#AD46FF,#9810FA)" }}
                   >
                     {item.icon}
                   </div>
@@ -163,16 +164,15 @@ const AddCompany = () => {
 
                 </div>
 
-                {/* Input + Upload */}
                 <div className="flex gap-2">
 
                   <input
                     type="text"
                     placeholder="Enter image URL or upload file"
-                    className="flex-1 border rounded-md px-3 py-2 text-sm"
+                    className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm"
                   />
 
-                  <button className="flex items-center gap-1 border px-4 py-2 rounded-md bg-white hover:bg-gray-100">
+                  <button className="flex items-center gap-1 border border-gray-200 px-4 py-2 rounded-md bg-white hover:bg-gray-100">
                     <Upload size={14} />
                     Upload
                   </button>
