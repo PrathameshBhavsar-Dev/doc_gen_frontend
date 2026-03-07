@@ -1,6 +1,9 @@
 import React from "react";
 import { Building2, Image, FileText, PenTool } from "lucide-react";
 
+import { useParams } from "react-router-dom";
+import { companies } from "../../constant/publicData/mockData"; // adjust path
+
 const CompanyBranding = () => {
   const assets = [
     {
@@ -28,6 +31,12 @@ const CompanyBranding = () => {
       img: "https://images.unsplash.com/photo-1521790366320-7bda2f2f0d52",
     },
   ];
+
+  const { id } = useParams();
+
+const company = companies.find(
+  (c) => c.id === Number(id)
+);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
