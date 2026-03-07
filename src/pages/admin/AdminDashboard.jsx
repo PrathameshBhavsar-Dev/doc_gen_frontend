@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import HeroDashBoardSection from "../../components/user/userDashboard/HeroDashBoardSection";
+import AnalyticSection from "../../components/user/userDashboard/AnalyticSection";
+import GeneratedDocumentSection from "../../components/user/userDashboard/GeneratedDocumentSection";
 
-const AdminDashboard = () => {
+const UserDashboardPage = () => {
   return (
-    <div>AdminDashboard</div>
-  )
-}
+    <div className="min-h-screen">
+      <HeroDashBoardSection />
+      
+      <AnalyticSection />
+      <GeneratedDocumentSection />
+    </div>
+  );
+};
 
-export default AdminDashboard
+export default UserDashboardPage;

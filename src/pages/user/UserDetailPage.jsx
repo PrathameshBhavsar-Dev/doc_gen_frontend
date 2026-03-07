@@ -173,7 +173,7 @@ const UserDetailPage = () => {
             bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
             hover:opacity-90"
           >
-            <Download size={18} />
+            <Download size={18} />  
             Download PDF
           </button>
 
