@@ -2,31 +2,15 @@ import React, { useState } from "react";
 import { FaRegEdit, FaBuilding } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-
-
 import { useNavigate } from "react-router-dom";
-import AddCompany from "../../components/admin/companyManagement/AddCompany"
-
-const initialCompanies = [
-  { id: 1, name: "Nimbja Security Solutions", date: "05-12-2018" },
-  { id: 2, name: "Penta Software Solutions", date: "03-08-2022" },
-  { id: 3, name: "Quick Management Solutions", date: "10-122009" },
-  { id: 4, name: "Smart Software Solutions", date: "09-022016" },
-  { id: 5, name: "Cubeage Tech Solutions", date: "27-12-2022" },
-  { id: 6, name: "Newedge Cloud Solutions", date: "28-12-2022" },
-  { id: 7, name: "Smart Matrix", date: "27-12-2022" },
-  { id: 8, name: "Devcore Software Solutions", date: "28-12-2022" },
-  { id: 9, name: "RF Business Solutions", date: "11-07-2023" },
-  { id: 10, name: "JDIT Solutions", date: "07-10-2022" }
-];
+import { companies as mockCompanies } from "../../components/constant/publicData/mockData";
 
 const assets = ["Header", "Watermark", "Footer", "Stamp", "Signature"];
 
 const AdminCompanyManagementPage = () => {
   const navigate = useNavigate();
 
-  const [companies, setCompanies] = useState(initialCompanies);
-
+  const [companies, setCompanies] = useState(mockCompanies);
   // view company
   const handleView = (company) => {
     navigate(`/view-company/${company.id}`);
@@ -53,9 +37,9 @@ const AdminCompanyManagementPage = () => {
     navigate("/admin/add-company");
   };
 
-  const handleCompanyDetails = () => {
-    navigate("/admin/company-details");
-  }
+  const handleCompanyDetails = (company) => {
+    navigate(`/admin/company-details/${company.id}`);
+  };
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
@@ -90,7 +74,7 @@ const AdminCompanyManagementPage = () => {
         {companies.map((company) => (
           <div
             key={company.id}
-            onClick={handleCompanyDetails}
+            onClick={() => handleCompanyDetails(company)} 
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
           >
 
