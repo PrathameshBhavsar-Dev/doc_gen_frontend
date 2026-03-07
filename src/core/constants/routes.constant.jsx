@@ -15,7 +15,7 @@ class ROUTES {
   static ADMIN_HISTORY = `${this.ADMIN_BASE}/history`;
   static ADMIN_SETTINGS = `${this.ADMIN_BASE}/settings`;
   static ADMIN_ADD_COMPANY = `${this.ADMIN_BASE}/add-company`;
-  static ADMIN_COMPANY_DETAILS = `${this.ADMIN_BASE}/company-details`;
+  static ADMIN_COMPANY_DETAILS = `${this.ADMIN_BASE}/company-details/:id`;
 
 
   // User Pages
