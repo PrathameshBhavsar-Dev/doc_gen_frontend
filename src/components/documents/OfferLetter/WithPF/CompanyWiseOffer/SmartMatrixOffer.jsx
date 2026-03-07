@@ -93,10 +93,10 @@ const SmartMatrixOffer = ({ company, data }) => {
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   const offerDate = fmtDate(data.issueDate);
@@ -166,7 +166,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear, {data.employeeName}</Typography>
 
           <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
 
@@ -204,9 +204,25 @@ const SmartMatrixOffer = ({ company, data }) => {
         </Typography>
 
         <Box sx={{ mt: "12mm" }}>
-          <Box component="img" src={sign} sx={{ width: 120 }} />
-          <Box component="img" src={stamp} sx={{ width: 120 }} />
-
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Box
+                component="img"
+                src={sign}
+                alt="Sign"
+                sx={{ width: 120, mt: "35mm" }}
+              />
+            </Grid>
+            <Grid item>
+              <Box
+                component="img"
+                src={company.stamp}
+                alt="Signature"
+                sx={{ width: 120, mt: "10mm", ml: "-2mm" }}
+              />
+            </Grid>
+          </Grid>
+          
           <Typography>
             <strong>{company.hrName}</strong>
           </Typography>
