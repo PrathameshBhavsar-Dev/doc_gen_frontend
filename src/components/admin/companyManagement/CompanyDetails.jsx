@@ -1,6 +1,9 @@
 import React from "react";
 import { Building2, Image, FileText, PenTool } from "lucide-react";
 
+import { useParams } from "react-router-dom";
+import { companies } from "../../constant/publicData/mockData"; // adjust path
+
 const CompanyBranding = () => {
   const assets = [
     {
@@ -29,6 +32,12 @@ const CompanyBranding = () => {
     },
   ];
 
+  const { id } = useParams();
+
+  const company = companies.find(
+    (c) => c.id === Number(id)
+  );
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
 
@@ -37,7 +46,7 @@ const CompanyBranding = () => {
         <div className="flex items-center gap-2">
           <Building2 className="text-gray-700" size={20} />
           <h1 className="text-xl font-semibold text-gray-800">
-            Nimbja Security Solutions
+            {company?.name}
           </h1>
         </div>
 
@@ -55,12 +64,11 @@ const CompanyBranding = () => {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-gray-500">Company Name</p>
-            <p className="font-medium">Nimbja Security Solutions</p>
-          </div>
-
+            <p className="font-medium">{company?.name}</p>
+            </div>
           <div>
             <p className="text-gray-500">Established</p>
-            <p className="font-medium">2024-05-16</p>
+            <p className="font-medium">{company?.date}</p>          
           </div>
         </div>
       </div>
@@ -106,7 +114,10 @@ const CompanyBranding = () => {
                 <PenTool className="text-purple-600" size={16} />
               </div>
               <h3 className="font-medium text-gray-800">
-                Company Stamp
+                <img
+                  src={company?.stamp}
+                  className="rounded-md w-full h-32 object-cover"
+                />
               </h3>
             </div>
 
