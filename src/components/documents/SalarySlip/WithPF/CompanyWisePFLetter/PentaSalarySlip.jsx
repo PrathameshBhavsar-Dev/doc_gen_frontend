@@ -65,7 +65,7 @@ const PentaSalarySlip = ({ company, data }) => {
  const totalSalary = Number(data.totalSalary || 35000);
 
 // Earnings (100% Proper Split)
-const basic = +(totalSalary * 0.40).toFixed(2);
+const basic = +(totalSalary * 0.48).toFixed(2);
 const hra = +(totalSalary * 0.18).toFixed(2);
 const da = +(totalSalary * 0.12).toFixed(2);
 const special = +(totalSalary * 0.16).toFixed(2);

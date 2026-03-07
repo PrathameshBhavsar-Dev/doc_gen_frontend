@@ -1,7 +1,8 @@
 import React from "react";
 import CubeageUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/CubeageUnPaidInternshipLetter";
-import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter";
 import NeweageUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NeweageUnPaidInternshipLetter";
+import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter";
+// import NeweageUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NeweageUnPaidInternshipLetter";
 import PentaUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/PentaUnPaidInternshipLetter";
 import RPUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/RPUnPaidInternshipLetter";
 import SmartMatrixUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartMatrixUnPaidInternshipLetter";

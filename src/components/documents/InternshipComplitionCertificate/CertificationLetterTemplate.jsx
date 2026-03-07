@@ -1,19 +1,20 @@
 import React from "react";
 
- 
 // import DevconsExperience from "./CompanyWiseExperience/DevconsExperience";
 // import JDITExperience from "./CompanyWiseExperience/JDITExperience";
 // import NeweageExperience from "./CompanyWiseExperience/NeweageExperience";
-// import PentaExperience from "./CompanyWiseExperience/PentaExperience";
 // import RPExperience from "./CompanyWiseExperience/RPExperience";
 import NeweageCertification from "./CompanyWiseCertification/NeweageCertification";
 import JditCertification from "./CompanyWiseCertification/JditCertification";
 import SmartSoftwareCertification from "./CompanyWiseCertification/SmartSoftwareCertification";
 import DevconsCertification from "./CompanyWiseCertification/DevconsCertification";
 import RPCertification from "./CompanyWiseCertification/RPCertification";
+import PentaCertification from "./CompanyWiseCertification/PentaCertification";
 import CubeageCertification from "./CompanyWiseCertification/CubeageCertification";
 import SmartMatrixCertification from "./CompanyWiseCertification/SmartMatrixCertification";
 import NimbjaCertification from "./CompanyWiseCertification/NimbjaCertification";
+import QMSCertification from "./CompanyWiseCertification/QMSCertification";
+// import SmartMatrixCertification from "./CompanyWiseCertification/SmartMatrixCertification";
 // import SmartMatrixExperience from "./CompanyWiseExperience/SmartMatrixExperience";
 // import SmartSoftwareExperience from "./CompanyWiseExperience/SmartSoftwareExperience";
 
@@ -21,11 +22,14 @@ import NimbjaCertification from "./CompanyWiseCertification/NimbjaCertification"
 const companyComponentMap = {
   1: CubeageCertification,
   2: NeweageCertification,
-//   3: SmartMatrixExperience,
+  //   3: SmartMatrixExperience,
+  3: SmartMatrixCertification,
   4: DevconsCertification,
   5: RPCertification,
-//   6: PentaExperience,
+  6: PentaCertification,
+  7: NimbjaCertification,
   8: JditCertification,
+  9: QMSCertification,
   10: SmartSoftwareCertification,
 };
 

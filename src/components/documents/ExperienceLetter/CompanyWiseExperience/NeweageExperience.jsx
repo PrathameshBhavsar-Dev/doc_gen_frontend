@@ -47,6 +47,10 @@ const NeweageExperience = ({ company, data }) => {
   return (
     <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
       {/* ================= DATE ================= */}
+
+      <Typography sx={{textAlign: "center", font: "18"}}> 
+        <b>Experience Letter</b>
+      </Typography>
       <Typography sx={{ ...TEXT, mb: 6, textAlign: "right" }}>
         {formatDate(issueDate)}
       </Typography>

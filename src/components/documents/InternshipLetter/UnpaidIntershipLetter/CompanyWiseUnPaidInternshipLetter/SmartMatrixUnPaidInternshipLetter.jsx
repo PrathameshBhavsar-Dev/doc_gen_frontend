@@ -1,21 +1,16 @@
-
-
-
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
-
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 /* ================= DATE FORMAT ================= */
-const formatDate = (date) => {
-  if (!date) return "";
-
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-
-  return `${day}/${month}/${year}`;
-};
+const formatDate = (date) =>
+  date
+    ? new Date(date).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : "";
 
 const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
   return (
@@ -32,7 +27,7 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
           fontFamily: "Bahnschrift",
         }}
       >
-        <strong>Date: {formatDate(data.issueDate)}</strong>
+        <strong> {formatDate(data.issueDate)}</strong>
       </Box>
 
       {/* ================= TITLE ================= */}
@@ -56,20 +51,23 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
         </Typography>
 
         <Typography sx={{ fontFamily: "Bahnschrift" }}>
-          <strong>Subject :</strong> Letter of intent for the Internship of
-          position as <strong>{data.field}</strong>.
+          <strong>Subject :</strong>{" "}
+          <u>
+            Letter of intent for the Internship of position as{" "}
+            <strong>{data.designation}</strong>.
+          </u>
           <br />
           <br />
-          Dear {data.internName},
+          Dear {data.employeeName},
         </Typography>
       </Box>
 
       {/* ================= BODY ================= */}
       <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
         We are pleased to offer you the Internship of position as{" "}
-        <strong>{data.field}</strong> with <strong>{company.name}</strong> with
-        effective date <strong>{formatDate(data.startDate)}</strong> considering
-        your performance and support towards the organization.
+        <strong>{data.designation}</strong> with <strong>{company.name}</strong>{" "}
+        with effective date <strong>{formatDate(data.startDate)}</strong>{" "}
+        considering your performance and support towards the organization.
       </Typography>
 
       <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
@@ -109,7 +107,7 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
           {/* HR SIGNATURE */}
           {company.signature && (
             <img
-              src={company.signature}
+              src={sign}
               alt="HR Signature"
               style={{
                 height: "50px",
@@ -139,4 +137,3 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
 };
 
 export default SmartMatrixUnPaidInternshipLetter;
-
