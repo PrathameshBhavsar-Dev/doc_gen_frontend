@@ -63,31 +63,38 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   }`}
 >
   {/* Logo + Text */}
-  {!collapsed && (
-    <div className="flex items-center gap-3">
-      <img
-        src={ContainerIcon}
-        alt="Logo"
-        className="w-10 h-10"
-      />
-      <div>
-        <h2 className="text-xl font-bold text-[#0E145EC7]">
+  <div
+    className="flex items-center gap-3 cursor-pointer"
+    onClick={() => setCollapsed(!collapsed)}
+  >
+    {!collapsed && (
+      <>
+    <img
+      src={ContainerIcon}
+      alt="Logo"
+      className="w-10 h-10 shrink-0"
+    />
+
+    
+      <div className="leading-tight">
+        <h2 className="text-xl font-bold text-[#0E145EC7] whitespace-nowrap">
           Doc Gen
         </h2>
-        <p className="text-xs text-[#62748E]">
+        <p className="text-xs text-[#62748E] whitespace-nowrap">
           Document Generator
         </p>
       </div>
-    </div>
-  )}
+      </>
+    )}
+  </div>
 
   {/* Toggle Button */}
- <button
-  onClick={() => setCollapsed(!collapsed)}
-  className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
->
-  <PanelLeft size={20} />
-</button>
+  <button
+    onClick={() => setCollapsed(!collapsed)}
+    className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
+  >
+    <PanelLeft size={20} />
+  </button>
 </div>
 
       
