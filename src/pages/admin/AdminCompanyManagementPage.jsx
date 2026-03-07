@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import AddCompany from "../../components/admin/companyManagement/AddCompany"
 
 const initialCompanies = [
-  { id: 1, name: "Nimbja Security Solutions", date: "2024-05-12" },
-  { id: 2, name: "Penta Software Solutions", date: "2022-08-03" },
-  { id: 3, name: "Quick Management Solutions", date: "2024-05-12" },
-  { id: 4, name: "Smart Software Solutions", date: "2016-02-09" },
-  { id: 5, name: "Cubeage Tech Solutions", date: "2022-12-27" },
-  { id: 6, name: "Newedge Cloud Solutions", date: "2022-12-28" },
-  { id: 7, name: "Smart Matrix", date: "2022-12-27" },
-  { id: 8, name: "Devcore Software Solutions", date: "2024-12-28" },
-  { id: 9, name: "RF Business Solutions", date: "2023-07-11" },
-  { id: 10, name: "JDIT Solutions", date: "2022-10-07" }
+  { id: 1, name: "Nimbja Security Solutions", date: "05-12-2018" },
+  { id: 2, name: "Penta Software Solutions", date: "03-08-2022" },
+  { id: 3, name: "Quick Management Solutions", date: "10-122009" },
+  { id: 4, name: "Smart Software Solutions", date: "09-022016" },
+  { id: 5, name: "Cubeage Tech Solutions", date: "27-12-2022" },
+  { id: 6, name: "Newedge Cloud Solutions", date: "28-12-2022" },
+  { id: 7, name: "Smart Matrix", date: "27-12-2022" },
+  { id: 8, name: "Devcore Software Solutions", date: "28-12-2022" },
+  { id: 9, name: "RF Business Solutions", date: "11-07-2023" },
+  { id: 10, name: "JDIT Solutions", date: "07-10-2022" }
 ];
 
 const assets = ["Header", "Watermark", "Footer", "Stamp", "Signature"];
@@ -49,6 +49,10 @@ const AdminCompanyManagementPage = () => {
     navigate("/admin/add-company");
   };
 
+  const handleCompanyDetails = () => {
+    navigate("/admin/company-details");
+  } 
+
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
 
@@ -67,8 +71,7 @@ const AdminCompanyManagementPage = () => {
 
         <button
           onClick={handleAddCompany}
-          className="bg-purple-600 text-white px-5 py-2 rounded-lg text-sm font-medium shadow"
-        >
+          className="bg-purple-700 hover:bg-purple-800 text-white px-5 py-2 rounded-lg text-sm font-medium shadow-sm"        >
           + Add New Company
         </button>
 
@@ -80,6 +83,7 @@ const AdminCompanyManagementPage = () => {
         {companies.map((company) => (
           <div
             key={company.id}
+            onClick={handleCompanyDetails}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-5"
           >
 
