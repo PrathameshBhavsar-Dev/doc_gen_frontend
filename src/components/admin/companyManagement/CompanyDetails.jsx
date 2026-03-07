@@ -64,10 +64,12 @@ const CompanyBranding = () => {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-gray-500">Company Name</p>
-            <p className="font-medium">{company?.name}</p>          </div>
+            <p className="font-medium">{company?.name}</p>
+            </div>
           <div>
             <p className="text-gray-500">Established</p>
-            <p className="font-medium">{company?.date}</p>          </div>
+            <p className="font-medium">{company?.date}</p>          
+          </div>
         </div>
       </div>
 
