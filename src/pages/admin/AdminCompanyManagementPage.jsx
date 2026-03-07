@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { FaEye, FaEdit, FaTrash, FaBuilding } from "react-icons/fa";
+import { FaRegEdit, FaBuilding } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+
+
 import { useNavigate } from "react-router-dom";
 import AddCompany from "../../components/admin/companyManagement/AddCompany"
 
@@ -51,7 +55,7 @@ const AdminCompanyManagementPage = () => {
 
   const handleCompanyDetails = () => {
     navigate("/admin/company-details");
-  } 
+  }
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
@@ -68,12 +72,15 @@ const AdminCompanyManagementPage = () => {
             Manage company information, branding assets, and documents
           </p>
         </div>
-
+        {/* Add Company Button */}
         <button
           onClick={handleAddCompany}
-          className="bg-purple-700 hover:bg-purple-800 text-white px-5 py-2 rounded-lg text-sm font-medium shadow-sm"        >
+          className="bg-gradient-to-b from-[#0E145E] to-[#B37BD6] hover:opacity-90 text-white px-6 py-2 rounded-2xl text-sm font-medium shadow-md transition"
+        >
           + Add New Company
         </button>
+        {/* Admin Section */}
+
 
       </div>
 
@@ -93,7 +100,7 @@ const AdminCompanyManagementPage = () => {
               <div className="flex items-start gap-3">
 
                 {/* Company Icon */}
-                <div className="bg-purple-600 text-white p-2 rounded-md">
+                <div className="bg-gradient-to-b from-[#0E145E] to-[#B37BD6] text-white p-2 rounded-md">
                   <FaBuilding size={14} />
                 </div>
 
@@ -112,20 +119,19 @@ const AdminCompanyManagementPage = () => {
               {/* Icons */}
               <div className="flex gap-4">
 
-                <FaEye
+                <MdOutlineRemoveRedEye
                   size={15}
                   className="text-green-500 cursor-pointer"
                   onClick={() => handleView(company)}
                 />
 
-                <FaEdit
+                <FaRegEdit
                   size={15}
                   className="text-blue-500 cursor-pointer"
                   onClick={() => handleEdit(company)}
                 />
 
-                <FaTrash
-                  size={15}
+                <RiDeleteBin6Line size={15}
                   className="text-red-500 cursor-pointer"
                   onClick={() => handleDelete(company)}
                 />

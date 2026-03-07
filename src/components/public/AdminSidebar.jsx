@@ -46,27 +46,41 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const sidebarInner = (
-    <div className="h-full flex flex-col p-4 overflow-hidden">
-
-      {/* Top: Logo + Toggle */}
-      <div className={`flex items-center mb-6 transition-all duration-300 ${collapsed ? "justify-center" : "justify-between"}`}>
-        <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}`}>
-          <img src={ContainerIcon} alt="Logo" className="w-10 h-10 flex-shrink-0" />
-          <div className="overflow-hidden whitespace-nowrap">
-            <h2 className="text-xl font-bold text-[#FFFEF8]">Doc Gen</h2>
-            <p className="text-xs text-[#FFFEF8]">Document Generator</p>
+  return (
+    <div
+      className={`h-screen flex flex-col p-4 transition-all duration-300
+      ${collapsed ? "items-center" : ""}`}
+    >
+      {/* 🔹 Top Toggle + Logo Section */}
+      <div
+        className={`w-full flex items-center mb-6 ${collapsed ? "justify-center" : "justify-between"
+          }`}
+      >
+        {/* Logo + Text */}
+        {!collapsed && (
+          <div className="flex items-center gap-3">
+            <img
+              src={ContainerIcon}
+              alt="Logo"
+              className="w-10 h-10"
+            />
+            <div>
+              <h2 className="text-xl font-bold text-[#0E145EC7]">
+                Doc Gen
+              </h2>
+              <p className="text-xs text-[#62748E]">
+                Document Generator
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
+        {/* Toggle Button */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white p-2 rounded-md hover:bg-white/10 transition-colors flex-shrink-0"
+          className="hidden lg:block p-2 rounded-md hover:bg-gray-100"
         >
-          <PanelLeft
-            size={20}
-            className={`transition-transform duration-300 ${collapsed ? "rotate-180" : "rotate-0"}`}
-          />
+          <PanelLeft size={20} />
         </button>
       </div>
 
@@ -79,9 +93,12 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
             onClick={() => setMobileOpen(false)}
             title={collapsed ? item.label : undefined}
             className={({ isActive }) =>
-              `flex items-center py-3 rounded-xl transition-all duration-200 font-semibold overflow-hidden
-              ${collapsed ? "justify-center px-6" : "px-4 gap-3"}
-              ${isActive ? "bg-[#FFFEF8] text-black" : "text-white hover:bg-white/15"}`
+              `flex items-center gap-3 py-3 rounded-xl transition-all font-semibold
+              ${collapsed ? "justify-center px-0" : "px-4"}
+              ${isActive
+                ? "bg-[#FFFEF8] text-black"
+                : "text-white hover:bg-[#B37BD6]"
+              }`
             }
           >
             <span className="flex-shrink-0">{item.icon}</span>
