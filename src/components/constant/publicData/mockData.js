@@ -46,7 +46,7 @@ import placeholderWatermark from '../../../assets/images/SmartSoftware/Watermark
 // import placeholderStamp from '../assets/images/SmartSoftware/Stamp.png';
 
 //Newage
-import Newage_header from "../../../assets/images/Newagecloud/neweagehead.jpeg"
+import Newage_header from "../../../assets/images/Newagecloud/Neweagehead.jpeg"
 import Newage_footer from "../../../assets/images/Newagecloud/neweagefooter.jpeg"
 import Newage_signature from "../../../assets/images/Newagecloud/Newage_signature.png"
 import Newage_stamp from "../../../assets/images/Newagecloud/Newage_stamp.png"
