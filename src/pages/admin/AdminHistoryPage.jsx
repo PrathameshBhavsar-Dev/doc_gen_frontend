@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Box,
@@ -6,8 +7,6 @@ import {
   TextField,
   MenuItem,
   Select,
-  InputLabel,
-  FormControl,
   Table,
   TableHead,
   TableRow,
@@ -63,64 +62,18 @@ const tableData = [
     date: "Feb 18, 2026",
     status: "Completed",
   },
-  {
-    name: "Amit Kumar",
-    id: "EMP008",
-    company: "Quick Managemant",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
-  {
-    name: "Sneha Reddy",
-    id: "EMP009",
-    company: "Cubeage Tech",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
-  {
-    name: "Vikram Singh",
-    id: "EMP010",
-    company: "Smart Software",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
-  {
-    name: "Anita Desai",
-    id: "EMP011",
-    company: "Neweage Cloud",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
-  {
-    name: "Vikram Singh",
-    id: "EMP012",
-    company: "Cubeage Tech",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
-  {
-    name: "Amit Kumar",
-    id: "EMP013",
-    company: "Penta Software",
-    generatedBy: "Aditi Khade",
-    date: "Feb 18, 2026",
-    status: "Completed",
-  },
 ];
-const UserHistoryPage = () => {
+
+const AdminHistoryPage = () => {
   return (
-    <Box sx={{ minHeight: "100vh", width: "100%" }}>
+    <Box sx={{ minHeight: "100vh", width: "100%", p: { xs: 2, md: 4 } }}>
+      
       {/* HEADER */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: { xs: "flex-start", sm: "center" },
           mb: 3,
           flexWrap: "wrap",
           gap: 2,
@@ -133,7 +86,7 @@ const UserHistoryPage = () => {
             fontSize: { xs: "18px", md: "22px" },
           }}
         >
-          <i class="fa-solid fa-arrow-left mr-2"></i>
+          <i className="fa-solid fa-arrow-left mr-2"></i>
           Document History
         </Typography>
 
@@ -157,7 +110,7 @@ const UserHistoryPage = () => {
       {/* FILTER SECTION */}
       <Paper
         sx={{
-          p: 3,
+          p: { xs: 2, md: 3 },
           mb: 4,
           borderRadius: "16px",
           border: "1px solid #E4E7EC",
@@ -177,34 +130,24 @@ const UserHistoryPage = () => {
               backgroundColor: "#F3F4F6",
               fontSize: "14px",
             },
-            "& input::placeholder": {
-              fontSize: "14px",
-              color: "#9CA3AF",
-              opacity: 1,
-            },
           }}
         />
 
+        {/* FILTER GRID */}
         <Box
           sx={{
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
             },
             gap: 3,
           }}
         >
           {/* DOCUMENT TYPE */}
           <Box>
-            <Typography
-              sx={{
-                fontSize: "15px",
-                fontWeight: 500,
-
-                mb: 1,
-              }}
-            >
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
               Document Type
             </Typography>
 
@@ -213,19 +156,13 @@ const UserHistoryPage = () => {
               displayEmpty
               defaultValue=""
               sx={{
-                width: "60%",
                 height: 48,
                 borderRadius: "14px",
                 backgroundColor: "#F3F4F6",
                 fontSize: "14px",
-                "& .MuiSelect-select": {
-                  color: "#9CA3AF",
-                },
               }}
               renderValue={(selected) => {
-                if (!selected) {
-                  return "Select Document Type";
-                }
+                if (!selected) return "Select Document Type";
                 return selected;
               }}
             >
@@ -241,81 +178,56 @@ const UserHistoryPage = () => {
           </Box>
 
           {/* COMPANY */}
-          <Box sx={{ display: "flex", gap: 3 }}>
-            {/* Company */}
-            <Box sx={{ width: "180%" }}>
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  mb: 1,
-                  marginLeft: "-48mm",
-                }}
-              >
-                Company
-              </Typography>
+          <Box>
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
+              Company
+            </Typography>
 
-              <Select
-                fullWidth
-                displayEmpty
-                defaultValue=""
-                sx={{
+            <Select
+              fullWidth
+              displayEmpty
+              defaultValue=""
+              sx={{
+                height: 48,
+                borderRadius: "14px",
+                backgroundColor: "#F3F4F6",
+                fontSize: "14px",
+              }}
+              renderValue={(selected) => {
+                if (!selected) return "Select Company";
+                return selected;
+              }}
+            >
+              <MenuItem value="">
+                <em>Select Company</em>
+              </MenuItem>
+              <MenuItem value="nimbja">Nimbja Security</MenuItem>
+              <MenuItem value="penta">Penta Software</MenuItem>
+              <MenuItem value="cubeage">Cubeage Tech</MenuItem>
+              <MenuItem value="quick">Quick Management</MenuItem>
+              <MenuItem value="smart">Smart Software</MenuItem>
+              <MenuItem value="newage">Newage Cloud</MenuItem>
+            </Select>
+          </Box>
+
+          {/* GENERATED BY */}
+          <Box>
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
+              Generated By
+            </Typography>
+
+            <TextField
+              fullWidth
+              placeholder="Generated by"
+              sx={{
+                "& .MuiOutlinedInput-root": {
                   height: 48,
                   borderRadius: "14px",
-                  marginLeft: "-48mm",
                   backgroundColor: "#F3F4F6",
                   fontSize: "14px",
-                  "& .MuiSelect-select": {
-                    color: "#9CA3AF",
-                  },
-                }}
-                renderValue={(selected) => {
-                  if (!selected) {
-                    return "Select Company";
-                  }
-                  return selected;
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Company</em>
-                </MenuItem>
-                <MenuItem value="nimbja">Nimbja Security</MenuItem>
-                <MenuItem value="penta">Penta Software</MenuItem>
-                <MenuItem value="cubeage">Cubeage Tech</MenuItem>
-                <MenuItem value="quick">Quick Management</MenuItem>
-                <MenuItem value="smart">Smart Software</MenuItem>
-                <MenuItem value="newage">Newage Cloud</MenuItem>
-              </Select>
-            </Box>
-
-            {/* Generated By */}
-            <Box sx={{ width: "120%" }}>
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  mb: 1,
-                  marginLeft: "-38mm",
-                }}
-              >
-                Generated by
-              </Typography>
-
-              <TextField
-                fullWidth
-                placeholder="Generated by"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    height: 48,
-                    width:"150%",
-                    borderRadius: "14px",
-                    backgroundColor: "#F3F4F6",
-                    marginLeft: "-38mm",
-                    fontSize: "14px",
-                  },
-                }}
-              />
-            </Box>
+                },
+              }}
+            />
           </Box>
         </Box>
       </Paper>
@@ -372,6 +284,7 @@ const UserHistoryPage = () => {
                         >
                           {row.name}
                         </Typography>
+
                         <Typography variant="caption" sx={{ color: "#9CA3AF" }}>
                           245 KB
                         </Typography>
@@ -389,6 +302,7 @@ const UserHistoryPage = () => {
                   </TableCell>
 
                   <TableCell>{row.generatedBy}</TableCell>
+
                   <TableCell sx={{ color: "#6B7280" }}>{row.date}</TableCell>
 
                   <TableCell>
@@ -425,4 +339,4 @@ const UserHistoryPage = () => {
   );
 };
 
-export default UserHistoryPage;
+export default AdminHistoryPage;
