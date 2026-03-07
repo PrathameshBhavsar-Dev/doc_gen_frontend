@@ -458,7 +458,7 @@ export const documentTypes = [
         template: 'offer-letter',
         fields: [
             { name: 'mrms', label: 'Identity', type: 'select', options: ['Mr.', 'Mrs.', 'Miss.', 'Mx.'], required: true },
-            { name: 'employeeName', label: 'Employee Name', type: 'text', required: true },
+            { name: 'candidateName', label: 'Employee Name', type: 'text', required: true },
             { name: 'address', label: 'Address', type: 'textarea', required: false },
             { name: 'position', label: 'Position', type: 'text', required: true },
             { name: 'department', label: 'Department', type: 'text', required: false },
@@ -535,9 +535,8 @@ export const documentTypes = [
             { name: 'designation', label: 'Designation', type: 'text', required: true },
             { name: 'department', label: 'Department', type: 'text', required: true },
             { name: 'joiningDate', label: 'Joining Date', type: 'date', required: true },
-            { name: 'deliveryDate', label: 'Delivery Date', type: 'date', required: true },
             { name: 'issueDate', label: 'Issue Date', type: 'date', required: true },
-            { name: 'lastWorkingDay', label: 'Last Working Day', type: 'date', required: true },
+            { name: 'lastWorkingDay', label: 'Relieving Date', type: 'date', required: true },
             { name: 'noticePeriod', label: 'Notice Period (Days)', type: 'text', required: true },
             { name: 'handoverStatus', label: 'Handover Status', type: 'select', options: ['Completed', 'Partially Completed', 'Not Applicable'], required: true },
         ]
@@ -641,24 +640,6 @@ export const documentTypes = [
             { name: 'validTill', label: 'Valid Till', type: 'date', required: false }
         ]
     },
-    // {
-    //     id: 11,
-    //     name: 'Internship Certificate',
-    //     template: 'internship-certificate',
-    //     fields: [
-    //         { name: 'mrms', label: 'Select Title', type: 'select', options: ['Mr.', 'Mrs.', 'Miss.', 'Mx.'], required: true },
-    //         { name: 'internName', label: 'Intern Name', type: 'text', required: true },
-    //         { name: 'field', label: 'Field of Study', type: 'text', required: true },
-    //         { name: 'startDate', label: 'Start Date', type: 'date', required: true },
-    //         { name: 'endDate', label: 'End Date', type: 'date', required: true },
-    //         // { name: 'department', label: 'Department', type: 'text', required: true },
-    //         // { name: 'projectName', label: 'Project Name', type: 'text', required: true },
-    //         // { name: 'performance', label: 'Performance', type: 'select', options: ['Excellent', 'Very Good', 'Good', 'Satisfactory'], required: true },
-    //         // { name: 'mentorName', label: 'Mentor Name', type: 'text', required: false },
-    //         { name: 'issueDate', label: 'Issue Date', type: 'date', required: true }
-    //     ]
-    // },
-
     {
         id: 11,
         name: 'Internship Certificate',
