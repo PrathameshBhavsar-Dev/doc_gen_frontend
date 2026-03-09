@@ -205,7 +205,7 @@ const DocumentPreview = () => {
         <Typography variant={isMobile ? 'h5' : 'h4'}>Document Preview</Typography>
 
         <Box display="flex" gap={2} flexWrap="wrap">
-          <Button variant="outlined" onClick={() => navigate('/documents/create')}>
+          <Button variant="outlined" onClick={() => navigate('/document/create')}>
             Edit
           </Button>
           <Button variant="contained" onClick={handleDownloadPDF} disabled={loading}>
