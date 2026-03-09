@@ -7,7 +7,6 @@ import {
   TableCell,
   TableBody,
   TableHead,
-  TableContainer,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 
@@ -17,7 +16,7 @@ import {
   numberToWords,
 } from "../../../../../utils/salaryCalculations";
 
-export default function SmartSoftwareOffer({ company, data }) {
+export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
     issueDate = new Date(),
     candidateName = "",
@@ -26,78 +25,95 @@ export default function SmartSoftwareOffer({ company, data }) {
     joiningDate = "",
     salary = 0,
     mrms = "",
-  } = data || {};
+  } = data;
 
-  /* ================= TEXT STYLES ================= */
+  /* ================= TITLE & PRONOUNS ================= */
+  const title = (mrms || "").toLowerCase().trim();
 
-  const baseText = {
-    fontSize: "11pt",
-    lineHeight: 1.6,
-  };
+  const pronouns =
+    ["miss", "miss.", "mrs", "mrs.", "ms", "ms."].includes(title)
+      ? { subject: "She", object: "her", possessive: "her" }
+      : ["mx", "mx."].includes(title)
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
 
-  const labelStyle = {
-    fontWeight: 600,
-  };
+  const displayTitle = title
+    ? title.charAt(0).toUpperCase() + title.slice(1)
+    : "Mr.";
 
-  const para = {
-    mt: "16px",
-    textAlign: "justify",
-  };
-
-  const paraLarge = {
-    mt: "20px",
-    textAlign: "justify",
-  };
-
-  /* ================= FORMATTED VALUES ================= */
-
-  const displayTitle = mrms ? `${mrms}.` : "";
-
-  const firstName = candidateName?.split(" ")[0] || "";
+  const firstName = candidateName.split(" ")[0] || "";
 
   const formattedJoiningDate = joiningDate
-    ? new Date(joiningDate).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+    ? new Date(joiningDate).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
-  /* ================= SALARY CALCULATION (48%,18%,12%,16%,6%) ================= */
-
+  /* ================= SALARY BREAKUP ================= */
   const totalAnnual = Number(salary) || 0;
   const totalMonthly = Math.round(totalAnnual / 12);
 
   const salaryComponents = useMemo(() => {
-    const basic = Math.round(totalAnnual * 0.48);
+    const basic = Math.round(totalAnnual * 0.40);
     const hra = Math.round(totalAnnual * 0.18);
     const conveyance = Math.round(totalAnnual * 0.12);
     const special = Math.round(totalAnnual * 0.16);
+    const medical = Math.round(totalAnnual * 0.06);
 
-    const misc = totalAnnual - (basic + hra + conveyance + special);
+    // MISC = remaining balance (ensures 100%)
+    const misc =
+      totalAnnual - (basic + hra + conveyance + special + medical);
 
     return [
-      { name: "Basic Salary", annual: basic, monthly: Math.round(basic / 12) },
+      { name: "Basic Salary ", annual: basic, monthly: Math.round(basic / 12) },
       { name: "HRA ", annual: hra, monthly: Math.round(hra / 12) },
-      { name: "Conveyance Allowance", annual: conveyance, monthly: Math.round(conveyance / 12) },
-      { name: "Special Allowance", annual: special, monthly: Math.round(special / 12) },
-      { name: "Food Allowance", annual: misc, monthly: Math.round(misc / 12) },
+      { name: "Conveyance Allowance ", annual: conveyance, monthly: Math.round(conveyance / 12) },
+      { name: "Special Allowance ", annual: special, monthly: Math.round(special / 12) },
+      { name: "Food Allowance ", annual: medical, monthly: Math.round(medical / 12) },
+      { name: "Misc. Allowance ", annual: misc, monthly: Math.round(misc / 12) },
     ];
   }, [totalAnnual]);
 
   const salaryInWords = numberToWords(totalAnnual);
 
-  /* ================= PF ================= */
+  /* ================= STYLES ================= */
+  const baseText = {
+    fontFamily: "Verdana, Geneva, sans-serif",
+    fontSize: "14px",
+    lineHeight: 1.8,
+    color: "#000",
+  };
 
-  const monthlyPF = 3750;
-  const annualPF = monthlyPF * 12;
+  const para = { ...baseText, mt: "12px" };
+  const paraLarge = { ...baseText, mt: "24px" };
 
-  /* ================= TABLE CELL STYLE ================= */
+  const labelStyle = {
+    display: "inline-block",
+    width: "110px",
+  };
 
-  const tableCellStyle = {
-    border: "1px solid #333",
-    fontSize: "9.75pt",
-    py: "0.35mm",
+  const tableCell = {
+    fontFamily: "Verdana, Geneva, sans-serif",
+    fontSize: "13px",
+    lineHeight: 1.4,
+    border: "1px solid #000",
+    padding: "4px 6px",
+  };
+
+  const tableHeader = {
+    ...tableCell,
+    backgroundColor: "#32a1c2ff",
+    color: "#fff",
+    fontWeight: "bold",
+  };
+
+  const tableTotal = {
+    ...tableCell,
+    backgroundColor: "#32a1c2ff",
+    color: "#fff",
+    fontWeight: "bold",
   };
 
   return (
@@ -160,6 +176,8 @@ export default function SmartSoftwareOffer({ company, data }) {
           <Typography sx={{ mt: "24px" }}>Yours Sincerely,</Typography>
           <Typography>For <b>{company.name?.toUpperCase()}</b></Typography>
 
+
+
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
             <Box>
               <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
@@ -183,89 +201,68 @@ export default function SmartSoftwareOffer({ company, data }) {
       </A4Layout>
 
       {/* ================= PAGE 2 ================= */}
-      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Typography align="center" sx={{ mb: "24px" }}>
-          <b>Annexure A – Salary Structure</b>
-        </Typography>
+      <A4Layout company={{ ...company, watermark: null, watermarkImage: null }}>
+        <Box sx={baseText}>
+          <Typography align="center" sx={{ mb: "24px" }}>
+            <b>Annexure A – Salary Structure</b>
+          </Typography>
 
-        <Typography sx={{ mb: 2 }}>
-          <b>Name : {candidateName}</b>
-          <span style={{ marginLeft: "120px" }}>
-            <b>Designation : {position}</b>
-          </span>
-        </Typography>
-
-        <TableContainer sx={{ mb: "4mm" }}>
-          <Table
-            size="small"
-            sx={{
-              border: "1px solid #333",
-              borderCollapse: "collapse",
-              width: "100%",
-            }}
-          >
+          <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
             <TableHead>
-              <TableRow
-                sx={{
-                  backgroundColor: "#32a1c2ff",
-                  "& th": {
-                    fontWeight: 600,
-                    fontSize: "10pt",
-                    border: "1px solid #333",
-                  },
-                }}
-              >
-                <TableCell>Salary Components</TableCell>
-                <TableCell align="center">Per month (Rs.)</TableCell>
-                <TableCell align="center">Per Annum (Rs.)</TableCell>
+              <TableRow>
+                <TableCell sx={tableHeader}>Salary Component</TableCell>
+                <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
+                <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell sx={tableCellStyle}>{row.name}</TableCell>
-                  <TableCell align="center" sx={tableCellStyle}>
+                  <TableCell sx={tableCell}>{row.name}</TableCell>
+                  <TableCell sx={tableCell} align="right">
                     {formatCurrency(row.monthly)}
                   </TableCell>
-                  <TableCell align="center" sx={tableCellStyle}>
+                  <TableCell sx={tableCell} align="right">
                     {formatCurrency(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
               <TableRow>
-                <TableCell sx={tableCellStyle}>Provident Fund (PF)</TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(monthlyPF)}
-                </TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(annualPF)}
-                </TableCell>
-              </TableRow>
-
-              <TableRow
-                sx={{
-                  backgroundColor: "#32a1c2ff",
-                  "& td": {
-                    fontWeight: 600,
-                    fontSize: "10pt",
-                    border: "1px solid #333",
-                  },
-                }}
-              >
-                <TableCell>Total Monthly Gross Salary</TableCell>
-                <TableCell align="center">
+                <TableCell sx={tableTotal}>Total Monthly Gross Salary</TableCell>
+                <TableCell sx={tableTotal} align="right">
                   {formatCurrency(totalMonthly)}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell sx={tableTotal} align="right">
                   {formatCurrency(totalAnnual)}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-        </TableContainer>
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+            <Box>
+              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+                {company.signature && (
+                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                )}
+                {company.stamp && (
+                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                )}
+              </Box>
+              <Typography>{company.hrName}</Typography>
+              <Typography>HR Relations Lead</Typography>
+            </Box>
+
+            <Box sx={{ width: "45%", mt: 8 }}>
+              <Typography>Signature : ___________________</Typography>
+              <Typography>Candidate Name : {candidateName}</Typography>
+            </Box>
+          </Box>
+        </Box>
       </A4Layout>
+
     </>
   );
 }
