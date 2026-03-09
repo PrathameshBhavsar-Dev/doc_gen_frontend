@@ -15,7 +15,7 @@ import {
   formatCurrency,
   // getProfessionalTax,
 } from "../../../../../utils/salaryCalculations";
-import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
@@ -127,7 +127,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
     hra: 0.18,
     da: 0.12,
     special: 0.16,
-    food: 0.06, // <-- IMPORTANT (see below)
+    food: 0.06,
   };
 
   /* Earnings */

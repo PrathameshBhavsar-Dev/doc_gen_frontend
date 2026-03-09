@@ -20,23 +20,16 @@ import { generatePDF } from '../../utils/pdfUtils'; // adjust path as needed
 import ROUTES from "../../core/constants/routes.constant";
 
 // Templates
-// import SalarySlipTemplate from '../components/documents/SalarySlip/SalarySlipTemplate';
-//import IncrementLetterTemplate from '../components/documents/IncrementLetter/IncrementLetterTemplate';
 import ExperienceLetterTemplate from '../documents/ExperienceLetter/ExperienceLetterTemplate';
 import RelievingLetterTemplate from '../documents/RelievingLetter/RelievingLetteTemplate';
-// import OfferLetterTemplate from '../components/documents/OfferLetter/WithoutPF/WithoutPFOfferLetterTemplate'
-//import AppointmentLetterTemplate from '../components/documents/AppointmentLeter/WithoutPF/WithoutPFAppointmentLetterTemplate';
 import InternshipLetterTemplate from '../documents/InternshipLetter/InternshipLetterTemplate';
 import CertificationLetterTemplate from '../documents/InternshipComplitionCertificate/CertificationLetterTemplate';
-//import FullandFinalLetterTemplate from '../components/documents/FullAndFinalLetter/FullAndFinalLetterTemplate';
 import SalarySlipLetterTemplate from "../documents/SalarySlip/SalarySlipTemplate";
 import IncrementTemplate from "../documents/IncrementLetter/IncrementTemplate";
 import OfferTemplate from "../documents/OfferLetter/OfferLetterTemplate";
-//import FullAndFinalLetterTemplate from "../components/documents/FullandFinalLetter/FullandFinalLetterTemplate";
 import AppointmentLetterTemplate from "../documents/AppointmentLeter/AppointmentLetterTemplate";
 import ConfirmationLetterTemplate from "../documents/ConfirmationLetter/ConfirmationLetterTemplate";
-import FullandfinalLetterTemplate from "../documents/FullandfinalLetter/FullandfinalLetterTemplate";
-//import FullAndFinalLetterTemplate from "../components/documents/FullAndFinalLetter/FullAndFinalLetterTemplate";
+import FullandfinalLetterTemplate from "../documents/FullAndFinalLetter/FullandFinalLetterTemplate.jsx";
 
 const DocumentPreview = () => {
   const { selectedCompany } = useCompany();
@@ -212,7 +205,7 @@ const DocumentPreview = () => {
         <Typography variant={isMobile ? 'h5' : 'h4'}>Document Preview</Typography>
 
         <Box display="flex" gap={2} flexWrap="wrap">
-          <Button variant="outlined" onClick={() => navigate('/documents/create')}>
+          <Button variant="outlined" onClick={() => navigate('/document/create')}>
             Edit
           </Button>
           <Button variant="contained" onClick={handleDownloadPDF} disabled={loading}>

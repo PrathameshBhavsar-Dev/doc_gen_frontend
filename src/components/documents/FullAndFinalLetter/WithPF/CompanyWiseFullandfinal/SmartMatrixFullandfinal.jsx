@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +13,7 @@ import {
 } from "../../../../../utils/salaryCalculations";
 
 import stampImg from "../../../../../assets/images/smartmatrix/Smartmatrix_stamp.png";
-import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 
 /* ================= STYLES ================= */
 

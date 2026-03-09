@@ -219,26 +219,7 @@ const CubeagePaidInternshipLetter = ({ company = {}, data = {} }) => {
             <PageLayout company={company} data={data}>
                 {/* TABLE WATERMARK */}
                 <Box sx={{ position: "relative", overflow: "hidden" }}>
-                    {/* TABLE WATERMARK */}
-                    <Typography
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            opacity: 0.15,
-                            fontSize: "45px",
-                            fontWeight: "bold",
-                            color: "#000",
-                            zIndex: 0,
-                            pointerEvents: "none",
-                            whiteSpace: "nowrap",
-                            fontFamily: "Impact, sans-serif",
-                            letterSpacing: "-2px",
-                        }}
-                    >
-                        {data?.tableWatermark || "CUBEAGE TECHNOLOGY"}
-                    </Typography>
+
 
                     <Typography
                         align="center"

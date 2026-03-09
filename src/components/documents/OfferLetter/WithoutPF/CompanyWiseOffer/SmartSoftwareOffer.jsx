@@ -71,8 +71,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
       { name: "HRA ", annual: hra, monthly: Math.round(hra / 12) },
       { name: "Conveyance Allowance ", annual: conveyance, monthly: Math.round(conveyance / 12) },
       { name: "Special Allowance ", annual: special, monthly: Math.round(special / 12) },
-      { name: "Medical Allowance ", annual: medical, monthly: Math.round(medical / 12) },
-      { name: "MISC Allowance ", annual: misc, monthly: Math.round(misc / 12) },
+      { name: "Food Allowance ", annual: medical, monthly: Math.round(medical / 12) },
+      { name: "Misc. Allowance ", annual: misc, monthly: Math.round(misc / 12) },
     ];
   }, [totalAnnual]);
 

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   const firstName = data.employeeName?.split(" ")[0] || "";
 
@@ -185,23 +185,20 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           <Typography mb={2} textAlign="justify">
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong>(
-            {numberToWords(totalAnnual)}
-            ) per year.
-            <br />
-            Subject to various deductions as per companies and government policy
+            <strong>{formatCurrency(totalAnnual)}</strong> (
+            {numberToWords(totalAnnual)}) per year.
           </Typography>
-
+          <Typography mb={2}>
+            Subject to various deductions as per companies and government
+            policy.
+          </Typography>
           <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
             your employment will be specified of appointment.We welcome you to
-            SmartMatrix Digital Services Pvt Ltd.
-          </Typography>
-
-          <Typography mb={2}>
-            Family and hope it would be the beginning of a long and mutually
-            beneficial association. Kindly acknowledge the duplicate copy of
-            this letter as an acceptance of this offer.
+            SmartMatrix Digital Services Pvt Ltd. Family and hope it would be
+            the beginning of a long and mutually beneficial association. Kindly
+            acknowledge the duplicate copy of this letter as an acceptance of
+            this offer.
           </Typography>
 
           <Typography sx={{ fontSize: "14pt", marginTop: "60px" }}>

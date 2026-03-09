@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -15,7 +14,7 @@ import {
 } from "../../../../../utils/salaryCalculations";
 
 import stampImg from "../../../../../assets/images/smartmatrix/Smartmatrix_stamp.png";
-import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 
 /* ================= COMPACT STYLES ================= */
 
@@ -24,8 +23,8 @@ const FONT = "Cambria, 'Times New Roman', serif";
 const cell = {
   border: "1px solid #000",
   fontFamily: FONT,
-  fontSize: "9.5pt", // 🔥 Reduced
-  padding: "3px 5px", // 🔥 Reduced
+  fontSize: "9.5pt",
+  padding: "3px 5px",
   verticalAlign: "middle",
 };
 

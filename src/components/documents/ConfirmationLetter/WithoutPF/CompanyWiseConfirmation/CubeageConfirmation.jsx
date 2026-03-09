@@ -206,26 +206,6 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
       {/* PAGE 2: Compensation Structure */}
       <PageLayout company={company} data={data}>
         <Box sx={{ mt: 4, position: "relative", overflow: "hidden" }}>
-          {/* TABLE WATERMARK */}
-          <Typography
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%) rotate(0deg)",
-              opacity: 0.15,
-              fontSize: "45px",
-              fontWeight: "bold",
-              color: "#000",
-              zIndex: 0,
-              pointerEvents: "none",
-              whiteSpace: "nowrap",
-              fontFamily: "Impact, sans-serif",
-              letterSpacing: "-2px",
-            }}
-          >
-            {data?.tableWatermark || "CUBEAGE TECHNOLOGY"}
-          </Typography>
 
           <Typography
             fontWeight={600}

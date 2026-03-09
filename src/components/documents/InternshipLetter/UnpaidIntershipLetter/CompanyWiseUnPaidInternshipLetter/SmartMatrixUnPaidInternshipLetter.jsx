@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date

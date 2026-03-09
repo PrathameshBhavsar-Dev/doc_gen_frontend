@@ -1,5 +1,5 @@
 import React from "react";
-import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_signature.png";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 import {
   Box,
   Typography,
@@ -181,41 +181,31 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             We are pleased to confirm your continued services at the position of{" "}
             <strong>{data.position}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
-            effective date <strong>{data.effectiveDate}</strong> considering
-            your performance and support towards the organization.
+            effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
+            considering your performance and support towards the organization.
           </Typography>
 
           <Typography mb={2} textAlign="justify">
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
             <strong>{formatCurrency(totalAnnual)}</strong> (
-            {numberToWords(totalAnnual)}
-            ) per year.
-            <br />
+            {numberToWords(totalAnnual)}) per year.
+          </Typography>
+          <Typography mb={2}>
             Subject to various deductions as per companies and government
             policy.
           </Typography>
 
-          {/* <Typography
-            mb={2}
-            textAlign="justify"
-            sx={{ fontFamily: "Bahnschrift" }}
-          >
-            
-            
-          </Typography> */}
-
           <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
-            your employment will be specified in your letter of appointment.We
-            welcome you to SmartMatrix Digital Services Pvt Ltd.
+            your employment will be specified in your letter of appointment. We
+            welcome you to SmartMatrix Digital Services Pvt Ltd. Family and hope
+            it would be the beginning of a long and mutually beneficial
+            association. Kindly acknowledge the duplicate copy of this letter as
+            an acceptance of this offer.
           </Typography>
 
-          <Typography mb={2}>
-            Family and hope it would be the beginning of a long and mutually
-            beneficial association. Kindly acknowledge the duplicate copy of
-            this letter as an acceptance of this offer.
-          </Typography>
+          <Typography mb={2}></Typography>
 
           <Typography sx={{ fontSize: "14pt", marginTop: "50px" }}>
             <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
