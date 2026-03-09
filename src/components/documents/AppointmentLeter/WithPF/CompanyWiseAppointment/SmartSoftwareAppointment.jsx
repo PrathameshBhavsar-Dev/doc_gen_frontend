@@ -158,16 +158,18 @@ const SmartSoftwareAppointment = ({ company, data }) => {
           ))}
         </Box>
 
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
           <Box>
-            <Typography>Yours faithfully,</Typography>
-            <Typography fontWeight={700}>
-              For {company.name?.toUpperCase()}
-            </Typography>
-            {company.signature && (
-              <img src={company.signature} alt="signature" height={60} />
-            )}
-            <Typography mt={1}>{company.hrName}</Typography>
+            <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+              {company.signature && (
+                <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+              )}
+              {company.stamp && (
+                <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+              )}
+            </Box>
+            <Typography>{company.hrName}</Typography>
+            <Typography>HR Relations Lead</Typography>
           </Box>
 
           <Box>
