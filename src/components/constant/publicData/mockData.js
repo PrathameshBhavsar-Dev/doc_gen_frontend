@@ -851,7 +851,7 @@ export const documentTypes = [
             { name: 'effectiveDate', label: 'Effective Date', type: 'date', required: true },
             { name: 'issueDate', label: 'Issue Date', type: 'date', required: true },
             { name: 'totalSalary', label: 'Total Salary', type: 'number', required: true },
-            // { name: 'newSalary', label: 'New Salary', type: 'number', required: true },
+            { name: 'address', label: 'Address', type: 'text', required: true },
             { name: 'designation', label: 'Designation', type: 'text', required: true },
             { name: 'department', label: 'Department', type: 'text', required: false },
             {
