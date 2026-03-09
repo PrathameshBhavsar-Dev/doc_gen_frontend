@@ -50,7 +50,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    mode = "-",
+    // bankName = "-",
     workdays = "-",
     bankName = "-",
     accountNo = "-",
@@ -142,35 +142,35 @@ const netPay = round2(totalEarning - totalDeduction);
             {/* EMPLOYEE DETAILS */}
             <TableRow>
               <TableCell>Employee Name</TableCell>
-              <TableCell>{employeeName}</TableCell>
+              <TableCell align="center">{employeeName}</TableCell>
               <TableCell>Employee ID</TableCell>
               <TableCell align="center">{employeeId}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Gender</TableCell>
-              <TableCell>{gender}</TableCell>
+              <TableCell align="center">{gender}</TableCell>
               <TableCell>Department</TableCell>
               <TableCell align="center">{department}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>DOJ</TableCell>
-              <TableCell>{doj}</TableCell>
+              <TableCell align="center">{doj}</TableCell>
               <TableCell>PAN</TableCell>
               <TableCell align="center">{pan}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Designation</TableCell>
-              <TableCell>{designation}</TableCell>
+              <TableCell align="center">{designation}</TableCell>
               <TableCell>DOB</TableCell>
               <TableCell align="center">{dob}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Mode</TableCell>
-              <TableCell>{mode}</TableCell>
+              <TableCell align="center">{bankName}</TableCell>
               <TableCell>Working Days</TableCell>
               <TableCell align="center">{workdays}</TableCell>
             </TableRow>
@@ -184,7 +184,7 @@ const netPay = round2(totalEarning - totalDeduction);
 
             <TableRow>
               <TableCell>Account No.</TableCell>
-              <TableCell>{accountNo}</TableCell>
+              <TableCell align="center">{accountNo}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
@@ -207,44 +207,44 @@ const netPay = round2(totalEarning - totalDeduction);
 
             <TableRow>
               <TableCell>Basic</TableCell>
-              <TableCell align="right">{formatCurrency(BASIC)}</TableCell>
-              <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
+              <TableCell align="center">PF</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Bouqet Of Benefits</TableCell>
-              <TableCell align="right">{formatCurrency(HRA)}</TableCell>
-              <TableCell>PT</TableCell>
-              <TableCell align="right">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">{formatCurrency(HRA)}</TableCell>
+              <TableCell align="center">PT</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>HRA</TableCell>
-              <TableCell align="right">{formatCurrency(DA)}</TableCell>
-              <TableCell>Other Deduction</TableCell>
-              <TableCell align="right">
+              <TableCell align="center">{formatCurrency(DA)}</TableCell>
+              <TableCell align="center">Other Deduction</TableCell>
+              <TableCell align="center">
                 {formatCurrency(otherDeduction)}
               </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>City Allowance</TableCell>
-              <TableCell align="right">{formatCurrency(SPECIAL)}</TableCell>
+              <TableCell align="center">{formatCurrency(SPECIAL)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>Superannuation Fund</TableCell>
-              <TableCell align="right">{formatCurrency(FOOD)}</TableCell>
+              <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF_DISPLAY)}</TableCell>
+              <TableCell align="center">{formatCurrency(PF_DISPLAY)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
@@ -252,18 +252,18 @@ const netPay = round2(totalEarning - totalDeduction);
             {/* TOTAL */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalEarning)}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalDeduction)}
               </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(netPay)}
               </TableCell>
               <TableCell />
