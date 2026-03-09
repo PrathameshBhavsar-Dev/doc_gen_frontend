@@ -1,5 +1,3 @@
-// SmartMatrixOfferWithPF.jsx
-
 import React from "react";
 import {
   Typography,
@@ -166,7 +164,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear, {data.employeeName}</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear, {data.candidateName}</Typography>
 
           <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
 
