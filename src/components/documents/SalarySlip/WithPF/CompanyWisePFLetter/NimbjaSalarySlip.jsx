@@ -144,35 +144,35 @@ const netPay = round2(totalEarning - totalDeduction);
               <TableCell>Employee Name</TableCell>
               <TableCell>{employeeName}</TableCell>
               <TableCell>Employee ID</TableCell>
-              <TableCell>{employeeId}</TableCell>
+              <TableCell align="center">{employeeId}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Gender</TableCell>
               <TableCell>{gender}</TableCell>
               <TableCell>Department</TableCell>
-              <TableCell>{department}</TableCell>
+              <TableCell align="center">{department}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>DOJ</TableCell>
               <TableCell>{doj}</TableCell>
               <TableCell>PAN</TableCell>
-              <TableCell>{pan}</TableCell>
+              <TableCell align="center">{pan}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Designation</TableCell>
               <TableCell>{designation}</TableCell>
               <TableCell>DOB</TableCell>
-              <TableCell>{dob}</TableCell>
+              <TableCell align="center">{dob}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Mode</TableCell>
               <TableCell>{mode}</TableCell>
               <TableCell>Working Days</TableCell>
-              <TableCell>{workdays}</TableCell>
+              <TableCell align="center">{workdays}</TableCell>
             </TableRow>
 
             {/* <TableRow>
