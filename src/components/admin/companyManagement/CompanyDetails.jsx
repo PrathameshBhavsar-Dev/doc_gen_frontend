@@ -156,7 +156,7 @@ const CompanyBranding = () => {
           </div>
         </div>
 
-        <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm">
+        <button className="bg-linear-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm">
           Edit Company
         </button>
 
