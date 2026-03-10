@@ -67,7 +67,7 @@ const UserSettingPage = () => {
             </div>
 
             {/* Delete Account */}
-            <div className="flex items-center justify-between bg-red-50 p-3 sm:p-4 rounded-xl hover:bg-red-100 transition cursor-pointer">
+            {/* <div className="flex items-center justify-between bg-red-50 p-3 sm:p-4 rounded-xl hover:bg-red-100 transition cursor-pointer">
               <div className="flex items-center gap-3">
                 <Trash2 className="w-4 h-4 text-red-600" />
                 <div>
@@ -80,7 +80,7 @@ const UserSettingPage = () => {
                 </div>
               </div>
               <span className="text-red-400 text-lg">›</span>
-            </div>
+            </div> */}
           </div>
 
           {/* ================= Security ================= */}
@@ -111,7 +111,7 @@ const UserSettingPage = () => {
           </div>
 
           {/* ================= Preferences ================= */}
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-300 p-5 sm:p-6 space-y-5 md:col-span-2 lg:col-span-1">
+          {/* <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-300 p-5 sm:p-6 space-y-5 md:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3">
               <div className="bg-purple-100 p-2 rounded-lg">
                 <Globe className="w-5 h-5 text-purple-600" />
@@ -134,7 +134,7 @@ const UserSettingPage = () => {
                 <option>Spanish</option>
               </select>
             </div>
-          </div>
+          </div> */}
 
         </div>
       </div>
