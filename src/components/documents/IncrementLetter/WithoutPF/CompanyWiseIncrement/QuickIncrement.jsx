@@ -1,15 +1,14 @@
 import React from "react";
-import {  Box,  Typography,  Table,  TableBody,  TableCell,  TableHead,  TableRow,} from "@mui/material";
-// import { formatCurrency,} from "../../../../../utils/salaryCalculations";
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, } from "@mui/material";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= HELPERS ================= */
@@ -69,26 +68,26 @@ const IncrementLetterPage = ({ company, data }) => {
           Dear <b>{employeeName}</b>,
         </Typography>
 
-        <Typography fontSize={13} lineHeight={1.8} mb={3}>
+        <Typography fontSize={13} lineHeight={1.8} mb={3} align="justify">
           Congratulations on your promotion to the position of{" "}
-          <b>{designation}</b>.Along with your new 
-     responsibilities, we are please to offer you a salary increment. 
-     Effective from <b>{formatDate(effectiveDate)}</b>, your revised annual
+          <b>{designation}</b>.Along with your new
+          responsibilities, we are please to offer you a salary increment.
+          Effective from <b>{formatDate(effectiveDate)}</b>, your revised annual
           Cost to Company (CTC) will be{" "}
           <b>₹ {newCTC.toLocaleString("en-IN")}</b>.
         </Typography>
 
-       
 
-        <Typography fontSize={13} mb={4}>
-                       Your promotion is a reflection of your exceptional performance and leadership abilities in your previous
-      role. We are confident that you will continue to excel in your new position and we look forward to seeing you
-      take on new challenges.
+
+        <Typography fontSize={13} mb={4} align="justify">
+          Your promotion is a reflection of your exceptional performance and leadership abilities in your previous
+          role. We are confident that you will continue to excel in your new position and we look forward to seeing you
+          take on new challenges.
         </Typography>
 
-        <Typography fontSize={13} mb={4}>
-        Thank you for your hard work and commitment to Quick Management Services Pvt Ltd. We are excited 
-       to see you grow further on your career with us.
+        <Typography fontSize={13} mb={4} align="justify">
+          Thank you for your hard work and commitment to Quick Management Services Pvt Ltd. We are excited
+          to see you grow further on your career with us.
         </Typography>
 
         <Typography fontSize={13} mb={2}>
@@ -97,9 +96,9 @@ const IncrementLetterPage = ({ company, data }) => {
 
         {/* ✅ SIGN + STAMP FIX */}
         <Box display="flex" alignItems="center" gap={3} mb={1}>
-          {company?. satish_sign && (
+          {company?.satish_sign && (
             <img
-              src={company. satish_sign}
+              src={company.satish_sign}
               alt="Signature"
               style={{ height: 55, objectFit: "contain" }}
             />
@@ -114,7 +113,7 @@ const IncrementLetterPage = ({ company, data }) => {
         </Box>
 
         <Typography fontSize={13} fontWeight="bold">
-          {company?. ceoName}
+          {company?.ceoName}
         </Typography>
         <Typography fontSize={13} fontWeight="bold">CEO & Managing Director</Typography>
       </Box>
@@ -126,12 +125,13 @@ const IncrementLetterPage = ({ company, data }) => {
 const SalaryAnnexurePage = ({ company, data }) => {
   const rows = data.salaryComponents;
 
-  const monthlyGross = round2(
-    rows.reduce((sum, r) => sum + r.monthly, 0)
-  );
-  const annualCTC = round2(
-    rows.reduce((sum, r) => sum + r.annual, 0)
-  );
+  const monthlyGross = rows
+    .filter(r => r.name !== "Provident Fund (PF)")
+    .reduce((sum, r) => sum + r.monthly, 0);
+
+  const annualCTC = rows
+    .filter(r => r.name !== "Provident Fund (PF)")
+    .reduce((sum, r) => sum + r.annual, 0);
 
   return (
     <A4Page company={company}>
@@ -140,7 +140,7 @@ const SalaryAnnexurePage = ({ company, data }) => {
           Salary Annexure
         </Typography>
 
-        <Table sx={{ border: "1px solid #000","& th, & td": { border: "1px solid #000", fontSize: 12, p: "6px", }, }}
+        <Table sx={{ border: "1px solid #000", "& th, & td": { border: "1px solid #000", fontSize: 12, p: "6px", }, }}
         >
           <TableHead sx={{ backgroundColor: "#1fb5e9" }}>
             <TableRow>
@@ -154,24 +154,24 @@ const SalaryAnnexurePage = ({ company, data }) => {
           <TableBody>
             {rows.map((r, i) => (
               <TableRow key={i}>
-                <TableCell>{r.name}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">{r.name}</TableCell>
+                <TableCell align="center">
                   {r.monthly.toLocaleString("en-IN")}
                 </TableCell>
                 {/* <TableCell>{r.name}</TableCell> */}
-                <TableCell align="right">
+                <TableCell align="center">
                   {r.annual.toLocaleString("en-IN")}
                 </TableCell>
               </TableRow>
             ))}
 
             <TableRow sx={{ backgroundColor: "#1fb5e9" }}>
-              <TableCell><b>Monthly Gross</b></TableCell>
-              <TableCell align="right">
+              <TableCell align="center"><b>Monthly Gross</b></TableCell>
+              <TableCell align="center">
                 <b>{monthlyGross.toLocaleString("en-IN")}</b>
               </TableCell>
               {/* <TableCell><b>Annual CTC</b></TableCell> */}
-              <TableCell align="right">
+              <TableCell align="center">
                 <b>{annualCTC.toLocaleString("en-IN")}</b>
               </TableCell>
             </TableRow>
@@ -183,53 +183,62 @@ const SalaryAnnexurePage = ({ company, data }) => {
 };
 
 /* ================= MAIN ================= */
+
 const QuickIncrement = ({ company, data }) => {
-  const { newCTC } = calculateIncrement(
-    data.currentCTC,
-    data.incrementPercentage
-  );
 
-const annualCTC = Number(newCTC);
+  /* 1️⃣ Calculate New CTC */
+  // The form provides 'newCTC' directly for Increment Letters
+  const annualCTC = normalizeAnnualCTC(data.newCTC);
 
-// Step 1: Fix Monthly FIRST (integer)
-const monthlyCTC = Math.floor(annualCTC / 12);
+  /* 2️⃣ Generate Salary Breakup */
+  const generateSalaryBreakup = (annualCTC) => {
 
-// Step 2: Calculate 5 components from monthly
-const basicMonthly   = Math.floor(monthlyCTC * 0.40);
-const hraMonthly     = Math.floor(monthlyCTC * 0.18);
-const daMonthly      = Math.floor(monthlyCTC * 0.12);
-const specialMonthly = Math.floor(monthlyCTC * 0.16);
-const foodMonthly    = Math.floor(monthlyCTC * 0.06);
+    // ✅ Monthly CTC
+    const monthlyCTC = annualCTC / 12;
 
-// Step 3: Balance remainder into misc
-const miscMonthly =
-  monthlyCTC -
-  (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly);
+    // ✅ Percentages total = 100%
+    const percentages = {
+      basic: 0.4,
+      hra: 0.18,
+      da: 0.12,
+      special: 0.16,
+      food: 0.06,
+      misc: 0.08
+    };
 
-// Step 4: Annual = monthly × 12 (no rounding here)
-const basicAnnual   = basicMonthly * 12;
-const hraAnnual     = hraMonthly * 12;
-const daAnnual      = daMonthly * 12;
-const specialAnnual = specialMonthly * 12;
-const foodAnnual    = foodMonthly * 12;
-const miscAnnual    = miscMonthly * 12;
+    // ✅ Monthly calculations (rounded)
+    const basic = round2(monthlyCTC * percentages.basic);
+    const hra = round2(monthlyCTC * percentages.hra);
+    const da = round2(monthlyCTC * percentages.da);
+    const special = round2(monthlyCTC * percentages.special);
+    const food = round2(monthlyCTC * percentages.food);
+    const misc = round2(monthlyCTC * percentages.misc);
 
-const finalAnnual = monthlyCTC * 12;
+    // ✅ Annual = Monthly × 12 (important)
+    const basicAnnual = round2(basic * 12);
+    const hraAnnual = round2(hra * 12);
+    const daAnnual = round2(da * 12);
+    const specialAnnual = round2(special * 12);
+    const foodAnnual = round2(food * 12);
+    const miscAnnual = round2(misc * 12);
 
-/* 6️⃣ Salary Components */
-const salaryComponents = [
-  { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
-  { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
-  { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
-  { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
-  { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
-  { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
-];
+
+    return [
+      { name: "Basic Salary", monthly: basic, annual: basicAnnual },
+      { name: "House Rent Allowance", monthly: hra, annual: hraAnnual },
+      { name: "Dearness Allowance", monthly: da, annual: daAnnual },
+      { name: "Special Allowance", monthly: special, annual: specialAnnual },
+      { name: "Food Allowance", monthly: food, annual: foodAnnual },
+      { name: "Misc Allowance", monthly: misc, annual: miscAnnual }
+    ];
+  };
+
+  const salaryComponents = generateSalaryBreakup(annualCTC);
 
   const finalData = {
     ...data,
-    newCTC,
-    salaryComponents,
+    newCTC: annualCTC,
+    salaryComponents
   };
 
   return (

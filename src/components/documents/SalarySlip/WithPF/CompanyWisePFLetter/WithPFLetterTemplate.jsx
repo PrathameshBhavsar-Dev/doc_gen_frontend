@@ -2,7 +2,7 @@ import React from "react";
 import DevconsSalarySlip from "./DevconsSalarySlip";
 import RPSalarySlip from "./RPSalarySlip";
 import NimbjaSalarySlip from "./NimbjaSalarySlip";
-//import CubeageSalarySlip from "./CubeageSalarySlip";
+import CubeageSalarySlip from "./CubeageSalarySlip";
 import JDITSalarySlip from "./JDITSalarySlip";
 import NeweageSalarySlip from "./NeweageSalarySlip";
 import SmartMatrixSalarySlip from "./SmartMatrixSalarySlip";
@@ -12,7 +12,7 @@ import QuickSalarySlip from "../../WithPF/CompanyWisePFLetter/QMSSalarySlip";
 
 // same company ids, just Increment components
 const companyComponentMap = {
-  //   1: CubeageUnPaidInternshipLetter,
+  1: CubeageSalarySlip,
   //   2: NeweageUnPaidInternshipLetter,
   2: NeweageSalarySlip,
   3: SmartMatrixSalarySlip,
@@ -21,6 +21,7 @@ const companyComponentMap = {
   5: RPSalarySlip,
   6: PentaSalarySlip,
   7: NimbjaSalarySlip,
+  8: JDITSalarySlip,
 
   //   8: JDITUnPaidInternshipLetter,
   //   9: QuickUnPaidInternshipLetter,
