@@ -213,10 +213,9 @@ const NimbjaRelieving = ({ company, data }) => {
           fontStyle: "Verdana",
           fontSize: "mm",
           marginTop: "16mm",
-          marginBottom: "14mm",
+          // marginBottom: "14mm",
           textDecoration: "",
-          marginRight: "6mm"
-          
+          marginRight: "12mm",
         }}
       >
         {new Date(data.issueDate).toLocaleDateString("en-US", {
@@ -239,21 +238,28 @@ const NimbjaRelieving = ({ company, data }) => {
           style={{
             textAlign: "Center",
             marginBottom: "26mm", // ✅ matches Word spacing
-            marginTop: "-20mm",
+            marginTop: "-22mm",
+            textDecoration: "underline",
           }}
         >
           Releiving Letter.
         </div>
 
         {/* ================= RECEIVER ================= */}
-        <div style={{ marginBottom: "18mm", marginTop: "15mm" }}>
+        <div
+          style={{
+            marginBottom: "18mm",
+            marginTop: "15mm",
+            marginTop: "-20mm",
+          }}
+        >
           <strong>{data.employeeName}</strong>
           <br />
           <strong>{data.designation}</strong>
         </div>
 
         {/* ================= SALUTATION ================= */}
-        <p style={{ marginBottom: "10mm" }}>
+        <p style={{ marginBottom: "10mm", marginTop: "-15mm" }}>
           Dear {data.employeeName.split(" ")[0]},
         </p>
 
@@ -279,7 +285,7 @@ const NimbjaRelieving = ({ company, data }) => {
           .
         </p>
 
-        <p style={{ marginBottom: "24mm" }}>
+        <p style={{ marginBottom: "24mm", marginTop: "-12mm" }}>
           We wish you success in all of your future endeavors.
         </p>
 
@@ -287,6 +293,7 @@ const NimbjaRelieving = ({ company, data }) => {
           style={{
             textAlign: "left",
             marginBottom: "22mm",
+            marginTop: "-13mm",
           }}
         >
           Sincerely,
