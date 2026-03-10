@@ -1,33 +1,31 @@
+
+
+
 // import React from "react";
 // import { Box, Typography } from "@mui/material";
 // import A4Page from "../../../../layout/A4Page";
 
-
-
-
-
-
-
 // const RPInternshipCertificate = ({ company, data }) => {
-
 //   const formatDate = (date) =>
-//   date
-//     ? new Date(date).toLocaleDateString("en-GB", {
-//         day: "2-digit",
-//         month: "2-digit",
-//         year: "numeric",
-//       })
-//     : "";
+//     date
+//       ? new Date(date).toLocaleDateString("en-GB", {
+//           day: "2-digit",
+//           month: "2-digit",
+//           year: "numeric",
+//         })
+//       : "";
 
-    
+//   const title = (data?.mrms || "").toLowerCase().trim();
 
+//   const pronouns =
+//     title === "miss." || title === "mrs."
+//       ? { subject: "She", object: "her", possessive: "her" }
+//       : title === "mx."
+//       ? { subject: "They", object: "them", possessive: "their" }
+//       : { subject: "He", object: "him", possessive: "his" };
 
 //   return (
-//     <A4Page
-//       headerSrc={company.header}
-//       footerSrc={company.footer}
-      
-//     >
+//     <A4Page headerSrc={company.header} footerSrc={company.footer}>
 //       <Box
 //         sx={{
 //           mt: 2,
@@ -40,15 +38,15 @@
 //         {/* ================= TITLE ================= */}
 //         <Typography
 //           align="center"
-//           fontWeight={700}
-//           fontSize={16}
-//           sx={{
+//          fontWeight={700}
+//          fontSize={16}
+//          sx={{
 //             // textDecoration: "underline",
 //             // textUnderlineOffset: "4px",
 //             // textDecorationThickness: "1.5px",
 //             mb: 6 ,
-//           }}
-//         >
+//          }}
+//        >
 //           LETTER OF INTERNSHIP
 //         </Typography>
 
@@ -58,20 +56,26 @@
 //           <b>
 //             {data.mrms} {data.employeeName}
 //           </b>{" "}
-//           has done her internship at{" "}
+//           has done {pronouns.possessive} internship at{" "}
 //           <b>RP Business Solutions LLP.</b>
 //         </Typography>
 
 //         <Typography fontSize={16} mb={2}>
-//           From <b>{formatDate(data.startDate)}</b> – <b>{formatDate(data.endDate)}</b>. She was designated
-//           as <b>{data.designation}</b>.
+//           From <b>{formatDate(data.startDate)}</b> –{" "}
+//           <b>{formatDate(data.endDate)}</b>. {pronouns.subject} was designated as{" "}
+//           <b>{data.designation}</b>.
 //         </Typography>
 
 //         <Typography fontSize={16} mb={6} textAlign="justify">
-//           During the internship She has demonstrated she skills with self-motivation to learn new skills. She performance exceeded our expectations and She was able to complete the given tasks on time. We wish her all the best for her upcoming career.
+//           During the internship {pronouns.subject} has demonstrated{" "}
+//           {pronouns.possessive} skills with self-motivation to learn new skills.{" "}
+//           {pronouns.subject} performance exceeded our expectations and{" "}
+//           {pronouns.subject.toLowerCase()} was able to complete the given tasks
+//           on time. We wish {pronouns.object} all the best for{" "}
+//           {pronouns.possessive} upcoming career.
 //         </Typography>
 
-//         {/* ================= SIGNATURE (BOTTOM) ================= */}
+//         {/* ================= SIGNATURE ================= */}
 //         <Box sx={{ mt: "auto" }}>
 //           <Typography fontSize={16} mb={2}>
 //             For RP Business Solutions LLP.
@@ -109,11 +113,14 @@
 // export default RPInternshipCertificate;
 
 
+
+
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 
 const RPInternshipCertificate = ({ company, data }) => {
+
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-GB", {
@@ -125,12 +132,16 @@ const RPInternshipCertificate = ({ company, data }) => {
 
   const title = (data?.mrms || "").toLowerCase().trim();
 
+  // Pronouns in lowercase
   const pronouns =
     title === "miss." || title === "mrs."
-      ? { subject: "She", object: "her", possessive: "her" }
+      ? { subject: "she", object: "her", possessive: "her" }
       : title === "mx."
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+      ? { subject: "they", object: "them", possessive: "their" }
+      : { subject: "he", object: "him", possessive: "his" };
+
+  // Capitalize first letter
+  const cap = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -143,22 +154,18 @@ const RPInternshipCertificate = ({ company, data }) => {
           color: "#000",
         }}
       >
-        {/* ================= TITLE ================= */}
+
+        {/* TITLE */}
         <Typography
           align="center"
-         fontWeight={700}
-         fontSize={16}
-         sx={{
-            // textDecoration: "underline",
-            // textUnderlineOffset: "4px",
-            // textDecorationThickness: "1.5px",
-            mb: 6 ,
-         }}
-       >
+          fontWeight={700}
+          fontSize={16}
+          sx={{ mb: 6 }}
+        >
           LETTER OF INTERNSHIP
         </Typography>
 
-        {/* ================= BODY ================= */}
+        {/* BODY */}
         <Typography fontSize={16} textAlign="justify" mb={2}>
           This is to certify that{" "}
           <b>
@@ -170,20 +177,20 @@ const RPInternshipCertificate = ({ company, data }) => {
 
         <Typography fontSize={16} mb={2}>
           From <b>{formatDate(data.startDate)}</b> –{" "}
-          <b>{formatDate(data.endDate)}</b>. {pronouns.subject} was designated as{" "}
+          <b>{formatDate(data.endDate)}</b>, {pronouns.subject} was designated as{" "}
           <b>{data.designation}</b>.
         </Typography>
 
-        <Typography fontSize={16} mb={6} textAlign="justify">
-          During the internship {pronouns.subject} has demonstrated{" "}
-          {pronouns.possessive} skills with self-motivation to learn new skills.{" "}
-          {pronouns.subject} performance exceeded our expectations and{" "}
-          {pronouns.subject.toLowerCase()} was able to complete the given tasks
-          on time. We wish {pronouns.object} all the best for{" "}
-          {pronouns.possessive} upcoming career.
-        </Typography>
+       <Typography fontSize={16} mb={6} textAlign="justify">
+  During the internship {pronouns.subject} demonstrated{" "}
+  excellent technical skills and strong motivation to learn new
+  technologies. {cap(pronouns.possessive)} performance exceeded our
+  expectations, and {pronouns.subject} was able to complete all assigned
+  tasks within the given time frame. We wish {pronouns.object} all the
+  best for {pronouns.possessive} future career.
+</Typography>
 
-        {/* ================= SIGNATURE ================= */}
+        {/* SIGNATURE */}
         <Box sx={{ mt: "auto" }}>
           <Typography fontSize={16} mb={2}>
             For RP Business Solutions LLP.
@@ -191,18 +198,10 @@ const RPInternshipCertificate = ({ company, data }) => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
             {company.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: 50 }}
-              />
+              <img src={company.signature} alt="Signature" style={{ height: 50 }} />
             )}
             {company.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: 80 }}
-              />
+              <img src={company.stamp} alt="Stamp" style={{ height: 80 }} />
             )}
           </Box>
 
@@ -213,10 +212,10 @@ const RPInternshipCertificate = ({ company, data }) => {
             Group Leader – HR Division Pune
           </Typography>
         </Box>
+
       </Box>
     </A4Page>
   );
 };
 
 export default RPInternshipCertificate;
-
