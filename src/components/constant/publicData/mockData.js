@@ -719,7 +719,6 @@ export const documentTypes = [
                 type: 'date',
                 required: true
             },
-            { name: 'monthlyStipend', label: 'Monthly Stipend', type: 'number', required: true },
         ]
     },
 
