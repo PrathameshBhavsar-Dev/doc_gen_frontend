@@ -42,36 +42,36 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.headerLine} />
           <div style={styles.headerAddress}>Address : {company.address}</div>
           <div style={styles.headerContact}>
-             Email : {company.email} | {company.phone}
-               <div style={styles.headerLine} />
+            Email : {company.email} | {company.phone}
+            <div style={styles.headerLine} />
           </div>
         </div>
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
-       <div style={styles.detailRow}>
-  <span style={styles.label}>Name</span>
-  <span style={styles.colon}>:</span>
-  <span style={styles.value}>
-    {mrms} {candidateName}
-  </span>
-</div>
+        <div style={styles.detailRow}>
+          <span style={styles.label}>Name</span>
+          <span style={styles.colon}>:</span>
+          <span style={styles.value}>
+            {mrms} {candidateName}
+          </span>
+        </div>
 
 
         <div style={styles.detailRow}>
-  <span style={styles.label}>Address</span>
-  <span style={styles.colon}>:</span>
-  <span style={styles.value}>{address}</span>
-</div>
+          <span style={styles.label}>Address</span>
+          <span style={styles.colon}>:</span>
+          <span style={styles.value}>{address}</span>
+        </div>
 
 
-      <div style={styles.subjectRow}>
-  <span style={styles.label}>Subject</span>
-  <span style={styles.colon}>:</span>
-  <span style={styles.value}>
-    Letter of Intent for the position of {position}
-  </span>
-</div>
+        <div style={styles.subjectRow}>
+          <span style={styles.label}>Subject</span>
+          <span style={styles.colon}>:</span>
+          <span style={styles.value}>
+            Letter of Intent for the position of {position}
+          </span>
+        </div>
 
 
         <p>Dear {getFirstName(candidateName)},</p>
@@ -85,15 +85,15 @@ const QuickManagementOffer = ({ company, data }) => {
 
         <p style={styles.paragraph}>
           This offer is based on your profile, and performance in the selection process. As discussed by us you are
- requested to join Dated <strong>{formatDate(data.joiningDate)}</strong>.You have been selected for the position of  <strong>{position}</strong> Your gross salary including all benefits
-            will be <strong>Rs. {annualCTC.toLocaleString("en-IN")}/-</strong> . Annexure 1
- provides a break-up of the compensation package.
+          requested to join Dated <strong>{formatDate(data.joiningDate)}</strong>.You have been selected for the position of  <strong>{position}</strong> Your gross salary including all benefits
+          will be <strong>Rs. {annualCTC.toLocaleString("en-IN")}/-</strong> . Annexure 1
+          provides a break-up of the compensation package.
 
         </p>
 
         <p style={styles.paragraph}>
-                   Kindly confirm your acceptance of this offer. If not accepted within 7 days, this offer is liable to lapse at
-          the discretion. Please initiate your Background Check and submit required documents within 5 days of     
+          Kindly confirm your acceptance of this offer. If not accepted within 7 days, this offer is liable to lapse at
+          the discretion. Please initiate your Background Check and submit required documents within 5 days of
           your offer acceptance. Kindly note that you’re Offer is subject to a positive background check. On joining
           and successful completion of joining formalities, you will be issued a Letter of Appointment.
 
@@ -127,7 +127,7 @@ const QuickManagementOffer = ({ company, data }) => {
           </div>
         </div>
 
-        <div style={styles.footer}>
+        <div style={styles.paragraph1}>
           <strong>Enclosures : Annexure A – Salary Structure</strong>
         </div>
       </div>
@@ -143,7 +143,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.headerAddress}>Address : {company.address}</div>
           <div style={styles.headerContact}>
             Email : {company.email} | {company.phone}
-              <div style={styles.headerLine} />
+            <div style={styles.headerLine} />
           </div>
         </div>
 
@@ -178,32 +178,32 @@ const QuickManagementOffer = ({ company, data }) => {
         </table>
 
         {/* PAGE-2 SIGN */}
-       {/* PAGE-2 SIGN */}
-<div style={styles.annexureSignRow}>
-  {/* LEFT SIDE — HR */}
-  <div style={styles.annexureLeft}>
-    <div style={styles.hrName}>{company.hrName}</div>
+        {/* PAGE-2 SIGN */}
+        <div style={styles.annexureSignRow}>
+          {/* LEFT SIDE — HR */}
+          <div style={styles.annexureLeft}>
+            <div style={styles.hrName}>{company.hrName}</div>
 
-    <div style={styles.hrSignWrap}>
-      {company.signature && (
-        <img src={company.signature} alt="HR Sign" style={styles.signInline} />
-      )}
-      {company.stamp && (
-        <img src={company.stamp} alt="Stamp" style={styles.stampInline} />
-      )}
-    </div>
+            <div style={styles.hrSignWrap}>
+              {company.signature && (
+                <img src={company.signature} alt="HR Sign" style={styles.signInline} />
+              )}
+              {company.stamp && (
+                <img src={company.stamp} alt="Stamp" style={styles.stampInline} />
+              )}
+            </div>
 
-    <div>HR Department, Pune</div>
-  </div>
+            <div>HR Department, Pune</div>
+          </div>
 
-  {/* RIGHT SIDE — CANDIDATE */}
-  <div style={styles.annexureRight}>
-    <div>Signature : ____________</div>
-    <div>
-      Candidate : <strong>{candidateName}</strong>
-    </div>
-  </div>
-</div>
+          {/* RIGHT SIDE — CANDIDATE */}
+          <div style={styles.annexureRight}>
+            <div>Signature : ____________</div>
+            <div>
+              Candidate : <strong>{candidateName}</strong>
+            </div>
+          </div>
+        </div>
 
 
 
@@ -236,38 +236,38 @@ const styles = {
 
   companyName: { fontSize: 18, fontWeight: "bold", color: "#0070C0" },
   headerLine: { height: 2, background: "#000", margin: "8px 0" },
-  headerAddress: {  fontWeight: "bold",fontSize: 10 },
+  headerAddress: { fontWeight: "bold", fontSize: 10 },
   headerContact: { fontWeight: "bold", fontSize: 10 },
 
   date: { textAlign: "right", marginBottom: 15 },
-  
- detailRow: {
-  display: "grid",
-  gridTemplateColumns: "80px 10px 1fr", // 🔥 image jaisa spacing
-  columnGap: "4px",
-  marginBottom: 4,
-  alignItems: "start",
-},
 
-label: {
-  fontWeight: "bold",
-},
+  detailRow: {
+    display: "grid",
+    gridTemplateColumns: "80px 10px 1fr", // 🔥 image jaisa spacing
+    columnGap: "4px",
+    marginBottom: 4,
+    alignItems: "start",
+  },
 
-colon: {
-  textAlign: "center",
-},
+  label: {
+    fontWeight: "bold",
+  },
 
-value: {
-  lineHeight: "16px",
-},
+  colon: {
+    textAlign: "center",
+  },
 
-subjectRow: {
-  display: "grid",
-  gridTemplateColumns: "80px 10px 1fr",
-  columnGap: "4px",
-  margin: "15px 0",
-  fontWeight: "bold",
-},
+  value: {
+    lineHeight: "16px",
+  },
+
+  subjectRow: {
+    display: "grid",
+    gridTemplateColumns: "80px 10px 1fr",
+    columnGap: "4px",
+    margin: "15px 0",
+    fontWeight: "bold",
+  },
 
 
   paragraph: { textAlign: "justify", marginBottom: 10 },
@@ -285,19 +285,12 @@ subjectRow: {
   },
 
   signImg: { height: 58, marginTop: 25 },
-  stampImgInline: { height: 82,  marginTop: 25 },
+  stampImgInline: { height: 82, marginTop: 25 },
 
   hrName: { fontSize: 11 },
 
   candidateBlock: { textAlign: "left", fontSize: 11, marginTop: 130 },
-
-  footer: {
-    position: "absolute",
-    bottom: 30,
-    width: "100%",
-    textAlign: "center",
-    fontSize: 11,
-  },
+  paragraph1: { textAlign: "center", marginTop: 130 },
 
   annexureTitle: {
     textAlign: "center",
@@ -333,7 +326,7 @@ subjectRow: {
     fontSize: 11,
   },
 
- 
+
 
   annexureRight: { textAlign: "right" },
 
@@ -341,7 +334,7 @@ subjectRow: {
   signInline: { height: 36 },
   stampInline: { height: 48, marginLeft: -6 },
 
-/* ===== PAGE-2 SIGNATURE (FINAL FIX) ===== */
+  /* ===== PAGE-2 SIGNATURE (FINAL FIX) ===== */
 
 
   annexureSignRow: {
@@ -383,53 +376,53 @@ subjectRow: {
 
 
 
-// annexureSignRow: {
-//   display: "flex",
-//   justifyContent: "flex-start",   // 🔥 important
-//   alignItems: "flex-end",
-//   gap: 80,                        // 🔥 sign & candidate ke beech gap
-//   marginTop: 70,
-//   fontFamily: "Verdana",
-//   fontSize: 11,
-// },
+  // annexureSignRow: {
+  //   display: "flex",
+  //   justifyContent: "flex-start",   // 🔥 important
+  //   alignItems: "flex-end",
+  //   gap: 80,                        // 🔥 sign & candidate ke beech gap
+  //   marginTop: 70,
+  //   fontFamily: "Verdana",
+  //   fontSize: 11,
+  // },
 
-// annexureLeft: {
-//   lineHeight: "14px",
-// },
+  // annexureLeft: {
+  //   lineHeight: "14px",
+  // },
 
-// hrName: {
-//   fontWeight: "bold",
-//   marginBottom: 6,
-// },
+  // hrName: {
+  //   fontWeight: "bold",
+  //   marginBottom: 6,
+  // },
 
-// hrSignWrap: {
-//   display: "flex",
-//   alignItems: "center",
-//   gap: 20,          // sign & stamp gap
-//   height: 70,
-//   marginTop: 12,
-//   marginBottom: 6,
-// },
+  // hrSignWrap: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   gap: 20,          // sign & stamp gap
+  //   height: 70,
+  //   marginTop: 12,
+  //   marginBottom: 6,
+  // },
 
-// signInline: {
-//   height: 52,
-// },
+  // signInline: {
+  //   height: 52,
+  // },
 
-// stampInline: {
-//   height: 74,
-//   marginLeft: -8,
-// },
+  // stampInline: {
+  //   height: 74,
+  //   marginLeft: -8,
+  // },
 
-// annexureRight: {
-//   lineHeight: "16px",
-//   whiteSpace: "nowrap",   // text ek block me rahe
-// },
+  // annexureRight: {
+  //   lineHeight: "16px",
+  //   whiteSpace: "nowrap",   // text ek block me rahe
+  // },
 
-//  annexureLeft: {
-//     // textAlign: "left",
-//     marginLeft: "120px",
-//     marginTop: "40px",
-//     fontSize: "14px",
-//   },
+  //  annexureLeft: {
+  //     // textAlign: "left",
+  //     marginLeft: "120px",
+  //     marginTop: "40px",
+  //     fontSize: "14px",
+  //   },
 
 };

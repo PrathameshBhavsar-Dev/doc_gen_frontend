@@ -5,433 +5,303 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableRow,
-  Paper,
 } from "@mui/material";
-import A4Page from "../../../../layout/A4Page";
-import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
+import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
-/* 🔢 Utility — Convert number to words */
+/* ── Number to Words ─────────────────────────────────────── */
 const numberToWords = (num) => {
-  if (num === 0) return "Zero Rupees Only";
+  if (!num || num === 0) return "Zero Rupees Only";
   const a = [
     "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
     "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
-    "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    "Sixteen", "Seventeen", "Eighteen", "Nineteen",
   ];
   const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-
   const inWords = (n) => {
     if (n < 20) return a[n];
     if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " and " + inWords(n % 100) : "");
-    if (n < 100000)
-      return (
-        inWords(Math.floor(n / 1000)) +
-        " Thousand" +
-        (n % 1000 ? " " + inWords(n % 1000) : "")
-      );
-    if (n < 10000000)
-      return (
-        inWords(Math.floor(n / 100000)) +
-        " Lakh" +
-        (n % 100000 ? " " + inWords(n % 100000) : "")
-      );
-    return "Value too large";
+    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " and " + inWords(n % 100) : "");
+    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
+    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
+    return "";
   };
-  return inWords(num) + " Rupees Only";
+  return inWords(Math.round(num)) + " Rupees Only";
 };
 
-const CubeageSalarySlip = ({ data, company }) => {
-  if (company?.name === "JDIT Software Solutions Pvt. Ltd.") {
-    return <JDITSalarySlipTemplate data={data} company={company} />;
-  }
+const fmt = (n) =>
+  Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  // === Basic Info ===
-  const name = data.employeeName || "Anagha Arun Kapse";
-  const empId = data.employeeId || "SSS2104";
-  const doj = data.doj || "05/01/2021";
-  const gender = data.gender;
-  const pan = data.pan || "ABCDE1234F";
-  const dob = data.dob || "15/08/1995";
-  const bankMode = data.mode || "HDFC Bank";
-  const totalWorkdays = data.workdays || "30";
-  const dept = data.department || "IT";
-  const desg = data.designation || "Quality Analyst";
-  // Convert "YYYY-MM" → "Month YY" (e.g. "2025-07" → "July 25")
-  const month = (() => {
-    if (!data.month) return "March 2022"; // fallback
+/* ── Cell style helper ────────────────────────────────────── */
+const C = (extra = {}) => ({
+  border: "1px solid #aaa",
+  padding: "6px 10px",
+  fontSize: "13px",
+  ...extra,
+});
 
+/* ============================================================
+   MAIN COMPONENT
+   ============================================================ */
+const CubeageSalarySlip = ({ data = {}, company = {} }) => {
+  const header = data?.header || company?.header;
+
+  /* ── employee info ── */
+  const name = data.employeeName || "";
+  const empId = data.employeeId || "";
+  const gender = data.gender || "";
+  const dept = data.department || "";
+
+  /* ── Format Date Helper ── */
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    if (!year || !month || !day) return dateStr;
+    return `${day}/${month}/${year}`;
+  };
+
+  const doj = formatDate(data.doj);
+  const dob = formatDate(data.dob);
+  const pan = data.pan || "";
+  const desg = data.designation || "";
+  const mode = data.mode || "";
+  const accountNo = data.accountNumber || "";
+
+  /* ── month label ── */
+  const monthLabel = (() => {
+    if (!data.month) return "";
     const [year, monthNum] = data.month.split("-");
-    const date = new Date(year, monthNum - 1); // JS months start at 0
-    const monthName = date.toLocaleString("default", { month: "long" });
-
-    return `${monthName} ${year}`; // ✅ Full year
+    const d = new Date(year, monthNum - 1);
+    return `${d.toLocaleString("default", { month: "long" })} ${year}`;
   })();
 
+  const getTotalDaysInMonth = (monthStr) => {
+    if (!monthStr) return 31;
+    const [year, monthNum] = monthStr.split("-");
+    return new Date(year, monthNum, 0).getDate();
+  };
 
-  // === Total Salary ===
-  const totalSalary = parseFloat(data.totalSalary || 35000); // default fallback
+  const totalDays = getTotalDaysInMonth(data.month);
+  const workingDays = data.workdays || totalDays;
 
-  
-  // === Auto-calculated components (percentages of totalSalary) ===
-  const basic = totalSalary * 0.4013;
-  const hra = totalSalary * 0.1798;
-  const conveyance = totalSalary * 0.1599;
-  const food = totalSalary * 0.0797;
-  const special = totalSalary * 0.1196;
-  const others = totalSalary * 0.0597; // optional, can be removed if 0
+  /* ── salary calculations ── */
+  const round2 = (n) => Math.floor(n);
 
-  const pt = getProfessionalTax(data.month, totalSalary);
+  const monthlyCTC = parseFloat(data.totalSalary || 0);
+
+  // Calculate proportional earned CTC based on working days
+  const earnedCTC = (monthlyCTC * workingDays) / totalDays;
+
+  // Calculate other components first (rounded down)
+  const hra = round2(earnedCTC * 0.18);
+  const da = round2(earnedCTC * 0.16);
+  const lta = round2(earnedCTC * 0.12);
+  const allow = round2(earnedCTC * 0.08);
+  const pfAllowance = round2(earnedCTC * 0.06);
+
+  // Basic gets the remaining amount so that the sum strictly equals earnedCTC
+  const basic = round2(earnedCTC) - (hra + da + lta + allow + pfAllowance);
+  const totalEarnings = basic + hra + da + lta + allow + pfAllowance;
+
+  /* ── deductions ── */
+  const pt = parseFloat(data.otherDeduction || 200);
   const otherDed = parseFloat(data.otherDeduction || 2000);
+  const totalDed = round2(pt + otherDed);
 
-const totalEarning = Math.round(
-  basic + hra + conveyance + food + special + others,
-);
-console.log("total earning  frontend : ",totalEarning)
+  const netPay = round2(totalEarnings - totalDed);
 
-const totalDed = pt + otherDed;
-
-const net = totalEarning - totalDed;
-console.log("net  frontend : ", net);
-const adjustment = 2200;
-
-const issuedSalary = totalEarning - adjustment;
-console.log("issuedSalary  frontend : ", issuedSalary);
-   
   return (
-    <A4Page headerSrc={company?.header}>
-      <Box sx={{ pt: "16mm", mt: "10mm", textAlign: "center" }}>
-        <Typography>Salary Statement for The Month of {month}</Typography>
-        <TableContainer
+    <Box
+      sx={{
+        width: "210mm",
+        minHeight: "297mm",
+        backgroundColor: "white",
+        fontFamily: "'Calibri', 'Arial', sans-serif",
+        position: "relative",
+      }}
+    >
+      {/* ── HEADER: Logo top-left | Company name + details on right ── */}
+      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, px: 4, py: 2, borderBottom: "2px solid #000", mb: 1 }}>
+        {/* Logo — top left */}
+        <Box sx={{ flexShrink: 0 }}>
+          {company.logo
+            ? <img src={company.logo} alt="logo" style={{ height: 70 }} />
+            : header
+              ? <img src={header} alt="header" style={{ height: 70 }} />
+              : null}
+        </Box>
+
+        {/* Company Name (heading) + details */}
+        <Box>
+          <Typography fontWeight="bold" fontSize="18px">
+            {company.name || company.companyName}
+          </Typography>
+          {company.address && (
+            <Typography fontSize="11px">{company.address}</Typography>
+          )}
+          {company.phone && (
+            <Typography fontSize="11px">
+              <strong>Contact No:</strong> {company.phone}
+            </Typography>
+          )}
+          {company.email && (
+            <Typography fontSize="11px">
+              <strong>Email:</strong> {company.email}
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      <Box sx={{ px: 6, py: 2 }}>
+        {/* TITLE */}
+        <Typography fontWeight="bold" textAlign={"center"} fontSize="14px" mb={1.5}>
+          Salary Statement for The Month of {monthLabel}
+        </Typography>
+
+        {/* ── EMPLOYEE DETAILS TABLE ── */}
+        <Table
           sx={{
-            border: "1.5px solid black",
-            borderRadius: 0,
-            mt: "5mm",
-            boxShadow: "none",
-            "& table": {
-              borderCollapse: "collapse",
+            width: "100%",
+            borderCollapse: "collapse",
+            "& td": {
+              border: "1px solid #aaa",
+              padding: "6px 10px",
+              fontSize: "13px",
             },
           }}
         >
-          <Table size="small">
-            <TableBody>
-              {/* ===== TOP DETAILS BOX (FULL BORDER) ===== */}
-              <TableRow>
-                <TableCell sx={{ border: "1.5px solid black" }} colSpan={2}>
-                  <strong>Name:</strong> {name}
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }} colSpan={2}>
-                  <strong>Designation:</strong> {desg}
-                </TableCell>
-              </TableRow>
+          <TableBody>
 
-              <TableRow>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  Employee Code:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {empId}
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  Total Days:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {totalWorkdays}
-                </TableCell>
-              </TableRow>
+            {/* ───── EMPLOYEE DETAILS ───── */}
 
-              <TableRow>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  Date Of Joining:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {doj}
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  Days Present:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {totalWorkdays}
-                </TableCell>
-              </TableRow>
+            {/* Name | Designation */}
+            <TableRow>
+              <TableCell colSpan={2} sx={{ fontWeight: "bold", height: "40px" }}>Name: {data.mrms || ""} {name}</TableCell>
+              <TableCell colSpan={2} sx={{ fontWeight: "bold", height: "40px" }}>Designation: {desg}</TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  Date Of Birth:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {dob}
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  PAN NO:
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}>
-                  {pan}
-                </TableCell>
-              </TableRow>
+            {/* Emp Code | Total Days */}
+            <TableRow>
+              <TableCell>Employee Code:</TableCell>
+              <TableCell align="center">{empId}</TableCell>
+              <TableCell>Total Days:</TableCell>
+              <TableCell align="center">{totalDays}</TableCell>
+            </TableRow>
 
-              {/* ==== SECTION HEADER (THICK BORDER LIKE WORD) ===== */}
-              <TableRow>
-                <TableCell
-                  sx={{ border: "1.5px solid black", fontWeight: "bold" }}
-                >
-                  Specifications (A)
-                </TableCell>
-                <TableCell
-                  sx={{ border: "1.5px solid black", fontWeight: "bold" }}
-                >
-                  Amount
-                </TableCell>
-                <TableCell
-                  sx={{ border: "1.5px solid black", fontWeight: "bold" }}
-                >
-                  Deductions (B)
-                </TableCell>
-                <TableCell
-                  sx={{ border: "1.5px solid black", fontWeight: "bold" }}
-                >
-                  Amount
-                </TableCell>
-              </TableRow>
+            {/* DOJ | Days Present */}
+            <TableRow>
+              <TableCell>Date Of Joining:</TableCell>
+              <TableCell align="center">{doj}</TableCell>
+              <TableCell>Days Present:</TableCell>
+              <TableCell align="center">{workingDays}</TableCell>
+            </TableRow>
 
-              {/* ===== ROWS EXACT LIKE IMAGE ===== */}
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  Basic
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(basic)}
-                </TableCell>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  P.T.
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(pt)}
-                </TableCell>
-              </TableRow>
+            {/* DOB | PAN */}
+            <TableRow>
+              <TableCell>Date Of Birth:</TableCell>
+              <TableCell align="center">{dob}</TableCell>
+              <TableCell>PAN NO:</TableCell>
+              <TableCell align="center">{pan}</TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  H.R.A.
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(hra)}
-                </TableCell>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  Other Deductions
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(otherDed)}
-                </TableCell>
-              </TableRow>
+            {/* ───── EARNINGS & DEDUCTIONS HEADER ───── */}
 
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  D.A.
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(conveyance)}
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-              </TableRow>
+            <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
+              <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Specifications(A)</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "20%", textAlign: "center" }}>Amount</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Deductions(B)</TableCell>
+              <TableCell sx={{ fontWeight: "bold", width: "20%", textAlign: "center" }}>Amount</TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  L.T.A.
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(food)}
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-              </TableRow>
+            {/* Salary Rows */}
 
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  ALLOWANCE (Shift+Skill)
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                  align="right"
-                >
-                  {formatCurrency(special)}
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell>Basic</TableCell>
+              <TableCell align="center">{fmt(basic)}</TableCell>
+              <TableCell>P.T.</TableCell>
+              <TableCell align="center">{fmt(pt)}</TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell sx={{ borderRight: "1.5px solid black" }}>
-                  Special Allowance
-                </TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }} align="right">
-                  {formatCurrency(others)}
-                </TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell sx={{ border: "1.5px solid black" }}></TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell>H.R.A.</TableCell>
+              <TableCell align="center">{fmt(hra)}</TableCell>
+              <TableCell>Other Deductions</TableCell>
+              <TableCell align="center">{fmt(otherDed)}</TableCell>
+            </TableRow>
 
-              {/* ===== TOTALS EXACT LIKE IMAGE ===== */}
-              <TableRow>
-                <TableCell
-                  sx={{ fontWeight: "bold", borderRight: "1.5px solid black" }}
-                >
-                  Grand Total "A"
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{
-                    fontWeight: "bold",
-                    border: "1.5px solid black",
-                    borderTop: "1.5px solid black",
-                  }}
-                >
-                  {formatCurrency(totalEarning)}
-                </TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ fontWeight: "bold", border: "1.5px solid black" }}
-                >
-                  {formatCurrency(totalDed)}
-                </TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell>D.A.</TableCell>
+              <TableCell align="center">{fmt(da)}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    border: "1.5px solid black",
-                    py: 2.7,
-                  }}
-                >
-                  Net Salary
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{
-                    fontWeight: "bold",
-                    border: "1.5px solid black",
-                    py: 2.7,
-                  }}
-                >
-                  {formatCurrency(totalEarning)}
-                </TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell>L.T.A.</TableCell>
+              <TableCell align="center">{fmt(lta)}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ fontWeight: "bold", border: "1.5px solid black" }}
-                >
-                  Issued Salary
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ fontWeight: "bold", border: "1.5px solid black" }}
-                >
-                  {formatCurrency(issuedSalary)}
-                </TableCell>
-              </TableRow>
+            <TableRow>
+              <TableCell>ALLOWANCE (Shift+Skill)</TableCell>
+              <TableCell align="center">{fmt(allow)}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    border: "1.5px solid black",
-                    pt: 2,
-                  }}
-                >
-                  Balance Salary
-                </TableCell>
-                <TableCell
-                  sx={{ border: "1.5px solid black", pt: 2 }}
-                  align="right"
-                >
-                  Nil
-                </TableCell>
-              </TableRow>
+            {/* PF Allowance */}
+            <TableRow>
+              <TableCell>PF Allowance</TableCell>
+              <TableCell align="center">{fmt(pfAllowance)}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
 
-              <TableRow>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{ borderRight: "1.5px solid black" }}
-                ></TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    borderRight: "1.5px solid black",
-                    py: 2,
-                  }}
-                  colSpan={2}
-                ></TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+            {/* Grand Total A & Total Deductions */}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Grand Total "A"</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(totalEarnings)}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Total Deductions</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(totalDed)}</TableCell>
+            </TableRow>
 
-        <Typography>
+            {/* Net Salary */}
+            <TableRow>
+              <TableCell colSpan={2} rowSpan={3}></TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Net Salary</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(totalEarnings)}</TableCell>
+            </TableRow>
+
+            {/* Issued Salary */}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Issued Salary</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(netPay)}</TableCell>
+            </TableRow>
+
+            {/* Balance Salary */}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Balance Salary</TableCell>
+              <TableCell align="center">
+                {parseFloat(data.balanceSalary || 0) === 0 ? "Nil" : fmt(parseFloat(data.balanceSalary || 0))}
+              </TableCell>
+            </TableRow>
+
+          </TableBody>
+        </Table>
+
+        {/* Issued Salary in Words */}
+        <Box sx={{ border: "1px solid #aaa", borderTop: "none", px: 1.5, py: 1 }}>
+          <Typography fontSize="13px">
+            <strong>Issued Salary in Words:</strong>{" "}{numberToWords(netPay)}
+          </Typography>
+        </Box>
+
+        <Typography mt={3} fontSize="12px" fontStyle="italic">
           *Computer Generated Salary Slip. No Signature Required
         </Typography>
       </Box>
-    </A4Page>
+    </Box>
   );
 };
 
