@@ -340,14 +340,18 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
             {/* SIGNATURE */}
             <TableRow>
               <TableCell sx={{ ...cell, ...center }}></TableCell>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}>
                 {company.stamp && (
-                  <img src={company.stamp} height={60} alt="" />
+                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img src={company.stamp} width={100} alt="" />
+                  </Box>
                 )}
               </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>
+              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}>
                 {company.signature && (
-                  <img src={company.signature} height={45} alt="" />
+                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img src={company.signature} width={220} alt="" />
+                  </Box>
                 )}
               </TableCell>
             </TableRow>
@@ -369,4 +373,3 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
 };
 
 export default NimbjaFullAndFinal;
-          
