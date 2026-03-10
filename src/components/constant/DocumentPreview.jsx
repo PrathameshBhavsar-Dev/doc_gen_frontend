@@ -29,7 +29,7 @@ import IncrementTemplate from "../documents/IncrementLetter/IncrementTemplate";
 import OfferTemplate from "../documents/OfferLetter/OfferLetterTemplate";
 import AppointmentLetterTemplate from "../documents/AppointmentLeter/AppointmentLetterTemplate";
 import ConfirmationLetterTemplate from "../documents/ConfirmationLetter/ConfirmationLetterTemplate";
-import FullandfinalLetterTemplate from "../documents/FullAndFinalLetter/FullandFinalLetterTemplate.jsx";
+import FullandfinalLetterTemplate from "../documents/FullAndFinalLetter/FullandFinalLetterTemplate";
 
 const DocumentPreview = () => {
   const { selectedCompany } = useCompany();
