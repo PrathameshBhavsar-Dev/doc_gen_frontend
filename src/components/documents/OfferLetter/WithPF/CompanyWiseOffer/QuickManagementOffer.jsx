@@ -240,7 +240,7 @@
 //   headerContact: { fontWeight: "bold", fontSize: 10 },
 
 //   date: { textAlign: "right", marginBottom: 15 },
-  
+
 //  detailRow: {
 //   display: "grid",
 //   gridTemplateColumns: "80px 10px 1fr", // 🔥 image jaisa spacing
@@ -333,7 +333,7 @@
 //     fontSize: 11,
 //   },
 
- 
+
 
 //   annexureRight: { textAlign: "right" },
 
@@ -461,14 +461,14 @@ const QuickManagementOffer = ({ company, data }) => {
 
         <p>Dear {getFirstName(candidateName)},</p>
 
-        <p style={styles.paragraph}>
+        <p style={styles.paragraph1}>
           Thank you for exploring career opportunities with{" "}
           <strong>QUICK MANAGEMENT SERVICES</strong>. You have successfully
           completed our initial selection process and we are pleased to make
           you an offer of employment.
         </p>
 
-        <p style={styles.paragraph}>
+        <p style={styles.paragraph1}>
           This offer is based on your profile, and performance in the selection process.
           As discussed by us you are requested to join Dated{" "}
           <strong>{formatDate(data.joiningDate)}</strong>.
@@ -478,7 +478,7 @@ const QuickManagementOffer = ({ company, data }) => {
           Annexure 1 provides a break-up of the compensation package.
         </p>
 
-        <p style={styles.paragraph}>
+        <p style={styles.paragraph1}>
           Kindly confirm your acceptance of this offer. If not accepted within 7 days,
           this offer is liable to lapse at the discretion. Please initiate your
           Background Check and submit required documents within 5 days of your
@@ -512,7 +512,7 @@ const QuickManagementOffer = ({ company, data }) => {
           </div>
         </div>
 
-        <div style={styles.footer}>
+        <div style={styles.paragraph}>
           <strong>Enclosures : Annexure A – Salary Structure</strong>
         </div>
       </div>
@@ -646,7 +646,7 @@ const styles = {
     fontWeight: "bold",
   },
 
-  paragraph: { textAlign: "justify", marginBottom: 10 },
+  paragraph1: { textAlign: "justify", marginBottom: 10 },
 
   signRow: {
     display: "flex",
@@ -660,20 +660,14 @@ const styles = {
     gap: 10,
   },
 
-  signImg: { height: 58, marginTop: 25 },
-  stampImgInline: { height: 82, marginTop: 25 },
+  signImg: { height: 50, marginTop: 25 },
+  stampImgInline: { height: 100, marginTop: 25 },
 
   hrName: { fontSize: 11 },
 
   candidateBlock: { textAlign: "left", fontSize: 11, marginTop: 130 },
+  paragraph: { textAlign: "center", marginTop: 130 },
 
-  footer: {
-    position: "absolute",
-    bottom: 30,
-    width: "100%",
-    textAlign: "center",
-    fontSize: 11,
-  },
 
   annexureTitle: {
     textAlign: "center",
@@ -719,6 +713,6 @@ const styles = {
     marginBottom: "6px",
   },
 
-  signInline: { height: "40px" },
-  stampInline: { height: "70px", opacity: 0.9 },
+  signInline: { height: "50px" },
+  stampInline: { height: "100px", opacity: 0.9 },
 };

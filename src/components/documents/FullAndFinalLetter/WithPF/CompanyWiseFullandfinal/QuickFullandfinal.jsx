@@ -52,7 +52,7 @@ const getSalaryBreakup = (totalSalary = 0) => {
   const da = +(totalSalary * 0.12).toFixed(2);
   const special = +(totalSalary * 0.16).toFixed(2);
   const food = +(totalSalary * 0.06).toFixed(2);
-  
+
 
   return {
     basic,
@@ -60,7 +60,7 @@ const getSalaryBreakup = (totalSalary = 0) => {
     da,
     special,
     food,
-   pf:3750,
+    pf: 3750,
     pt: 200,
     other: 2000,
   };
@@ -122,7 +122,7 @@ const QuickFullandfinal = ({ company, data }) => {
   const totalSalary = Number(data.totalSalary || 0);
   const salary = getSalaryBreakup(totalSalary);
 
-   /* ---- Earnings ---- */
+  /* ---- Earnings ---- */
   const earnings = [
     { label: "Basic Salary", value: salary.basic },
     { label: "HRA", value: salary.hra },
@@ -132,7 +132,7 @@ const QuickFullandfinal = ({ company, data }) => {
     { label: "PF", value: salary.pf, excludeFromTotal: true },
   ];
 
-   const earningsTotal = earnings.reduce(
+  const earningsTotal = earnings.reduce(
     (sum, item) =>
       item.excludeFromTotal
         ? sum
@@ -140,15 +140,15 @@ const QuickFullandfinal = ({ company, data }) => {
     0
   );
 
-const earnedTotal = Math.floor(
-  earnings.reduce(
-    (sum, item) =>
-      item.excludeFromTotal
-        ? sum
-        : sum + Math.floor(item.value * paidRatio),
-    0
-  )
-);
+  const earnedTotal = Math.floor(
+    earnings.reduce(
+      (sum, item) =>
+        item.excludeFromTotal
+          ? sum
+          : sum + Math.floor(item.value * paidRatio),
+      0
+    )
+  );
 
   /* ---- Deductions ---- */
   const deductionsTotal = salary.pt + salary.other + salary.pf;
@@ -261,24 +261,24 @@ const earnedTotal = Math.floor(
             </TableRow>
 
             {earnings.map((item, i) => (
-                       <TableRow key={i}>
-                         <TableCell colSpan={2} sx={cell}>
-                           {item.label}
-                         </TableCell>
-         
-                         <TableCell sx={cell}>
-                           {numberFormat(item.value)}
-                         </TableCell>
-         
-                         <TableCell sx={cell}>
-  {numberFormat(
-    item.label === "PF"
-      ? item.value
-      : Math.floor(item.value * paidRatio)
-  )}
-                         </TableCell>
-                       </TableRow>
-                     ))}
+              <TableRow key={i}>
+                <TableCell colSpan={2} sx={cell}>
+                  {item.label}
+                </TableCell>
+
+                <TableCell sx={cell}>
+                  {numberFormat(item.value)}
+                </TableCell>
+
+                <TableCell sx={cell}>
+                  {numberFormat(
+                    item.label === "PF"
+                      ? item.value
+                      : Math.floor(item.value * paidRatio)
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
 
             <TableRow sx={{ backgroundColor: totalBg }}>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
@@ -298,11 +298,11 @@ const earnedTotal = Math.floor(
               </TableCell>
             </TableRow>
 
-               <TableRow>
-                           <TableCell sx={cell}>Provident Fund</TableCell>
-                           <TableCell colSpan={2} sx={cell}></TableCell>
-                           <TableCell sx={cell}>{numberFormat(salary.pf)}</TableCell>
-                         </TableRow>
+            <TableRow>
+              <TableCell sx={cell}>Provident Fund</TableCell>
+              <TableCell colSpan={2} sx={cell}></TableCell>
+              <TableCell sx={cell}>{numberFormat(salary.pf)}</TableCell>
+            </TableRow>
 
 
             <TableRow>
@@ -359,18 +359,52 @@ const earnedTotal = Math.floor(
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
                 Prepared By
               </TableCell>
-              <TableCell sx={{ ...cell, ...center }}>
-                <img src={company.stamp} height={50} alt="stamp" />
-                <br />
-                Verified By
+              <TableCell sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {company.stamp && (
+                    <img
+                      src={company.stamp}
+                      style={{ height: "90px", width: "auto" }}
+                      alt="stamp"
+                    />
+                  )}
+                  <br />
+                  Verified By
+                </Box>
               </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                <img src={company.signature} height={45} alt="sign" />
-                <br />
-                Approved By
+              <TableCell colSpan={2} sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {company.signature && (
+                    <img
+                      src={company.signature}
+                      style={{ height: "75px", width: "auto" }}
+                      alt="sign"
+                    />
+                  )}
+                  <br />
+                  Approved By
+                </Box>
               </TableCell>
             </TableRow>
 
@@ -378,7 +412,7 @@ const earnedTotal = Math.floor(
         </Table>
       </Box>
 
-    
+
     </Box>
   );
 };

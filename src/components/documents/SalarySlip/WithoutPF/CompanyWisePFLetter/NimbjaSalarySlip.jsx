@@ -99,7 +99,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    mode = "Bank Transfer",
+    bankName = "Bank Transfer",
     workdays = "",
     month = "2025-02",
     totalSalary = 0,
@@ -206,41 +206,49 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             {/* ===== EMPLOYEE INFO ===== */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
-              <TableCell>{employeeName}</TableCell>
+              <TableCell align="center">{employeeName}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Employee ID</TableCell>
-              <TableCell>{employeeId}</TableCell>
+              <TableCell align="center">{employeeId}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", borderBottom: "none" }}>
                 Gender
               </TableCell>
-              <TableCell sx={{ borderBottom: "none" }}>{gender}</TableCell>
+              <TableCell align="center" sx={{ borderBottom: "none" }}>
+                {gender}
+              </TableCell>
               <TableCell sx={{ fontWeight: "bold", borderBottom: "none" }}>
                 Department
               </TableCell>
-              <TableCell sx={{ borderBottom: "none" }}>{department}</TableCell>
+              <TableCell align="center" sx={{ borderBottom: "none" }}>
+                {department}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", borderTop: "none" }}>
                 DOJ
               </TableCell>
-              <TableCell sx={{ borderTop: "none" }}>{doj}</TableCell>
+              <TableCell align="center" sx={{ borderTop: "none" }}>
+                {doj}
+              </TableCell>
               <TableCell sx={{ fontWeight: "bold", borderTop: "none" }}>
                 PAN
               </TableCell>
-              <TableCell sx={{ borderTop: "none" }}>{pan}</TableCell>
+              <TableCell align="center" sx={{ borderTop: "none" }}>
+                {pan}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Designation</TableCell>
-              <TableCell>{designation}</TableCell>
+              <TableCell align="center">{designation}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>DOB</TableCell>
-              <TableCell>{dob}</TableCell>
+              <TableCell align="center">{dob}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
-              <TableCell>{mode}</TableCell>
+              <TableCell align="center">{bankName}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
-              <TableCell>{workdays}</TableCell>
+              <TableCell align="center">{workdays}</TableCell>
             </TableRow>
             {/* ===== EARNINGS / DEDUCTIONS ===== */}
             <TableRow>
@@ -261,7 +269,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
                 Basic
               </TableCell>
-              <TableCell align="right">{formatCurrency(basic)}</TableCell>
+              <TableCell align="center">{formatCurrency(basic)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -269,23 +277,23 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 Bouquet Of Benefits
               </TableCell>
-              <TableCell align="right">{formatCurrency(hra)}</TableCell>
+              <TableCell align="center">{formatCurrency(hra)}</TableCell>
               <TableCell>Professional Tax</TableCell>
-              <TableCell align="right">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
                 HRA
               </TableCell>
-              <TableCell align="right">{formatCurrency(conveyance)}</TableCell>
+              <TableCell align="center">{formatCurrency(conveyance)}</TableCell>
               <TableCell whiteSpace="nowrap">Other Deduction</TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {formatCurrency(otherDeduction)}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>City Allowance</TableCell>
-              <TableCell align="right">{formatCurrency(food)}</TableCell>
+              <TableCell align="center">{formatCurrency(food)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -293,7 +301,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 Superannuation Fund
               </TableCell>
-              <TableCell align="right">{formatCurrency(special)}</TableCell>
+              <TableCell align="center">{formatCurrency(special)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -301,7 +309,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 Performance Bonus
               </TableCell>
-              <TableCell align="right">{formatCurrency(others)}</TableCell>
+              <TableCell align="center">{formatCurrency(others)}</TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -309,11 +317,11 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             {/* ===== TOTALS ===== */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total Earnings</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalEarning)}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalDeduction)}
               </TableCell>
             </TableRow>
@@ -321,7 +329,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
               <TableCell
-                align="right"
+                align="center"
                 sx={{ fontWeight: "bold", fontSize: "13pt" }}
               >
                 {formatCurrency(netPay)}

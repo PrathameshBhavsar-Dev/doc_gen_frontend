@@ -62,10 +62,7 @@ const PageLayout = ({ children, company }) => (
         )}
       </Box>
       <Box sx={{ width: "100%" }}>
-        <Typography fontSize="12px" color="#90abc4" fontWeight="bold">
-          <span style={{ fontSize: "20px", letterSpacing: "2px" }}>C U B E A G E</span><br />
-          Technology Services Pvt. Ltd.
-        </Typography>
+
         <Typography fontSize="12px" mt={1}>
           <strong>Office:</strong> {company.address || "Office No. 102-6, First Floor Ganesham-4 Commercial, BRTS Road Pimple Saudagar, Pune-411027"}
         </Typography>

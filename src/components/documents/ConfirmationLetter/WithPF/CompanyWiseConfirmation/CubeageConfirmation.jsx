@@ -26,22 +26,6 @@ const PageLayout = ({ children, company, data }) => {
         },
       }}
     >
-      {/* WATERMARK */}
-      {company?.watermark && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            opacity: 0.1,
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <img src={company.watermark} alt="watermark" width={500} />
-        </Box>
-      )}
 
       {/* HEADER */}
       {header && <img src={header} alt="header" width="100%" />}
@@ -117,7 +101,7 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
 
   const subject =
     data.subject ||
-    `Letter of intent for the continued services as ${data.position}`;
+    `Letter of intent for the continued services as ${data.designation || data.position}`;
 
   return (
     <Box>
@@ -148,7 +132,7 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
 
         <Typography mt={2} textAlign="justify" lineHeight={1.6}>
           We are pleased to confirm your continued services at the position of{" "}
-          {data.position} with <strong>{company?.name || company?.companyName}</strong> with effective date{" "}
+          {data.designation || data.position} with <strong>{company?.name || company?.companyName}</strong> with effective date{" "}
           <strong>{formatDate(data.effectiveDate)}</strong> considering your performance and
           support towards the organization.
         </Typography>
@@ -231,7 +215,7 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
               <strong>Name:</strong> {data.employeeName}
             </Typography>
             <Typography>
-              <strong>Designation:</strong> {data.position}
+              <strong>Designation:</strong> {data.designation || data.position}
             </Typography>
             <Typography>
               <strong>Location:</strong> {data.location || company.city}

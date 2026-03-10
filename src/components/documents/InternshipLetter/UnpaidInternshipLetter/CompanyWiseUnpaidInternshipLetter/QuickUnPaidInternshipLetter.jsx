@@ -144,10 +144,10 @@ import { Box, Typography } from "@mui/material";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= PRONOUN RESOLVER ================= */
@@ -249,7 +249,7 @@ const QuickUnPaidInternshipLetter = ({ company, data }) => {
         <strong>{designation}</strong>.
       </Typography>
 
-      <Typography sx={{ fontSize: 13.5, lineHeight: 2, mb: 6 }}>
+      <Typography sx={{ textAlign: "justify", fontSize: 13.5, lineHeight: 2, mb: 6 }}>
         During the internship {pronoun.subject} demonstrated
         strong skills with self-motivation to learn new skills.{" "}
         {pronoun.possessive} performance exceeded our

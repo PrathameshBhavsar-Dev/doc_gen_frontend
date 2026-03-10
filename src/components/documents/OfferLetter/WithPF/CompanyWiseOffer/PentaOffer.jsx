@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography, Table,  TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import A4Page from "../../../../layout/A4Page";
 
 /* ===================== UTILITIES ===================== */
 const formatDate = (date) => {
@@ -192,200 +193,190 @@ const PentaOffer = ({ company, data }) => {
   return (
     <>
       {/* ================= PAGE 1 – OFFER LETTER ================= */}
-      <Page company={company}>
-  {company.header && (
-  <img
-    src={company.header}
-    alt="Header"
-    style={{
-      width: "100%",
-      position: "relative",
-      zIndex: 2,
-    }}
-  />
-)}
+      <A4Page
+        headerSrc={company.header}
+        footerSrc={company.footer}>
 
-        <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}>
+        {/* <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}> */}
 
-  {/* ✅ ALIGNED NAME / ADDRESS / SUBJECT */}
-  <Box
-    sx={{
-      display: "grid",
-      gridTemplateColumns: "95px 10px auto",
-      
-      fontSize: 14,
-      mb: 4,
-    }}
-  >
-    <Typography fontWeight="bold">Name</Typography>
-    <Typography fontWeight="bold">:</Typography>
-    <Typography>{data.mrms} {data.candidateName}</Typography>
+        {/* ✅ ALIGNED NAME / ADDRESS / SUBJECT */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "95px 10px auto",
+            pt: "8mm",
+            fontSize: 14,
+            mb: 4,
+          }}
+        >
+          <Typography fontWeight="bold">Name</Typography>
+          <Typography fontWeight="bold">:</Typography>
+          <Typography>{data.mrms} {data.candidateName}</Typography>
 
-    <Typography fontWeight="bold">Address</Typography>
-    <Typography fontWeight="bold">:</Typography>
-    <Typography>{data.address}</Typography>
+          <Typography fontWeight="bold">Address</Typography>
+          <Typography fontWeight="bold">:</Typography>
+          <Typography>{data.address}</Typography>
 
-    <Typography fontWeight="bold">Subject</Typography>
-    <Typography fontWeight="bold">:</Typography>
-    <Typography>
-      Letter of intent for the position of{" "}
-      <strong>{data.position}</strong>.
-    </Typography>
-  </Box>
-
-  {/* REST OF CONTENT UNCHANGED */}
-  <Typography sx={{ fontSize: 14, mb: 1 }}>
-    Dear {data.candidateName?.split(" ")[0]},
-  </Typography>
-
-  <Typography sx={{ fontSize: 14, lineHeight: 1.9, mb: 1 }}>
-    <strong>Congratulations!</strong>
-    <br />
-    Welcome to Team <strong>PENTA</strong>!
-  </Typography>
-
-          <Typography sx={{ fontSize: 14, lineHeight: 1.9, mb: 2 }}>
-            We are pleased to offer you a position of{" "}
-            <strong>{data.position}</strong> at{" "}
-            <strong>{company.name}</strong>.where you will be an integral part of highly technical engineering
-            workforce that works on latest, innovative and cutting edge technologies.
-            Your total Gross salary will be{" "}
-            <strong>Rs. {formatCurrency(annualCTC)}</strong> per year.
+          <Typography fontWeight="bold">Subject</Typography>
+          <Typography fontWeight="bold">:</Typography>
+          <Typography>
+            Letter of intent for the position of{" "}
+            <strong>{data.position}</strong>.
           </Typography>
-
-
-          <Typography sx={{ fontSize: 14, lineHeight: 1.9 }}>
-            Today, the corporate landscape is dynamic and the world ahead is full of possibilities! None of which
-            would be possible without the strong value system and culture that PENTA SOFTWARE CONSULTANCY
-            SERVICES PVT. LTD. basks in.
-            - Congenial while being Professional,<br />
-            - Respectful while Encouraging Discussions,<br />
-            - Rock-solid but Fast-Growing,<br />
-            - Traditional yet possessing a Global Mind set,<br />
-            - Business like but contributing to Social and Environmental causes.<br />
-
-
-          </Typography> <br />
-          <Typography sx={{ fontSize: 14, lineHeight: 1.9 }}>
-            You would be working in collaboration with the incredible team across the world. We believe you will
-            benefit from the exposure of Global platform which will give you access to career mobility, innovative
-            technology, personal development, and freedom to explore new ideas.
-
-          </Typography>
-
-          <Typography sx={{ fontSize: 14, lineHeight: 1.9 }}>
-            Your start date will be{" "}
-            <strong>{formatDate(data.joiningDate)}</strong> and your base office
-            will be in <strong>{data.location}</strong>, India. At PENTA
-            we Understand the value of diverse skill sets and experience that each person brings to our teams
-            creating an environment growth,
-
-          </Typography>
-
-          <Typography sx={{ fontSize: 14, mt: 4 }}>Yours Sincerely,</Typography>
-
-          <Typography sx={{ fontSize: 14, mt: 1 }}>
-            For <strong>{company.name}</strong>
-          </Typography>
-
-          <SignatureBlock
-            company={company}
-            candidateName={data.candidateName}
-          />
         </Box>
 
-      {company.footer && (
+        {/* REST OF CONTENT UNCHANGED */}
+        <Typography sx={{ fontSize: 14, mb: 1 }}>
+          Dear {data.candidateName?.split(" ")[0]},
+        </Typography>
+
+        <Typography sx={{ fontSize: 14, lineHeight: 1.9, mb: 1 }}>
+          <strong>Congratulations!</strong>
+          <br />
+          Welcome to Team <strong>PENTA</strong>!
+        </Typography>
+
+        <Typography sx={{ fontSize: 14, lineHeight: 1.6, mb: 2 }}>
+          We are pleased to offer you a position of{" "}
+          <strong>{data.position}</strong> at{" "}
+          <strong>{company.name}</strong>.where you will be an integral part of highly technical engineering
+          workforce that works on latest, innovative and cutting edge technologies.
+          Your total Gross salary will be{" "}
+          <strong>Rs. {formatCurrency(annualCTC)}</strong> per year.
+        </Typography>
+
+
+        <Typography sx={{ fontSize: 14, lineHeight: 1.5 }}>
+          Today, the corporate landscape is dynamic and the world ahead is full of possibilities! None of which
+          would be possible without the strong value system and culture that PENTA SOFTWARE CONSULTANCY
+          SERVICES PVT. LTD. basks in.
+          - Congenial while being Professional,<br />
+          - Respectful while Encouraging Discussions,<br />
+          - Rock-solid but Fast-Growing,<br />
+          - Traditional yet possessing a Global Mind set,<br />
+          - Business like but contributing to Social and Environmental causes.<br />
+
+
+        </Typography> <br />
+        <Typography sx={{ fontSize: 14, lineHeight: 1.9 }}>
+          You would be working in collaboration with the incredible team across the world. We believe you will
+          benefit from the exposure of Global platform which will give you access to career mobility, innovative
+          technology, personal development, and freedom to explore new ideas.
+
+        </Typography>
+
+        <Typography sx={{ fontSize: 14, lineHeight: 1.9 }}>
+          Your start date will be{" "}
+          <strong>{formatDate(data.joiningDate)}</strong> and your base office
+          will be in <strong>{data.location}</strong>, India. At PENTA
+          we Understand the value of diverse skill sets and experience that each person brings to our teams
+          creating an environment growth,
+
+        </Typography>
+
+        <Typography sx={{ fontSize: 14, mt: 4 }}>Yours Sincerely,</Typography>
+
+        <Typography sx={{ fontSize: 14, mt: 1 }}>
+          For <strong>{company.name}</strong>
+        </Typography>
+
+        <SignatureBlock
+          company={company}
+          candidateName={data.candidateName}
+        />
+        {/* </Box> */}
+
+        {/* {company.footer && (
   <Box
     sx={{ position: "absolute", bottom: 0,left: 0,width: "100%", zIndex: 2,}}>
     <img src={company.footer} alt="Footer" style={{ width: "100%", display: "block" }} />
   </Box>
-)}
-      </Page>
+)} */}
+      </A4Page>
 
       {/* ================= PAGE 2 – ANNEXURE A ================= */}
-      <Page company={company}>
-        {company.header && (
-          <img src={company.header} alt="Header" style={{ width: "100%" }} />
-        )}
+      <A4Page
+        headerSrc={company.header}
+        footerSrc={company.footer}>
 
-        <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}>
-          <Typography
-            sx={{
-              fontSize: 16,
-              fontWeight: "bold",
-              textAlign: "center",
-              textDecoration: "underline",
-              mb: 2,
-            }}
-          >
-            Annexure A – Salary Structure
-          </Typography>
+        {/* <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}> */}
+        <Typography
+          sx={{
+            fontSize: 16,
+            fontWeight: "bold",
+            textAlign: "center",
+            textDecoration: "underline",
+            mb: 2,
+          }}
+        >
+          Annexure A – Salary Structure
+        </Typography>
 
-          <Table
-            sx={{
+        <Table
+          sx={{
+            border: "1px solid #000",
+            "& .MuiTableCell-root": {
               border: "1px solid #000",
-              "& .MuiTableCell-root": {
-                border: "1px solid #000",
-                fontSize: 13,
-                padding: "6px 8px",
-              },
-            }}
-          >
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#3598b4" }}>
-                <TableCell sx={{ fontWeight: "bold" }}>
-                  Salary Components
+              fontSize: 13,
+              padding: "6px 8px",
+            },
+          }}
+        >
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#3598b4" }}>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Salary Components
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", textAlign: "right" }}>
+                Per Month (Rs.)
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", textAlign: "right" }}>
+                Per Annum (Rs.)
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {finalData.salaryBreakup.map((row, i) => (
+              <TableRow key={i}>
+                <TableCell>{row.label}</TableCell>
+                <TableCell sx={{ textAlign: "right" }}>
+                  {formatCurrency(row.perMonth)}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold", textAlign: "right" }}>
-                  Per Month (Rs.)
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", textAlign: "right" }}>
-                  Per Annum (Rs.)
+                <TableCell sx={{ textAlign: "right" }}>
+                  {formatCurrency(row.perYear)}
                 </TableCell>
               </TableRow>
-            </TableHead>
+            ))}
 
-            <TableBody>
-              {finalData.salaryBreakup.map((row, i) => (
-                <TableRow key={i}>
-                  <TableCell>{row.label}</TableCell>
-                  <TableCell sx={{ textAlign: "right" }}>
-                    {formatCurrency(row.perMonth)}
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "right" }}>
-                    {formatCurrency(row.perYear)}
-                  </TableCell>
-                </TableRow>
-              ))}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Total Monthly Gross Salary
+              </TableCell>
+              <TableCell sx={{ textAlign: "right", fontWeight: "bold" }}>
+                {formatCurrency(finalData.totalPerMonth)}
+              </TableCell>
+              <TableCell sx={{ textAlign: "right", fontWeight: "bold" }}>
+                {formatCurrency(finalData.totalPerYear)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
 
-              <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }}>
-                  Total Monthly Gross Salary
-                </TableCell>
-                <TableCell sx={{ textAlign: "right", fontWeight: "bold" }}>
-                  {formatCurrency(finalData.totalPerMonth)}
-                </TableCell>
-                <TableCell sx={{ textAlign: "right", fontWeight: "bold" }}>
-                  {formatCurrency(finalData.totalPerYear)}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+        <SignatureBlock
+          company={company}
+          candidateName={data.candidateName}
+          showCandidate={true}
+        />
 
-          <SignatureBlock
-            company={company}
-            candidateName={data.candidateName}
-            showCandidate={true}
-          />
+        {/* </Box> */}
 
-        </Box>
-
-        {company.footer && (
+        {/* {company.footer && (
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <img src={company.footer} alt="Footer" style={{ width: "100%" }} />
           </Box>
-        )}
-      </Page>
+        )} */}
+      </A4Page>
     </>
   );
 };

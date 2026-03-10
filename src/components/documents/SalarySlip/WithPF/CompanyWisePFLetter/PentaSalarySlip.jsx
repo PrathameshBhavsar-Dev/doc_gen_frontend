@@ -160,7 +160,7 @@ const netPayWords = numberToWords(Math.round(netPay));
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
             <Box sx={{ ...cell, width: "25%" }}>
-              Bank Name– {data.mode}
+              Bank Name– {data.bankName}
               <br />
               Account No – {data.accountNo}
             </Box>
