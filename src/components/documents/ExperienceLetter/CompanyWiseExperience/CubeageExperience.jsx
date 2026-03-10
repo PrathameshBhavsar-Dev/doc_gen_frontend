@@ -4,11 +4,25 @@ import cubeage_stamp from "../../../../assets/images/cubeagetechnology/cubeage_s
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) => {
   if (!date) return "";
-  return new Date(date).toLocaleDateString("en-GB"); // ✅ DD/MM/YYYY
+  return new Date(date).toLocaleDateString("en-GB");
 };
 
-const CubeageExperience = ({ company, data }) => {
+const CubeageRelieving = ({ company, data }) => {
   if (!company || !data) return null;
+
+  const header = data?.header || company?.header;
+
+  const isFemale =
+    data.mrms === "Ms." ||
+    data.mrms === "Mrs." ||
+    data.mrms === "Miss" ||
+    data.mrms === "Miss.";
+
+  const isNeutral = data.mrms === "Mx" || data.mrms === "Mx.";
+
+  const heShe = isNeutral ? "they" : isFemale ? "she" : "he";
+  const hisHer = isNeutral ? "their" : isFemale ? "her" : "his";
+  const wasWere = isNeutral ? "were" : "was";
 
   return (
     <div
@@ -17,64 +31,64 @@ const CubeageExperience = ({ company, data }) => {
         width: "210mm",
         minHeight: "297mm",
         position: "relative",
-        fontFamily: 'Cambria, "Cambria Math", serif', // ✅ CHANGED
-        fontSize: "12pt",
-        lineHeight: "1.5", // ✅ Word exact
+        fontFamily: 'Cambria, "Cambria Math", serif',
+        fontSize: "13.5pt",
+        lineHeight: "1.6",
         color: "#000",
         backgroundColor: "#fff",
         overflow: "hidden",
       }}
     >
-      {/* ================= HEADER ================= */}
-      {company.header && (
-        <img
-          src={company.header}
-          alt="Company Header"
-          style={{ width: "100%", display: "block" }}
-        />
-      )}
+      {/* ================= HEADER: Logo left | Company info right ================= */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 20px 10px", borderBottom: "2px solid #000" }}>
+        {/* Logo */}
+        <div style={{ flexShrink: 0 }}>
+          {company.logo
+            ? <img src={company.logo} alt="logo" style={{ height: "70px" }} />
+            : header
+              ? <img src={header} alt="header" style={{ height: "70px" }} />
+              : null}
+        </div>
+        {/* Company Info */}
+        <div>
+          <p style={{ margin: 0, fontWeight: "bold", fontSize: "18px" }}>{company.name || company.companyName}</p>
+          {company.address && <p style={{ margin: 0, fontSize: "11px" }}>{company.address}</p>}
+          {company.phone && <p style={{ margin: 0, fontSize: "11px" }}><strong>Contact No:</strong> {company.phone}</p>}
+          {company.email && <p style={{ margin: 0, fontSize: "11px" }}><strong>Email:</strong> {company.email}</p>}
+        </div>
+      </div>
 
       {/* ================= CONTENT ================= */}
       <div
         style={{
-          padding: "28mm 25mm 30mm 25mm",
+          padding: "28mm 25mm 30mm 25mm", // Word margins
           boxSizing: "border-box",
         }}
       >
         {/* ================= DATE ================= */}
-        {/* TITLE */}
+        <p style={{ textAlign: "right", marginBottom: "2mm", marginTop: "-10mm" }}>
+          Date: {formatDate(data.issueDate)}
+        </p>
+
         <p
           style={{
             textAlign: "center",
             fontWeight: 600,
-            marginBottom: "6mm", // space between heading & date
-            textDecoration:"underline"
+            marginTop: "20mm",
           }}
         >
-          Experience Letter
+          RELIEVING & EXPERIENCE LETTER
         </p>
 
-        {/* ISSUE DATE */}
-        <div
-          style={{
-            textAlign: "right",
-            marginBottom: "18mm", // space before main content
-          }}
-        >
-          {formatDate(data.issueDate)}
-        </div>
 
-        {/* ================= SUB TITLE ================= */}
-        <p style={{ textAlign: "center", marginBottom: "14pt" }}>
-          TO WHOM IT MAY CONCERN
-        </p>
 
         {/* ================= BODY ================= */}
         <p
           style={{
             marginBottom: "10pt",
+            marginTop: "20pt",
             textAlign: "justify",
-            letterSpacing: "0.1px",
+            letterSpacing: "0.1px", // ✅ Cambria readability
           }}
         >
           This is to certify that{" "}
@@ -83,7 +97,7 @@ const CubeageExperience = ({ company, data }) => {
           </strong>{" "}
           was working with us as <strong>{data.designation}</strong> from{" "}
           <strong>{formatDate(data.joiningDate)}</strong> to{" "}
-          <strong>{formatDate(data.lastWorkingDay)}</strong> in the{" "}
+          <strong>{formatDate(data.lastWorkingDay || data.relievingDate)}</strong> in the{" "}
           <strong>{data.department}</strong> Department.
         </p>
 
@@ -94,10 +108,10 @@ const CubeageExperience = ({ company, data }) => {
             letterSpacing: "0.1px",
           }}
         >
-          During the tenure of his job, he was found to be sincere and loyal
-          towards the company. Due to his own wish, for better future prospects,
-          he has been relieved from our organization on{" "}
-          <strong>{formatDate(data.lastWorkingDay)}</strong>.
+          During the tenure of {hisHer} job, {heShe} {wasWere} found to be sincere and loyal
+          towards the company. Due to {hisHer} own wish, for better future prospects,
+          {heShe} has been relieved from our organization on{" "}
+          <strong>{formatDate(data.lastWorkingDay || data.relievingDate)}</strong>.
         </p>
 
         <p
@@ -117,16 +131,18 @@ const CubeageExperience = ({ company, data }) => {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "4mm",
+              gap: "10mm",
               marginBottom: "6mm",
             }}
           >
+            {/* STAMP */}
             <img
               src={cubeage_stamp}
               alt="Company Stamp"
               style={{ width: "110px" }}
             />
 
+            {/* SIGNATURE */}
             {company.signature && (
               <img
                 src={company.signature}
@@ -144,4 +160,4 @@ const CubeageExperience = ({ company, data }) => {
   );
 };
 
-export default CubeageExperience;
+export default CubeageRelieving;

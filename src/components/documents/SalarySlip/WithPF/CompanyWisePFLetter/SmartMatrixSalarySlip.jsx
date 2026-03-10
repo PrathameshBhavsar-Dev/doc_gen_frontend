@@ -10,7 +10,6 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-// import signature from "../../../../../assets/images/Nimbja/Nimbja_signature.png";
 import {
   formatCurrency,
   // getProfessionalTax,

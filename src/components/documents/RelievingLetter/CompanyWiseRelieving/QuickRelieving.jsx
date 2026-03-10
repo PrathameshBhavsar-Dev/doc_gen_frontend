@@ -10,7 +10,7 @@ import { Box, Typography } from "@mui/material";
 const formatDate = (date) => {
   if (!date) return "";
   return new Date(date).toLocaleDateString("en-US", {
-     month: "long",
+    month: "long",
     day: "2-digit",
     year: "numeric",
   });
@@ -47,9 +47,9 @@ const QuickRelieving = ({ company, data = {} }) => {
           pb: "40mm",   // Space for footer
         }}
       >
-       
 
-       
+
+
 
         {/* Title */}
         <Typography
@@ -88,10 +88,10 @@ const QuickRelieving = ({ company, data = {} }) => {
             mb: 10,
           }}
         >
-          With reference to your resignation letter, we would like to
+          With reference to your resignation letter dated <strong>{formatDate(data.issueDate)}</strong> , we would like to
           inform you that your resignation has been accepted and you are relieved
           from the company at the closing of working hours on{" "}
-          <strong>{formatDate(data.lastWorkingDay)}</strong>.
+          <strong>{formatDate(data.lastWorkingDay || data.relievingDate)}</strong>.
         </Typography>
 
         {/* Company Name */}
@@ -136,7 +136,7 @@ const QuickRelieving = ({ company, data = {} }) => {
         </Typography>
       </Box>
 
-      
+
     </Box>
   );
 };
