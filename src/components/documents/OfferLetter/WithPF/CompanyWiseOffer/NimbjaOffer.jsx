@@ -132,7 +132,7 @@ const NimbjaOffer = ({ company, data }) => {
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-              Subject : Letter of intent for the position of {data.designation}
+              Subject : Letter of intent for the position of {data.position}
             </Typography>
 
             <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
