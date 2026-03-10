@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import A4Page from "../../../../layout/A4Page";
 
 /* ===================== UTILITIES ===================== */
 const formatDate = (date) => {
@@ -142,7 +143,7 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
             style={{
               position: "absolute", display: "flex",
               bottom: 30,
-              gap: 10,
+              gap: 5,
               left: 180,
               width: 90,
               opacity: 0.9,
@@ -196,12 +197,10 @@ const finalData = calculateSalaryBreakup(annualCTC);
   return (
     <>
       {/* ================= PAGE 1 – OFFER LETTER ================= */}
-      <Page company={company}>
-        {company.header && (
-          <img src={company.header} alt="Header" style={{ width: "100%" }} />
-        )}
-
-        <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}>
+      <A4Page 
+      headerSrc={company.header}
+      footerSrc={company.footer}>
+        {/* <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}> */}
 
   {/* ✅ ALIGNED NAME / ADDRESS / SUBJECT */}
   <Box
@@ -288,22 +287,21 @@ const finalData = calculateSalaryBreakup(annualCTC);
             company={company}
             candidateName={data.candidateName}
           />
-        </Box>
+        {/* </Box> */}
 
-        {company.footer && (
+        {/* {company.footer && (
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <img src={company.footer} alt="Footer" style={{ width: "100%" }} />
           </Box>
-        )}
-      </Page>
+        )} */}
+      </A4Page>
 
       {/* ================= PAGE 2 – ANNEXURE A ================= */}
-      <Page company={company}>
-        {company.header && (
-          <img src={company.header} alt="Header" style={{ width: "100%" }} />
-        )}
-
-        <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}>
+      <A4Page
+         headerSrc={company.header}
+         footerSrc={company.footer}
+         >
+        {/* // <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}> */}
           <Typography
             sx={{
               fontSize: 16,
@@ -373,14 +371,14 @@ const finalData = calculateSalaryBreakup(annualCTC);
             showCandidate={true}
           />
 
-        </Box>
+        {/* </Box> */}
 
-        {company.footer && (
+         {/* {company.footer && (
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <img src={company.footer} alt="Footer" style={{ width: "100%" }} />
           </Box>
-        )}
-      </Page>
+        )} */}
+      </A4Page>
     </>
   );
 };
