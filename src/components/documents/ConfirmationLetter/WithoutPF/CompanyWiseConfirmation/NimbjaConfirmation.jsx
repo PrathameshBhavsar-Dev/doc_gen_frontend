@@ -163,7 +163,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.position}</strong>
+            as <strong>{data.designation}</strong>
           </Typography>
 
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
@@ -176,7 +176,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             sx={{ fontFamily: "Bahnschrift" }}
           >
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with{" "}
+            <strong>{data.designation}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
             date <strong>{formatDate(data.effectiveDate)}</strong>, considering
             your performance and support towards the organization.
