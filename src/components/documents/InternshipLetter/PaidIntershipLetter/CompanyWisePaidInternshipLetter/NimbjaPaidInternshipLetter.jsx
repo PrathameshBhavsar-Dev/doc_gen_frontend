@@ -133,7 +133,7 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
         // watermarkSrc={company.watermark}
       >
         <Box>
-          <Typography sx={{ fontFamily: "Bahnschrift" }} align="right" mb={3}>
+          <Typography sx={{ fontFamily: "Bahnschrift",marginTop:"-8mm" }} align="right" mb={3}>
             {formatDate(data.issueDate)}
           </Typography>
 

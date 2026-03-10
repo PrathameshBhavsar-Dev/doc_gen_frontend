@@ -347,7 +347,7 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...center }}>
                 {company.signature && (
-                  <img src={company.signature} height={45} alt="" />
+                  <img src={company.signature} height={30} width={30} alt="" />
                 )}
               </TableCell>
             </TableRow>
