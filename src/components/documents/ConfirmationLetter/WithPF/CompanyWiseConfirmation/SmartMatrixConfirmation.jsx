@@ -144,7 +144,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             lineHeight: 1.6,
           }}
         >
-          <Typography align="right" mb={3} sx={{ mt: "-5mm" }}>
+          <Typography align="right" mb={3}>
             {formatDate(data.issueDate)}
           </Typography>
 
@@ -152,26 +152,25 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             align="center"
             mb={3}
             sx={{
-              mt: "-5mm",
+              mt: "1mm",
               textDecoration: "underline",
             }}
           >
-            Confirmation Letter
+            <strong>Confirmation Letter</strong>
           </Typography>
 
-          <Typography mb={1}>
+          <Typography mb={2}>
             <strong>Name :</strong> {data.employeeName}
           </Typography>
 
-          <Typography b={2} sx={{ mt: "-2mm" }}>
-            <strong>Address:</strong> {data.address}
+          <Typography b={2} mb={2}>
+            <strong>Address :</strong> {data.address}
           </Typography>
 
           <Typography mb={3}>
             <strong>Subject :</strong>{" "}
             <u>
-              Letter of intent for continued services as{" "}
-              <strong>{data.position}</strong>.
+              Letter of intent for continued services as {data.designation}.
             </u>
           </Typography>
 
@@ -179,7 +178,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
           <Typography mb={2} textAlign="justify">
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with
+            <strong>{data.designation}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
             effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
             considering your performance and support towards the organization.
@@ -199,7 +198,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
             your employment will be specified in your letter of appointment. We
-            welcome you to SmartMatrix Digital Services Pvt Ltd. Family and hope
+            welcome you to SmartMatrix Digital Services Pvt Ltd. family and hope
             it would be the beginning of a long and mutually beneficial
             association. Kindly acknowledge the duplicate copy of this letter as
             an acceptance of this offer.
