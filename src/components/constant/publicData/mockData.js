@@ -490,7 +490,7 @@ export const documentTypes = [
             { name: 'address', label: 'Address', type: 'textarea', required: true },
             { name: 'position', label: 'Position', type: 'text', required: true },
             { name: 'department', label: 'Department', type: 'text', required: false },
-            { name: 'designation', label: 'Designation', type: 'text', required: false },
+            // { name: 'designation', label: 'Designation', type: 'text', required: false },
             { name: 'joiningDate', label: 'Joining Date', type: 'date', required: true },
             { name: 'probationPeriod', label: 'Probation Period (months)', type: 'number', required: true },
             { name: 'salary', label: 'Joining Annual Salary (CTC)', type: 'number', required: true },
