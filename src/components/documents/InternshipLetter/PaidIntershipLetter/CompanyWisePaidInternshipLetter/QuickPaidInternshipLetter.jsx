@@ -9,16 +9,17 @@ import {
   TableBody,
 } from "@mui/material";
 
-/* ✅ USE PROJECT SALARY UTILS */
-import {
-  generateSalaryComponents,
-  calculateSalaryBreakdown,
-  formatCurrency,
-  numberToWords,
-} from "../../../../../utils/salaryCalculations"
+/* ================= HELPERS ================= */
+const round2 = (num) => Number(num.toFixed(2));
+
+// auto detect monthly / annual
+const normalizeAnnualCTC = (ctc) => {
+  const value = Number(ctc || 0);
+  return value < 100000 ? value * 12 : value;
+};
 
 /* ================= A4 PAGE ================= */
-const A4Page = ({ children, headerSrc,  }) => (
+const A4Page = ({ children, headerSrc, }) => (
   <Box
     sx={{
       width: "210mm",
@@ -34,7 +35,7 @@ const A4Page = ({ children, headerSrc,  }) => (
       <img src={headerSrc} alt="Header" style={{ width: "100%" }} />
     )}
     {children}
-   
+
   </Box>
 );
 
@@ -42,10 +43,10 @@ const A4Page = ({ children, headerSrc,  }) => (
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* =====================================================
@@ -56,9 +57,47 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
 
   const firstName = data.candidateName?.split(" ")[0] || "";
 
-  /* ✅ SALARY FROM CENTRAL LOGIC */
-  const salaryComponents = generateSalaryComponents(data.stipend);
-  const breakdown = calculateSalaryBreakdown(data.stipend);
+  /* ✅ Calculate New CTC & Breakup */
+  const annualCTC = normalizeAnnualCTC(data.stipend);
+
+  const generateSalaryBreakup = (annualCTC) => {
+    const monthlyCTC = annualCTC / 12;
+
+    const percentages = {
+      basic: 0.4,
+      hra: 0.18,
+      da: 0.12,
+      special: 0.16,
+      food: 0.06,
+      misc: 0.08
+    };
+
+    const basic = round2(monthlyCTC * percentages.basic);
+    const hra = round2(monthlyCTC * percentages.hra);
+    const da = round2(monthlyCTC * percentages.da);
+    const special = round2(monthlyCTC * percentages.special);
+    const food = round2(monthlyCTC * percentages.food);
+    const misc = round2(monthlyCTC * percentages.misc);
+
+    const basicAnnual = round2(basic * 12);
+    const hraAnnual = round2(hra * 12);
+    const daAnnual = round2(da * 12);
+    const specialAnnual = round2(special * 12);
+    const foodAnnual = round2(food * 12);
+    const miscAnnual = round2(misc * 12);
+
+    return [
+      { name: "Basic Salary", monthly: basic, annual: basicAnnual },
+      { name: "House Rent Allowance", monthly: hra, annual: hraAnnual },
+      { name: "Dearness Allowance", monthly: da, annual: daAnnual },
+      { name: "Special Allowance", monthly: special, annual: specialAnnual },
+      { name: "Food Allowance", monthly: food, annual: foodAnnual },
+      { name: "Misc Allowance", monthly: misc, annual: miscAnnual }
+    ];
+  };
+
+  const salaryComponents = generateSalaryBreakup(annualCTC);
+  const monthlyGross = salaryComponents.reduce((sum, r) => sum + r.monthly, 0);
 
   return (
     <>
@@ -66,7 +105,7 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
       <A4Page headerSrc={company.header} >
         <Box sx={{ px: "20mm", pt: "-2", fontSize: "14px", lineHeight: 1.7 }}>
           {/* DATE */}
-          <Typography align="right" sx={{ mt:2 }}>
+          <Typography align="right" sx={{ mt: 2 }}>
             {formatDate(data.issueDate)}
           </Typography>
 
@@ -92,7 +131,7 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
 
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
             We are pleased to offer you the Internship position of {" "}
-           <strong>{data.designation}</strong>. As discussed, you are requested to
+            <strong>{data.designation}</strong>. As discussed, you are requested to
             join on <strong>{formatDate(data.startDate)}</strong>. If there is
             any change in the date of joining, the same can be taken under
             consideration.
@@ -100,8 +139,8 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
 
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
             Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(breakdown.annual.ctc)}</strong>{" "}
-            (<strong>{numberToWords(breakdown.annual.ctc)}</strong>) per year. 
+            <strong>{annualCTC.toLocaleString("en-IN")}/-</strong>{" "}
+            per year.
           </Typography>
 
           <Typography sx={{ mb: 2 }}>
@@ -141,12 +180,21 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
           >
             {/* HR SIDE */}
             <Box>
-              <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-                {company.signature && (
-                  <img src={company.signature} alt="HR Sign" height={55} />
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {/* SIGNATURE */}
+                {company?.signature && (
+                  <img src={company.signature} alt="Signature" style={{ height: 55, marginTop: 30 }} />
                 )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={90} />
+
+                {/* STAMP */}
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{
+                      height: 100
+                    }}
+                  />
                 )}
               </Box>
               <Typography sx={{ fontWeight: 600 }}>
@@ -198,42 +246,42 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
             <TableHead>
               <TableRow>
                 <TableCell align="center">Salary Components</TableCell>
-                <TableCell align="right">Per month (Rs.)</TableCell>
-                <TableCell align="right">Per Annum (Rs.)</TableCell>
+                <TableCell align="center">Per month (Rs.)</TableCell>
+                <TableCell align="center">Per Annum (Rs.)</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {salaryComponents.map((row) => (
                 <TableRow key={row.name}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="left">
-                    {formatCurrency(row.monthly)}
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">
+                    {row.monthly.toLocaleString("en-IN")}
                   </TableCell>
-                  <TableCell align="left">
-                    {formatCurrency(row.annual)}
+                  <TableCell align="center">
+                    {row.annual.toLocaleString("en-IN")}
                   </TableCell>
                 </TableRow>
               ))}
 
               <TableRow>
-                <TableCell sx={{ fontWeight: 700 }}>
+                <TableCell align="center" sx={{ fontWeight: 700 }}>
                   Total Monthly Gross Salary
                 </TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700 }}>
-                  {formatCurrency(breakdown.monthly.totalEarnings)}
+                <TableCell align="center" sx={{ fontWeight: 700 }}>
+                  {monthlyGross.toLocaleString("en-IN")}
                 </TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700 }}>
-                  {formatCurrency(breakdown.annual.totalEarnings)}
+                <TableCell align="center" sx={{ fontWeight: 700 }}>
+                  {annualCTC.toLocaleString("en-IN")}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
 
           {/* SIGNATURE SECTION */}
-           <Typography sx={{ fontWeight: 600, mt: 6}}>
-                {company.hrName}
-              </Typography>
+          <Typography sx={{ fontWeight: 600, mt: 10 }}>
+            {company.hrName}
+          </Typography>
           <Box
             sx={{
               mt: 4,
@@ -242,22 +290,30 @@ const QuickPaidInternshipLetter = ({ company, data }) => {
               alignItems: "flex-end",
             }}
           >
-            
+
             {/* HR SIDE */}
             <Box>
-              <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-                {company.signature && (
-                  <img src={company.signature} alt="HR Sign" height={55} />
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {/* SIGNATURE */}
+                {company?.signature && (
+                  <img src={company.signature} alt="Signature" style={{ height: 55, marginTop: 30 }} />
                 )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={90} />
+
+                {/* STAMP */}
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{
+                      height: 100
+                    }}
+                  />
                 )}
               </Box>
-              {/* <Typography sx={{ fontWeight: 600 }}>
-                {company.hrName}
-              </Typography> */}
+
               <Typography>HR Department Pune</Typography>
             </Box>
+
 
             {/* CANDIDATE SIDE */}
             <Box sx={{ minWidth: 260 }}>

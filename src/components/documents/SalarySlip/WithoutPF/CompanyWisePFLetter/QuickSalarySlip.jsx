@@ -172,7 +172,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
       }}
     >
       {/* 🔹 UI CODE EXACT SAME – NOT TOUCHED */}
-    
+
 
 
 
@@ -201,7 +201,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
                 textTransform: "uppercase",
               }}
             >
-              {company.name}   
+              {company.name}
             </TableCell>
           </TableRow>
 
@@ -211,14 +211,14 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
             </TableCell>
           </TableRow>
 
-        <TableRow>
-  <TableCell
-    colSpan={4}
-    sx={{ ...cell, ...bold, textAlign: "center" }}
-  >
-    Salary Slip {formatMonthYear(data.month)}
-  </TableCell>
-</TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={4}
+              sx={{ ...cell, ...bold, textAlign: "center" }}
+            >
+              Salary Slip {formatMonthYear(data.month)}
+            </TableCell>
+          </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Employee Name</TableCell>
@@ -228,9 +228,9 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           </TableRow>
 
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Gender <br/> DOJ</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>Gender <br /> DOJ</TableCell>
             <TableCell sx={cell} colSpan={3}>
-              {safe(data.gender)} <br/> {formatDate(data.doj)}
+              {safe(data.gender)} <br /> {formatDate(data.doj)}
             </TableCell>
           </TableRow>
 
@@ -241,14 +241,14 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
             </TableCell>
           </TableRow>
 
-           <TableRow>
-             <TableCell sx={{ ...cell, ...bold }}>Mode</TableCell>
-             <TableCell sx={cell} colSpan={3}>
-           {/* Bank Account No:  {safe(data.accountNo)}<br/> */}
-             Bank Name :{safe (data.mode)} {safe(data.bankName)}<br/>
+          <TableRow>
+            <TableCell sx={{ ...cell, ...bold }}>Mode</TableCell>
+            <TableCell sx={cell} colSpan={3}>
+              {/* Bank Account No:  {safe(data.accountNo)}<br/> */}
+              Bank Name :{safe(data.mode)} {safe(data.bankName)}<br />
               Bank Account No:  {safe(data.accountNo)}
-             </TableCell>
-           </TableRow>
+            </TableCell>
+          </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Employee ID</TableCell>
@@ -329,32 +329,70 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           </TableRow>
 
           <TableRow>
-  <TableCell sx={{ ...cell, ...bold }}>In Words</TableCell>
-  <TableCell sx={cell} colSpan={3}>
-    {numberToWords(Math.round(netPay))} Rs Only
-  </TableCell>
-</TableRow>
+            <TableCell sx={{ ...cell, ...bold }}>In Words</TableCell>
+            <TableCell sx={cell} colSpan={3}>
+              {numberToWords(Math.round(netPay))} Rs Only
+            </TableCell>
+          </TableRow>
 
 
           <TableRow>
             <TableCell
               colSpan={2}
-              sx={{ ...cell, height: 80, textAlign: "center" }}
+              sx={{
+                ...cell,
+                height: 100,
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
             >
               {company.stamp && (
-                <img src={company.stamp} height={75} alt="Stamp" />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src={company.stamp}
+                    style={{ height: "90px", width: "auto" }}
+                    alt="Stamp"
+                  />
+                </Box>
               )}
             </TableCell>
             <TableCell
               colSpan={2}
-              sx={{ ...cell, textAlign: "center" }}
+              sx={{
+                ...cell,
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
             >
               {company.signature && (
-                <img src={company.signature} height={50} alt="Signature" />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src={company.signature}
+                    style={{ height: "75px", width: "auto" }}
+                    alt="Signature"
+                  />
+                  <Typography fontSize={12} fontWeight="bold">
+                    Signature
+                  </Typography>
+                </Box>
               )}
-              <Typography fontSize={12} fontWeight="bold">
-                Signature
-              </Typography>
             </TableCell>
           </TableRow>
         </TableBody>

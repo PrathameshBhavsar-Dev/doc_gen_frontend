@@ -49,7 +49,7 @@
 
 //       {/* Main Content */}
 //       <Box sx={{ px: "32mm", pt: "28mm", pb: "40mm" }}>
-      
+
 
 //         {/* Title */}
 //         <Typography
@@ -102,7 +102,7 @@
 //         </Typography>
 //       </Box>
 
-      
+
 //     </Page>
 //   );
 // };
@@ -217,7 +217,7 @@ const QuickExperience = ({ company, data }) => {
           <strong>{data.designation}</strong>.
         </Typography>
 
-       <Typography sx={{ fontSize: 14, lineHeight: 2, mb: 15 }}>
+        <Typography sx={{ fontSize: 14, lineHeight: 2, mb: 10 }}>
           We wish {pronoun.object} success in{" "}
           {pronoun.possessive} future career.
         </Typography>
@@ -228,12 +228,12 @@ const QuickExperience = ({ company, data }) => {
         </Typography>
 
         {/* Signature & Stamp */}
-        <Box sx={{ display: "flex", gap: 5, alignItems: "flex-end", mb: 3 }}>
+        <Box sx={{ display: "flex", gap: 5, alignItems: "center", mb: 3 }}>
           {company.signature && (
-            <img src={company.signature} alt="Signature" height={55} />
+            <img src={company.signature} style={{ height: "75px", width: "auto" }} alt="Signature" />
           )}
           {company.stamp && (
-            <img src={company.stamp} alt="Stamp" height={65} />
+            <img src={company.stamp} style={{ height: "90px", width: "auto" }} alt="Stamp" />
           )}
         </Box>
 

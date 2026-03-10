@@ -140,7 +140,7 @@ const QuickFullandfinal = ({ company, data }) => {
     0
   );
 
-   const earnedTotal = earnings.reduce(
+  const earnedTotal = earnings.reduce(
     (sum, [, val]) => sum + Math.floor(val * paidRatio),
     0
   );
@@ -337,18 +337,52 @@ const QuickFullandfinal = ({ company, data }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
                 Prepared By
               </TableCell>
-              <TableCell sx={{ ...cell, ...center }}>
-                <img src={company.stamp} height={50} alt="stamp" />
-                <br />
-                Verified By
+              <TableCell sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {company.stamp && (
+                    <img
+                      src={company.stamp}
+                      style={{ height: "90px", width: "auto" }}
+                      alt="stamp"
+                    />
+                  )}
+                  <br />
+                  Verified By
+                </Box>
               </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                <img src={company.signature} height={45} alt="sign" />
-                <br />
-                Approved By
+              <TableCell colSpan={2} sx={{ ...cell, ...center, height: 100, verticalAlign: "middle" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  {company.signature && (
+                    <img
+                      src={company.signature}
+                      style={{ height: "75px", width: "auto" }}
+                      alt="sign"
+                    />
+                  )}
+                  <br />
+                  Approved By
+                </Box>
               </TableCell>
             </TableRow>
 
@@ -356,7 +390,7 @@ const QuickFullandfinal = ({ company, data }) => {
         </Table>
       </Box>
 
-    
+
     </Box>
   );
 };
