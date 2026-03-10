@@ -17,11 +17,14 @@ import {
   Chip,
   IconButton,
 } from "@mui/material";
-
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import { Download, Visibility } from "@mui/icons-material";
 import profile from "../../assets/images/profile.png";
 import company_icon from "../../assets/images/companies_icon.png";
-
+import { useState } from "react";
 const tableData = [
   {
     name: "Rahul Sharma",
@@ -113,6 +116,42 @@ const tableData = [
   },
 ];
 const UserHistoryPage = () => {
+  const [timeFilter, setTimeFilter] = useState("");
+
+  const filteredData = tableData.filter((item) => {
+    if (!timeFilter) return true;
+
+    const today = new Date();
+    const itemDate = new Date(item.date);
+
+    if (timeFilter === "day") {
+      return itemDate.toDateString() === today.toDateString();
+    }
+
+    if (timeFilter === "week") {
+      const firstDay = new Date(
+        today.setDate(today.getDate() - today.getDay()),
+      );
+      return itemDate >= firstDay;
+    }
+
+    if (timeFilter === "month") {
+      return (
+        itemDate.getMonth() === today.getMonth() &&
+        itemDate.getFullYear() === today.getFullYear()
+      );
+    }
+
+    if (timeFilter === "year") {
+      return itemDate.getFullYear() === today.getFullYear();
+    }
+
+    return true;
+  });
+
+  const [period, setPeriod] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+
   return (
     <Box sx={{ minHeight: "100vh", width: "100%" }}>
       {/* HEADER */}
@@ -190,7 +229,7 @@ const UserHistoryPage = () => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr",
+              md: "1fr 1fr 1fr",
             },
             gap: 3,
           }}
@@ -282,6 +321,86 @@ const UserHistoryPage = () => {
               <MenuItem value="newage">Newage Cloud</MenuItem>
             </Select>
           </Box>
+          {/* TIME FILTER */}
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: 500,
+                mb: 1,
+              }}
+            >
+              View By
+            </Typography>
+
+            <Select
+              fullWidth
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+              displayEmpty
+              sx={{
+                height: 48,
+                borderRadius: "14px",
+                backgroundColor: "#F3F4F6",
+                fontSize: "14px",
+              }}
+              renderValue={(selected) => {
+                if (!selected) {
+                  return (
+                    <span style={{ color: "#9CA3AF" }}>Select Period</span>
+                  );
+                }
+                return selected;
+              }}
+            >
+              <MenuItem value="Today">Today</MenuItem>
+              <MenuItem value="Week">This Week</MenuItem>
+              <MenuItem value="Month">This Month</MenuItem>
+              <MenuItem value="Year">This Year</MenuItem>
+              <MenuItem value="Custom">Custom Date</MenuItem>
+            </Select>
+            {period === "Custom" && (
+              <Box
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  borderRadius: "12px",
+                  backgroundColor: "#F9FAFB",
+                  border: "1px solid #E5E7EB",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    mb: 1,
+                    color: "#6B7280",
+                  }}
+                >
+                  Select Specific Date
+                </Typography>
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    value={selectedDate}
+                    onChange={(newValue) => setSelectedDate(newValue)}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        size: "small",
+                        sx: {
+                          "& .MuiOutlinedInput-root": {
+                            borderRadius: "10px",
+                            backgroundColor: "#F3F4F6",
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Paper>
 
@@ -308,7 +427,7 @@ const UserHistoryPage = () => {
             </TableHead>
 
             <TableBody>
-              {tableData.map((row, index) => (
+              {filteredData.map((row, index) => (
                 <TableRow key={index} hover>
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

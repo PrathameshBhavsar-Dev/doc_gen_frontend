@@ -4,7 +4,7 @@ import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutl
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-
+import { FiEdit } from "react-icons/fi";
 function GeneratedDocumentSection() {
   const documents = [
     {
@@ -227,6 +227,7 @@ function GeneratedDocumentSection() {
 
                 {/* Actions */}
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+                  {/* View */}
                   <IconButton
                     sx={{
                       width: 36,
@@ -241,6 +242,20 @@ function GeneratedDocumentSection() {
                     />
                   </IconButton>
 
+                  {/* Edit */}
+                  <IconButton
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: "8px",
+                      backgroundColor: "#FEF3C7",
+                      "&:hover": { backgroundColor: "#FDE68A" },
+                    }}
+                  >
+                    <FiEdit style={{ fontSize: 18, color: "#F59E0B" }} />
+                  </IconButton>
+
+                  {/* Download */}
                   <IconButton
                     sx={{
                       width: 36,
