@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import A4Page from "../../../../layout/A4Page";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaPaidInternshipLetter = ({ company, data }) => {
   const firstName = data.employeeName?.split(" ")[0] || "";
 
@@ -132,37 +132,60 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
         footerSrc={company.footer}
         // watermarkSrc={company.watermark}
       >
-        <Box>
-          <Typography sx={{ fontFamily: "Bahnschrift",marginTop:"-8mm" }} align="right" mb={3}>
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {" "}
+          <Typography
+            sx={{ fontFamily: "Bahnschrift", marginTop: "-8mm" }}
+            align="right"
+            mb={3}
+          >
             {formatDate(data.issueDate)}
           </Typography>
-
           <Typography
-                                sx={{
-                                  textAlign: "Center",
-                                  marginTop: "-8mm",
-                                  mb: "5mm",
-                                  fontFamily: "Verdana",
-                                  textDecoration: "underline",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                Internship Letter
-                              </Typography>
-
+            sx={{
+              textAlign: "Center",
+              marginTop: "-8mm",
+              mb: "5mm",
+              fontFamily: "Verdana",
+              textDecoration: "underline",
+              fontSize: "15px",
+            }}
+          >
+            Internship Letter
+          </Typography>
           <Typography sx={{ fontFamily: "Bahnschrift" }} mb={1}>
             <strong>Name :</strong> {data.mrms} {data.employeeName}
           </Typography>
-
           <Typography sx={{ fontFamily: "Bahnschrift" }} mb={3}>
             <strong>Subject :</strong> Letter of intent for the Internship of
             position as <strong>{data.designation}</strong>
           </Typography>
-
           <Typography sx={{ fontFamily: "Bahnschrift" }} mb={2}>
             Dear {firstName},
           </Typography>
-
           <Typography
             sx={{ fontFamily: "Bahnschrift" }}
             mb={2}
@@ -174,7 +197,6 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
             date <strong>{formatDate(data.startDate)}</strong> considering your
             performance and support towards the organization.
           </Typography>
-
           <Typography
             sx={{ fontFamily: "Bahnschrift" }}
             mb={2}
@@ -187,12 +209,10 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
             </strong>{" "}
             per year.
           </Typography>
-
           {/* <Typography mb={2} textAlign="justify">
             Subject to various deductions as per companies and government
             policy.
           </Typography> */}
-
           <Typography
             sx={{ fontFamily: "Bahnschrift" }}
             mb={2}
@@ -203,12 +223,10 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
             family and hope it would be the beginning of a long and mutually
             beneficial association.
           </Typography>
-
           <Typography sx={{ fontFamily: "Bahnschrift" }} mb={4}>
             Kindly acknowledge the duplicate copy of this letter as an
             acceptance of this offer.
           </Typography>
-
           <Typography sx={{ fontFamily: "Bahnschrift" }} mb={3}>
             Yours Sincerely,
           </Typography>
@@ -219,7 +237,6 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
           >
             For Nimbja Security Solutions Pvt. Ltd.
           </Typography>
-
           {/* SIGNATURE BLOCK */}
           <Box
             sx={{
@@ -267,7 +284,6 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
               </Typography>
             </Box>
           </Box>
-
           <Typography
             mt={1}
             fontSize="16px"

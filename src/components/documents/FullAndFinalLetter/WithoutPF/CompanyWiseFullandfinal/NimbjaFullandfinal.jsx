@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
@@ -144,7 +144,30 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
     <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Segoe UI" }}>
       {company.header && <img src={company.header} width="100%" alt="" />}
 
-      <Box p="10mm">
+      <Box
+        component="img"
+        src={watermark}
+        alt="watermark"
+        sx={{
+          position: "absolute",
+          top: "90%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "30%",
+          opacity: 0.6,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* CONTENT */}
+      <Box
+        className="a4-content-only"
+        sx={{
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
             {/* TITLE */}
@@ -340,16 +363,33 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
             {/* SIGNATURE */}
             <TableRow>
               <TableCell sx={{ ...cell, ...center }}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}>
+              <TableCell
+                sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}
+              >
                 {company.stamp && (
-                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img src={company.stamp} width={100} alt="" />
                   </Box>
                 )}
               </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}>
+              <TableCell
+                colSpan={2}
+                sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}
+              >
                 {company.signature && (
-                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <img src={company.signature} width={220} alt="" />
                   </Box>
                 )}
