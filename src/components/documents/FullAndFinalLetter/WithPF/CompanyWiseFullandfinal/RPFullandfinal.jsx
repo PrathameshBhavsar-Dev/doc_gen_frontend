@@ -231,7 +231,7 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
                         </TableRow>
             
                         <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
+                          <TableCell colSpan={2} sx={cell}>Leave encashment  </TableCell>
                           <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                             00
                           </TableCell>
@@ -259,10 +259,10 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
                         <TableRow>
                           <TableCell sx={{ ...cell, ...center }}></TableCell>
                           <TableCell sx={{ ...cell, ...center }}>
-                            {company.stamp && <img src={company.stamp} height={60} alt="" />}
+                            {company.stamp && <img src={company.stamp} height={40} alt="" />}
                           </TableCell>
                           <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                            {company.signature && <img src={company.signature} height={45} alt="" />}
+                            {company.signature && <img src={company.signature}  alt="" />}
                           </TableCell>
                         </TableRow>
             
