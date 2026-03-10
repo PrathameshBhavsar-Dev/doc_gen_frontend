@@ -1,273 +1,5 @@
-// import React from "react";
-// import {
-//   Box,
-//   Typography,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableRow,
-// } from "@mui/material";
-// import A4Page from "../../../../layout/A4Page";
-// import { formatCurrency } from "../../../../../utils/salaryCalculations";
-
-// const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
-//   const firstName = data.employeeName?.split(" ")[0] || "";
-
-//   const formatDate = (date) =>
-//     date
-//       ? new Date(date).toLocaleDateString("en-US", {
-//           month: "long",
-//           day: "numeric", // 👈 change here
-//           year: "numeric",
-//         })
-//       : "";
-
-
-//   /* ================= SALARY LOGIC ================= */
-
-//   const round2 = (num) => Number(num.toFixed(2));
-//   const annualCTC = round2(Number(data.totalSalary || 0));
-
-//   const basicAnnual = round2(annualCTC * 0.4);
-//   const hraAnnual = round2(annualCTC * 0.18);
-//   const daAnnual = round2(annualCTC * 0.12);
-//   const specialAnnual = round2(annualCTC * 0.16);
-//   const foodAnnual = round2(annualCTC * 0.06);
-
-//   const usedAnnual =
-//     basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual;
-
-//   const miscAnnual = round2(annualCTC - usedAnnual);
-
-//   const basicMonthly = round2(basicAnnual / 12);
-//   const hraMonthly = round2(hraAnnual / 12);
-//   const daMonthly = round2(daAnnual / 12);
-//   const specialMonthly = round2(specialAnnual / 12);
-//   const foodMonthly = round2(foodAnnual / 12);
-//   const miscMonthly = round2(miscAnnual / 12);
-
-//   const salaryRows = [
-//     ["Basic", basicMonthly, basicAnnual],
-//     ["House Rent Allowance", hraMonthly, hraAnnual],
-//     ["Dearness Allowance", daMonthly, daAnnual],
-//     ["Special Allowance", specialMonthly, specialAnnual],
-//     ["Food Allowance", foodMonthly, foodAnnual],
-//     ["Misc. Allowance", miscMonthly, miscAnnual],
-//   ];
-
-//   const totalMonthly = round2(salaryRows.reduce((sum, row) => sum + row[1], 0));
-
-//   const totalAnnual = round2(salaryRows.reduce((sum, row) => sum + row[2], 0));
-
-//   return (
-//     <>
-//       {/* ================= PAGE 1 ================= */}
-//       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-//         <Box>
-//           <Typography
-//             align="right"
-//             mb={3}
-//             sx={{ fontFamily: "Verdana", mt: "-5mm" }}
-//           >
-//             {formatDate(data.issueDate)}
-//           </Typography>
-
-//           <Typography
-//             align="center"
-//             mb={3}
-//             sx={{
-//               fontFamily: "Verdana",
-//               mt: "-5mm",
-//               textDecoration: "underline",
-//             }}
-//           >
-//             Confirmation Letter
-//           </Typography>
-
-//           <Typography mb={1} sx={{ fontFamily: "Times New Roman" }}>
-//             <strong>Name :</strong> {data.employeeName}
-//           </Typography>
-
-//           <Typography b={2} sx={{ fontFamily: "Times New Roman", mt: "-2mm" }}>
-//             <strong>Address:</strong> {data.address}
-//           </Typography>
-
-//           <Typography mb={3} sx={{ fontFamily: "Times New Roman" }}>
-//             <strong>Subject :</strong> Letter of intent for continued services
-//             as <strong>{data.position}</strong>
-//           </Typography>
-
-//           <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
-//             Dear {firstName},
-//           </Typography>
-
-//           <Typography
-//             mb={2}
-//             textAlign="justify"
-//             sx={{ fontFamily: "Times New Roman" }}
-//           >
-//             We are pleased to confirm your continued services at the position of{" "}
-//             <strong>{data.position}</strong> with
-//             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
-//             effective date <strong>{data.effectiveDate}</strong>, considering
-//             your performance and support towards the organization.
-//           </Typography>
-
-//           <Typography
-//             mb={2}
-//             textAlign="justify"
-//             sx={{ fontFamily: "Times New Roman" }}
-//           >
-//             If there is any change in the date of joining, changes can be taken
-//             under consideration. Your total Gross salary will be Rs.{" "}
-//             <strong>{formatCurrency(data.totalSalary)}</strong> per year.
-//             <br />
-//             Subject to various deductions as per companies and government policy
-//           </Typography>
-
-//           {/* <Typography
-//             mb={2}
-//             textAlign="justify"
-//             sx={{ fontFamily: "Bahnschrift" }}
-//           >
-            
-            
-//           </Typography> */}
-
-//           <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
-//             The roles and responsibilities and other terms and conditions of
-//             your employment will be specified of appointment.We welcome you to
-//             SmartMatrix Digital Services Pvt Ltd.
-//           </Typography>
-
-//           <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
-//             Family and hope it would be the beginning of a long and mutually
-//             beneficial association. Kindly acknowledge the duplicate copy of
-//             this letter as an acceptance of this offer.
-//           </Typography>
-
-//           <Typography sx={{ fontFamily: "Verdana", fontSize: "14pt" }}>
-//              <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
-//           </Typography>
-
-//           {/* Signature Block */}
-//           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-//             <Box>
-//               <Box sx={{ display: "flex", gap: 3 }}>
-//                 {company?.signature && (
-//                   <img
-//                     src={company.signature}
-//                     alt="Signature"
-//                     style={{ height: 42, width: 140, marginTop: "6mm" }}
-//                   />
-//                 )}
-//                 {company?.stamp && (
-//                   <img
-//                     src={company.stamp}
-//                     alt="Stamp"
-//                     style={{ height: 110, marginLeft: "-2mm" }}
-//                   />
-//                 )}
-//               </Box>
-//               <Typography mt={1}>
-//                 <strong>{company.hrName}</strong>
-//               </Typography>
-//               <Typography>
-//                 <strong>HR Relations Lead</strong>
-//               </Typography>
-//             </Box>
-//           </Box>
-//         </Box>
-//       </A4Page>
-
-//       {/* ================= PAGE 2 ================= */}
-//       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-//         <Typography align="center" fontWeight={600} mb={4}>
-//           Annexure A – Salary Structure
-//         </Typography>
-
-//         <Table
-//           sx={{
-//             width: "100%",
-//             border: "1px solid #000",
-//             "& td": {
-//               border: "1px solid #000",
-//               padding: "6px",
-//               fontSize: "14px",
-//             },
-//           }}
-//         >
-//           <TableBody>
-//             <TableRow sx={{ backgroundColor: "#f17e25" }}>
-//               <TableCell>
-//                 <b>Salary Components</b>
-//               </TableCell>
-//               <TableCell align="right">
-//                 <b>Per month (Rs.)</b>
-//               </TableCell>
-//               <TableCell align="right">
-//                 <b>Per Annum (Rs.)</b>
-//               </TableCell>
-//             </TableRow>
-
-//             {salaryRows.map(([name, monthly, annual], i) => (
-//               <TableRow key={i}>
-//                 <TableCell>{name}</TableCell>
-//                 <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-//                 <TableCell align="right">{formatCurrency(annual)}</TableCell>
-//               </TableRow>
-//             ))}
-
-//             <TableRow sx={{ backgroundColor: "#f17e25" }}>
-//               <TableCell>
-//                 <b>Total Monthly Gross Salary</b>
-//               </TableCell>
-//               <TableCell align="right">
-//                 <b>{formatCurrency(totalMonthly)}</b>
-//               </TableCell>
-//               <TableCell align="right">
-//                 <b>{formatCurrency(totalAnnual)}</b>
-//               </TableCell>
-//             </TableRow>
-//           </TableBody>
-//         </Table>
-
-//         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 10 }}>
-//           <Box>
-//             <Box sx={{ display: "flex", gap: 3 }}>
-//               {company?.signature && (
-//                 <img
-//                   src={company.signature}
-//                   alt="Signature"
-//                   style={{ height: 42, width: 140, marginTop: "9mm" }}
-//                 />
-//               )}
-//               {company?.stamp && (
-//                 <img
-//                   src={company.stamp}
-//                   alt="Stamp"
-//                   style={{ height: 110, marginLeft: "-2mm" }}
-//                 />
-//               )}
-//             </Box>
-//             <Typography mt={1}>
-//               <strong>{company.hrName}</strong>
-//             </Typography>
-//             <Typography>
-//               <strong>HR Relations Lead</strong>
-//             </Typography>
-//           </Box>
-//         </Box>
-//       </A4Page>
-//     </>
-//   );
-// };
-
-// export default SmartMatrixConfirmation;
-
-
-
 import React from "react";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 import {
   Box,
   Typography,
@@ -360,15 +92,15 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
     return `${inWords(Math.round(num))} Rupees Only`;
   };
 
-  /* ================= SALARY LOGIC ================= */
+  /* ================= SALARY LOGIC (WITH PF) ================= */
 
   const round0 = (num) => Math.round(num);
 
-  // ================= MONTHLY CTC =================
+  // 🔹 Source of Truth → Monthly salary entered by user
   const monthlyCTC = round0(Number(data.totalSalary || 0));
 
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+  // ================= PERCENTAGE BREAKUP =================
+  const basicMonthly = round0(monthlyCTC * 0.48);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
@@ -392,10 +124,10 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
     ["Dearness Allowance", daMonthly, daAnnual],
     ["Special Allowance", specialMonthly, specialAnnual],
     ["Food Allowance", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 
-  // ================= TOTAL EARNINGS =================
+  // ================= TOTAL GROSS (WITHOUT PF) =================
   const totalMonthly =
     basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
 
@@ -405,12 +137,14 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box>
-          <Typography
-            align="right"
-            mb={3}
-            sx={{ fontFamily: "Verdana", mt: "-5mm" }}
-          >
+        <Box
+          sx={{
+            fontFamily: "'Times New Roman', Times, serif",
+            fontSize: "12pt",
+            lineHeight: 1.6,
+          }}
+        >
+          <Typography align="right" mb={3} sx={{ mt: "-5mm" }}>
             {formatDate(data.issueDate)}
           </Typography>
 
@@ -418,7 +152,6 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             align="center"
             mb={3}
             sx={{
-              fontFamily: "Verdana",
               mt: "-5mm",
               textDecoration: "underline",
             }}
@@ -426,71 +159,55 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             Confirmation Letter
           </Typography>
 
-          <Typography mb={1} sx={{ fontFamily: "Times New Roman" }}>
+          <Typography mb={1}>
             <strong>Name :</strong> {data.employeeName}
           </Typography>
 
-          <Typography b={2} sx={{ fontFamily: "Times New Roman", mt: "-2mm" }}>
+          <Typography b={2} sx={{ mt: "-2mm" }}>
             <strong>Address:</strong> {data.address}
           </Typography>
 
-          <Typography mb={3} sx={{ fontFamily: "Times New Roman" }}>
-            <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.position}</strong>
+          <Typography mb={3}>
+            <strong>Subject :</strong>{" "}
+            <u>
+              Letter of intent for continued services as{" "}
+              <strong>{data.position}</strong>.
+            </u>
           </Typography>
 
-          <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
-            Dear {firstName},
-          </Typography>
+          <Typography mb={2}>Dear {firstName},</Typography>
 
-          <Typography
-            mb={2}
-            textAlign="justify"
-            sx={{ fontFamily: "Times New Roman" }}
-          >
+          <Typography mb={2} textAlign="justify">
             We are pleased to confirm your continued services at the position of{" "}
             <strong>{data.position}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
-            effective date <strong>{data.effectiveDate}</strong> considering
-            your performance and support towards the organization.
+            effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
+            considering your performance and support towards the organization.
           </Typography>
 
-          <Typography
-            mb={2}
-            textAlign="justify"
-            sx={{ fontFamily: "Times New Roman" }}
-          >
+          <Typography mb={2} textAlign="justify">
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(data.totalSalary)}</strong> (
-            {numberToWords(Number(data.totalSalary))}
-            ) per year.
-            <br />
-            Subject to various deductions as per companies and government policy
+            <strong>{formatCurrency(totalAnnual)}</strong> (
+            {numberToWords(totalAnnual)}) per year.
+          </Typography>
+          <Typography mb={2}>
+            Subject to various deductions as per companies and government
+            policy.
           </Typography>
 
-          {/* <Typography
-            mb={2}
-            textAlign="justify"
-            sx={{ fontFamily: "Bahnschrift" }}
-          >
-            
-            
-          </Typography> */}
-
-          <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
+          <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
-            your employment will be specified of appointment.We welcome you to
-            SmartMatrix Digital Services Pvt Ltd.
+            your employment will be specified in your letter of appointment. We
+            welcome you to SmartMatrix Digital Services Pvt Ltd. Family and hope
+            it would be the beginning of a long and mutually beneficial
+            association. Kindly acknowledge the duplicate copy of this letter as
+            an acceptance of this offer.
           </Typography>
 
-          <Typography mb={2} sx={{ fontFamily: "Times New Roman" }}>
-            Family and hope it would be the beginning of a long and mutually
-            beneficial association. Kindly acknowledge the duplicate copy of
-            this letter as an acceptance of this offer.
-          </Typography>
+          <Typography mb={2}></Typography>
 
-          <Typography sx={{ fontFamily: "Verdana", fontSize: "14pt" }}>
+          <Typography sx={{ fontSize: "14pt", marginTop: "50px" }}>
             <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
           </Typography>
 
@@ -500,9 +217,9 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
               <Box sx={{ display: "flex", gap: 3 }}>
                 {company?.signature && (
                   <img
-                    src={company.signature}
+                    src={sign}
                     alt="Signature"
-                    style={{ height: 42, width: 140, marginTop: "6mm" }}
+                    style={{ height: 42, width: 140, marginTop: "20mm" }}
                   />
                 )}
                 {company?.stamp && (
@@ -546,10 +263,10 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
               <TableCell>
                 <b>Salary Components</b>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <b>Per month (Rs.)</b>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <b>Per Annum (Rs.)</b>
               </TableCell>
             </TableRow>
@@ -557,8 +274,8 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             {salaryRows.map(([name, monthly, annual], i) => (
               <TableRow key={i}>
                 <TableCell>{name}</TableCell>
-                <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(annual)}</TableCell>
+                <TableCell align="center">{formatCurrency(monthly)}</TableCell>
+                <TableCell align="center">{formatCurrency(annual)}</TableCell>
               </TableRow>
             ))}
 
@@ -566,24 +283,28 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
               <TableCell>
                 <b>Total Monthly Gross Salary</b>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <b>{formatCurrency(totalMonthly)}</b>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <b>{formatCurrency(totalAnnual)}</b>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 10 }}>
+        <Typography
+          sx={{ fontFamily: "Verdana", fontSize: "14pt", marginTop: "50px" }}
+        >
+          <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 5 }}>
           <Box>
             <Box sx={{ display: "flex", gap: 3 }}>
               {company?.signature && (
                 <img
-                  src={company.signature}
+                  src={sign}
                   alt="Signature"
-                  style={{ height: 42, width: 140, marginTop: "6mm" }}
+                  style={{ height: 42, width: 140, marginTop: "20mm" }}
                 />
               )}
               {company?.stamp && (

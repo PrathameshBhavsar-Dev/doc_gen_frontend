@@ -12,6 +12,14 @@ import A4Page from "../../../../layout/A4Page";
 
 const RPIncrement = ({ company = {}, data = {} }) => {
 
+
+  const getFinancialYear = (effectiveDate) => {
+  if (!effectiveDate) return "";
+
+  const year = new Date(effectiveDate).getFullYear();
+  return `${year - 1} - ${year}`;
+};
+
   /* ================= HELPER ================= */
   const round2 = (num) => Number(Number(num).toFixed(2));
 
@@ -24,13 +32,13 @@ const RPIncrement = ({ company = {}, data = {} }) => {
         })
       : "";
 
-  const getFinancialYear = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    return month >= 4 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
-  };
+  // const getFinancialYear = (date) => {
+  //   if (!date) return "";
+  //   const d = new Date(date);
+  //   const year = d.getFullYear();
+  //   const month = d.getMonth() + 1;
+  //   return month >= 4 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+  // };
 
   /* ================= SALARY LOGIC ================= */
   const round0 = (num) => Math.round(num);
@@ -98,7 +106,7 @@ const totalAnnual = totalMonthly * 12;
 
           <Typography mb={3}>
             Your performance has been reviewed and your performance banding for
-            the year {getFinancialYear(data.effectiveDate)} is{" "}
+            the year  {getFinancialYear(data.effectiveDate)} is{" "}
             <strong>"Met Expectation".</strong>
           </Typography>
 

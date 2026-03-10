@@ -8,11 +8,15 @@ import {
   Typography,
 } from "@mui/material";
 
+import A4Page from "../../../../layout/A4Page";
+
+
 /* ================== COMMON STYLES ================== */
 const cell = {
-  border: "1px solid #000",
-  fontSize: "13px",
-  padding: "4px 6px",
+   border: "1px solid #000",
+  fontSize: "13px",      // smaller text
+  padding: "3px 5px",    // less spacing
+  // lineHeight: 1.2,
 };
 
 const bold = { fontWeight: 700 };
@@ -60,27 +64,27 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
   const gross = Number(data.totalSalary || 0);
 
-  const basic = +(gross * 0.4).toFixed(2);
-  const hra = +(gross * 0.18).toFixed(2);
-  const da = +(gross * 0.12).toFixed(2);
-  const special = +(gross * 0.16).toFixed(2);
-  const food = +(gross * 0.06).toFixed(2);
+  const basic = +(gross * 0.48);
+  const hra = +(gross * 0.18);
+  const da = +(gross * 0.12);
+  const special = +(gross * 0.16);
+  const food = +(gross * 0.06);
 
   // ✅ PF Allowance Static
   const pfAllowance = 3750;
 
-  const earned = (v) => +(v * ratio).toFixed(2);
+  const earned = (v) => +(v * ratio);
 
   const totalActual =
-    basic + hra + da + special + food + pfAllowance;
+    basic + hra + da + special + food
 
   const totalEarned =
     earned(basic) +
     earned(hra) +
     earned(da) +
     earned(special) +
-    earned(food) +
-    pfAllowance; // static earned
+    earned(food)
+    // pfAllowance; // static earned
 
   /* ---------- DEDUCTIONS ---------- */
   const pf = 3750;
@@ -93,10 +97,9 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
   const netPay = totalEarned - totalDeductions;
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Segoe UI" }}>
-      {company.header && <img src={company.header} width="100%" alt="" />}
+<A4Page headerSrc={company.header} footerSrc={company.footer}>
 
-      <Box p="10mm">
+      <Box sx={{ width: "95%", margin: "0 auto" }}>
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
 
@@ -193,7 +196,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell> 
             </TableRow>
 
             {/* Deductions */}
@@ -275,9 +278,8 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
           </TableBody>
         </Table>
       </Box>
-
-      {company.footer && <img src={company.footer} width="100%" alt="" />}
-    </Box>
+</A4Page>   
+    
   );
 };
 

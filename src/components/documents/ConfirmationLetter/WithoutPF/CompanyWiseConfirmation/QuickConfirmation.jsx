@@ -21,7 +21,7 @@ const formatDate = (date) =>
       })
     : "";
 
-const round2 = (n) => Number(Number(n || 0).toFixed(2));
+const round0 = (n) => Math.round(Number(n || 0));
 
 const formatCurrency = (v) =>
   Number(v || 0).toLocaleString("en-IN", {
@@ -32,36 +32,39 @@ const formatCurrency = (v) =>
 /* ================= SIMPLE SALARY BREAKUP ================= */
 /* ================= SALARY BREAKUP WITH PENTA LOGIC ================= */
 
-const generateSalaryBreakup = (annualCTC) => {
-  const round0 = (num) => Math.round(num);
+const QuickConfirmation = ({ company = {}, data = {} }) => {
+  if (!company || !data) return null;
 
-  const annual = round0(Number(annualCTC || 0));
-  const monthlyCTC = round0(annual / 12);
+  const monthlyCTC = round0(Number(data.totalSalary || 0));
+  const annualCTC = monthlyCTC * 12;
 
-  const basicMonthly = round0(monthlyCTC * 0.40);
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-  const miscMonthly = round0(monthlyCTC * 0.08);
+  // ===== Percentage Breakup =====
+  let basicMonthly = round0(monthlyCTC * 0.40);
+  let hraMonthly = round0(monthlyCTC * 0.18);
+  let daMonthly = round0(monthlyCTC * 0.12);
+  let specialMonthly = round0(monthlyCTC * 0.16);
+  let foodMonthly = round0(monthlyCTC * 0.06);
+  let miscMonthly = round0(monthlyCTC * 0.08);
 
-  return [
+  // Fix rounding difference
+  const calculated =
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    miscMonthly;
+
+  basicMonthly += monthlyCTC - calculated;
+
+  const salaryRows = [
     ["Basic", basicMonthly, basicMonthly * 12],
     ["House Rent Allowance", hraMonthly, hraMonthly * 12],
     ["Dearness Allowance", daMonthly, daMonthly * 12],
     ["Special Allowance", specialMonthly, specialMonthly * 12],
     ["Food Allowance", foodMonthly, foodMonthly * 12],
-    ["Misc Allowance", miscMonthly, miscMonthly * 12],
+    ["Misc. Allowance", miscMonthly, miscMonthly * 12],
   ];
-};
-/* ================= MAIN COMPONENT ================= */
-
-const QuickConfirmation = ({ company = {}, data = {} }) => {
-  if (!company || !data) return null;
-
-  const annualCTC = Number(data.totalSalary || 0);
-
-  const salaryRows = generateSalaryBreakup(annualCTC);
 
   const monthlyGross = salaryRows.reduce(
     (sum, row) => sum + row[1],
@@ -110,19 +113,21 @@ const QuickConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
 
           <Typography fontSize={14} textAlign="justify" mt={2}>
-                     We are pleased to confirm your continued services at the position of Software Test<br />
-                     Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}
-                     <strong>{formatDate(data.effectiveDate)}</strong><br /> considering your performance and support towards the organization..
+                     We are pleased to confirm your continued services at the position of {data.position}<br />
+                     Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}<strong>{formatDate(data.effectiveDate)}</strong><br />
+                     considering your performance and support towards the organization..
                    </Typography>
          
                    <Typography fontSize={14} textAlign="justify" mt={2}>
                      If there is any change in the date of joining, changes can be taken under consideration<br />
-                     Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> per year.
+                     Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> Per Year.
                    </Typography>
          
          
                    <Typography fontSize={14} textAlign="justify" mt={2}>
-                     Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be Specified in your letter of appointment. We welcome you to R P BUSINESS SOLUTIONS LLP. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+                     Subject to various deductions as per companies and government policy.The roles and
+                      responsibilities and other terms and conditions of your employment will be Specified 
+                      in your letter of appointment. We welcome you to  {company.name}. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
                    </Typography>
 
           {/* Signature Section */}

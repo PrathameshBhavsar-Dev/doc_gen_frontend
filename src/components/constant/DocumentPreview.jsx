@@ -10,41 +10,31 @@ import {
   Alert,
   Snackbar
 } from '@mui/material';
-import { useCompany } from '../context/CompanyContext';
-import { useDocument } from '../context/DocumentContext';
-import { useAuth } from '../context/AuthContext';
+import { useCompany } from '../../core/contexts/CompanyContext';
+import { useDocument } from '../../core/contexts/DocumentContext';
+import { useAuth } from '../../core/contexts/AuthContext';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import ResponsiveContainer from '../components/common/ResponsiveContainer';
-import { generatePDF } from '../utils/pdfUtils'; // adjust path as needed
+import ResponsiveContainer from '../common/ResponsiveContainer';
+import { generatePDF } from '../../utils/pdfUtils'; // adjust path as needed
+import ROUTES from "../../core/constants/routes.constant";
 
 // Templates
-// import SalarySlipTemplate from '../components/documents/SalarySlip/SalarySlipTemplate';
-//import IncrementLetterTemplate from '../components/documents/IncrementLetter/IncrementLetterTemplate';
-import ExperienceLetterTemplate from '../components/documents/ExperienceLetter/ExperienceLetterTemplate';
-import RelievingLetterTemplate from '../components/documents/RelievingLetter/RelievingLetteTemplate';
-// import OfferLetterTemplate from '../components/documents/OfferLetter/WithoutPF/WithoutPFOfferLetterTemplate'
-//import AppointmentLetterTemplate from '../components/documents/AppointmentLeter/WithoutPF/WithoutPFAppointmentLetterTemplate';
-import InternshipLetterTemplate from '../components/documents/InternshipLetter/InternshipLetterTemplate';
-import CertificationLetterTemplate from '../components/documents/InternshipComplitionCertificate/CertificationLetterTemplate';
-//import FullandFinalLetterTemplate from '../components/documents/FullAndFinalLetter/FullAndFinalLetterTemplate';
-import SalarySlipLetterTemplate from "../components/documents/SalarySlip/SalarySlipTemplate";
-import IncrementTemplate from "../components/documents/IncrementLetter/IncrementTemplate";
-import OfferTemplate from "../components/documents/OfferLetter/OfferLetterTemplate";
-//import FullAndFinalLetterTemplate from "../components/documents/FullandFinalLetter/FullandFinalLetterTemplate";
-import AppointmentLetterTemplate from "../components/documents/AppointmentLeter/AppointmentLetterTemplate";
-import ConfirmationLetterTemplate from "../components/documents/ConfirmationLetter/ConfirmationLetterTemplate";
-import FullandfinalLetterTemplate from "../components/documents/FullandfinalLetter/FullandfinalLetterTemplate";
-//import FullAndFinalLetterTemplate from "../components/documents/FullAndFinalLetter/FullAndFinalLetterTemplate";
-
-
-
-
+import ExperienceLetterTemplate from '../documents/ExperienceLetter/ExperienceLetterTemplate';
+import RelievingLetterTemplate from '../documents/RelievingLetter/RelievingLetteTemplate';
+import InternshipLetterTemplate from '../documents/InternshipLetter/InternshipLetterTemplate';
+import CertificationLetterTemplate from '../documents/InternshipComplitionCertificate/CertificationLetterTemplate';
+import SalarySlipLetterTemplate from "../documents/SalarySlip/SalarySlipTemplate";
+import IncrementTemplate from "../documents/IncrementLetter/IncrementTemplate";
+import OfferTemplate from "../documents/OfferLetter/OfferLetterTemplate";
+import AppointmentLetterTemplate from "../documents/AppointmentLeter/AppointmentLetterTemplate";
+import ConfirmationLetterTemplate from "../documents/ConfirmationLetter/ConfirmationLetterTemplate";
+import FullandfinalLetterTemplate from "../documents/FullAndFinalLetter/FullandFinalLetterTemplate.jsx";
 
 const DocumentPreview = () => {
   const { selectedCompany } = useCompany();
   const { selectedDocType, documentData } = useDocument();
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const documentRef = useRef(null);
@@ -59,20 +49,18 @@ const DocumentPreview = () => {
 
   /* ================= AUTH + STATE CHECK ================= */
   useEffect(() => {
-    if (!currentUser) {
+    if (!user) {
       navigate("/login");
       return;
     }
 
-    // Redirect if no company or document type selected
-    if (
-      !selectedCompany ||
-      !selectedDocType ||
-      Object.keys(documentData).length === 0
-    ) {
-      navigate("/dashboard");
+    // wait until context loads
+    if (!selectedCompany || !selectedDocType) return;
+
+    if (Object.keys(documentData).length === 0) {
+      navigate(ROUTES.USER_DASHBOARD);
     }
-  }, [currentUser, selectedCompany, selectedDocType, documentData, navigate]);
+  }, [user, selectedCompany, selectedDocType, documentData, navigate]);
 
   /* ================= TEMPLATE RENDER ================= */
   const renderDocumentTemplate = () => {
@@ -80,17 +68,17 @@ const DocumentPreview = () => {
       case 'salary-slip':
         return <SalarySlipLetterTemplate data={documentData} company={selectedCompany} />;
 
-       case 'internship-certificate':
-      return (
-        <InternshipLetterTemplate data={documentData} company={selectedCompany}/>
-      );
+      case 'internship-certificate':
+        return (
+          <InternshipLetterTemplate data={documentData} company={selectedCompany} />
+        );
 
-       
+
       case 'offer-letter':
         return <OfferTemplate data={documentData} company={selectedCompany} />;
-        
-       case 'completion-certificate':
-         return <CertificationLetterTemplate data={documentData} company={selectedCompany} />;
+
+      case 'completion-certificate':
+        return <CertificationLetterTemplate data={documentData} company={selectedCompany} />;
 
       case 'increment-letter':
         return <IncrementTemplate data={documentData} company={selectedCompany} />;
@@ -100,7 +88,7 @@ const DocumentPreview = () => {
         return <ExperienceLetterTemplate data={documentData} company={selectedCompany} />;
       case 'relieving-letter':
         return <RelievingLetterTemplate data={documentData} company={selectedCompany} />;
-       case 'fullandfinal-letter':
+      case 'fullandfinal-letter':
         return <FullandfinalLetterTemplate data={documentData} company={selectedCompany} />;
 
       // case 'salary-transaction':
@@ -116,10 +104,10 @@ const DocumentPreview = () => {
       // case 'termination-letter':
       // return <TerminationLetterTemplate data={documentData} company={selectedCompany} />;
       // case 'transfer-letter':
-        // return <TransferLetterTemplate data={documentData} company={selectedCompany} />;
-        // case 'fullandfinal-letter':
-        //  return <FullAndFinalLetterTemplate data={documentData} company={selectedCompany} />;
-         case 'confirmation-letter':
+      // return <TransferLetterTemplate data={documentData} company={selectedCompany} />;
+      // case 'fullandfinal-letter':
+      //  return <FullAndFinalLetterTemplate data={documentData} company={selectedCompany} />;
+      case 'confirmation-letter':
         return <ConfirmationLetterTemplate data={documentData} company={selectedCompany} />;
       default:
         return <Typography>Template not found</Typography>;
@@ -127,30 +115,30 @@ const DocumentPreview = () => {
   };
 
   /* ================= PDF GENERATION (FULL) ================= */
- const handleDownloadPDF = async () => {
-  if (!documentRef.current) return;
+  const handleDownloadPDF = async () => {
+    if (!documentRef.current) return;
 
     setLoading(true);
     setError('');
 
-  try {
-    setSnackbarMessage('Generating PDF...');
-    setSnackbarOpen(true);
+    try {
+      setSnackbarMessage('Generating PDF...');
+      setSnackbarOpen(true);
 
-    await generatePDF(
-      documentRef.current,
-      `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
-    );
+      await generatePDF(
+        documentRef.current,
+        `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
+      );
 
-    setSnackbarMessage('PDF downloaded successfully');
-    setSnackbarOpen(true);
-  } catch (err) {
-    console.error(err);
-    setError('Failed to generate PDF');
-  } finally {
-    setLoading(false);
-  }
-};
+      setSnackbarMessage('PDF downloaded successfully');
+      setSnackbarOpen(true);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to generate PDF');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /* ================= PDF (CONTENT ONLY / WORD STYLE) ================= */
   const handleDownloadPDFWord = async () => {
@@ -217,7 +205,7 @@ const DocumentPreview = () => {
         <Typography variant={isMobile ? 'h5' : 'h4'}>Document Preview</Typography>
 
         <Box display="flex" gap={2} flexWrap="wrap">
-          <Button variant="outlined" onClick={() => navigate('/documents/create')}>
+          <Button variant="outlined" onClick={() => navigate('/document/create')}>
             Edit
           </Button>
           <Button variant="contained" onClick={handleDownloadPDF} disabled={loading}>

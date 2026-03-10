@@ -1,5 +1,6 @@
-
 import React from "react";
+import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
+
 import {
   Box,
   Grid,
@@ -13,28 +14,6 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-
-
-// ================= TABLE CELL STYLES =================
-const headCell = {
-  fontWeight: 700,
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
-
-const bodyCell = {
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
-
-const totalCell = {
-  fontWeight: 700,
-  border: "1px solid #333",
-  fontFamily: "Times New Roman",
-};
-
-
-
 
 /* ================= DATE FORMATTER ================= */
 const formatDate = (date) => {
@@ -52,14 +31,18 @@ const formatOneCurrency = (salary) => {
   const valueInLakhs = salary / 100000;
 
   // remove .0 if number is whole
-  return valueInLakhs % 1 === 0 
-    ? valueInLakhs.toString() 
+  return valueInLakhs % 1 === 0
+    ? valueInLakhs.toString()
     : valueInLakhs.toFixed(1);
 };
 
 const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
+  // 🔥 Input salary is MONTHLY
+  const monthlySalary = Number(data.salary || 0);
 
+  // Convert to annual
+  const annualSalary = monthlySalary * 12;
   return (
     <>
       {/* ================= FIRST PAGE ================= */}
@@ -89,9 +72,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
 
           {/* ================= ADDRESS ================= */}
           <p style={{ marginTop: "20mm", marginBottom: "6mm" }}>
-            
-              {data.mrms} {data.employeeName}
-            
+            {data.mrms} {data.employeeName}
             <br />
             {data.address}
           </p>
@@ -135,7 +116,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
 
           <p style={{ marginBottom: "6mm" }}>
             2. Your total emoluments will be{" "}
-            <strong>Rs. {formatOneCurrency(data.salary)}</strong> lakh per
+            <strong>Rs. {formatOneCurrency(annualSalary)}</strong> lakh per
             annum.
           </p>
 
@@ -180,15 +161,15 @@ const SmartMatrixAppointment = ({ company, data }) => {
           }}
         >
           <p style={{ textAlign: "justify", marginBottom: "6mm" }}>
-            7. You will be on probation for a period of six months from the
-            first of the calendar month following the date of your joining,
-            after which you will be confirmed if your work is found
-            satisfactory. The probation period can be extended at the discretion
-            of the Company. You shall continue to be on probation, till your
-            services are confirmed in writing by a letter of confirmation.In
-            case your performance is not found satisfactory during such period
-            of probation or extended period of probation and you shall be
-            informed of the same in writing.
+            7. You will be on probation for a period of {data.probationPeriod}{" "}
+            months from the first of the calendar month following the date of
+            your joining, after which you will be confirmed if your work is
+            found satisfactory. The probation period can be extended at the
+            discretion of the Company. You shall continue to be on probation,
+            till your services are confirmed in writing by a letter of
+            confirmation.In case your performance is not found satisfactory
+            during such period of probation or extended period of probation and
+            you shall be informed of the same in writing.
           </p>
 
           <p style={{ textAlign: "justify", marginBottom: "6mm" }}>
@@ -303,17 +284,17 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   <Grid item>
                     <Box
                       component="img"
-                      src={company?.stamp}
-                      alt="Stamp"
-                      sx={{ width: 110 }}
+                      src={sign}
+                      alt="Signature"
+                      sx={{ width: 140, mt: "18mm", ml: "-2mm" }}
                     />
                   </Grid>
                   <Grid item>
                     <Box
                       component="img"
-                      src={company?.signature}
-                      alt="Signature"
-                      sx={{ width: 140, mt: "18mm", ml: "-2mm" }}
+                      src={company?.stamp}
+                      alt="Stamp"
+                      sx={{ width: 110 }}
                     />
                   </Grid>
                 </Grid>
@@ -321,7 +302,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between", // ⬅️ LEFT & RIGHT alignment
+                    justifyContent: "space-between",
                     alignItems: "flex-start",
                     mt: "2mm",
                     width: "100%",
@@ -348,13 +329,12 @@ const SmartMatrixAppointment = ({ company, data }) => {
                     </Typography>
                   </Box>
 
-                  {/* ================= RIGHT — NAME & DATE ================= */}
                   {/* ================= RIGHT — NAME & DATE (SAME COLUMN) ================= */}
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column", // 🔑 vertical stacking
-                      alignItems: "flex-end", // 🔑 same right edge
+                      flexDirection: "column",
+                      alignItems: "flex-end",
                     }}
                   >
                     <Typography
@@ -371,7 +351,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                       sx={{
                         fontFamily:
                           '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                        mt: "2mm", // 🔑 small Word-like gap
+                        mt: "2mm",
                         textAlign: "right",
                         ml: "42mm",
                       }}
@@ -390,10 +370,6 @@ const SmartMatrixAppointment = ({ company, data }) => {
       {/* ======================= 🔴 FOURTH PAGE START ====================== */}
       {/* =================================================================== */}
 
-      {/* =================================================================== */}
-      {/* ======================= 🔴 FOURTH PAGE START ====================== */}
-      {/* =================================================================== */}
-
       <A4Page
         headerSrc={company?.header}
         footerSrc={company?.footer}
@@ -403,21 +379,26 @@ const SmartMatrixAppointment = ({ company, data }) => {
         {(() => {
           const round2 = (num) => Number(num.toFixed(2));
 
-          const annualCTC = round2(
-            Number(data.salary || data.ctc || data.annualSalary || 0)
-          );
+          // 🔥 INPUT IS MONTHLY SALARY
+          const monthlyCTC = round2(Number(data.salary || 0));
 
+          // Convert to Annual
+          const annualCTC = round2(monthlyCTC * 12);
+
+          // Annual breakup (percentage based)
           const basicAnnual = round2(annualCTC * 0.4);
           const hraAnnual = round2(annualCTC * 0.18);
           const daAnnual = round2(annualCTC * 0.12);
           const specialAnnual = round2(annualCTC * 0.16);
           const foodAnnual = round2(annualCTC * 0.06);
 
+          // Adjust remainder (to avoid rounding mismatch)
           const usedAnnual =
             basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual;
 
           const miscAnnual = round2(annualCTC - usedAnnual);
 
+          // Build rows
           const salaryComponents = [
             {
               name: "Basic",
@@ -440,23 +421,24 @@ const SmartMatrixAppointment = ({ company, data }) => {
               annual: specialAnnual,
             },
             {
+              name: "Facility Allowance",
+              monthly: round2(miscAnnual / 12),
+              annual: miscAnnual,
+            },
+            {
               name: "Food Allowance",
               monthly: round2(foodAnnual / 12),
               annual: foodAnnual,
             },
-            {
-              name: "Misc. Allowance",
-              monthly: round2(miscAnnual / 12),
-              annual: miscAnnual,
-            },
           ];
 
+          // Totals
           const totalMonthly = round2(
-            salaryComponents.reduce((sum, r) => sum + r.monthly, 0)
+            salaryComponents.reduce((sum, r) => sum + r.monthly, 0),
           );
 
           const totalAnnual = round2(
-            salaryComponents.reduce((sum, r) => sum + r.annual, 0)
+            salaryComponents.reduce((sum, r) => sum + r.annual, 0),
           );
 
           return (
@@ -519,26 +501,59 @@ const SmartMatrixAppointment = ({ company, data }) => {
               {/* ================= SALARY TABLE ================= */}
               <TableContainer
                 sx={{
-                  mt: "6mm",
-                  mb: "8mm",
-                  fontFamily:
-                    '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+                  mt: "8mm",
+                  mb: "6mm",
+                  fontFamily: "Calibri, 'Segoe UI', sans-serif",
                 }}
               >
-                <Table sx={{ border: "2px solid #333" }}>
+                <Table
+                  sx={{
+                    border: "2px solid #000",
+                    borderCollapse: "collapse",
+                    tableLayout: "fixed",
+                  }}
+                >
                   <TableHead>
                     <TableRow
                       sx={{
-                        backgroundColor: "rgba(215,121,34,0.9)",
-                        fontFamily:
-                          '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+                        backgroundColor: "#f28c28", // exact orange
                       }}
                     >
-                      <TableCell sx={headCell}>Salary Components</TableCell>
-                      <TableCell align="center" sx={headCell}>
+                      <TableCell
+                        sx={{
+                          width: "45%",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          border: "1px solid #000",
+                          padding: "6px 8px",
+                        }}
+                      >
+                        Salary Components
+                      </TableCell>
+
+                      <TableCell
+                        align="center"
+                        sx={{
+                          width: "27.5%",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          border: "1px solid #000",
+                          padding: "6px 8px",
+                        }}
+                      >
                         Per month (Rs.)
                       </TableCell>
-                      <TableCell align="center" sx={headCell}>
+
+                      <TableCell
+                        align="center"
+                        sx={{
+                          width: "27.5%",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          border: "1px solid #000",
+                          padding: "6px 8px",
+                        }}
+                      >
                         Per Annum (Rs.)
                       </TableCell>
                     </TableRow>
@@ -547,29 +562,77 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   <TableBody>
                     {salaryComponents.map((row, i) => (
                       <TableRow key={i}>
-                        <TableCell sx={bodyCell}>{row.name}</TableCell>
-                        <TableCell align="right" sx={bodyCell}>
+                        <TableCell
+                          sx={{
+                            border: "1px solid #000",
+                            fontSize: "14px",
+                            padding: "5px 8px",
+                          }}
+                        >
+                          {row.name}
+                        </TableCell>
+
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid #000",
+                            fontSize: "14px",
+                            padding: "5px 8px",
+                          }}
+                        >
                           {formatCurrency(row.monthly)}
                         </TableCell>
-                        <TableCell align="right" sx={bodyCell}>
+
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid #000",
+                            fontSize: "14px",
+                            padding: "5px 8px",
+                          }}
+                        >
                           {formatCurrency(row.annual)}
                         </TableCell>
                       </TableRow>
                     ))}
 
-                    {/* ================= TOTAL ROW ================= */}
-                    <TableRow
-                      sx={{
-                        backgroundColor: "",
-                        fontFamily:
-                          '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                      }}
-                    >
-                      <TableCell sx={totalCell}>Monthly Gross Salary</TableCell>
-                      <TableCell align="right" sx={totalCell}>
+                    {/* TOTAL ROW */}
+                    <TableRow>
+                      <TableCell
+                        sx={{
+                          border: "1px solid #000",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          padding: "6px 8px",
+                          background: "#f28c28",
+                        }}
+                      >
+                        Monthly Gross Salary
+                      </TableCell>
+
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid #000",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          padding: "6px 8px",
+                          background: "#f28c28",
+                        }}
+                      >
                         {formatCurrency(totalMonthly)}
                       </TableCell>
-                      <TableCell align="right" sx={totalCell}>
+
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid #000",
+                          fontWeight: 700,
+                          fontSize: "14px",
+                          padding: "6px 8px",
+                          background: "#f28c28",
+                        }}
+                      >
                         {formatCurrency(totalAnnual)}
                       </TableCell>
                     </TableRow>
@@ -580,16 +643,8 @@ const SmartMatrixAppointment = ({ company, data }) => {
           );
         })()}
       </A4Page>
-
-      {/* ================= OTHER PAGES (EMPTY FOR NOW) =================
-      <A4Page headerSrc={company.header} footerSrc={company.footer} />
-      <A4Page headerSrc={company.header} footerSrc={company.footer} />
-      <A4Page headerSrc={company.header} footerSrc={company.footer} /> */}
     </>
   );
 };
 
 export default SmartMatrixAppointment;
-
-
-

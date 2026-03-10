@@ -23,6 +23,8 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
+import SalaryStructureTable from "../../../../common/SalaryStructureTable";
+
 
 const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   const firstName = data.employeeName?.split(" ")[0] || "";
@@ -133,8 +135,8 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   // ================= SALARY TABLE =================
   const salaryRows = [
     ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
+    ["Bouquet Of Benefits", hraMonthly, hraAnnual],
+    ["Hra", daMonthly, daAnnual],
     ["City Allowance", specialMonthly, specialAnnual],
     ["Superannuation Fund", foodMonthly, foodAnnual],
     ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
@@ -145,14 +147,30 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
     basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
 
   const totalAnnual = totalMonthly * 12;
-
   return (
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Box>
-          <Typography align="right" mb={3} sx={{ fontFamily: "Bahnschrift" }}>
+          <Typography
+            align="right"
+            mb={3}
+            sx={{ fontFamily: "Bahnschrift", marginTop: "-10mm", mb: "8mm" }}
+          >
             {formatDate(data.issueDate)}
+          </Typography>
+
+          <Typography
+            sx={{
+              textAlign: "Center",
+              marginTop: "-8mm",
+              mb: "5mm",
+              fontFamily: "Verdana",
+              textDecoration: "underline",
+              fontSize: "15px",
+            }}
+          >
+            Confirmation Letter
           </Typography>
 
           <Typography mb={1} sx={{ fontFamily: "Bahnschrift" }}>
@@ -160,12 +178,12 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
 
           <Typography b={2} sx={{ fontFamily: "Bahnschrift", mt: "-2mm" }}>
-                      <strong>Address:</strong> {data.address}
-                    </Typography>
+            <strong>Address:</strong> {data.Address}
+          </Typography>
 
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.position}</strong>
+            as <strong>{data.designation}</strong>
           </Typography>
 
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
@@ -178,10 +196,10 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             sx={{ fontFamily: "Bahnschrift" }}
           >
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with{" "}
+            <strong>{data.designation}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
-            date <strong>{data.effectiveDate}</strong>, considering your
-            performance and support towards the organization.
+            date <strong>{formatDate(data.effectiveDate)}</strong>, considering
+            your performance and support towards the organization.
           </Typography>
 
           <Typography
@@ -191,7 +209,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(data.totalSalary)}</strong> per year.
+            <strong>{formatCurrency(totalAnnual)}</strong> per year.
           </Typography>
 
           <Typography
@@ -260,64 +278,45 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography align="center" fontWeight={600} mb={4}>
-          Annexure A – Salary Structure
-        </Typography>
+        <Box className="a4-content-only">
+          <Typography
+            sx={{
+              textAlign: "right",
+              mb: "5mm",
+              mt: "-12mm",
+              fontSize: "11pt",
+              fontFamily: "Bahnschrift",
+            }}
+          >
+            {formatDate(data.issueDate)}
+          </Typography>
 
-        <Table
-          sx={{
-            width: "100%",
-            border: "1px solid #000",
-            "& td": {
-              border: "1px solid #000",
-              padding: "6px",
-              fontSize: "14px",
-            },
-          }}
-        >
-          <TableBody>
-            <TableRow sx={{ backgroundColor: "#a1f569" }}>
-              <TableCell>
-                <b>Salary Components</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>Per month (Rs.)</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>Per Annum (Rs.)</b>
-              </TableCell>
-            </TableRow>
+          <Typography
+            sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+          >
+            <strong>
+              Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
+            </strong>
+          </Typography>
 
-            {salaryRows.map(([name, monthly, annual], i) => (
-              <TableRow key={i}>
-                <TableCell>{name}</TableCell>
-                <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(annual)}</TableCell>
-              </TableRow>
-            ))}
-
-            <TableRow sx={{ backgroundColor: "#a1f569" }}>
-              <TableCell>
-                <b>Total Monthly Gross Salary</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>{formatCurrency(totalMonthly)}</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>{formatCurrency(totalAnnual)}</b>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 10 }}>
+          {/* 🔥 ONLY THIS PART IS REPLACED */}
+          <SalaryStructureTable
+            salaryRows={salaryRows}
+            totalMonthly={totalMonthly}
+            totalAnnual={totalAnnual}
+            data={data}
+            formatDate={formatDate}
+          />
+        </Box>
+        {/* Signature Block */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
           <Box>
             <Box sx={{ display: "flex", gap: 3 }}>
               {company?.signature && (
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 50 }}
+                  style={{ height: 45 }}
                 />
               )}
               {company?.stamp && (

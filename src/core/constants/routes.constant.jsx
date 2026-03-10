@@ -10,6 +10,13 @@ class ROUTES {
 
   // Admin Pages
   static ADMIN_DASHBOARD = `${this.ADMIN_BASE}/dashboard`;
+  static ADMIN_COMPANY_MANAGEMENT = `${this.ADMIN_BASE}/company-dashboard`;
+  static ADMIN_USER_MANAGEMENT = `${this.ADMIN_BASE}/user-management`;
+  static ADMIN_HISTORY = `${this.ADMIN_BASE}/history`;
+  static ADMIN_SETTINGS = `${this.ADMIN_BASE}/settings`;
+  static ADMIN_ADD_COMPANY = `${this.ADMIN_BASE}/add-company`;
+  static ADMIN_COMPANY_DETAILS = `${this.ADMIN_BASE}/company-details/:id`;
+
 
   // User Pages
   static USER_DASHBOARD = `${this.USER_BASE}/dashboard`;
@@ -20,8 +27,10 @@ class ROUTES {
   static USER_FORM = `${this.USER_BASE}/form`;
 
   // Documents
-  static DOCUMENT_DASHBOARD = `${this.DOCUMENT_BASE}/dashboard`;
-  
+  static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
+  static DOCUMENT_PREVIEW = `${this.DOCUMENT_BASE}/preview`;
+  static DOCUMENT_GENERATE = `${this.DOCUMENT_BASE}/generate`;
+
 }
 
 export default ROUTES;

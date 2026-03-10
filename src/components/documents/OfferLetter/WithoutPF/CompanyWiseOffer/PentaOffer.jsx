@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import A4Page from "../../../../layout/A4Page";
 
 /* ===================== UTILITIES ===================== */
 const formatDate = (date) => {
@@ -28,49 +29,59 @@ const formatCurrency = (value) => {
 };
 
 /* ===================== SALARY CALCULATION ===================== */
-const calculateSalaryBreakup = (monthlyInput) => {
-  if (!monthlyInput) {
-    return { salaryBreakup: [], totalPerMonth: 0, totalPerYear: 0 };
-  }
 
+/* ===================== SALARY CALCULATION ===================== */
+
+const calculateSalaryBreakup = (annualCTC) => {
   const round0 = (num) => Math.round(num);
 
-  // 🔥 Monthly salary directly from form
-  const monthlyCTC = round0(Number(data.totalSalary || 0));1
-  
-
-  // First 5 components
-  const basicMonthly = round0(monthlyCTC * 0.40);
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // 🔥 Adjust misc to avoid mismatch
-  const miscMonthly =
-    monthlyCTC -
-    (basicMonthly +
-      hraMonthly +
-      daMonthly +
-      specialMonthly +
-      foodMonthly);
+  // 🔥 Your required percentages
+  const basicAnnual   = round0(annualCTC * 0.40);
+  const hraAnnual     = round0(annualCTC * 0.18);
+  const daAnnual      = round0(annualCTC * 0.12);
+  const specialAnnual = round0(annualCTC * 0.16);
+  const foodAnnual    = round0(annualCTC * 0.06);
+  const miscAnnual    = round0(annualCTC * 0.08);
 
   const salaryBreakup = [
-    { label: "Basic", perMonth: basicMonthly, perYear: basicMonthly * 12 },
-    { label: "House Rent Allowance", perMonth: hraMonthly, perYear: hraMonthly * 12 },
-    { label: "Dearness Allowance", perMonth: daMonthly, perYear: daMonthly * 12 },
-    { label: "Special Allowance", perMonth: specialMonthly, perYear: specialMonthly * 12 },
-    { label: "Food Allowance", perMonth: foodMonthly, perYear: foodMonthly * 12 },
-    { label: "Misc. Allowance", perMonth: miscMonthly, perYear: miscMonthly * 12 },
+    {
+      label: "Basic ",
+      perMonth: round0(basicAnnual / 12),
+      perYear: basicAnnual,
+    },
+    {
+      label: "House Rent Allowance ",
+      perMonth: round0(hraAnnual / 12),
+      perYear: hraAnnual,
+    },
+    {
+      label: "Dearness Allowance ",
+      perMonth: round0(daAnnual / 12),
+      perYear: daAnnual,
+    },
+    {
+      label: "Special Allowance ",
+      perMonth: round0(specialAnnual / 12),
+      perYear: specialAnnual,
+    },
+    {
+      label: "Food Allowance ",
+      perMonth: round0(foodAnnual / 12),
+      perYear: foodAnnual,
+    },
+    {
+      label: "Misc. Allowance ",
+      perMonth: round0(miscAnnual / 12),
+      perYear: miscAnnual,
+    },
   ];
 
   return {
     salaryBreakup,
-    totalPerMonth: monthlyCTC,
-    totalPerYear: annualCTC,
+    monthlyCTC: round0(annualCTC / 12),
+    annualCTC,
   };
 };
-
 /* ===================== PAGE WRAPPER ===================== */
 const Page = ({ company, children }) => (
   <Box
@@ -132,7 +143,7 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
             style={{
               position: "absolute", display: "flex",
               bottom: 30,
-              gap: 10,
+              gap: 5,
               left: 180,
               width: 90,
               opacity: 0.9,
@@ -152,7 +163,7 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
           {company.hrName}
         </Typography>
         <Typography sx={{ fontSize: 14, fontWeight: "bold" }}>
-          Group Leader – Shared HR Services
+          Group Leader - Shared HR Services
         </Typography>
       </Box>
 
@@ -181,17 +192,15 @@ const PentaOffer = ({ company, data }) => {
     );
   }
 
-  const annualCTC = Number(data.salary || 0);
-const finalData = calculateSalaryBreakup(monthyCTC);
+ const annualCTC = Number(data.salary || 0);
+const finalData = calculateSalaryBreakup(annualCTC);
   return (
     <>
       {/* ================= PAGE 1 – OFFER LETTER ================= */}
-      <Page company={company}>
-        {company.header && (
-          <img src={company.header} alt="Header" style={{ width: "100%" }} />
-        )}
-
-        <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}>
+      <A4Page 
+      headerSrc={company.header}
+      footerSrc={company.footer}>
+        {/* <Box sx={{ px: "30mm", pt: "8mm", pb: "35mm" }}> */}
 
   {/* ✅ ALIGNED NAME / ADDRESS / SUBJECT */}
   <Box
@@ -278,22 +287,21 @@ const finalData = calculateSalaryBreakup(monthyCTC);
             company={company}
             candidateName={data.candidateName}
           />
-        </Box>
+        {/* </Box> */}
 
-        {company.footer && (
+        {/* {company.footer && (
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <img src={company.footer} alt="Footer" style={{ width: "100%" }} />
           </Box>
-        )}
-      </Page>
+        )} */}
+      </A4Page>
 
       {/* ================= PAGE 2 – ANNEXURE A ================= */}
-      <Page company={company}>
-        {company.header && (
-          <img src={company.header} alt="Header" style={{ width: "100%" }} />
-        )}
-
-        <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}>
+      <A4Page
+         headerSrc={company.header}
+         footerSrc={company.footer}
+         >
+        {/* // <Box sx={{ px: "30mm", pt: "25mm", pb: "35mm" }}> */}
           <Typography
             sx={{
               fontSize: 16,
@@ -363,14 +371,14 @@ const finalData = calculateSalaryBreakup(monthyCTC);
             showCandidate={true}
           />
 
-        </Box>
+        {/* </Box> */}
 
-        {company.footer && (
+         {/* {company.footer && (
           <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <img src={company.footer} alt="Footer" style={{ width: "100%" }} />
           </Box>
-        )}
-      </Page>
+        )} */}
+      </A4Page>
     </>
   );
 };

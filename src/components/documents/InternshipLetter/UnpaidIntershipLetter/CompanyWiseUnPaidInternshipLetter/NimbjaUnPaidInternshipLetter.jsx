@@ -1,137 +1,199 @@
 import React from "react";
-import {
-    Box,
-    Typography,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Paper,
-} from "@mui/material";
-import A4Layout from "../../../../layout/A4Page";
-import {
-    generateAnnexureSalaryStructure,
-    formatCurrency,
-} from "../../../../../utils/salaryCalculations";
+import { Box, Typography } from "@mui/material";
+import A4Page from "../../../../layout/A4Page";
 
+const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
+  // ✅ Safe firstName extraction
+  const firstName =
+    data?.employeeName && typeof data.employeeName === "string"
+      ? data.employeeName.split(" ")[0]
+      : "";
 
-/* ================= DATE FORMAT ================= */
-const formatDate = (date) => {
-  if (!date) return "";
+  const formatDate = (date) =>
+    date
+      ? new Date(date).toLocaleDateString("en-US", {
+          month: "long",
+          day: "2-digit",
+          year: "numeric",
+        })
+      : "";
 
-  const d = new Date(date); // 🔥 dynamic input (string / Date)
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-
-  return `${day}/${month}/${year}`;
-};
-
-
-const NimbjaUnPaidInternshipLetter = ({ company, data }) => {
   return (
-    <>
-      <A4Layout
+    <Box
+      sx={{
+        width: "210mm",
+        minHeight: "297mm",
+        backgroundColor: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
+        "& *": {
+          fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
+        },
+      }}
+    >
+      {/* ================= HEADER ================= */}
+      <A4Page
         headerSrc={company.header}
         footerSrc={company.footer}
-        watermarkSrc={company.watermark}
+        // watermarkSrc={company.watermark}
       >
-        {/* ================= TITLE ================= */}
-        <Typography
-          align="center"
-          sx={{
-            fontSize: "26px",
-            fontWeight: "bold",
-            textDecoration: "underline",
-            mt: 12,
-            mb: 8,
-            fontFamily: "Verdana",
-          }}
-        >
-          Letter of Internship
-        </Typography>
+        {/* ================= CONTENT ================= */}
+        <Box>
+          {/* DATE */}
+          <Typography
+            sx={{
+              textAlign: "right",
+              mb: 3,
+              fontFamily: "Bahnschrift",
+              mt: "-10mm",
+            }}
+          >
+            {formatDate(data.issueDate)}
+          </Typography>
 
-        {/* ================= SALUTATION ================= */}
-        {/* <Typography sx={{ mb: 2, fontFamily: "Book Antiqua" }}></Typography> */}
+          <Typography
+                                          sx={{
+                                            textAlign: "Center",
+                                            marginTop: "-8mm",
+                                            mb: "5mm",
+                                            fontFamily: "Verdana",
+                                            textDecoration: "underline",
+                                            fontSize: "15px",
+                                          }}
+                                        >
+                                          Internship Letter
+                                        </Typography>
 
-        {/* ================= BODY ================= */}
-        <Typography
-          paragraph
-          sx={{ fontFamily: "Arial", fontSize: "5mm", fontWeight: "semi-bold", textAlign: "left" }}
-        >
-          This is to certify that {data.internName} has done his internship at{" "}
-          {company.name}
-          From {formatDate(data.startDate)},and End on{" "}
-          {formatDate(data.endDate)}.
-        </Typography>
+          {/* NAME */}
+          <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
+            <strong>Name :</strong> {data.mrms} {data.employeeName}
+          </Typography>
 
-        <Typography
-          paragraph
-          sx={{ fontFamily: "Arial", fontSize: "5mm", fontWeight: "semi-bold" }}
-        >
-          During the internship, he has demonstrated his skills with
-          self-motivation to learn new skills. His performance exceeded our
-          expectations and he was able to complete the given tasks on time. He
-          was designated as Trainee Software Developer. We wish him all the best
-          for his upcoming career
-        </Typography>
+          {/* SUBJECT */}
+          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+            <strong>Subject :</strong> Letter of intent for the Internship of
+            position as a <strong>{data.designation}</strong>
+          </Typography>
 
-        {/* ================= SIGNATURE ================= */}
-        <Box sx={{ mt: 12, fontFamily: "Arial" }}>
-          <Typography>Sincerely,</Typography>
+          {/* GREETING */}
+          <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
+            Dear {firstName},
+          </Typography>
 
-          {/* ================= STAMP + SIGNATURE ROW ================= */}
+          {/* BODY */}
+          <Typography
+            sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift",  }}
+          >
+            We are pleased to offer you the internship on position as a{" "}
+            <strong>{data.designation}</strong> with{" "}
+            <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
+            date <strong>{formatDate(data.startDate)}</strong> considering your
+            performance and support towards the organization.
+          </Typography>
+
+          {/* <Typography
+            sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
+          >
+            This Offline Internship program will commence on{" "}
+            <strong>
+              {formatDate(data.startDate)} End on {formatDate(data.endDate)}
+            </strong>
+          </Typography> */}
+
+          <Typography
+            sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
+          >
+            As an Intern you will have the opportunity to work closely with our
+            highly skilled team of Software Development professionals. In the
+            internship you will get the key responsibilities and learning
+            objectives.
+          </Typography>
+
+          <Typography
+            sx={{ mb: 4, textAlign: "justify", fontFamily: "Bahnschrift" }}
+          >
+            During the continuance of your internship with the Company or any
+            extension there of and even after the cessation of your internship
+            with the Company by any reason whatsoever: You shall protect and
+            will not disclose all confidential information that may come in your
+            possession or knowledge by virtue of your internship with the
+            Company and shall use such information only as may be required
+            normal course of internship.
+          </Typography>
+
+          {/* <Typography
+            sx={{
+              mb: 1,
+              textAlign: "justify",
+              fontFamily: "Bahnschrift",
+              mt: "-5mm",
+            }}
+          >
+            Subject to various deductions as per companies and government
+            policy.
+          </Typography> */}
+
+          {/* SIGN OFF */}
+          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", }}>
+            We welcome you to Nimbja Security Solutions Pvt. Ltd. Family and
+            hope it would be the beginning of a long and mutually beneficial
+            association.
+          </Typography>
+
+          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+            Yours Sincerely,
+          </Typography>
+
+          <Typography
+            sx={{ fontWeight: 700, mb: 2, fontFamily: "Bahnschrift" }}
+          >
+            For Nimbja Security Solutions Pvt. Ltd.
+          </Typography>
+
+          {/* SIGNATURE + STAMP */}
+          {/* SIGNATURE SECTION – EXACT AS IMAGE */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-end",
-              mt: 2,
+              mt: 5,
             }}
           >
-            {/* RIGHT: HR SIGNATURE */}
-            {company.signature && (
-              <img
-                src={company.signature}
-                alt="HR Signature"
-                style={{
-                  height: "50px",
-                }}
-              />
-            )}
+            {/* LEFT – COMPANY SIGNATURE */}
+            <Box>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}
+              >
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 40 }}
+                  />
+                )}
+                {company?.stamp && (
+                  <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
+                )}
+              </Box>
 
-            {/* LEFT: COMPANY STAMP */}
-            <img
-              src={company.stamp}
-              alt="Company Stamp"
-              style={{
-                width: "110px",
-                marginRight: "96mm",
-              }}
-            />
+              <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
+                <strong>{company.hrName}</strong>
+              </Typography>
+              <Typography sx={{ fontSize: "14px", fontFamily: "Bahnschrift",mt:"-2mm" }}>
+                <strong>HR Relations Lead</strong>
+              </Typography>
+            </Box>
+
+            {/* RIGHT – CANDIDATE */}
           </Box>
-
-          {/* ================= COMPANY NAME ================= */}
-          <Typography
-            sx={{
-              mt: 2,
-              fontWeight: "bold",
-              display: "flex",
-              flexDirection: "column",
-              fontFamily: "Bahnschrift",
-            }}
-          >
-            <span>Kalpana Khade</span>
-            <span>HR Relations Lead</span>
-            <span>Department of HR Relations</span>
-          </Typography>
         </Box>
-      </A4Layout>
-    </>
+
+        {/* ================= FOOTER ================= */}
+      </A4Page>
+    </Box>
   );
 };
 
-
-export default NimbjaUnPaidInternshipLetter;
+export default NimbjaUnPaidinternshipLetter;
