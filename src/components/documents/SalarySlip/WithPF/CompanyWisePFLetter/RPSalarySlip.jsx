@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-import { formatCurrency,getProfessionalTax } from "../../../../../utils/salaryCalculations";
+import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
@@ -92,9 +92,9 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
   // const totalDeduction = PF + PT + OTHER_DEDUCTION;
 
   /* ================= NET PAY ================= */
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
-const netPay = round2(totalEarning - totalDeduction);
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <TableContainer
@@ -256,10 +256,15 @@ const netPay = round2(totalEarning - totalDeduction);
               <TableCell />
               <TableCell />
               <TableCell align="center">
-                {company.stamp && <img src={company.stamp} height={60} alt="Stamp" />}
+                {company.stamp && (
+                  <img src={company.stamp} width={90} alt="Stamp" />
+                )}
               </TableCell>
+
               <TableCell align="center">
-                {company.signature && <img src={company.signature} height={28} alt="Signature" />}
+                {company.signature && (
+                  <img src={company.signature} width={150} alt="Signature" />
+                )}
                 <Typography fontWeight="bold" fontSize="9pt">
                   Signature
                 </Typography>

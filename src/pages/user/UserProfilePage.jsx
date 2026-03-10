@@ -25,7 +25,7 @@ const stats = [
     sub: "+23% from last month",
     icon: Calendar,
     iconBg: "bg-green-100",
-    iconColor: "text-green-500",
+    iconColor: "text-green-500",  
   },
   {
     label: "Companies Managed",

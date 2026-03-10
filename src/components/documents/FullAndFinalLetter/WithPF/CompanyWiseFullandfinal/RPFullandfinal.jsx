@@ -5,6 +5,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography
 } from "@mui/material";
 
 import A4Page from "../../../../layout/A4Page";
@@ -231,7 +232,7 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
                         </TableRow>
             
                         <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
+                          <TableCell colSpan={2} sx={cell}>Leave encashment  </TableCell>
                           <TableCell colSpan={2} sx={{ ...cell, ...right }}>
                             00
                           </TableCell>
@@ -256,23 +257,31 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
             </TableRow>
 
              {/* SIGNATURE */}
-                        <TableRow>
-                          <TableCell sx={{ ...cell, ...center }}></TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>
-                            {company.stamp && <img src={company.stamp} height={60} alt="" />}
-                          </TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                            {company.signature && <img src={company.signature} height={45} alt="" />}
-                          </TableCell>
-                        </TableRow>
-            
-                        <TableRow>
-                          <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
-                        </TableRow>
+          <TableRow>
+  <TableCell sx={cell} />
+  {/* <TableCell sx={cell} /> */}
 
+  <TableCell sx={{ ...cell, ...center }}>
+    {company.stamp && (
+      <img src={company.stamp} width={90} alt="Stamp" style={{display:"block", margin:"0 auto"}} />
+    )}
+  </TableCell>
 
+  <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+    {company.signature && (
+      <img src={company.signature} width={150} alt="Signature" style={{display:"block", margin:"0 auto"}}/>
+    )}
+    <Typography fontWeight="bold" fontSize="9pt">
+      Signature
+    </Typography>
+  </TableCell>
+</TableRow>
+
+ <TableRow>
+              <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
+              <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
+              <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
+            </TableRow>
 
           </TableBody>
         </Table>

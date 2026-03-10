@@ -26,9 +26,9 @@ import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
 import jdit_header from "../../../assets/images/jdit/jdit_head.jpeg";
 import jdit_footer from "../../../assets/images/jdit/jditFooter.png";
 import jdit_watermark from "../../../assets/images/jdit/jdit_watermark.png";
-import jdit_signature from "../../../assets/images/jdit/jdit_Sign.jpeg";
+import jdit_signature from "../../../assets/images/jdit/jdit_sweety_sign.png";
 import ajaySignature from "../../../assets/images/jdit/jdit_sign.png";
-import jdit_stamp from "../../../assets/images/jdit/jdit_Stamp.jpeg";
+import jdit_stamp from "../../../assets/images/jdit/jdit_stamp.png";
 
 // rp imports  (watermark pending)
 import rp_header from "../../../assets/images/rp/RP_header.png";
