@@ -98,7 +98,7 @@ const SmartMatrixExperience = ({ company, data }) => {
         </p>
 
         {/* DATE – moved BELOW title, position unchanged (right aligned) */}
-        <div style={{ textAlign: "right", marginBottom: "20mm" }}>
+        <div style={{ textAlign: "right", marginBottom: "18mm" }}>
           {formatDate(data.issueDate)}
         </div>
 
@@ -115,13 +115,13 @@ const SmartMatrixExperience = ({ company, data }) => {
           <strong>{data.designation}</strong> with our company,{" "} */}
           was under the employer of <strong>{company.name}</strong> as{" "}
           <strong>{data.designation}</strong> in the{" "}
-          <strong>{data.department}</strong> Department during the period
-          beginning <strong>{formatDate(data.joiningDate)}</strong> and ending{" "}
+          <strong>{data.department} Department </strong>from
+          <strong>{formatDate(data.joiningDate)}</strong> to{" "}
           <strong>{formatDate(data.relievingDate)}</strong>.<br></br>
           <br></br> During {possessivePronoun} tenure, we observed{" "}
           {objectPronoun} obedience, honesty and dedication in{" "}
           {possessivePronoun} work.<br></br> <br></br>We wish {objectPronoun}{" "}
-          bright success in {possessivePronoun} future endeavors.
+          bright and good speed in {possessivePronoun} future endeavors.
           {/* {pronouns.possessive} time with SmartMatrix Digital Services Pvt Ltd.,{" "}
           {pronouns.subject.toLowerCase()} has remained dedicated and loyal to{" "}
           {pronouns.possessive} work and responsibilities with our company.{" "}
@@ -149,7 +149,7 @@ const SmartMatrixExperience = ({ company, data }) => {
         </p>
 
         {/* ================= SIGNATURE ================= */}
-        <div style={{ marginTop: "30mm" }}>
+        <div style={{ marginTop: "30mm", fontSize: "18px" }}>
           <p>
             <strong>{company.name}</strong>
           </p>

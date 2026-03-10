@@ -61,7 +61,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           <div
             style={{
               position: "absolute",
-              top: "-15mm",
+              top: "-20mm",
               right: "0",
               fontSize: "11pt",
               fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
@@ -107,7 +107,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
             <strong>{formatDate(data.issueDate)}</strong>, we are pleased to
             appoint you in our organization with effect from{" "}
             <strong>{formatDate(data.joiningDate)}</strong>, under the terms and
-            conditions given below:
+            conditions given below:-
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
@@ -233,7 +233,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
             fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
             fontSize: "12pt",
             lineHeight: "1.5",
-            paddingTop: "20mm",
+            // paddingTop: "10mm",
             paddingBottom: "40mm",
           }}
         >
@@ -286,7 +286,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                       component="img"
                       src={sign}
                       alt="Signature"
-                      sx={{ width: 140, mt: "18mm", ml: "-2mm" }}
+                      sx={{ width: 140, mt: "26mm", ml: "-2mm" }}
                     />
                   </Grid>
                   <Grid item>
@@ -304,7 +304,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "flex-start",
-                    mt: "2mm",
+                    mt: "5mm",
                     width: "100%",
                   }}
                 >
@@ -451,7 +451,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   position: "absolute",
                   top: "58mm", // ⬇️ pushes date just BELOW header
                   right: "18mm",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily:
                     '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                 }}
@@ -474,7 +474,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
               >
                 <Typography
                   sx={{
-                    fontSize: "11pt",
+                    fontSize: "13pt",
                     fontWeight: "bold",
                     textAlign: "center",
                     mb: "6mm",
