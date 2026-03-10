@@ -9,7 +9,10 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-import { formatCurrency,getProfessionalTax } from "../../../../../utils/salaryCalculations";
+import {
+  formatCurrency,
+  getProfessionalTax,
+} from "../../../../../utils/salaryCalculations";
 
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
@@ -20,18 +23,53 @@ const numberToWords = (numVal = 0) => {
   if (!numVal) return "Zero Rupees Only";
 
   const a = [
-    "", "One", "Two", "Three", "Four", "Five", "Six",
-    "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-    "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
   ];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  const b = [
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
+  ];
 
   const w = (n) => {
     if (n < 20) return a[n];
     if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + w(n % 100) : "");
-    if (n < 100000) return w(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + w(n % 1000) : "");
+    if (n < 1000)
+      return (
+        a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + w(n % 100) : "")
+      );
+    if (n < 100000)
+      return (
+        w(Math.floor(n / 1000)) +
+        " Thousand" +
+        (n % 1000 ? " " + w(n % 1000) : "")
+      );
     return w(Math.floor(n / 100000)) + " Lakh";
   };
 
@@ -39,7 +77,6 @@ const numberToWords = (numVal = 0) => {
 };
 
 const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
-
   /* ================= EMPLOYEE DATA ================= */
   const {
     employeeName = "-",
@@ -59,10 +96,11 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     otherDeduction = 2000,
   } = data;
 
-
   /* ===== MONTH FORMAT ===== */
   const [year, monthNum] = month.split("-");
-  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
+  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
+    month: "long",
+  });
   const salaryMonth = `${monthName} ${year}`;
 
   /* ================= EARNINGS BREAKUP (100%) ================= */
@@ -84,22 +122,24 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
   const PF_DISPLAY = 3750; // 👈 ONLY for showing in earnings
 
   /* ================= TOTAL EARNINGS ================= */
-  const totalEarning =
-    BASIC + HRA + DA + SPECIAL + FOOD; // ✅ EXACT = totalSalary
+  const totalEarning = BASIC + HRA + DA + SPECIAL + FOOD; // ✅ EXACT = totalSalary
 
   /* ================= DEDUCTIONS ================= */
   const PF = 3750;
   // const PT = 200;
   // const OTHER_DEDUCTION = 2000;
 
-
   /* ================= NET PAY ================= */
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
-const netPay = round2(totalEarning - totalDeduction);
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
 
   return (
-    <A4Page headerSrc={company.header} footerSrc={company.footer}>
+    <A4Page
+      headerSrc={company.header}
+      footerSrc={company.footer}
+      watermarkSrc={company.watermark}
+    >
       <TableContainer
         component={Paper}
         sx={{

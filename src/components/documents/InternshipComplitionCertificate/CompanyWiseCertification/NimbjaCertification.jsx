@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import A4Page from "../../../layout/A4Page";
-
+import watermark from "../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaCertification = ({ company, data }) => {
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("en-GB", {
@@ -33,7 +33,31 @@ const NimbjaCertification = ({ company, data }) => {
     >
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         {/* ================= CONTENT ================= */}
-        <Box>
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "60%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {" "}
           {/* TITLE */}
           <Typography
             sx={{
@@ -47,7 +71,6 @@ const NimbjaCertification = ({ company, data }) => {
           >
             LETTER OF INTERNSHIP COMPLETION
           </Typography>
-
           {/* BODY */}
           <Typography sx={{ mb: 2, textAlign: "justify", fontFamily: "Arial" }}>
             This is to certify that <strong>{data.employeeName}</strong> has
@@ -56,7 +79,6 @@ const NimbjaCertification = ({ company, data }) => {
             <strong>{formatDate(data.startDate)}</strong> to{" "}
             <strong>{formatDate(data.completionDate)}</strong>.
           </Typography>
-
           <Typography sx={{ mb: 9, textAlign: "justify", fontFamily: "Arial" }}>
             During the internship, {pronouns.subject.toLowerCase()} has
             demonstrated {pronouns.possessive} skills with self-motivation to
@@ -66,15 +88,13 @@ const NimbjaCertification = ({ company, data }) => {
             performance exceeded our expectations and{" "}
             {pronouns.subject.toLowerCase()} was able to complete the given
             tasks on time. {pronouns.subject} was designated as{" "}
-            <strong>{data.role}.</strong> We wish {pronouns.object} all
-            the best for {pronouns.possessive} upcoming career.
+            <strong>{data.role}.</strong> We wish {pronouns.object} all the best
+            for {pronouns.possessive} upcoming career.
           </Typography>
-
           {/* SIGN OFF */}
           <Typography sx={{ mb: 1, fontFamily: "Arial" }}>
             Yours faithfully,
           </Typography>
-
           <Typography
             sx={{
               fontWeight: 700,
@@ -85,7 +105,6 @@ const NimbjaCertification = ({ company, data }) => {
           >
             For {company.name}
           </Typography>
-
           {/* SIGNATURE SECTION */}
           <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
             {company?.signature && (
@@ -100,7 +119,6 @@ const NimbjaCertification = ({ company, data }) => {
               <img src={company.stamp} alt="Stamp" style={{ height: 95 }} />
             )}
           </Box>
-
           <Typography
             sx={{
               fontWeight: 600,

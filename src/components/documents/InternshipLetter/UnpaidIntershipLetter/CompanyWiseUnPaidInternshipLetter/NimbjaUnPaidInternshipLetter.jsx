@@ -39,7 +39,31 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
         // watermarkSrc={company.watermark}
       >
         {/* ================= CONTENT ================= */}
-        <Box>
+        <Box
+          component="img"
+          src={company.watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {" "}
           {/* DATE */}
           <Typography
             sx={{
@@ -51,39 +75,34 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
           >
             {formatDate(data.issueDate)}
           </Typography>
-
           <Typography
-                                          sx={{
-                                            textAlign: "Center",
-                                            marginTop: "-8mm",
-                                            mb: "5mm",
-                                            fontFamily: "Verdana",
-                                            textDecoration: "underline",
-                                            fontSize: "15px",
-                                          }}
-                                        >
-                                          Internship Letter
-                                        </Typography>
-
+            sx={{
+              textAlign: "Center",
+              marginTop: "-8mm",
+              mb: "5mm",
+              fontFamily: "Verdana",
+              textDecoration: "underline",
+              fontSize: "15px",
+            }}
+          >
+            Internship Letter
+          </Typography>
           {/* NAME */}
           <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
             <strong>Name :</strong> {data.mrms} {data.employeeName}
           </Typography>
-
           {/* SUBJECT */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for the Internship of
             position as a <strong>{data.designation}</strong>
           </Typography>
-
           {/* GREETING */}
           <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
             Dear {firstName},
           </Typography>
-
           {/* BODY */}
           <Typography
-            sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift",  }}
+            sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
             We are pleased to offer you the internship on position as a{" "}
             <strong>{data.designation}</strong> with{" "}
@@ -91,7 +110,6 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
             date <strong>{formatDate(data.startDate)}</strong> considering your
             performance and support towards the organization.
           </Typography>
-
           {/* <Typography
             sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
@@ -100,7 +118,6 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
               {formatDate(data.startDate)} End on {formatDate(data.endDate)}
             </strong>
           </Typography> */}
-
           <Typography
             sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
@@ -109,7 +126,6 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
             internship you will get the key responsibilities and learning
             objectives.
           </Typography>
-
           <Typography
             sx={{ mb: 4, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
@@ -121,7 +137,6 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
             Company and shall use such information only as may be required
             normal course of internship.
           </Typography>
-
           {/* <Typography
             sx={{
               mb: 1,
@@ -133,24 +148,20 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
             Subject to various deductions as per companies and government
             policy.
           </Typography> */}
-
           {/* SIGN OFF */}
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", }}>
+          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
             We welcome you to Nimbja Security Solutions Pvt. Ltd. Family and
             hope it would be the beginning of a long and mutually beneficial
             association.
           </Typography>
-
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
             Yours Sincerely,
           </Typography>
-
           <Typography
             sx={{ fontWeight: 700, mb: 2, fontFamily: "Bahnschrift" }}
           >
             For Nimbja Security Solutions Pvt. Ltd.
           </Typography>
-
           {/* SIGNATURE + STAMP */}
           {/* SIGNATURE SECTION – EXACT AS IMAGE */}
           <Box
@@ -181,7 +192,9 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
               <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
                 <strong>{company.hrName}</strong>
               </Typography>
-              <Typography sx={{ fontSize: "14px", fontFamily: "Bahnschrift",mt:"-2mm" }}>
+              <Typography
+                sx={{ fontSize: "14px", fontFamily: "Bahnschrift", mt: "-2mm" }}
+              >
                 <strong>HR Relations Lead</strong>
               </Typography>
             </Box>

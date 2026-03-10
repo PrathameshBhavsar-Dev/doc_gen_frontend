@@ -12,8 +12,7 @@ import {
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import A4Page from "../../../../layout/A4Page";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
-
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaIncrement = ({ company = {}, data = {} }) => {
   /* ================= HELPER ================= */
   const round0 = (num) => Math.round(num);
@@ -75,6 +74,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           backgroundColor: "#fff",
           display: "flex",
           flexDirection: "column",
+          position: "relative",
           fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
           "& *": {
             fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
@@ -91,6 +91,29 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
         )}
 
         <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        {/* <Box
+          className="a4-content-only"
+          sx={{
+            
+          }}
+        > */}
+        <Box
           sx={{
             px: "25mm",
             py: "22mm",
@@ -98,6 +121,8 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             fontSize: "14px",
             lineHeight: 1.8,
             color: "#000",
+            position: "relative",
+            zIndex: 1,
           }}
         >
           <Typography

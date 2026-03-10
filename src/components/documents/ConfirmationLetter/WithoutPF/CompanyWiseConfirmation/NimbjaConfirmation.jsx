@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   const firstName = data.employeeName?.split(" ")[0] || "";
@@ -135,7 +136,30 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box>
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           <Typography align="right" mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             {formatDate(data.issueDate)}
           </Typography>

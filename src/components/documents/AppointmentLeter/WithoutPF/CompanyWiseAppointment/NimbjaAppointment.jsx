@@ -13,8 +13,7 @@ import {
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
-
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
@@ -84,8 +83,31 @@ const NimbjaAppointment = ({ company, data }) => {
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        {/* ================= CONTENT ================= */}
-        <Box className="a4-content-only">
+        {/* WATERMARK */}
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "70%",
+            opacity: 0.8,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           {/* ================= DATE ================= */}
           <Typography
             sx={{
