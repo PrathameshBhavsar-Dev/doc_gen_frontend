@@ -14,10 +14,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
@@ -178,16 +178,36 @@ const NeweageAppointment = ({ company, data }) => {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
                 {company.signature && (
-                  <img src={company.signature} alt="signature" height={60} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="signature"
+                    sx={{
+                      height: "60px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
                 {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="stamp"
+                    sx={{
+                      height: "80px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
               </Box>
 
-              <Typography fontWeight={600} mt={-3}>
+              <Typography fontWeight={600}>
                 {company.hrName}
               </Typography>
               <Typography fontSize={13}>

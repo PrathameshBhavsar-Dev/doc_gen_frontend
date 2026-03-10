@@ -10,8 +10,8 @@ const NeweageCertification = ({ company, data }) => {
     title === "miss." || title === "mrs."
       ? { subject: "She", object: "her", possessive: "her" }
       : title === "mx."
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -58,21 +58,31 @@ const NeweageCertification = ({ company, data }) => {
             NEWEAGE CLOUD SOFTWARE SERVICES PVT. LTD.
           </Typography>
 
-          <Box mt={3} display="flex" gap={4} alignItems="center">
+          <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
             {company.signature && (
-              <img
+              <Box
+                component="img"
                 src={company.signature}
-                alt="Signature"
-                width="140"
-                height="60"
+                alt="signature"
+                sx={{
+                  height: "60px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
               />
             )}
-
             {company.stamp && (
-              <img
+              <Box
+                component="img"
                 src={company.stamp}
-                alt="Company Stamp"
-                height="90"
+                alt="stamp"
+                sx={{
+                  height: "80px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
               />
             )}
           </Box>
