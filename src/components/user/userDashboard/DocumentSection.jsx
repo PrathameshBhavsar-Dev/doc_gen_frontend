@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import {
   FileText,
   Briefcase,
-  Receipt,
+  Wallet,
   CheckCircle,
   TrendingUp,
-  DollarSign,
+  HandCoins,
   Award,
   ClipboardList,
   GraduationCap,
@@ -36,7 +36,7 @@ const documents = [
     docTypeId: 1,   // Salary Slip → mockData id: 1
     title: "Salary Slip",
     description: "Generate monthly salary slips with PF",
-    icon: Receipt,
+    icon: Wallet,
     hasPFToggle: true,
   },
   {
@@ -60,7 +60,7 @@ const documents = [
     docTypeId: 16,  // Full & Final → mockData id: 16
     title: "Full & Final Settlement",
     description: "Create full and final settlement letters",
-    icon: DollarSign,
+    icon: HandCoins,
     hasPFToggle: true,
   },
   {

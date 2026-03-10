@@ -167,10 +167,14 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.CEO && (
-              <img src={company.CEO} alt="Signature" style={{ height: 60 }} />
+              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
             )}
             {company?.stamp && (
-              <img src={company.stamp} alt="Stamp" style={{ height: 110 }} />
+              <img
+                src={company.stamp}
+                alt="Stamp"
+                style={{ height: 110, marginLeft: "-20px" }}
+              />
             )}
           </Box>
 
@@ -211,11 +215,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             <strong>
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
             </strong>
-
-            
           </Typography>
-            
-            
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
           <SalaryStructureTable
@@ -226,8 +226,6 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             formatDate={formatDate}
           />
         </Box>
-
-        
       </A4Page>
     </>
   );

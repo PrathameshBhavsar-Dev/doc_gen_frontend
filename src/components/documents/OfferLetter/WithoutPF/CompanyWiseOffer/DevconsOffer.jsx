@@ -105,9 +105,9 @@ const totalAnnual = round0(
             </Typography>
 
             {/* SUBJECT */}
-            <Typography sx={{ mb: 4, fontWeight: 700 }}>
-  Subject : Letter of intent for the position of {data.position}
-</Typography>
+            <Typography sx={{ mb: 4 }}>
+            Subject : Letter of intent for the position of <b>{data.position}</b>
+            </Typography>
 
 
             <Typography sx={{ mb: 3 }}>
@@ -115,7 +115,7 @@ const totalAnnual = round0(
             </Typography>
 
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
-              <b>{company.name}</b> is delighted to offer you the full-time position of{" "}
+              <b style={{ textTransform: "uppercase" }}>{company.name}</b> is delighted to offer you the full-time position of{" "}
               <b>{data.position}</b> with an anticipated start date of{" "}
               <b> {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 month: "long",
@@ -141,7 +141,7 @@ const totalAnnual = round0(
             </Typography>
 
             <Typography sx={{ mb: 2 }}>
-              <b>{company.name}</b> offers a comprehensive benefits program.
+              <b style={{ textTransform: "uppercase" }}>{company.name}</b> offers a comprehensive benefits program.
             </Typography>
 
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
@@ -157,7 +157,7 @@ const totalAnnual = round0(
             {/* CLOSING */}
             <Typography sx={{ mb: 1 }}>Yours Sincerely,</Typography>
             <Typography sx={{ mb: 1 }}>
-              <b>For {company.name}</b>
+              For <b style={{ textTransform: "uppercase" }}>{company.name}</b>
             </Typography>
 
             {/* SIGNATURE */}
