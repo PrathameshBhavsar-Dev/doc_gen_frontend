@@ -6,10 +6,10 @@ import A4Layout from "../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= TEXT STYLE ================= */
@@ -48,9 +48,9 @@ const NeweageRelieving = ({ company, data }) => {
       footerSrc={company.footerImage}
     >
 
-      <Typography sx={{textAlign: "center", font: "28"}}> 
-              <b>Relieving Letter</b>
-            </Typography>
+      <Typography sx={{ textAlign: "center", font: "28" }}>
+        <b>Relieving Letter</b>
+      </Typography>
       {/* ================= DATE ================= */}
       <Typography align="right" sx={{ ...TEXT, mb: 4 }}>
         {formatDate(issueDate)}
@@ -113,22 +113,34 @@ const NeweageRelieving = ({ company, data }) => {
         }}
       >
         <Box>
-          {company.signature && (
-            <img
-              src={company.signature}
-              alt="Signature"
-              style={{ height: "60px", marginBottom: "6px" }}
-            />
-          )}
-
-          {company.stamp && (
-            <img
-              src={company.stamp}
-              alt="Stamp"
-              style={{ height: "100px" }}
-            />
-          )}
-
+          <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
+            {company.signature && (
+              <Box
+                component="img"
+                src={company.signature}
+                alt="signature"
+                sx={{
+                  height: "60px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            )}
+            {company.stamp && (
+              <Box
+                component="img"
+                src={company.stamp}
+                alt="stamp"
+                sx={{
+                  height: "80px",
+                  width: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            )}
+          </Box>
           <Typography sx={TEXT}>{company.hrName}</Typography>
           <Typography sx={TEXT}>HR Relations Lead</Typography>
           <Typography sx={TEXT}>Department of HR Relations</Typography>
