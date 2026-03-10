@@ -1404,8 +1404,8 @@ const NimbjaIncrement = ({ company, data }) => {
 
           <p style={para}>
             I am pleased to inform you that due to your consistent outstanding
-            performance and dedication to your role as Software Test Engineer,
-            we are providing you with a salary increment effective{" "}
+            performance and dedication to your role as <b>{data.designation}</b>
+            , we are providing you with a salary increment effective{" "}
             <strong>{formatDate(data.effectiveDate)}</strong>, your revised
             annual CTC will be <strong>{formatCurrency(totalAnnual)}</strong>.
           </p>
@@ -1424,11 +1424,7 @@ const NimbjaIncrement = ({ company, data }) => {
 
           <div style={signatureRow}>
             {company.signature && (
-              <img
-                src={company.CEO}
-                alt="Signature"
-                style={{ height: "42px" }}
-              />
+              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
             )}
             {company.stamp && (
               <img
@@ -1477,7 +1473,7 @@ const NimbjaIncrement = ({ company, data }) => {
             fontWeight: 600,
           }}
         >
-          Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId} 
+          Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
         </Typography>
 
         {/* Title */}
@@ -1495,7 +1491,6 @@ const NimbjaIncrement = ({ company, data }) => {
         </Typography>
 
         {/* Employee Details */}
-       
 
         {/* Table */}
         <Table
@@ -1589,9 +1584,7 @@ const NimbjaIncrement = ({ company, data }) => {
             fontFamily: "Bahnschrift",
             textAlign: "center",
           }}
-        >
-          
-        </Typography>
+        ></Typography>
       </A4Page>
     </>
   );

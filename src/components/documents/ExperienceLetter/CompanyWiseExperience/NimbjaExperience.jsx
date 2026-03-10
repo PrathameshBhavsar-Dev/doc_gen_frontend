@@ -261,6 +261,16 @@ const NimbjaExperience = ({ company, data }) => {
           zIndex: 1,
         }}
       >
+        {/* ISSUE DATE */}
+        <div
+          style={{
+            textAlign: "right",
+            marginBottom: "8mm", // space before main content
+            marginTop: "-8mm",
+          }}
+        >
+          {formatDate(data.issueDate)}
+        </div>
         {/* DATE — TOP RIGHT */}
         {/* TITLE */}
         <p
@@ -268,22 +278,13 @@ const NimbjaExperience = ({ company, data }) => {
             textAlign: "center",
             fontWeight: 600,
             marginBottom: "6mm", // space between heading & date
-            textDecoration:"underline",
-            fontSize:"12pt"
+            textDecoration: "underline",
+            fontSize: "12pt",
           }}
         >
           Experience Letter
         </p>
 
-        {/* ISSUE DATE */}
-        <div
-          style={{
-            textAlign: "right",
-            marginBottom: "18mm", // space before main content
-          }}
-        >
-          {formatDate(data.issueDate)}
-        </div>
         {/* PARAGRAPH 1 */}
         <p
           style={{

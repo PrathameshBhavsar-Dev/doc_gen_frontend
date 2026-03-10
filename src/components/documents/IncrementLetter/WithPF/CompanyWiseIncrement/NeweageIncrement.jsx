@@ -173,12 +173,32 @@ const NeweageIncrement = ({ company, data }) => {
 
           {/* Signature + Stamp Block */}
           <Box sx={{ mt: 2 }}>
-            <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+            <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
               {company.signature && (
-                <img src={sign} alt="signature" height={50} />
+                <Box
+                  component="img"
+                  src={company.signature}
+                  alt="signature"
+                  sx={{
+                    height: "60px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
               {company.stamp && (
-                <img src={company.stamp} alt="stamp" height={90} />
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="stamp"
+                  sx={{
+                    height: "80px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
             </Box>
 
