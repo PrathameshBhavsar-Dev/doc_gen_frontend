@@ -106,7 +106,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     otherDeduction = 500,
   } = data;
 
-  /* ===== MONTH FORMAT ===== */
+  /* ===== MONTH FORMAT ===== ?
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
     month: "long",
