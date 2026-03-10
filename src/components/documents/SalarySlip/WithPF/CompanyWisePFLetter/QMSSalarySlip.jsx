@@ -48,7 +48,7 @@ const getSalaryBreakup = (data) => {
       da: data.da,
       special: data.special,
       food: data.food,
-    //   misc: data.misc,
+      //   misc: data.misc,
       pt: data.pt,
     };
   }
@@ -68,7 +68,7 @@ const getSalaryBreakup = (data) => {
   return {
     basic,
     hra,
-    da, 
+    da,
     special,
     food,
     pf: data.pf ?? 3750,
@@ -134,34 +134,34 @@ const bold = { fontWeight: "bold" };
 const QuickSalarySlip = ({ data = {}, company = {} }) => {
   const salary = getSalaryBreakup(data);
 
-const earnings = [
-  { label: "BASIC", value: salary.basic },
-  { label: "HRA", value: salary.hra },
-  { label: "DEARNESS ALLOWANCE", value: salary.da },
-  { label: "SPECIAL ALLOWANCE", value: salary.special },
-  { label: "FOOD ALLOWANCE", value: salary.food },
-  { label: "PF", value: salary.pf }, // ✅ Keep PF here (display only)
-];
+  const earnings = [
+    { label: "BASIC", value: salary.basic },
+    { label: "HRA", value: salary.hra },
+    { label: "DEARNESS ALLOWANCE", value: salary.da },
+    { label: "SPECIAL ALLOWANCE", value: salary.special },
+    { label: "FOOD ALLOWANCE", value: salary.food },
+    { label: "PF", value: salary.pf }, // ✅ Keep PF here (display only)
+  ];
 
- const deductions = [
-  { label: "PF", value: salary.pf },
-  { label: "PT", value: salary.pt },
-  { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
-];
+  const deductions = [
+    { label: "PF", value: salary.pf },
+    { label: "PT", value: salary.pt },
+    { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
+  ];
 
-const totalEarning = earnings.reduce(
-  (sum, e) =>
-    e.label === "PF"
-      ? sum   // ❌ Do NOT count PF
-      : sum + Number(e.value || 0),
-  0
-);
-const totalDeduction = deductions.reduce(
-  (sum, d) => sum + Number(d.value || 0),
-  0
-);
+  const totalEarning = earnings.reduce(
+    (sum, e) =>
+      e.label === "PF"
+        ? sum   // ❌ Do NOT count PF
+        : sum + Number(e.value || 0),
+    0
+  );
+  const totalDeduction = deductions.reduce(
+    (sum, d) => sum + Number(d.value || 0),
+    0
+  );
 
-const netPay = totalEarning - totalDeduction;
+  const netPay = totalEarning - totalDeduction;
   const maxRows = Math.max(earnings.length, deductions.length);
 
   return (
@@ -175,7 +175,7 @@ const netPay = totalEarning - totalDeduction;
       }}
     >
       {/* 🔹 UI CODE EXACT SAME – NOT TOUCHED */}
-    
+
 
 
 
@@ -204,7 +204,7 @@ const netPay = totalEarning - totalDeduction;
                 textTransform: "uppercase",
               }}
             >
-              {company.name}   
+              {company.name}
             </TableCell>
           </TableRow>
 
@@ -214,14 +214,14 @@ const netPay = totalEarning - totalDeduction;
             </TableCell>
           </TableRow>
 
-        <TableRow>
-  <TableCell
-    colSpan={4}
-    sx={{ ...cell, ...bold, textAlign: "center" }}
-  >
-    Salary Slip {formatMonthYear(data.month)}
-  </TableCell>
-</TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={4}
+              sx={{ ...cell, ...bold, textAlign: "center" }}
+            >
+              Salary Slip {formatMonthYear(data.month)}
+            </TableCell>
+          </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Employee Name</TableCell>
@@ -231,9 +231,9 @@ const netPay = totalEarning - totalDeduction;
           </TableRow>
 
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Gender <br/> DOJ</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>Gender <br /> DOJ</TableCell>
             <TableCell sx={cell} colSpan={3}>
-              {safe(data.gender)} <br/> {formatDate(data.doj)}
+              {safe(data.gender)} <br /> {formatDate(data.doj)}
             </TableCell>
           </TableRow>
 
@@ -244,14 +244,14 @@ const netPay = totalEarning - totalDeduction;
             </TableCell>
           </TableRow>
 
-           <TableRow>
-             <TableCell sx={{ ...cell, ...bold }}>Mode</TableCell>
-             <TableCell sx={cell} colSpan={3}>
-           {/* Bank Account No:  {safe(data.accountNo)}<br/> */}
-             Bank Name :{safe (data.mode)} {safe(data.bankName)}<br/>
+          <TableRow>
+            <TableCell sx={{ ...cell, ...bold }}>Mode</TableCell>
+            <TableCell sx={cell} colSpan={3}>
+              {/* Bank Account No:  {safe(data.accountNo)}<br/> */}
+              Bank Name :{safe(data.mode)} {safe(data.bankName)}<br />
               Bank Account No:  {safe(data.accountNo)}
-             </TableCell>
-           </TableRow>
+            </TableCell>
+          </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Employee ID</TableCell>
@@ -332,32 +332,70 @@ const netPay = totalEarning - totalDeduction;
           </TableRow>
 
           <TableRow>
-  <TableCell sx={{ ...cell, ...bold }}>In Words</TableCell>
-  <TableCell sx={cell} colSpan={3}>
-    {numberToWords(Math.round(netPay))} Rs Only
-  </TableCell>
-</TableRow>
+            <TableCell sx={{ ...cell, ...bold }}>In Words</TableCell>
+            <TableCell sx={cell} colSpan={3}>
+              {numberToWords(Math.round(netPay))} Rs Only
+            </TableCell>
+          </TableRow>
 
 
           <TableRow>
             <TableCell
               colSpan={2}
-              sx={{ ...cell, height: 80, textAlign: "center" }}
+              sx={{
+                ...cell,
+                height: 100,
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
             >
               {company.stamp && (
-                <img src={company.stamp} height={75} alt="Stamp" />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src={company.stamp}
+                    style={{ height: "90px", width: "auto" }}
+                    alt="Stamp"
+                  />
+                </Box>
               )}
             </TableCell>
             <TableCell
               colSpan={2}
-              sx={{ ...cell, textAlign: "center" }}
+              sx={{
+                ...cell,
+                textAlign: "center",
+                verticalAlign: "middle",
+              }}
             >
               {company.signature && (
-                <img src={company.signature} height={50} alt="Signature" />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src={company.signature}
+                    style={{ height: "75px", width: "auto" }}
+                    alt="Signature"
+                  />
+                  <Typography fontSize={12} fontWeight="bold">
+                    Signature
+                  </Typography>
+                </Box>
               )}
-              <Typography fontSize={12} fontWeight="bold">
-                Signature
-              </Typography>
             </TableCell>
           </TableRow>
         </TableBody>
