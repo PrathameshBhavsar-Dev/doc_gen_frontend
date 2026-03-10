@@ -19,10 +19,10 @@ import stamp from "../../../../../assets/images/Newagecloud/Newage_stamp.png";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= TEXT STYLE (MATCH IMAGE) ================= */
@@ -176,12 +176,32 @@ const NeweageOffer = ({ company, data }) => {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
                 {company.signature && (
-                  <img src={company.signature} alt="signature" height={60} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="signature"
+                    sx={{
+                      height: "60px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
                 {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="stamp"
+                    sx={{
+                      height: "80px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
               </Box>
 
@@ -312,12 +332,32 @@ const NeweageOffer = ({ company, data }) => {
               For {company.name}
             </Typography> */}
 
-            <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
               {company.signature && (
-                <img src={company.signature} alt="signature" height={60} />
+                <Box
+                  component="img"
+                  src={company.signature}
+                  alt="signature"
+                  sx={{
+                    height: "60px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
               {company.stamp && (
-                <img src={company.stamp} alt="stamp" height={80} />
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="stamp"
+                  sx={{
+                    height: "80px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
             </Box>
 

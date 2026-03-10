@@ -174,7 +174,7 @@ export const companies = [
     footerImage: null,
     watermarkImage: null,
     address:
-      "Office No. 102-A, 1st Floor, Ganesham A Commercial, Pimple Saudagar, Pune- 411027",
+      "Office No. 102-B, First Floor, Ganesham Commercial -A, Survey No. 21/18-21/24, BRTS Road, Pimple Saudagar, Pune- 411027",
     email: "contact@smartmatrixds.com",
     phone: "+91 9112108484",
     website: "https://smartmatrixds.com/",
@@ -463,7 +463,7 @@ export const documentTypes = [
       { name: "month", label: "Month", type: "month", required: true },
       {
         name: "totalSalary",
-        label: "Total Salary",
+        label: "Total Montly Salary",
         type: "number",
         required: true,
       },
@@ -476,7 +476,7 @@ export const documentTypes = [
         options: ["Male", "Female", "Other"],
         required: true,
       },
-      { name: "bankName", label: "Bank Name", type: "text", required: false },
+      { name: "mode", label: "Bank Name", type: "text", required: false },
       {
         name: "workdays",
         label: "Total Workdays",
@@ -592,6 +592,12 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeId",
+        label: "Employee ID",
+        type: "text",
+        required: true,
+      },
+      {
         name: "employeeName",
         label: "Employee Name",
         type: "text",
@@ -602,12 +608,6 @@ export const documentTypes = [
       {
         name: "department",
         label: "Department",
-        type: "text",
-        required: false,
-      },
-      {
-        name: "designation",
-        label: "Designation",
         type: "text",
         required: false,
       },
@@ -639,7 +639,7 @@ export const documentTypes = [
         name: "reportingManager",
         label: "Reporting Manager",
         type: "text",
-        required: true,
+        required: false,
       },
       { name: "workHours", label: "Work Hours", type: "text", required: false },
       {
@@ -871,7 +871,12 @@ export const documentTypes = [
         type: "text",
         required: true,
       },
-      { name: "department", label: "Department", type: "text", required: true },
+      {
+        name: "department",
+        label: "Department",
+        type: "text",
+        required: false,
+      },
       {
         name: "newCTC",
         label: "Increment Package",
@@ -1527,7 +1532,7 @@ export const documentTypes = [
         required: true,
       },
       { name: "department", label: "Department", type: "text", required: true },
-      // {name:  'date', label:'F&F Date', type:'date', required: true},
+      { name: "date", label: "F&F Date", type: "date", required: true },
       { name: "month", label: "For the Month", type: "month", required: true },
       {
         name: "totalSalary",
@@ -1599,12 +1604,7 @@ export const documentTypes = [
         type: "text",
         required: true,
       },
-      {
-        name: "employeeId",
-        label: "Employee ID",
-        type: "text",
-        required: true,
-      },
+      // { name: 'employeeId', label: 'Employee ID', type: 'text', required: false },
       {
         name: "effectiveDate",
         label: "Effective Date",
@@ -1614,17 +1614,12 @@ export const documentTypes = [
       { name: "issueDate", label: "Issue Date", type: "date", required: true },
       {
         name: "totalSalary",
-        label: "Total Salary",
+        label: "Total Montly Salary",
         type: "number",
         required: true,
       },
       { name: "address", label: "Address", type: "text", required: true },
-      {
-        name: "designation",
-        label: "Designation",
-        type: "text",
-        required: true,
-      },
+      { name: "position", label: "Designation", type: "text", required: true },
       {
         name: "department",
         label: "Department",
