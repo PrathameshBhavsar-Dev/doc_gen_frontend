@@ -571,7 +571,6 @@ export const documentTypes = [
             { name: 'designation', label: 'Designation', type: 'text', required: true },
             { name: 'department', label: 'Department', type: 'text', required: false },
             { name: 'newCTC', label: 'Increment Package', type: 'number', required: true },
-            { name: 'performanceYear', label: 'Performance Year', type: 'text', required: true },
             { name: 'effectiveDate', label: 'Effective Date', type: 'date', required: true },
             {
                 name: 'incrementType',
@@ -652,7 +651,6 @@ export const documentTypes = [
                 options: ['Mr.', 'Mrs.', 'Miss.', 'Mx.'],
                 required: true
             },
-
       {
         name: "employeeName",
         label: "Employee Name",
