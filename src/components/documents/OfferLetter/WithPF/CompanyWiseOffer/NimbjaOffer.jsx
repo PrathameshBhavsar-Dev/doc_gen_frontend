@@ -101,6 +101,7 @@ const NimbjaOffer = ({ company, data }) => {
           sx={{
             position: "relative",
             zIndex: 1,
+            fontFamily: "Bahnschrift",
           }}
         >
           {/* CONTENT */}
@@ -198,7 +199,7 @@ const NimbjaOffer = ({ company, data }) => {
               <img
                 src={company.signature}
                 alt="Signature"
-                style={{ height: 42, marginTop:"2mm" }}
+                style={{ height: 42, marginTop: "2mm" }}
               />
             )}
             {company?.stamp && (
@@ -284,7 +285,7 @@ const NimbjaOffer = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45, marginTop:"3mm" }}
+                  style={{ height: 45, marginTop: "3mm" }}
                 />
               )}
               {company?.stamp && (

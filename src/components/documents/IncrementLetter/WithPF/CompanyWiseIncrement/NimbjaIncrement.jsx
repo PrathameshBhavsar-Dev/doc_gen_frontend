@@ -221,7 +221,30 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           PAGE 2 – SALARY ANNEXURE
       ====================================================== */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box className="a4-content-only">
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           <Typography
             sx={{
               textAlign: "right",

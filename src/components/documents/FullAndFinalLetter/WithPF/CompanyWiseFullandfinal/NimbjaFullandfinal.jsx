@@ -130,9 +130,19 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
   const netPay = totalEarned - totalDeductions;
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Bahnschrift" }}>
-      {company.header && <img src={company.header} width="100%" alt="" />}
+    <Box
+      sx={{
+        width: "210mm",
+        minHeight: "297mm",
+        fontFamily: "Bahnschrift, sans-serif",
 
+        "& *": {
+          fontFamily: "Bahnschrift, sans-serif",
+        },
+      }}
+    >
+      {" "}
+      {company.header && <img src={company.header} width="100%" alt="" />}
       <Box
         component="img"
         src={watermark}
@@ -148,7 +158,6 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
           pointerEvents: "none",
         }}
       />
-
       {/* CONTENT */}
       <Box
         className="a4-content-only"
@@ -406,7 +415,6 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
           </TableBody>
         </Table>
       </Box>
-
       {company.footer && <img src={company.footer} width="100%" alt="" />}
     </Box>
   );

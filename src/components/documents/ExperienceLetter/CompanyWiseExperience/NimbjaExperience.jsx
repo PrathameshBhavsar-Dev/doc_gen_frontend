@@ -144,8 +144,8 @@ const NimbjaExperience = ({ company, data }) => {
         </p>
 
         {/* ================= SIGNATURE SECTION ================= */}
-        <div style={{ marginTop: "28mm" }}>
-          <p style={{ marginBottom: "12mm" }}>Sincerely,</p>
+        <div style={{ marginTop: "15mm" }}>
+          <p style={{ marginBottom: "8mm" }}>Sincerely,</p>
 
           {/* SIGNATURE + STAMP SIDE BY SIDE */}
           <div

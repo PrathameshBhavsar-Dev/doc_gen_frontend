@@ -68,7 +68,15 @@ const NimbjaIncrement = ({ company, data }) => {
   return (
     <>
       {/* =========================== PAGE 1 =========================== */}
-      <div className="a4-content-only" style={page}>
+      <Box
+        className="a4-content-only"
+        sx={{
+          ...page,
+          "& *": {
+            fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
+          },
+        }}
+      >
         {company.headerImage && (
           <img src={company.headerImage} alt="Header" style={fullWidth} />
         )}
@@ -85,6 +93,9 @@ const NimbjaIncrement = ({ company, data }) => {
             opacity: 0.6,
             zIndex: 0,
             pointerEvents: "none",
+            "& *": {
+              fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
+            },
           }}
         />
 
@@ -147,160 +158,185 @@ const NimbjaIncrement = ({ company, data }) => {
         {company.footerImage && (
           <img src={company.footerImage} alt="Footer" style={fullWidth} />
         )}
-      </div>
+      </Box>
 
       {/* =========================== PAGE 2 =========================== */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        {/* Date */}
-        <Typography
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
           sx={{
-            textAlign: "right",
-            fontSize: "11pt",
-            fontFamily: "Bahnschrift",
-            mb: 2,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
           }}
         >
-          {formatDate(data.issueDate)}
-        </Typography>
+          {/* Date */}
+          <Typography
+            sx={{
+              textAlign: "right",
+              fontSize: "11pt",
+              fontFamily: "Bahnschrift",
+              mb: 2,
+            }}
+          >
+            {formatDate(data.issueDate)}
+          </Typography>
 
-        {/* Ref */}
-        <Typography
-          sx={{
-            fontSize: "11pt",
-            fontFamily: "Bahnschrift",
-            mb: 4,
-            fontWeight: 600,
-          }}
-        >
-          Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
-        </Typography>
+          {/* Ref */}
+          <Typography
+            sx={{
+              fontSize: "11pt",
+              fontFamily: "Bahnschrift",
+              mb: 4,
+              fontWeight: 600,
+            }}
+          >
+            Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
+          </Typography>
 
-        {/* Title */}
-        <Typography
-          align="center"
-          sx={{
-            fontSize: "14pt",
-            fontWeight: 600,
-            textDecoration: "underline",
-            mb: 5,
-            fontFamily: "Bahnschrift",
-          }}
-        >
-          Salary Annexure A
-        </Typography>
+          {/* Title */}
+          <Typography
+            align="center"
+            sx={{
+              fontSize: "14pt",
+              fontWeight: 600,
+              textDecoration: "underline",
+              mb: 5,
+              fontFamily: "Bahnschrift",
+            }}
+          >
+            Salary Annexure A
+          </Typography>
 
-        {/* Employee Details */}
+          {/* Employee Details */}
 
-        {/* Table */}
-        <Table
-          sx={{
-            width: "100%",
-            borderCollapse: "collapse",
-            "& th": {
-              backgroundColor: "#8bc34a",
-              fontWeight: 700,
-              fontSize: "13px",
-              border: "1px solid #000",
-              padding: "6px",
-            },
-            "& td": {
-              border: "1px solid #000",
-              padding: "6px",
-              fontSize: "13px",
-              fontFamily: `"Times New Roman", Times, serif`,
-            },
-          }}
-        >
-          <TableBody>
-            {/* Header Row */}
-            <TableRow>
-              <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
-                <b>Salary Components</b>
-              </TableCell>
-              <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
-                <b>Per month (Rs.)</b>
-              </TableCell>
-              <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
-                <b>Per Annum (Rs.)</b>
-              </TableCell>
-            </TableRow>
+          {/* Table */}
+          <Table
+            sx={{
+              width: "100%",
+              borderCollapse: "collapse",
+              "& th": {
+                backgroundColor: "#8bc34a",
+                fontWeight: 700,
+                fontSize: "13px",
+                border: "1px solid #000",
+                padding: "6px",
+              },
+              "& td": {
+                border: "1px solid #000",
+                padding: "6px",
+                fontSize: "13px",
+                fontFamily: "Bahnschrift",
+              },
+            }}
+          >
+            <TableBody>
+              {/* Header Row */}
+              <TableRow>
+                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+                  <b>Salary Components</b>
+                </TableCell>
+                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+                  <b>Per month (Rs.)</b>
+                </TableCell>
+                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+                  <b>Per Annum (Rs.)</b>
+                </TableCell>
+              </TableRow>
 
-            {/* Salary Rows */}
-            <TableRow>
-              <TableCell>Basic</TableCell>
-              <TableCell align="right">{basicMonthly}</TableCell>
-              <TableCell align="right">{basicAnnual}</TableCell>
-            </TableRow>
+              {/* Salary Rows */}
+              <TableRow>
+                <TableCell>Basic</TableCell>
+                <TableCell align="right">{basicMonthly}</TableCell>
+                <TableCell align="right">{basicAnnual}</TableCell>
+              </TableRow>
 
-            <TableRow>
-              <TableCell>Bouqet Of Benefits</TableCell>
-              <TableCell align="right">{hraMonthly}</TableCell>
-              <TableCell align="right">{hraAnnual}</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>Bouqet Of Benefits</TableCell>
+                <TableCell align="right">{hraMonthly}</TableCell>
+                <TableCell align="right">{hraAnnual}</TableCell>
+              </TableRow>
 
-            <TableRow>
-              <TableCell>HRA</TableCell>
-              <TableCell align="right">{daMonthly}</TableCell>
-              <TableCell align="right">{daAnnual}</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>HRA</TableCell>
+                <TableCell align="right">{daMonthly}</TableCell>
+                <TableCell align="right">{daAnnual}</TableCell>
+              </TableRow>
 
-            <TableRow>
-              <TableCell>City Allowance</TableCell>
-              <TableCell align="right">{specialMonthly}</TableCell>
-              <TableCell align="right">{specialAnnual}</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>City Allowance</TableCell>
+                <TableCell align="right">{specialMonthly}</TableCell>
+                <TableCell align="right">{specialAnnual}</TableCell>
+              </TableRow>
 
-            <TableRow>
-              <TableCell>Superannuation Fund</TableCell>
-              <TableCell align="right">{foodMonthly}</TableCell>
-              <TableCell align="right">{foodAnnual}</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>Superannuation Fund</TableCell>
+                <TableCell align="right">{foodMonthly}</TableCell>
+                <TableCell align="right">{foodAnnual}</TableCell>
+              </TableRow>
 
-            <TableRow>
-              <TableCell>Performance Bonus</TableCell>
-              <TableCell align="right">{miscMonthly}</TableCell>
-              <TableCell align="right">{miscAnnual}</TableCell>
-            </TableRow>
+              <TableRow>
+                <TableCell>Performance Bonus</TableCell>
+                <TableCell align="right">{miscMonthly}</TableCell>
+                <TableCell align="right">{miscAnnual}</TableCell>
+              </TableRow>
 
-            {/* Total Row */}
-            <TableRow sx={{ backgroundColor: "#8bc34a" }}>
-              <TableCell sx={{ fontWeight: 700 }}>Total Salary</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 700 }}>
-                {totalMonthly}
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: 700 }}>
-                {totalAnnual}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+              {/* Total Row */}
+              <TableRow sx={{ backgroundColor: "#8bc34a" }}>
+                <TableCell sx={{ fontWeight: 700 }}>Total Salary</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700 }}>
+                  {totalMonthly}
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700 }}>
+                  {totalAnnual}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
 
-        {/* Confidential Note */}
-        <Typography
-          sx={{
-            mt: 6,
-            fontSize: "12pt",
-            fontFamily: "Bahnschrift",
-            textAlign: "center",
-          }}
-        ></Typography>
+          {/* Confidential Note */}
+          <Typography
+            sx={{
+              mt: 6,
+              fontSize: "12pt",
+              fontFamily: "Bahnschrift",
+              textAlign: "center",
+            }}
+          ></Typography>
+        </Box>
       </A4Page>
     </>
   );
 };
 
 /* ================= STYLES ================= */
-
 const page = {
   width: "210mm",
   minHeight: "297mm",
   backgroundColor: "#fff",
-  fontFamily: "Bahnschrift, 'Segoe UI', Arial, sans-serif",
   fontSize: "11pt",
   lineHeight: "1.5",
   display: "flex",
   flexDirection: "column",
   position: "relative",
+
+  fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
 };
 
 const content = { padding: "22mm 25mm", flexGrow: 1 };
