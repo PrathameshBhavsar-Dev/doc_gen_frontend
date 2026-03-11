@@ -15,12 +15,6 @@ const formatDate = (date) =>
     })
     : "";
 
-/* ================= PRONOUN RESOLVER ================= */
-
-
-
-
-/* ================= MAIN COMPONENT ================= */
 const JDITUnPaidInternshipLetter = ({ company, data }) => {
 
   const title = (data?.mrms || "").toLowerCase().trim();
