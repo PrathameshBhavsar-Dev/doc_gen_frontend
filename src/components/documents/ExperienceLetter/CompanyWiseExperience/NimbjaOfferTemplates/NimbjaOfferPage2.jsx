@@ -307,6 +307,30 @@ const NimbjaOfferPage2 = ({ company, data }) => {
           formatDate={formatDate}
         />
       </Box>
+      <Box
+          component="img"
+          src={company.watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.5,
+            zIndex: -1,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 2,
+          }}
+        ></Box>
       {/* Signature Block */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
         <Box>
