@@ -769,13 +769,13 @@ export const documentTypes = [
         name: "technologies",
         label: "Technologies Used",
         type: "textarea",
-        required: true,
+        required: false,
       },
       {
         name: "achievements",
         label: "Key Achievements",
         type: "textarea",
-        required: true,
+        required: false,
       },
       {
         name: "clientName",
