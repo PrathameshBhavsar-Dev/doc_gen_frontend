@@ -36,7 +36,7 @@ const numberToWords = (num = 0) => {
 
 const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
-   const round2 = (num) => Number(num.toFixed(2));
+  const round2 = (num) => Number(num.toFixed(2));
 
   /* ===== EMPLOYEE DETAILS ===== */
   const {
@@ -62,39 +62,39 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
   /* ===== MONTHLY SALARY LOGIC (PERCENTAGE-WISE) ===== */
 
-const monthlyGross = round2(Number(totalSalary || 0));
+  const monthlyGross = round2(Number(totalSalary || 0));
 
-// Percentages (TOTAL = 100%)
-const PERCENT = {
-  basic: 0.40,
-  hra: 0.18,
-  da: 0.12,
-  special: 0.16,
-  food: 0.06,
-  misc: 0.08,
-};
+  // Percentages (TOTAL = 100%)
+  const PERCENT = {
+    basic: 0.40,
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+    misc: 0.08,
+  };
 
-// Monthly breakup
-const basic      = round2(monthlyGross * PERCENT.basic);
-const hra        = round2(monthlyGross * PERCENT.hra);
-const conveyance = round2(monthlyGross * PERCENT.da);     // DA
-const special    = round2(monthlyGross * PERCENT.special);
-const food       = round2(monthlyGross * PERCENT.food);
-const others     = round2(monthlyGross * PERCENT.misc);
+  // Monthly breakup
+  const basic = round2(monthlyGross * PERCENT.basic);
+  const hra = round2(monthlyGross * PERCENT.hra);
+  const conveyance = round2(monthlyGross * PERCENT.da);     // DA
+  const special = round2(monthlyGross * PERCENT.special);
+  const food = round2(monthlyGross * PERCENT.food);
+  const others = round2(monthlyGross * PERCENT.misc);
 
-// Totals
-const totalEarning =
-  basic +
-  hra +
-  conveyance +
-  special +
-  food +
-  others;
+  // Totals
+  const totalEarning =
+    basic +
+    hra +
+    conveyance +
+    special +
+    food +
+    others;
 
-// Deductions
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round2(pt + Number(otherDeduction || 0));
-const netPay = round2(totalEarning - totalDeduction);
+  // Deductions
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
 
 
   return (
@@ -102,8 +102,8 @@ const netPay = round2(totalEarning - totalDeduction);
       headerSrc={company.header}
       footerSrc={company.footer}
       watermarkSrc={company.watermark}
-      // contentTop="45mm"
-      // contentBottom="30mm"
+    // contentTop="45mm"
+    // contentBottom="30mm"
     >
       <TableContainer
         component={Paper}
@@ -114,8 +114,10 @@ const netPay = round2(totalEarning - totalDeduction);
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            fontSize: "11pt",
-            padding: "6px 8px",
+            fontSize: "10pt",   // reduce font
+            padding: "3px 6px", // reduce row height
+            lineHeight: 1.2
+
           },
         }}
       >
@@ -213,7 +215,7 @@ const netPay = round2(totalEarning - totalDeduction);
               <TableCell />
             </TableRow>
 
-            <TableRow>  
+            <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>FOOD ALLOWANCE</TableCell>
               <TableCell align="right">{formatCurrency(food)}</TableCell>
               <TableCell />
@@ -252,10 +254,10 @@ const netPay = round2(totalEarning - totalDeduction);
               <TableCell />
               <TableCell />
               <TableCell align="center">
-                {company?.stamp && <img src={company.stamp} height={55} alt="Stamp" />}
+                {company?.stamp && <img src={company.stamp} height={45} alt="Stamp" />}
               </TableCell>
               <TableCell align="center">
-                {company?.signature && <img src={company.signature} height={40} alt="Signature" />}
+                {company?.signature && <img src={company.signature} height={10} alt="Signature" />}
                 <Typography fontWeight="bold">Signature</Typography>
               </TableCell>
             </TableRow>
@@ -263,7 +265,7 @@ const netPay = round2(totalEarning - totalDeduction);
         </Table>
       </TableContainer>
     </A4Page>
-    
+
   );
 };
 

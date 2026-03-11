@@ -13,7 +13,7 @@ import {
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 // ================= TABLE CELL STYLES =================
 const NimbjaAppointment = ({ company, data }) => {
@@ -43,42 +43,6 @@ const NimbjaAppointment = ({ company, data }) => {
 
   /* ================= SALARY LOGIC ================= */
   const round0 = (num) => Math.round(num);
-
-  // // ===== Static PF =====
-  // const pfMonthly = 3750;
-  // const pfAnnual = round2(pfMonthly * 12);
-
-  // // ===== Fixed % Components =====
-  // const basicAnnual = round2(annualCTC * 0.34);
-  // const hraAnnual = round2(annualCTC * 0.20);
-  // const daAnnual = round2(annualCTC * 0.035);
-  // const foodAnnual = round2(annualCTC * 0.06);
-
-  // // ===== Special = Balance Amount =====
-  // const specialAnnual = round2(
-  //   annualCTC -
-  //     (basicAnnual + hraAnnual + daAnnual + foodAnnual + pfAnnual)
-  // );
-
-  // // ===== Monthly Values =====
-  // const basicMonthly = round2(basicAnnual / 12);
-  // const hraMonthly = round2(hraAnnual / 12);
-  // const daMonthly = round2(daAnnual / 12);
-  // const specialMonthly = round2(specialAnnual / 12);
-  // const foodMonthly = round2(foodAnnual / 12);
-
-  // // ===== Totals (Exact CTC Match) =====
-  // const totalMonthly = round2(annualCTC / 12);
-  // const totalAnnual = annualCTC;
-
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Provident Fund (PF)", pfMonthly, pfAnnual],
-  // ];
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(Number(data.salary || 0));
@@ -119,8 +83,30 @@ const NimbjaAppointment = ({ company, data }) => {
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        {/* ================= CONTENT ================= */}
-        <Box className="a4-content-only">
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "70%",
+            opacity: 0.8,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           {/* ================= DATE ================= */}
           <Typography
             sx={{

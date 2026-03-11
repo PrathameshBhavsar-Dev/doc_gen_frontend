@@ -14,7 +14,7 @@ const HeroDashBoardSection = () => {
       badge: "+12.5%",
     },
     { img: icon2, value: "48", label: "This Month", badge: "+23.1%" },
-    { img: icon3, value: "4", label: "Active Users", badge: "+5" },
+    // { img: icon3, value: "4", label: "Active Users", badge: "+5" },
   ];
 
   return (
@@ -45,14 +45,13 @@ const HeroDashBoardSection = () => {
                           grid-cols-1 
                           sm:grid-cols-2 
                           lg:grid-cols-3 
-                          xl:grid-cols-4 
                           gap-4 sm:gap-6"
           >
             {stats.map((card, index) => (
               <div
                 key={index}
                 className="group bg-white rounded-2xl 
-                           p-4 sm:p-5 lg:p-6
+                           p-5 sm:p-6 lg:p-8
                            shadow-sm hover:shadow-xl
                            transition-all duration-300
                            hover:bg-gradient-to-r 
