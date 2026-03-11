@@ -216,16 +216,35 @@ const {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 3, mt: 2 }}>
-                {company.   sign && (
-                  <img src={company.sign} alt="sign" height={45} />
+              <Box sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}>
+                
+                 {company.signature && (
+                  <img
+                    src={company.signature}
+                    alt="signature"
+                    style={{
+                      height: "65px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
+              
                 {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
+                  <img
+                    src={company.stamp}
+                    alt="stamp"
+                    style={{
+                      height: "90px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
-              </Box>
+              
+               </Box>
 
-              <Typography fontWeight={600} mt={-3}>
+              <Typography fontWeight={600} mt={2}>
                 {company.hrName}
               </Typography>
               <Typography fontSize={13}>
