@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
+import { formatCurrency } from "../../../../../utils/salaryCalculations";
+
 import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
 import { TableContainer, Paper } from "@mui/material";
 
@@ -87,9 +89,9 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
         {/* BODY */}
         <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
           We are pleased to offer you the Internship of position as{" "}
-          <strong>{data.designation}</strong> with {company.name}, with
-          effective date <strong>{formatDate(data.startDate)}</strong>{" "}
-          considering your performance and support towards the organization.
+          <strong>{data.designation}</strong> with {company.name} with effective
+          date <strong>{formatDate(data.startDate)}</strong> considering your
+          performance and support towards the organization.
         </Typography>
 
         <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
@@ -199,25 +201,26 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
                 ].map(([label, value]) => (
                   <TableRow key={label}>
                     <TableCell>{label}</TableCell>
+
                     <TableCell align="center">
-                      {Number(value).toLocaleString("en-IN")}
+                      {formatCurrency(value)}
                     </TableCell>
+
                     <TableCell align="center">
-                      {Number(value * 12).toLocaleString("en-IN")}
+                      {formatCurrency(value * 12)}
                     </TableCell>
                   </TableRow>
                 ))}
-
                 {/* TOTAL ROW */}
                 <TableRow sx={{ backgroundColor: "#f7941d" }}>
                   <TableCell sx={{ fontWeight: "bold" }}>
                     Total Monthly Gross Salary
                   </TableCell>
                   <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                    {monthlyGross.toLocaleString("en-IN")}
+                    {formatCurrency(monthlyGross)}
                   </TableCell>
                   <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                    {annualCTC.toLocaleString("en-IN")}
+                    {formatCurrency(annualCTC)}
                   </TableCell>
                 </TableRow>
               </TableBody>
