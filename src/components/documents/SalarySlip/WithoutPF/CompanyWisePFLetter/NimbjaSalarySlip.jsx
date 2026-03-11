@@ -15,7 +15,7 @@ import {
   formatCurrency,
   getProfessionalTax,
 } from "../../../../../utils/salaryCalculations";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 /* 🔢 Number to Words (Indian system – up to Crores) */
 const numberToWords = (num = 0) => {
   if (!num) return "Zero Rupees Only";
@@ -151,17 +151,43 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     <A4Page
       headerSrc={company?.header}
       footerSrc={company?.footer}
-      watermarkSrc={company?.watermark}
       contentTop="35mm"
       contentBottom="45mm"
     >
+      {/* WATERMARK */}
+      <Box
+        component="img"
+        src={watermark}
+        alt="watermark"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50%",
+          opacity: 0.6,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* CONTENT */}
+      {/* <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+        }}
+      > */}
+
       <TableContainer
         component={Paper}
         sx={{
           width: "95%",
           margin: "0 auto",
           border: "1px solid #000",
+          position: "relative",
           borderRadius: 0,
+          backgroundColor: "transparent",
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid #000",
