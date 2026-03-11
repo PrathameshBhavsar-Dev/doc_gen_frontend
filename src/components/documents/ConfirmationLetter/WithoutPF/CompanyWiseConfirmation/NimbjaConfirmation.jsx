@@ -146,7 +146,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -276,82 +276,129 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography
-          sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
-        >
-          <strong>Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}</strong>
-        </Typography>
-        <Typography align="center" fontWeight={600} mb={4}>
-          Annexure A – Salary Structure
-        </Typography>
-
-        <Table
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
           sx={{
-            width: "100%",
-            border: "1px solid #000",
-            "& td": {
-              border: "1px solid #000",
-              padding: "6px",
-              fontSize: "14px",
-            },
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
           }}
         >
-          <TableBody>
-            <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-              <TableCell>
-                <b>Salary Components</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>Per month (Rs.)</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>Per Annum (Rs.)</b>
-              </TableCell>
-            </TableRow>
+          <Typography
+            sx={{
+              mb: "6mm",
+              fontSize: "11pt",
+              fontFamily: "Bahnschrift",
+              position: "relative",
+            }}
+          >
+            <strong>
+              Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
+            </strong>
+          </Typography>
+          <Typography align="center" fontWeight={600} mb={4}>
+            Annexure A – Salary Structure
+          </Typography>
 
-            {salaryRows.map(([name, monthly, annual], i) => (
-              <TableRow key={i}>
-                <TableCell>{name}</TableCell>
-                <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(annual)}</TableCell>
+          <Table
+            sx={{
+              width: "100%",
+              border: "1px solid #000",
+              "& td": {
+                border: "1px solid #000",
+                padding: "6px",
+                fontSize: "14px",
+                fontFamily: "Bahnschrift",
+              },
+            }}
+          >
+            <TableBody>
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell>
+                  <b>Salary Components</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Per month (Rs.)</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Per Annum (Rs.)</b>
+                </TableCell>
               </TableRow>
-            ))}
 
-            <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-              <TableCell>
-                <b>Total Monthly Gross Salary</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>{formatCurrency(totalMonthly)}</b>
-              </TableCell>
-              <TableCell align="right">
-                <b>{formatCurrency(totalAnnual)}</b>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+              {salaryRows.map(([name, monthly, annual], i) => (
+                <TableRow key={i}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell align="right">{formatCurrency(monthly)}</TableCell>
+                  <TableCell align="right">{formatCurrency(annual)}</TableCell>
+                </TableRow>
+              ))}
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 10 }}>
-          <Box>
-            <Box sx={{ display: "flex", gap: 3 }}>
-              {company?.signature && (
-                <img
-                  src={company.signature}
-                  alt="Signature"
-                  style={{ height: 45, marginTop: "5mm" }}
-                />
-              )}
-              {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
-              )}
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell>
+                  <b>Total Monthly Gross Salary</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>{formatCurrency(totalMonthly)}</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>{formatCurrency(totalAnnual)}</b>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: 10,
+              fontFamily: "Bahnschrift",
+            }}
+          >
+            <Box>
+              <Box sx={{ display: "flex", gap: 3 }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 45, marginTop: "5mm" }}
+                  />
+                )}
+                {company?.stamp && (
+                  <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
+                )}
+              </Box>
+              <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
+                {company.hrName}
+              </Typography>
+              <Typography sx={{ fontFamily: "Bahnschrift" }}>
+                HR Relations Lead
+              </Typography>
             </Box>
-            <Typography mt={1}>{company.hrName}</Typography>
-            <Typography>HR Relations Lead</Typography>
-          </Box>
 
-          <Box minWidth="250px" sx={{ mt: 10 }}>
-            <Typography>Signature: __________________</Typography>
-            <Typography mt={2}>Candidate Name: {data.employeeName}</Typography>
+            <Box minWidth="250px" sx={{ mt: 10, fontFamily: "Bahnschrift" }}>
+              <Typography sx={{ fontFamily: "Bahnschrift" }}>
+                Signature: __________________
+              </Typography>
+              <Typography mt={2} sx={{ fontFamily: "Bahnschrift" }}>
+                Candidate Name: {data.employeeName}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </A4Page>

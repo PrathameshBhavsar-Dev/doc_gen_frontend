@@ -161,7 +161,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -289,7 +289,31 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box className="a4-content-only">
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {" "}
           <Typography
             sx={{
               textAlign: "right",
@@ -301,7 +325,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             {formatDate(data.issueDate)}
           </Typography>
-
           <Typography
             sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
           >
@@ -309,7 +332,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
             </strong>
           </Typography>
-
           {/* 🔥 ONLY THIS PART IS REPLACED */}
           <SalaryStructureTable
             salaryRows={salaryRows}

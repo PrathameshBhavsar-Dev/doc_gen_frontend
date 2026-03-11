@@ -301,12 +301,36 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
         footerSrc={company.footer}
         // watermarkSrc={company.watermark}
       >
-        <Box>
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.6,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            fontFamily: "Bahnschrift",
+          }}
+        >
           <Typography
             align="center"
             fontWeight={600}
             mb={5}
-            sx={{ textDecoration: "underline" }}
+            sx={{ textDecoration: "underline", fontFamily: "Bahnschrift" }}
           >
             Annexure A – Salary Structure
           </Typography>
@@ -319,6 +343,7 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
                 border: "1px solid #000",
                 padding: "4px 6px",
                 fontSize: "16px",
+                fontFamily: "Bahnschrift",
               },
             }}
           >
