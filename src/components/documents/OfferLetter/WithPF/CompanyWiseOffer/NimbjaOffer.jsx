@@ -198,7 +198,7 @@ const NimbjaOffer = ({ company, data }) => {
               <img
                 src={company.signature}
                 alt="Signature"
-                style={{ height: 42 }}
+                style={{ height: 42, marginTop:"2mm" }}
               />
             )}
             {company?.stamp && (
@@ -251,6 +251,31 @@ const NimbjaOffer = ({ company, data }) => {
             formatDate={formatDate}
           />
         </Box>
+
+        <Box
+          component="img"
+          src={company.watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.5,
+            zIndex: -1,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 2,
+          }}
+        ></Box>
         {/* Signature Block */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
           <Box>
@@ -259,11 +284,15 @@ const NimbjaOffer = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45 }}
+                  style={{ height: 45, marginTop:"3mm" }}
                 />
               )}
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{ height: 100, marginLeft: "-2mm" }}
+                />
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
