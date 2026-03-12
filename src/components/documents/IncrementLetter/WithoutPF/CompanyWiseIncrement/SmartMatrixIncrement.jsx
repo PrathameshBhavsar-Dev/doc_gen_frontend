@@ -267,11 +267,17 @@ const SmartMatrixIncrement = ({ company, data }) => {
         >
           Salary Annexure
         </Typography>
-        <div
-          style={{
-            marginBottom: "16px",
-            fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
-            fontSize: "12pt",
+        <Box
+          sx={{
+            marginBottom: "35px",
+            fontSize: "13pt",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
+
+            "& p": {
+              mt: 1,
+            },
           }}
         >
           <p>
@@ -284,14 +290,17 @@ const SmartMatrixIncrement = ({ company, data }) => {
           <p>
             <strong>Effective Date :</strong> {formatDate(data.effectiveDate)}
           </p>
-        </div>
+        </Box>
         <TableContainer
           component={Paper}
           sx={{
-            width: "100%",
+            marginBottom: "20px",
             border: "0.5px solid #000",
             borderRadius: 0,
             boxShadow: "none",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
           }}
         >
           <Table size="small" sx={{ tableLayout: "fixed" }}>
@@ -300,19 +309,18 @@ const SmartMatrixIncrement = ({ company, data }) => {
               <TableRow>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     fontSize: "15px",
                     width: "40%",
-                    fontFamily: "Times New Roman",
                   }}
                 >
                   Salary Components
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     fontSize: "15px",
@@ -324,7 +332,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     fontSize: "15px",
@@ -353,6 +361,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                         border: "1.5px solid #000",
                         fontWeight: isTotal ? "bold" : "normal",
                         fontSize: "14px",
+                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
                       }}
                     >
                       {row.label}
@@ -363,6 +372,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                         textAlign: "center",
                         fontWeight: isTotal ? "bold" : "normal",
                         fontSize: "14px",
+                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
                       }}
                     >
                       {formatCurrency(row.monthly)}
@@ -373,6 +383,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                         textAlign: "center",
                         fontWeight: isTotal ? "bold" : "normal",
                         fontSize: "14px",
+                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
                       }}
                     >
                       {formatCurrency(row.annual)}

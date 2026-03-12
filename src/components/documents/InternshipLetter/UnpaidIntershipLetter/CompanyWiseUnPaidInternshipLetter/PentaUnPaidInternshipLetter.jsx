@@ -106,7 +106,7 @@ const PentaUnpaidInternshipLetter = ({ company, data }) => {
   return (
     <A4Page company={company}>
       {/* CONTENT BLOCK */}
-      <Box sx={{ px: "32mm", pt: "35mm", pb: "45mm" }}>
+      <Box sx={{ px: "32mm", pt: "20mm", pb: "45mm" }}>
         {/* TITLE */}
         <Typography
           sx={{
@@ -114,7 +114,7 @@ const PentaUnpaidInternshipLetter = ({ company, data }) => {
             fontWeight: "bold",
             fontSize: 16,
             letterSpacing: 1,
-            mb: 10,
+            mb: 12,
           }}
         >
           LETTER OF INTERNSHIP

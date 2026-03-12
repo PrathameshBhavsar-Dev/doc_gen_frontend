@@ -334,19 +334,27 @@ const JditFullAndFinal = ({ company, data }) => {
       
                    {/* SIGNATURE */}
                               <TableRow>
-                                <TableCell sx={{ ...cell, ...center }}></TableCell>
-                                <TableCell sx={{ ...cell, ...center }}>
-                                  {company.stamp && <img src={company.stamp} height={60} alt="" />}
+                                <TableCell sx={{ ...cell, ...center, padding: "2px" }}></TableCell>
+                              
+                                <TableCell sx={{ ...cell, ...center, padding: "2px" }}>
+                                  {company.stamp && (
+                                    <img
+                                      src={company.stamp}
+                                      alt="Stamp"
+                                      style={{ height: 75, display: "block", margin: "0 auto" }}
+                                    />
+                                  )}
                                 </TableCell>
-                                <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                                  {company.signature && <img src={company.signature} height={45} alt="" />}
+                              
+                                <TableCell colSpan={2} sx={{ ...cell, ...center, padding: "3px" }}>
+                                  {company.signature && (
+                                    <img
+                                      src={company.signature}
+                                      alt="Signature"
+                                      style={{ height: 60, display: "block", margin: "0 auto" }}
+                                    />
+                                  )}
                                 </TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
-                                <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
-                                <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
                               </TableRow>
       
                 </TableBody>

@@ -253,7 +253,7 @@ const netPayWords = numberToWords(Math.round(netPay));
   <img
     src={company.stamp}
     alt=""
-    style={{ height: "40%", objectFit: "contain" }}
+    style={{ height: "130%", objectFit: "contain" }}
   />
 </Box>
             <Box sx={{ ...cell, width: "25%", flexDirection: "column", alignItems: "center" }}>

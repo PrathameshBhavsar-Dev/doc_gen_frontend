@@ -143,15 +143,15 @@ const PentaFullandfinal = ({ company, data }) => {
     0
   );
 
- const earnedTotal = Math.floor(
-  earnings.reduce(
-    (sum, item) =>
-      item.excludeFromTotal
-        ? sum
-        : sum + Math.floor(item.value * paidRatio),
-    0
-  )
-);
+  const earnedTotal = Math.floor(
+    earnings.reduce(
+      (sum, item) =>
+        item.excludeFromTotal
+          ? sum
+          : sum + Math.floor(item.value * paidRatio),
+      0
+    )
+  );
   /* ---- Deductions ---- */
   const deductionsTotal = salary.pt + salary.other + salary.pf;
 
@@ -271,12 +271,12 @@ const PentaFullandfinal = ({ company, data }) => {
                   {numberFormat(item.value)}
                 </TableCell>
 
-               <TableCell sx={cell}>
-  {numberFormat(
-    item.label === "PF"
-      ? item.value
-      : Math.floor(item.value * paidRatio)
-  )}
+                <TableCell sx={cell}>
+                  {numberFormat(
+                    item.label === "PF"
+                      ? item.value
+                      : Math.floor(item.value * paidRatio)
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -357,19 +357,26 @@ const PentaFullandfinal = ({ company, data }) => {
                 {numberToWords(netPay)}
               </TableCell>
             </TableRow>
-
             <TableRow>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell sx={{ ...cell, ...center }} style={{ mt: "15" }}>
                 Prepared By
               </TableCell>
+
               <TableCell sx={{ ...cell, ...center }}>
-                <img src={company.stamp} height={50} alt="stamp" />
-                <br />
+                <img
+                  src={company.stamp}
+                  alt="stamp"
+                  style={{ height: "55px", width: "auto", display: "block", margin: "0 auto" }}
+                />
                 Verified By
               </TableCell>
+
               <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                <img src={company.signature} height={45} alt="sign" />
-                <br />
+                <img
+                  src={company.signature}
+                  alt="sign"
+                  style={{ height: "40px", width: "auto", display: "block", margin: "0 auto" }}
+                />
                 Approved By
               </TableCell>
             </TableRow>

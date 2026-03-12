@@ -183,31 +183,33 @@ const PentaAppointment = ({ company, data }) => {
           }}
         >
           {/* COMPANY SIGNATURE */}
-          <Box>
-            <Typography>For<strong> {company.name} </strong></Typography>
+         <Box sx={{ mt: 4 }}>
+  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    {company.signature && (
+      <img
+        src={company.signature}
+        alt="Authorized Sign"
+        style={{ height: "35px", width: "auto", objectFit: "contain" }}
+      />
+    )}
 
+    {company.stamp && (
+      <img
+        src={company.stamp}
+        alt="Company Stamp"
+        style={{ height: "100px", width: "auto", objectFit: "contain" }}
+      />
+    )}
+  </Box>
 
+  <Typography fontWeight={600} mt={1}>
+    {company.hrName}
+  </Typography>
 
-
-
-            <Box sx={{ mt: 2 }}>
-              {company.signature && (
-                <img src={company.signature} alt="Authorized Sign" height={45} />
-              )}
-
-              {company.stamp && (
-                <img src={company.stamp} alt="Company Stamp" height={80} />
-              )}
-
-
-              <Typography fontWeight={600} mt={1}>
-                {company.hrName}
-              </Typography>
-              <Typography fontSize={13}>
-                <strong>Group Leader - Shared HR Services  </strong>
-              </Typography>
-            </Box>
-          </Box>
+  <Typography fontSize={13}>
+    <strong>Group Leader - Shared HR Services</strong>
+  </Typography>
+</Box>
 
           {/* ACCEPTANCE */}
           <Box>

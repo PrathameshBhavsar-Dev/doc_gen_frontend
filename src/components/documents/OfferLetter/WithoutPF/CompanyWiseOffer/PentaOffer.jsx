@@ -207,12 +207,12 @@ const finalData = calculateSalaryBreakup(annualCTC);
     sx={{
       display: "grid",
       gridTemplateColumns: "95px 10px auto",
-      
+      mt:14,
       fontSize: 14,
-      mb: 4,
+      // mb: 4
     }}
   >
-    <Typography fontWeight="bold">Name</Typography>
+    <Typography fontWeight="bold" marginTop="2">Name</Typography>
     <Typography fontWeight="bold">:</Typography>
     <Typography>{data.mrms} {data.candidateName}</Typography>
 
