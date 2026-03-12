@@ -48,7 +48,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    mode = "Bank Transfer",
+    mode = "",
     workdays = "",
     month = "2025-02",
     totalSalary = 0,
