@@ -186,7 +186,7 @@ const totalEarned =
             </TableRow>
 
             {/* SALARY PARTICULARS */}
-            <TableRow sx={{ background: "#f5f5f5" }}>
+            <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
                 Salary particulars
               </TableCell>
@@ -202,7 +202,7 @@ const totalEarned =
             </TableRow>
 
             {/* EARNINGS */}
-            <TableRow sx={{ background: "#f2dede" }}>
+            <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
