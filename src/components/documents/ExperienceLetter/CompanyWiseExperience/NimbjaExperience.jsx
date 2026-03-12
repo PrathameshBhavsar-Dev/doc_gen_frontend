@@ -35,7 +35,6 @@ const NimbjaExperience = ({ company, data }) => {
         color: "#000",
         backgroundColor: "#fff",
         overflow: "hidden",
-        position: "relative",
       }}
     >
       {/* ================= HEADER ================= */}
