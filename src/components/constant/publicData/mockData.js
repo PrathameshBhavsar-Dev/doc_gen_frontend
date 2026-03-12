@@ -21,6 +21,7 @@ import smartholderWatermark from "../../../assets/images/SmartSoftware/Watermark
 import smartholderSignature from "../../../assets/images/SmartSoftware/Sign.png";
 import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.jpeg";
 import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
+import smartLogo from "../../../assets/images/SmartSoftware/Sign.png";
 
 // Import JDIT Company Data images
 import jdit_header from "../../../assets/images/jdit/jdit_head.jpeg";
@@ -1405,13 +1406,13 @@ export const documentTypes = [
         name: "technologies",
         label: "Technologies Used",
         type: "textarea",
-        required: true,
+        required: false,
       },
       {
         name: "achievements",
         label: "Key Achievements",
         type: "textarea",
-        required: true,
+        required: false,
       },
       {
         name: "clientName",
