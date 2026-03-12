@@ -106,7 +106,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "10pt" }}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>
@@ -149,7 +149,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             <TableRow>
               <TableCell sx={bold}>Mode</TableCell>
               <TableCell sx={cell}>
-                Bank Name- {data.bankName}
+                Bank Name- {data.mode}
                 <br />
                 Bank Account No.- {data.accountNo}
               </TableCell>

@@ -170,7 +170,8 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           <Typography mb={3}>
             <strong>Subject :</strong>{" "}
             <u>
-              Letter of intent for continued services as {data.designation}.
+              Letter of intent for continued services as{" "}
+              <strong>{data.position}.</strong>
             </u>
           </Typography>
 
@@ -178,7 +179,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
           <Typography mb={2} textAlign="justify">
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.designation}</strong> with
+            <strong>{data.position}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
             effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
             considering your performance and support towards the organization.

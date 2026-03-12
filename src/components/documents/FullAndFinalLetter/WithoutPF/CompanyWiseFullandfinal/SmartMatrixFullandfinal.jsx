@@ -98,7 +98,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
 
   /* ================= OTHER EARNINGS ================= */
 
-  const leaveEncashment = Number(data.leaveEncashment || 0);
+  const leaveEncashment = Number(data.leaveencashment || 0);
 
   const totalAfterOther = totalEarned + leaveEncashment;
   const netPayable = totalAfterOther - totalDeduction;
@@ -125,12 +125,12 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
 
             {/* COMPANY */}
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
                 <strong>{company.name}</strong>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>

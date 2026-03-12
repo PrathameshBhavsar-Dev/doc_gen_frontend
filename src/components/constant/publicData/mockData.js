@@ -174,7 +174,7 @@ export const companies = [
     footerImage: null,
     watermarkImage: null,
     address:
-      "Office No. 102-B, First Floor, Ganesham Commercial -A, Survey No. 21/18-21/24, BRTS Road, Pimple Saudagar, Pune- 411027",
+      "Office No. 102-A, First Floor Ganesham - A Commercial, Pimple Saudagar, Pune- 411027",
     email: "contact@smartmatrixds.com",
     phone: "+91 9112108484",
     website: "https://smartmatrixds.com/",
@@ -449,6 +449,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -515,6 +528,19 @@ export const documentTypes = [
         name: "candidateName",
         label: "Employee Name",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       { name: "address", label: "Address", type: "textarea", required: false },
@@ -592,15 +618,29 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeName",
+        label: "Employee Name",
+        type: "text",
+        required: true,
+      },
+      {
         name: "employeeId",
         label: "Employee ID",
         type: "text",
         required: true,
       },
+
       {
-        name: "employeeName",
-        label: "Employee Name",
-        type: "text",
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       { name: "address", label: "Address", type: "textarea", required: true },
@@ -677,6 +717,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -736,6 +789,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -792,6 +858,19 @@ export const documentTypes = [
         name: "employeeId",
         label: "Employee ID",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       {
@@ -866,6 +945,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -921,6 +1013,19 @@ export const documentTypes = [
         name: "employeeId",
         label: "Employee ID",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       {
@@ -1005,6 +1110,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -1076,6 +1194,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -1134,6 +1265,19 @@ export const documentTypes = [
         name: "employeeName",
         label: "Employee Name",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
 
@@ -1224,6 +1368,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -1290,6 +1447,19 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -1353,6 +1523,19 @@ export const documentTypes = [
         name: "employeeId",
         label: "Employee ID",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       {
@@ -1429,6 +1612,19 @@ export const documentTypes = [
         name: "employeeId",
         label: "Employee ID",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       {
@@ -1513,6 +1709,32 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
+        required: true,
+      },
+      {
         name: "designation",
         label: "Designation",
         type: "text",
@@ -1589,6 +1811,19 @@ export const documentTypes = [
         name: "employeeName",
         label: "Employee Name",
         type: "text",
+        required: true,
+      },
+      {
+        name: "employeeEmail",
+        label: "Employee Email",
+        type: "email",
+        required: true,
+      },
+
+      {
+        name: "employeePhone",
+        label: "Phone Number",
+        type: "number",
         required: true,
       },
       // { name: 'employeeId', label: 'Employee ID', type: 'text', required: false },

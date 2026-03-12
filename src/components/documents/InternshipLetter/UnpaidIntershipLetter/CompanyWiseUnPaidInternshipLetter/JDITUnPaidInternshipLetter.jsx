@@ -1,22 +1,18 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import A4Page from "../../../layout/A4Page";
-
-
-
+import A4Page from "../../../../layout/A4Page";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
     : "";
 
 const JDITUnPaidInternshipLetter = ({ company, data }) => {
-
   const title = (data?.mrms || "").toLowerCase().trim();
 
   const pronouns =
@@ -61,14 +57,10 @@ const JDITUnPaidInternshipLetter = ({ company, data }) => {
         INTERNSHIP COMPLETION LETTER
       </Typography>
 
-
       {/* BODY – Neweage Content */}
       <Typography sx={{ mb: 2, textAlign: "justify" }}>
-        This is to certify that{" "}
-        <strong>
-          {data.employeeName}
-        </strong>{" "}
-        has done {pronouns.possessive} internship at{" "}
+        This is to certify that <strong>{data.employeeName}</strong> has done{" "}
+        {pronouns.possessive} internship at{" "}
         <strong>DEVCONS SOFTWARE SOLUTIONS PVT. LTD.</strong> from{" "}
         <strong>{formatDate(data.startDate)}</strong> to{" "}
         <strong>{formatDate(data.completionDate)}</strong>.
@@ -79,28 +71,22 @@ const JDITUnPaidInternshipLetter = ({ company, data }) => {
         {pronouns.possessive} skills with self-motivation to learn new skills.{" "}
         {pronouns.possessive.charAt(0).toUpperCase() +
           pronouns.possessive.slice(1)}{" "}
-        performance exceeded our expectations and {pronouns.subject.toLowerCase()} was
-        able to complete the given tasks on time. {pronouns.subject} was designated as <strong>{data.role}</strong> with project
-        named <strong>{data.projectName}</strong>. We wish {pronouns.object} all the
-        best for {pronouns.possessive} upcoming career.
+        performance exceeded our expectations and{" "}
+        {pronouns.subject.toLowerCase()} was able to complete the given tasks on
+        time. {pronouns.subject} was designated as <strong>{data.role}</strong>{" "}
+        with project named <strong>{data.projectName}</strong>. We wish{" "}
+        {pronouns.object} all the best for {pronouns.possessive} upcoming
+        career.
       </Typography>
 
       {/* SIGNATURE & STAMP */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
         {company?.sign && (
-          <img
-            src={company.sign}
-            alt="Signature"
-            style={{ height: 65 }}
-          />
+          <img src={company.sign} alt="Signature" style={{ height: 65 }} />
         )}
 
         {company?.stamp && (
-          <img
-            src={company.stamp}
-            alt="Stamp"
-            style={{ height: 85 }}
-          />
+          <img src={company.stamp} alt="Stamp" style={{ height: 85 }} />
         )}
       </Box>
 
@@ -118,8 +104,7 @@ const JDITUnPaidInternshipLetter = ({ company, data }) => {
           Candidate Name: <span>{employeeName}</span>
         </Typography>
       </Box>
-
-    </A4Page >
+    </A4Page>
   );
 };
 

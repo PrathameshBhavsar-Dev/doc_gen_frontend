@@ -166,9 +166,8 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           <Typography mb={3}>
             <strong>Subject :</strong>
             <u>
-              {" "}
               Letter of intent for continued services as{" "}
-              <strong>{data.designation}</strong>.
+              <strong>{data.position}</strong>.
             </u>
           </Typography>
 
@@ -176,7 +175,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
           <Typography mb={2} textAlign="justify">
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.designation}</strong> with
+            <strong>{data.position}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
             effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
             considering your performance and support towards the organization.
@@ -194,7 +193,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
           <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
-            your employment will be specified of appointment.We welcome you to
+            your employment will be specified of appointment. We welcome you to
             SmartMatrix Digital Services Pvt Ltd. Family and hope it would be
             the beginning of a long and mutually beneficial association. Kindly
             acknowledge the duplicate copy of this letter as an acceptance of
