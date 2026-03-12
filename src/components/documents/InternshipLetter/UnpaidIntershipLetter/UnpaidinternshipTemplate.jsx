@@ -8,7 +8,7 @@ import RPUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/RPUnPa
 import SmartMatrixUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartMatrixUnPaidInternshipLetter";
 import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
 import NimbjaUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NimbjaUnPaidInternshipLetter";
-import DevconsUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnpaidInternshipLetter";
+import DevconsUnpaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnpaidInternshipLetter";
 import QuickUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/QuickUnPaidInternshipLetter";
 
 // same company ids, just Increment components
@@ -16,7 +16,7 @@ const companyComponentMap = {
   1: CubeageUnPaidInternshipLetter,
   2: NeweageUnPaidInternshipLetter,
   3: SmartMatrixUnPaidInternshipLetter,
-  4: DevconsUnPaidInternshipLetter,
+  4: DevconsUnpaidInternshipLetter,
   5: RPUnPaidInternshipLetter,
   6: PentaUnPaidInternshipLetter,
   7: NimbjaUnPaidInternshipLetter,
