@@ -15,10 +15,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
 const round0 = (n) => Math.round(Number(n || 0));
@@ -113,22 +113,22 @@ const QuickConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
 
           <Typography fontSize={14} textAlign="justify" mt={2}>
-                     We are pleased to confirm your continued services at the position of {data.position}<br />
-                     Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}<strong>{formatDate(data.effectiveDate)}</strong><br />
-                     considering your performance and support towards the organization..
-                   </Typography>
-         
-                   <Typography fontSize={14} textAlign="justify" mt={2}>
-                     If there is any change in the date of joining, changes can be taken under consideration<br />
-                     Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> Per Year.
-                   </Typography>
-         
-         
-                   <Typography fontSize={14} textAlign="justify" mt={2}>
-                     Subject to various deductions as per companies and government policy.The roles and
-                      responsibilities and other terms and conditions of your employment will be Specified 
-                      in your letter of appointment. We welcome you to  {company.name}. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
-                   </Typography>
+            We are pleased to confirm your continued services at the position of {data.position}<br />
+            Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}<strong>{formatDate(data.effectiveDate)}</strong><br />
+            considering your performance and support towards the organization..
+          </Typography>
+
+          <Typography fontSize={14} textAlign="justify" mt={2}>
+            If there is any change in the date of joining, changes can be taken under consideration<br />
+            Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> Per Year.
+          </Typography>
+
+
+          <Typography fontSize={14} textAlign="justify" mt={2}>
+            Subject to various deductions as per companies and government policy.The roles and
+            responsibilities and other terms and conditions of your employment will be Specified
+            in your letter of appointment. We welcome you to  {company.name}. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+          </Typography>
 
           {/* Signature Section */}
           <Box mt={6} display="flex" justifyContent="space-between">
@@ -137,12 +137,31 @@ const QuickConfirmation = ({ company = {}, data = {} }) => {
                 For <strong>{company.name}</strong>
               </Typography>
 
-              <Box mt={2}>
+              <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3, mt: 3 }}>
                 {company.signature && (
-                  <img src={company.signature} alt="Sign" height={45} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="Authorized Sign"
+                    sx={{
+                      height: 40,
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
+
                 {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={85} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="Company Stamp"
+                    sx={{
+                      height: 100,
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
               </Box>
 
@@ -214,35 +233,54 @@ const QuickConfirmation = ({ company = {}, data = {} }) => {
               </TableCell>
             </TableRow>
           </TableBody>
-          
+
         </Table>
-  {/* Signature Section */}
-          <Box mt={6} display="flex" justifyContent="space-between">
-            <Box>
-                   <Box mt={5}>
-                {company.signature && (
-                  <img src={company.signature} alt="Sign" height={45} />
-                )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={85} />
-                )}
-              </Box>
+        {/* Signature Section */}
+        <Box mt={6} display="flex" justifyContent="space-between">
+          <Box>
+            <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3, mt: 3 }}>
+              {company.signature && (
+                <Box
+                  component="img"
+                  src={company.signature}
+                  alt="Authorized Sign"
+                  sx={{
+                    height: 40,
+                    width: "auto",
+                    objectFit: "contain"
+                  }}
+                />
+              )}
 
-              <Typography fontWeight={600} mt={2}>
-                {company.hrName}
-              </Typography>
-              <Typography fontSize={15}>
-                HR Relations Lead
-              </Typography>
+              {company.stamp && (
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="Company Stamp"
+                  sx={{
+                    height: 100,
+                    width: "auto",
+                    objectFit: "contain"
+                  }}
+                />
+              )}
             </Box>
 
-            <Box>
-              <Typography mt={17}>Signature: __________________</Typography>
-              <Typography mt={1}>
-                Name: {data.employeeName}
-              </Typography>
-            </Box>
+            <Typography fontWeight={600} mt={2}>
+              {company.hrName}
+            </Typography>
+            <Typography fontSize={15}>
+              HR Relations Lead
+            </Typography>
           </Box>
+
+          <Box>
+            <Typography mt={17}>Signature: __________________</Typography>
+            <Typography mt={1}>
+              Name: {data.employeeName}
+            </Typography>
+          </Box>
+        </Box>
       </A4Page>
     </>
   );

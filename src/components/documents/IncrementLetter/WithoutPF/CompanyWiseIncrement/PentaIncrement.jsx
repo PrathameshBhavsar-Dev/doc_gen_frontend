@@ -92,7 +92,7 @@ const totalAnnual = round0(
 
                 
             . Your salary will increase to{" "}
-            <strong>{formatCurrency(data.newCTC)}</strong> per annum. Effective from <strong> {new Date(data.effectiveDate).toLocaleDateString("en-US", {
+            <strong>{formatCurrency(totalAnnual)}</strong> per annum. Effective from <strong> {new Date(data.effectiveDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",
                 year: "numeric",
@@ -115,7 +115,7 @@ const totalAnnual = round0(
               <img
                 src={company.jaya_sign}
                 alt="Signature"
-                style={{ height: 60 }}
+                style={{ height: 30 }}
               />
             )}
 

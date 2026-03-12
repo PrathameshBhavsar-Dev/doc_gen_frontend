@@ -164,14 +164,33 @@ const QuickAppointment = ({ company, data }) => {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 3, mt: 2 }}>
-                {company.signature && (
-                  <img src={company.signature} alt="sign" height={55} />
-                )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
-                )}
-              </Box>
+              <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3, mt: 3 }}>
+  {company.signature && (
+    <Box
+      component="img"
+      src={company.signature}
+      alt="Authorized Sign"
+      sx={{
+        height: 40,
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
+
+  {company.stamp && (
+    <Box
+      component="img"
+      src={company.stamp}
+      alt="Company Stamp"
+      sx={{
+        height: 95,
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
+</Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
@@ -185,7 +204,7 @@ const QuickAppointment = ({ company, data }) => {
             <Box>
               <Typography fontWeight={600}>I ACCEPT</Typography>
               <Typography mt={1}>Signature: _____________</Typography>
-              <Typography mt={2}>Name: {data.employeeName}</Typography>
+              <Typography mt={11}>Name: {data.employeeName}</Typography>
               <Typography mt={1}>Date: _____________</Typography>
             </Box>
           </Box>

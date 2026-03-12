@@ -15,7 +15,7 @@ const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GN", {
       month: "long",
-       day: "2-digit",
+      day: "2-digit",
       year: "numeric",
     })
     : "";
@@ -33,12 +33,12 @@ const formatCurrency = (v) =>
 const generateSalaryBreakup = (annualCTC) => {
   const round2 = (n) => Number(n.toFixed(2));
 
-  const basic   = round2(annualCTC * 0.40);
-  const hra     = round2(annualCTC * 0.18);
-  const da      = round2(annualCTC * 0.12);
+  const basic = round2(annualCTC * 0.40);
+  const hra = round2(annualCTC * 0.18);
+  const da = round2(annualCTC * 0.12);
   const special = round2(annualCTC * 0.16);
-  const food    = round2(annualCTC * 0.06);
-  const misc    = round2(annualCTC * 0.08);
+  const food = round2(annualCTC * 0.06);
+  const misc = round2(annualCTC * 0.08);
 
   return [
     ["Basic Salary ", basic / 12, basic],
@@ -131,10 +131,10 @@ const PentaAppointment = ({ company, data }) => {
             LETTER OF APPOINTMENT
           </Typography>
 
-         <Typography mt={2} fontSize={15} textAlign="justify">
-                     Further to your acceptance, Offer dated {" "}
-                     <b>{formatDate(data. issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
-                   </Typography>
+          <Typography mt={2} fontSize={15} textAlign="justify">
+            Further to your acceptance, Offer dated {" "}
+            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+          </Typography>
 
           <Box component="ol" sx={{ pl: 3, mt: 1 }}>
             {terms.slice(0, 11).map((t, i) => (
@@ -153,7 +153,7 @@ const PentaAppointment = ({ company, data }) => {
         headerSrc={company.header}
         footerSrc={company.footer}
       >
-        <Box component="ol" start={12} sx={{ pl: 3,  mt: 2}}>
+        <Box component="ol" start={12} sx={{ pl: 3, mt: 2 }}>
           {terms.slice(8).map((t, i) => (
             <li key={i}>
               <Typography fontSize={14} textAlign="justify" mb={1}>
@@ -178,21 +178,39 @@ const PentaAppointment = ({ company, data }) => {
 
 
 
-            <Box sx={{ mt: 2 }}>
-              {company.signature && (
-                <img src={company.signature} alt="Authorized Sign" height={45} />
-              )}
+            <Box sx={{ mt: 3 }}>
+              <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
+  {company.signature && (
+    <img
+      src={company.signature}
+      alt="Authorized Sign"
+      style={{
+        height: "45px",
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
 
-              {company.stamp && (
-                <img src={company.stamp} alt="Company Stamp" height={80} />
-              )}
-
+  {company.stamp && (
+    <img
+      src={company.stamp}
+      alt="Company Stamp"
+      style={{
+        height: "70px",
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
+</Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
               </Typography>
+
               <Typography fontSize={13}>
-                <strong>Group Leader - Shared HR Services  </strong>
+                <strong>Group Leader - Shared HR Services</strong>
               </Typography>
             </Box>
           </Box>

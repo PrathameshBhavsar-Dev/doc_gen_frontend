@@ -441,14 +441,23 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
                 For <strong>{company.name}</strong>
               </Typography>
 
-              <Box mt={2}>
-                {company.signature && (
-                  <img src={company.signature} alt="Sign" height={50} />
-                )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={80} />
-                )}
-              </Box>
+<Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+  {company.signature && (
+    <img
+      src={company.signature}
+      alt="Sign"
+      style={{ height: "30px", width: "auto" }}
+    />
+  )}
+
+  {company.stamp && (
+    <img
+      src={company.stamp}
+      alt="Stamp"
+      style={{ height: "95px", width: "auto" }}
+    />
+  )}
+</Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
@@ -533,12 +542,23 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
           }}
         >
           <Box>
-            {company.signature && (
-              <img src={company.signature} alt="Sign" height={50} />
-            )}
-            {company.stamp && (
-              <img src={company.stamp} alt="Stamp" height={80} />
-            )}
+           <Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+  {company.signature && (
+    <img
+      src={company.signature}
+      alt="Sign"
+      style={{ height: "30px", width: "auto" }}
+    />
+  )}
+
+  {company.stamp && (
+    <img
+      src={company.stamp}
+      alt="Stamp"
+      style={{ height: "95px", width: "auto" }}
+    />
+  )}
+</Box>
             <Typography mt={1}>{company.hrName}</Typography>
             <Typography fontSize={13}>HR Relations Lead</Typography>
           </Box>
