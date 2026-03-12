@@ -1722,19 +1722,7 @@ export const documentTypes = [
         type: "number",
         required: true,
       },
-      {
-        name: "employeeEmail",
-        label: "Employee Email",
-        type: "email",
-        required: true,
-      },
 
-      {
-        name: "employeePhone",
-        label: "Phone Number",
-        type: "number",
-        required: true,
-      },
       {
         name: "designation",
         label: "Designation",
