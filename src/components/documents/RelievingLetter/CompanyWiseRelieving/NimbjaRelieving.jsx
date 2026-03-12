@@ -90,7 +90,7 @@ const NimbjaRelieving = ({ company, data }) => {
         <div
           style={{
             marginBottom: "18mm",
-            marginTop: "15mm",
+            // marginTop: "15mm",
             marginTop: "-20mm",
           }}
         >

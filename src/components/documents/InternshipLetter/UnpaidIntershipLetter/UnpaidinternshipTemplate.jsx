@@ -8,7 +8,7 @@ import RPUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/RPUnPa
 import SmartMatrixUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartMatrixUnPaidInternshipLetter";
 import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
 import NimbjaUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NimbjaUnPaidInternshipLetter";
-import DevconsUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnPaidInternshipLetter";
+import DevconsUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnpaidInternshipLetter";
 import QuickUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/QuickUnPaidInternshipLetter";
 
 // same company ids, just Increment components
