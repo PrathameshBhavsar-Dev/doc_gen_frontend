@@ -18,7 +18,7 @@ const HeroDashBoardSection = () => {
   ];
 
   return (
-    <section className="bg-[#f3f4f8] w-full ">
+    <section className="w-full ">
       {/* Responsive Container */}
       <div className="w-full max-w-screen-2xl mx-auto">
         {/* Heading */}

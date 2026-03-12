@@ -21,6 +21,7 @@ import smartholderWatermark from "../../../assets/images/SmartSoftware/Watermark
 import smartholderSignature from "../../../assets/images/SmartSoftware/Sign.png";
 import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.jpeg";
 import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
+import smartLogo from "../../../assets/images/SmartSoftware/Sign.png";
 
 // Import JDIT Company Data images
 import jdit_header from "../../../assets/images/jdit/jdit_head.jpeg";
