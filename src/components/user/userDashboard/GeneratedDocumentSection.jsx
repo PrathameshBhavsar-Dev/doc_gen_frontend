@@ -5,7 +5,11 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { FiEdit } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../../../core/constants/routes.constant";
+
 function GeneratedDocumentSection() {
+  const navigate = useNavigate();
   const documents = [
     {
       type: "Offer Letter",
@@ -113,6 +117,7 @@ function GeneratedDocumentSection() {
             {documents.map((item, index) => (
               <Box
                 key={index}
+                onClick={() => navigate(ROUTES.USERDOCUMENT_DETAIL, { state: { document: item } })}
                 sx={{
                   display: "grid",
                   gridTemplateColumns: "2fr 1.4fr 1.4fr 1.2fr 1fr 1fr 1fr",
@@ -120,6 +125,7 @@ function GeneratedDocumentSection() {
                   py: 3,
                   alignItems: "center",
                   borderTop: "1px solid #F1F1F4",
+                  cursor: "pointer",
                   "&:hover": {
                     backgroundColor: "#f9fafb",
                   },

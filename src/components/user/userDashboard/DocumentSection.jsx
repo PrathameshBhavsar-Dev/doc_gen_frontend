@@ -128,7 +128,7 @@ const DocumentCard = ({ doc, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className={`relative flex flex-col gap-3 rounded-2xl border p-3 sm:p-4 cursor-pointer
+      className={`relative flex flex-col bg-white gap-3 rounded-2xl border p-3 sm:p-4 cursor-pointer
                   transition-all duration-300 ease-in-out shadow-lg
                   hover:border-[#B37BD6] hover:-translate-y-1 hover:bg-purple-50
                   hover:shadow-[#B37BD6] bg-[#FFFEF8]

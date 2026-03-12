@@ -108,16 +108,13 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
       <TableContainer
         component={Paper}
         sx={{
-          border: "1.5px solid black",
+          border: "1px solid black",
           borderRadius: 0,
-          mt: "5mm",
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            fontSize: "10pt",   // reduce font
-            padding: "3px 6px", // reduce row height
-            lineHeight: 1.2
-
+            padding: "4px 6px",
+            fontFamily: "Bahnschrift",
           },
         }}
       >
@@ -251,13 +248,24 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell align="center">
-                {company?.stamp && <img src={company.stamp} height={45} alt="Stamp" />}
+              <TableCell colSpan={2} />
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: 85, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
               </TableCell>
-              <TableCell align="center">
-                {company?.signature && <img src={company.signature} height={10} alt="Signature" />}
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 50, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
                 <Typography fontWeight="bold">Signature</Typography>
               </TableCell>
             </TableRow>
