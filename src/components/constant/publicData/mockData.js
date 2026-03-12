@@ -537,7 +537,6 @@ export const documentTypes = [
         type: "email",
         required: true,
       },
-
       {
         name: "employeePhone",
         label: "Phone Number",
