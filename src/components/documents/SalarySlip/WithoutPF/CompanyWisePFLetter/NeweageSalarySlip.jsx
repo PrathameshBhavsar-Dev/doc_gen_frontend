@@ -121,7 +121,11 @@ const NeweageSalarySlip = ({ company, data }) => {
 
   /* ================= RENDER ================= */
   return (
-    <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
+    <A4Layout
+      headerSrc={company.headerImage}
+      footerSrc={company.footerImage}
+      watermarkSrc={company.waterMarkImage}
+    >
       <Table>
         <TableBody>
           {/* HEADER */}

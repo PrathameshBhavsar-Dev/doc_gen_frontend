@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
@@ -130,10 +130,42 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
   const netPay = totalEarned - totalDeductions;
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", fontFamily: "Bahnschrift" }}>
-      {company.header && <img src={company.header} width="100%" alt="" />}
+    <Box
+      sx={{
+        width: "210mm",
+        minHeight: "297mm",
+        fontFamily: "Bahnschrift, sans-serif",
 
-      <Box p="10mm">
+        "& *": {
+          fontFamily: "Bahnschrift, sans-serif",
+        },
+      }}
+    >
+      {" "}
+      {company.header && <img src={company.header} width="100%" alt="" />}
+      <Box
+        component="img"
+        src={watermark}
+        alt="watermark"
+        sx={{
+          position: "absolute",
+          top: "90%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "30%",
+          opacity: 0.6,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+      {/* CONTENT */}
+      <Box
+        className="a4-content-only"
+        sx={{
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
             {/* TITLE */}
@@ -340,14 +372,35 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
             {/* SIGNATURE */}
             <TableRow>
               <TableCell sx={{ ...cell, ...center }}></TableCell>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell
+                sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}
+              >
                 {company.stamp && (
-                  <img src={company.stamp} height={60} alt="" />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={company.stamp} width={100} alt="" />
+                  </Box>
                 )}
               </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>
+              <TableCell
+                colSpan={2}
+                sx={{ ...cell, textAlign: "center", verticalAlign: "middle" }}
+              >
                 {company.signature && (
-                  <img src={company.signature} height={45} alt="" />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img src={company.signature} width={220} alt="" />
+                  </Box>
                 )}
               </TableCell>
             </TableRow>
@@ -362,7 +415,6 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
           </TableBody>
         </Table>
       </Box>
-
       {company.footer && <img src={company.footer} width="100%" alt="" />}
     </Box>
   );

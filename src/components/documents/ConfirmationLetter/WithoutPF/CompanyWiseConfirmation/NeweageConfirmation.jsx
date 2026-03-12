@@ -15,10 +15,10 @@ import { formatCurrency } from "../../../../../utils/salaryCalculations";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
     : "";
 
 const round2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
@@ -199,12 +199,32 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
                 {company.signature && (
-                  <img src={company.signature} alt="signature" height={60} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="signature"
+                    sx={{
+                      height: "60px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
                 {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="stamp"
+                    sx={{
+                      height: "80px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
               </Box>
 
@@ -289,12 +309,32 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
               For {company.name}
             </Typography>
 
-            <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+            <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
               {company.signature && (
-                <img src={company.signature} alt="signature" height={60} />
+                <Box
+                  component="img"
+                  src={company.signature}
+                  alt="signature"
+                  sx={{
+                    height: "60px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
               {company.stamp && (
-                <img src={company.stamp} alt="stamp" height={80} />
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="stamp"
+                  sx={{
+                    height: "80px",
+                    width: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                  }}
+                />
               )}
             </Box>
 

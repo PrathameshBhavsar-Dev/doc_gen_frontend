@@ -36,7 +36,7 @@ const numberToWords = (num = 0) => {
 
 const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
-   const round2 = (num) => Number(num.toFixed(2));
+  const round2 = (num) => Number(num.toFixed(2));
 
   /* ===== EMPLOYEE DETAILS ===== */
   const {
@@ -62,39 +62,39 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
   /* ===== MONTHLY SALARY LOGIC (PERCENTAGE-WISE) ===== */
 
-const monthlyGross = round2(Number(totalSalary || 0));
+  const monthlyGross = round2(Number(totalSalary || 0));
 
-// Percentages (TOTAL = 100%)
-const PERCENT = {
-  basic: 0.40,
-  hra: 0.18,
-  da: 0.12,
-  special: 0.16,
-  food: 0.06,
-  misc: 0.08,
-};
+  // Percentages (TOTAL = 100%)
+  const PERCENT = {
+    basic: 0.40,
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+    misc: 0.08,
+  };
 
-// Monthly breakup
-const basic      = round2(monthlyGross * PERCENT.basic);
-const hra        = round2(monthlyGross * PERCENT.hra);
-const conveyance = round2(monthlyGross * PERCENT.da);     // DA
-const special    = round2(monthlyGross * PERCENT.special);
-const food       = round2(monthlyGross * PERCENT.food);
-const others     = round2(monthlyGross * PERCENT.misc);
+  // Monthly breakup
+  const basic = round2(monthlyGross * PERCENT.basic);
+  const hra = round2(monthlyGross * PERCENT.hra);
+  const conveyance = round2(monthlyGross * PERCENT.da);     // DA
+  const special = round2(monthlyGross * PERCENT.special);
+  const food = round2(monthlyGross * PERCENT.food);
+  const others = round2(monthlyGross * PERCENT.misc);
 
-// Totals
-const totalEarning =
-  basic +
-  hra +
-  conveyance +
-  special +
-  food +
-  others;
+  // Totals
+  const totalEarning =
+    basic +
+    hra +
+    conveyance +
+    special +
+    food +
+    others;
 
-// Deductions
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round2(pt + Number(otherDeduction || 0));
-const netPay = round2(totalEarning - totalDeduction);
+  // Deductions
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
 
 
   return (
@@ -102,20 +102,19 @@ const netPay = round2(totalEarning - totalDeduction);
       headerSrc={company.header}
       footerSrc={company.footer}
       watermarkSrc={company.watermark}
-      // contentTop="45mm"
-      // contentBottom="30mm"
+    // contentTop="45mm"
+    // contentBottom="30mm"
     >
       <TableContainer
         component={Paper}
         sx={{
-          border: "1.5px solid black",
+          border: "1px solid black",
           borderRadius: 0,
-          mt: "5mm",
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            fontSize: "11pt",
-            padding: "6px 8px",
+            padding: "4px 6px",
+            fontFamily: "Bahnschrift",
           },
         }}
       >
@@ -213,7 +212,7 @@ const netPay = round2(totalEarning - totalDeduction);
               <TableCell />
             </TableRow>
 
-            <TableRow>  
+            <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>FOOD ALLOWANCE</TableCell>
               <TableCell align="right">{formatCurrency(food)}</TableCell>
               <TableCell />
@@ -249,13 +248,24 @@ const netPay = round2(totalEarning - totalDeduction);
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell align="center">
-                {company?.stamp && <img src={company.stamp} height={55} alt="Stamp" />}
+              <TableCell colSpan={2} />
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: 85, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
               </TableCell>
-              <TableCell align="center">
-                {company?.signature && <img src={company.signature} height={40} alt="Signature" />}
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 50, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
                 <Typography fontWeight="bold">Signature</Typography>
               </TableCell>
             </TableRow>
@@ -263,7 +273,7 @@ const netPay = round2(totalEarning - totalDeduction);
         </Table>
       </TableContainer>
     </A4Page>
-    
+
   );
 };
 

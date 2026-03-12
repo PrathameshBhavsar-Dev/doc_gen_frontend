@@ -1,162 +1,3 @@
-// import React from "react";
-
-// const NimbjaRelieving = ({ company, data }) => {
-//   return (
-//     <div
-//       className="a4-content-only"
-//       style={{
-//         width: "210mm",
-//         minHeight: "297mm",
-//         position: "relative", // 🔴 UPDATED (needed for watermark & footer)
-//         fontFamily: "Bahnschrift, 'Segoe UI', Arial, sans-serif",
-//         fontSize: "12pt",
-//         lineHeight: "1.55",
-//         color: "#000",
-//         backgroundColor: "#fff",
-//         overflow: "hidden",
-//       }}
-//     >
-//       {/* ================= WATERMARK ================= */}
-//       {company.watermark && (
-//         <img
-//           src={company.watermark} // 🔴 UPDATED (from mockdata)
-//           alt="Company Watermark"
-//           style={{
-//             position: "absolute",
-//             top: "50%",
-//             left: "50%",
-//             transform: "translate(-50%, -50%)", // 🔴 UPDATED (centered)
-//             width: "300px", // 🔴 UPDATED (balanced size)
-//             opacity: 0.08, // 🔴 UPDATED (behind content)
-//             zIndex: 0, // 🔴 UPDATED
-//             pointerEvents: "none", // 🔴 UPDATED
-//           }}
-//         />
-//       )}
-
-//       {/* ================= HEADER ================= */}
-//       {company.header && (
-//         <img
-//           src={company.header}
-//           alt="Company Header"
-//           style={{
-//             width: "100%",
-//             display: "block",
-//             zIndex: 1, // 🔴 UPDATED
-//             position: "relative",
-//           }}
-//         />
-//       )}
-
-//       {/* ================= CONTENT ================= */}
-//       <div
-//         style={{
-//           padding: "22mm 22mm 30mm 22mm",
-//           position: "relative", // 🔴 UPDATED
-//           zIndex: 1, // 🔴 UPDATED (above watermark)
-//         }}
-//       >
-//         {/* ================= DATE ================= */}
-//         <div style={{ textAlign: "right", marginBottom: "16mm" }}>
-//           {new Date(data.issueDate).toLocaleDateString("en-US", {
-//             month: "long",
-//             day: "2-digit",
-//             year: "numeric",
-//           })}
-//         </div>
-
-//         {/* ================= RECEIVER ================= */}
-//         <div style={{ marginBottom: "10mm" }}>
-//           <strong>{data.employeeName}</strong>
-//           <br />
-//           {data.designation}
-//         </div>
-
-//         {/* ================= SALUTATION ================= */}
-//         <p>Dear {data.employeeName.split(" ")[0]},</p>
-
-//         {/* ================= BODY ================= */}
-//         <p style={{ textAlign: "justify" }}>
-//           This letter confirms that we accept your voluntary and irrevocable
-//           resignation from employment of your position as{" "}
-//           <strong>{data.designation}</strong> Engineer in the Department of{" "}
-//           <strong>{data.department}</strong>. Your last day of employment will
-//           be{" "}
-//           <strong>
-//             {new Date(data.lastWorkingDay).toLocaleDateString("en-US", {
-//               month: "long",
-//               day: "2-digit",
-//               year: "numeric",
-//             })}
-//           </strong>
-//           .
-//         </p>
-
-//         <p>We wish you success in all of your future endeavors.</p>
-
-//         {/* ================= SIGNATURE + STAMP ================= */}
-//         <div
-//           style={{
-//             marginTop: "18mm",
-//             display: "flex",
-//             alignItems: "flex-start",
-//             gap: "24px",
-//           }}
-//         >
-//           {/* SIGNATURE */}
-//           <div>
-//             {company.signature && (
-//               <img
-//                 src={company.signature}
-//                 alt="HR Signature"
-//                 style={{
-//                   width: "130px",
-//                   display: "block",
-//                   marginBottom: "6px",
-//                 }}
-//               />
-//             )}
-
-//             <p style={{ margin: 0, fontWeight: "600" }}>{company.hrName}</p>
-//             <p style={{ margin: 0 }}>HR Relations Lead</p>
-//             <p style={{ margin: 0 }}>Department of HR Relations</p>
-//           </div>
-
-//           {/* STAMP */}
-//           {company.stamp && (
-//             <img
-//               src={company.stamp}
-//               alt="Company Stamp"
-//               style={{
-//                 width: "115px",
-//                 marginTop: "10px",
-//               }}
-//             />
-//           )}
-//         </div>
-//       </div>
-
-//       {/* ================= FOOTER ================= */}
-//       {company.footer && (
-//         <img
-//           src={company.footer}
-//           alt="Company Footer"
-//           style={{
-//             position: "absolute",
-//             bottom: 0,
-//             left: 0,
-//             width: "100%",
-//             display: "block",
-//             zIndex: 1, // 🔴 UPDATED
-//           }}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default NimbjaRelieving;
-
 import React from "react";
 
 const NimbjaRelieving = ({ company, data }) => {
@@ -185,8 +26,8 @@ const NimbjaRelieving = ({ company, data }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "300px",
-            opacity: 0.08,
+            width: "50%",
+            opacity: 0.6,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -213,10 +54,9 @@ const NimbjaRelieving = ({ company, data }) => {
           fontStyle: "Verdana",
           fontSize: "mm",
           marginTop: "16mm",
-          marginBottom: "14mm",
+          // marginBottom: "14mm",
           textDecoration: "",
-          marginRight: "6mm"
-          
+          marginRight: "12mm",
         }}
       >
         {new Date(data.issueDate).toLocaleDateString("en-US", {
@@ -239,21 +79,28 @@ const NimbjaRelieving = ({ company, data }) => {
           style={{
             textAlign: "Center",
             marginBottom: "26mm", // ✅ matches Word spacing
-            marginTop: "-20mm",
+            marginTop: "-22mm",
+            textDecoration: "underline",
           }}
         >
           Releiving Letter.
         </div>
 
         {/* ================= RECEIVER ================= */}
-        <div style={{ marginBottom: "18mm", marginTop: "15mm" }}>
+        <div
+          style={{
+            marginBottom: "18mm",
+            marginTop: "15mm",
+            marginTop: "-20mm",
+          }}
+        >
           <strong>{data.employeeName}</strong>
           <br />
           <strong>{data.designation}</strong>
         </div>
 
         {/* ================= SALUTATION ================= */}
-        <p style={{ marginBottom: "10mm" }}>
+        <p style={{ marginBottom: "10mm", marginTop: "-15mm" }}>
           Dear {data.employeeName.split(" ")[0]},
         </p>
 
@@ -279,7 +126,7 @@ const NimbjaRelieving = ({ company, data }) => {
           .
         </p>
 
-        <p style={{ marginBottom: "24mm" }}>
+        <p style={{ marginBottom: "24mm", marginTop: "-12mm" }}>
           We wish you success in all of your future endeavors.
         </p>
 
@@ -287,6 +134,7 @@ const NimbjaRelieving = ({ company, data }) => {
           style={{
             textAlign: "left",
             marginBottom: "22mm",
+            marginTop: "-13mm",
           }}
         >
           Sincerely,

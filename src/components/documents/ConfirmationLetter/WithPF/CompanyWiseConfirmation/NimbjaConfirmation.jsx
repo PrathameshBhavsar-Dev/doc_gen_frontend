@@ -24,7 +24,7 @@ import {
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   const firstName = data.employeeName?.split(" ")[0] || "";
@@ -151,7 +151,30 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box>
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           <Typography
             align="right"
             mb={3}
@@ -159,7 +182,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             {formatDate(data.issueDate)}
           </Typography>
-
           <Typography
             sx={{
               textAlign: "Center",
@@ -172,24 +194,19 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             Confirmation Letter
           </Typography>
-
           <Typography mb={1} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Name :</strong> {data.employeeName}
           </Typography>
-
           <Typography b={2} sx={{ fontFamily: "Bahnschrift", mt: "-2mm" }}>
             <strong>Address:</strong> {data.Address}
           </Typography>
-
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
             as <strong>{data.designation}</strong>
           </Typography>
-
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
             Dear {firstName},
           </Typography>
-
           <Typography
             mb={3}
             textAlign="justify"
@@ -201,7 +218,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             date <strong>{formatDate(data.effectiveDate)}</strong>, considering
             your performance and support towards the organization.
           </Typography>
-
           <Typography
             mb={2}
             textAlign="justify"
@@ -211,7 +227,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             under consideration. Your total Gross salary will be Rs.{" "}
             <strong>{formatCurrency(totalAnnual)}</strong> per year.
           </Typography>
-
           <Typography
             mb={2}
             textAlign="justify"
@@ -221,22 +236,18 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             Kindly acknowledge the duplicate copy of this letter as an
             acceptance of this offer.
           </Typography>
-
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
             The roles and responsibilities and other terms and conditions of
             your employment will be specified in your letter of appointment.
           </Typography>
-
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
             We welcome you to Nimbja Security Solutions Pvt. Ltd. Family and
             hope it would be the beginning of a long and mutually beneficial
             association.
           </Typography>
-
           <Typography sx={{ fontFamily: "Bahnschrift", fontSize: "14pt" }}>
             for <strong>Nimbja Security Solutions Pvt. Ltd.</strong>
           </Typography>
-
           {/* Signature Block */}
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
             <Box>
@@ -278,7 +289,31 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box className="a4-content-only">
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {" "}
           <Typography
             sx={{
               textAlign: "right",
@@ -290,7 +325,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             {formatDate(data.issueDate)}
           </Typography>
-
           <Typography
             sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
           >
@@ -298,7 +332,6 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
             </strong>
           </Typography>
-
           {/* 🔥 ONLY THIS PART IS REPLACED */}
           <SalaryStructureTable
             salaryRows={salaryRows}
@@ -346,4 +379,3 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 };
 
 export default NimbjaConfirmation;
-

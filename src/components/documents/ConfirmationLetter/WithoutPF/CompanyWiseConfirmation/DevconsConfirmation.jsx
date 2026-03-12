@@ -244,7 +244,7 @@ const totalAnnual = round0(
                 <b>{formatCurrency(totalMonthly)}</b>
               </TableCell>
               <TableCell align="right">
-                <b>{formatCurrency(totalMonthly)}</b>
+                <b>{formatCurrency(totalAnnual)}</b>
               </TableCell>
             </TableRow>
           </TableBody>

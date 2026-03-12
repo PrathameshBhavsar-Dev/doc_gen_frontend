@@ -32,6 +32,7 @@ const FieldLabel = ({ label, required, htmlFor }) => (
 /* ========================= */
 /*     Input Class Helper    */
 /* ========================= */
+
 const inputClass = (hasError) =>
   `w-full rounded-lg border px-3 py-2.5 text-sm text-gray-800 bg-white
    focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition
@@ -85,6 +86,7 @@ const DocumentCreate = () => {
   const location = useLocation();
   const [formErrors, setFormErrors] = useState({});
   const navStateApplied = useRef(false);
+  const [logoError, setLogoError] = useState(false);
 
   /* ================= AUTH CHECK ================= */
   useEffect(() => {
@@ -115,6 +117,7 @@ const DocumentCreate = () => {
 
   /* ================= COMPANY CHANGE ================= */
   const handleCompanyChange = (companyId) => {
+    setLogoError(false); // ✅ add this line
     const currentDocTypeId = selectedDocType?.id;
     selectCompany(Number(companyId));
     resetOnCompanyChange();
@@ -251,15 +254,17 @@ const DocumentCreate = () => {
   };
 
   /* ================= UI ================= */
+  // UserDocumentFormPage (return section) - full replacement
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="">
+      <div className="max-w-6xl ">
 
         {/* ── HEADER ── */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="p-1 text-gray-500 hover:text-gray-900 transition"
+            className="text-gray-700 hover:text-gray-900 transition"
           >
             <IoArrowBack className="w-5 h-5" />
           </button>
@@ -268,19 +273,38 @@ const DocumentCreate = () => {
           </h1>
         </div>
 
-        {/* ── MAIN CARD ── */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+        {/* ── COMPANY DROPDOWN ── */}
+        <div className="mb-8">
+          <FieldLabel label="Company" required htmlFor="company" />
 
-          {/* Company Dropdown */}
-          <div className="mb-8">
-            <FieldLabel label="Company" required htmlFor="company" />
+          <div className="flex items-center gap-3" style={{ maxWidth: "320px" }}>
+
+            {/* Logo */}
+            {selectedCompany && (
+              <div className="w-9 h-9
+                            flex items-center justify-center overflow-hidden shrink-0 bg-white">
+                {selectedCompany.logo && !logoError ? (
+                  <img
+                    src={selectedCompany.logo}
+                    alt={selectedCompany.name}
+                    className="object-contain"
+                    onError={() => setLogoError(true)}
+                  />
+                ) : (
+                  <span className="text-sm font-bold text-indigo-700">
+                    {selectedCompany.name.charAt(0)}
+                  </span>
+                )}
+              </div>
+            )}
+
             <SelectWrapper>
               <select
                 id="company"
                 value={selectedCompany?.id || ""}
                 onChange={(e) => handleCompanyChange(e.target.value)}
                 className={selectClass(false)}
-                style={{ maxWidth: "320px" }}
+                style={{ width: "280px" }}
               >
                 <option value="" disabled>Select Company</option>
                 {companies.map((company) => (
@@ -290,69 +314,69 @@ const DocumentCreate = () => {
                 ))}
               </select>
             </SelectWrapper>
+
           </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-100 mb-8" />
-
-          {/* Validation Error Banner */}
-          {Object.keys(formErrors).length > 0 && (
-            <div className="flex items-start gap-2 bg-red-50 border border-red-200
-                            text-red-600 rounded-lg px-4 py-3 mb-6 text-sm">
-              <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>Please fill in all required fields before previewing.</span>
-            </div>
-          )}
-
-          {/* Form Fields */}
-          {selectedCompany ? (
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
-                {selectedDocType?.fields?.length > 0 ? (
-                  selectedDocType.fields.map(
-                    (field) => shouldShowField(field) && renderField(field)
-                  )
-                ) : (
-                  <div className="col-span-3 flex items-center justify-center py-10 text-gray-400">
-                    <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin mr-2" />
-                    <span className="text-sm">Loading fields...</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between mt-10 pt-6 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => navigate(ROUTES.USER_DASHBOARD)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
-                             border border-gray-300 text-gray-600 text-sm font-medium
-                             hover:bg-gray-50 transition"
-                >
-                  <MdOutlineCancel className="w-4 h-4" />
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
-                             bg-gray-200 text-gray-700 text-sm font-medium
-                             hover:bg-gray-300 transition"
-                >
-                  <MdOutlinePreview className="w-4 h-4" />
-                  Preview Document
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-              <RiBuilding2Line className="w-10 h-10 mb-3 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500">No company selected</p>
-              <p className="text-xs text-gray-400 mt-1">
-                Select a company above to fill in the form.
-              </p>
-            </div>
-          )}
         </div>
+
+        {/* ── VALIDATION BANNER ── */}
+        {Object.keys(formErrors).length > 0 && (
+          <div className="flex items-start gap-2 bg-red-50 border border-red-200
+                        text-red-600 rounded-lg px-4 py-3 mb-6 text-sm">
+            <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>Please fill in all required fields before previewing.</span>
+          </div>
+        )}
+
+        {/* ── FORM FIELDS ── */}
+        {selectedCompany ? (
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-6">
+              {selectedDocType?.fields?.length > 0 ? (
+                selectedDocType.fields.map(
+                  (field) => shouldShowField(field) && renderField(field)
+                )
+              ) : (
+                <div className="col-span-5 flex items-center justify-center py-10 text-gray-400">
+                  <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin mr-2" />
+                  <span className="text-sm">Loading fields...</span>
+                </div>
+              )}
+            </div>
+
+            {/* ── ACTIONS ── */}
+            <div className="flex items-center gap-4 mt-10">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg
+                         bg-gray-200 text-gray-700 text-sm font-medium
+                         hover:bg-gray-300 transition"
+              >
+                <MdOutlinePreview className="w-4 h-4" />
+                Preview Document
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.USER_DASHBOARD)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
+                         border border-gray-300 text-gray-500 text-sm font-medium
+                         hover:bg-gray-50 transition"
+              >
+                <MdOutlineCancel className="w-4 h-4" />
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-300">
+            <RiBuilding2Line className="w-10 h-10 mb-3" />
+            <p className="text-sm font-medium text-gray-400">No company selected</p>
+            <p className="text-xs text-gray-300 mt-1">
+              Select a company above to fill in the form.
+            </p>
+          </div>
+        )}
+
       </div>
     </div>
   );

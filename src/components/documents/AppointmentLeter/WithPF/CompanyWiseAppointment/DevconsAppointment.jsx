@@ -134,7 +134,7 @@ const totalAnnual = totalMonthly * 12;
     </Typography>
 
     <Typography fontSize={15} mt={2}>
-      <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/
+      <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/DSS
       {String(data.employeeId).padStart(4, "0")}
     </Typography>
 
@@ -179,7 +179,7 @@ const totalAnnual = totalMonthly * 12;
       given below:
     </Typography>
 
-    <Box component="ol" sx={{ pl: 3, mt: 1 }}>
+    <Box component="ol" sx={{ pl: 3, mt: 4 }}>
   <li>
     <Typography fontSize={14}>
       Your Designation will be <b>“{data.position}”</b>.
@@ -187,13 +187,13 @@ const totalAnnual = totalMonthly * 12;
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={2}>
       Your total emoluments will be <b>{formatLakhsPerAnnum(totalAnnual)}</b>.
     </Typography>
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       Full details of your pay package are given in the enclosure to this letter.
       However, please note that, LTA is payable after completion of one year of
       service, subject to your getting confirmed in the service. If the company
@@ -203,21 +203,21 @@ const totalAnnual = totalMonthly * 12;
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       Whilst you are located abroad, the terms applicable will be intimated at
       the relevant point of time.
     </Typography>
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={2}>
       You shall be due for salary revision not before one year from your date of
       joining.
     </Typography>
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       The Management reserves the right to change the different
       components/allowances in the total emoluments package, at its own
       discretion, at any time in future. However, your total monthly salary will
@@ -226,7 +226,7 @@ const totalAnnual = totalMonthly * 12;
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       You will be on probation for a period of six months from the first of the
       calendar month following the date of your joining, after which you will be
       confirmed if your work is found satisfactory. The probation period can be
@@ -235,7 +235,7 @@ const totalAnnual = totalMonthly * 12;
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       Your services are terminable with one month’s notice on either side. The
       Company may, at its discretion, choose to terminate your services with one
       month’s total salary in lieu of notice period.
@@ -243,7 +243,7 @@ const totalAnnual = totalMonthly * 12;
   </li>
 
   <li>
-    <Typography fontSize={14}>
+    <Typography fontSize={14} mt={1}>
       The Company shall have the right to terminate your service without notice,
       if the information given by you at a time of interview or in the application
       is found to be incorrect or in case of any serious misconduct or if

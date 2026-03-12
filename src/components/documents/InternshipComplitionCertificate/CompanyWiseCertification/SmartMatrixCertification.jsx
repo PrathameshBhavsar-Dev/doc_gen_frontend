@@ -1,7 +1,8 @@
 import React from "react";
 import { Typography, Box } from "@mui/material";
 import A4Page from "../../../layout/A4Page";
-
+import sign from "../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
+import stamp from "../../../../assets/images/smartmatrix/Smartmatrix_stamp.png";
 const SmartMatrixCertification = ({ company, data }) => {
   if (!company || !data) return null;
 
@@ -30,7 +31,7 @@ const SmartMatrixCertification = ({ company, data }) => {
       <Typography
         sx={{
           textAlign: "right",
-          fontSize: "11pt",
+          fontSize: "12pt",
           mb: "8mm",
         }}
       >
@@ -42,7 +43,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         sx={{
           textAlign: "center",
           fontWeight: 600,
-          textDecoration: "underline",
+          // textDecoration: "underline",
           fontSize: "14pt",
           mb: "8mm",
         }}
@@ -53,23 +54,23 @@ const SmartMatrixCertification = ({ company, data }) => {
       {/* BODY CONTENT */}
       <Box sx={{ fontSize: "11pt", lineHeight: 1.6 }}>
         <Typography sx={{ mb: "6mm" }}>
-          We are pleased to certify that <strong>{data.employeeName}</strong>,
-          has joined our group to work on internship with organization{" "}
-          <strong>{company.name}</strong> The internship program held on{" "}
-          <strong>{startDate}</strong> to <strong>{endDate}</strong>.
+          We are pleased to certify that{data.employeeName}, has joined our
+          group to work on internship with organization{" "}
+          <strong>{company.name}</strong>. The internship program held on{" "}
+          {startDate} to {endDate}.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          During the internship period, <strong>{data.employeeName}</strong> was
-          actively participated in project related tasks, shown their skills and
-          abilities as <strong>{data.role}</strong>.
+          During the internship period, {data.employeeName} was actively
+          participated in project related tasks, shown their skills and
+          abilities as {data.role}.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          Through this internship experience,{" "}
-          <strong>{data.employeeName}</strong> adopted practical knowledge, best
-          practices and exposure to real-world scenarios, which will undoubtedly
-          enhance their academic and professional development.
+          Through this internship experience, {data.employeeName} adopted
+          practical knowledge, best practices and exposure to real-world
+          scenarios, which will undoubtedly enhance their academic and
+          professional development.
         </Typography>
 
         <Typography sx={{ mb: "8mm" }}>
@@ -81,25 +82,24 @@ const SmartMatrixCertification = ({ company, data }) => {
       </Box>
 
       {/* COMPANY NAME */}
-      <Typography sx={{ fontWeight: 600, mb: "20mm" }}>
+      {/* <Typography sx={{ fontWeight: 600, mb: "20mm" }}>
         {company.name}
-      </Typography>
+      </Typography> */}
 
       {/* SIGNATURE + STAMP BLOCK */}
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           alignItems: "center",
           gap: "30mm",
         }}
       >
-        {/* SIGNATURE */}
         <Box>
           <Box
             component="img"
-            src={company.signature}
+            src={sign}
             alt="Signature"
-            sx={{ width: 120, marginTop: "10mm" }}
+            sx={{ width: 110, marginTop: "10mm" }}
           />
           <Typography sx={{ mt: "5mm", fontWeight: 600 }}>
             {company.hrName}
@@ -109,16 +109,72 @@ const SmartMatrixCertification = ({ company, data }) => {
           </Typography>
         </Box>
 
-        {/* STAMP */}
         <Box>
           <Box
             component="img"
-            src={company.stamp}
+            src={stamp}
             alt="Stamp"
-            sx={{ width: 110, marginLeft: -20, marginTop: -10 }}
+            sx={{ width: 110, marginLeft: "-10mm" }}
           />
         </Box>
-      </Box>
+      </Box> */}
+
+      <div style={{ marginTop: "20mm", fontSize: "18px" }}>
+        <p>
+          <strong>{company.name}</strong>
+        </p>
+        <br />
+
+        <div style={{ display: "flex", gap: "32px", marginTop: "10px" }}>
+          <div>
+            {company.signature && (
+              <img
+                // src={company.signature}
+                src={sign}
+                alt="HR Signature"
+                style={{
+                  width: "130px",
+                  marginTop: "50px",
+                  marginBottom: "110px",
+                  marginLeft: "10px",
+                }}
+              />
+            )}
+            <p
+              style={{
+                margin: 0,
+                fontWeight: 600,
+                marginTop: "-20mm",
+                marginBottom: "0.5mm",
+              }}
+            >
+              <strong>{company.hrName}</strong>
+            </p>
+
+            <p
+              style={{
+                margin: 0,
+                fontWeight: 600,
+              }}
+            >
+              <strong>HR Manager - HR Services</strong>
+            </p>
+          </div>
+
+          {company.stamp && (
+            <img
+              src={company.stamp}
+              alt="Company Stamp"
+              style={{
+                width: "110px",
+                marginTop: "-6mm",
+                marginBottom: "28mm",
+                marginLeft: "-24mm",
+              }}
+            />
+          )}
+        </div>
+      </div>
     </A4Page>
   );
 };
