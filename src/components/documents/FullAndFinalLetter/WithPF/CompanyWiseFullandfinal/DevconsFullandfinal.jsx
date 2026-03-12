@@ -105,13 +105,13 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
              {/* TITLE */}
                         <TableRow>
-                          <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center,  background: "#b8b5b5"  }}>
+                          <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center    }}>
                             Full & Final Settlement Statement
                           </TableCell>
                         </TableRow>
             
                         <TableRow>
-                          <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center, background: "#b8b5b5" }}>
+                          <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
                             {company.name}
                           </TableCell>
                         </TableRow>
@@ -152,7 +152,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
                         </TableRow>
             
                         {/* SALARY PARTICULARS */}
-                        <TableRow sx={{ background: "#b8b5b5" }}>
+                        <TableRow >
                           <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
                             Salary particulars
                           </TableCell>
@@ -168,7 +168,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
                         </TableRow>
 
             {/* Earnings Section */}
-            <TableRow sx={{ background: "#b8b5b5" }}>
+            <TableRow >
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
@@ -260,20 +260,28 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
              {/* SIGNATURE */}
                         <TableRow>
-                          <TableCell sx={{ ...cell, ...center }}></TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>
-                            {company.stamp && <img src={company.stamp} height={60} alt="" />}
-                          </TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                            {company.signature && <img src={company.signature} height={45} alt="" />}
-                          </TableCell>
-                        </TableRow>
-            
-                        <TableRow>
-                          <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
-                        </TableRow>
+                                                  <TableCell sx={{ ...cell, ...center, padding: "2px" }}></TableCell>
+                                    
+                                                  <TableCell sx={{ ...cell, ...center, padding: "2px" }}>
+                                                    {company.stamp && (
+                                                      <img
+                                                        src={company.stamp}
+                                                        alt="Stamp"
+                                                        style={{ height: 70, display: "block", margin: "0 auto" }}
+                                                      />
+                                                    )}
+                                                  </TableCell>
+                                    
+                                                  <TableCell colSpan={2} sx={{ ...cell, ...center, padding: "3px" }}>
+                                                    {company.signature && (
+                                                      <img
+                                                        src={company.signature}
+                                                        alt="Signature"
+                                                        style={{ height: 60, display: "block", margin: "0 auto" }}
+                                                      />
+                                                    )}
+                                                  </TableCell>
+                                                </TableRow>
 
           </TableBody>
         </Table>
