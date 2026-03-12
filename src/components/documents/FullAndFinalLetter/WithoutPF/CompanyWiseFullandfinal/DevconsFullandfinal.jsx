@@ -14,10 +14,12 @@ import A4Page from "../../../../layout/A4Page";
 
 /* ================== COMMON STYLES ================== */
 const cell = {
-  border: "1px solid #000",
-  fontSize: "13px",      // smaller text
-  padding: "3px 5px",    // less spacing
-  // lineHeight: 1.2,       
+    border: "1px solid #000",
+  fontSize: "12px",
+  padding: "6px 6px",   // ✅ more space
+  lineHeight: 1.4,
+  verticalAlign: "middle",
+      
 };
 
 const bold = { fontWeight: 700 };
@@ -134,8 +136,7 @@ const totalEarned =
    
 
       <Box sx={{ width: "95%", margin: "0 auto" }}>
-        <Table sx={{ borderCollapse: "collapse" }}>
-          <TableBody>
+<Table sx={{ borderCollapse: "collapse", width: "100%" }}>          <TableBody>
           
             {/* TITLE */}
             <TableRow>
@@ -296,7 +297,7 @@ const totalEarned =
                               <img
                                 src={company.stamp}
                                 alt="Stamp"
-                                style={{ height: 70, display: "block", margin: "0 auto" }}
+                                style={{ height: 55, display: "block", margin: "0 auto" }}
                               />
                             )}
                           </TableCell>
@@ -306,7 +307,7 @@ const totalEarned =
                               <img
                                 src={company.signature}
                                 alt="Signature"
-                                style={{ height: 60, display: "block", margin: "0 auto" }}
+                                style={{ height: 45, display: "block", margin: "0 auto" }}
                               />
                             )}
                           </TableCell>
