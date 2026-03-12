@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import A4Page from "../../../layout/A4Page";
+import A4Page from "../../../../layout/A4Page";
 
 
 
