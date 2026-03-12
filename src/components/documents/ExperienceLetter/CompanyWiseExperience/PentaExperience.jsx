@@ -143,15 +143,22 @@ const PentaExperience = ({ company, data }) => {
         <Typography sx={{ fontSize: 14, mb: 4 }}>
           For <strong>{company.name}</strong>
         </Typography>
-
-        <Box sx={{ display: "flex", alignItems: "flex-end", gap: 2, mb: 2 }}>
-          {company.signature && (
-            <img src={company.signature} alt="Signature" height={39} />
-          )}
-          {company.stamp && (
-            <img src={company.stamp} alt="Stamp" height={89} />
-          )}
-        </Box>
+<Box sx={{ display: "flex", alignItems: "flex-end", gap: 2, mb: 2 }}>
+  {company.signature && (
+    <img
+      src={company.signature}
+      alt="Signature"
+      style={{ height: "30px", width: "auto" }}
+    />
+  )}
+  {company.stamp && (
+    <img
+      src={company.stamp}
+      alt="Stamp"
+      style={{ height: "80px", width: "auto" }}
+    />
+  )}
+</Box>
 
         <Typography sx={{ fontSize: 14, fontWeight: "bold", mt: 2 }}>
           {company.hrName}

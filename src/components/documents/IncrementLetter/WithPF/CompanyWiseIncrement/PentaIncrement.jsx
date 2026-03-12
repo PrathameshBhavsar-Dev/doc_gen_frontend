@@ -177,22 +177,22 @@ const totalAnnual = totalMonthly * 12;
                     </Typography>
 
                     <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
-                        {company?.jaya_sign && (
-                            <img
-                                src={company.jaya_sign}
-                                alt="Signature"
-                                style={{ height: 60 }}
-                            />
-                        )}
-
-                        {company?.stamp && (
-                            <img
-                                src={company.stamp}
-                                alt="Stamp"
-                                style={{ height: 110 }}
-                            />
-                        )}
-                    </Box>
+                                {company?.jaya_sign && (
+                                  <img
+                                    src={company.jaya_sign}
+                                    alt="Signature"
+                                    style={{ height: 30 }}
+                                  />
+                                )}
+                    
+                                {company?.stamp && (
+                                  <img
+                                    src={company.stamp}
+                                    alt="Stamp"
+                                    style={{ height: 110 }}
+                                  />
+                                )}
+                              </Box>
 
                     <Typography sx={{ fontWeight: 600 }}>
                         CEO & Managing Director
