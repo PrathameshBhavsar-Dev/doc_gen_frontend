@@ -94,7 +94,7 @@ const NimbjaAppointment = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -355,7 +355,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: "50%",
-                opacity: 0.5,
+                opacity: 0.4,
                 zIndex: -1,
                 pointerEvents: "none",
               }}
@@ -596,7 +596,7 @@ const NimbjaAppointment = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: -1,
             pointerEvents: "none",
           }}
