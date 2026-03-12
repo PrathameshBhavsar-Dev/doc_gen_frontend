@@ -477,7 +477,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    bankName = "Bank Transfer",
+    mode = "-",
     workdays = "",
     month = "2025-02",
     totalSalary = 0,
@@ -543,7 +543,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: "50%",
-          opacity: 0.6,
+          opacity: 0.4,
           zIndex: 0,
           pointerEvents: "none",
         }}
@@ -650,7 +650,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
-              <TableCell align="center">{bankName}</TableCell>
+              <TableCell align="center">{mode}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
               <TableCell align="center">{workdays}</TableCell>
             </TableRow>
@@ -756,7 +756,14 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                   <Box
                     component="img"
                     src={stamp}
-                    sx={{ width: 115, objectFit: "contain" }}
+                    // sx={{ width: 115, objectFit: "contain", marginRight:"-18mm" }}
+                    sx={{
+                      display: "block",
+                      margin: "0 auto",
+                      width: 115,
+                      objectFit: "contain",
+                      
+                    }}
                   />
                 )}
               </TableCell>
@@ -765,7 +772,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                   <Box
                     component="img"
                     src={sign}
-                    sx={{ width: 140, height: 60, objectFit: "contain", mb: 1 }}
+                    sx={{ width: 150, height: 70, objectFit: "contain", mb: 1 }}
                   />
                 )}
                 <Typography fontWeight="bold">Signature</Typography>

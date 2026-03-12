@@ -319,7 +319,7 @@ export const companies = [
       secondary: "#5D4037",
       accent: "#A1887F",
       textColor: "#3E2723",
-      watermarkOpacity: 0.04,
+      watermarkOpacity: 0.8,
       hueRotate: 30,
     },
   },
