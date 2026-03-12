@@ -103,11 +103,11 @@ const AdminCompanyManagementPage = () => {
               {/* Icons */}
               <div className="flex gap-4">
 
-                <MdOutlineRemoveRedEye
+                {/* <MdOutlineRemoveRedEye
                   size={15}
                   className="text-green-500 cursor-pointer"
                   onClick={() => handleView(company)}
-                />
+                /> */}
 
                 <FaRegEdit
                   size={15}

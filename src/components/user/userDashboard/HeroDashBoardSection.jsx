@@ -1,8 +1,8 @@
 import React from "react";
-import icon from "../../../assets/images/icon.png";
-import icon1 from "../../../assets/images/icon1.png";
-import icon2 from "../../../assets/images/icon2.png";
-import icon3 from "../../../assets/images/icon3.png";
+import icon from "../../../assets/images/Icon.png";
+import icon1 from "../../../assets/images/Icon1.png";
+import icon2 from "../../../assets/images/Icon2.png";
+import icon3 from "../../../assets/images/Icon3.png";
 
 const HeroDashBoardSection = () => {
   const stats = [
@@ -14,11 +14,11 @@ const HeroDashBoardSection = () => {
       badge: "+12.5%",
     },
     { img: icon2, value: "48", label: "This Month", badge: "+23.1%" },
-    { img: icon3, value: "4", label: "Active Users", badge: "+5" },
+    // { img: icon3, value: "4", label: "Active Users", badge: "+5" },
   ];
 
   return (
-    <section className="bg-[#f3f4f8] w-full ">
+    <section className="w-full ">
       {/* Responsive Container */}
       <div className="w-full max-w-screen-2xl mx-auto">
         {/* Heading */}
@@ -45,14 +45,13 @@ const HeroDashBoardSection = () => {
                           grid-cols-1 
                           sm:grid-cols-2 
                           lg:grid-cols-3 
-                          xl:grid-cols-4 
                           gap-4 sm:gap-6"
           >
             {stats.map((card, index) => (
               <div
                 key={index}
                 className="group bg-white rounded-2xl 
-                           p-4 sm:p-5 lg:p-6
+                           p-5 sm:p-6 lg:p-8
                            shadow-sm hover:shadow-xl
                            transition-all duration-300
                            hover:bg-gradient-to-r 

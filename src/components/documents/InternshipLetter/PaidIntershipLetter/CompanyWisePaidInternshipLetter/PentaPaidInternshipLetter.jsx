@@ -298,10 +298,10 @@ const A4Page = ({ children, headerSrc, footerSrc }) => (
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* =====================================================
@@ -341,14 +341,14 @@ const PentaPaidInternshipLetter = ({ company, data }) => {
           <Typography sx={{ mb: 2 }}>Dear {data.employeeName},</Typography>
 
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
-           We are pleased to offer you the Internship of position of <strong>{data.designation}</strong>. As discussed by us you 
-are requested to join on  <strong>{formatDate(data.startDate)}</strong>.
+            We are pleased to offer you the Internship of position of <strong>{data.designation}</strong>. As discussed by us you
+            are requested to join on  <strong>{formatDate(data.startDate)}</strong>.
           </Typography>
 
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
-           If there is any change in the date of joining changes can be taken under consideration. Your total Gross 
-salary will be 
- Rs.{" "}
+            If there is any change in the date of joining changes can be taken under consideration. Your total Gross
+            salary will be
+            Rs.{" "}
             <strong>{formatCurrency(breakdown.annual.ctc)}</strong> per year.
           </Typography>
 
@@ -374,12 +374,31 @@ salary will be
           {/* SIGNATURES */}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 {company.signature && (
-                  <img src={company.signature} alt="HR Sign" height={45} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="HR Sign"
+                    sx={{
+                      height: "20px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
+
                 {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={90} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="Stamp"
+                    sx={{
+                      height: "60px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
                 )}
               </Box>
               <Typography sx={{ fontWeight: 600 }}>
@@ -389,7 +408,7 @@ salary will be
             </Box>
 
             <Box sx={{ minWidth: 260 }}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 1 , mt: 10}}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1, mt: 10 }}>
                 <Typography sx={{ mr: 1 }}>Signature :</Typography>
                 <Box sx={{ flexGrow: 1, borderBottom: "1px solid #000" }} />
               </Box>
@@ -407,7 +426,7 @@ salary will be
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box sx={{ px: "25mm", pt: "40mm", fontSize: "14px" }}>
+        <Box sx={{ px: "25mm", pt: "30mm", pb: "60mm", fontSize: "14px" }}>
           <Typography align="center" sx={{ fontWeight: 700, mb: 3 }}>
             Annexure A – Salary Structure
           </Typography>
@@ -419,6 +438,7 @@ salary will be
               "& th, & td": {
                 border: "1px solid #000",
                 py: "4px",
+                // pb: "10px",
               },
               "& th": {
                 backgroundColor: "#0cacd8ff",
@@ -461,24 +481,50 @@ salary will be
             </TableBody>
           </Table>
           {/* SIGNATURES */}
-          <Box sx={{ display: "flex", justifyContent: "space-between"}}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box>
-              <Box sx={{ display: "flex", gap: 2, mt: 10 }}>
-                {company.signature && (
-                  <img src={company.signature} alt="HR Sign" height={45} />
-                )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="Stamp" height={90} />
-                )}
-              </Box>
+              <Box
+  sx={{
+    mt: 9, // adds space above (4 * 8 = 32px)
+    display: "flex",
+    gap: 2,
+    alignItems: "center"
+  }}
+>
+  {company.signature && (
+    <Box
+      component="img"
+      src={company.signature}
+      alt="HR Sign"
+      sx={{
+        height: "30px",
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
+
+  {company.stamp && (
+    <Box
+      component="img"
+      src={company.stamp}
+      alt="Stamp"
+      sx={{
+        height: "100px",
+        width: "auto",
+        objectFit: "contain"
+      }}
+    />
+  )}
+</Box>
               <Typography sx={{ fontWeight: 600 }}>
                 {company.hrName}
               </Typography>
               <Typography>Group Leader - Shared HR Services</Typography>
             </Box>
 
-            <Box sx={{ minWidth: 260 }}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 1 , mt: 20 }}>
+            <Box sx={{ minWidth: 20 }}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1, mt: 20 }}>
                 <Typography sx={{ mr: 1 }}>Signature :</Typography>
                 <Box sx={{ flexGrow: 1, borderBottom: "1px solid #000" }} />
               </Box>

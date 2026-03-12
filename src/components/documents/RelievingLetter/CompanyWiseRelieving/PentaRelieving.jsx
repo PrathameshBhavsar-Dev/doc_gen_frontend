@@ -109,7 +109,7 @@ const PentaRelieving = ({ company, data }) => {
           <img
             src={company.signature}
             alt="HR Signature"
-            style={{ height: "55px" }}
+            style={{ height: "35px" }}
           />
 
           {/* Stamp */}

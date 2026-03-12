@@ -125,6 +125,9 @@ const DocumentPreview = () => {
       setSnackbarMessage('Generating PDF...');
       setSnackbarOpen(true);
 
+      window.scrollTo(0, 0);
+      await new Promise(resolve => setTimeout(resolve, 300));
+
       await generatePDF(
         documentRef.current,
         `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
@@ -177,7 +180,7 @@ const DocumentPreview = () => {
       heightLeft -= pageHeight;
 
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+        position = -(imgHeight - heightLeft);
         pdf.addPage();
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
@@ -205,7 +208,7 @@ const DocumentPreview = () => {
         <Typography variant={isMobile ? 'h5' : 'h4'}>Document Preview</Typography>
 
         <Box display="flex" gap={2} flexWrap="wrap">
-          <Button variant="outlined" onClick={() => navigate('/documents/create')}>
+          <Button variant="outlined" onClick={() => navigate('/document/create')}>
             Edit
           </Button>
           <Button variant="contained" onClick={handleDownloadPDF} disabled={loading}>

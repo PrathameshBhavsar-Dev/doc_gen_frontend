@@ -181,7 +181,7 @@ const netPayWords = numberToWords(Math.round(netPay));
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
             <Box sx={{ ...cell, width: "25%" }}>
-              Bank Name– {data.mode}
+              Bank Name– {data.bankName}
               <br />
               Account No – {data.accountNo}
             </Box>
@@ -242,9 +242,20 @@ const netPayWords = numberToWords(Math.round(netPay));
           {/* SIGNATURE */}
           <Box sx={{ ...row, height: "100px" }}>
             <Box sx={{ ...cell, width: "50%" }} />
-            <Box sx={{ ...cell, width: "25%", justifyContent: "center" }}>
-              <img src={company.stamp} height={80} alt="" />
-            </Box>
+            <Box
+  sx={{
+    ...cell,
+    width: "25%",
+    justifyContent: "center",
+    height: "80px"
+  }}
+>
+  <img
+    src={company.stamp}
+    alt=""
+    style={{ height: "130%", objectFit: "contain" }}
+  />
+</Box>
             <Box sx={{ ...cell, width: "25%", flexDirection: "column", alignItems: "center" }}>
               <img src={company.signature} height={45} alt="" />
               <Typography fontSize={12} fontWeight="bold">Signature</Typography>

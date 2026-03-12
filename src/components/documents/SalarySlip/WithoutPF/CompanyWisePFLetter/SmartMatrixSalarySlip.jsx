@@ -91,6 +91,12 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
         }}
       >
         <Table size="small">
+          <colgroup>
+            <col style={{ width: "22%" }} />
+            <col style={{ width: "28%" }} />
+            <col style={{ width: "22%" }} />
+            <col style={{ width: "28%" }} />
+          </colgroup>{" "}
           <TableBody>
             {/* ===== HEADER ===== */}
             <TableRow>
@@ -100,7 +106,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "10pt" }}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>
@@ -143,20 +149,21 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             <TableRow>
               <TableCell sx={bold}>Mode</TableCell>
               <TableCell sx={cell}>
-                {data.mode}
+                Bank Name- {data.mode}
                 <br />
-                {data.accountNo}
+                Bank Account No.- {data.accountNo}
               </TableCell>
               <TableCell sx={bold}>Working days</TableCell>
               <TableCell sx={cell}>{data.workdays}</TableCell>
             </TableRow>
 
-            {/* ===== EARNINGS ===== */}
             <TableRow>
-              <TableCell colSpan={3} sx={centerBold}>
+              <TableCell colSpan={2} sx={centerBold}>
                 Earnings
               </TableCell>
-              <TableCell sx={centerBold}>Amount</TableCell>
+              <TableCell colSpan={2} sx={centerBold}>
+                Amount
+              </TableCell>
             </TableRow>
 
             {[
@@ -168,72 +175,89 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
               ["FOOD ALLOWANCE", food],
             ].map(([label, value]) => (
               <TableRow key={label}>
-                <TableCell colSpan={3} sx={cell}>
+                <TableCell colSpan={2} sx={cell}>
                   {label}
                 </TableCell>
-                <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+                <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
                   {formatCurrency(value)}
                 </TableCell>
               </TableRow>
             ))}
 
             <TableRow>
-              <TableCell colSpan={3} sx={centerBold}>
+              <TableCell colSpan={2} sx={centerBold}>
                 Total
               </TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+              <TableCell
+                colSpan={2}
+                sx={{ ...centerBold, textAlign: "center" }}
+              >
                 {formatCurrency(monthlyGross)}
               </TableCell>
             </TableRow>
 
             {/* ===== DEDUCTIONS ===== */}
             <TableRow>
-              <TableCell colSpan={3} sx={centerBold}>
+              <TableCell colSpan={4} sx={centerBold}>
                 Deductions
               </TableCell>
-              <TableCell sx={cell}></TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={3} sx={cell}>
+              <TableCell colSpan={2} sx={cell}>
                 PT
               </TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
                 {formatCurrency(pt)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={3} sx={cell}>
+              <TableCell colSpan={2} sx={cell}>
                 Other Deduction
               </TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
                 {formatCurrency(otherDeduction)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={3} sx={centerBold}>
+              <TableCell colSpan={2} sx={centerBold}>
                 Total Deduction
               </TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+              <TableCell
+                colSpan={2}
+                sx={{ ...centerBold, textAlign: "center" }}
+              >
                 {formatCurrency(totalDeduction)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={3} sx={centerBold}>
+              <TableCell colSpan={2} sx={centerBold}>
                 Net Pay
               </TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+
+              <TableCell
+                colSpan={2}
+                sx={{ ...centerBold, textAlign: "center" }}
+              >
                 {formatCurrency(netPay)}
               </TableCell>
             </TableRow>
 
             {/* ===== IN WORDS ===== */}
             <TableRow>
-              <TableCell sx={centerBold}>In Words</TableCell>
-              <TableCell colSpan={3} sx={cell}>
+              <TableCell colSpan={2} sx={centerBold}>
+                In Words
+              </TableCell>
+
+              <TableCell colSpan={2} sx={cell} align="center">
                 <strong>{numberToWords(Math.round(netPay))}</strong>
               </TableCell>
             </TableRow>
@@ -241,11 +265,23 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             {/* ===== SIGNATURE ===== */}
             <TableRow>
               <TableCell align="center" sx={cell}>
-                <img src={stampImg} alt="Stamp" width={70} />
+                <img
+                  src={stampImg}
+                  alt="Stamp"
+                  width={90}
+                  style={{ display: "block", margin: "0 auto" }}
+                />
               </TableCell>
+
               <TableCell colSpan={2} sx={cell}></TableCell>
+
               <TableCell align="center" sx={cell}>
-                <img src={signImg} alt="Sign" width={120} />
+                <img
+                  src={signImg}
+                  alt="Sign"
+                  width={120}
+                  style={{ display: "block", margin: "0 auto" }}
+                />
               </TableCell>
             </TableRow>
           </TableBody>

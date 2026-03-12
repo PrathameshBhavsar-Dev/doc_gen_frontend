@@ -139,7 +139,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             lineHeight: 1.6,
           }}
         >
-          <Typography align="right" mb={3} sx={{ mt: "-5mm" }}>
+          <Typography align="right" mb={3}>
             {formatDate(data.issueDate)}
           </Typography>
 
@@ -148,25 +148,24 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             mb={3}
             sx={{
               fontFamily: "Verdana",
-              mt: "-5mm",
+              mt: "1mm",
               textDecoration: "underline",
             }}
           >
             Confirmation Letter
           </Typography>
 
-          <Typography mb={1}>
+          <Typography mb={2}>
             <strong>Name :</strong> {data.employeeName}
           </Typography>
 
-          <Typography b={2} sx={{ mt: "-2mm" }}>
+          <Typography b={2} mb={2}>
             <strong>Address:</strong> {data.address}
           </Typography>
 
           <Typography mb={3}>
             <strong>Subject :</strong>
             <u>
-              {" "}
               Letter of intent for continued services as{" "}
               <strong>{data.position}</strong>.
             </u>
@@ -194,7 +193,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
           <Typography mb={2}>
             The roles and responsibilities and other terms and conditions of
-            your employment will be specified of appointment.We welcome you to
+            your employment will be specified of appointment. We welcome you to
             SmartMatrix Digital Services Pvt Ltd. Family and hope it would be
             the beginning of a long and mutually beneficial association. Kindly
             acknowledge the duplicate copy of this letter as an acceptance of

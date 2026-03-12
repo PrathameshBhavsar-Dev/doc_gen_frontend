@@ -1,5 +1,3 @@
-// SmartMatrixOfferWithPF.jsx
-
 import React from "react";
 import {
   Typography,
@@ -93,10 +91,10 @@ const SmartMatrixOffer = ({ company, data }) => {
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })
       : "";
 
   const offerDate = fmtDate(data.issueDate);
@@ -166,7 +164,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear, {data.employeeName}</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
 
           <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
 
@@ -203,27 +201,27 @@ const SmartMatrixOffer = ({ company, data }) => {
           <strong>{company.name}</strong>
         </Typography>
 
-        <Box sx={{ mt: "12mm" }}>
+        <Box>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
               <Box
                 component="img"
                 src={sign}
                 alt="Sign"
-                sx={{ width: 120, mt: "35mm" }}
+                sx={{ width: 120, mt: "26mm" }}
               />
             </Grid>
             <Grid item>
               <Box
                 component="img"
                 src={company.stamp}
-                alt="Signature"
-                sx={{ width: 120, mt: "10mm", ml: "-2mm" }}
+                alt="Stamp"
+                sx={{ width: 120, mt: "4mm", ml: "-2mm" }}
               />
             </Grid>
           </Grid>
-          
-          <Typography>
+
+          <Typography sx={{ mt: "5mm" }}>
             <strong>{company.hrName}</strong>
           </Typography>
           <Typography>
@@ -326,7 +324,7 @@ const SmartMatrixOffer = ({ company, data }) => {
                   component="img"
                   src={sign}
                   alt="Sign"
-                  sx={{ width: 120, mt: "35mm" }}
+                  sx={{ width: 120, mt: "26mm" }}
                 />
               </Grid>
               <Grid item>
@@ -334,12 +332,12 @@ const SmartMatrixOffer = ({ company, data }) => {
                   component="img"
                   src={company.stamp}
                   alt="Signature"
-                  sx={{ width: 120, mt: "10mm", ml: "-2mm" }}
+                  sx={{ width: 120, mt: "4mm", ml: "-2mm" }}
                 />
               </Grid>
             </Grid>
 
-            <Box sx={{ mt: "2mm" }}>
+            <Box sx={{ mt: "5mm" }}>
               <Typography>
                 <strong>{company.hrName}</strong>
               </Typography>

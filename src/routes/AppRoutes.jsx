@@ -78,6 +78,10 @@ const AppRoutes = () => {
             path={ROUTES.USER_SETTINGS}
             element={<LazyLoad component={UserSettingsPage} />}
           />
+          <Route
+            path={ROUTES.DOCUMENT_CREATE}
+            element={<LazyLoad component={DocumentCreate} />}
+          />
         </Route>
       </Route>
 
@@ -117,10 +121,6 @@ const AppRoutes = () => {
 
       {/* ================= DOCUMENT ROUTES ================= */}
       <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
-        <Route
-          path={ROUTES.DOCUMENT_CREATE}
-          element={<LazyLoad component={DocumentCreate} />}
-        />
         <Route
           path={ROUTES.DOCUMENT_PREVIEW}
           element={<LazyLoad component={DocumentPreview} />}

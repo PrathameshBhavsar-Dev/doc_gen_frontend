@@ -93,11 +93,14 @@ const SmartMatrixIncrement = ({ company, data }) => {
             lineHeight: "1.42",
             fontWeight: 800,
             color: "#000",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
           }}
         >
           <Typography
             align="right"
-            sx={{ mb: "12mm", fontFamily: "Bahnschrift" }}
+            sx={{ mb: "12mm", mt: "4mm", fontFamily: "Bahnschrift" }}
           >
             {formatDate(data.issueDate)}
           </Typography>
@@ -106,8 +109,17 @@ const SmartMatrixIncrement = ({ company, data }) => {
             Dear {data.employeeName},
           </Typography>
 
-          <Typography
+          {/* <Typography
             sx={{ textAlign: "justify", mb: "6mm", fontFamily: "Bahnschrift" }}
+          > */}
+          <Typography
+            sx={{
+              fontSize: "12pt",
+              fontWeight: 200,
+              textAlign: "justify",
+              mb: "6mm",
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            }}
           >
             As part of our periodic salary review process, we have adjusted
             compensation across the company to reflect market trends. Effective{" "}
@@ -116,7 +128,13 @@ const SmartMatrixIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography
-            sx={{ textAlign: "justify", mb: "6mm", fontFamily: "Bahnschrift" }}
+            sx={{
+              fontSize: "12pt",
+              fontWeight: 200,
+              textAlign: "justify",
+              mb: "6mm",
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            }}
           >
             This adjustment ensures that your compensation remains competitive
             within the industry and we hope this reflects our commitment to
@@ -124,14 +142,25 @@ const SmartMatrixIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography
-            sx={{ textAlign: "justify", mb: "20mm", fontFamily: "Bahnschrift" }}
+            sx={{
+              fontSize: "12pt",
+              fontWeight: 200,
+              textAlign: "justify",
+              mb: "20mm",
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            }}
           >
             We appreciate your hard work and dedication and look forward to your
             continued success at {company.name}.
           </Typography>
 
           <Typography
-            sx={{ fontWeight: 600, mb: "5mm", fontFamily: "Bahnschrift" }}
+            sx={{
+              fontSize: "12pt",
+              fontWeight: 600,
+              mb: "5mm",
+              fontFamily: "Verdana",
+            }}
           >
             <strong>{company.name}</strong>
           </Typography>
@@ -154,11 +183,25 @@ const SmartMatrixIncrement = ({ company, data }) => {
               )}
             </Box>
 
-            <Typography sx={{ fontWeight: 600 }}>
+            <Typography
+              sx={{
+                fontSize: "12pt",
+                fontWeight: 600,
+                fontFamily: '"Verdana","Segoe UI",Arial,sans-serif',
+              }}
+            >
+              {" "}
               <strong>{company.ceoName}</strong>
             </Typography>
 
-            <Typography>
+            <Typography
+              sx={{
+                fontSize: "11pt",
+                fontWeight: 400,
+                fontFamily: '"Verdana","Segoe UI",Arial,sans-serif',
+              }}
+            >
+              {" "}
               <strong>Group Leader-HR Services</strong>
             </Typography>
           </Box>
@@ -175,12 +218,27 @@ const SmartMatrixIncrement = ({ company, data }) => {
             mt: 8,
             fontSize: "16px",
             textDecoration: "underline",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
           }}
         >
           Salary Annexure
         </Typography>
 
-        <div style={{ marginBottom: "16px", fontSize: "12pt" }}>
+        <Box
+          sx={{
+            marginBottom: "35px",
+            fontSize: "13pt",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
+
+            "& p": {
+              mt: 1,
+            },
+          }}
+        >
           <p>
             <strong>Employee Code :</strong> {data.employeeId}
           </p>
@@ -190,14 +248,18 @@ const SmartMatrixIncrement = ({ company, data }) => {
           <p>
             <strong>Effective Date :</strong> {formatDate(data.effectiveDate)}
           </p>
-        </div>
+        </Box>
 
         <TableContainer
           component={Paper}
           sx={{
+            marginBottom: "20px",
             border: "0.5px solid #000",
             borderRadius: 0,
             boxShadow: "none",
+            "& *": {
+              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+            },
           }}
         >
           <Table size="small" sx={{ tableLayout: "fixed" }}>
@@ -205,7 +267,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
               <TableRow>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     width: "40%",
@@ -215,7 +277,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     textAlign: "center",
@@ -225,7 +287,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1px solid #000",
                     backgroundColor: "#f68b1f",
                     fontWeight: "bold",
                     textAlign: "center",
@@ -283,6 +345,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
         <Typography
           sx={{
             fontSize: "13pt",
+            mt: "5",
             fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
           }}
         >

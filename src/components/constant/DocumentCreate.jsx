@@ -32,6 +32,7 @@ const FieldLabel = ({ label, required, htmlFor }) => (
 /* ========================= */
 /*     Input Class Helper    */
 /* ========================= */
+
 const inputClass = (hasError) =>
   `w-full rounded-lg border px-3 py-2.5 text-sm text-gray-800 bg-white
    focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent transition
@@ -60,9 +61,7 @@ const FieldError = ({ message }) => (
 const SelectWrapper = ({ children }) => (
   <div className="relative">
     {children}
-    <MdKeyboardArrowDown
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none w-4 h-4"
-    />
+    <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none w-4 h-4" />
   </div>
 );
 
@@ -85,6 +84,7 @@ const DocumentCreate = () => {
   const location = useLocation();
   const [formErrors, setFormErrors] = useState({});
   const navStateApplied = useRef(false);
+  const [logoError, setLogoError] = useState(false);
 
   /* ================= AUTH CHECK ================= */
   useEffect(() => {
@@ -115,6 +115,7 @@ const DocumentCreate = () => {
 
   /* ================= COMPANY CHANGE ================= */
   const handleCompanyChange = (companyId) => {
+    setLogoError(false); // ✅ add this line
     const currentDocTypeId = selectedDocType?.id;
     selectCompany(Number(companyId));
     resetOnCompanyChange();
@@ -130,10 +131,34 @@ const DocumentCreate = () => {
 
   /* ================= INPUT HANDLER ================= */
   const handleInputChange = (field, value) => {
+    // Phone number validation (10 digits only)
+
+    if (field === "employeePhone") {
+      // allow only digits
+      value = value.replace(/\D/g, "");
+
+      // restrict to 10 digits
+      if (value.length > 10) {
+        value = value.slice(0, 10);
+      }
+
+      // store with 91 prefix
+      updateDocumentData(field, value ? `91${value}` : "");
+      return;
+    }
+
+    // Email cleanup
+    if (field === "employeeEmail") {
+      value = value.trim();
+    }
+
     updateDocumentData(field, value);
+
     if (field === "internshipType" && value === "unpaid") {
       updateDocumentData("stipend", "");
     }
+
+    // Clear field error when user edits
     if (formErrors[field]) {
       setFormErrors((prev) => {
         const copy = { ...prev };
@@ -142,26 +167,55 @@ const DocumentCreate = () => {
       });
     }
   };
-
   /* ================= VALIDATION ================= */
   const validateDocumentForm = () => {
     if (!selectedDocType) return true;
 
     const rules = {};
+
     selectedDocType.fields.forEach((field) => {
       if (!shouldShowField(field)) return;
+
       rules[field.name] = rules[field.name] || {};
       const isRequired = field.required === true || field.require === true;
+
       if (isRequired) {
         rules[field.name].required = true;
         rules[field.name].message = `${field.label} is required`;
       }
-      if (field.type === "email") rules[field.name].email = true;
-      if (field.type === "date" || field.type === "month") rules[field.name].date = true;
+
+      if (field.type === "date" || field.type === "month")
+        rules[field.name].date = true;
+
       if (field.type === "number") rules[field.name].number = true;
     });
 
     const errors = validateForm(documentData, rules);
+
+    /* ================= CUSTOM VALIDATIONS ================= */
+
+    selectedDocType.fields.forEach((field) => {
+      const value = documentData[field.name];
+
+      // Email validation
+      if (field.name === "employeeEmail" && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(value)) {
+          errors[field.name] = "Enter a valid email address";
+        }
+      }
+
+      // Phone validation
+      if (field.name === "employeePhone" && value) {
+        const phoneRegex = /^91[6-9]\d{9}$/;
+
+        if (!phoneRegex.test(value)) {
+          errors[field.name] = "Enter a valid 10 digit mobile number";
+        }
+      }
+    });
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -194,7 +248,11 @@ const DocumentCreate = () => {
     if (field.type === "select") {
       return (
         <div key={field.name}>
-          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+          <FieldLabel
+            label={field.label}
+            required={isRequired}
+            htmlFor={field.name}
+          />
           <SelectWrapper>
             <select
               id={field.name}
@@ -203,9 +261,13 @@ const DocumentCreate = () => {
               onChange={(e) => handleInputChange(field.name, e.target.value)}
               className={selectClass(hasError)}
             >
-              <option value="" disabled>Select {field.label}</option>
+              <option value="" disabled>
+                Select {field.label}
+              </option>
               {field.options?.map((option) => (
-                <option key={option} value={option}>{option}</option>
+                <option key={option} value={option}>
+                  {option}
+                </option>
               ))}
             </select>
           </SelectWrapper>
@@ -216,15 +278,24 @@ const DocumentCreate = () => {
 
     if (field.type === "textarea") {
       return (
-        <div key={field.name} className="col-span-1 md:col-span-2 lg:col-span-3">
-          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+        <div
+          key={field.name}
+          className="col-span-1 md:col-span-2 lg:col-span-3"
+        >
+          <FieldLabel
+            label={field.label}
+            required={isRequired}
+            htmlFor={field.name}
+          />
           <textarea
             id={field.name}
             name={field.name}
             rows={3}
             value={documentData[field.name] ?? ""}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+            placeholder={
+              field.placeholder || `Enter ${field.label.toLowerCase()}`
+            }
             className={`${inputClass(hasError)} resize-none`}
           />
           {hasError && <FieldError message={formErrors[field.name]} />}
@@ -235,31 +306,65 @@ const DocumentCreate = () => {
     // text, number, date, month, email
     return (
       <div key={field.name}>
-        <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
-        <input
-          id={field.name}
-          name={field.name}
-          type={field.type}
-          value={documentData[field.name] ?? ""}
-          onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-          placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
-          className={inputClass(hasError)}
+        <FieldLabel
+          label={field.label}
+          required={isRequired}
+          htmlFor={field.name}
         />
+        {field.name === "employeePhone" ? (
+          <div
+            className={`
+      flex w-full rounded-lg border overflow-hidden
+      ${hasError ? "border-red-400 bg-red-50" : "border-gray-300 hover:border-gray-400"}
+      focus-within:ring-2 focus-within:ring-violet-400
+    `}
+          >
+            {/* +91 */}
+            <span className="flex items-center px-3 bg-gray-100 text-sm text-gray-600 border-r border-gray-300">
+              +91
+            </span>
+
+            <input
+              id={field.name}
+              name={field.name}
+              type="tel"
+              value={(documentData[field.name] || "").replace(/^91/, "")}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              placeholder="Enter phone number"
+              maxLength={10}
+              className="w-full px-3 py-2.5 text-sm text-gray-800 bg-white focus:outline-none"
+            />
+          </div>
+        ) : (
+          <input
+            id={field.name}
+            name={field.name}
+            type={field.type}
+            value={documentData[field.name] ?? ""}
+            onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+            placeholder={
+              field.placeholder || `Enter ${field.label.toLowerCase()}`
+            }
+            className={inputClass(hasError)}
+          />
+        )}
+
         {hasError && <FieldError message={formErrors[field.name]} />}
       </div>
     );
   };
 
   /* ================= UI ================= */
-  return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+  // UserDocumentFormPage (return section) - full replacement
 
+  return (
+    <div className="">
+      <div className="max-w-6xl ">
         {/* ── HEADER ── */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="p-1 text-gray-500 hover:text-gray-900 transition"
+            className="text-gray-700 hover:text-gray-900 transition"
           >
             <IoArrowBack className="w-5 h-5" />
           </button>
@@ -268,21 +373,46 @@ const DocumentCreate = () => {
           </h1>
         </div>
 
-        {/* ── MAIN CARD ── */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+        {/* ── COMPANY DROPDOWN ── */}
+        <div className="mb-8">
+          <FieldLabel label="Company" required htmlFor="company" />
 
-          {/* Company Dropdown */}
-          <div className="mb-8">
-            <FieldLabel label="Company" required htmlFor="company" />
+          <div
+            className="flex items-center gap-3"
+            style={{ maxWidth: "320px" }}
+          >
+            {/* Logo */}
+            {selectedCompany && (
+              <div
+                className="w-9 h-9
+                            flex items-center justify-center overflow-hidden shrink-0 bg-white"
+              >
+                {selectedCompany.logo && !logoError ? (
+                  <img
+                    src={selectedCompany.logo}
+                    alt={selectedCompany.name}
+                    className="object-contain"
+                    onError={() => setLogoError(true)}
+                  />
+                ) : (
+                  <span className="text-sm font-bold text-indigo-700">
+                    {selectedCompany.name.charAt(0)}
+                  </span>
+                )}
+              </div>
+            )}
+
             <SelectWrapper>
               <select
                 id="company"
                 value={selectedCompany?.id || ""}
                 onChange={(e) => handleCompanyChange(e.target.value)}
                 className={selectClass(false)}
-                style={{ maxWidth: "320px" }}
+                style={{ width: "280px" }}
               >
-                <option value="" disabled>Select Company</option>
+                <option value="" disabled>
+                  Select Company
+                </option>
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
                     {company.name}
@@ -290,69 +420,70 @@ const DocumentCreate = () => {
                 ))}
               </select>
             </SelectWrapper>
+
           </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-100 mb-8" />
-
-          {/* Validation Error Banner */}
-          {Object.keys(formErrors).length > 0 && (
-            <div className="flex items-start gap-2 bg-red-50 border border-red-200
-                            text-red-600 rounded-lg px-4 py-3 mb-6 text-sm">
-              <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>Please fill in all required fields before previewing.</span>
-            </div>
-          )}
-
-          {/* Form Fields */}
-          {selectedCompany ? (
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
-                {selectedDocType?.fields?.length > 0 ? (
-                  selectedDocType.fields.map(
-                    (field) => shouldShowField(field) && renderField(field)
-                  )
-                ) : (
-                  <div className="col-span-3 flex items-center justify-center py-10 text-gray-400">
-                    <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin mr-2" />
-                    <span className="text-sm">Loading fields...</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between mt-10 pt-6 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={() => navigate(ROUTES.USER_DASHBOARD)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
-                             border border-gray-300 text-gray-600 text-sm font-medium
-                             hover:bg-gray-50 transition"
-                >
-                  <MdOutlineCancel className="w-4 h-4" />
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
-                             bg-gray-200 text-gray-700 text-sm font-medium
-                             hover:bg-gray-300 transition"
-                >
-                  <MdOutlinePreview className="w-4 h-4" />
-                  Preview Document
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-              <RiBuilding2Line className="w-10 h-10 mb-3 text-gray-300" />
-              <p className="text-sm font-medium text-gray-500">No company selected</p>
-              <p className="text-xs text-gray-400 mt-1">
-                Select a company above to fill in the form.
-              </p>
-            </div>
-          )}
         </div>
+
+        {/* ── VALIDATION BANNER ── */}
+        {Object.keys(formErrors).length > 0 && (
+          <div
+            className="flex items-start gap-2 bg-red-50 border border-red-200
+                        text-red-600 rounded-lg px-4 py-3 mb-6 text-sm"
+          >
+            <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>Please fill in all required fields before previewing.</span>
+          </div>
+        )}
+
+        {/* ── FORM FIELDS ── */}
+        {selectedCompany ? (
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-6">
+              {selectedDocType?.fields?.length > 0 ? (
+                selectedDocType.fields.map(
+                  (field) => shouldShowField(field) && renderField(field)
+                )
+              ) : (
+                <div className="col-span-5 flex items-center justify-center py-10 text-gray-400">
+                  <AiOutlineLoading3Quarters className="w-5 h-5 animate-spin mr-2" />
+                  <span className="text-sm">Loading fields...</span>
+                </div>
+              )}
+            </div>
+
+            {/* ── ACTIONS ── */}
+            <div className="flex items-center gap-4 mt-10">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg
+                         bg-gray-200 text-gray-700 text-sm font-medium
+                         hover:bg-gray-300 transition"
+              >
+                <MdOutlinePreview className="w-4 h-4" />
+                Preview Document
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.USER_DASHBOARD)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
+                         border border-gray-300 text-gray-500 text-sm font-medium
+                         hover:bg-gray-50 transition"
+              >
+                <MdOutlineCancel className="w-4 h-4" />
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-300">
+            <RiBuilding2Line className="w-10 h-10 mb-3" />
+            <p className="text-sm font-medium text-gray-400">No company selected</p>
+            <p className="text-xs text-gray-300 mt-1">
+              Select a company above to fill in the form.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

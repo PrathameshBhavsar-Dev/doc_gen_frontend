@@ -13,7 +13,7 @@ import {
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
-
+import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 // ================= TABLE CELL STYLES =================
 const NimbjaAppointment = ({ company, data }) => {
@@ -43,42 +43,6 @@ const NimbjaAppointment = ({ company, data }) => {
 
   /* ================= SALARY LOGIC ================= */
   const round0 = (num) => Math.round(num);
-
-  // // ===== Static PF =====
-  // const pfMonthly = 3750;
-  // const pfAnnual = round2(pfMonthly * 12);
-
-  // // ===== Fixed % Components =====
-  // const basicAnnual = round2(annualCTC * 0.34);
-  // const hraAnnual = round2(annualCTC * 0.20);
-  // const daAnnual = round2(annualCTC * 0.035);
-  // const foodAnnual = round2(annualCTC * 0.06);
-
-  // // ===== Special = Balance Amount =====
-  // const specialAnnual = round2(
-  //   annualCTC -
-  //     (basicAnnual + hraAnnual + daAnnual + foodAnnual + pfAnnual)
-  // );
-
-  // // ===== Monthly Values =====
-  // const basicMonthly = round2(basicAnnual / 12);
-  // const hraMonthly = round2(hraAnnual / 12);
-  // const daMonthly = round2(daAnnual / 12);
-  // const specialMonthly = round2(specialAnnual / 12);
-  // const foodMonthly = round2(foodAnnual / 12);
-
-  // // ===== Totals (Exact CTC Match) =====
-  // const totalMonthly = round2(annualCTC / 12);
-  // const totalAnnual = annualCTC;
-
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Provident Fund (PF)", pfMonthly, pfAnnual],
-  // ];
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(Number(data.salary || 0));
@@ -119,8 +83,31 @@ const NimbjaAppointment = ({ company, data }) => {
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        {/* ================= CONTENT ================= */}
-        <Box className="a4-content-only">
+        <Box
+          component="img"
+          src={watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            height: "40%",
+            top: "53%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           {/* ================= DATE ================= */}
           <Typography
             sx={{
@@ -216,7 +203,7 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
-                Your Designation will be <strong>{data.position}</strong>.
+                1.Your Designation will be <strong>{data.position}</strong>.
               </Typography>
             </li>
 
@@ -224,7 +211,7 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
-                Your total emoluments will be{" "}
+                2.Your total emoluments will be{" "}
                 <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong>
               </Typography>
             </li>
@@ -238,10 +225,10 @@ const NimbjaAppointment = ({ company, data }) => {
                   fontFamily: "Bahnschrift",
                 }}
               >
-                Full details of your pay package are given in the enclosure this
+                3.Full details of your pay package are given in the enclosure this
                 letter. However, please
                 <br />
-                note that, LTA is payable after completion of one year of
+                  note that, LTA is payable after completion of one year of
                 service, subject to your getting
               </Typography>
             </li>
@@ -250,7 +237,7 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
-                Whilst you are located abroad, the terms applicable will be
+                4.Whilst you are located abroad, the terms applicable will be
                 intimated at the relevant point of time.
               </Typography>
             </li>
@@ -259,7 +246,7 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
-                You shall be due for salary revision not before one year from
+                5.You shall be due for salary revision not before one year from
                 your date of joining.
               </Typography>
             </li>
@@ -273,7 +260,7 @@ const NimbjaAppointment = ({ company, data }) => {
                   fontFamily: "Bahnschrift",
                 }}
               >
-                The Management reserves the right to change the different
+                6.The Management reserves the right to change the different
                 components/allowances in the total emoluments package at its
                 discretion at any time in future. However, your total monthly
                 salary will be protected.
@@ -289,7 +276,7 @@ const NimbjaAppointment = ({ company, data }) => {
                   fontFamily: "Bahnschrift",
                 }}
               >
-                You will be on probation for a period of six months from the
+                7.You will be on probation for a period of six months from the
                 first of the calendar month following your date of joining,
                 after which you will be confirmed if your performance is found
                 satisfactory. The probation period may be extended at the
@@ -301,8 +288,8 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
-                Your services are terminable with one month’s notice on either
-                side or salary in lieu thereof.
+                8.Your services are terminable with one month’s notice on either
+                side or salary in lieu of notice period.
               </Typography>
             </li>
 
@@ -315,7 +302,7 @@ const NimbjaAppointment = ({ company, data }) => {
                   fontFamily: "Bahnschrift",
                 }}
               >
-                The Company shall have the right to terminate your service
+                9.The Company shall have the right to terminate your service
                 without notice, if the information furnished by you is found
                 incorrect or in case of any serious misconduct.
               </Typography>
@@ -329,86 +316,123 @@ const NimbjaAppointment = ({ company, data }) => {
         <Box className="a4-content-only">
           <Box component="ol" start={10} sx={{ pl: "6mm", m: 0, mt: "-7mm" }}>
             <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
-                This appointment is subject to your being medically fit.
+              <Typography
+                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
+              >
+                10.This appointment is subject to your being medically fit.
               </Typography>
             </li>
 
             <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
-                The age of retirement will be 58 years.
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
+                11.The age of retirement will be 58 years.
               </Typography>
             </li>
 
             <li>
               <Typography
                 sx={{
-                  mb: "3mm",
+                  mb: "2mm",
                   textAlign: "justify",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                You will devote whole time and attention to your duties and
-                shall not divulge or utilize any information concerning the
-                Company’s trade secrets or affairs.
+                12. You will devote whole time and attention to your duties
+                promote the interests of the company and you will undertake
+                herewith not to divulge or utilize any information, which may
+                become known to you in the course of your duties concerning the
+                Company’s trade secret or affairs
+              </Typography>
+            </li>
+            <Box
+              component="img"
+              src={watermark}
+              alt="watermark"
+              sx={{
+                position: "absolute",
+                height: "40%",
+                top: "48%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "50%",
+                opacity: 0.4,
+                zIndex: -1,
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* CONTENT */}
+            <Box
+              className="a4-content-only"
+              sx={{
+                position: "relative",
+                zIndex: 1,
+              }}
+            ></Box>
+            <li>
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
+                13. You will be required to give an undertaking on
+                confidentiality and non-competition as per the document given to
+                you separately.
               </Typography>
             </li>
 
             <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
-                You will be required to give an undertaking on confidentiality
-                and non-competition.
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
+                You will not, without previous written permission of the
+                Company, carry on any business or engage yourself in the
+                services or employment of any other Company/Firm/Person.
               </Typography>
             </li>
 
             <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
-                You will not engage in any other employment without prior
-                written permission of the Company.
-              </Typography>
-            </li>
-
-            <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
                 You will keep the Company informed of any change in your
                 residential address.
               </Typography>
             </li>
 
             <li>
-              <Typography sx={{ mb: "3mm", fontFamily: "Bahnschrift" }}>
-                You will attend duties according to business exigencies.
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
+                16. You will be required to attend to your work according to the
+                exigencies and urgency of the various jobs, from time to time
+                and you will adhere to the requirements of the Company.
               </Typography>
             </li>
 
             <li>
               <Typography
                 sx={{
-                  mb: "3mm",
+                  mb: "2mm",
                   textAlign: "justify",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                You will be governed by the service conditions applicable to
-                employees as amended from time to time.
+                17. You will governed by the service conditions applicable to
+                the employees of the Company as amended from time to time and
+                you will abide by the same as well as by the terms of the
+                agreement between yourself and the Company and also as per the
+                undertaking on confidentiality and non-competition.
               </Typography>
             </li>
 
             <li>
               <Typography
                 sx={{
-                  mb: "6mm",
+                  mb: "2mm",
                   textAlign: "justify",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                The Company reserves the right to transfer you. However, your
-                present posting will be at Pune.
+                18. The Company reserves the right to transfer you to any of our
+                offices/factories/establishments/group companies, whether now in
+                existence or to be set hereafter. However, your present posting
+                will be at Pune.
               </Typography>
             </li>
           </Box>
 
-          <Typography sx={{ mt: "8mm", fontFamily: "Bahnschrift" }}>
+          <Typography sx={{ mt: "2mm", fontFamily: "Bahnschrift", mb: "2mm" }}>
             You are requested to sign and return the duplicate copy of this
             letter as a token of your acceptance of the above terms and
             conditions.
@@ -417,7 +441,7 @@ const NimbjaAppointment = ({ company, data }) => {
         <div style={{ marginTop: "10mm" }}>
           <div
             style={{
-              marginTop: "2mm",
+              marginTop: "-5mm",
               display: "flex",
               justifyContent: "space-between",
             }}
@@ -430,7 +454,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
               <p>
                 {/* ⬆️ negative margin lifts company name upward */}
-                <strong>For Nimbja Security Solution Pvt Ltd.</strong>
+                For<strong> Nimbja Security Solution Pvt Ltd.</strong>
               </p>
             </div>
             <div style={{ textAlign: "center", fontFamily: "Bahnschrift" }}>
@@ -448,7 +472,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.signature}
                     alt="Signature"
-                    sx={{ width: 140, mt: "18mm", ml: "-2mm" }}
+                    sx={{ width: 185, mt: "-2mm", ml: "-2mm" }}
                   />
                 </Grid>
                 <Grid item>
@@ -456,7 +480,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110 }}
+                    sx={{ width: 110, mt: "-5mm", mb: "2mm" }}
                   />
                 </Grid>
               </Grid>
@@ -477,6 +501,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       fontWeight: "400",
                       fontSize: "4mm",
+                      mt: "-7mm",
                     }}
                   >
                     {company?.hrName}
@@ -507,6 +532,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       textAlign: "right",
                       marginRight: "-3mm",
+                      mt: "-7mm",
                     }}
                   >
                     Name: {data.employeeName}
@@ -517,6 +543,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       mt: "2mm", // 🔑 small Word-like gap
                       textAlign: "left",
+                      mb:"2mm",
                       ml: "73mm",
                     }}
                   >
@@ -559,6 +586,30 @@ const NimbjaAppointment = ({ company, data }) => {
             formatDate={formatDate}
           />
         </Box>
+            <Box
+          component="img"
+          src={company.watermark}
+          alt="watermark"
+          sx={{
+            position: "absolute",
+            top: "53%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "50%",
+            opacity: 0.4,
+            zIndex: -1,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* CONTENT */}
+        <Box
+          className="a4-content-only"
+          sx={{
+            position: "relative",
+            zIndex: 2,
+          }}
+        ></Box>
         {/* Signature Block */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
           <Box>
@@ -567,7 +618,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45 }}
+                  style={{ height: 45, marginTop:"10mm" }}
                 />
               )}
               {company?.stamp && (

@@ -1,19 +1,19 @@
 import React from "react";
 import {
-    Box,
-    Typography,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Paper,
+  Box,
+  Typography,
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 import {
-    generateAnnexureSalaryStructure,
-    formatCurrency,
+  generateAnnexureSalaryStructure,
+  formatCurrency,
 } from "../../../../../utils/salaryCalculations";
 
 
@@ -31,6 +31,8 @@ const formatDate = (date) => {
 
 
 const CubeageUnPaidInternshipLetter = ({ company, data }) => {
+  const firstName = data.employeeName?.split(" ")[0] || data.internName?.split(" ")[0] || "";
+
   return (
     <>
       <A4Layout headerSrc={company.header}>
@@ -67,14 +69,14 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
         {/* ================= CANDIDATE DETAILS ================= */}
         <Box sx={{ mb: 2, fontFamily: "Book Antiqua" }}>
           <Typography sx={{ mb: 1, fontFamily: "Cambria" }}>
-            <strong>Name :</strong> {data.mrms} {data.internName}
+            <strong>Name :</strong> {data.mrms} {data.employeeName || data.internName}
           </Typography>
 
           <Typography sx={{ fontFamily: "Book Antiqua", mb: 2 }}>
             <strong>Subject :</strong> Letter of intent for the Internship of{" "}
-            {data.field}
+            {data.designation || data.field}
             <br />
-            Dear {data.internName},
+            Dear {firstName},
           </Typography>
         </Box>
 
@@ -86,16 +88,16 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
           On behalf of <strong>{company.name}</strong> family, We are thrilled
           to extend our warmest congratulations as we offer you the exciting
           opportunity to join our esteemed team as our
-          <strong> {data.field} </strong>
-          from <strong>{formatDate(data.startDate)}</strong>{" "}
+          <strong> {data.designation || data.field} </strong>
+          from <strong>{formatDate(data.startDate)}.</strong>{" "}
         </Typography>
 
-        <Typography paragraph sx={{ fontFamily: "Book Antiqua" }}>
+        <Typography sx={{ fontFamily: "Book Antiqua" }}>
           Your skills, passion, and competency stood out among a large pool of
           candidates, making you a perfect fit for our organization.
         </Typography>
 
-        <Typography paragraph sx={{ fontFamily: "Book Antiqua" }}>
+        <Typography sx={{ fontFamily: "Book Antiqua" }}>
           During your internship tenure, you will work closely with our
           experienced software professionals and gain hands-on exposure to
           real-world projects and modern technologies.
@@ -110,7 +112,13 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
 
         <Box
           component="ul"
-          sx={{ pl: 4, mt: 1, fontFamily: "Book Antiqua", fontSize: "12pt" }}
+          sx={{
+            pl: 4,
+            mt: 1,
+            fontFamily: "Book Antiqua",
+            fontSize: "12pt",
+            listStyleType: "disc",
+          }}
         >
           <li>Assisting in software design, development, and testing</li>
           <li>Participating in code reviews and feedback sessions</li>
@@ -118,7 +126,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
           <li>Collaborating with cross-functional teams</li>
         </Box>
 
-        <Typography paragraph sx={{ mt: 2, fontFamily: "Book Antiqua" }}>
+        <Typography sx={{ mt: 2, fontFamily: "Book Antiqua" }}>
           We wish you a rewarding learning journey with us and look forward to
           your valuable contributions.
         </Typography>
