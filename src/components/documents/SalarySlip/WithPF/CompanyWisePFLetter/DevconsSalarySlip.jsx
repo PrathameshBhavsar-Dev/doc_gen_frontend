@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-import { formatCurrency,getProfessionalTax } from "../../../../../utils/salaryCalculations";
+import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
@@ -59,7 +59,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     otherDeduction = 2000,
   } = data;
 
-   /* ===== MONTH FORMAT ===== */
+  /* ===== MONTH FORMAT ===== */
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
   const salaryMonth = `${monthName} ${year}`;
@@ -87,13 +87,13 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
 
   /* ================= DEDUCTIONS ================= */
   const PF = 3750;
-  
+
   // const OTHER_DEDUCTION = 2000;
 
   /* ================= NET PAY ================= */
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
-const netPay = round2(totalEarning - totalDeduction);
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
+  const netPay = round2(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -253,19 +253,27 @@ const netPay = round2(totalEarning - totalDeduction);
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell align="center">
-                {company.stamp && <img src={company.stamp} height={60} alt="Stamp" />}
+              <TableCell colSpan={2} />
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: 85, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
               </TableCell>
-              <TableCell align="center">
-                {company.signature && <img src={company.signature} height={28} alt="Signature" />}
-                <Typography fontWeight="bold" fontSize="9pt">
-                  Signature
-                </Typography>
+              <TableCell align="center" sx={{ verticalAlign: "middle" }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 50, width: "auto", maxWidth: "100%", display: "block", margin: "0 auto" }}
+                  />
+                )}
+                <Typography fontWeight="bold">Signature</Typography>
               </TableCell>
             </TableRow>
-
           </TableBody>
         </Table>
       </TableContainer>
