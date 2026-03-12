@@ -428,7 +428,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
 
   const totalDeductions = pf + pt + others;
 
-  const leaveEncashment = Number(data.leaveEncashment || 0);
+  const leaveEncashment = Number(data.leaveencashment || 0);
 
   const netPayable = totalEarned - totalDeductions;
 
@@ -465,13 +465,13 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
 
             {/* COMPANY */}
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
                 <strong>{company.name}</strong>
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>

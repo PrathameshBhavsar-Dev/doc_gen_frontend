@@ -342,6 +342,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         fontFamily:
                           '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                         textAlign: "right",
+                        // mt: "-35mm",
                       }}
                     >
                       Name: {data.employeeName}
@@ -353,7 +354,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                         mt: "2mm",
                         textAlign: "right",
-                        ml: "42mm",
+                        ml: "55mm",
                       }}
                     >
                       Date : _________________
