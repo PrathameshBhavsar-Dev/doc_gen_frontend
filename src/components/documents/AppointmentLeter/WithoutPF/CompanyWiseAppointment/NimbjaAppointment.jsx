@@ -90,11 +90,12 @@ const NimbjaAppointment = ({ company, data }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            height: "40%",
+            top: "54%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "70%",
-            opacity: 0.8,
+            width: "50%",
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -355,7 +356,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: "50%",
-                opacity: 0.5,
+                opacity: 0.4,
                 zIndex: -1,
                 pointerEvents: "none",
               }}
@@ -473,7 +474,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.signature}
                     alt="Signature"
-                    sx={{ width: 140, mt: "18mm", ml: "-2mm" }}
+                    sx={{ width: 180, mt: "10mm", ml: "-2mm", height: 40 }}
                   />
                 </Grid>
                 <Grid item>
@@ -532,6 +533,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       textAlign: "right",
                       marginRight: "-3mm",
+                      mt: "-2mm",
                     }}
                   >
                     Name: {data.employeeName}
@@ -540,12 +542,12 @@ const NimbjaAppointment = ({ company, data }) => {
                   <Typography
                     sx={{
                       fontFamily: "Bahnschrift",
-                      mt: "2mm", // 🔑 small Word-like gap
+                      mt: "1mm", // 🔑 small Word-like gap
                       textAlign: "left",
                       ml: "73mm",
                     }}
                   >
-                    Date : _________________
+                    Date : ________________
                   </Typography>
                 </Box>
               </Box>
@@ -566,7 +568,30 @@ const NimbjaAppointment = ({ company, data }) => {
           >
             {formatDate(data.issueDate)}
           </Typography>
+          <Box
+            component="img"
+            src={company.watermark}
+            alt="watermark"
+            sx={{
+              position: "absolute",
+              top: "55%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "50%",
+              opacity: 0.4,
+              zIndex: -1,
+              pointerEvents: "none",
+            }}
+          />
 
+          {/* CONTENT */}
+          <Box
+            className="a4-content-only"
+            sx={{
+              position: "relative",
+              zIndex: 2,
+            }}
+          ></Box>
           <Typography
             sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
           >
@@ -585,18 +610,25 @@ const NimbjaAppointment = ({ company, data }) => {
           />
         </Box>
         {/* Signature Block */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 12 }}>
           <Box>
             <Box sx={{ display: "flex", gap: 3 }}>
               {company?.signature && (
-                <img
+                <Box
+                  component="img"
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45 }}
+                  sx={{ height: 45, mt: 3 }} // margin-top applied here
                 />
               )}
+
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  alt="Stamp"
+                  sx={{ height: 100 }}
+                />
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>

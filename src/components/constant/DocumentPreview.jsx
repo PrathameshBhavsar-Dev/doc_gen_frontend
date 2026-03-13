@@ -125,6 +125,9 @@ const DocumentPreview = () => {
       setSnackbarMessage('Generating PDF...');
       setSnackbarOpen(true);
 
+      window.scrollTo(0, 0);
+      await new Promise(resolve => setTimeout(resolve, 300));
+
       await generatePDF(
         documentRef.current,
         `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
@@ -177,7 +180,7 @@ const DocumentPreview = () => {
       heightLeft -= pageHeight;
 
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+        position = -(imgHeight - heightLeft);
         pdf.addPage();
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
