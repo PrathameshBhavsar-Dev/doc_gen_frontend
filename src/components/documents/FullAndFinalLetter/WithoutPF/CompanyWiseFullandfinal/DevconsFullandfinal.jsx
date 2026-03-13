@@ -136,7 +136,8 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
 
       <Box sx={{ width: "95%", margin: "0 auto" }}>
-        <Table sx={{ borderCollapse: "collapse", width: "100%" }}>          <TableBody>
+        <Table sx={{ borderCollapse: "collapse", width: "100%" }}>          
+          <TableBody>
 
           {/* TITLE */}
           <TableRow>
