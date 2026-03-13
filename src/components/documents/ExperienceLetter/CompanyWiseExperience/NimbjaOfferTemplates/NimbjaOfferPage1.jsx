@@ -136,7 +136,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
           <Typography
             component="span"
             sx={{
-              borderBottom: "1px solid #000",
+              
               display: "inline",
               paddingBottom: "1px",
               fontFamily: "Bahnschrift",
