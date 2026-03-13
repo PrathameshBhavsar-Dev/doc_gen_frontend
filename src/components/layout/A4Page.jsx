@@ -10,7 +10,7 @@ const A4Page = ({
   footerSrc,
   watermarkSrc,
   children,
-  contentTop = "44mm", // Adjusted for finer vertical spacing!
+  contentTop = "38mm", // Adjusted for finer vertical spacing!
   contentBottom = "28mm",
   company, // Add company prop for enhanced branding
 }) => {
