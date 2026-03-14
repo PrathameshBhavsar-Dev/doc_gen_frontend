@@ -79,7 +79,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
             fontWeight: 600,
             textAlign: "right",
             mb: "9mm",
-            mt: "-12mm",
+            mt: "1mm",
           }}
         >
           {offerDate}
