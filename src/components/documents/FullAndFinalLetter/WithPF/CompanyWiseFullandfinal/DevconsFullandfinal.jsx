@@ -99,7 +99,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
 
-      <Box sx={{ width: "95%", margin: "0 auto" }}>
+      <Box sx={{ width: "95%", my: 5 }}>
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
 
@@ -267,7 +267,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
                   <img
                     src={company.stamp}
                     alt="Stamp"
-                    style={{ height: 70, display: "block", margin: "0 auto" }}
+                    style={{ height: 70, display: "block", margin: "3px auto" }}
                   />
                 )}
               </TableCell>
