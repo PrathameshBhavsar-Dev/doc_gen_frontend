@@ -96,7 +96,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "45%",
+            top: "47%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
@@ -192,7 +192,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.CEO && (
-              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
+              <img src={company.CEO} alt="Signature" style={{ height: 60 }} />
             )}
             {company?.stamp && (
               <img
@@ -227,7 +227,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "55%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
