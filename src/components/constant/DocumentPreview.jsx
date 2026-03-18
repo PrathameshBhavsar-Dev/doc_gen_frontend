@@ -148,47 +148,44 @@ const DocumentPreview = () => {
     setError('');
 
     try {
-      setSnackbarMessage('Generating Content Only PDF...');
-      setSnackbarOpen(true);
+      const element = documentRef.current;
 
-      const content = documentRef.current.querySelector('.a4-content-only');
-      if (!content) throw new Error('Missing .a4-content-only');
+      await document.fonts.ready;
+      await new Promise(r => setTimeout(r, 300));
 
-      const canvas = await html2canvas(content, {
-        scale: 3,
+      const canvas = await html2canvas(element, {
+        scale: 2,
         useCORS: true,
-        backgroundColor: '#ffffff',
-        ignoreElements: (el) =>
-          el?.getAttribute?.('alt')?.toLowerCase()?.includes('signature') ||
-          el?.getAttribute?.('alt')?.toLowerCase()?.includes('stamp'),
+        backgroundColor: "#ffffff",
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL("image/png");
 
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const pdf = new jsPDF("p", "mm", "a4");
 
-      let heightLeft = imgHeight;
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      let heightLeft = pdfHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight();
 
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
+        position = heightLeft - pdfHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
       }
 
       pdf.save(`${selectedDocType.name}-ContentOnly.pdf`);
-      setSnackbarMessage('Content-only PDF downloaded');
-      setSnackbarOpen(true);
     } catch (err) {
       console.error(err);
-      setError('Failed to generate content-only PDF');
+      setError("Failed to generate PDF");
     } finally {
       setLoading(false);
     }
@@ -221,10 +218,14 @@ const DocumentPreview = () => {
         ref={documentRef}
         elevation={3}
         sx={{
-          width: '210mm',
-          minHeight: '297mm',
-          margin: '0 auto',
-          backgroundColor: '#fff',
+          width: "794px",
+          height: "1123px",
+          margin: "0 auto",
+          backgroundColor: "#fff",
+          overflow: "hidden",
+
+          transform: "scale(1)",
+          transformOrigin: "top left"
         }}
       >
         {renderDocumentTemplate()}

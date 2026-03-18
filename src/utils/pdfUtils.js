@@ -14,70 +14,45 @@ export const generatePDF = async (element, fileName) => {
   }
 
   try {
-    // Create a canvas from the element
-    // const canvas = await html2canvas(element, {
-    //   scale: 2, // Higher scale for better quality
-    //   useCORS: true, // Enable CORS for images
-    //   allowTaint: true, // Allow cross-origin images
-    //   logging: false,
-    //   letterRendering: true,
-    //   width: element.scrollWidth,
-    //   height: element.scrollHeight,
-    //   scrollX: 0,
-    //   scrollY: 0
-    // });
+    // Increase delay to ensure fonts (like Bahnschrift) and stickers are 100% loaded
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-//     const canvas = await html2canvas(element, {
-//   scale: 3,
-//   useCORS: true,
-//   backgroundColor: "#ffffff",
-//   logging: false,
-//   windowWidth: element.scrollWidth,
-//   windowHeight: element.scrollHeight
-// });
+    const canvas = await html2canvas(element, {
+      scale: 2, 
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+      width: element.offsetWidth,
+      height: element.offsetHeight,
+      windowWidth: element.offsetWidth || 1200, // Stabilize viewport
+    });
 
-//     const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL("image/png");
     
-//     // A4 size in mm: 210 x 297
-//     const pdf = new jsPDF({
-//       orientation: 'portrait',
-//       unit: 'mm',
-//       format: 'a4'
-//     });
-
-const canvas = await html2canvas(element, {
-  scale: 3,
-  useCORS: true,
-  backgroundColor: "#ffffff"
-});
-
-const imgData = canvas.toDataURL("image/png");
-
-const pdf = new jsPDF("p", "mm", "a4");
-
-pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
-
-pdf.save(`${fileName}.pdf`);
-
+    // A4 dimensions in mm
     const imgWidth = 210;
-    const imgHeight = 297;
-    // const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const pageHeight = 297; 
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    
+    const pdf = new jsPDF("p", "mm", "a4");
+    
     let heightLeft = imgHeight;
     let position = 0;
 
     // Add first page
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
     heightLeft -= pageHeight;
 
-    // Add additional pages if needed
-    while (heightLeft >= 1) {
+    // Add additional pages if content exceeds one A4 page
+    // Use a small threshold (2mm) to prevent extra blank pages due to rounding
+    while (heightLeft > 2) {
       position = heightLeft - imgHeight;
       pdf.addPage();
-pdf.addImage(imgData, "PNG", 0, 0, 210, 297);      
-heightLeft -= pageHeight;
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      heightLeft -= pageHeight;
     }
 
-    // Download the PDF
     pdf.save(`${fileName}.pdf`);
   } catch (error) {
     console.error('Error generating PDF:', error);

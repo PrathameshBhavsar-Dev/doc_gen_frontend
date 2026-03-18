@@ -7,7 +7,6 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 
@@ -102,23 +101,28 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
       headerSrc={company.header}
       footerSrc={company.footer}
       watermarkSrc={company.watermark}
-    // contentTop="45mm"
-    // contentBottom="30mm"
     >
-      <TableContainer
-        component={Paper}
+      <Box
         sx={{
           border: "1px solid black",
-          borderRadius: 0,
-          boxShadow: "none",
+          width: "100%",
+          boxSizing: "border-box",
           "& .MuiTableCell-root": {
             border: "1px solid black",
             padding: "4px 6px",
             fontFamily: "Bahnschrift",
+            color: "#000",
           },
         }}
       >
-        <Table size="small">
+        <Table size="small" sx={{ 
+          borderCollapse: "collapse", 
+          width: "100%", 
+          tableLayout: "fixed", // Force fixed layout for perfect alignment
+          "& .MuiTableCell-root": {
+            width: "25%", // Each of the 4 columns gets exactly 25%
+          }
+        }}>
           <TableBody>
             {/* HEADER */}
             <TableRow>
@@ -271,7 +275,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
           </TableBody>
         </Table>
-      </TableContainer>
+      </Box>
     </A4Page>
 
   );

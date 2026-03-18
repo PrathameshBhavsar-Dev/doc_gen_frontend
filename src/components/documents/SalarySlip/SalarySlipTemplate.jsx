@@ -2,7 +2,7 @@ import React from "react";
 // import PaidInternshipLetterTemplate from "./PaidIntershipLetter/PaidInternshipTemplate";
 // import UnPaidInternshipLetterTemplate from "./UnpaidIntershipLetter/UnpaidinternshipTemplate";
 import WithPFLetterTemplate from "./WithPF/CompanyWisePFLetter/WithPFLetterTemplate";
-import SalarySlipTemplate from "../../documents/SalarySlip/WithoutPF/WithoutPFLetterTemplate";
+import WithoutPFLetterTemplate from "./WithoutPF/WithoutPFLetterTemplate";
 
 
 const SalarySlipLetterTemplate = ({ company, data }) => {
@@ -18,7 +18,7 @@ const SalarySlipLetterTemplate = ({ company, data }) => {
   }
 
   if (SalaryType === "withoutPF") {
-    return <SalarySlipTemplate company={company} data={data} />;
+    return <WithoutPFLetterTemplate company={company} data={data} />;
   }
 
   return <div>Invalid Salary type</div>;
