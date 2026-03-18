@@ -74,6 +74,7 @@
 //     day: 'numeric'
 //   });
 // };
+
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -116,7 +117,6 @@ export const generatePDF = async (element, fileName) => {
 
     const imgWidth = 210;
     const pageHeight = 297;
-
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     let heightLeft = imgHeight;
 

@@ -5,8 +5,8 @@ class ROUTES {
   static DOCUMENT_BASE = "/document";
 
   //  Auth Pages
-  static LOGIN = "/login";
-  static SIGNUP = "/";
+  static LOGIN = "/";
+  // static SIGNUP = "/";
 
   // Admin Pages
   static ADMIN_DASHBOARD = `${this.ADMIN_BASE}/dashboard`;

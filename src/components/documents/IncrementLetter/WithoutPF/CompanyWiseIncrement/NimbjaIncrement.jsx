@@ -69,39 +69,78 @@ const NimbjaIncrement = ({ company, data }) => {
     <>
       {/* =========================== PAGE 1 =========================== */}
       <Box
-        className="a4-content-only"
         sx={{
-          ...page,
+          width: "210mm",
+          minHeight: "297mm",
+          backgroundColor: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
           "& *": {
             fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
           },
+          pageBreakAfter: "always",
         }}
       >
-        {company.headerImage && (
-          <img src={company.headerImage} alt="Header" style={fullWidth} />
+        {company?.headerImage && (
+          <img
+            src={company.headerImage}
+            alt="Header"
+            style={{ width: "100%" }}
+          />
         )}
+
         <Box
           component="img"
           src={watermark}
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "47%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
-            "& *": {
-              fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
-            },
           }}
         />
 
-        <div style={{ ...content, position: "relative", zIndex: 1 }}>
-          {" "}
-          <p style={rightDate}>{formatDate(data.issueDate)}</p>
+        {/* CONTENT */}
+        {/* <Box
+                className="a4-content-only"
+                sx={{
+                  
+                }}
+              > */}
+        <Box
+          sx={{
+            px: "25mm",
+            py: "22mm",
+            flexGrow: 1,
+            fontSize: "14px",
+            lineHeight: 1.8,
+            color: "#000",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: "right",
+              mb: 6,
+              mt: "-12mm",
+              fontFamily: "Bahnschrift",
+            }}
+          >
+            {new Date(data.issueDate).toLocaleDateString("en-US", {
+              month: "long",
+              day: "2-digit",
+              year: "numeric",
+            })}
+          </Typography>
+
           <Typography
             sx={{
               textAlign: "Center",
@@ -114,49 +153,68 @@ const NimbjaIncrement = ({ company, data }) => {
           >
             Appraisal Letter
           </Typography>
-          <p style={greeting}>
-            Dear {data.candidateName || data.employeeName},
-          </p>
-          <p style={para}>
-            I am pleased to inform you that due to your consistent outstanding
-            performance and dedication to your role as <b>{data.designation}</b>
-            , we are providing you with a salary increment effective{" "}
-            <strong>{formatDate(data.effectiveDate)}</strong>, your revised
-            annual CTC will be <strong>{formatCurrency(totalAnnual)}</strong>.
-          </p>
-          <p style={para}>
-            Your dedication and commitment to the organization are truly
-            appreciated, and we look forward to your continued contribution and
-            success.
-          </p>
-          <p style={{ ...para, marginBottom: "36px" }}>
-            We wish you continued growth and success with the organization.
-          </p>
-          <p style={signOff}>Yours sincerely,</p>
-          <div style={signatureRow}>
-            {company.signature && (
-              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
+
+          <Typography sx={{ mb: 4, fontFamily: "Bahnschrift" }}>
+            Dear {data.employeeName},
+          </Typography>
+
+          <Typography
+            sx={{ mb: 4, textAlign: "justify", fontFamily: "Bahnschrift" }}
+          >
+            In Recognition of your previous years of service with{" "}
+            <strong>{company.name}</strong>, we are pleased to offer you a
+            salary increment effective{" "}
+            <strong>
+              {new Date(data.effectiveDate).toLocaleDateString("en-US", {
+                month: "long",
+                day: "2-digit",
+                year: "numeric",
+              })}
+            </strong>
+            . Your salary will increase to{" "}
+            <strong>{formatCurrency(totalAnnual)}</strong> per annum.
+          </Typography>
+
+          <Typography
+            sx={{ mb: 4, textAlign: "justify", fontFamily: "Bahnschrift" }}
+          >
+            Your loyalty and commitment to the company over the years have been
+            invaluable and this increment is a token of our appreciation. We
+            look forward to many more years of your dedication and contribution.
+          </Typography>
+
+          <Typography sx={{ mb: 8, fontFamily: "Bahnschrift" }}>
+            Once again, thank you for being such a reliable member of our team.
+          </Typography>
+
+          <Typography sx={{ mb: 6, fontFamily: "Bahnschrift" }}>
+            Yours Sincerely,
+          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
+            {company?.CEO && (
+              <img src={company.CEO} alt="Signature" style={{ height: 60 }} />
             )}
-            {company.stamp && (
+            {company?.stamp && (
               <img
                 src={company.stamp}
                 alt="Stamp"
-                style={{
-                  height: "100px",
-                  marginLeft: "-26mm",
-                  marginTop: "-8mm",
-                }}
+                style={{ height: 110, marginLeft: "-20px" }}
               />
             )}
-          </div>
-          <p style={signName}>{company.ceoName}</p>
-          <strong>
-            <p>CEO & Managing Director</p>
-          </strong>
-        </div>
+          </Box>
 
-        {company.footerImage && (
-          <img src={company.footerImage} alt="Footer" style={fullWidth} />
+          <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
+            CEO & Managing Director
+          </Typography>
+        </Box>
+
+        {company?.footerImage && (
+          <img
+            src={company.footerImage}
+            alt="Footer"
+            style={{ width: "100%" }}
+          />
         )}
       </Box>
 
@@ -168,11 +226,11 @@ const NimbjaIncrement = ({ company, data }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "55%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -230,18 +288,12 @@ const NimbjaIncrement = ({ company, data }) => {
           <Table
             sx={{
               width: "100%",
-              borderCollapse: "collapse",
-              "& th": {
-                backgroundColor: "#8bc34a",
-                fontWeight: 700,
-                fontSize: "13px",
+              border: "1px solid #000",
+              fontFamily: "Bahnschrift",
+              "& th, & td": {
                 border: "1px solid #000",
                 padding: "6px",
-              },
-              "& td": {
-                border: "1px solid #000",
-                padding: "6px",
-                fontSize: "13px",
+                fontSize: "14px",
                 fontFamily: "Bahnschrift",
               },
             }}
@@ -263,48 +315,54 @@ const NimbjaIncrement = ({ company, data }) => {
               {/* Salary Rows */}
               <TableRow>
                 <TableCell>Basic</TableCell>
-                <TableCell align="right">{basicMonthly}</TableCell>
-                <TableCell align="right">{basicAnnual}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(basicMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(basicAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Bouqet Of Benefits</TableCell>
-                <TableCell align="right">{hraMonthly}</TableCell>
-                <TableCell align="right">{hraAnnual}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(hraMonthly)}
+                </TableCell>
+                <TableCell align="right">{formatCurrency(hraAnnual)}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>HRA</TableCell>
-                <TableCell align="right">{daMonthly}</TableCell>
-                <TableCell align="right">{daAnnual}</TableCell>
+                <TableCell align="right">{formatCurrency(daMonthly)}</TableCell>
+                <TableCell align="right">{formatCurrency(daAnnual)}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>City Allowance</TableCell>
-                <TableCell align="right">{specialMonthly}</TableCell>
-                <TableCell align="right">{specialAnnual}</TableCell>
+                <TableCell align="right">{formatCurrency(specialMonthly)}</TableCell>
+                <TableCell align="right">{formatCurrency(specialAnnual)}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Superannuation Fund</TableCell>
-                <TableCell align="right">{foodMonthly}</TableCell>
-                <TableCell align="right">{foodAnnual}</TableCell>
+                <TableCell align="right">{formatCurrency(foodMonthly)}</TableCell>
+                <TableCell align="right">{formatCurrency(foodAnnual)}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Performance Bonus</TableCell>
-                <TableCell align="right">{miscMonthly}</TableCell>
-                <TableCell align="right">{miscAnnual}</TableCell>
+                <TableCell align="right">{formatCurrency(miscMonthly)}</TableCell>
+                <TableCell align="right">{formatCurrency(miscAnnual)}</TableCell>
               </TableRow>
 
               {/* Total Row */}
               <TableRow sx={{ backgroundColor: "#8bc34a" }}>
                 <TableCell sx={{ fontWeight: 700 }}>Total Salary</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  {totalMonthly}
+                  {formatCurrency(totalMonthly)}
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  {totalAnnual}
+                  {formatCurrency(totalAnnual)}
                 </TableCell>
               </TableRow>
             </TableBody>

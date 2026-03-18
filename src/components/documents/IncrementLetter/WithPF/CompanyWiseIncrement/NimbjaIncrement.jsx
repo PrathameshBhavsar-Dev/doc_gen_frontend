@@ -96,11 +96,11 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "47%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -129,7 +129,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             sx={{
               textAlign: "right",
               mb: 6,
-              mt: "-4mm",
+              mt: "-12mm",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -192,7 +192,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.CEO && (
-              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
+              <img src={company.CEO} alt="Signature" style={{ height: 60 }} />
             )}
             {company?.stamp && (
               <img
@@ -227,11 +227,11 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "55%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -249,7 +249,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}

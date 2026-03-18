@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 import {
   LayoutDashboard,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import ContainerIcon from "../../assets/logos/Container.png";
 import GenerateDocDropDown from "../common/GenerateDocDropDown";
+import { useAuth } from "../../core/contexts/AuthContext";
 
 const menuItems = [
   { label: "Dashboard", path: ROUTES.USER_DASHBOARD, icon: <LayoutDashboard size={18} /> },
@@ -25,6 +26,8 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   const [isVisible, setIsVisible] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleToggle = () => {
     if (showDropdown) {
@@ -34,6 +37,13 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
       setIsVisible(true);
       setTimeout(() => setShowDropdown(true), 10);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+
+    // redirect after logout
+    navigate("/login", { replace: true });
   };
 
   useEffect(() => {
@@ -184,17 +194,18 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
       {/* ── LOGOUT ── */}
       <div className="mt-auto w-full">
         <button
+          onClick={handleLogout}
           className={`flex items-center gap-3 py-2.5 rounded-xl w-full
-            text-red-400 hover:bg-red-50 hover:text-red-500
-            transition-all duration-200 font-medium text-sm
-            ${collapsed ? "justify-center px-0" : "px-4"}
-          `}
+    text-red-400 hover:bg-red-50 hover:text-red-500
+    transition-all duration-200 font-medium text-sm
+    ${collapsed ? "justify-center px-0" : "px-4"}
+  `}
         >
           <LogOut size={16} className="shrink-0" />
           <span
             className={`transition-all duration-300 overflow-hidden whitespace-nowrap
-              ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}
-            `}
+      ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}
+    `}
           >
             Logout
           </span>
