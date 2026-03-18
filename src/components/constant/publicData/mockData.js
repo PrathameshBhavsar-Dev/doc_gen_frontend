@@ -957,18 +957,18 @@ export const documentTypes = [
         type: "number",
         required: true,
       },
-      {
-        name: "designation",
-        label: "Designation",
-        type: "text",
-        required: true,
-      },
-      {
-        name: "department",
-        label: "Department",
-        type: "text",
-        required: false,
-      },
+      // {
+      //   name: "designation",
+      //   label: "Designation",
+      //   type: "text",
+      //   required: true,
+      // },
+      // {
+      //   name: "department",
+      //   label: "Department",
+      //   type: "text",
+      //   required: false,
+      // },
       {
         name: "newCTC",
         label: "Increment Package",

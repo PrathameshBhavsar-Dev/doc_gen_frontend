@@ -106,6 +106,7 @@ const NeweageIncrement = ({ company, data }) => {
               textDecoration: "underline",
               fontWeight: 600,
               mb: 3,
+              mt: 2,
             }}
           >
             Appraisal Letter
