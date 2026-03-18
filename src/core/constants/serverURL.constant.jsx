@@ -23,6 +23,7 @@ class ServerUrl {
 
   // base
   static doc = (type) => `${this.API_MODULE_DOCUMENTS}/${type}`;
+  static API_ALL_DOCUMENTS = "/documents/getalldoc";
 
   // 🔥 MAPPED TO YOUR BACKEND
   static generateDoc = (type) => `${this.doc(type)}/generate`;
