@@ -59,7 +59,7 @@ const Login = () => {
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
 
         {/* LEFT SIDE */}
-        <div className="relative rounded-3xl overflow-hidden min-h-[600px] text-white flex flex-col justify-between p-10 bg-[#07061a]">
+        <div className="relative rounded-3xl overflow-hidden min-h-150 text-white flex flex-col justify-between p-10 bg-[#07061a]">
           <div className="absolute inset-0">
             <SilkBackground />
           </div>
