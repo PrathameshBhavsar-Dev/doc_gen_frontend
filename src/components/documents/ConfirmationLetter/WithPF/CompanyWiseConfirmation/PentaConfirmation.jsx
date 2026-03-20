@@ -126,7 +126,8 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
          
    <Typography fontSize={14} textAlign="justify" mt={2}>
            Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be
-            Specified in your letter of appointment. We welcome you to R P BUSINESS SOLUTIONS LLP. Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+            Specified in your letter of appointment. We welcome you throw new Error {company.name} 
+             Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
           </Typography>
           {/* SIGNATURE SECTION */}
           <Box

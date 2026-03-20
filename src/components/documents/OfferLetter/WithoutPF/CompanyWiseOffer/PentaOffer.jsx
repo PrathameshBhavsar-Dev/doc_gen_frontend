@@ -23,8 +23,8 @@ const formatDate = (date) => {
 const formatCurrency = (value) => {
   if (value == null || value === "") return "";
   return Number(value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    // minimumFractionDigits: 2,
+    // maximumFractionDigits: 2,
   });
 };
 
