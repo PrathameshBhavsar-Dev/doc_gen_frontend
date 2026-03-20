@@ -37,7 +37,7 @@ export const generateAnnexureSalaryStructure = (ctc) => {
     { label: "Basic", percent: 0.444 },
     { label: "House Rent Allowance", percent: 0.18 },
     { label: "Dearness Allowance", percent: 0.12 },
-    { label: "Special Allowance", percent: 0.114 },
+    { label: "Special Allowance", percent: 0.114 },l
     { label: "Food Allowance", percent: 0.06 },
     { label: "Misc. Allowance", percent: 0.082 },
   ];
