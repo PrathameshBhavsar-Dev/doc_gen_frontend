@@ -94,7 +94,7 @@ const NimbjaAppointment = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -113,7 +113,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-5mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -317,14 +317,14 @@ const NimbjaAppointment = ({ company, data }) => {
           <Box component="ol" start={10} sx={{ pl: "6mm", m: 0, mt: "-7mm" }}>
             <li>
               <Typography
-                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
+                sx={{ mb: "2mm", fontFamily: "Bahnschrift",  mt:"-8mm" }}
               >
                 10.This appointment is subject to your being medically fit.
               </Typography>
             </li>
 
             <li>
-              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
+              <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift", }}>
                 11.The age of retirement will be 58 years.
               </Typography>
             </li>
@@ -355,7 +355,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: "50%",
-                opacity: 0.5,
+                opacity: 0.4,
                 zIndex: -1,
                 pointerEvents: "none",
               }}
@@ -379,7 +379,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will not, without previous written permission of the
+                14.You will not, without previous written permission of the
                 Company, carry on any business or engage yourself in the
                 services or employment of any other Company/Firm/Person.
               </Typography>
@@ -387,7 +387,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will keep the Company informed of any change in your
+                15.You will keep the Company informed of any change in your
                 residential address.
               </Typography>
             </li>
@@ -480,7 +480,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110, mt: "-5mm", mb: "2mm" }}
+                    sx={{ width: 110, mt: "-5mm", mb: "2mm",height:110 }}
                   />
                 </Grid>
               </Grid>
@@ -561,7 +561,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -596,7 +596,7 @@ const NimbjaAppointment = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: -1,
             pointerEvents: "none",
           }}
@@ -622,7 +622,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 />
               )}
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <img src={company.stamp} alt="Stamp" style={{ height: 110 }} />
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>

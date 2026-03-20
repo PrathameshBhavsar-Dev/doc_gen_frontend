@@ -162,7 +162,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             transform: "translate(-50%, -50%)",
             width: "50%",
             opacity: 0.4,
-            zIndex: 0,
+            zIndex: -1,
             pointerEvents: "none",
           }}
         />
@@ -198,11 +198,11 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             <strong>Name :</strong> {data.employeeName}
           </Typography>
           <Typography b={2} sx={{ fontFamily: "Bahnschrift", mt: "-2mm" }}>
-            <strong>Address:</strong> {data.Address}
+            <strong>Address:</strong> {data.address}
           </Typography>
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.designation}</strong>
+            as <strong>{data.position}</strong>
           </Typography>
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
             Dear {firstName},
@@ -256,7 +256,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: 50 }}
+                    style={{ height: 50, marginTop: "4mm" }}
                   />
                 )}
                 {company?.stamp && (
@@ -349,7 +349,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45 }}
+                  style={{ height: 45, marginTop: "8mm" }}
                 />
               )}
               {company?.stamp && (

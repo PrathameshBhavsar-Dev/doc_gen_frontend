@@ -259,14 +259,14 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>BASIC</TableCell>
               <TableCell align="right">{formatCurrency(basic)}</TableCell>
-              <TableCell>PF</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>PF</TableCell>
               <TableCell align="right">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>HRA</TableCell>
               <TableCell align="right">{formatCurrency(hra)}</TableCell>
-              <TableCell>PT</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>PT</TableCell>
               <TableCell align="right">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
@@ -275,7 +275,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
                 DEARNESS ALLOWANCE
               </TableCell>
               <TableCell align="right">{formatCurrency(da)}</TableCell>
-              <TableCell>Other Deduction</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Other Deduction</TableCell>
               <TableCell align="right">
                 {formatCurrency(otherDeduction)}
               </TableCell>

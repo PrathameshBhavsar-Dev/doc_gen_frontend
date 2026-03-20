@@ -61,9 +61,7 @@ const FieldError = ({ message }) => (
 const SelectWrapper = ({ children }) => (
   <div className="relative">
     {children}
-    <MdKeyboardArrowDown
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none w-4 h-4"
-    />
+    <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none w-4 h-4" />
   </div>
 );
 
@@ -133,10 +131,34 @@ const DocumentCreate = () => {
 
   /* ================= INPUT HANDLER ================= */
   const handleInputChange = (field, value) => {
+    // Phone number validation (10 digits only)
+
+    if (field === "employeePhone") {
+      // allow only digits
+      value = value.replace(/\D/g, "");
+
+      // restrict to 10 digits
+      if (value.length > 10) {
+        value = value.slice(0, 10);
+      }
+
+      // store with 91 prefix
+      updateDocumentData(field, value ? `91${value}` : "");
+      return;
+    }
+
+    // Email cleanup
+    if (field === "employeeEmail") {
+      value = value.trim();
+    }
+
     updateDocumentData(field, value);
+
     if (field === "internshipType" && value === "unpaid") {
       updateDocumentData("stipend", "");
     }
+
+    // Clear field error when user edits
     if (formErrors[field]) {
       setFormErrors((prev) => {
         const copy = { ...prev };
@@ -145,26 +167,55 @@ const DocumentCreate = () => {
       });
     }
   };
-
   /* ================= VALIDATION ================= */
   const validateDocumentForm = () => {
     if (!selectedDocType) return true;
 
     const rules = {};
+
     selectedDocType.fields.forEach((field) => {
       if (!shouldShowField(field)) return;
+
       rules[field.name] = rules[field.name] || {};
       const isRequired = field.required === true || field.require === true;
+
       if (isRequired) {
         rules[field.name].required = true;
         rules[field.name].message = `${field.label} is required`;
       }
-      if (field.type === "email") rules[field.name].email = true;
-      if (field.type === "date" || field.type === "month") rules[field.name].date = true;
+
+      if (field.type === "date" || field.type === "month")
+        rules[field.name].date = true;
+
       if (field.type === "number") rules[field.name].number = true;
     });
 
     const errors = validateForm(documentData, rules);
+
+    /* ================= CUSTOM VALIDATIONS ================= */
+
+    selectedDocType.fields.forEach((field) => {
+      const value = documentData[field.name];
+
+      // Email validation
+      if (field.name === "employeeEmail" && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(value)) {
+          errors[field.name] = "Enter a valid email address";
+        }
+      }
+
+      // Phone validation
+      if (field.name === "employeePhone" && value) {
+        const phoneRegex = /^91[6-9]\d{9}$/;
+
+        if (!phoneRegex.test(value)) {
+          errors[field.name] = "Enter a valid 10 digit mobile number";
+        }
+      }
+    });
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -197,7 +248,11 @@ const DocumentCreate = () => {
     if (field.type === "select") {
       return (
         <div key={field.name}>
-          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+          <FieldLabel
+            label={field.label}
+            required={isRequired}
+            htmlFor={field.name}
+          />
           <SelectWrapper>
             <select
               id={field.name}
@@ -206,9 +261,13 @@ const DocumentCreate = () => {
               onChange={(e) => handleInputChange(field.name, e.target.value)}
               className={selectClass(hasError)}
             >
-              <option value="" disabled>Select {field.label}</option>
+              <option value="" disabled>
+                Select {field.label}
+              </option>
               {field.options?.map((option) => (
-                <option key={option} value={option}>{option}</option>
+                <option key={option} value={option}>
+                  {option}
+                </option>
               ))}
             </select>
           </SelectWrapper>
@@ -219,15 +278,24 @@ const DocumentCreate = () => {
 
     if (field.type === "textarea") {
       return (
-        <div key={field.name} className="col-span-1 md:col-span-2 lg:col-span-3">
-          <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
+        <div
+          key={field.name}
+          className="col-span-1 md:col-span-2 lg:col-span-3"
+        >
+          <FieldLabel
+            label={field.label}
+            required={isRequired}
+            htmlFor={field.name}
+          />
           <textarea
             id={field.name}
             name={field.name}
             rows={3}
             value={documentData[field.name] ?? ""}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+            placeholder={
+              field.placeholder || `Enter ${field.label.toLowerCase()}`
+            }
             className={`${inputClass(hasError)} resize-none`}
           />
           {hasError && <FieldError message={formErrors[field.name]} />}
@@ -238,16 +306,49 @@ const DocumentCreate = () => {
     // text, number, date, month, email
     return (
       <div key={field.name}>
-        <FieldLabel label={field.label} required={isRequired} htmlFor={field.name} />
-        <input
-          id={field.name}
-          name={field.name}
-          type={field.type}
-          value={documentData[field.name] ?? ""}
-          onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-          placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
-          className={inputClass(hasError)}
+        <FieldLabel
+          label={field.label}
+          required={isRequired}
+          htmlFor={field.name}
         />
+        {field.name === "employeePhone" ? (
+          <div
+            className={`
+      flex w-full rounded-lg border overflow-hidden
+      ${hasError ? "border-red-400 bg-red-50" : "border-gray-300 hover:border-gray-400"}
+      focus-within:ring-2 focus-within:ring-violet-400
+    `}
+          >
+            {/* +91 */}
+            <span className="flex items-center px-3 bg-gray-100 text-sm text-gray-600 border-r border-gray-300">
+              +91
+            </span>
+
+            <input
+              id={field.name}
+              name={field.name}
+              type="tel"
+              value={(documentData[field.name] || "").replace(/^91/, "")}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+              placeholder="Enter phone number"
+              maxLength={10}
+              className="w-full px-3 py-2.5 text-sm text-gray-800 bg-white focus:outline-none"
+            />
+          </div>
+        ) : (
+          <input
+            id={field.name}
+            name={field.name}
+            type={field.type}
+            value={documentData[field.name] ?? ""}
+            onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+            placeholder={
+              field.placeholder || `Enter ${field.label.toLowerCase()}`
+            }
+            className={inputClass(hasError)}
+          />
+        )}
+
         {hasError && <FieldError message={formErrors[field.name]} />}
       </div>
     );
@@ -259,7 +360,6 @@ const DocumentCreate = () => {
   return (
     <div className="">
       <div className="max-w-6xl ">
-
         {/* ── HEADER ── */}
         <div className="flex items-center gap-3 mb-8">
           <button
@@ -277,12 +377,16 @@ const DocumentCreate = () => {
         <div className="mb-8">
           <FieldLabel label="Company" required htmlFor="company" />
 
-          <div className="flex items-center gap-3" style={{ maxWidth: "320px" }}>
-
+          <div
+            className="flex items-center gap-3"
+            style={{ maxWidth: "320px" }}
+          >
             {/* Logo */}
             {selectedCompany && (
-              <div className="w-9 h-9
-                            flex items-center justify-center overflow-hidden shrink-0 bg-white">
+              <div
+                className="w-9 h-9
+                            flex items-center justify-center overflow-hidden shrink-0 bg-white"
+              >
                 {selectedCompany.logo && !logoError ? (
                   <img
                     src={selectedCompany.logo}
@@ -306,7 +410,9 @@ const DocumentCreate = () => {
                 className={selectClass(false)}
                 style={{ width: "280px" }}
               >
-                <option value="" disabled>Select Company</option>
+                <option value="" disabled>
+                  Select Company
+                </option>
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
                     {company.name}
@@ -320,8 +426,10 @@ const DocumentCreate = () => {
 
         {/* ── VALIDATION BANNER ── */}
         {Object.keys(formErrors).length > 0 && (
-          <div className="flex items-start gap-2 bg-red-50 border border-red-200
-                        text-red-600 rounded-lg px-4 py-3 mb-6 text-sm">
+          <div
+            className="flex items-start gap-2 bg-red-50 border border-red-200
+                        text-red-600 rounded-lg px-4 py-3 mb-6 text-sm"
+          >
             <BiSolidError className="w-4 h-4 mt-0.5 shrink-0" />
             <span>Please fill in all required fields before previewing.</span>
           </div>
@@ -376,7 +484,6 @@ const DocumentCreate = () => {
             </p>
           </div>
         )}
-
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
       {/* ================= CONTENT ================= */}
       <div
         style={{
-          padding: "22mm 22mm 30mm 22mm",
+          padding: "10mm 20mm 15mm 20mm",
           position: "relative",
           zIndex: 1,
         }}
@@ -68,7 +68,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         <div
           style={{
             textAlign: "right",
-            marginBottom: "10mm",
+            marginBottom: "8mm",
             fontFamily: "Bahnschrift",
           }}
         >
@@ -80,7 +80,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
             textAlign: "center",
             fontWeight: "600",
             fontSize: "5mm",
-            marginBottom: "14mm",
+            marginBottom: "10mm",
             textDecoration: "underline",
           }}
         >
@@ -147,7 +147,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         <br />
         <p
           style={{
-            marginTop: "15mm",
+            marginTop: "5mm",
             marginBottom: "0",
             fontWeight: "400",
             fontFamily: "Verdana",

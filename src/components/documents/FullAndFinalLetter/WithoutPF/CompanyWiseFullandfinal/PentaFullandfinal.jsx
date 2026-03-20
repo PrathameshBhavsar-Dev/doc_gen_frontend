@@ -116,7 +116,7 @@ const numberToWords = (num) => {
 };
 
 /* ---------------- COMPONENT ---------------- */
-const  PentaFullandfinal = ({ company, data }) => {
+const PentaFullandfinal = ({ company, data }) => {
   /* ---- Days ---- */
   const totalDays = getDaysInMonth(data.month);
   const paidDays = Number(data.paiddays || 0);
@@ -336,19 +336,26 @@ const  PentaFullandfinal = ({ company, data }) => {
                 {numberToWords(netPay)}
               </TableCell>
             </TableRow>
-
             <TableRow>
-              <TableCell sx={{ ...cell, ...center }}>
+              <TableCell sx={{ ...cell, ...center }} style={{ mt: "15" }}>
                 Prepared By
               </TableCell>
+
               <TableCell sx={{ ...cell, ...center }}>
-                <img src={company.stamp} height={50} alt="stamp" />
-                <br />
+                <img
+                  src={company.stamp}
+                  alt="stamp"
+                  style={{ height: "55px", width: "auto", display: "block", margin: "0 auto" }}
+                />
                 Verified By
               </TableCell>
+
               <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                <img src={company.signature} height={45} alt="sign" />
-                <br />
+                <img
+                  src={company.signature}
+                  alt="sign"
+                  style={{ height: "40px", width: "auto", display: "block", margin: "0 auto" }}
+                />
                 Approved By
               </TableCell>
             </TableRow>
