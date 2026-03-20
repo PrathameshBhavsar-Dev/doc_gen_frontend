@@ -2,8 +2,7 @@ class ServerUrl {
   static BASE_URL = import.meta.env.VITE_API_URL;
 
   // ================= USER =================
-  static API_MODULE_AUTH = "/api/v1/users";
-
+  static API_MODULE_AUTH = "/users";
   static API_LOGIN = ServerUrl.API_MODULE_AUTH + "/login";
   static API_SIGNUP = ServerUrl.API_MODULE_AUTH + "/register";
   static API_LOGOUT = ServerUrl.API_MODULE_AUTH + "/logout";
@@ -14,7 +13,7 @@ class ServerUrl {
   // ================= ADMIN =================
   static API_MODULE_ADMIN = "/api/v1/admin";
 
-  static API_ADMIN_USERS = ServerUrl.API_MODULE_ADMIN + "/users";
+  static API_ADMIN_USERS = "/admin/users";
   static API_ADMIN_SIGNUP = ServerUrl.API_MODULE_ADMIN + "/signup";
   static API_DASHBOARD = ServerUrl.API_MODULE_ADMIN + "/dashboard-stats";
 
