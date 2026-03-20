@@ -223,9 +223,8 @@
 //   });
 // };
 
-
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 /**
  * Generates a PDF from a DOM element
@@ -251,43 +250,19 @@ export const generatePDF = async (element, fileName) => {
 
     const imgWidth = 210;
     const pageHeight = 297;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    let position = 0;
 
-    const pageHeightPx = (canvasWidth * pageHeight) / imgWidth;
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
 
-    let renderedHeight = 0;
-
-    while (renderedHeight < canvasHeight) {
-      const pageCanvas = document.createElement("canvas");
-      const context = pageCanvas.getContext("2d");
-
-      pageCanvas.width = canvasWidth;
-      pageCanvas.height = pageHeightPx;
-
-      context.fillStyle = "#ffffff";
-      context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-
-      context.drawImage(
-        canvas,
-        0,
-        renderedHeight,
-        canvasWidth,
-        pageHeightPx,
-        0,
-        0,
-        canvasWidth,
-        pageHeightPx
-      );
-
-      const imgData = pageCanvas.toDataURL("image/png");
-
-      if (renderedHeight > 0) pdf.addPage();
-
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, pageHeight);
-
-      renderedHeight += pageHeightPx;
+    while (heightLeft >= 1) {
+      position = -(imgHeight - heightLeft);
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
     }
 
     pdf.save(`${fileName}.pdf`);

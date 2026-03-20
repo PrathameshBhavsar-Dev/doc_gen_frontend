@@ -10,7 +10,7 @@ import AdminLayout from "../components/layout/AdminLayout";
 
 /* ======================= AUTH ======================= */
 const Login = lazy(() => import("../pages/auth/Login"));
-const Signup = lazy(() => import("../pages/auth/Signup"));
+// const Signup = lazy(() => import("../pages/auth/Signup"));
 
 /* ======================= ADMIN ======================= */
 const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
@@ -24,7 +24,6 @@ const AdminCompanyManagementPage = lazy(
 const AdminSettingPage = lazy(() => import("../pages/admin/AdminSettingPage"));
 const AdminAddCompany = lazy(() => import("../components/admin/companyManagement/AddCompany"));
 const AdminCompanyDetails = lazy(() => import("../components/admin/companyManagement/CompanyDetails"));
-
 
 /* ======================= USER ======================= */
 const UserDashboardPage = lazy(() => import("../pages/user/UserDashboardPage"));
@@ -47,12 +46,15 @@ const DocumentPreview = lazy(
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* ================= AUTH ROUTES ================= */}
+      {/* ================= PUBLIC AUTH ROUTES (NO PROTECTION) ================= */}
       <Route path={ROUTES.LOGIN} element={<LazyLoad component={Login} />} />
-      <Route path={ROUTES.SIGNUP} element={<LazyLoad component={Signup} />} />
+      {/* <Route path={ROUTES.SIGNUP} element={<LazyLoad component={Signup} />} /> */}
+
+      {/* Default redirect to login */}
+      <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
 
       {/* ================= USER ROUTES ================= */}
-      <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+      {/* <Route element={<ProtectedRoute allowedRoles={["user"]} />}> */}
         <Route element={<UserLayout />}>
           <Route
             path={ROUTES.USER_DASHBOARD}
@@ -83,10 +85,10 @@ const AppRoutes = () => {
             element={<LazyLoad component={DocumentCreate} />}
           />
         </Route>
-      </Route>
+      {/* </Route> */}
 
       {/* ================= ADMIN ROUTES ================= */}
-      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+      {/* <Route element={<ProtectedRoute allowedRoles={["admin"]} />}> */}
         <Route element={<AdminLayout />}>
           <Route
             path={ROUTES.ADMIN_DASHBOARD}
@@ -117,16 +119,18 @@ const AppRoutes = () => {
             element={<LazyLoad component={AdminCompanyDetails} />}
           />
         </Route>
-      </Route>
+      {/* </Route> */}
 
       {/* ================= DOCUMENT ROUTES ================= */}
-      <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+      {/* <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}> */}
         <Route
           path={ROUTES.DOCUMENT_PREVIEW}
           element={<LazyLoad component={DocumentPreview} />}
         />
-      </Route>
+      {/* </Route> */}
 
+      {/* 404 - Catch all */}
+      <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
     </Routes>
   );
 };
