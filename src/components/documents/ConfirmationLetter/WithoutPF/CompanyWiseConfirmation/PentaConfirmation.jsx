@@ -399,7 +399,7 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
             <Typography fontWeight={600}>:</Typography>
             <Typography>
               Letter of Confirmation for continued services as{" "}
-              {data.position}
+              <Strong>{data.position}</Strong>
             </Typography>
           </Box>
 

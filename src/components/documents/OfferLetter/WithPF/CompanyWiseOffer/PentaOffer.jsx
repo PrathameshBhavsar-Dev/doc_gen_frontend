@@ -15,8 +15,8 @@ const formatDate = (date) => {
 const formatCurrency = (value) => {
   if (value == null || value === "") return "";
   return Number(value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    // minimumFractionDigits: 2,
+    // maximumFractionDigits: 2,
   });
 };
 
@@ -163,16 +163,44 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
       </Box>
 
       {/* CANDIDATE SIGN */}
-      {showCandidate && (
-        <Box sx={{ textAlign: "right" }}>
-          <Typography sx={{ fontSize: 14, fontWeight: "bold" }}>
-            Signature: ___________________
-          </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            Candidate Name: {candidateName}
-          </Typography>
-        </Box>
-      )}
+     {showCandidate && (
+  <Box
+    sx={{
+      width: 320,
+      ml: "auto",
+      textAlign: "right",
+    }}
+  >
+    {/* Signature */}
+    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+      Signature: ______________________
+    </Typography>
+
+    {/* Candidate Name */}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+        fontSize: 16,
+        mt: 0.5,
+      }}
+    >
+      <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
+        Candidate Name:
+      </Box>
+
+      <Box
+        sx={{
+          maxWidth: 180,              // controls when it wraps
+          wordBreak: "break-word",
+          textAlign: "left",          // keeps wrapping clean
+        }}
+      >
+        {candidateName}
+      </Box>
+    </Box>
+  </Box>
+)}
     </Box>
   );
 };
