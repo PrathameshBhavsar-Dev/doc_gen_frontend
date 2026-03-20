@@ -1,13 +1,49 @@
-import { API_MODULE } from "../models/api.module";
 class ServerUrl {
-    
-    // Base URL
-    static REACT_APP_API_URL = import.meta.env.VITE_API_URL;
+  static BASE_URL = import.meta.env.VITE_API_URL;
 
-    // ADMIN DASHBOARD COUNTS
-    static API_MODULE_DASHBOARD = "/api";
+  // ================= USER =================
+  static API_MODULE_AUTH = "/api/v1/users";
 
-    static API_DASHBOARD = ServerUrl.API_MODULE_DASHBOARD + "/admin/dashboard-stats";
+  static API_LOGIN = ServerUrl.API_MODULE_AUTH + "/login";
+  static API_SIGNUP = ServerUrl.API_MODULE_AUTH + "/register";
+  static API_LOGOUT = ServerUrl.API_MODULE_AUTH + "/logout";
+
+  static API_USER_PROFILE = ServerUrl.API_MODULE_AUTH + "/profile";
+  static API_CHANGE_PASSWORD = ServerUrl.API_MODULE_AUTH + "/change-password";
+
+  // ================= ADMIN =================
+  static API_MODULE_ADMIN = "/api/v1/admin";
+
+  static API_ADMIN_USERS = ServerUrl.API_MODULE_ADMIN + "/users";
+  static API_ADMIN_SIGNUP = ServerUrl.API_MODULE_ADMIN + "/signup";
+  static API_DASHBOARD = ServerUrl.API_MODULE_ADMIN + "/dashboard-stats";
+
+  // ================= DOCUMENTS =================
+  static API_MODULE_DOCUMENTS = "/api/v1/documents";
+
+  // base
+  static doc = (type) => `${this.API_MODULE_DOCUMENTS}/${type}`;
+
+  // 🔥 MAPPED TO YOUR BACKEND
+  static generateDoc = (type) => `${this.doc(type)}/generate`;
+  static getAllDocs = (type) => `${this.doc(type)}/all-letters`;
+  static getDocByUserId = (type, id) => `${this.doc(type)}/user/${id}`;
+  static updateDoc = (type, id) => `${this.doc(type)}/update/${id}`;
+  static deleteDoc = (type, id) => `${this.doc(type)}/delete/${id}`;
+
+  // ================= DOC TYPES =================
+  static DOC_TYPES = {
+    EXPERIENCE: "experience_letter",
+    OFFER: "offer_letter",
+    SALARY: "salaryslip_letter",
+    APPOINTMENT: "appointment_letter",
+    RELIEVING: "relieving_letter",
+    COMPLETION: "completion_letter",
+    FULLANDFINAL: "fullandfinal_letter",
+    INCREMENT: "increment_letter",
+    INTERNSHIP: "internship_letter",
+    CONFIRMATION: "confirmation_letter",
+  };
 }
 
 export default ServerUrl;

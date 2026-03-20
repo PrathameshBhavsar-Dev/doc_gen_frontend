@@ -25,6 +25,11 @@ import { Download, Visibility } from "@mui/icons-material";
 import profile from "../../assets/images/profile.png";
 import company_icon from "../../assets/images/companies_icon.png";
 import { useState } from "react";
+
+import {
+  companies as mockCompanies,
+  documentTypes as mockDocumentTypes,
+} from "../../components/constant/publicData/mockData"; // adjust path if needed
 const tableData = [
   {
     name: "Rahul Sharma",
@@ -117,40 +122,74 @@ const tableData = [
 ];
 const UserHistoryPage = () => {
   const [timeFilter, setTimeFilter] = useState("");
-
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [docType, setDocType] = useState("");
+  const [company, setCompany] = useState("");
+  const [search, setSearch] = useState("");
   const filteredData = tableData.filter((item) => {
-    if (!timeFilter) return true;
+    const itemDate = dayjs(item.date);
 
-    const today = new Date();
-    const itemDate = new Date(item.date);
-
-    if (timeFilter === "day") {
-      return itemDate.toDateString() === today.toDateString();
+    // search filter
+    if (
+      search &&
+      !item.name.toLowerCase().includes(search.toLowerCase()) &&
+      !item.id.toLowerCase().includes(search.toLowerCase())
+    ) {
+      return false;
     }
 
-    if (timeFilter === "week") {
-      const firstDay = new Date(
-        today.setDate(today.getDate() - today.getDay()),
-      );
-      return itemDate >= firstDay;
+    // company filter
+    if (company && item.company !== company) {
+      return false;
     }
 
-    if (timeFilter === "month") {
-      return (
-        itemDate.getMonth() === today.getMonth() &&
-        itemDate.getFullYear() === today.getFullYear()
-      );
+    // month filter
+    if (month && itemDate.format("MMMM") !== month) {
+      return false;
     }
 
-    if (timeFilter === "year") {
-      return itemDate.getFullYear() === today.getFullYear();
+    // year filter
+    if (year && itemDate.year() !== Number(year)) {
+      return false;
+    }
+
+    // date filter
+    if (selectedDate && !itemDate.isSame(selectedDate, "day")) {
+      return false;
     }
 
     return true;
   });
 
   const [period, setPeriod] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const startYear = 1990; // or company start year
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => currentYear - i,
+  );
+
+  const companies = mockCompanies.map((company) => company.shortName);
+
+  const documentTypes = mockDocumentTypes.map((doc) => doc.name);
 
   return (
     <Box sx={{ minHeight: "100vh", width: "100%" }}>
@@ -200,13 +239,14 @@ const UserHistoryPage = () => {
           mb: 4,
           borderRadius: "16px",
           border: "1px solid #E4E7EC",
-          backgroundColor: "#F9FAFB",
         }}
       >
         {/* SEARCH */}
         <TextField
           fullWidth
-          placeholder="Search by employee name, ID, or document type..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by employee name or ID..."
           variant="outlined"
           sx={{
             mb: 3,
@@ -216,11 +256,6 @@ const UserHistoryPage = () => {
               backgroundColor: "#F3F4F6",
               fontSize: "14px",
             },
-            "& input::placeholder": {
-              fontSize: "14px",
-              color: "#9CA3AF",
-              opacity: 1,
-            },
           }}
         />
 
@@ -229,7 +264,7 @@ const UserHistoryPage = () => {
             display: "grid",
             gridTemplateColumns: {
               xs: "1fr",
-              md: "1fr 1fr 1fr",
+              md: "repeat(5, 1fr)",
             },
             gap: 3,
           }}
@@ -247,35 +282,34 @@ const UserHistoryPage = () => {
               Document Type
             </Typography>
 
-            <Select
-              fullWidth
-              displayEmpty
-              defaultValue=""
-              sx={{
-                height: 48,
-                borderRadius: "14px",
-                backgroundColor: "#F3F4F6",
-                fontSize: "14px",
-                "& .MuiSelect-select": {
-                  color: "#9CA3AF",
-                },
-              }}
-              renderValue={(selected) => {
-                if (!selected) {
-                  return "Select Document Type";
-                }
-                return selected;
-              }}
-            >
-              <MenuItem value="">
-                <em>Select Document Type</em>
-              </MenuItem>
-              <MenuItem value="salary">Salary Slip</MenuItem>
-              <MenuItem value="offer">Offer Letter</MenuItem>
-              <MenuItem value="experience">Experience Letter</MenuItem>
-              <MenuItem value="relieving">Relieving Letter</MenuItem>
-              <MenuItem value="others">Others</MenuItem>
-            </Select>
+            <FormControl fullWidth>
+              <Select
+                value={docType}
+                onChange={(e) => setDocType(e.target.value)}
+                displayEmpty
+                sx={{
+                  height: 48,
+                  borderRadius: "14px",
+                  backgroundColor: "#F3F4F6",
+                  fontSize: "14px",
+                }}
+                renderValue={(selected) => {
+                  if (!selected)
+                    return (
+                      <span style={{ color: "#9CA3AF" }}>
+                        Select Document Type
+                      </span>
+                    );
+                  return selected;
+                }}
+              >
+                {documentTypes.map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
 
           {/* COMPANY */}
@@ -290,116 +324,127 @@ const UserHistoryPage = () => {
               Company
             </Typography>
 
-            <Select
-              fullWidth
-              displayEmpty
-              defaultValue=""
-              sx={{
-                height: 48,
-                borderRadius: "14px",
-                backgroundColor: "#F3F4F6",
-                fontSize: "14px",
-                "& .MuiSelect-select": {
-                  color: "#9CA3AF",
-                },
-              }}
-              renderValue={(selected) => {
-                if (!selected) {
-                  return "Select Company";
-                }
-                return selected;
-              }}
-            >
-              <MenuItem value="">
-                <em>Select Company</em>
-              </MenuItem>
-              <MenuItem value="nimbja">Nimbja Security</MenuItem>
-              <MenuItem value="penta">Penta Software</MenuItem>
-              <MenuItem value="cubeage">Cubeage Tech</MenuItem>
-              <MenuItem value="quick">Quick Management</MenuItem>
-              <MenuItem value="smart">Smart Software</MenuItem>
-              <MenuItem value="newage">Newage Cloud</MenuItem>
-            </Select>
-          </Box>
-          {/* TIME FILTER */}
-          <Box>
-            <Typography
-              sx={{
-                fontSize: "15px",
-                fontWeight: 500,
-                mb: 1,
-              }}
-            >
-              View By
-            </Typography>
-
-            <Select
-              fullWidth
-              value={period}
-              onChange={(e) => setPeriod(e.target.value)}
-              displayEmpty
-              sx={{
-                height: 48,
-                borderRadius: "14px",
-                backgroundColor: "#F3F4F6",
-                fontSize: "14px",
-              }}
-              renderValue={(selected) => {
-                if (!selected) {
-                  return (
-                    <span style={{ color: "#9CA3AF" }}>Select Period</span>
-                  );
-                }
-                return selected;
-              }}
-            >
-              <MenuItem value="Today">Today</MenuItem>
-              <MenuItem value="Week">This Week</MenuItem>
-              <MenuItem value="Month">This Month</MenuItem>
-              <MenuItem value="Year">This Year</MenuItem>
-              <MenuItem value="Custom">Custom Date</MenuItem>
-            </Select>
-            {period === "Custom" && (
-              <Box
+            <FormControl fullWidth>
+              <Select
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                displayEmpty
                 sx={{
-                  mt: 2,
-                  p: 2,
-                  borderRadius: "12px",
-                  backgroundColor: "#F9FAFB",
-                  border: "1px solid #E5E7EB",
+                  height: 48,
+                  borderRadius: "14px",
+                  backgroundColor: "#F3F4F6",
+                  fontSize: "14px",
+                }}
+                renderValue={(selected) => {
+                  if (!selected)
+                    return (
+                      <span style={{ color: "#9CA3AF" }}>Select Company</span>
+                    );
+                  return selected;
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    mb: 1,
-                    color: "#6B7280",
-                  }}
-                >
-                  Select Specific Date
-                </Typography>
+                {companies.map((comp) => (
+                  <MenuItem key={comp} value={comp}>
+                    {comp}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          {/* TIME FILTER */}
+          {/* SELECT MONTH */}
+          <Box>
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
+              Select month
+            </Typography>
 
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    value={selectedDate}
-                    onChange={(newValue) => setSelectedDate(newValue)}
-                    slotProps={{
-                      textField: {
-                        fullWidth: true,
-                        size: "small",
-                        sx: {
-                          "& .MuiOutlinedInput-root": {
-                            borderRadius: "10px",
-                            backgroundColor: "#F3F4F6",
-                          },
-                        },
+            <FormControl fullWidth>
+              <Select
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                displayEmpty
+                sx={{
+                  height: 48,
+                  borderRadius: "14px",
+                  backgroundColor: "#F3F4F6",
+                  fontSize: "14px",
+                }}
+                renderValue={(selected) => {
+                  if (!selected)
+                    return (
+                      <span style={{ color: "#9CA3AF" }}>Select months</span>
+                    );
+                  return selected;
+                }}
+              >
+                {months.map((m) => (
+                  <MenuItem key={m} value={m}>
+                    {m}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          {/* YEAR */}
+          {/* SELECT YEAR */}
+          <Box>
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
+              Select year
+            </Typography>
+
+            <FormControl fullWidth>
+              <Select
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+                displayEmpty
+                sx={{
+                  height: 48,
+                  borderRadius: "14px",
+                  backgroundColor: "#F3F4F6",
+                  fontSize: "14px",
+                }}
+                renderValue={(selected) => {
+                  if (!selected)
+                    return (
+                      <span style={{ color: "#9CA3AF" }}>Select Year</span>
+                    );
+                  return selected;
+                }}
+              >
+                {years.map((y) => (
+                  <MenuItem key={y} value={y}>
+                    {y}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          {/* DATE */}
+          {/* SELECT DATE */}
+          <Box>
+            <Typography sx={{ fontSize: "15px", fontWeight: 500, mb: 1 }}>
+              Select date
+            </Typography>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={selectedDate}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    size: "small",
+                    sx: {
+                      "& .MuiOutlinedInput-root": {
+                        height: 48,
+                        borderRadius: "14px",
+                        backgroundColor: "#F3F4F6",
                       },
-                    }}
-                  />
-                </LocalizationProvider>
-              </Box>
-            )}
+                    },
+                  },
+                }}
+              />
+            </LocalizationProvider>
           </Box>
         </Box>
       </Paper>

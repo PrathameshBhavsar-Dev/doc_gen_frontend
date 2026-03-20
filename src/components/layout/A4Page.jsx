@@ -1,9 +1,9 @@
 // A4Page.js
 import React from "react";
 import { Box } from "@mui/material";
-import placeholderHeader from "../../assets/images/SmartSoftware/smartheaders.png";
-import placeholderFooter from "../../assets/images/SmartSoftware/smartfooters.png";
-import placeholderWatermark from "../../assets/images/SmartSoftware/Watermark.png";
+import placeholderHeader from '../../assets/images/SmartSoftware/smartheaders.png';
+import placeholderFooter from '../../assets/images/SmartSoftware/smartfooters.png';
+import placeholderWatermark from '../../assets/images/SmartSoftware/Watermark.png';
 
 const A4Page = ({
   headerSrc,
@@ -121,9 +121,10 @@ const A4Page = ({
             position: "absolute",
             top: "50%",
             left: "50%",
-            width: "50%",
+            width: "110mm",
+            height: "50mm",
             transform: "translate(-50%, -50%)",
-            opacity: 0.6, // ✅ better visibility behind content
+            opacity: 0.8, // ✅ better visibility behind content
             pointerEvents: "none",
             userSelect: "none",
             zIndex: 0, // ✅ ensures watermark stays behind text

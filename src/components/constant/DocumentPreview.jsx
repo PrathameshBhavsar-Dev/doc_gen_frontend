@@ -148,44 +148,53 @@ const DocumentPreview = () => {
     setError('');
 
     try {
-      const element = documentRef.current;
+      setSnackbarMessage('Generating Content Only PDF...');
+      setSnackbarOpen(true);
 
-      await document.fonts.ready;
-      await new Promise(r => setTimeout(r, 300));
+      // Add small delay to ensure all dynamic styles/fonts are applied
+      await new Promise(resolve => setTimeout(resolve, 200));
 
-      const canvas = await html2canvas(element, {
+      const content = documentRef.current.querySelector('.a4-content-only');
+      if (!content) throw new Error('Missing .a4-content-only');
+
+      const canvas = await html2canvas(content, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#ffffff",
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        ignoreElements: (el) =>
+          el?.getAttribute?.('alt')?.toLowerCase()?.includes('signature') ||
+          el?.getAttribute?.('alt')?.toLowerCase()?.includes('stamp'),
       });
 
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
-      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      let heightLeft = pdfHeight;
+      let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight();
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      heightLeft -= pageHeight;
 
+      // Add additional pages if content exceeds one A4 page
       while (heightLeft > 0) {
-        position = heightLeft - pdfHeight;
+        position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
+        heightLeft -= pageHeight;
       }
 
       pdf.save(`${selectedDocType.name}-ContentOnly.pdf`);
+      setSnackbarMessage('Content-only PDF downloaded');
+      setSnackbarOpen(true);
     } catch (err) {
       console.error(err);
-      setError("Failed to generate PDF");
+      setError('Failed to generate content-only PDF');
     } finally {
       setLoading(false);
     }
@@ -218,14 +227,10 @@ const DocumentPreview = () => {
         ref={documentRef}
         elevation={3}
         sx={{
-          width: "794px",
-          height: "1123px",
-          margin: "0 auto",
-          backgroundColor: "#fff",
-          overflow: "hidden",
-
-          transform: "scale(1)",
-          transformOrigin: "top left"
+          width: '210mm',
+          minHeight: '297mm',
+          margin: '0 auto',
+          backgroundColor: '#fff',
         }}
       >
         {renderDocumentTemplate()}

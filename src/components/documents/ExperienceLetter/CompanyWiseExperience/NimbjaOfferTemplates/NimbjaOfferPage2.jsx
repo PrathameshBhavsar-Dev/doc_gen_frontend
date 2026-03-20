@@ -320,6 +320,18 @@ const NimbjaOfferPage2 = ({ company, data }) => {
           </strong>
         </Typography> */}
         {/* 🔥 ONLY THIS PART IS REPLACED */}
+
+        <Typography
+          sx={{
+            textAlign: "right",
+            mb: "5mm",
+            mt: "-8mm",
+            fontSize: "11pt",
+            fontFamily: "Bahnschrift",
+          }}
+        >
+          {formatDate(data.issueDate)}
+        </Typography>
         <SalaryStructureTable
           salaryRows={salaryRows}
           totalMonthly={totalMonthly}
@@ -337,7 +349,7 @@ const NimbjaOfferPage2 = ({ company, data }) => {
               <img
                 src={company.signature}
                 alt="Signature"
-                style={{ height: 45 }}
+                style={{ height: 45, marginTop: "7mm" }}
               />
             )}
             {company?.stamp && (

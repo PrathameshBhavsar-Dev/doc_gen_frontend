@@ -4,26 +4,29 @@ import { useAuth } from "../core/contexts/AuthContext";
 import ROUTES from "../core/constants/routes.constant";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const { isLoggedIn, user, isLoading } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
 
-  // Wait until auth finishes loading
-  if (isLoading) return <div></div>;
+  // ✅ Wait until auth loads
+  if (loading) return <div>Loading...</div>;
 
-  // Not logged in → go to login
-  if (!isLoggedIn || !user) {
-    return <Navigate to="/login" replace />;
+  // ❌ Not logged in
+  if (!isAuthenticated || !user) {
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  // Role mismatch → redirect based on actual role
+  // ❌ Role mismatch
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    if (user.role === "admin") return <Navigate to={ROUTES.ADMIN_DASHBOARD} replace />;
-    if (user.role === "user") return <Navigate to={ROUTES.USER_DASHBOARD} replace />;
+    if (user.role === "admin") {
+      return <Navigate to={ROUTES.ADMIN_DASHBOARD} replace />;
+    }
+    if (user.role === "user") {
+      return <Navigate to={ROUTES.USER_DASHBOARD} replace />;
+    }
 
-    // fallback
-    return <Navigate to="/" replace />;
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  // Authenticated and allowed → render child routes
+  // ✅ Allowed
   return <Outlet />;
 };
 

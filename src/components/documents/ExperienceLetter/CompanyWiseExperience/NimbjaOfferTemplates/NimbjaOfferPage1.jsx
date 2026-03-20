@@ -79,7 +79,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
             fontWeight: 600,
             textAlign: "right",
             mb: "9mm",
-            mt: "-12mm",
+            mt: "1mm",
           }}
         >
           {offerDate}
@@ -136,7 +136,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
           <Typography
             component="span"
             sx={{
-              borderBottom: "1px solid #000",
+              
               display: "inline",
               paddingBottom: "1px",
               fontFamily: "Bahnschrift",

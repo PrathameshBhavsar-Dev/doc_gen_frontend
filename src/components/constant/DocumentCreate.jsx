@@ -420,6 +420,7 @@ const DocumentCreate = () => {
                 ))}
               </select>
             </SelectWrapper>
+
           </div>
         </div>
 
@@ -440,7 +441,7 @@ const DocumentCreate = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-5 gap-y-6">
               {selectedDocType?.fields?.length > 0 ? (
                 selectedDocType.fields.map(
-                  (field) => shouldShowField(field) && renderField(field),
+                  (field) => shouldShowField(field) && renderField(field)
                 )
               ) : (
                 <div className="col-span-5 flex items-center justify-center py-10 text-gray-400">
@@ -477,9 +478,7 @@ const DocumentCreate = () => {
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-gray-300">
             <RiBuilding2Line className="w-10 h-10 mb-3" />
-            <p className="text-sm font-medium text-gray-400">
-              No company selected
-            </p>
+            <p className="text-sm font-medium text-gray-400">No company selected</p>
             <p className="text-xs text-gray-300 mt-1">
               Select a company above to fill in the form.
             </p>

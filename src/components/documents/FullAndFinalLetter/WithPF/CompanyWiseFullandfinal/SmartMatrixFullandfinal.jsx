@@ -454,7 +454,15 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
           mt: "5mm",
         }}
       >
-        <Table size="small">
+        <Table
+          size="small"
+          sx={{
+            width: "100%",
+            tableLayout: "fixed",
+            borderCollapse: "collapse",
+          }}
+        >
+          {" "}
           <TableBody>
             {/* TITLE */}
             <TableRow>
