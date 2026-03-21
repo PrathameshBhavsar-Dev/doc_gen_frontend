@@ -1,13 +1,14 @@
 import React from "react";
-import CubeageUnPaidInternship from "./CompanyWiseUnPaidInternship/CubeageUnPaidInternship";
+import CubeageUnaidInternshipLetter from "./CompanyWiseUnPaidInternship/CubeageUnPaidInternshipLetter";
 import NimbjaUnPaidInternship from "./CompanyWiseUnPaidInternship/NimbjaUnPaidInternship";
 import SmartMatrixUnPaidInternship from "./CompanyWiseUnPaidInternship/SmartMatrixUnPaidInternship";
+import CubeageUnPaidInternshipLetter from "../InternshipLetter/UnpaidIntershipLetter/CompanyWiseUnPaidInternshipLetter/CubeageUnPaidInternshipLetter";
 
 // map company shortName OR id to component
 const companyComponentMap = {
-  1: CubeageUnPaidInternship,
+  1: CubeageUnPaidInternshipLetter,
   //   2: NeweageExperience,
-    3: SmartMatrixUnPaidInternship,
+  3: SmartMatrixUnPaidInternship,
   //   4: DevconsExperience,
   //   5: RPExperience,
   //   6: PentaExperience,

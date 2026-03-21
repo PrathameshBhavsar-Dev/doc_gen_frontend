@@ -89,11 +89,13 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
   const annualCTC = round0(Number(data.salary || 0));
   const monthlyCTC = round0(annualCTC / 12);
 
-  const basic = round0(monthlyCTC * 0.48);
+
   const hra = round0(monthlyCTC * 0.18);
   const da = round0(monthlyCTC * 0.12);
   const allow = round0(monthlyCTC * 0.16);
   const special = round0(monthlyCTC * 0.06);
+  const employeePF = 3750;
+  const basic = monthlyCTC - (hra + da + allow + special + employeePF);
 
   const rows = [
     ["Basic", basic],
@@ -101,10 +103,11 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
     ["DA", da],
     ["ALLOWANCE (Shift+Skill)", allow],
     ["SPECIAL ALLOWANCE", special],
+    ["PROVIDENT FUND", employeePF]
   ];
 
   /* ---------------- Fixed PF Deductions ---------------- */
-  const employeePF = 3750;
+
 
   const candidateName = data.candidateName || data.employeeName || "";
   const displayName = candidateName ? `${data.mrms || "Mr."} ${candidateName}`.trim() : "";
@@ -211,12 +214,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
                   </TableRow>
                 ))}
 
-                {/* PF Deduction */}
-                <TableRow>
-                  <TableCell sx={TC({ textAlign: "center" })}>Provident Fund</TableCell>
-                  <TableCell sx={TC({ textAlign: "center" })}>{fmt(employeePF)}</TableCell>
-                  <TableCell sx={TC({ textAlign: "center" })}>{fmt(employeePF * 12)}</TableCell>
-                </TableRow>
+
 
                 {/* CTC */}
                 <TableRow sx={{ backgroundColor: "#bfbfbf" }}>
