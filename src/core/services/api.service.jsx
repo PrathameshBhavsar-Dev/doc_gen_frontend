@@ -3,7 +3,7 @@ import axios from "axios";
 class ApiService {
   constructor() {
     // Base URL from environment variable or default
-    this.baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+    this.baseURL = import.meta.env.VITE_API_URL;
     
     // Create axios instance
     this.api = axios.create({

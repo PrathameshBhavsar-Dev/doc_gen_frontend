@@ -85,7 +85,7 @@ const PentaRelieving = ({ company, data }) => {
           }}
         >
           With reference to your resignation letter{" "}
-          <strong>{formatDate(data.resignationDate)}</strong>, we would like to
+          <strong>{formatDate(data.lastWorkingDay)}</strong>, we would like to
           inform you that your resignation has been accepted and you are relieved
           from the company at the closing of working hours on{" "}
           <strong>{formatDate(data.lastWorkingDay)}</strong>.
