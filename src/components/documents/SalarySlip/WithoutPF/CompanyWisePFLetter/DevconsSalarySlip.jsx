@@ -113,8 +113,11 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            padding: "4px 6px",
+            padding: "7px 8px",              // 🔥 increase spacing
             fontFamily: "Bahnschrift",
+            verticalAlign: "middle",         // 🔥 FIX alignment
+            lineHeight: 1.8,                 // 🔥 better spacing
+
           },
         }}
       >

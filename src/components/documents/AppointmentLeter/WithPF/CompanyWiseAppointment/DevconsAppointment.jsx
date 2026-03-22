@@ -40,7 +40,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
   };
 
   /* ================= SALARY LOGIC ================= */
-  const round0 = (num) => Math.round(num);
+  // const round0 = (num) => Math.round(num);
 
 // // ===== Static PF =====
 // const pfMonthly = 3750;
@@ -78,27 +78,127 @@ const DevconsAppointmentLetter = ({ company, data }) => {
 //   ["Food Allowance", foodMonthly, foodAnnual],
 //   ["Provident Fund (PF)", pfMonthly, pfAnnual],
 // ];
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// // ================= MONTHLY CTC =================
+// const monthlyCTC = round0(Number(data.salary || 0));
+
+// // ================= UPDATED PERCENTAGES =================
+// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = basicMonthly * 12;
+// const hraAnnual = hraMonthly * 12;
+// const daAnnual = daMonthly * 12;
+// const specialAnnual = specialMonthly * 12;
+// const foodAnnual = foodMonthly * 12;
+// const pfAnnual = pfMonthly * 12;
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+// ];
+
+// // ================= TOTAL EARNINGS =================
+// const totalMonthly =
+//       basicMonthly +
+//       hraMonthly +
+//       daMonthly +
+//       specialMonthly +
+//       foodMonthly;
+
+// const totalAnnual = totalMonthly * 12;
+
+// const monthlyCTC = round0(Number(data.salary || 0));
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= FIXED PERCENTAGES =================
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= ADJUSTED BASIC =================
+// const basicMonthly = round0(
+//   monthlyCTC -
+//   (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+// );
+
+// // ================= ANNUAL =================
+// const basicAnnual = basicMonthly * 12;
+// const hraAnnual = hraMonthly * 12;
+// const daAnnual = daMonthly * 12;
+// const specialAnnual = specialMonthly * 12;
+// const foodAnnual = foodMonthly * 12;
+// const pfAnnual = pfMonthly * 12;
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual],
+// ];
+
+// // ================= TOTAL =================
+// const totalMonthly =
+//   basicMonthly +
+//   hraMonthly +
+//   daMonthly +
+//   specialMonthly +
+//   foodMonthly +
+//   pfMonthly;
+
+// const totalAnnual = totalMonthly * 12;
+
+
+/////////////////// Anually calculation ///////////////
+
+const round0 = (num) => Math.round(num);
+
+// ================= ANNUAL CTC INPUT =================
+const annualCTC = round0(Number(data.salary || 0));
 
 // ================= MONTHLY CTC =================
-const monthlyCTC = round0(Number(data.salary || 0));
+const monthlyCTC = round0(annualCTC / 12);
 
-// ================= UPDATED PERCENTAGES =================
-const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+// ================= STATIC PF =================
+const pfMonthly = 3750;
+
+// ================= FIXED PERCENTAGES =================
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
 const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
+// ================= ADJUSTED BASIC =================
+const basicMonthly = round0(
+  monthlyCTC -
+  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+);
 
-// ================= ANNUAL VALUES =================
-const basicAnnual = basicMonthly * 12;
-const hraAnnual = hraMonthly * 12;
-const daAnnual = daMonthly * 12;
-const specialAnnual = specialMonthly * 12;
-const foodAnnual = foodMonthly * 12;
-const pfAnnual = pfMonthly * 12;
+// ================= ANNUAL =================
+const basicAnnual = round0(basicMonthly * 12);
+const hraAnnual = round0(hraMonthly * 12);
+const daAnnual = round0(daMonthly * 12);
+const specialAnnual = round0(specialMonthly * 12);
+const foodAnnual = round0(foodMonthly * 12);
+const pfAnnual = round0(pfMonthly * 12);
 
 // ================= SALARY TABLE =================
 const salaryRows = [
@@ -107,18 +207,20 @@ const salaryRows = [
   ["Dearness Allowance", daMonthly, daAnnual],
   ["Special Allowance", specialMonthly, specialAnnual],
   ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  ["Provident Fund (PF)", pfMonthly, pfAnnual],
 ];
 
-// ================= TOTAL EARNINGS =================
-const totalMonthly =
+// ================= TOTAL =================
+const totalMonthly = round0(
   basicMonthly +
   hraMonthly +
   daMonthly +
   specialMonthly +
-  foodMonthly;
+  foodMonthly +
+  pfMonthly
+);
 
-const totalAnnual = totalMonthly * 12;
+const totalAnnual = round0(totalMonthly * 12);
 
 
 
@@ -182,19 +284,19 @@ const totalAnnual = totalMonthly * 12;
     <Box component="ol" sx={{ pl: 3, mt: 4 }}>
   <li>
     <Typography fontSize={14}>
-      Your Designation will be <b>“{data.position}”</b>.
-    </Typography>
-  </li>
-
-  <li>
-    <Typography fontSize={14} mt={2}>
-      Your total emoluments will be <b>{formatLakhsPerAnnum(totalAnnual)}</b>.
+     1. Your Designation will be <b>“{data.position}”</b>.
     </Typography>
   </li>
 
   <li>
     <Typography fontSize={14} mt={1}>
-      Full details of your pay package are given in the enclosure to this letter.
+     2. Your total emoluments will be <b>{formatLakhsPerAnnum(totalAnnual)}</b>.
+    </Typography>
+  </li>
+
+  <li>
+    <Typography fontSize={14} mt={1}>
+    3. Full details of your pay package are given in the enclosure to this letter.
       However, please note that, LTA is payable after completion of one year of
       service, subject to your getting confirmed in the service. If the company
       provides accommodation/transit accommodation, appropriate deductions will
@@ -204,21 +306,21 @@ const totalAnnual = totalMonthly * 12;
 
   <li>
     <Typography fontSize={14} mt={1}>
-      Whilst you are located abroad, the terms applicable will be intimated at
+     4. Whilst you are located abroad, the terms applicable will be intimated at
       the relevant point of time.
     </Typography>
   </li>
 
   <li>
     <Typography fontSize={14} mt={2}>
-      You shall be due for salary revision not before one year from your date of
+    5.  You shall be due for salary revision not before one year from your date of
       joining.
     </Typography>
   </li>
 
   <li>
     <Typography fontSize={14} mt={1}>
-      The Management reserves the right to change the different
+    6.  The Management reserves the right to change the different
       components/allowances in the total emoluments package, at its own
       discretion, at any time in future. However, your total monthly salary will
       be protected.
@@ -227,7 +329,7 @@ const totalAnnual = totalMonthly * 12;
 
   <li>
     <Typography fontSize={14} mt={1}>
-      You will be on probation for a period of six months from the first of the
+    7.  You will be on probation for a period of six months from the first of the
       calendar month following the date of your joining, after which you will be
       confirmed if your work is found satisfactory. The probation period can be
       extended at the discretion of the Company.
@@ -236,7 +338,7 @@ const totalAnnual = totalMonthly * 12;
 
   <li>
     <Typography fontSize={14} mt={1}>
-      Your services are terminable with one month’s notice on either side. The
+    8.  Your services are terminable with one month’s notice on either side. The
       Company may, at its discretion, choose to terminate your services with one
       month’s total salary in lieu of notice period.
     </Typography>
@@ -244,7 +346,7 @@ const totalAnnual = totalMonthly * 12;
 
   <li>
     <Typography fontSize={14} mt={1}>
-      The Company shall have the right to terminate your service without notice,
+    9.  The Company shall have the right to terminate your service without notice,
       if the information given by you at a time of interview or in the application
       is found to be incorrect or in case of any serious misconduct or if
       reference check leads to an adverse report of your credentials.
@@ -270,15 +372,15 @@ const totalAnnual = totalMonthly * 12;
     {/* ================= TERMS (10–18) ================= */}
     <Box component="ol" start={10} sx={{ pl: 3 }}>
       {[
-        "This appointment is subject to your being medically fit",
-        "The age of retirement will be 58 years",
-        "You will devote whole time and attention to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs",
-        "You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.",
-        "You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company / Firm / Person.",
-        "You will keep the Company informed of any change in your residential address.",
-        "You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.",
-        "You will be governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition.",
-        "The Company reserves the right to transfer you to any of our offices / factories / establishments / group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.",
+        "10. This appointment is subject to your being medically fit",
+        "11. The age of retirement will be 58 years",
+        "12. You will devote whole time and attention to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs",
+        "13. You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.",
+        "14. You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company / Firm / Person.",
+        "15. You will keep the Company informed of any change in your residential address.",
+        "16. You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.",
+        "17. You will be governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition.",
+        "18. The Company reserves the right to transfer you to any of our offices / factories / establishments / group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.",
       ].map((text, index) => (
         <li key={index}>
           <Typography
@@ -337,7 +439,7 @@ const totalAnnual = totalMonthly * 12;
         </Box>
 
         {/* RIGHT SIDE */}
-        <Box sx={{ minWidth: 250}}>
+        <Box sx={{ minWidth: 250, mt: 2}}>
           <Typography fontWeight={600} fontSize={15} mt={1} sx={{ minWidth: 250, textAlign: "center"}} >
             I ACCEPT
           </Typography>
@@ -381,7 +483,7 @@ const totalAnnual = totalMonthly * 12;
         <Typography mb={0.5}>
           <b>Designation:</b> {data.position}
         </Typography>
-        <Typography mb={2}>
+        <Typography mb={5}>
           <b>Date of Joining:</b> {formatDate(data.joiningDate)}
         </Typography>
 
@@ -398,7 +500,7 @@ const totalAnnual = totalMonthly * 12;
         >
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f4c430" }}>
-              <TableCell>
+              <TableCell> 
                 <b>Salary Components</b>
               </TableCell>
               <TableCell align="right">

@@ -37,7 +37,7 @@ export const generateAnnexureSalaryStructure = (ctc) => {
     { label: "Basic", percent: 0.444 },
     { label: "House Rent Allowance", percent: 0.18 },
     { label: "Dearness Allowance", percent: 0.12 },
-    { label: "Special Allowance", percent: 0.114 },l
+    { label: "Special Allowance", percent: 0.114 },
     { label: "Food Allowance", percent: 0.06 },
     { label: "Misc. Allowance", percent: 0.082 },
   ];
@@ -301,10 +301,14 @@ export const calculateIncrement = (currentCTC, incrementPercentage) => {
  * @returns {string} - Formatted currency string
  */
 
-export const formatCurrency = (amount, decimals = 2) => {
-  if (amount == null || isNaN(amount)) {
-    return Number(0).toFixed(decimals);
-  }
+export const formatCurrency = (amount) => {
+  if (amount == null || isNaN(amount)) return "0";
+
+  return Number(amount).toLocaleString("en-IN", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+
 
   return new Intl.NumberFormat("en-IN", {
     minimumFractionDigits: decimals,
