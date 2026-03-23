@@ -6,7 +6,7 @@ import GeneratedDocumentSection from "../../components/user/userDashboard/Genera
 const UserDashboardPage = () => {
   return (
     <div className="min-h-screen">
-      <AdminHeroDashboardSection />
+      <AdminHeroDashboardSection/>
 
       <AnalyticSection />
       <GeneratedDocumentSection />

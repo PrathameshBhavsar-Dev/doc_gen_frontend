@@ -245,8 +245,8 @@ export default function UserDetails() {
                 <div
                   onClick={() => setOpenCompanyDropdown(!openCompanyDropdown)}
                   className="w-full flex items-center justify-between
-    border border-gray-200 rounded-lg px-3 py-2.5
-    text-sm bg-white cursor-pointer"
+                             border border-gray-200 rounded-lg px-3 py-2.5
+                             text-sm bg-white cursor-pointer"
                 >
                   <span className="text-gray-500">{selectedCompany}</span>
                   <ChevronDown size={16} className="text-gray-400" />
@@ -286,7 +286,7 @@ export default function UserDetails() {
 
         <h3
           className="text-[20px] font-semibold mb-4 
-bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
+bg-linear-to-r from-[#0E145E] to-[#B37BD6]
 bg-clip-text text-transparent"
         >
           Aditi Khade’s generated Documents Total (56)
