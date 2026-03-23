@@ -86,24 +86,34 @@ const TC = (extra = {}) => ({
 /* ============================================================ */
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
+  // ================= ANNUAL CTC INPUT =================
   const annualCTC = round0(Number(data.salary || 0));
+
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-  const hra = round0(monthlyCTC * 0.18);
-  const da = round0(monthlyCTC * 0.12);
-  const allow = round0(monthlyCTC * 0.16);
-  const special = round0(monthlyCTC * 0.06);
-  const employeePF = 3750;
-  const basic = monthlyCTC - (hra + da + allow + special + employeePF);
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   const rows = [
-    ["Basic", basic],
-    ["HRA", hra],
-    ["DA", da],
-    ["ALLOWANCE (Shift+Skill)", allow],
-    ["SPECIAL ALLOWANCE", special],
-    ["PROVIDENT FUND", employeePF]
+    ["Basic", basicMonthly],
+    ["House Rent Allowance", hraMonthly],
+    ["Dearness Allowance", daMonthly],
+    ["Special Allowance", specialMonthly],
+    ["Food Allowance", foodMonthly],
+    ["Provident Fund (PF)", pfMonthly]
   ];
 
   /* ---------------- Fixed PF Deductions ---------------- */

@@ -104,7 +104,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
   const totalEarnings = basic + hra + da + lta + allow + pfAllowance;
 
   /* ── deductions ── */
-  const pt = parseFloat(data.otherDeduction || 200);
+  const pt = getProfessionalTax(data.month, totalEarnings);
   const otherDed = parseFloat(data.otherDeduction || 2000);
   const totalDed = round2(pt + otherDed);
 
@@ -206,7 +206,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
 
             {/* ───── EARNINGS & DEDUCTIONS HEADER ───── */}
 
-            <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
+            <TableRow >
               <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Specifications(A)</TableCell>
               <TableCell sx={{ fontWeight: "bold", width: "20%", textAlign: "center" }}>Amount</TableCell>
               <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Deductions(B)</TableCell>
@@ -267,20 +267,20 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Net Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "80px" }}>
               <TableCell colSpan={2} rowSpan={3}></TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Net Salary</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(totalEarnings)}</TableCell>
             </TableRow>
 
             {/* Issued Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "40px" }}>
               <TableCell sx={{ fontWeight: "bold" }}>Issued Salary</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(netPay)}</TableCell>
             </TableRow>
 
             {/* Balance Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "50px" }}>
               <TableCell sx={{ fontWeight: "bold" }}>Balance Salary</TableCell>
               <TableCell align="center">
                 {parseFloat(data.balanceSalary || 0) === 0 ? "Nil" : fmt(parseFloat(data.balanceSalary || 0))}
@@ -290,12 +290,6 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
           </TableBody>
         </Table>
 
-        {/* Issued Salary in Words */}
-        <Box sx={{ border: "1px solid #aaa", borderTop: "none", px: 1.5, py: 1 }}>
-          <Typography fontSize="13px">
-            <strong>Issued Salary in Words:</strong>{" "}{numberToWords(netPay)}
-          </Typography>
-        </Box>
 
         <Typography mt={3} fontSize="12px" fontStyle="italic">
           *Computer Generated Salary Slip. No Signature Required

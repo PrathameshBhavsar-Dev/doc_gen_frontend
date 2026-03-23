@@ -670,18 +670,20 @@ import A4Layout from "../../../../layout/A4Page";
 import {
   getProfessionalTax,
   numberToWords,
-  formatCurrency,
 } from "../../../../../utils/salaryCalculations";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
+
+const fmt = (n) =>
+  Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /* ================= STYLES ================= */
 const CELL = {
@@ -712,88 +714,90 @@ const JDITSalarySlip = ({ company, data }) => {
   } = data;
 
   /* ================= SALARY CALCULATION ================= */
- /* ================= SALARY CALCULATION ================= */
-const {
-  basicSalary,
-  hra,
-  dearnessAllowance,
-  specialAllowance,
-  foodAllowance,
-  pf,
-  professionalTax,
-  otherDeduction,
-  totalDeductions,
-  totalEarning,
-  netPay,
-} = useMemo(() => {
-
-  const round2 = (num) => Number(Number(num || 0).toFixed(2));
-
-  const monthlyGross = round2(Number(totalSalary || 0));
-
-  /* ================= PERCENT BREAKUP ================= */
-  const PERCENT = {
-    basic: 0.48,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
-
-  const BASIC   = round2(monthlyGross * PERCENT.basic);
-  const HRA     = round2(monthlyGross * PERCENT.hra);
-  const DA      = round2(monthlyGross * PERCENT.da);
-  const SPECIAL = round2(monthlyGross * PERCENT.special);
-  const FOOD    = round2(monthlyGross * PERCENT.food);
-
-  const PF = 3750; // fixed PF
-  const OTHER = 2000; // if needed dynamic later
-
-  /* ================= TOTAL EARNINGS ================= */
-  const totalEarning =
-    BASIC +
-    HRA +
-    DA +
-    SPECIAL +
-    FOOD;
-
-  /* ================= DEDUCTIONS ================= */
-  const pt = getProfessionalTax(month, totalEarning);
-
-  const totalDeduction = round2(
-    PF +
-    pt +
-    Number(OTHER || 0)
-  );
-
-  /* ================= NET PAY ================= */
-  const netPay = round2(totalEarning - totalDeduction);
-
-  return {
-    basicSalary: BASIC,
-    hra: HRA,
-    dearnessAllowance: DA,
-    specialAllowance: SPECIAL,
-    foodAllowance: FOOD,
-    pf: PF,
-    professionalTax: pt,
-    otherDeduction: OTHER,
-    totalDeductions: totalDeduction,
+  /* ================= SALARY CALCULATION ================= */
+  const {
+    basicSalary,
+    hra,
+    dearnessAllowance,
+    specialAllowance,
+    foodAllowance,
+    pf,
+    professionalTax,
+    otherDeduction,
+    totalDeductions,
     totalEarning,
     netPay,
-  };
+  } = useMemo(() => {
 
-}, [totalSalary, month]);
+    const round0 = (num) => Math.round(Number(num || 0));
+
+    const monthlyGross = round0(Number(totalSalary || 0));
+
+    /* ================= PERCENT BREAKUP ================= */
+    const PERCENT = {
+      hra: 0.18,
+      da: 0.12,
+      special: 0.16,
+      food: 0.06,
+    };
+
+    const HRA = round0(monthlyGross * PERCENT.hra);
+    const DA = round0(monthlyGross * PERCENT.da);
+    const SPECIAL = round0(monthlyGross * PERCENT.special);
+    const FOOD = round0(monthlyGross * PERCENT.food);
+
+    const PF = 3750; // fixed PF
+    const OTHER = 2000; // if needed dynamic later
+
+    const BASIC = round0(monthlyGross - (HRA + DA + SPECIAL + FOOD + PF));
+
+
+    /* ================= TOTAL EARNINGS ================= */
+    const totalEarning =
+      round0(BASIC +
+        HRA +
+        DA +
+        SPECIAL +
+        FOOD +
+        PF);
+
+    /* ================= DEDUCTIONS ================= */
+    const pt = getProfessionalTax(month, totalEarning);
+
+    const totalDeduction = round0(
+      PF +
+      pt +
+      Number(OTHER || 0)
+    );
+
+    /* ================= NET PAY ================= */
+    const netPay = round0(totalEarning - totalDeduction);
+
+    return {
+      basicSalary: BASIC,
+      hra: HRA,
+      dearnessAllowance: DA,
+      specialAllowance: SPECIAL,
+      foodAllowance: FOOD,
+      pf: PF,
+      professionalTax: pt,
+      otherDeduction: OTHER,
+      totalDeductions: totalDeduction,
+      totalEarning,
+      netPay,
+    };
+
+  }, [totalSalary, month]);
 
   /* ================= ARRAYS ================= */
   const earnings = [
-  { label: <b>BASIC</b>, value: basicSalary },
-  { label: <b>HRA</b>, value: hra },
-  { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
-  { label: <b>SPECIAL ALLOWANCE</b>, value: specialAllowance },
-  { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
-  { label: <b>PF</b>, value: pf },
-];
+    { label: <b>BASIC</b>, value: basicSalary },
+    { label: <b>HRA</b>, value: hra },
+    { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
+    { label: <b>SPECIAL ALLOWANCE</b>, value: specialAllowance },
+    { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
+    { label: <b>PF</b>, value: pf },
+  ];
 
   const deductions = [
     { label: "PF", value: pf },
@@ -830,7 +834,7 @@ const {
           </TableRow>
 
           <TableRow>
-            <TableCell colSpan={4} sx={{ ...CELL, textAlign: "center",fontSize: "12px" }}>
+            <TableCell colSpan={4} sx={{ ...CELL, textAlign: "center", fontSize: "12px" }}>
               <b>Salary Slip {formatMonthYear(month)}</b>
             </TableCell>
           </TableRow>
@@ -879,7 +883,7 @@ const {
             <TableRow key={i}>
               <TableCell sx={CELL}>{e.label}</TableCell>
               <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-                {formatCurrency(e.value)}
+                {fmt(e.value)}
               </TableCell>
             </TableRow>
           ))}
@@ -887,8 +891,8 @@ const {
           <TableRow>
             <TableCell sx={CELL}><b>Total Earnings</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(totalSalary)}             
-              </TableCell>
+              {fmt(totalSalary)}
+            </TableCell>
           </TableRow>
 
           {/* DEDUCTIONS */}
@@ -903,7 +907,7 @@ const {
             <TableRow key={i}>
               <TableCell sx={CELL}>{d.label}</TableCell>
               <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-                {formatCurrency(d.value)}
+                {fmt(d.value)}
               </TableCell>
             </TableRow>
           ))}
@@ -911,18 +915,18 @@ const {
           <TableRow>
             <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(totalDeductions)}
+              {fmt(totalDeductions)}
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell sx={CELL}><b>Net Pay</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(netPay)}
+              {fmt(netPay)}
             </TableCell>
           </TableRow>
 
-<TableRow>
+          <TableRow>
             <TableCell sx={CELL}><b>In Words</b></TableCell>
             <TableCell colSpan={3} sx={CELL}>
               {numberToWords(netPay)}
@@ -934,17 +938,17 @@ const {
         {/* SIGNATURE */}
         <TableBody>
           <TableRow>
-            <TableCell sx={{ ...CELL, width: "33%", height: "100px", textAlign: "center" }}>
-              {company.stamp && <img src={company.stamp} alt="Stamp" height="80" />}
+            <TableCell sx={{ ...CELL, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle" }}>
+              {company.stamp && <img src={company.stamp} alt="Stamp" style={{ height: "90px", display: "block", margin: "0 auto" }} />}
             </TableCell>
 
-            <TableCell sx={{ ...CELL, width: "34%", height: "110px" }} />
+            <TableCell sx={{ ...CELL, width: "34%", height: "90px", borderTop: "none" }} />
 
-            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "100px", textAlign: "center" }}>
+            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle" }}>
               {company.signature && (
                 <>
-                  <img src={company.signature} alt="Signature" height="40" />
-                  <Typography fontWeight="bold" fontSize="11px">
+                  <img src={company.signature} alt="Signature" style={{ height: "40px", display: "block", margin: "0 auto" }} />
+                  <Typography fontWeight="bold" fontSize="11px" mt={1}>
                     Signature
                   </Typography>
                 </>
@@ -955,50 +959,50 @@ const {
       </Table>
 
       {/* NOTES */}
-     <Box sx={{ mt: 2 }}>
-  <Typography fontWeight="bold" fontSize="11px">
-    Note:
-  </Typography>
+      <Box sx={{ mt: 2 }}>
+        <Typography fontWeight="bold" fontSize="11px">
+          Note:
+        </Typography>
 
-  <Typography fontSize="9px">
-    1. Please note that all information regarding remuneration is confidential
-    and should not be disclosed.
-  </Typography>
+        <Typography fontSize="9px">
+          1. Please note that all information regarding remuneration is confidential
+          and should not be disclosed.
+        </Typography>
 
-  <Typography fontSize="9px">
-    2. TDS, PF, LWF, and ESIC or any other statutory liabilities (if any) falling
-    within your salary structure would be liable for deduction as per the
-    statutory norms.
-  </Typography>
+        <Typography fontSize="9px">
+          2. TDS, PF, LWF, and ESIC or any other statutory liabilities (if any) falling
+          within your salary structure would be liable for deduction as per the
+          statutory norms.
+        </Typography>
 
-  <Typography fontSize="9px">
-    3. Gratuity will be paid out to the employee as per the Payment of Gratuity
-    Act, 1972.
-  </Typography>
+        <Typography fontSize="9px">
+          3. Gratuity will be paid out to the employee as per the Payment of Gratuity
+          Act, 1972.
+        </Typography>
 
-  <Typography fontSize="9px">
-    4. The employee will be paid monthly/quarterly/yearly allowances/PLI/Bonus
-    (if any) only if he/she remains in the service of the company at the end of
-    that period.
-  </Typography>
+        <Typography fontSize="9px">
+          4. The employee will be paid monthly/quarterly/yearly allowances/PLI/Bonus
+          (if any) only if he/she remains in the service of the company at the end of
+          that period.
+        </Typography>
 
-  <Typography fontSize="9px">
-    5. Any incentive/allowance earned during the service will be added to the
-    CTC and is subject to Income Tax regulations and other laws applicable from
-    time to time.
-  </Typography>
+        <Typography fontSize="9px">
+          5. Any incentive/allowance earned during the service will be added to the
+          CTC and is subject to Income Tax regulations and other laws applicable from
+          time to time.
+        </Typography>
 
-  <Typography fontSize="9px">
-    6. Medical insurance policy valued at Rs.12,000/- must be submitted within
-    30 days of joining. If failed, the same value will be deducted from the CTC
-    as per the JDITBS policy.
-  </Typography>
+        <Typography fontSize="9px">
+          6. Medical insurance policy valued at Rs.12,000/- must be submitted within
+          30 days of joining. If failed, the same value will be deducted from the CTC
+          as per the JDITBS policy.
+        </Typography>
 
-  <Typography fontSize="9px">
-    7. JDIT Software Solutions may review at any time and/or restructure the
-    compensation package.
-  </Typography>
-</Box>
+        <Typography fontSize="9px">
+          7. JDIT Software Solutions may review at any time and/or restructure the
+          compensation package.
+        </Typography>
+      </Box>
 
     </A4Layout>
   );

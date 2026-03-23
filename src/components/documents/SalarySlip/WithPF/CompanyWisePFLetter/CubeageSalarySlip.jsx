@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
 /* ── Number to Words ───────────────────────── */
 const numberToWords = (num) => {
@@ -88,13 +89,13 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
   const pfAllowance = 3750;
 
   // Basic carries the remaining amount so that all positive components exactly sum to earnedCTC
-  const basic = round2(earnedCTC) - (hra + da + lta + allow);
+  const basic = round2(earnedCTC) - (hra + da + lta + allow + pfAllowance);
 
-  const grandTotalA = basic + hra + da + lta + allow;
+  const grandTotalA = basic + hra + da + lta + allow + pfAllowance;
 
   /* ── Deductions — fixed constants ── */
   const pfDeduction = 3750;
-  const pt = 200;
+  const pt = getProfessionalTax(data.month, grandTotalA);
   const otherDed = 2000;
   const totalDeductions = round2(pfDeduction + pt + otherDed);
 
@@ -177,7 +178,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Column Headers */}
-            <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
+            <TableRow >
               <TableCell sx={C({ fontWeight: "bold", width: W.label })}>Specifications(A)</TableCell>
               <TableCell sx={C({ fontWeight: "bold", width: W.amt, textAlign: "center" })}>Amount</TableCell>
               <TableCell sx={C({ fontWeight: "bold", width: W.dlabel })}>Deductions(B)</TableCell>
@@ -241,20 +242,20 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Net Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "80px" }}>
               <TableCell colSpan={2} rowSpan={3} sx={C()}></TableCell>
               <TableCell sx={C({ fontWeight: "bold" })}>Net Salary</TableCell>
               <TableCell sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(netSalary)}</TableCell>
             </TableRow>
 
             {/* Issued Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "40px" }}>
               <TableCell sx={C({ fontWeight: "bold" })}>Issued Salary</TableCell>
               <TableCell sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(issuedSalary)}</TableCell>
             </TableRow>
 
             {/* Balance Salary */}
-            <TableRow>
+            <TableRow sx={{ height: "50px" }}>
               <TableCell sx={C({ fontWeight: "bold" })}>Balance Salary</TableCell>
               <TableCell sx={C({ textAlign: "center" })}>
                 {balanceSalary === 0 ? "Nil" : fmt(balanceSalary)}
@@ -264,12 +265,6 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
           </TableBody>
         </Table>
 
-        {/* Issued Salary in Words */}
-        <Box sx={{ border: "1px solid #000", borderTop: "none", px: 1.5, py: 1 }}>
-          <Typography fontSize="12.5px">
-            <strong>Issued Salary in Words:</strong>{" "}{numberToWords(issuedSalary)}
-          </Typography>
-        </Box>
 
         <Typography mt={3} fontSize="12px" fontStyle="italic">
           *Computer Generated Salary Slip. No Signature Required

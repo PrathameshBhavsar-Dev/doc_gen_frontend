@@ -111,13 +111,9 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
             border: "1px solid black",
             padding: "7px 8px",              // 🔥 increase spacing
             fontFamily: "Bahnschrift",
-<<<<<<< HEAD
             color: "#000",
-=======
             verticalAlign: "middle",         // 🔥 FIX alignment
             lineHeight: 1.8,                 // 🔥 better spacing
-
->>>>>>> 4874f1de928a1e06312261e5992e76c609ad73f1
           },
         }}
       >
