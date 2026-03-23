@@ -65,36 +65,36 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
   const salaryMonth = `${monthName} ${year}`;
 
   /* ================= EARNINGS BREAKUP (100%) ================= */
-  const monthlyGross = round2(totalSalary);
+  const round0 = (num) => Math.round(num);
 
-  const PERCENT = {
-    basic: 0.48,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
+// ================= MONTHLY INPUT =================
+const monthlyCTC = round0(totalSalary);
 
-  const BASIC = round2(monthlyGross * PERCENT.basic);
-  const HRA = round2(monthlyGross * PERCENT.hra);
-  const DA = round2(monthlyGross * PERCENT.da);
-  const SPECIAL = round2(monthlyGross * PERCENT.special);
-  const FOOD = round2(monthlyGross * PERCENT.food);
-  const PF_DISPLAY = 3750;
+// ================= FIXED PF =================
+const PF = 3750;
+const PF_DISPLAY = 3750; // ✅ ADD THIS
 
-  /* ================= TOTAL EARNINGS ================= */
-  const totalEarning = BASIC + HRA + DA + SPECIAL + FOOD;
+// ================= COMPONENTS =================
+const HRA = round0(monthlyCTC * 0.18);
+const DA = round0(monthlyCTC * 0.12);
+const SPECIAL = round0(monthlyCTC * 0.16);
+const FOOD = round0(monthlyCTC * 0.06);
 
-  /* ================= DEDUCTIONS ================= */
-  const PF = 3750;
-  // const PT = 200;
-  // const OTHER_DEDUCTION = 2000;
-  // const totalDeduction = PF + PT + OTHER_DEDUCTION;
+// ================= ADJUSTED BASIC =================
+const BASIC = round0(
+  monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
+);
 
-  /* ================= NET PAY ================= */
-  const pt = getProfessionalTax(month, totalEarning);
-  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
-  const netPay = round2(totalEarning - totalDeduction);
+// ================= TOTAL EARNINGS =================
+const totalEarning = round0(
+  BASIC + HRA + DA + SPECIAL + FOOD + PF
+);
+
+// ================= NET PAY =================
+const pt = getProfessionalTax(month, totalEarning);
+const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
+const netPay = round0(totalEarning - totalDeduction);
+
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <TableContainer
@@ -255,7 +255,9 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell />
               <TableCell />
-              <TableCell align="center">
+              <TableCell align="center"
+              sx={{ padding: "15px !important" }}
+   >
                 {company.stamp && (
                   <img src={company.stamp} width={90} alt="Stamp" />
                 )}

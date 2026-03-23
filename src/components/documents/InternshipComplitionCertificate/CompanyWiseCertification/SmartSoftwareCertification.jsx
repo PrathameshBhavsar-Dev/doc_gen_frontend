@@ -16,6 +16,7 @@ const SmartSoftwareCertification = ({ company, data }) => {
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <Box px={6} py={4}>
+        
         {/* ================= CERTIFICATE TITLE ================= */}
         <Typography
           variant="h6"
@@ -47,8 +48,8 @@ const SmartSoftwareCertification = ({ company, data }) => {
             strong technical skills along with self-motivation to learn new
             technologies. {pronouns.subject} consistently exceeded our
             expectations and successfully completed the assigned tasks on time.
-            We wish {pronouns.object} all the best for {pronouns.possessive}{" "}
-            future career.
+            We wish {pronouns.object} all the best for{" "}
+            {pronouns.possessive} future career.
           </Typography>
         </Box>
 
@@ -58,43 +59,51 @@ const SmartSoftwareCertification = ({ company, data }) => {
             SMART SOFTWARE SERVICES (I) PVT. LTD.
           </Typography>
 
-          <Box mt={4}>
-            <img
-              src={company.signature}
-              alt="signature"
-              width="140"
-              height="60"
-            />
-            {company.stamp && (
-            <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
-          )}
+          {/* Signature + Stamp */}
+          <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3, mt: 2 }}>
+            {company?.signature && (
+              <img
+                src={company.signature}
+                alt="Signature"
+                style={{ height: 55 }}
+              />
+            )}
+
+            {company?.stamp && (
+              <img
+                src={company.stamp}
+                alt="Stamp"
+                style={{ height: 85 }}
+              />
+            )}
           </Box>
 
-          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-            {company.hrName}
-          </Typography>
-
-          <Typography sx={{ fontSize: "13px" }}>
-            HR Department, Pune
-          </Typography>
-          
-          <Box mt={2} textAlign="right">
-          <Typography sx={{ fontSize: "13px" }}>
-            Signature: ______________________
-          </Typography>
-        </Box>
+          {/* HR Name BELOW */}
+          <Box mt={1}>
+            <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
+              {company.hrName}
+            </Typography>
+            <Typography sx={{ fontSize: "15px" }}>
+              HR Relations Lead
+            </Typography>
+          </Box>
         </Box>
 
-        {/* ================= CANDIDATE NAME ================= */}
+        {/* ================= CANDIDATE SIGNATURE ================= */}
+        {/* <Box sx={{ width: "45%", mt: 8 }}>
+          <Typography>Signature : ___________________</Typography>
+          <Typography>
+            Candidate Name : {data.employeeName}
+          </Typography>
+        </Box> */}
 
-
-
-        
-        <Box mt={2} mr={2} textAlign="right">
+        {/* ================= CANDIDATE NAME (BOTTOM RIGHT) ================= */}
+        {/* <Box mt={2} mr={2} textAlign="right">
           <Typography sx={{ fontSize: "13px" }}>
             Candidate Name: <strong>{data.employeeName}</strong>
           </Typography>
-        </Box>
+        </Box> */}
+
       </Box>
     </A4Page>
   );
