@@ -27,6 +27,12 @@ import SalaryStructureTable from "../../../../common/SalaryStructureTable";
 import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 const NimbjaConfirmation = ({ company = {}, data = {} }) => {
+  console.log("FULL DATA:", data);
+  console.log("CTC VALUES:", {
+    newCTC: data.newCTC,
+    salary: data.salary,
+    ctc: data.ctc,
+  });
   const firstName = data.employeeName?.split(" ")[0] || "";
 
   const formatDate = (date) =>
@@ -109,44 +115,13 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
   /* ================= SALARY LOGIC ================= */
 
-  const round0 = (num) => Math.round(num);
 
   // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.totalSalary || 0));
+ const annualCTC = Number(
+   data.newCTC || data.salary || data.ctc || data.totalSalary || 0,
+ );
 
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
-
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
-
-  // ================= SALARY TABLE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouquet Of Benefits", hraMonthly, hraAnnual],
-    ["Hra", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  ];
-
-  // ================= TOTAL EARNINGS =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -225,7 +200,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong> per year.
+            <strong>{formatCurrency(annualCTC)}</strong> per year.
           </Typography>
           <Typography
             mb={2}
@@ -333,13 +308,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             </strong>
           </Typography>
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <SalaryStructureTable ctc={annualCTC} />
         </Box>
         {/* Signature Block */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 9 }}>
