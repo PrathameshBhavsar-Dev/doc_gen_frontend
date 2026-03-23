@@ -503,7 +503,10 @@ export default function UserDetails() {
   const { id } = useParams(); // ✅ GET CLICKED USER ID
 
   const api = new ApiService();
-
+  const [openDocDropdown, setOpenDocDropdown] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState("Select Document Type");
+  const [selectedCompany, setSelectedCompany] = useState("Select Company");
+  const [openCompanyDropdown, setOpenCompanyDropdown] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: "",
