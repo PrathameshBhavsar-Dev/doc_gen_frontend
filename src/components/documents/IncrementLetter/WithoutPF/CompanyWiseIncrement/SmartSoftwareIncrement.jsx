@@ -16,10 +16,10 @@ import {
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= CURRENCY FORMAT ================= */
@@ -139,6 +139,8 @@ const SmartSoftwareIncrement = ({ company, data }) => {
           <Typography sx={{ mb: 2 }}>Yours Sincerely,</Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 3, mt: 2 }}>
+
+            {/* Signature */}
             {company.incrementSignature && (
               <Box
                 component="img"
@@ -146,11 +148,13 @@ const SmartSoftwareIncrement = ({ company, data }) => {
                 sx={{ height: 60 }}
               />
             )}
+
+            {/* Stamp */}
             {company.stamp && (
               <Box component="img" src={company.stamp} sx={{ height: 90 }} />
             )}
-          </Box>
 
+          </Box>
           <Typography fontWeight="bold" sx={{ mt: 2 }}>
             CEO & Managing Director
           </Typography>
