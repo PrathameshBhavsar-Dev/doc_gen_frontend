@@ -269,6 +269,28 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Table>
 
         </Box>
+
+
+         <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+            <Box>
+              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+                {company.signature && (
+                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                )}
+                {company.stamp && (
+                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                )}
+              </Box>
+              <Typography>{company.hrName}</Typography>
+              <Typography>HR Relations Lead</Typography>
+            </Box>
+
+            <Box sx={{ width: "45%", mt: 8 }}>
+              <Typography>Signature : ___________________</Typography>
+              <Typography>Candidate Name : {candidateName}</Typography>
+            </Box>
+          </Box>
+        
       </A4Layout>
     </>
   );

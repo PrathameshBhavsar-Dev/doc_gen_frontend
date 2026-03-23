@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import {
-  Box,
   Typography,
   Table,
   TableBody,
@@ -10,10 +9,43 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
+import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
-import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
+/* 🔥 CLEAN CURRENCY (REMOVES .00 & ZERO) */
+// const cleanCurrency = (val) => {
+//   if (!val) return "";
 
-/* 🔢 Number to Words (Indian System) */
+//   return new Intl.NumberFormat("en-IN", {
+//     minimumFractionDigits: 0,
+//     maximumFractionDigits: 2,
+//   }).format(val);
+// };
+
+
+
+/* 🔥 CLEAN CURRENCY (ALWAYS SHOW .00) */
+const cleanCurrency = (val) => {
+  if (!val) return "";
+
+  const num = Number(val) || 0;
+
+  return num.toLocaleString("en-IN", {
+    minimumFractionDigits: 2, // 🔥 force .00
+    maximumFractionDigits: 2,
+  });
+};
+
+
+/* 🔥 CLEAN CURRENCY (NO .00 AT ALL) */
+// const cleanCurrency = (val) => {
+//   if (!val) return "";
+
+//   const num = Math.round(Number(val) || 0); // 🔥 force integer
+
+//   return num.toLocaleString("en-IN"); // 🔥 8,667 (no .00)
+// };
+
+/* 🔢 Number to Words */
 const numberToWords = (num = 0) => {
   if (!num) return "Zero Rupees Only";
 
@@ -60,7 +92,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
   const salaryMonth = `${monthName} ${year}`;
 
-  /* ===== SALARY CALCULATION (WITHOUT PF) ===== */
+  /* ===== SALARY CALCULATION ===== */
   const {
     basic,
     hra,
@@ -75,7 +107,6 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
   } = useMemo(() => {
     const gross = round2(Number(totalSalary || 0));
 
-    // Earnings % calculation
     const basic = round2(gross * 0.40);
     const hra = round2(gross * 0.18);
     const dearnessAllowance = round2(gross * 0.12);
@@ -83,9 +114,9 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     const foodAllowance = round2(gross * 0.06);
     const miscAllowance = round2(gross * 0.08);
 
-    const totalEarnings = basic + hra + dearnessAllowance + specialAllowance + foodAllowance + miscAllowance;
+    const totalEarnings =
+      basic + hra + dearnessAllowance + specialAllowance + foodAllowance + miscAllowance;
 
-    // Deductions (NO PF)
     const professionalTax = getProfessionalTax(month, totalEarnings);
     const totalDeductions = round2(professionalTax + Number(otherDeduction || 0));
 
@@ -105,7 +136,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     };
   }, [totalSalary, month, otherDeduction]);
 
-  /* ===== EARNINGS & DEDUCTIONS ARRAY ===== */
+  /* ===== REMOVE ZERO ROWS ===== */
   const earnings = [
     { label: "BASIC", value: basic },
     { label: "HRA", value: hra },
@@ -113,17 +144,19 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     { label: "SPECIAL ALLOWANCE", value: specialAllowance },
     { label: "FOOD ALLOWANCE", value: foodAllowance },
     { label: "MISC ALLOWANCE", value: miscAllowance },
-  ];
+  ].filter(e => e.value !== 0);
 
   const deductions = [
     { label: "PT", value: professionalTax },
     { label: "Other Deduction", value: otherDeduction },
-  ];
+  ].filter(d => d.value !== 0);
 
+  /* 🔥 COMPACT STYLE */
   const CELL = {
     border: "1px solid #000",
-    padding: "6px",
-    fontSize: "12pt",
+    padding: "3px 5px",
+    fontSize: "10.5pt",
+    lineHeight: 1.2,
   };
 
   return (
@@ -131,16 +164,12 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
       <TableContainer
         component={Paper}
         sx={{
-          border: "1px solid black",      // Outer table border
+          border: "1px solid black",
           borderRadius: 0,
-          mt: "5mm",
+          mt: "4mm",
           boxShadow: "none",
-          "& .MuiTable-root": {
-            borderCollapse: "collapse",   // Ensure borders are crisp
-          },
-          "& .MuiTableCell-root": {
-            border: "1px solid black",    // Add border to every cell
-          },
+          "& .MuiTable-root": { borderCollapse: "collapse" },
+          "& .MuiTableCell-root": { border: "1px solid black" },
         }}
       >
         <Table size="small">
@@ -148,13 +177,21 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
             {/* HEADER */}
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "14pt" }}>{company.name}</TableCell>
+              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "13pt" }}>
+                {company.name}
+              </TableCell>
             </TableRow>
+
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>{company.address}</TableCell>
+              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "10.5pt" }}>
+                {company.address}
+              </TableCell>
             </TableRow>
+
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>Salary Slip {salaryMonth}</TableCell>
+              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "11pt" }}>
+                Salary Slip {salaryMonth}
+              </TableCell>
             </TableRow>
 
             {/* EMPLOYEE DETAILS */}
@@ -193,38 +230,44 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell sx={CELL}>{workdays}</TableCell>
             </TableRow>
 
-            {/* SALARY HEADERS */}
+            {/* HEADERS */}
             <TableRow>
               <TableCell sx={CELL}><b>Earnings</b></TableCell>
-              <TableCell sx={CELL}><b>Amount</b></TableCell>
+              <TableCell sx={CELL} align="center"><b>Amount</b></TableCell>
               <TableCell sx={CELL}><b>Deductions</b></TableCell>
-              <TableCell sx={CELL}><b>Amount</b></TableCell>
+              <TableCell sx={CELL} align="center"><b>Amount</b></TableCell>
             </TableRow>
 
+            {/* ROWS */}
             {earnings.map((e, i) => (
               <TableRow key={i}>
                 <TableCell sx={CELL}>{e.label}</TableCell>
-                <TableCell sx={CELL} align="right">{formatCurrency(e.value)}</TableCell>
+                <TableCell sx={CELL} align="center">{cleanCurrency(e.value)}</TableCell>
+
                 <TableCell sx={CELL}>{deductions[i]?.label || ""}</TableCell>
-                <TableCell sx={CELL} align="right">{deductions[i] ? formatCurrency(deductions[i].value) : ""}</TableCell>
+                <TableCell sx={CELL} align="center">
+                  {deductions[i] ? cleanCurrency(deductions[i].value) : ""}
+                </TableCell>
               </TableRow>
             ))}
 
-            {/* TOTALS */}
+            {/* TOTAL */}
             <TableRow>
               <TableCell sx={CELL}><b>Total</b></TableCell>
-              <TableCell sx={CELL} align="right">{formatCurrency(totalEarnings)}</TableCell>
+              <TableCell sx={CELL} align="center">{cleanCurrency(totalEarnings)}</TableCell>
               <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
-              <TableCell sx={CELL} align="right">{formatCurrency(totalDeductions)}</TableCell>
+              <TableCell sx={CELL} align="center">{cleanCurrency(totalDeductions)}</TableCell>
             </TableRow>
 
+            {/* NET PAY */}
             <TableRow>
               <TableCell sx={CELL}><b>Net Pay</b></TableCell>
-              <TableCell sx={CELL} align="right">{formatCurrency(netPay)}</TableCell>
+              <TableCell sx={CELL} align="center">{cleanCurrency(netPay)}</TableCell>
               <TableCell sx={CELL} />
               <TableCell sx={CELL} />
             </TableRow>
 
+            {/* IN WORDS */}
             <TableRow>
               <TableCell sx={CELL}><b>In Words</b></TableCell>
               <TableCell colSpan={3} sx={CELL}>{numberToWords(netPay)}</TableCell>
@@ -235,11 +278,11 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell />
               <TableCell />
               <TableCell align="center">
-                {company?.stamp && <img src={company.stamp} height={80} alt="Stamp" />}
+                {company?.stamp && <img src={company.stamp} height={70} alt="Stamp" />}
               </TableCell>
               <TableCell align="center">
-                {company?.signature && <img src={company.signature} height={50} alt="Signature" />}
-                <Typography fontWeight="bold">Signature</Typography>
+                {company?.signature && <img src={company.signature} height={45} alt="Signature" />}
+                <Typography fontWeight="bold" fontSize="10pt">Signature</Typography>
               </TableCell>
             </TableRow>
 
