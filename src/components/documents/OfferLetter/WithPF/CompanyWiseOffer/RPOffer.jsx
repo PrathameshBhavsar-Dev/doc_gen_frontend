@@ -189,7 +189,7 @@ const totalAnnual = totalMonthly * 12;
                       color: "#000"
                     }}
                   >
-                    <strong>Name</strong> : {data.mrms} {data.candidateName}
+                    <strong>Name</strong> : {data.mrms} {data.employeeName}
                   </Typography>
       
                   <Typography
@@ -226,7 +226,7 @@ const totalAnnual = totalMonthly * 12;
                       fontWeight: 500,
                     }}
                   >
-                     Dear {data?.candidateName?.split(" ")[0]},
+                     Dear {data?.employeeName?.split(" ")[0]},
                   </Typography>
       
       
@@ -370,7 +370,7 @@ const totalAnnual = totalMonthly * 12;
                         Signature : __________________
                       </Typography>
                       <Typography sx={{ mt: 1 }}>
-                        Candidate Name : {data.candidateName}
+                        Candidate Name : {data.employeeName}
                       </Typography>
                     </Box>
                   </Box>

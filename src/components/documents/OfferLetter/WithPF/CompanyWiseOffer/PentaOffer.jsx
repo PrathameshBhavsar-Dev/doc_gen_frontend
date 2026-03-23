@@ -119,7 +119,7 @@ const Page = ({ company, children }) => (
 );
 
 /* ===================== SIGNATURE + STAMP ===================== */
-const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
+const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
   return (
     <Box
       sx={{
@@ -196,7 +196,7 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
           textAlign: "left",          // keeps wrapping clean
         }}
       >
-        {candidateName}
+        {employeeName}
       </Box>
     </Box>
   </Box>
@@ -239,7 +239,7 @@ const PentaOffer = ({ company, data }) => {
         >
           <Typography fontWeight="bold">Name</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.mrms} {data.candidateName}</Typography>
+          <Typography>{data.mrms} {data.employeeName}</Typography>
 
           <Typography fontWeight="bold">Address</Typography>
           <Typography fontWeight="bold">:</Typography>
@@ -255,7 +255,7 @@ const PentaOffer = ({ company, data }) => {
 
         {/* REST OF CONTENT UNCHANGED */}
         <Typography sx={{ fontSize: 14, mb: 1 }}>
-          Dear {data.candidateName?.split(" ")[0]},
+          Dear {data.employeeName?.split(" ")[0]},
         </Typography>
 
         <Typography sx={{ fontSize: 14, lineHeight: 1.9, mb: 1 }}>
@@ -310,7 +310,7 @@ const PentaOffer = ({ company, data }) => {
 
         <SignatureBlock
           company={company}
-          candidateName={data.candidateName}
+          employeeName={data.employeeName}
         />
         {/* </Box> */}
 
@@ -393,7 +393,7 @@ const PentaOffer = ({ company, data }) => {
 
         <SignatureBlock
           company={company}
-          candidateName={data.candidateName}
+          employeeName={data.employeeName}
           showCandidate={true}
         />
 

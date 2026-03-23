@@ -15,6 +15,9 @@ import { useDocument } from "../../core/contexts/DocumentContext";
 import { useAuth } from "../../core/contexts/AuthContext";
 import { validateForm } from "../../utils/validationUtils";
 import ROUTES from "../../core/constants/routes.constant";
+import axios from "axios";
+import API from "../../core/constants/serverURL.constant"; // adjust path
+import ApiService from "../../core/services/api.service";
 
 /* ========================= */
 /*     Reusable Field Label  */
@@ -87,9 +90,9 @@ const DocumentCreate = () => {
   const [logoError, setLogoError] = useState(false);
 
   /* ================= AUTH CHECK ================= */
-  useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) navigate("/login");
+  // }, [user]);
 
   /* ================= READ NAVIGATION STATE ================= */
   useEffect(() => {
@@ -221,10 +224,79 @@ const DocumentCreate = () => {
   };
 
   /* ================= SUBMIT ================= */
-  const handleSubmit = (e) => {
+  const apiService = new ApiService();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateDocumentForm()) {
-      navigate(ROUTES.DOCUMENT_PREVIEW, { state: { fromCreate: true } });
+
+    if (!validateDocumentForm()) return;
+
+    try {
+      const docTypeKey = selectedDocType?.template?.replace(/-/g, "_");
+
+      if (!docTypeKey) {
+        throw new Error("Document type key missing");
+      }
+
+      const apiUrl = API.generateDoc(docTypeKey);
+
+      // ✅ FINAL CORRECT PAYLOAD
+      const payload = {
+        company: selectedCompany?.name,
+        issuedTo: user?.id,
+
+        title: documentData.mrms,
+        employeeName: documentData.employeeName,
+        email: documentData.employeeEmail,
+
+        position: documentData.position,
+        department: documentData.department || "IT",
+        employmentType: documentData.employmentType || "Full-time",
+
+        joiningDate: documentData.joiningDate,
+        salary: Number(documentData.salary),
+
+        location: documentData.location || "Pune",
+
+        offerValidTill:
+          documentData.offerValidTill || documentData.joiningDate,
+
+        offerType: documentData.offerType,
+        issueDate: documentData.issueDate,
+      };
+
+      console.log("FINAL PAYLOAD:", JSON.stringify(payload, null, 2));
+      console.log("Fields received:", {
+        company: payload.company,
+        issuedTo: payload.issuedTo,
+        title: payload.title,
+        employeeName: payload.employeeName,
+        email: payload.email,
+        position: payload.position,
+        department: payload.department,
+        employmentType: payload.employmentType,
+        joiningDate: payload.joiningDate,
+        salary: payload.salary,
+        location: payload.location,
+        offerValidTill: payload.offerValidTill,
+        offerType: payload.offerType,
+        issueDate: payload.issueDate,
+      });
+
+      const res = await apiService.apipost(apiUrl, payload);
+
+      const documentId = res?.data?._id;
+
+      navigate(`/document/preview`, {
+        state: {
+          documentData,
+          selectedDocType,
+          selectedCompany
+        }
+      });
+      
+    } catch (error) {
+      console.error("❌ FULL ERROR:", error.response?.data || error);
     }
   };
 

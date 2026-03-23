@@ -57,7 +57,7 @@ const NimbjaOffer = ({ company, data }) => {
 
   const totalAnnual = totalMonthly * 12;
 
-  const firstName = data.candidateName?.trim().split(" ")[0];
+  const firstName = data.employeeName?.trim().split(" ")[0];
 
   const formatDate = (date) =>
     date
@@ -133,7 +133,7 @@ const NimbjaOffer = ({ company, data }) => {
           </Typography>
           {/* NAME */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
-            Name : {data.mrms} {data.candidateName}
+            Name : {data.mrms} {data.employeeName}
           </Typography>
 
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
@@ -309,7 +309,7 @@ const NimbjaOffer = ({ company, data }) => {
               Signature: __________________
             </Typography>
             <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
-              Candidate Name: {data.candidateName}
+              Candidate Name: {data.employeeName}
             </Typography>
           </Box>
         </Box>

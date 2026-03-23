@@ -38,7 +38,7 @@
 //   /* ================= SAFE DATA ================= */
 //   const {
 //     mrms = "",
-//     candidateName = "",
+//     employeeName = "",
 //     employeeName = "",
 //     address = "",
 //     position = "",
@@ -47,7 +47,7 @@
 //     totalSalary = 0,
 //   } = data;
 
-//   const NAME = candidateName || employeeName;
+//   const NAME = employeeName || employeeName;
 //   const COMPANY_NAME = company.name?.toUpperCase() || "";
 
 //   /* ================= SALARY BREAKUP ================= */
@@ -290,7 +290,7 @@
 //   /* ================= SAFE DATA ================= */
 //   const {
 //     mrms = "",
-//     candidateName = "",
+//     employeeName = "",
 //     employeeName = "",
 //     address = "",
 //     position = "",
@@ -299,7 +299,7 @@
 //     totalSalary = 0,
 //   } = data;
 
-//   const NAME = candidateName || employeeName;
+//   const NAME = employeeName || employeeName;
 //   const COMPANY_NAME = company.name?.toUpperCase() || "";
 
 //   /* ================= SALARY BREAKUP ================= */
@@ -541,7 +541,6 @@ const JDITConfirmation = ({ company, data }) => {
   /* ================= SAFE DATA ================= */
   const {
     mrms = "",
-    candidateName = "",
     employeeName = "",
     address = "",
     position = "",
@@ -550,7 +549,7 @@ const JDITConfirmation = ({ company, data }) => {
     totalSalary = 0,
   } = data;
 
-  const NAME = candidateName || employeeName;
+  const NAME = employeeName;
   const COMPANY_NAME = company.name?.toUpperCase() || "";
 
   /* ================= SALARY BREAKUP ================= */

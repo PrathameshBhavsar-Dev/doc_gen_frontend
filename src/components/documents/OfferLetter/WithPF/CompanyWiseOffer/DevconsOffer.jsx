@@ -65,7 +65,7 @@ const totalMonthly =
 const totalAnnual = totalMonthly * 12;
 
 
-  const firstName = data.candidateName?.trim().split(" ")[0];
+  const firstName = data.employeeName?.trim().split(" ")[0];
 
   return (
     <>
@@ -103,7 +103,7 @@ const totalAnnual = totalMonthly * 12;
 
             {/* NAME */}
             <Typography sx={{ mb: 2, fontWeight: 700 }}>
-              <b>Name</b> : {data.mrms} {data.candidateName}
+              <b>Name</b> : {data.mrms} {data.employeeName}
             </Typography>
 
             {/* SUBJECT */}

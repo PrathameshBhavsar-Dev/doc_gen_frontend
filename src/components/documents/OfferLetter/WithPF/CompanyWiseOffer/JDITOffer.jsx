@@ -36,7 +36,7 @@ const JDITOffer = ({ company, data }) => {
   /* 🔥 OFFER LETTER FIELD NAMES */
   const {
     issueDate,
-    candidateName,
+    employeeName,
     position,
     joiningDate,
     employeeId,
@@ -125,7 +125,7 @@ const JDITOffer = ({ company, data }) => {
         <Typography align="center" sx={TEXT}>And</Typography>
 
         <Typography align="center" sx={{ ...TEXT, fontWeight: "bold", mb: 2 }}>
-          {candidateName}
+          {employeeName}
         </Typography>
 
         {/* ---- full width divider like screenshot ---- */}
@@ -147,7 +147,7 @@ const JDITOffer = ({ company, data }) => {
             ➢ Position: <b>{position}</b>
           </Typography>
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
-            ➢ Employee’s Name: <b>{candidateName}</b>
+            ➢ Employee’s Name: <b>{employeeName}</b>
           </Typography>
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
             ➢ Business / Work Hours per Day: <b>As per business requirement of the client.</b>
@@ -182,7 +182,7 @@ const JDITOffer = ({ company, data }) => {
 
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
         <Typography sx={{ ...TEXT, mb: 2 }}>
-          <b>Name : {candidateName}</b>
+          <b>Name : {employeeName}</b>
           <span style={{ marginLeft: "120px" }}>
             <b>Designation :{position}</b>
           </span>
@@ -584,7 +584,7 @@ const JDITOffer = ({ company, data }) => {
                 Employee Signature: ______________________
               </Typography>
               <Typography sx={{ ...TEXT, fontWeight: "bold" }}>
-                Employee Full Name: {candidateName}
+                Employee Full Name: {employeeName}
               </Typography>
             </Box>
 

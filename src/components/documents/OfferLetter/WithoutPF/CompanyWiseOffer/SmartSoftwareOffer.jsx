@@ -19,7 +19,7 @@ import {
 export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
     issueDate = new Date(),
-    candidateName = "",
+    employeeName = "",
     address = "",
     position = "",
     joiningDate = "",
@@ -41,7 +41,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     ? title.charAt(0).toUpperCase() + title.slice(1)
     : "Mr.";
 
-  const firstName = candidateName.split(" ")[0] || "";
+  const firstName = employeeName.split(" ")[0] || "";
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
@@ -130,7 +130,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>
-            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {candidateName}
+            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {employeeName}
           </Typography>
 
           <Typography sx={{ mt: "12px" }}>
@@ -194,7 +194,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {candidateName}</Typography>
+              <Typography>Candidate Name : {employeeName}</Typography>
             </Box>
           </Box>
         </Box>
@@ -257,7 +257,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {candidateName}</Typography>
+              <Typography>Candidate Name : {employeeName}</Typography>
             </Box>
           </Box>
         </Box>

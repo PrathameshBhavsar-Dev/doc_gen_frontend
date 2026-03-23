@@ -105,7 +105,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
     ["SPECIAL ALLOWANCE", special],
   ];
 
-  const candidateName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.candidateName || "";
+  const employeeName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.employeeName || "";
   const position = data.position || "";
   const location = data.workLocation || company.city || "";
   const joiningDate = data.joiningDate || "";
@@ -143,11 +143,11 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={2}>
-          Employee Name: <strong>{candidateName}</strong>
+          Employee Name: <strong>{employeeName}</strong>
         </Typography>
 
         <Typography mb={2}>
-          Dear <strong>{candidateName}</strong>,
+          Dear <strong>{employeeName}</strong>,
         </Typography>
 
         <Typography textAlign="justify" mb={2}>
@@ -381,7 +381,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
           <Box>
             <Typography fontWeight="bold">Accepted By:</Typography>
             <Typography mt={6}>_________________________</Typography>
-            <Typography>{candidateName}</Typography>
+            <Typography>{employeeName}</Typography>
             <Typography>Date: __________________</Typography>
           </Box>
 
@@ -405,7 +405,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={1} fontSize="14px">
-          <strong>Name:{candidateName}</strong>
+          <strong>Name:{employeeName}</strong>
         </Typography>
 
         <Typography mb={1} fontSize="14px">
