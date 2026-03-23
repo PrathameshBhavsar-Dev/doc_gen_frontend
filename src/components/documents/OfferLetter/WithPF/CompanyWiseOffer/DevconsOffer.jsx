@@ -20,29 +20,82 @@ import A4Page from "../../../../layout/A4Page";
 const DevconsOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  // ================= HELPERS =================
-  const round0 = (num) => Math.round(num);
+//   // ================= HELPERS =================
+//   const round0 = (num) => Math.round(num);
 
-  // ================= CTC =================
-  const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+//   // ================= CTC =================
+//   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
 
-  // ================= UPDATED PERCENTAGES =================
-const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+//   // ================= UPDATED PERCENTAGES =================
+// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = basicMonthly * 12;
+// const hraAnnual = hraMonthly * 12;
+// const daAnnual = daMonthly * 12;
+// const specialAnnual = specialMonthly * 12;
+// const foodAnnual = foodMonthly * 12;
+// const pfAnnual = pfMonthly * 12;
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+// ];
+
+// // ================= TOTAL EARNINGS =================
+// const totalMonthly =
+//   basicMonthly +
+//   hraMonthly +
+//   daMonthly +
+//   specialMonthly +
+//   foodMonthly;
+
+// const totalAnnual = totalMonthly * 12;
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+const round0 = (num) => Math.round(num);
+
+// ================= ANNUAL CTC INPUT =================
+const annualCTC = round0(Number(data.salary || 0));
+
+// ================= MONTHLY CTC =================
+const monthlyCTC = round0(annualCTC / 12);
+
+// ================= STATIC PF =================
+const pfMonthly = 3750;
+
+// ================= FIXED PERCENTAGES =================
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
 const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
+// ================= ADJUSTED BASIC =================
+const basicMonthly = round0(
+  monthlyCTC -
+  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+);
 
-// ================= ANNUAL VALUES =================
-const basicAnnual = basicMonthly * 12;
-const hraAnnual = hraMonthly * 12;
-const daAnnual = daMonthly * 12;
-const specialAnnual = specialMonthly * 12;
-const foodAnnual = foodMonthly * 12;
-const pfAnnual = pfMonthly * 12;
+// ================= ANNUAL =================
+const basicAnnual = round0(basicMonthly * 12);
+const hraAnnual = round0(hraMonthly * 12);
+const daAnnual = round0(daMonthly * 12);
+const specialAnnual = round0(specialMonthly * 12);
+const foodAnnual = round0(foodMonthly * 12);
+const pfAnnual = round0(pfMonthly * 12);
 
 // ================= SALARY TABLE =================
 const salaryRows = [
@@ -51,18 +104,20 @@ const salaryRows = [
   ["Dearness Allowance", daMonthly, daAnnual],
   ["Special Allowance", specialMonthly, specialAnnual],
   ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  ["Provident Fund (PF)", pfMonthly, pfAnnual],
 ];
 
-// ================= TOTAL EARNINGS =================
-const totalMonthly =
+// ================= TOTAL =================
+const totalMonthly = round0(
   basicMonthly +
   hraMonthly +
   daMonthly +
   specialMonthly +
-  foodMonthly;
+  foodMonthly +
+  pfMonthly
+);
 
-const totalAnnual = totalMonthly * 12;
+const totalAnnual = round0(totalMonthly * 12);
 
 
   const firstName = data.candidateName?.trim().split(" ")[0];
