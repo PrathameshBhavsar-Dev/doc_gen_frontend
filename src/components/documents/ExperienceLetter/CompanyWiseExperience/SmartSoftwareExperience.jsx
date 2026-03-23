@@ -95,9 +95,9 @@ const SmartSoftwareExperience = ({ company, data }) => {
           For Smart Software Services (I) Pvt. Ltd.
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2, mt: 2 }}>
           {company.signature && (
-            <img src={company.signature} alt="Signature" style={{ height: 60 }} />
+            <img src={company.signature} alt="Signature" style={{ height: 70 }} />
           )}
 
           {company.stamp && (

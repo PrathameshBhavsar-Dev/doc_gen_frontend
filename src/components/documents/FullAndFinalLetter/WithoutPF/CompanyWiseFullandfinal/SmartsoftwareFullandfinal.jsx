@@ -230,14 +230,54 @@ const SmartSoftwareFullAndFinal = ({ company = {}, data = {} }) => {
               {/* SIGNATURE */}
               <TableRow>
                 <TableCell sx={{ ...cell, ...center }}></TableCell>
-                <TableCell sx={{ ...cell, ...center }}>
-                  {company.stamp && <img src={company.stamp} height={60} alt="Stamp" />}
+
+                {/* STAMP */}
+                <TableCell sx={{ ...cell }}>
+                  {company.stamp && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "130px", // ✅ increased
+                      }}
+                    >
+                      <img
+                        src={company.stamp}
+                        alt="Stamp"
+                        style={{
+                          height: "110px",   // 🔥 BIG STAMP
+                          width: "auto",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                  )}
                 </TableCell>
-                <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                  {company.signature && <img src={company.signature} height={45} alt="Signature" />}
+
+                {/* SIGNATURE */}
+                <TableCell colSpan={2} sx={{ ...cell }}>
+                  {company.signature && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "130px", // ✅ match stamp
+                      }}
+                    >
+                      <img
+                        src={company.signature}
+                        alt="Signature"
+                        style={{
+                          height: "70px",
+                          width: "auto",
+                        }}
+                      />
+                    </Box>
+                  )}
                 </TableCell>
               </TableRow>
-
               <TableRow>
                 <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
                 <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>

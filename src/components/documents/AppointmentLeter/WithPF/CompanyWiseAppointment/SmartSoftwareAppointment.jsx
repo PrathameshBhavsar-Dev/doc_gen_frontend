@@ -16,60 +16,22 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
     : "";
 
-const round2 = (n) => Number(Number(n || 0).toFixed(2));
-
+// ✅ NO .00
 const formatCurrency = (v) =>
   Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   });
 
 const tableCellStyle = {
   border: "1px solid #333",
   fontSize: 13,
-};
-
-/* ================= SALARY BREAKUP ================= */
-/* 48%, 18%, 12%, 16%, 6% = 100% */
-
-const generateSalaryBreakup = (annualCTC) => {
-  const basic = round2(annualCTC * 0.48);
-  const hra = round2(annualCTC * 0.18);
-  const da = round2(annualCTC * 0.12);
-  const special = round2(annualCTC * 0.16);
-  const food = round2(annualCTC * 0.06);
-
-  const salaryComponents = [
-    { name: "Basic Salary", monthly: basic / 12, annual: basic },
-    { name: "House Rent Allowance", monthly: hra / 12, annual: hra },
-    { name: "Conveyance Allowance", monthly: da / 12, annual: da },
-    { name: "Special Allowance", monthly: special / 12, annual: special },
-    { name: "Food Allowance", monthly: food / 12, annual: food },
-  ];
-
-  const totalAnnual = round2(
-    salaryComponents.reduce((sum, row) => sum + row.annual, 0)
-  );
-
-  const totalMonthly = round2(totalAnnual / 12);
-
-  // Fixed PF
-  const monthlyPF = 3750;
-  const annualPF = monthlyPF * 12;
-
-  return {
-    salaryComponents,
-    monthlyPF,
-    annualPF,
-    totalMonthly,
-    totalAnnual,
-  };
 };
 
 /* ================= MAIN COMPONENT ================= */
@@ -78,17 +40,56 @@ const SmartSoftwareAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
 
-  const {
-    salaryComponents,
-    monthlyPF,
-    annualPF,
-    totalMonthly,
-    totalAnnual,
-  } = generateSalaryBreakup(annualCTC);
+  /* ================= SAME LOGIC AS OFFER LETTER ================= */
 
-  const terms = [
+  const totalAnnualInput = Number(data.salary) || 0;
+  const round0 = (num) => Math.round(num);
+
+  const annualCTC = round0(totalAnnualInput);
+  const monthlyCTC = round0(annualCTC / 12);
+
+  const pfMonthly = 3750;
+
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  const basicMonthly = round0(
+    monthlyCTC -
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
+
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  const salaryComponents = [
+    { name: "Basic Salary", monthly: basicMonthly, annual: basicAnnual },
+    { name: "HRA", monthly: hraMonthly, annual: hraAnnual },
+    { name: "Conveyance Allowance", monthly: daMonthly, annual: daAnnual },
+    { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { name: "PF", monthly: pfMonthly, annual: pfAnnual },
+  ];
+
+  const totalMonthly = salaryComponents.reduce(
+    (sum, item) => sum + item.monthly,
+    0
+  );
+
+  const totalAnnualFinal = salaryComponents.reduce(
+    (sum, item) => sum + item.annual,
+    0
+  );
+
+  /* ================= TERMS ================= */
+
+ const terms = [
     <>Your Designation will be <strong>"{data.position}"</strong>.</>,
     <>Your total emoluments will be <strong>Rs. {(annualCTC / 100000).toFixed(2)}</strong> Lakhs per annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable.`,
@@ -109,8 +110,6 @@ const SmartSoftwareAppointment = ({ company, data }) => {
     `The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
     `You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
   ];
-
-
   return (
     <>
       {/* PAGE 1 */}
@@ -131,6 +130,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
         <Typography mt={2} fontSize={13}>
           Dear {firstName},
         </Typography>
+
         <Typography align="center" fontWeight={700} mt={3}>
           LETTER OF APPOINTMENT
         </Typography>
@@ -149,7 +149,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
       {/* PAGE 2 */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
         <Box component="ol" start={11} sx={{ pl: 3, mt: 2 }}>
-          {terms.slice(7).map((t, i) => (
+          {terms.slice(10).map((t, i) => (
             <li key={i}>
               <Typography fontSize={14} textAlign="justify" mb={1}>
                 {t}
@@ -181,7 +181,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
         </Box>
       </A4Page>
 
-      {/* PAGE 3 – SALARY STRUCTURE */}
+      {/* PAGE 3 */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
         <Typography align="center" fontWeight={700} mb={3}>
           Salary Structure – Break Up
@@ -210,23 +210,13 @@ const SmartSoftwareAppointment = ({ company, data }) => {
                 </TableRow>
               ))}
 
-              <TableRow>
-                <TableCell sx={tableCellStyle}>Provident Fund (PF)</TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(monthlyPF)}
-                </TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(annualPF)}
-                </TableCell>
-              </TableRow>
-
               <TableRow sx={{ backgroundColor: "#32a1c2ff" }}>
                 <TableCell>Total Gross Salary</TableCell>
                 <TableCell align="center">
                   {formatCurrency(totalMonthly)}
                 </TableCell>
                 <TableCell align="center">
-                  {formatCurrency(totalAnnual)}
+                  {formatCurrency(totalAnnualFinal)}
                 </TableCell>
               </TableRow>
             </TableBody>

@@ -562,6 +562,7 @@ import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryC
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
 const round2 = (v) => Math.round(num(v) * 100) / 100;
+const round0 = (v) => Math.round(num(v));
 
 /* ================= NUMBER TO WORDS ================= */
 const numberToWords = (numVal = 0) => {
@@ -573,6 +574,7 @@ const numberToWords = (numVal = 0) => {
     "Thirteen", "Fourteen", "Fifteen", "Sixteen",
     "Seventeen", "Eighteen", "Nineteen",
   ];
+
   const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
   const w = (n) => {
@@ -605,14 +607,64 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     month = "-",
     totalSalary = 0,
     otherDeduction = 2000,
+
+    // 👉 ADDED SUPPORT FOR CTC
+    salary = 0,
   } = data;
 
-  /* ===== MONTH FORMAT ===== */
+  /* ================= MONTH FORMAT ================= */
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
   const salaryMonth = `${monthName} ${year}`;
 
-  /* ================= EARNINGS BREAKUP ================= */
+  /* =====================================================
+     🔥 NEW CTC-BASED SALARY LOGIC (ADDED - NOT USED IN UI)
+  ====================================================== */
+
+  const annualCTC = round0(Number(salary || totalSalary || 0));
+  const monthlyCTC = round0(annualCTC / 12);
+
+  const pfMonthly = 3750;
+
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
+
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
+
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
+
+  const totalAnnual = round0(totalMonthly * 12);
+
+  /* ================= YOUR EXISTING LOGIC (UNCHANGED UI) ================= */
+
   const monthlyGross = round2(totalSalary);
 
   const PERCENT = {
@@ -629,12 +681,10 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
   const SPECIAL = round2(monthlyGross * PERCENT.special);
   const FOOD = round2(monthlyGross * PERCENT.food);
 
-  /* ================= DEDUCTIONS ================= */
   const PF = 3750;
   const pt = getProfessionalTax(month, monthlyGross);
   const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
 
-  /* ================= NET PAY ================= */
   const totalEarning = BASIC + HRA + DA + SPECIAL + FOOD;
   const netPay = round2(totalEarning - totalDeduction);
 
@@ -653,16 +703,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
           },
         }}
       >
-        <Table
-          size="small"
-          sx={{
-            tableLayout: "fixed",
-            width: "100%",
-            "& td, & th": {
-              width: "25%",
-            },
-          }}
-        >
+        <Table size="small" sx={{ tableLayout: "fixed", width: "100%" }}>
           <TableBody>
 
             {/* HEADER */}
@@ -684,7 +725,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               </TableCell>
             </TableRow>
 
-            {/* EMPLOYEE DETAILS */}
+            {/* EMPLOYEE DETAILS (UNCHANGED) */}
             <TableRow>
               <TableCell>Employee Name</TableCell>
               <TableCell>{employeeName}</TableCell>
@@ -720,14 +761,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell>{workdays}</TableCell>
             </TableRow>
 
-            <TableRow>
-              <TableCell>Account No.</TableCell>
-              <TableCell>{accountNo}</TableCell>
-              <TableCell />
-              <TableCell />
-            </TableRow>
-
-            {/* EARNINGS / DEDUCTIONS */}
+            {/* EARNINGS / DEDUCTIONS (UNCHANGED UI) */}
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>Earnings</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold" }}>Amount</TableCell>
@@ -770,24 +804,25 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell />
             </TableRow>
 
-            <TableRow>
-              <TableCell>PF</TableCell>
-              <TableCell align="center">{formatCurrency(PF)}</TableCell>
-              <TableCell />
-              <TableCell />
-            </TableRow>
-
             {/* TOTAL */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalEarning)}</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">Total Deduction</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalDeduction)}</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                {formatCurrency(totalEarning)}
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }} align="center">
+                Total Deduction
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                {formatCurrency(totalDeduction)}
+              </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(netPay)}</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                {formatCurrency(netPay)}
+              </TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
@@ -799,54 +834,22 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell
-                sx={{ border: "1px solid #000", paddingLeft: "150px" }}
-              ></TableCell>
-
-              <TableCell
-                sx={{ border: "1px solid #000", paddingLeft: "150px" }}
-              ></TableCell>
-              <TableCell
-                sx={{
-                  border: "1px solid #000",
-                  verticalAlign: "top",
-                  padding: "10px",
-                  width: "50%",
-                  textAlign: "center",
-                }}
-              >
+              <TableCell />
+              <TableCell />
+              <TableCell align="center">
                 {company.stamp && (
-                  <img
-                    src={company.stamp}
-                    alt="Stamp"
-                    style={{ height: "100px" }}
-                  />
+                  <img src={company.stamp} alt="Stamp" style={{ height: "130px" }} />
                 )}
               </TableCell>
 
-              <TableCell
-                sx={{
-                  border: "1px solid #000",
-                  verticalAlign: "top",
-                  padding: "10px",
-                  width: "50%",
-                }}
-              >
+              <TableCell align="center">
                 {company.signature && (
-                  <img
-                    src={company.signature}
-                    alt="Signature"
-                    style={{ height: "60px", marginBottom: "6px" }}
-
-                  />
-
+                  <img src={company.signature} alt="Signature" style={{ height: "80px" }} />
                 )}
-                <Typography textAlign="Center"><b>Signature</b></Typography>
-
+                <Typography textAlign="center"><b>Signature</b></Typography>
               </TableCell>
-
-
             </TableRow>
+
           </TableBody>
         </Table>
       </TableContainer>
@@ -855,4 +858,3 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 };
 
 export default SmartSoftwareSalarySlip;
-

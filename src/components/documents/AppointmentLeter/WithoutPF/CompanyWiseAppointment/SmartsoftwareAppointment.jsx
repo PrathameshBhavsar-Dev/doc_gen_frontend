@@ -154,14 +154,23 @@ const SmartSoftwareAppointment = ({ company, data }) => {
               For {company.name?.toUpperCase()}
             </Typography>
 
-            <Box sx={{ mt: 1 }}>
-              {company.signature && (
-                <img src={company.signature} alt="signature" height={60} />
-              )}
-              {company.stamp && (
-                <img src={company.stamp} alt="stamp" height={70} />
-              )}
-            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 3 }}>
+                              {company?.signature && (
+                                <img
+                                  src={company.signature}
+                                  alt="Signature"
+                                  style={{ height: 75 }}
+                                />
+                              )}
+                    
+                              {company?.stamp && (
+                                <img
+                                  src={company.stamp}
+                                  alt="Stamp"
+                                  style={{ height: 90 }}
+                                />
+                              )}
+                            </Box>
 
             <Typography mt={1}>{company.hrName}</Typography>
             <Typography fontSize={14.30}>HR Department</Typography>
