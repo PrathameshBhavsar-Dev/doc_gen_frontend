@@ -20,14 +20,14 @@ const A4Page = ({
   return (
     <Box
       sx={{
-        width: "210mm", // A4 width for consistent sizing
-        minHeight: "297mm", // A4 height for consistent sizing
-        height: "297mm", // Fixed height for proper page breaks
+        width: "794px",
+        minHeight: "1123px",
+        height: "1123px",
         position: "relative",
         bgcolor: "#fff",
-        color: "#000", // Industrial standard black text
-        overflow: "hidden",
-        margin: "0 auto", // Center the page
+        color: "#000",
+        overflow: "visible",
+        margin: "0 auto",
         boxSizing: "border-box",
         "@media print": {
           width: "210mm",
@@ -55,35 +55,35 @@ const A4Page = ({
         company?.header ||
         company?.headerImage ||
         placeholderHeader) && (
-        <Box
-          component="img"
-          src={
-            headerSrc ||
-            company?.header ||
-            company?.headerImage ||
-            placeholderHeader
-          }
-          alt="Header"
-          sx={{
-            position: "absolute",
-            // right: 10,
-            width: "100%",
-            height: "auto",
-            objectFit: "cover",
-            zIndex: 1,
-            filter: company?.brandColors?.primary
-              ? `hue-rotate(${company.brandColors.hueRotate || 0}deg)`
-              : "none",
-            "@media print": {
+          <Box
+            component="img"
+            src={
+              headerSrc ||
+              company?.header ||
+              company?.headerImage ||
+              placeholderHeader
+            }
+            alt="Header"
+            sx={{
               position: "absolute",
-              top: 0,
-              left: 0,
+              // right: 10,
               width: "100%",
               height: "auto",
-            },
-          }}
-        />
-      )}
+              objectFit: "cover",
+              zIndex: 1,
+              filter: company?.brandColors?.primary
+                ? `hue-rotate(${company.brandColors.hueRotate || 0}deg)`
+                : "none",
+              "@media print": {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "auto",
+              },
+            }}
+          />
+        )}
       {/* FOOTER - HIGHLIGHT: width = 210mm */}
       {(footerSrc || company?.footer || company?.footerImage) && (
         <Box
@@ -143,8 +143,12 @@ const A4Page = ({
           px: "20mm",
           pt: contentTop,
           pb: contentBottom,
-          lineHeight: 1.38,
-          fontSize: "11pt",
+          lineHeight: 1.4,
+          fontSize: "14pt",
+
+          letterSpacing: "0px",
+          wordSpacing: "0px",
+          WebkitFontSmoothing: "antialiased",
           textAlign: "justify",
           whiteSpace: "pre-wrap",
           color: company?.brandColors?.textColor || "#000",
@@ -161,6 +165,10 @@ const A4Page = ({
             orphans: 3,
             widows: 3,
           },
+          // Force layout stabilization for html2canvas
+          display: "block",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
         {children}

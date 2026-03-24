@@ -56,37 +56,43 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(num);
 
-  const monthlyCTC = round0(Number(data.totalSalary || 0));
-  const annualCTC = round0(monthlyCTC * 12);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.totalSalary || 0));
 
-  /* ===== PF: 7.5% OF CTC — NOT PART OF CTC TOTAL ===== */
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
+
+  // ================= STATIC PF =================
   const pfMonthly = 3750;
   const pfAnnual = round0(pfMonthly * 12);
 
-  /* ===== DYNAMIC % OF CTC (these must sum to monthlyCTC) ===== */
-  let basicMonthly = round0(monthlyCTC * 0.40);
-  let hraMonthly = round0(monthlyCTC * 0.18);
-  let daMonthly = round0(monthlyCTC * 0.12);
-  let foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  /* ===== SPECIAL: BALANCING FIGURE (no PF here) ===== */
-  let specialMonthly =
-    monthlyCTC - (basicMonthly + hraMonthly + daMonthly + foodMonthly);
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-  /* ===== ANNUAL ===== */
+  // ================= ANNUAL =================
   const basicAnnual = round0(basicMonthly * 12);
   const hraAnnual = round0(hraMonthly * 12);
   const daAnnual = round0(daMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
   const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
 
   /* ===== TABLE ROWS (PF listed separately at bottom) ===== */
   const ctcRows = [
     ["Basic", basicMonthly, basicAnnual],
     ["HRA", hraMonthly, hraAnnual],
     ["DA", daMonthly, daAnnual],
-    ["LTA", specialMonthly, specialAnnual],
-    ["Allowance", foodMonthly, foodAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual]
   ];
 
   const pfRow = ["Provident Fund (PF)", pfMonthly, pfAnnual];
@@ -98,6 +104,7 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
   const totalAnnual = round0(
     ctcRows.reduce((sum, row) => sum + row[2], 0)
   );
+
 
   const subject =
     data.subject ||
@@ -267,16 +274,6 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
                 </TableRow>
               ))}
 
-              {/* PF row — above Total */}
-              <TableRow>
-                <TableCell>{pfRow[0]}</TableCell>
-                <TableCell align="center">
-                  {Math.round(pfRow[1]).toLocaleString("en-IN")}
-                </TableCell>
-                <TableCell align="center">
-                  {Math.round(pfRow[2]).toLocaleString("en-IN")}
-                </TableCell>
-              </TableRow>
 
               {/* Total CTC row (PF excluded) */}
               <TableRow sx={{ backgroundColor: "#f0f0f0" }}>

@@ -86,25 +86,38 @@ const TC = (extra = {}) => ({
 /* ============================================================ */
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
+  // ================= ANNUAL CTC INPUT =================
   const annualCTC = round0(Number(data.salary || 0));
+
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
-  const basic = round0(monthlyCTC * 0.48);
-  const hra = round0(monthlyCTC * 0.18);
-  const da = round0(monthlyCTC * 0.12);
-  const allow = round0(monthlyCTC * 0.16);
-  const special = round0(monthlyCTC * 0.06);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   const rows = [
-    ["Basic", basic],
-    ["HRA", hra],
-    ["DA", da],
-    ["ALLOWANCE (Shift+Skill)", allow],
-    ["SPECIAL ALLOWANCE", special],
+    ["Basic", basicMonthly],
+    ["House Rent Allowance", hraMonthly],
+    ["Dearness Allowance", daMonthly],
+    ["Special Allowance", specialMonthly],
+    ["Food Allowance", foodMonthly],
+    ["Provident Fund (PF)", pfMonthly]
   ];
 
   /* ---------------- Fixed PF Deductions ---------------- */
-  const employeePF = 3750;
+
 
   const candidateName = data.candidateName || data.employeeName || "";
   const displayName = candidateName ? `${data.mrms || "Mr."} ${candidateName}`.trim() : "";
@@ -211,12 +224,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
                   </TableRow>
                 ))}
 
-                {/* PF Deduction */}
-                <TableRow>
-                  <TableCell sx={TC({ textAlign: "center" })}>Provident Fund</TableCell>
-                  <TableCell sx={TC({ textAlign: "center" })}>{fmt(employeePF)}</TableCell>
-                  <TableCell sx={TC({ textAlign: "center" })}>{fmt(employeePF * 12)}</TableCell>
-                </TableRow>
+
 
                 {/* CTC */}
                 <TableRow sx={{ backgroundColor: "#bfbfbf" }}>

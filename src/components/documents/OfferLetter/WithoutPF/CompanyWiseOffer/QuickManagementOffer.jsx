@@ -41,7 +41,7 @@ const QuickManagementOffer = ({ company, data }) => {
           alt="Company Header"
           style={{ width: "100%", display: "block" }}
         />
-      
+
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
@@ -132,7 +132,7 @@ const QuickManagementOffer = ({ company, data }) => {
 
       {/* ================= PAGE 2 ================= */}
       <div style={styles.page}>
-       <img
+        <img
           src={company.header}
           alt="Company Header"
           style={{ width: "100%", display: "block" }}

@@ -54,8 +54,8 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(num);
 
-  const monthlyCTC = round0(Number(data.totalSalary || 0));
-  const annualCTC = round0(monthlyCTC * 12);
+  const annualCTC = round0(Number(data.totalSalary || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
   // Components Logic
   let basicMonthly = round0(monthlyCTC * 0.4);
