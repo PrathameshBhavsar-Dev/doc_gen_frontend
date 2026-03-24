@@ -9,67 +9,32 @@ import {
   Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
+import { getProfessionalTax, formatCurrency } from "../../../../../utils/salaryCalculations";
 
-/* 🔥 CLEAN CURRENCY (REMOVES .00 & ZERO) */
-// const cleanCurrency = (val) => {
-//   if (!val) return "";
-
-//   return new Intl.NumberFormat("en-IN", {
-//     minimumFractionDigits: 0,
-//     maximumFractionDigits: 2,
-//   }).format(val);
-// };
-
-
-
-/* 🔥 CLEAN CURRENCY (ALWAYS SHOW .00) */
-const cleanCurrency = (val) => {
-  if (!val) return "";
-
-  const num = Number(val) || 0;
-
-  return num.toLocaleString("en-IN", {
-    minimumFractionDigits: 2, // 🔥 force .00
-    maximumFractionDigits: 2,
-  });
-};
-
-
-/* 🔥 CLEAN CURRENCY (NO .00 AT ALL) */
-// const cleanCurrency = (val) => {
-//   if (!val) return "";
-
-//   const num = Math.round(Number(val) || 0); // 🔥 force integer
-
-//   return num.toLocaleString("en-IN"); // 🔥 8,667 (no .00)
-// };
-
-/* 🔢 Number to Words */
+/* ================= NUMBER TO WORDS ================= */
 const numberToWords = (num = 0) => {
   if (!num) return "Zero Rupees Only";
 
   const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
-  const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"];
   const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
-  const inWords = (n) => {
+  const convert = (n) => {
     if (n < 10) return ones[n];
     if (n < 20) return teens[n - 10];
     if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
-    if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
+    if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + convert(n % 100) : "");
+    if (n < 100000) return convert(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + convert(n % 1000) : "");
+    if (n < 10000000) return convert(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + convert(n % 100000) : "");
+    return convert(Math.floor(n / 10000000)) + " Crore";
   };
 
-  return `${inWords(Math.round(num))} Rupees Only`;
+  return `${convert(Math.round(num))} Rupees Only`;
 };
 
+/* ================= COMPONENT ================= */
 const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
-  const round2 = (num) => Number(num.toFixed(2));
 
-  /* ===== EMPLOYEE DETAILS ===== */
   const {
     employeeName = "-",
     employeeId = "-",
@@ -79,97 +44,61 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    mode = "Bank Transfer",
+    mode = "-",
+    workdays = "-",
     accountNo = "-",
-    workdays = "",
-    month = "2025-02",
+    month = "-",
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
 
-  /* ===== MONTH FORMAT ===== */
-  const [year, monthNum] = month.split("-");
-  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
-  const salaryMonth = `${monthName} ${year}`;
+  /* ================= MONTH ================= */
+  const [year, monthNum] = month ? month.split("-") : ["", ""];
+  const monthName = monthNum
+    ? new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" })
+    : "";
+  const salaryMonth = monthName && year ? `${monthName} ${year}` : "-";
 
-  /* ===== SALARY CALCULATION ===== */
-  const {
-    basic,
-    hra,
-    dearnessAllowance,
-    specialAllowance,
-    foodAllowance,
-    miscAllowance,
-    professionalTax,
-    totalEarnings,
-    totalDeductions,
-    netPay,
-  } = useMemo(() => {
-    const gross = round2(Number(totalSalary || 0));
+  /* ================= SALARY LOGIC (NO PF) ================= */
+  const round0 = (v) => Math.round(Number(v) || 0);
 
-    const basic = round2(gross * 0.40);
-    const hra = round2(gross * 0.18);
-    const dearnessAllowance = round2(gross * 0.12);
-    const specialAllowance = round2(gross * 0.16);
-    const foodAllowance = round2(gross * 0.06);
-    const miscAllowance = round2(gross * 0.08);
+  const monthlyCTC = round0(totalSalary);
 
-    const totalEarnings =
-      basic + hra + dearnessAllowance + specialAllowance + foodAllowance + miscAllowance;
+  const HRA = round0(monthlyCTC * 0.18);
+  const DA = round0(monthlyCTC * 0.12);
+  const SPECIAL = round0(monthlyCTC * 0.16);
+  const FOOD = round0(monthlyCTC * 0.06);
 
-    const professionalTax = getProfessionalTax(month, totalEarnings);
-    const totalDeductions = round2(professionalTax + Number(otherDeduction || 0));
+  const BASIC = round0(
+    monthlyCTC - (HRA + DA + SPECIAL + FOOD)
+  );
 
-    const netPay = round2(totalEarnings - totalDeductions);
+  const totalEarning = round0(
+    BASIC + HRA + DA + SPECIAL + FOOD
+  );
 
-    return {
-      basic,
-      hra,
-      dearnessAllowance,
-      specialAllowance,
-      foodAllowance,
-      miscAllowance,
-      professionalTax,
-      totalEarnings,
-      totalDeductions,
-      netPay,
-    };
-  }, [totalSalary, month, otherDeduction]);
+  const pt = month ? getProfessionalTax(month, totalEarning) : 0;
 
-  /* ===== REMOVE ZERO ROWS ===== */
-  const earnings = [
-    { label: "BASIC", value: basic },
-    { label: "HRA", value: hra },
-    { label: "CONVEYANCE ALLOWANCE", value: dearnessAllowance },
-    { label: "SPECIAL ALLOWANCE", value: specialAllowance },
-    { label: "FOOD ALLOWANCE", value: foodAllowance },
-    { label: "MISC ALLOWANCE", value: miscAllowance },
-  ].filter(e => e.value !== 0);
+  const totalDeduction = round0(
+    pt + Number(otherDeduction || 0)
+  );
 
-  const deductions = [
-    { label: "PT", value: professionalTax },
-    { label: "Other Deduction", value: otherDeduction },
-  ].filter(d => d.value !== 0);
-
-  /* 🔥 COMPACT STYLE */
-  const CELL = {
-    border: "1px solid #000",
-    padding: "3px 5px",
-    fontSize: "10.5pt",
-    lineHeight: 1.2,
-  };
+  const netPay = round0(totalEarning - totalDeduction);
 
   return (
-    <A4Page headerSrc={company.header} footerSrc={company.footer} watermarkSrc={company.watermark}>
+    <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <TableContainer
         component={Paper}
         sx={{
           border: "1px solid black",
           borderRadius: 0,
-          mt: "4mm",
           boxShadow: "none",
-          "& .MuiTable-root": { borderCollapse: "collapse" },
-          "& .MuiTableCell-root": { border: "1px solid black" },
+
+          "& .MuiTableCell-root": {
+            border: "1px solid black",
+            padding: "6px",
+            fontFamily: "Bahnschrift",
+          },
         }}
       >
         <Table size="small">
@@ -177,112 +106,132 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
             {/* HEADER */}
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "13pt" }}>
-                {company.name}
+              <TableCell colSpan={4} align="center">
+                <b>SMART SOFTWARE SERVICES (I) PVT. LTD.</b>
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "10.5pt" }}>
-                {company.address}
+              <TableCell colSpan={4} align="center">
+                <b>406 Changbhale Heights, Near Kalpataru Estate Phase III, Pimple Gurav, Pune 411061</b>
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "11pt" }}>
-                Salary Slip {salaryMonth}
+              <TableCell colSpan={4} align="center">
+                <b>Salary Slip {salaryMonth}</b>
               </TableCell>
             </TableRow>
 
-            {/* EMPLOYEE DETAILS */}
+            {/* DETAILS */}
             <TableRow>
-              <TableCell sx={CELL}><b>Employee Name</b></TableCell>
-              <TableCell sx={CELL}>{employeeName}</TableCell>
-              <TableCell sx={CELL}>Employee ID</TableCell>
-              <TableCell sx={CELL}>{employeeId}</TableCell>
+              <TableCell>Employee Name</TableCell>
+              <TableCell>{employeeName}</TableCell>
+              <TableCell>Employee ID</TableCell>
+              <TableCell>{employeeId}</TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={CELL}><b>Gender</b></TableCell>
-              <TableCell sx={CELL}>{gender}</TableCell>
-              <TableCell sx={CELL}><b>Department</b></TableCell>
-              <TableCell sx={CELL}>{department}</TableCell>
+              <TableCell>Gender</TableCell>
+              <TableCell>{gender}</TableCell>
+              <TableCell>Department</TableCell>
+              <TableCell>{department}</TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={CELL}><b>Designation</b></TableCell>
-              <TableCell sx={CELL}>{designation}</TableCell>
-              <TableCell sx={CELL}>DOJ</TableCell>
-              <TableCell sx={CELL}>{doj}</TableCell>
+              <TableCell>Designation</TableCell>
+              <TableCell>{designation}</TableCell>
+              <TableCell>PAN</TableCell>
+              <TableCell>{pan}</TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={CELL}><b>DOB</b></TableCell>
-              <TableCell sx={CELL}>{dob}</TableCell>
-              <TableCell sx={CELL}>PAN</TableCell>
-              <TableCell sx={CELL}>{pan}</TableCell>
+              <TableCell>Mode</TableCell>
+              <TableCell>{mode}</TableCell>
+              <TableCell>Working Days</TableCell>
+              <TableCell>{workdays}</TableCell>
             </TableRow>
 
+            {/* HEADER */}
             <TableRow>
-              <TableCell sx={CELL}><b>Mode</b></TableCell>
-              <TableCell sx={CELL}>Bank: {mode} <br />Account: {accountNo}</TableCell>
-              <TableCell sx={CELL}>Working Days</TableCell>
-              <TableCell sx={CELL}>{workdays}</TableCell>
-            </TableRow>
-
-            {/* HEADERS */}
-            <TableRow>
-              <TableCell sx={CELL}><b>Earnings</b></TableCell>
-              <TableCell sx={CELL} align="center"><b>Amount</b></TableCell>
-              <TableCell sx={CELL}><b>Deductions</b></TableCell>
-              <TableCell sx={CELL} align="center"><b>Amount</b></TableCell>
+              <TableCell align="center"><b>Earnings</b></TableCell>
+              <TableCell align="center"><b>Amount</b></TableCell>
+              <TableCell align="center"><b>Deductions</b></TableCell>
+              <TableCell align="center"><b>Amount</b></TableCell>
             </TableRow>
 
             {/* ROWS */}
-            {earnings.map((e, i) => (
-              <TableRow key={i}>
-                <TableCell sx={CELL}>{e.label}</TableCell>
-                <TableCell sx={CELL} align="center">{cleanCurrency(e.value)}</TableCell>
+            <TableRow>
+              <TableCell>BASIC</TableCell>
+              <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
+              <TableCell>PT</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
+            </TableRow>
 
-                <TableCell sx={CELL}>{deductions[i]?.label || ""}</TableCell>
-                <TableCell sx={CELL} align="center">
-                  {deductions[i] ? cleanCurrency(deductions[i].value) : ""}
-                </TableCell>
-              </TableRow>
-            ))}
+            <TableRow>
+              <TableCell>HRA</TableCell>
+              <TableCell align="center">{formatCurrency(HRA)}</TableCell>
+              <TableCell>Other Deduction</TableCell>
+              <TableCell align="center">{formatCurrency(otherDeduction)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>DEARNESS ALLOWANCE</TableCell>
+              <TableCell align="center">{formatCurrency(DA)}</TableCell>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+
+            <TableRow>
+              <TableCell>SPECIAL ALLOWANCE</TableCell>
+              <TableCell align="center">{formatCurrency(SPECIAL)}</TableCell>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+
+            <TableRow>
+              <TableCell>FOOD ALLOWANCE</TableCell>
+              <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
+              <TableCell />
+              <TableCell />
+            </TableRow>
 
             {/* TOTAL */}
             <TableRow>
-              <TableCell sx={CELL}><b>Total</b></TableCell>
-              <TableCell sx={CELL} align="center">{cleanCurrency(totalEarnings)}</TableCell>
-              <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
-              <TableCell sx={CELL} align="center">{cleanCurrency(totalDeductions)}</TableCell>
+              <TableCell><b>Total</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(totalEarning)}</b></TableCell>
+              <TableCell><b>Total Deduction</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(totalDeduction)}</b></TableCell>
             </TableRow>
 
-            {/* NET PAY */}
             <TableRow>
-              <TableCell sx={CELL}><b>Net Pay</b></TableCell>
-              <TableCell sx={CELL} align="center">{cleanCurrency(netPay)}</TableCell>
-              <TableCell sx={CELL} />
-              <TableCell sx={CELL} />
-            </TableRow>
-
-            {/* IN WORDS */}
-            <TableRow>
-              <TableCell sx={CELL}><b>In Words</b></TableCell>
-              <TableCell colSpan={3} sx={CELL}>{numberToWords(netPay)}</TableCell>
-            </TableRow>
-
-            {/* SIGNATURE */}
-            <TableRow>
+              <TableCell><b>Net Pay</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(netPay)}</b></TableCell>
               <TableCell />
               <TableCell />
+            </TableRow>
+
+            <TableRow>
+              <TableCell><b>In Words</b></TableCell>
+              <TableCell colSpan={3}>{numberToWords(netPay)}</TableCell>
+            </TableRow>
+
+            {/* SIGN ROW (4 COLUMN SAME) */}
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+
               <TableCell align="center">
-                {company?.stamp && <img src={company.stamp} height={70} alt="Stamp" />}
+                {company?.stamp && (
+                  <img src={company.stamp} alt="Stamp" style={{ height: 120 }} />
+                )}
               </TableCell>
+
               <TableCell align="center">
-                {company?.signature && <img src={company.signature} height={45} alt="Signature" />}
-                <Typography fontWeight="bold" fontSize="10pt">Signature</Typography>
+                {company?.signature && (
+                  <img src={company.signature} alt="Signature" style={{ height: 80 }} />
+                )}
+                <Typography><b>Signature</b></Typography>
               </TableCell>
             </TableRow>
 
