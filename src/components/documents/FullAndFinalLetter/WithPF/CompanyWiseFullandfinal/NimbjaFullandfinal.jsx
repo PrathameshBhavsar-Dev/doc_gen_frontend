@@ -11,8 +11,9 @@ import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png"
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
-  fontSize: "13px",
+  fontSize: "12px", // slightly reduce size
   padding: "4px 6px",
+  wordBreak: "break-word", // prevents overflow
 };
 
 const bold = { fontWeight: 700 };
@@ -164,9 +165,18 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
         sx={{
           position: "relative",
           zIndex: 1,
+          padding: "10mm", // gives proper margin inside A4
         }}
       >
-        <Table sx={{ borderCollapse: "collapse" }}>
+        <Table
+          sx={{
+            borderCollapse: "collapse",
+            width: "95%", // control width (important)
+            margin: "0 auto", // center horizontally
+            tableLayout: "fixed", // prevent overflow
+          }}
+        >
+          {" "}
           <TableBody>
             {/* TITLE */}
             <TableRow>
