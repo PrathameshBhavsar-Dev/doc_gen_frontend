@@ -28,6 +28,8 @@ const round2 = (n) => Number(Number(n || 0).toFixed(2));
 //     minimumFractionDigits: 2,
 //     maximumFractionDigits: 2,
 //   });
+ 
+
 
   export const formatCurrency = (value) => {
   const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
