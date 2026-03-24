@@ -15,41 +15,47 @@ const formatDate = (date) =>
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Number(v || 0).toLocaleString("en-IN", 
+  //   {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // }
+);
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
   const monthlyCTC = Math.round(annualCTC / 12);
 
-  // Apply percentages directly on full monthly CTC
-  let basic = Math.round(monthlyCTC * 0.48);
-  let hra = Math.round(monthlyCTC * 0.18);
-  let da = Math.round(monthlyCTC * 0.12);
-  let special = Math.round(monthlyCTC * 0.16);
-  let food = Math.round(monthlyCTC * 0.06);
+  const round = (n) => Math.round(n);
 
-  // Fix rounding difference
-  const calculated =
-    basic + hra + da + special + food;
-
-  const diff = monthlyCTC - calculated;
-
-  basic += diff; // adjust only Basic
-
-  // PF Static (NOT calculated)
+  // ✅ PF FIXED (included in CTC)
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
+  // ✅ Other components (ONLY these are % based)
+  let hra = round(monthlyCTC * 0.18);
+  let da = round(monthlyCTC * 0.12);
+  let special = round(monthlyCTC * 0.16);
+  let food = round(monthlyCTC * 0.06);
+
+  // ✅ BASIC = REMAINING (MOST IMPORTANT)
+  let basic = round(
+    monthlyCTC - (hra + da + special + food + pfMonthly)
+  );
+
+  // 🔥 FINAL ROUND FIX (no ₹1 error ever)
+  const finalCheck =
+    basic + hra + da + special + food + pfMonthly;
+
+  basic += (monthlyCTC - finalCheck);
+
   return [
-    ["Basic Salary ", basic, basic * 12],
-    ["House Rent Allowance ", hra, hra * 12],
-    ["Dearness Allowance ", da, da * 12],
-    ["Special Allowance ", special, special * 12],
-    ["Food Allowance ", food, food * 12],
-    ["Provident Fund (PF )", pfMonthly, pfAnnual],
+    ["Basic Salary", basic, basic * 12],
+    ["House Rent Allowance", hra, hra * 12],
+    ["Dearness Allowance", da, da * 12],
+    ["Special Allowance", special, special * 12],
+    ["Food Allowance", food, food * 12],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual], // included in CTC
   ];
 };
 /* ================= MAIN COMPONENT ================= */
@@ -175,14 +181,38 @@ const QuickAppointment = ({ company, data }) => {
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 3, mt: 2 }}>
-                {company.signature && (
-                  <img src={company.signature} alt="sign" height={55} />
-                )}
-                {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
-                )}
-              </Box>
+             <Box
+  sx={{
+    display: "flex",
+    alignItems: "flex-end", // 🔥 aligns bottom properly
+    gap: 2,
+    mt: 5,
+  }}
+>
+  {company.signature && (
+    <Box
+      component="img"
+      src={company.signature}
+      alt="sign"
+      sx={{
+        height: 50,   // ✅ controlled size
+        objectFit: "contain",
+      }}
+    />
+  )}
+
+  {company.stamp && (
+    <Box
+      component="img"
+      src={company.stamp}
+      alt="stamp"
+      sx={{
+        height: 100,   // ✅ slightly bigger than sign
+        objectFit: "contain",
+      }}
+    />
+  )}
+</Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
@@ -194,9 +224,9 @@ const QuickAppointment = ({ company, data }) => {
 
             {/* ACCEPTANCE */}
             <Box>
-              <Typography fontWeight={600}>I ACCEPT</Typography>
+              <Typography fontWeight={600} mt={1}>I ACCEPT</Typography>
               <Typography mt={1}>Signature: _____________</Typography>
-              <Typography mt={2}>Name: {data.employeeName}</Typography>
+              <Typography mt={14}>Name: {data.employeeName}</Typography>
               <Typography mt={1}>Date: _____________</Typography>
             </Box>
           </Box>

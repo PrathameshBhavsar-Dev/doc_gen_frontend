@@ -3,7 +3,10 @@ import { Box, Typography } from "@mui/material";
 
 /* ===================== HELPERS ===================== */
 const money = (v) =>
-  Number(v || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Math.round(Number(v || 0)).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString("en-GB") : "";
@@ -44,6 +47,7 @@ const numberToWords = (num) => {
     return `${inWords(Math.floor(n / 100000))} Lakh ${inWords(n % 100000)}`;
   };
 
+
   return `${inWords(num).trim()} Only`;
 };
 
@@ -62,30 +66,63 @@ const bold = { fontWeight: "bold" };
 /* ===================== COMPONENT ===================== */
 const PentaSalarySlip = ({ company, data }) => {
   /* ===== AUTO SALARY CALCULATION ===== */
- const totalSalary = Number(data.totalSalary || 35000);
+  //  const totalSalary = Number(data.totalSalary || 35000);
 
-// Earnings (100% Proper Split)
-const basic = +(totalSalary * 0.48).toFixed(2);
-const hra = +(totalSalary * 0.18).toFixed(2);
-const da = +(totalSalary * 0.12).toFixed(2);
-const special = +(totalSalary * 0.16).toFixed(2);
+  // // Earnings (100% Proper Split)
+  // const basic = +(totalSalary * 0.48).toFixed(2);
+  // const hra = +(totalSalary * 0.18).toFixed(2);
+  // const da = +(totalSalary * 0.12).toFixed(2);
+  // const special = +(totalSalary * 0.16).toFixed(2);
 
-// 🔥 FOOD = AUTO BALANCE (No % issue)
-const food = +(
-  totalSalary - (basic + hra + da + special)
-).toFixed(2);
+  // // 🔥 FOOD = AUTO BALANCE (No % issue)
+  // const food = +(
+  //   totalSalary - (basic + hra + da + special)
+  // ).toFixed(2);
 
-// ===== DEDUCTIONS =====
-const pf = 3750;
-const pt = Number(data.pt || 200);
-const otherDeduction = Number(data.otherDeduction || 2000);
+  // // ===== DEDUCTIONS =====
+  // const pf = 3750;
+  // const pt = Number(data.pt || 200);
+  // const otherDeduction = Number(data.otherDeduction || 2000);
 
-// ===== TOTALS =====
-const totalEarning = totalSalary; // Always equal
-const totalDeduction = +(pf + pt + otherDeduction).toFixed(2);
-const netPay = +(totalEarning - totalDeduction).toFixed(2);
+  // // ===== TOTALS =====
+  // const totalEarning = totalSalary; // Always equal
+  // const totalDeduction = +(pf + pt + otherDeduction).toFixed(2);
+  // const netPay = +(totalEarning - totalDeduction).toFixed(2);
 
-const netPayWords = numberToWords(Math.round(netPay));
+  // const netPayWords = numberToWords(Math.round(netPay));
+
+  const totalSalary = Number(data.totalSalary || 35000);
+
+  // ✅ PF STATIC
+  const pf = 3750;
+
+  // Earnings (excluding Basic)
+  const hra = +(totalSalary * 0.18).toFixed(2);
+  const da = +(totalSalary * 0.12).toFixed(2);
+  const special = +(totalSalary * 0.16).toFixed(2);
+  const food = +(totalSalary * 0.06).toFixed(2);
+
+  // ✅ Basic = remaining (INCLUDING PF)
+  let basic = +(totalSalary - (hra + da + special + food + pf)).toFixed(2);
+
+  // ✅ Rounding Fix (IMPORTANT FIX)
+  const finalCheck = basic + hra + da + special + food + pf;
+
+  basic += +(totalSalary - finalCheck).toFixed(2);
+
+  // ===== DEDUCTIONS =====
+  const pt = Number(data.pt || 200);
+
+  const otherDeduction = Number(data.otherDeduction || 2000);
+
+  // ===== TOTALS =====
+  const totalEarning = totalSalary;
+
+  // PF already included in CTC but also deducted
+  const totalDeduction = +(pf + pt + otherDeduction).toFixed(2);
+
+  const netPay = Math.round(totalEarning - totalDeduction).toFixed(2);
+  const netPayWords = numberToWords(Math.round(netPay));
 
 
   return (
@@ -160,7 +197,7 @@ const netPayWords = numberToWords(Math.round(netPay));
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
             <Box sx={{ ...cell, width: "25%" }}>
-              Bank Name– {data.bankName}
+              Bank Name– {data.mode}
               <br />
               Account No – {data.accountNo}
             </Box>
@@ -220,15 +257,35 @@ const netPayWords = numberToWords(Math.round(netPay));
           </Box>
 
           {/* SIGNATURE */}
-          <Box sx={{ ...row, height: "100px" }}>
+          <Box sx={{ ...row, height: "120px" }}>
+
+            {/* Empty Left Space */}
             <Box sx={{ ...cell, width: "50%" }} />
-            <Box sx={{ ...cell, width: "25%", justifyContent: "center" }}>
-              <img src={company.stamp} height={80} alt="" />
+
+            {/* Stamp (centered nicely) */}
+            <Box
+              sx={{
+                ...cell,
+                width: "25%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end", // pushes stamp slightly downward
+                pb: 2
+              }}
+            >
+              <Box
+                component="img" src={company.stamp} sx={{ height: 95, width: "auto", objectFit: "contain" }} />
             </Box>
-            <Box sx={{ ...cell, width: "25%", flexDirection: "column", alignItems: "center" }}>
-              <img src={company.signature} height={45} alt="" />
-              <Typography fontSize={12} fontWeight="bold">Signature</Typography>
+
+            {/* Signature (right aligned like slip) */}
+            <Box
+              sx={{ ...cell, width: "25%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
+              <Box
+                component="img" src={company.signature} sx={{ height: 40, width: "auto", objectFit: "contain" }} />
+
+              <Typography fontSize={12} fontWeight="bold" mt={0.5}> Signature </Typography>
             </Box>
+
           </Box>
         </Box>
       </Box>
