@@ -37,35 +37,56 @@ const NeweageIncrement = ({ company, data }) => {
   if (!company || !data) return null;
 
   /* ======================================================
-     ✅ SMARTMATRIX LOGIC (INPUT IS MONTHLY) WITH PF
+     ✅ CUBEAGE LOGIC (INPUT IS ANNUAL) WITH PF
   ====================================================== */
 
-  const monthlyGross = round2(Number(data.newCTC || 0)); // 🔥 INPUT MONTHLY
-  const annualCTC = round2(monthlyGross * 12);
+  const parseNumber = (value) => {
+    if (!value) return 0;
+    return Number(String(value).replace(/,/g, ""));
+  };
 
-  /* Percentage on MONTHLY */
-  const basicMonthly = round2(monthlyGross * 0.48);
-  const hraMonthly = round2(monthlyGross * 0.18);
-  const daMonthly = round2(monthlyGross * 0.12);
-  const specialMonthly = round2(monthlyGross * 0.16);
+  const round0 = (n) => Math.round(n || 0);
 
-  const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
-  const foodMonthly = round2(monthlyGross - used);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(parseNumber(data?.newCTC));
 
-  /* Annual */
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-  /* PF (DISPLAY ONLY – NOT INCLUDED IN TOTAL) */
+  // ================= STATIC PF =================
   const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
 
-  /* Total WITHOUT PF */
-  const totalMonthly = monthlyGross;
-  const totalAnnual = annualCTC;
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
+
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  // ================= TOTAL CTC =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
+
+  const totalAnnual = round0(totalMonthly * 12);
 
   const salaryRows = [
     { label: "Basic", monthly: basicMonthly, annual: basicAnnual },

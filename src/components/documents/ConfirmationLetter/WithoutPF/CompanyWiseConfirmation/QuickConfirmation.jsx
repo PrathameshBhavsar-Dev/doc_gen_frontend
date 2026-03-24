@@ -24,10 +24,12 @@ const formatDate = (date) =>
 const round0 = (n) => Math.round(Number(n || 0));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Number(v || 0).toLocaleString("en-IN", 
+  //   {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // }
+);
 
 /* ================= SIMPLE SALARY BREAKUP ================= */
 /* ================= SALARY BREAKUP WITH PENTA LOGIC ================= */

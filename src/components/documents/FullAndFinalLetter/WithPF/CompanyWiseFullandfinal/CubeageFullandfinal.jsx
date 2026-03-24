@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import A4Page from "../../../../layout/A4Page";
 import cubeage_stamp from "../../../../../assets/images/cubeagetechnology/cubeage_stamp.png";
 
 /* ── Number to Words ── */
@@ -23,7 +24,12 @@ const fmt = (n) => Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2,
 const round2 = (n) => Math.round(n * 100) / 100;
 
 const C = (extra = {}) => ({
-  border: "1px solid #000", padding: "5px 8px", fontSize: "12.5px", verticalAlign: "middle", ...extra,
+  border: "1px solid #000",
+  padding: "5px 8px",
+  fontSize: "12.5px",
+  height: "35px",
+  verticalAlign: "middle",
+  ...extra,
 });
 
 const W = { label: "30%", amt: "20%", dlabel: "30%", damt: "20%" };
@@ -105,30 +111,17 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
   const balanceSalary = parseFloat(data.balanceSalary || 0);
 
   return (
-    <Box sx={{ width: "210mm", minHeight: "297mm", backgroundColor: "white", fontFamily: "'Calibri', 'Arial', sans-serif" }}>
+    <A4Page
+      company={{ ...company, footer: null, footerImage: null, watermark: null, watermarkImage: null }}
+      headerSrc={header}
+    >
+      <Box sx={{ px: 0, py: 1 }}>
+        {/* Title */}
+        <Typography align="center" fontWeight="bold" fontSize="14px" mt={9} sx={{ textDecoration: "underline" }}>
+          Full &amp; Final Settlement Statement
+        </Typography>
 
-      {/* HEADER */}
-      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, px: 4, py: 2, borderBottom: "2px solid #000", mb: 1 }}>
-        <Box sx={{ flexShrink: 0 }}>
-          {company.logo ? <img src={company.logo} alt="logo" style={{ height: 70 }} />
-            : header ? <img src={header} alt="header" style={{ height: 70 }} /> : null}
-        </Box>
-        <Box>
-          <Typography fontWeight="bold" fontSize="18px">{company.name || company.companyName}</Typography>
-          {company.address && <Typography fontSize="11px">{company.address}</Typography>}
-          {company.phone && <Typography fontSize="11px"><strong>Contact No:</strong> {company.phone}</Typography>}
-          {company.email && <Typography fontSize="11px"><strong>Email:</strong> {company.email}</Typography>}
-        </Box>
-      </Box>
-      {/* Title (Moved below table per request) */}
-      <Typography align="center" fontWeight="bold" fontSize="14px" mt={2} sx={{ textDecoration: "underline" }}>
-        Full &amp; Final Settlement Statement
-      </Typography>
-
-      <Box sx={{ px: 4, py: 1 }}>
-
-
-        <Table sx={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", marginTop: "20px" }}>
+        <Table sx={{ width: "100%", borderCollapse: "collapse", marginTop: "30px" }}>
           <TableBody>
 
             {/* Table Header: Employee Details Row 1 */}
@@ -293,7 +286,7 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
           *Computer Generated Full &amp; Final Settlement. No Signature Required.
         </Typography>
       </Box>
-    </Box>
+    </A4Page>
   );
 };
 

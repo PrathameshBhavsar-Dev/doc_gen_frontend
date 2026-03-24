@@ -125,9 +125,6 @@ const DocumentPreview = () => {
       setSnackbarMessage('Generating PDF...');
       setSnackbarOpen(true);
 
-      window.scrollTo(0, 0);
-      await new Promise(resolve => setTimeout(resolve, 300));
-
       await generatePDF(
         documentRef.current,
         `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
@@ -154,12 +151,16 @@ const DocumentPreview = () => {
       setSnackbarMessage('Generating Content Only PDF...');
       setSnackbarOpen(true);
 
+      // Add small delay to ensure all dynamic styles/fonts are applied
+      await new Promise(resolve => setTimeout(resolve, 200));
+
       const content = documentRef.current.querySelector('.a4-content-only');
       if (!content) throw new Error('Missing .a4-content-only');
 
       const canvas = await html2canvas(content, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
+        allowTaint: true,
         backgroundColor: '#ffffff',
         ignoreElements: (el) =>
           el?.getAttribute?.('alt')?.toLowerCase()?.includes('signature') ||
@@ -176,13 +177,15 @@ const DocumentPreview = () => {
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
 
+      // Add additional pages if content exceeds one A4 page
       while (heightLeft > 0) {
-        position = -(imgHeight - heightLeft);
+        position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= pageHeight;
       }
 

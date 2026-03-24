@@ -699,19 +699,20 @@ export default function JDITIncrement({ company, data }) {
   const firstName = employeeName.split(" ")[0] || "";
 
   /* ================= SALARY LOGIC ================= */
-  // Helper to keep 2 decimals everywhere
   const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.newCTC || 0));
+  // Source of truth (Annual CTC)
+  const annualCTC = round0(Number(data.newCTC || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
   // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.40);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
   const foodMonthly = round0(monthlyCTC * 0.06);
-  const miscMonthly = round0(monthlyCTC * 0.08);
+
+  // ================= BALANCING BASIC =================
+  const basicMonthly = monthlyCTC - hraMonthly - daMonthly - specialMonthly - foodMonthly;
 
   // ================= ANNUAL VALUES =================
   const basicAnnual = round0(basicMonthly * 12);
@@ -719,7 +720,6 @@ export default function JDITIncrement({ company, data }) {
   const daAnnual = round0(daMonthly * 12);
   const specialAnnual = round0(specialMonthly * 12);
   const foodAnnual = round0(foodMonthly * 12);
-  const miscAnnual = round0(miscMonthly * 12);
 
   // ================= SALARY TABLE STRUCTURE =================
   const salaryRows = [
@@ -727,18 +727,12 @@ export default function JDITIncrement({ company, data }) {
     ["House Rent Allowance", hraMonthly, hraAnnual],
     ["Dearness Allowance", daMonthly, daAnnual],
     ["Special Allowance", specialMonthly, specialAnnual],
-    ["Food Allowance", foodMonthly, foodAnnual],
-    ["Misc. Allowance", miscMonthly, miscAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual]
   ];
 
   // ================= TOTALS =================
-  const totalMonthly = round0(
-    salaryRows.reduce((sum, row) => sum + row[1], 0)
-  );
-
-  const totalAnnual = round0(
-    salaryRows.reduce((sum, row) => sum + row[2], 0)
-  );
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = monthlyCTC * 12;
 
   const salaryInWords = numberToWords(totalAnnual);
 

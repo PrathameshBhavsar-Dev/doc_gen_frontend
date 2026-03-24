@@ -317,9 +317,19 @@ function GeneratedDocumentSection() {
       console.log("API RESPONSE:", res);
 
       // Handle different response formats
-      const docs = res?.data || res?.documents || res || [];
+      let docs = res?.data?.documents || res?.data || res?.documents || res || [];
+      
+      // Ensure docs is strictly an array
+      if (!Array.isArray(docs)) {
+        if (typeof docs === "object" && docs !== null) {
+          // Sometimes APIs return the array in a nested property like `data.items`
+          docs = docs.items || docs.data || [];
+        } else {
+          docs = [];
+        }
+      }
 
-      setDocuments(docs);
+      setDocuments(Array.isArray(docs) ? docs : []);
     } catch (error) {
       console.error("Error fetching documents:", error);
     } finally {

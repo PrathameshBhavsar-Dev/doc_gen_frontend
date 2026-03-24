@@ -61,52 +61,52 @@ const bold = { fontWeight: "bold" };
 
 /* ===================== COMPONENT ===================== */
 const PentaSalarySlip = ({ company, data }) => {
-/* ===== AUTO SALARY CALCULATION ===== */
-/* ===== SALARY BREAKUP LOGIC ===== */
+  /* ===== AUTO SALARY CALCULATION ===== */
+  /* ===== SALARY BREAKUP LOGIC ===== */
 
-const totalSalary = Number(data.totalSalary || 0);
+  const totalSalary = Number(data.totalSalary || 0);
 
-// Percentage structure (Total = 100%)
-const PERCENT = {
-  basic: 0.40,    // 40%
-  hra: 0.18,      // 18%
-  da: 0.12,       // 12%
-  special: 0.16,  // 16%
-  food: 0.06,     // 6%
-  misc: 0.08,     // 8%
-};
+  // Percentage structure (Total = 100%)
+  const PERCENT = {
+    basic: 0.40,    // 40%
+    hra: 0.18,      // 18%
+    da: 0.12,       // 12%
+    special: 0.16,  // 16%
+    food: 0.06,     // 6%
+    misc: 0.08,     // 8%
+  };
 
-// Round to 2 decimals helper
-const round2 = (num) => Number(num.toFixed(2));
+  // Round to 2 decimals helper
+  const round2 = (num) => Number(num.toFixed(2));
 
-// Calculate components
-const basic   = round2(totalSalary * PERCENT.basic);
-const hra     = round2(totalSalary * PERCENT.hra);
-const da      = round2(totalSalary * PERCENT.da);
-const special = round2(totalSalary * PERCENT.special);
-const food    = round2(totalSalary * PERCENT.food);
+  // Calculate components
+  const basic = round2(totalSalary * PERCENT.basic);
+  const hra = round2(totalSalary * PERCENT.hra);
+  const da = round2(totalSalary * PERCENT.da);
+  const special = round2(totalSalary * PERCENT.special);
+  const food = round2(totalSalary * PERCENT.food);
 
-// 🔥 Important: Auto balance last component
-const misc = round2(
-  totalSalary - (basic + hra + da + special + food)
-);
+  // 🔥 Important: Auto balance last component
+  const misc = round2(
+    totalSalary - (basic + hra + da + special + food)
+  );
 
-// Total earnings
-const totalEarning = round2(
-  basic + hra + da + special + food + misc
-);
+  // Total earnings
+  const totalEarning = round2(
+    basic + hra + da + special + food + misc
+  );
 
-/* ===== DEDUCTIONS ===== */
+  /* ===== DEDUCTIONS ===== */
 
-const pt = Number(data.pt || 200);
-const otherDeduction = Number(data.otherDeduction || 2000);
+  const pt = Number(data.pt || 200);
+  const otherDeduction = Number(data.otherDeduction || 2000);
 
-const totalDeduction = round2(pt + otherDeduction);
+  const totalDeduction = round2(pt + otherDeduction);
 
-// Net salary
-const netPay = round2(totalEarning - totalDeduction);
+  // Net salary
+  const netPay = round2(totalEarning - totalDeduction);
 
-const netPayWords = numberToWords(Math.round(netPay));
+  const netPayWords = numberToWords(Math.round(netPay));
 
 
   return (
@@ -118,24 +118,24 @@ const netPayWords = numberToWords(Math.round(netPay));
         fontFamily: "Cambria, 'Times New Roman', serif",
       }}
     >
-       {/* WATERMARK */}
-  <Box
-  component="img"
-  src={company.watermark || company.watermarkImage}
-  alt="Watermark"
-  sx={{
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%) rotate(-30deg)",
-    width: "70%",
-    opacity: company.brandColors?.watermarkOpacity || 0.05,
-    zIndex: 0,
-    pointerEvents: "none",
-  }}
-/>
+      {/* WATERMARK */}
+      <Box
+        component="img"
+        src={company.watermark || company.watermarkImage}
+        alt="Watermark"
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%) rotate(-30deg)",
+          width: "70%",
+          opacity: company.brandColors?.watermarkOpacity || 0.05,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
 
-      <img src={company.Penta_watermark} alt="" style={{width: "50%"}}/>
+      <img src={company.Penta_watermark} alt="" style={{ width: "50%" }} />
       {/* HEADER */}
       <img src={company.headerImage} alt="" style={{ width: "100%" }} />
 
@@ -181,7 +181,7 @@ const netPayWords = numberToWords(Math.round(netPay));
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
             <Box sx={{ ...cell, width: "25%" }}>
-              Bank Name– {data.bankName}
+              Bank Name– {data.mode}
               <br />
               Account No – {data.accountNo}
             </Box>
@@ -227,8 +227,8 @@ const netPayWords = numberToWords(Math.round(netPay));
 
           {/* NET PAY */}
           <Box sx={row}>
-            <Box sx={{ ...cell, width: "25%", ...bold,  }}>Net Pay</Box>
-            <Box sx={{ ...cell, width: "75%", ...bold,  }}>
+            <Box sx={{ ...cell, width: "25%", ...bold, }}>Net Pay</Box>
+            <Box sx={{ ...cell, width: "75%", ...bold, }}>
               {money(netPay)}
             </Box>
           </Box>
@@ -240,27 +240,36 @@ const netPayWords = numberToWords(Math.round(netPay));
           </Box>
 
           {/* SIGNATURE */}
-          <Box sx={{ ...row, height: "100px" }}>
-            <Box sx={{ ...cell, width: "50%" }} />
-            <Box
-  sx={{
-    ...cell,
-    width: "25%",
-    justifyContent: "center",
-    height: "80px"
-  }}
->
-  <img
-    src={company.stamp}
-    alt=""
-    style={{ height: "130%", objectFit: "contain" }}
-  />
-</Box>
-            <Box sx={{ ...cell, width: "25%", flexDirection: "column", alignItems: "center" }}>
-              <img src={company.signature} height={45} alt="" />
-              <Typography fontSize={12} fontWeight="bold">Signature</Typography>
-            </Box>
-          </Box>
+         <Box sx={{ ...row, height: "120px" }}>
+         
+                     {/* Empty Left Space */}
+                     <Box sx={{ ...cell, width: "50%" }} />
+         
+                     {/* Stamp (centered nicely) */}
+                     <Box
+                       sx={{
+                         ...cell,
+                         width: "25%",
+                         display: "flex",
+                         justifyContent: "center",
+                         alignItems: "flex-end", // pushes stamp slightly downward
+                         pb: 2
+                       }}
+                     >
+                       <Box
+                         component="img" src={company.stamp} sx={{ height: 95, width: "auto", objectFit: "contain" }} />
+                     </Box>
+         
+                     {/* Signature (right aligned like slip) */}
+                     <Box
+                       sx={{ ...cell, width: "25%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
+                       <Box
+                         component="img" src={company.signature} sx={{ height: 40, width: "auto", objectFit: "contain" }} />
+         
+                       <Typography fontSize={12} fontWeight="bold" mt={0.5}> Signature </Typography>
+                     </Box>
+         
+                   </Box>
         </Box>
       </Box>
 
