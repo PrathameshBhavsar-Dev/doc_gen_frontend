@@ -59,34 +59,40 @@ const NeweageFullandfinal = ({ company, data }) => {
   const ratio = paidDays / totalDays;
 
   /* ---------- SALARY LOGIC (NEWEAGE) ---------- */
- /* ---------- SALARY LOGIC (NEWEAGE CORRECTED) ---------- */
+  /* ---------- SALARY LOGIC (CUBEAGE STANDARD) ---------- */
+  const round0 = (num) => Math.round(num || 0);
 
-const gross = Number(data.totalSalary || 0);
+  const getTotalDaysInMonth = (monthStr) => {
+    if (!monthStr) return 31;
+    const [year, monthNum] = monthStr.split("-");
+    return new Date(year, monthNum, 0).getDate();
+  };
 
-// Correct Percentage Breakup (100%)
-const basic = Math.floor(gross * 0.48);
-const hra = Math.floor(gross * 0.18);
-const special = Math.floor(gross * 0.12);
-const da = Math.floor(gross * 0.16);
-const food = Math.floor(gross * 0.06);
+  const totalDaysInMonth = Number(data.workdays || getTotalDaysInMonth(data.month));
+  const paidDaysVal = Number(data.paiddays || totalDaysInMonth);
 
-const earned = (value) =>
-  Math.floor(
-    value * (paidDays && totalDays ? paidDays / totalDays : 0)
-  );
+  const monthlyCTC = parseFloat(data.totalSalary || 0);
 
-const totalActual = Math.floor(
-  basic + hra + special + da + food
-);
+  // ACTUAL CALCULATION
+  const hraActual = round0(monthlyCTC * 0.18);
+  const daActual = round0(monthlyCTC * 0.12);
+  const specialActual = round0(monthlyCTC * 0.16);
+  const foodActual = round0(monthlyCTC * 0.06);
+  const pfMonthly = 3750;
 
-const totalEarned = Math.floor(
-  earned(basic) +
-  earned(hra) +
-  earned(special) +
-  earned(da) +
-  earned(food)
-);
-  // earned(facility);
+  const basicActual = round0(monthlyCTC) - (hraActual + daActual + specialActual + foodActual + pfMonthly);
+  const totalActual = basicActual + hraActual + daActual + specialActual + foodActual + pfMonthly;
+
+  // EARNED CALCULATION
+  const earnedCTC = (monthlyCTC * paidDaysVal) / totalDaysInMonth;
+
+  const hraEarned = round0(earnedCTC * 0.18);
+  const daEarned = round0(earnedCTC * 0.12);
+  const specialEarned = round0(earnedCTC * 0.16);
+  const foodEarned = round0(earnedCTC * 0.06);
+
+  const basicEarned = round0(earnedCTC) - (hraEarned + daEarned + specialEarned + foodEarned + pfMonthly);
+  const totalEarned = basicEarned + hraEarned + daEarned + specialEarned + foodEarned + pfMonthly;
 
   /* ---------- DEDUCTIONS ---------- */
   const pf = 3750;
@@ -152,9 +158,9 @@ const totalEarned = Math.floor(
 
             <TableRow>
               <TableCell sx={boldCell}>Total Days</TableCell>
-              <TableCell sx={centerCell}>{totalDays}</TableCell>
+              <TableCell sx={centerCell}>{totalDaysInMonth}</TableCell>
               <TableCell sx={boldCell}>Paid Days</TableCell>
-              <TableCell sx={centerCell}>{paidDays}</TableCell>
+              <TableCell sx={centerCell}>{paidDaysVal}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -163,26 +169,24 @@ const totalEarned = Math.floor(
               <TableCell sx={centerBold}>Earned</TableCell>
             </TableRow>
 {[
-  ["Basic", basic],
-  ["HRA", hra],
-  ["Dearness Allowance", da],
-  ["Special Allowance", special],
-  ["Food Allowance", food],
-  ["PF", pf, true], // third param = static full
-].map(([label, value, isStatic]) => (
+  ["Basic", basicActual, basicEarned],
+  ["HRA", hraActual, hraEarned],
+  ["Dearness Allowance", daActual, daEarned],
+  ["Special Allowance", specialActual, specialEarned],
+  ["Food Allowance", foodActual, foodEarned],
+  ["PF", pfMonthly, pfMonthly],
+].map(([label, actVal, earnVal]) => (
   <TableRow key={label}>
     <TableCell sx={tableCell} colSpan={2}>
       {label}
     </TableCell>
 
     <TableCell sx={centerCell}>
-      {formatAmt(value)}
+      {formatAmt(actVal)}
     </TableCell>
 
     <TableCell sx={centerCell}>
-      {formatAmt(
-        isStatic ? value : earned(value)
-      )}
+      {formatAmt(earnVal)}
     </TableCell>
   </TableRow>
 ))}

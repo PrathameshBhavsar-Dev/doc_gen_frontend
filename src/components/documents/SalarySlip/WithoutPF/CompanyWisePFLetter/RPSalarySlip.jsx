@@ -270,7 +270,8 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell />
               <TableCell />
-              <TableCell align="center">
+              <TableCell align="center"
+              sx={{ padding: "13px !important" }}>
                 {company.stamp && (
                   <img src={company.stamp} width={90} alt="Stamp" />
                 )}

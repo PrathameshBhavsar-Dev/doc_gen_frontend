@@ -35,17 +35,13 @@ const QuickManagementOffer = ({ company, data }) => {
 
       {/* ================= PAGE 1 ================= */}
       <div style={styles.page}>
-        {/* HEADER */}
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+
+        <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        />
+
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
@@ -136,16 +132,11 @@ const QuickManagementOffer = ({ company, data }) => {
 
       {/* ================= PAGE 2 ================= */}
       <div style={styles.page}>
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+        <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        />
 
         <p style={styles.annexureTitle}>Annexure A Salary Structure</p>
 

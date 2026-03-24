@@ -15,8 +15,8 @@ const formatDate = (date) => {
 const formatCurrency = (value) => {
   if (value == null || value === "") return "";
   return Number(value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    // minimumFractionDigits: 2,
+    // maximumFractionDigits: 2,
   });
 };
 
@@ -31,23 +31,40 @@ const calculateSalaryBreakup = (annualCTC) => {
   // ✅ Monthly CTC
   const monthlyCTC = round2(annualCTC / 12);
 
-  // ✅ 48 + 18 + 12 + 16 + 8 = 100%
-  const basicMonthly = round2(monthlyCTC * 0.48);
+  // ✅ PF STATIC
+  const pfMonthly = 3750;
+  const pfAnnual = round2(pfMonthly * 12);
+
+  // ✅ Other components (% based)
   const hraMonthly = round2(monthlyCTC * 0.18);
   const daMonthly = round2(monthlyCTC * 0.12);
   const foodMonthly = round2(monthlyCTC * 0.16);
   const specialMonthly = round2(monthlyCTC * 0.06);
 
-  // ✅ Annual = Monthly × 12
+  // ✅ TOTAL of all except Basic
+  const totalOthers =
+    hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly;
+
+  // ✅ BASIC = REMAINING
+  let basicMonthly = round2(monthlyCTC - totalOthers);
+
+  // ✅ Rounding Fix
+  const finalCheck =
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    foodMonthly +
+    specialMonthly +
+    pfMonthly;
+
+  basicMonthly += round2(monthlyCTC - finalCheck);
+
+  // ✅ Annual values
   const basicAnnual = round2(basicMonthly * 12);
   const hraAnnual = round2(hraMonthly * 12);
   const daAnnual = round2(daMonthly * 12);
   const foodAnnual = round2(foodMonthly * 12);
   const specialAnnual = round2(specialMonthly * 12);
-
-  // ✅ PF Static (ONLY DISPLAY)
-  const pfMonthly = 3750;
-  const pfAnnual = round2(pfMonthly * 12);
 
   const salaryBreakup = [
     { label: "Basic", perMonth: basicMonthly, perYear: basicAnnual },
@@ -58,22 +75,14 @@ const calculateSalaryBreakup = (annualCTC) => {
     { label: "Provident Fund (PF)", perMonth: pfMonthly, perYear: pfAnnual }, // show only
   ];
 
-  // ✅ Total WITHOUT PF
+  // ✅ Total WITHOUT PF (Gross)
   const totalPerMonth = round2(
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    foodMonthly +
-    specialMonthly
-  );
+  basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
+);
 
-  const totalPerYear = round2(
-    basicAnnual +
-    hraAnnual +
-    daAnnual +
-    foodAnnual +
-    specialAnnual
-  );
+ const totalPerYear = round2(
+  basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
+);
 
   return { salaryBreakup, totalPerMonth, totalPerYear };
 };
@@ -163,16 +172,44 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
       </Box>
 
       {/* CANDIDATE SIGN */}
-      {showCandidate && (
-        <Box sx={{ textAlign: "right" }}>
-          <Typography sx={{ fontSize: 14, fontWeight: "bold" }}>
-            Signature: ___________________
-          </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            Candidate Name: {candidateName}
-          </Typography>
-        </Box>
-      )}
+     {showCandidate && (
+  <Box
+    sx={{
+      width: 320,
+      ml: "auto",
+      textAlign: "right",
+    }}
+  >
+    {/* Signature */}
+    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+      Signature: ______________________
+    </Typography>
+
+    {/* Candidate Name */}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+        fontSize: 16,
+        mt: 0.5,
+      }}
+    >
+      <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
+        Candidate Name:
+      </Box>
+
+      <Box
+        sx={{
+          maxWidth: 180,              // controls when it wraps
+          wordBreak: "break-word",
+          textAlign: "left",          // keeps wrapping clean
+        }}
+      >
+        {candidateName}
+      </Box>
+    </Box>
+  </Box>
+)}
     </Box>
   );
 };
@@ -366,7 +403,7 @@ const PentaOffer = ({ company, data }) => {
         <SignatureBlock
           company={company}
           candidateName={data.candidateName}
-          showCandidate={true}
+          showCandidateName={true}
         />
 
         {/* </Box> */}

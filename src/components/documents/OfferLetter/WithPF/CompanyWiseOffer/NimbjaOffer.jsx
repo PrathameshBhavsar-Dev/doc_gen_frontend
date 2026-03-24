@@ -21,41 +21,10 @@ const NimbjaOffer = ({ company, data }) => {
   const round0 = (num) => Math.round(num);
 
   // ================= CTC =================
-  const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
-
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
-
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
+ const annualCTC = Number(data.salary || data.ctc || 0);
 
   // ================= SALARY TABLE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  ];
-
-  // ================= TOTAL EARNINGS =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
+  
 
   const firstName = data.candidateName?.trim().split(" ")[0];
 
@@ -73,7 +42,7 @@ const NimbjaOffer = ({ company, data }) => {
       {/* ================================================================= */}
       {/* ================= PAGE 1 – OFFER LETTER ================= */}
       {/* ================================================================= */}
-    
+
       <A4Page
         headerSrc={company.header}
         footerSrc={company.footer}
@@ -111,7 +80,7 @@ const NimbjaOffer = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -125,7 +94,7 @@ const NimbjaOffer = ({ company, data }) => {
               marginTop: "-8mm",
               mb: "5mm",
               fontFamily: "Verdana",
-              textDecoration: "underline",
+              
               fontSize: "15px",
             }}
           >
@@ -169,7 +138,7 @@ const NimbjaOffer = ({ company, data }) => {
             sx={{ mb: 2, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
             On Joining, your all-inclusive Cost to the Company (CTC) will be{" "}
-            <b>Rs.{formatCurrency(totalAnnual)}/-</b>
+            <b>Rs.{formatCurrency(annualCTC)}/-</b>
             as per Annexure A. This offer is made on the basis of your having
             furnished to the Company information and documents in support of
             your age, academic qualifications, previous work experience,
@@ -227,7 +196,7 @@ const NimbjaOffer = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -244,13 +213,7 @@ const NimbjaOffer = ({ company, data }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <SalaryStructureTable ctc={annualCTC} />
         </Box>
 
         <Box
@@ -285,7 +248,7 @@ const NimbjaOffer = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45, marginTop: "3mm" }}
+                  style={{ height: 45, marginTop: "7mm" }}
                 />
               )}
               {company?.stamp && (

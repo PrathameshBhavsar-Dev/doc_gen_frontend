@@ -41,45 +41,9 @@ const NimbjaAppointment = ({ company, data }) => {
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs Per Annum`;
   };
 
-  /* ================= SALARY LOGIC ================= */
-  const round0 = (num) => Math.round(num);
-
-  // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.salary || 0));
-
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
-
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
-
+  
   // ================= SALARY TABLE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  ];
-
-  // ================= TOTAL EARNINGS =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
+const annualCTC = Number(data.salary || 0);
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -113,7 +77,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-5mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -212,7 +176,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
                 2.Your total emoluments will be{" "}
-                <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong>
+                <strong>Rs. {formatLakhsPerAnnum(annualCTC)}</strong>
               </Typography>
             </li>
 
@@ -225,10 +189,10 @@ const NimbjaAppointment = ({ company, data }) => {
                   fontFamily: "Bahnschrift",
                 }}
               >
-                3.Full details of your pay package are given in the enclosure this
-                letter. However, please
+                3.Full details of your pay package are given in the enclosure
+                this letter. However, please
                 <br />
-                  note that, LTA is payable after completion of one year of
+                note that, LTA is payable after completion of one year of
                 service, subject to your getting
               </Typography>
             </li>
@@ -317,7 +281,7 @@ const NimbjaAppointment = ({ company, data }) => {
           <Box component="ol" start={10} sx={{ pl: "6mm", m: 0, mt: "-7mm" }}>
             <li>
               <Typography
-                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
+                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-8mm" }}
               >
                 10.This appointment is subject to your being medically fit.
               </Typography>
@@ -379,7 +343,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will not, without previous written permission of the
+                14.You will not, without previous written permission of the
                 Company, carry on any business or engage yourself in the
                 services or employment of any other Company/Firm/Person.
               </Typography>
@@ -387,7 +351,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will keep the Company informed of any change in your
+                15.You will keep the Company informed of any change in your
                 residential address.
               </Typography>
             </li>
@@ -480,7 +444,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110, mt: "-5mm", mb: "2mm" }}
+                    sx={{ width: 110, mt: "-5mm", mb: "2mm", height: 110 }}
                   />
                 </Grid>
               </Grid>
@@ -543,7 +507,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       mt: "2mm", // 🔑 small Word-like gap
                       textAlign: "left",
-                      mb:"2mm",
+                      mb: "2mm",
                       ml: "73mm",
                     }}
                   >
@@ -561,7 +525,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -578,15 +542,9 @@ const NimbjaAppointment = ({ company, data }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <SalaryStructureTable ctc={annualCTC} />
         </Box>
-            <Box
+        <Box
           component="img"
           src={company.watermark}
           alt="watermark"
@@ -618,11 +576,11 @@ const NimbjaAppointment = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45, marginTop:"10mm" }}
+                  style={{ height: 45, marginTop: "10mm" }}
                 />
               )}
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <img src={company.stamp} alt="Stamp" style={{ height: 110 }} />
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>

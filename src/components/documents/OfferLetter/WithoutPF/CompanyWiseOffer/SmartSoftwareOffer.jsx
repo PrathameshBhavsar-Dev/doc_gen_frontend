@@ -27,6 +27,11 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     mrms = "",
   } = data;
 
+  const formatCurrency = (value) => {
+  const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
+
+  return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
+};
   /* ================= TITLE & PRONOUNS ================= */
   const title = (mrms || "").toLowerCase().trim();
 

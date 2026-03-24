@@ -32,17 +32,22 @@ const CubeageIncrement = ({ company, data }) => {
      (matches Word file structure)
      ===================================================== */
 
-  const round0 = (n) => Math.round(n);
+  const parseNumber = (value) => {
+    if (!value) return 0;
+    return Number(String(value).replace(/,/g, ""));
+  };
 
-  // Source of truth (Monthly CTC)
-  const monthlyCTC = round0(Number(data.newCTC || 0));
-  const annualCTC = round0(monthlyCTC * 12);
+  const round0 = (n) => Math.round(n || 0);
+
+  // Source of truth (Annual CTC)
+  const annualCTC = round0(parseNumber(data?.newCTC));
+  const monthlyCTC = round0(annualCTC / 12);
 
   const hraM = round0(monthlyCTC * 0.18);
   const daM = round0(monthlyCTC * 0.16);
   const ltaM = round0(monthlyCTC * 0.12);
   const specialM = round0(monthlyCTC * 0.06);
-  const allowM = Math.floor(monthlyCTC * 0.08);
+  const allowM = round0(monthlyCTC * 0.08);
 
   const basicM = monthlyCTC - (hraM + daM + ltaM + specialM + allowM);
 

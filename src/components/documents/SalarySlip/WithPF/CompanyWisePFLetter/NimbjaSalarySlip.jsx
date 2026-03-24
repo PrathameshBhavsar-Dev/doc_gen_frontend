@@ -344,14 +344,32 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                 <TableCell />
                 <TableCell align="center">
                   {company.stamp && (
-                    <img src={company.stamp} height={60} alt="" />
+                    <img
+                      src={company.stamp}
+                      alt="signature"
+                      style={{
+                        height: "120px",
+                        width: "auto",
+                        display: "block",
+                        margin: "0 auto",
+                      }}
+                    />
                   )}
                 </TableCell>
                 <TableCell align="center">
                   {company.signature && (
-                    <img src={company.signature} height={28} alt="" />
+                    <img
+                      src={company.signature}
+                      alt="signature"
+                      style={{
+                        height: "30px",
+                        width: "auto",
+                        display: "block",
+                        margin: "0 auto",
+                      }}
+                    />
                   )}
-                  <Typography fontWeight="bold" fontSize="9pt">
+                  <Typography fontWeight="bold" fontSize="10pt">
                     Signature
                   </Typography>
                 </TableCell>
