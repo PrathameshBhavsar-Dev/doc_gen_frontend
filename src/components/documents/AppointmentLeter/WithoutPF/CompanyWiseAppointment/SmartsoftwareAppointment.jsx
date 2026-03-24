@@ -23,12 +23,17 @@ const formatDate = (date) =>
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+// const formatCurrency = (v) =>
+//   Number(v || 0).toLocaleString("en-IN", {
+//     minimumFractionDigits: 2,
+//     maximumFractionDigits: 2,
+//   });
 
+  export const formatCurrency = (value) => {
+  const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
+
+  return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
+};
 /* ================= SALARY BREAKUP ================= */
 /* 40%, 18%, 12%, 16%, 6%, 8% = 100% */
 

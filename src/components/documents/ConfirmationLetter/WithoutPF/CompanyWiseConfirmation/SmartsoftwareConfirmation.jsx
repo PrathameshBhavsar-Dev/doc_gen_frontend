@@ -80,6 +80,11 @@ const SmartsoftwareConfirmation = ({ company, data }) => {
     (sum, item) => sum + item.annual,
     0
   );
+  const formatCurrency = (value) => {
+  const num = Math.round(Number(value) || 0); // 🔥 remove decimals
+
+  return num.toLocaleString("en-IN"); // 🔥 8,667 (no .00)
+};
 
   return (
     <>
