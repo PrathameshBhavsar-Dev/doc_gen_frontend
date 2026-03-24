@@ -587,7 +587,9 @@ const QuickManagementOffer = ({ company, data }) => {
 
         <div style={styles.annexureSignRow}>
           <div style={styles.annexureLeft}>
-            <div style={styles.hrName}>{company.hrName}</div>
+            <div style={{ ...styles.hrName, fontSize: "16px" }}>
+              {company.hrName}
+            </div>
             <div style={styles.hrSignWrap}>
               {company.signature && (
                 <img src={company.signature} alt="" style={styles.signInline} />
