@@ -34,13 +34,18 @@ const NeweageIncrement = ({ company, data }) => {
   if (!company || !data) return null;
 
   /* ======================================================
-     ✅ SMARTMATRIX LOGIC (INPUT IS MONTHLY)
+     ✅ SMARTMATRIX LOGIC (INPUT IS ANNUAL)
   ====================================================== */
 
-  const round2 = (v) => Math.round(Number(v) * 100) / 100;
+  const parseNumber = (value) => {
+    if (!value) return 0;
+    return Number(String(value).replace(/,/g, ""));
+  };
 
-  const monthlyGross = round2(data.newCTC || 0); // 🔥 INPUT IS MONTHLY
-  const annualCTC = round2(monthlyGross * 12);
+  const round0 = (v) => Math.round(Number(v) || 0);
+
+  const annualCTC = round0(parseNumber(data.newCTC)); // 🔥 INPUT IS ANNUAL
+  const monthlyGross = round0(annualCTC / 12);
 
   const PERCENT = {
     basic: 0.4,
@@ -50,26 +55,26 @@ const NeweageIncrement = ({ company, data }) => {
     food: 0.06,
   };
 
-  const basic = round2(monthlyGross * PERCENT.basic);
-  const hra = round2(monthlyGross * PERCENT.hra);
-  const da = round2(monthlyGross * PERCENT.da);
-  const special = round2(monthlyGross * PERCENT.special);
-  const food = round2(monthlyGross * PERCENT.food);
+  const basic = round0(monthlyGross * PERCENT.basic);
+  const hra = round0(monthlyGross * PERCENT.hra);
+  const da = round0(monthlyGross * PERCENT.da);
+  const special = round0(monthlyGross * PERCENT.special);
+  const food = round0(monthlyGross * PERCENT.food);
 
   // Adjustment row to prevent mismatch
-  const misc = round2(monthlyGross - (basic + hra + da + special + food));
+  const misc = monthlyGross - (basic + hra + da + special + food);
 
   const salaryRows = [
-    { label: "Basic", monthly: basic, annual: round2(basic * 12) },
-    { label: "House Rent Allowance", monthly: hra, annual: round2(hra * 12) },
-    { label: "Dearness Allowance", monthly: da, annual: round2(da * 12) },
+    { label: "Basic", monthly: basic, annual: round0(basic * 12) },
+    { label: "House Rent Allowance", monthly: hra, annual: round0(hra * 12) },
+    { label: "Dearness Allowance", monthly: da, annual: round0(da * 12) },
     {
       label: "Special Allowance",
       monthly: special,
-      annual: round2(special * 12),
+      annual: round0(special * 12),
     },
-    { label: "Food Allowance", monthly: food, annual: round2(food * 12) },
-    { label: "Misc. Allowance", monthly: misc, annual: round2(misc * 12) },
+    { label: "Food Allowance", monthly: food, annual: round0(food * 12) },
+    { label: "Misc. Allowance", monthly: misc, annual: round0(misc * 12) },
     {
       label: "Total Monthly Gross Salary",
       monthly: monthlyGross,

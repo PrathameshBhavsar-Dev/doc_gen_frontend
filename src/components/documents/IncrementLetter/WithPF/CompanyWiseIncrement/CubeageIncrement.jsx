@@ -39,48 +39,55 @@ const CubeageIncrement = ({ company, data }) => {
 
   const round0 = (n) => Math.round(n || 0);
 
-  /* ================= SOURCE ================= */
-  const monthlyCTC = round0(parseNumber(data?.newCTC));
-  const annualCTC = round0(monthlyCTC * 12);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(parseNumber(data?.newCTC));
 
-  /* ================= EARNINGS ================= */
-  const basic = round0(monthlyCTC * 0.48);
-  const hra = round0(monthlyCTC * 0.18);
-  const da = round0(monthlyCTC * 0.12);
-  const allowance = round0(monthlyCTC * 0.16);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-  /* Remaining goes to Special */
-  const special = round0(
-    monthlyCTC - (basic + hra + da + allowance)
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
   );
 
-  const earnings = [
-    { name: "Basic", monthly: basic, annual: basic * 12 },
-    { name: "HRA", monthly: hra, annual: hra * 12 },
-    { name: "DA", monthly: da, annual: da * 12 },
-    { name: "ALLOWANCE (Shift+Skill)", monthly: allowance, annual: allowance * 12 },
-    { name: "SPECIAL ALLOWANCE", monthly: special, annual: special * 12 },
-  ];
-
-  /* ================= PF (NOT PART OF CTC) ================= */
-  const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
   const tableRows = [
-    ...earnings,
-    { name: "PF", monthly: pfMonthly, annual: pfAnnual },
+    { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { name: "Provident Fund (PF)", monthly: pfMonthly, annual: pfAnnual },
   ];
 
-  /* ================= TOTAL CTC (WITHOUT PF) ================= */
-  const totalMonthlyCTC = earnings.reduce(
-    (sum, r) => sum + (r.monthly || 0),
-    0
+  // ================= TOTAL CTC (WITHOUT PF) =================
+  const totalMonthlyCTC = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
   );
 
-  const totalAnnualCTC = earnings.reduce(
-    (sum, r) => sum + (r.annual || 0),
-    0
-  );
+  const totalAnnualCTC = round0(totalMonthlyCTC * 12);
   // ================= FINAL TABLE ROWS =================
   const pageStyle = {
     width: "210mm",
