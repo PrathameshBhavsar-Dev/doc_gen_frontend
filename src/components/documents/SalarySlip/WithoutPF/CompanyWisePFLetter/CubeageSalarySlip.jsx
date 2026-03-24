@@ -206,7 +206,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
 
             {/* ───── EARNINGS & DEDUCTIONS HEADER ───── */}
 
-            <TableRow >
+            <TableRow>
               <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Specifications(A)</TableCell>
               <TableCell sx={{ fontWeight: "bold", width: "20%", textAlign: "center" }}>Amount</TableCell>
               <TableCell sx={{ fontWeight: "bold", width: "30%" }}>Deductions(B)</TableCell>

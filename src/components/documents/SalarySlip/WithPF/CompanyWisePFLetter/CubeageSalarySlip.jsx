@@ -74,7 +74,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
 
 
   /* ── Salary ── */
-  const round2 = (n) => Math.floor(n);
+  const round0 = (n) => Math.round(Number(n) || 0);
 
   const monthlyCTC = parseFloat(data.totalSalary || 0);
 
@@ -82,14 +82,14 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
   const earnedCTC = (monthlyCTC * presentDays) / totalDays;
 
   // Calculate other components, rounded down
-  const hra = round2(earnedCTC * 0.18);
-  const da = round2(earnedCTC * 0.12);
-  const lta = round2(earnedCTC * 0.16);
-  const allow = round2(earnedCTC * 0.06);
+  const hra = round0(earnedCTC * 0.18);
+  const da = round0(earnedCTC * 0.12);
+  const lta = round0(earnedCTC * 0.16);
+  const allow = round0(earnedCTC * 0.06);
   const pfAllowance = 3750;
 
   // Basic carries the remaining amount so that all positive components exactly sum to earnedCTC
-  const basic = round2(earnedCTC) - (hra + da + lta + allow + pfAllowance);
+  const basic = round0(earnedCTC) - (hra + da + lta + allow + pfAllowance);
 
   const grandTotalA = basic + hra + da + lta + allow + pfAllowance;
 
@@ -97,10 +97,10 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
   const pfDeduction = 3750;
   const pt = getProfessionalTax(data.month, grandTotalA);
   const otherDed = 2000;
-  const totalDeductions = round2(pfDeduction + pt + otherDed);
+  const totalDeductions = round0(pfDeduction + pt + otherDed);
 
   const netSalary = grandTotalA;
-  const issuedSalary = round2(netSalary - totalDeductions);
+  const issuedSalary = round0(netSalary - totalDeductions);
   const balanceSalary = parseFloat(data.balanceSalary || 0);
 
   return (
@@ -178,7 +178,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Column Headers */}
-            <TableRow >
+            <TableRow>
               <TableCell sx={C({ fontWeight: "bold", width: W.label })}>Specifications(A)</TableCell>
               <TableCell sx={C({ fontWeight: "bold", width: W.amt, textAlign: "center" })}>Amount</TableCell>
               <TableCell sx={C({ fontWeight: "bold", width: W.dlabel })}>Deductions(B)</TableCell>

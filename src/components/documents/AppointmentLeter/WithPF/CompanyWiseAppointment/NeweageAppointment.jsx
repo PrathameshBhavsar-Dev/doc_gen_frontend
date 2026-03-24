@@ -28,22 +28,22 @@ const formatCurrency = (v) =>
     maximumFractionDigits: 2,
   });
 /* ================= SALARY BREAKUP WITH PF ================= */
-const generateSalaryBreakup = (monthlySalaryInput) => {
-  const monthlySalary = round2(Number(monthlySalaryInput || 0));
-  const annualSalary = round2(monthlySalary * 12);
+const generateSalaryBreakup = (annualCTCInput) => {
+  const round0 = (n) => Math.round(Number(n) || 0);
+  const annualCTC = round0(annualCTCInput);
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // 🔥 Monthly percentage logic (like SmartMatrix)
-  const basicMonthly = round2(monthlySalary * 0.48);
-  const hraMonthly = round2(monthlySalary * 0.18);
-  const daMonthly = round2(monthlySalary * 0.12);
-  const foodMonthly = round2(monthlySalary * 0.06);
-
-  // Remaining → Special
-  const specialMonthly =
-    monthlySalary - (basicMonthly + hraMonthly + daMonthly + foodMonthly);
-
-  // Static Employer PF
   const pfMonthly = 3750;
+
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   return {
     rows: [
@@ -52,10 +52,10 @@ const generateSalaryBreakup = (monthlySalaryInput) => {
       ["Dearness Allowance (DA)", daMonthly, daMonthly * 12],
       ["Special Allowance", specialMonthly, specialMonthly * 12],
       ["Food Allowance", foodMonthly, foodMonthly * 12],
-      ["Provident Fund", pfMonthly, pfMonthly * 12],
+      ["Provident Fund (PF)", pfMonthly, pfMonthly * 12],
     ],
-    monthlyGross: monthlySalary, // PF NOT added here
-    annualGross: annualSalary, // PF NOT added here
+    monthlyGross: monthlyCTC,
+    annualGross: annualCTC,
   };
 };
 
@@ -64,13 +64,13 @@ const NeweageAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const monthlySalary = Number(data.salary || 0);
+  const annualCTCInput = Number(data.salary || 0);
 
   const {
     rows: salaryRows,
     monthlyGross,
     annualGross,
-  } = generateSalaryBreakup(monthlySalary);
+  } = generateSalaryBreakup(annualCTCInput);
 
   /* ================= TERMS & CONDITIONS ================= */
   const terms = [

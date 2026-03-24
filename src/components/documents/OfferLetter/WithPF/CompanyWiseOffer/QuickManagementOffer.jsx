@@ -397,27 +397,53 @@ const formatDate = (date) => {
 
 const getFirstName = (name = "") => name.split(" ")[0];
 
-/* ================= SALARY STRUCTURE ================= */
-const salaryStructure = [
-  { label: "Basic", percent: 0.48 },
-  { label: "House Rent Allowance", percent: 0.18 },
-  { label: "Dearness Allowance", percent: 0.12 },
-  { label: "Special Allowance", percent: 0.16 },
-  { label: "Food Allowance", percent: 0.06 },
-  // { label: "Misc. Allowance", percent: 0.08 },
-];
-
 const QuickManagementOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
   const { mrms, candidateName, address, position, salary, issueDate } = data;
 
-  const annualCTC = Number(salary || 0);
-  const monthlyCTC = Math.round(annualCTC / 12);
+  /* ===== PARSE INPUT ===== */
+  const parseNumber = (value) => {
+    if (!value) return 0;
+    return Number(String(value).replace(/,/g, ""));
+  };
+  const round0 = (n) => Math.round(n || 0);
 
-  /* ===== PF STATIC (ONLY DISPLAY) ===== */
+  const annualCTC = round0(parseNumber(salary));
+  const monthlyCTC = round0(annualCTC / 12);
+
+  /* ===== CUBEAGE SALARY LOGIC (WITH PF) ===== */
   const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  const basicMonthly = round0(
+    monthlyCTC - (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
+
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  const salaryRows = [
+    { label: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { label: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { label: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { label: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { label: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { label: "Provident Fund (PF)", monthly: pfMonthly, annual: pfAnnual },
+  ];
+
+  const totalMonthly = round0(
+    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly
+  );
+  const totalAnnual = round0(totalMonthly * 12);
 
   return (
     <div style={styles.wrapper}>
@@ -543,29 +569,18 @@ const QuickManagementOffer = ({ company, data }) => {
             </tr>
           </thead>
           <tbody>
-            {salaryStructure.map((item) => {
-              const yearly = Math.round(annualCTC * item.percent);
-              const monthly = Math.round(yearly / 12);
-              return (
-                <tr key={item.label}>
-                  <td style={styles.td}>{item.label}</td>
-                  <td style={styles.td}>{monthly.toLocaleString("en-IN")}</td>
-                  <td style={styles.td}>{yearly.toLocaleString("en-IN")}</td>
-                </tr>
-              );
-            })}
-
-            {/* ===== PF ROW (STATIC – NOT INCLUDED IN TOTAL) ===== */}
-            <tr>
-              <td style={styles.td}>Provident Fund (PF)</td>
-              <td style={styles.td}>{pfMonthly.toLocaleString("en-IN")}</td>
-              <td style={styles.td}>{pfAnnual.toLocaleString("en-IN")}</td>
-            </tr>
+            {salaryRows.map((row) => (
+              <tr key={row.label}>
+                <td style={styles.td}>{row.label}</td>
+                <td style={styles.td}>{row.monthly.toLocaleString("en-IN")}</td>
+                <td style={styles.td}>{row.annual.toLocaleString("en-IN")}</td>
+              </tr>
+            ))}
 
             <tr style={{ fontWeight: "bold" }}>
               <td style={styles.td}>Total Monthly Gross Salary</td>
-              <td style={styles.td}>{monthlyCTC.toLocaleString("en-IN")}</td>
-              <td style={styles.td}>{annualCTC.toLocaleString("en-IN")}</td>
+              <td style={styles.td}>{totalMonthly.toLocaleString("en-IN")}</td>
+              <td style={styles.td}>{totalAnnual.toLocaleString("en-IN")}</td>
             </tr>
           </tbody>
         </table>
