@@ -39,8 +39,8 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
   const [year, monthNum] = (data.month || "").split("-");
   const monthName = year
     ? new Date(year, monthNum - 1).toLocaleString("en-IN", {
-      month: "long",
-    })
+        month: "long",
+      })
     : "";
 
   /* ================= BASIC DETAILS ================= */
@@ -105,7 +105,6 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
 
   return (
     <div data-pdf-target="true">
-
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <TableContainer
           component={Paper}
@@ -239,10 +238,10 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
                   Total
                 </TableCell>
                 <TableCell sx={{ ...cell, textAlign: "center" }}>
-                  {formatCurrency(totalActual)}
+                  <strong>{formatCurrency(Math.round(totalActual))}</strong>
                 </TableCell>
                 <TableCell sx={{ ...cell, textAlign: "center" }}>
-                  {formatCurrency(totalEarned)}
+                  <strong> {formatCurrency(Math.round(totalEarned))}</strong>
                 </TableCell>
               </TableRow>
 
@@ -324,7 +323,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
                 <TableCell sx={cell}></TableCell>
 
                 <TableCell sx={{ ...cell, textAlign: "center" }}>
-                  <strong>{formatCurrency(netPayable)}</strong>
+                  <strong>{formatCurrency(Math.round(netPayable))}</strong>
                 </TableCell>
               </TableRow>
 
@@ -393,7 +392,6 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
         </TableContainer>
       </A4Page>
     </div>
-
   );
 };
 

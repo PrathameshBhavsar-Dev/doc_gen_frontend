@@ -98,7 +98,7 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
           fontWeight: "bold",
           textAlign: "center",
           mb: "6mm",
-          mt: "20mm",
+          mt: "10mm",
         }}
       >
         Annexure A Salary Structure
@@ -113,11 +113,17 @@ const SmartMatrixOfferPage2 = ({ data, company }) => {
         }}
       >
         <Table
+          size="small"
           sx={{
             border: "2px solid #000",
             borderCollapse: "collapse",
-            tableLayout: "fixed",
             width: "100%",
+            "& th, & td": {
+              border: "1px solid #000",
+              padding: "8px 8px",
+              fontSize: "14px",
+              lineHeight: 1.3,
+            },
           }}
         >
           <TableHead>

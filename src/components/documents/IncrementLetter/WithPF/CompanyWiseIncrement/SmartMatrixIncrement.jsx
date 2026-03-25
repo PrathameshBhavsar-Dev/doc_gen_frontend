@@ -25,45 +25,51 @@ const formatDate = (date) => {
     year: "numeric",
   });
 };
-
 const SmartMatrixIncrement = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const monthlyGross = round2(Number(data.newCTC || 0));
-  const annualCTC = round2(monthlyGross * 12);
+  const round2 = (num) => Number(Number(num).toFixed(2));
 
-  /* Apply percentages on MONTHLY */
-  const basicMonthly = round2(monthlyGross * 0.48);
-  const hraMonthly = round2(monthlyGross * 0.18);
-  const daMonthly = round2(monthlyGross * 0.12);
-  const specialMonthly = round2(monthlyGross * 0.16);
+  /* ================= INPUT IS ANNUAL ================= */
+  const annualCTC = round2(Number(data.newCTC || 0));
+  const monthlyCTC = round2(annualCTC / 12);
 
-  // Adjustment for perfect match
-  const usedMonthly = basicMonthly + hraMonthly + daMonthly + specialMonthly;
+  /* ================= STATIC PF ================= */
+  const pfMonthly = 3750;
+  const pfAnnual = round2(pfMonthly * 12);
 
-  const foodMonthly = round2(monthlyGross - usedMonthly);
+  /* ================= FIXED PERCENTAGES ================= */
+  const hraMonthly = round2(monthlyCTC * 0.18);
+  const daMonthly = round2(monthlyCTC * 0.12);
+  const specialMonthly = round2(monthlyCTC * 0.16);
+  const foodMonthly = round2(monthlyCTC * 0.06);
 
-  /* Annual */
+  /* ================= ADJUSTED BASIC ================= */
+  const basicMonthly = round2(
+    monthlyCTC -
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+  );
+
+  /* ================= ANNUAL ================= */
   const basicAnnual = round2(basicMonthly * 12);
   const hraAnnual = round2(hraMonthly * 12);
   const daAnnual = round2(daMonthly * 12);
   const specialAnnual = round2(specialMonthly * 12);
   const foodAnnual = round2(foodMonthly * 12);
 
-  /* PF (DISPLAY ONLY – NOT INCLUDED IN TOTAL) */
-  const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
-
-  /* Totals WITHOUT PF */
+  /* ================= TOTAL ================= */
   const totalMonthly = round2(
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly,
+    basicMonthly +
+      hraMonthly +
+      daMonthly +
+      specialMonthly +
+      foodMonthly +
+      pfMonthly,
   );
 
-  const totalAnnual = round2(
-    basicAnnual + hraAnnual + daAnnual + specialAnnual + foodAnnual,
-  );
+  const totalAnnual = round2(totalMonthly * 12);
 
-  /* Salary Rows */
+  /* ================= SALARY ROWS ================= */
   const salaryRows = [
     { label: "Basic", monthly: basicMonthly, annual: basicAnnual },
     { label: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
@@ -124,7 +130,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
             As part of our periodic salary review process, we have adjusted
             compensation across the company to reflect market trends. Effective{" "}
             {formatDate(data.effectiveDate)}, your salary will be increased to{" "}
-            <strong> {formatCurrency(annualCTC)}</strong> .
+            <strong> {formatCurrency(annualCTC)} per annum</strong> .
           </Typography>
 
           <Typography
