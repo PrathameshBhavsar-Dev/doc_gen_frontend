@@ -165,13 +165,13 @@ const PageLoader = () => {
           {/* Label + Progress */}
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-px h-4 bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
+              <div className="w-px h-4 bg-linear-to-b from-transparent via-blue-500 to-transparent" />
               <span style={{
                 fontFamily: "'SF Mono', 'Fira Code', monospace",
                 fontSize: "11px", letterSpacing: "0.35em",
                 color: "#ffffff88", textTransform: "uppercase"
               }}>DOC GEN</span>
-              <div className="w-px h-4 bg-gradient-to-b from-transparent via-blue-500 to-transparent" />
+              <div className="w-px h-4 bg-linear-to-b from-transparent via-blue-500 to-transparent" />
             </div>
 
             {/* Progress bar track */}
