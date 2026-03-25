@@ -100,7 +100,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     <A4Page
       headerSrc={company.header}
       footerSrc={company.footer}
-      watermarkSrc={company.watermark}
+      // watermarkSrc={company.watermark}
     >
       <Box
         sx={{
@@ -109,11 +109,11 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
           boxSizing: "border-box",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            padding: "7px 8px",              // 🔥 increase spacing
+            padding: "6px 7px",              // 🔥 increase spacing
             fontFamily: "Bahnschrift",
             color: "#000",
             verticalAlign: "middle",         // 🔥 FIX alignment
-            lineHeight: 1.8,                 // 🔥 better spacing
+            lineHeight: 1.7,                 // 🔥 better spacing
           },
         }}
       >
