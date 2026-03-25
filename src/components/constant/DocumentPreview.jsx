@@ -18,6 +18,7 @@ import html2canvas from 'html2canvas';
 import ResponsiveContainer from '../common/ResponsiveContainer';
 import { generatePDF } from '../../utils/pdfUtils'; // adjust path as needed
 import ROUTES from "../../core/constants/routes.constant";
+import { useLocation } from "react-router-dom";
 
 // Templates
 import ExperienceLetterTemplate from '../documents/ExperienceLetter/ExperienceLetterTemplate';
@@ -32,10 +33,14 @@ import ConfirmationLetterTemplate from "../documents/ConfirmationLetter/Confirma
 import FullandfinalLetterTemplate from "../documents/FullAndFinalLetter/FullandFinalLetterTemplate";
 
 const DocumentPreview = () => {
-  const { selectedCompany } = useCompany();
-  const { selectedDocType, documentData } = useDocument();
+  // const { selectedCompany } = useCompany();
+  // const { selectedDocType, documentData } = useDocument();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const previewData = location.state?.documentData;
+  const previewDocType = location.state?.selectedDocType;
+  const previewCompany = location.state?.selectedCompany;
 
   const documentRef = useRef(null);
 
@@ -54,61 +59,57 @@ const DocumentPreview = () => {
       return;
     }
 
-    // wait until context loads
-    if (!selectedCompany || !selectedDocType) return;
-
-    if (Object.keys(documentData).length === 0) {
+    if (!previewCompany || !previewDocType || !previewData) {
       navigate(ROUTES.USER_DASHBOARD);
     }
-  }, [user, selectedCompany, selectedDocType, documentData, navigate]);
+  }, [user, previewCompany, previewDocType, previewData, navigate]);
 
   /* ================= TEMPLATE RENDER ================= */
   const renderDocumentTemplate = () => {
-    switch (selectedDocType?.template) {
-      case 'salary-slip':
-        return <SalarySlipLetterTemplate data={documentData} company={selectedCompany} />;
+    switch (previewDocType?.template) {
+      case 'salary_slip':
+        return <SalarySlipLetterTemplate data={previewData} company={previewCompany} />;
 
-      case 'internship-certificate':
+      case 'internship_certificate':
         return (
-          <InternshipLetterTemplate data={documentData} company={selectedCompany} />
+          <InternshipLetterTemplate data={previewData} company={previewCompany} />
         );
 
+      case 'offer_letter':
+        return <OfferTemplate data={previewData} company={previewCompany} />;
 
-      case 'offer-letter':
-        return <OfferTemplate data={documentData} company={selectedCompany} />;
+      case 'completion_certificate':
+        return <CertificationLetterTemplate data={previewData} company={previewCompany} />;
 
-      case 'completion-certificate':
-        return <CertificationLetterTemplate data={documentData} company={selectedCompany} />;
-
-      case 'increment-letter':
-        return <IncrementTemplate data={documentData} company={selectedCompany} />;
-      case 'appointment-letter':
-        return <AppointmentLetterTemplate data={documentData} company={selectedCompany} />;
-      case 'experience-letter':
-        return <ExperienceLetterTemplate data={documentData} company={selectedCompany} />;
-      case 'relieving-letter':
-        return <RelievingLetterTemplate data={documentData} company={selectedCompany} />;
-      case 'fullandfinal-letter':
-        return <FullandfinalLetterTemplate data={documentData} company={selectedCompany} />;
+      case 'increment_letter':
+        return <IncrementTemplate data={previewData} company={previewCompany} />;
+      case 'appointment_letter':
+        return <AppointmentLetterTemplate data={previewData} company={previewCompany} />;
+      case 'experience_letter':
+        return <ExperienceLetterTemplate data={previewData} company={previewCompany} />;
+      case 'relieving_letter':
+        return <RelievingLetterTemplate data={previewData} company={previewCompany} />;
+      case 'fullandfinal_letter':
+        return <FullandfinalLetterTemplate data={previewData} company={previewCompany} />;
 
       // case 'salary-transaction':
-      // return <SalaryTransactionTemplate data={documentData} company={selectedCompany} />;
+      // return <SalaryTransactionTemplate data={previewData} company={previewCompany} />;
       // case 'employment-verification':
-      // return <EmploymentVerificationTemplate data={documentData} company={selectedCompany} />;
+      // return <EmploymentVerificationTemplate data={previewData} company={previewCompany} />;
       // case 'promotion-letter':
-      // return <PromotionLetterTemplate data={documentData} company={selectedCompany} />;
+      // return <PromotionLetterTemplate data={previewData} company={previewCompany} />;
       // case 'warning-letter':
-      // return <WarningLetterTemplate data={documentData} company={selectedCompany} />;
+      // return <WarningLetterTemplate data={previewData} company={previewCompany} />;
       // case 'noc':
-      // return <NOCTemplate data={documentData} company={selectedCompany} />;
+      // return <NOCTemplate data={previewData} company={previewCompany} />;
       // case 'termination-letter':
-      // return <TerminationLetterTemplate data={documentData} company={selectedCompany} />;
+      // return <TerminationLetterTemplate data={previewData} company={previewCompany} />;
       // case 'transfer-letter':
-      // return <TransferLetterTemplate data={documentData} company={selectedCompany} />;
+      // return <TransferLetterTemplate data={previewData} company={previewCompany} />;
       // case 'fullandfinal-letter':
-      //  return <FullAndFinalLetterTemplate data={documentData} company={selectedCompany} />;
-      case 'confirmation-letter':
-        return <ConfirmationLetterTemplate data={documentData} company={selectedCompany} />;
+      //  return <FullAndFinalLetterTemplate data={previewData} company={previewCompany} />;
+      case 'confirmation_letter':
+        return <ConfirmationLetterTemplate data={previewData} company={previewCompany} />;
       default:
         return <Typography>Template not found</Typography>;
     }
@@ -127,7 +128,7 @@ const DocumentPreview = () => {
 
       await generatePDF(
         documentRef.current,
-        `${selectedDocType.name}-${new Date().toISOString().slice(0, 10)}`
+        `${previewDocType.name}-${new Date().toISOString().slice(0, 10)}`
       );
 
       setSnackbarMessage('PDF downloaded successfully');
@@ -189,7 +190,7 @@ const DocumentPreview = () => {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`${selectedDocType.name}-ContentOnly.pdf`);
+      pdf.save(`${previewDocType.name}-ContentOnly.pdf`);
       setSnackbarMessage('Content-only PDF downloaded');
       setSnackbarOpen(true);
     } catch (err) {
@@ -201,7 +202,7 @@ const DocumentPreview = () => {
   };
 
   /* ================= UI ================= */
-  if (!selectedCompany || !selectedDocType) return null;
+  if (!previewCompany || !previewDocType || !previewData) return null;
 
   return (
     <ResponsiveContainer>

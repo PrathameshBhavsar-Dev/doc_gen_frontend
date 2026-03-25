@@ -10,15 +10,92 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom"; // ✅
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { useRef, useState, useEffect } from "react";
+import { generatePDF } from '../../utils/pdfUtils'; // adjust path as needed
 
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const doc = state?.document;  // ✅ pulls the clicked document
+  const [doc, setDoc] = useState(null);
 
+  const docId = state?.id;
+  const docType = state?.type;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const mapDocTypeToRoute = (type) => {
+    const map = {
+      AppointmentLetter: "appointment_letter",
+      OfferLetter: "offer_letter",
+      ExperienceLetter: "experience_letter",
+      CompletionCertificate: "completion_certificate",
+      SalarySlip: "salaryslip_letter",
+      RelievingLetter: "relieving_letter",
+      IncrementLetter: "increment_letter",
+      InternshipCertificate: "internshipcertificate_letter",
+      ConfirmationLetter: "confirmation_letter",
+      FullAndFinal: "fullandfinal_letter",
+    };
+
+    return map[type] || "";
+  };
+
+  const documentRef = useRef();
+  /* ================= PDF GENERATION (FULL) ================= */
+  const handleDownload = async () => {
+    try {
+      const api = new ApiService();
+
+      const routeType = mapDocTypeToRoute(doc.documentType);
+
+      await api.downloadFile(
+        `/api/v1/documents/${routeType}/download/${doc._id}`,
+        `${doc.documentType}.pdf`
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePreview = () => {
+    const routeType = mapDocTypeToRoute(doc.documentType);
+
+    window.open(
+      `http://localhost:5000/api/v1/documents/${routeType}/preview/${doc._id}`,
+      "_blank"
+    );
+  };
+
+  useEffect(() => {
+    if (!docId || !docType) return;
+
+    const fetchDocument = async () => {
+      try {
+        const api = new ApiService();
+
+        const routeType = mapDocTypeToRoute(docType);
+
+        const url = ServerUrl.getDocByUserId(routeType, docId);
+
+        console.log("Fetching:", url);
+
+        const res = await api.apiget(url);
+
+        setDoc(res.data);
+      } catch (err) {
+        console.error("Error fetching document:", err);
+      }
+    };
+
+    fetchDocument();
+  }, [docId, docType]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100" ref={documentRef}>
 
       {/* ================= PAGE CONTENT ================= */}
       <div className="p-4 sm:p-6">
@@ -53,7 +130,17 @@ const UserDetailPage = () => {
                 Completed
               </span>
 
-              <span>Generated on {doc?.date}</span>            </div>
+              <span>
+                Generated on{" "}
+                {doc?.createdAt
+                  ? new Date(doc.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                  : "—"}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -76,11 +163,10 @@ const UserDetailPage = () => {
             </div>
 
             <p className="text-sm text-gray-500">Employee Name</p>
-            <p className="font-medium mb-4">{doc?.employee}</p>
+            <p className="font-medium mb-4">{doc?.employeeName}</p>
 
             <p className="text-sm text-gray-500">Employee ID</p>
-            <p className="font-medium">{doc?.id}</p>
-          </div>
+            <p className="font-medium">{doc?.employeeId}</p>          </div>
 
           {/* Company */}
           <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm">
@@ -121,7 +207,7 @@ const UserDetailPage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-sm">
             <div>
               <p className="text-gray-500">Document Type</p>
-              <p className="font-medium">{doc?.type}</p>
+              <p className="font-medium">{doc?.documentType}</p>
             </div>
 
             <div>
@@ -131,27 +217,35 @@ const UserDetailPage = () => {
 
             <div>
               <p className="text-gray-500">Date</p>
-              <p className="font-medium">{doc?.date}</p>
+              <p className="font-medium">
+                {doc?.createdAt
+                  ? new Date(doc.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                  : "—"}
+              </p>
             </div>
 
             <div>
               <p className="text-gray-500">Generated By</p>
-              <p className="font-medium">{doc?.generatedBy}</p>
+              <p className="font-medium">{doc?.issuedTo}</p>
             </div>
 
             <div>
               <p className="text-gray-500">Payment Status</p>
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-                ✔ Completed
+                {doc?.paymentStatus}
               </span>
             </div>
           </div>
         </div>
 
         {/* ================= BUTTONS ================= */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-8">
-
+        <div className="flex flex-col text-sm sm:flex-row gap-4 mt-8">
           <button
+            onClick={handleDownload}
             className="w-full sm:w-auto flex justify-center items-center gap-2
             text-white px-6 py-3 rounded-xl shadow transition
             bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
@@ -162,16 +256,15 @@ const UserDetailPage = () => {
           </button>
 
           <button
+            onClick={handlePreview}
             className="w-full sm:w-auto flex justify-center items-center gap-2
             bg-gray-200 text-gray-700 px-6 py-3 rounded-xl
             hover:bg-gray-300 transition"
           >
             <Eye size={18} />
-            Preview All Document
+            Preview Document
           </button>
-
         </div>
-
       </div>
     </div>
   );
