@@ -186,6 +186,13 @@ const SmartSoftwareAppointment = ({ company, data }) => {
         <Typography align="center" fontWeight={700} mb={3}>
           Salary Structure – Break Up
         </Typography>
+         {/* Employee Info */}
+                <Box sx={{ mb: 2 }}>
+                  <Typography><strong>Employee Name:</strong> {data.employeeName}</Typography>
+                  <Typography><strong>Designation:</strong> {data.position}</Typography>
+                  <Typography><strong>Date of Joining:</strong> {formatDate(data.joiningDate)}</Typography>
+                  <Typography><strong>Employee ID:</strong> {String(data.employeeId).padStart(4, "0")}</Typography>
+                </Box>
 
         <TableContainer>
           <Table size="small" sx={{ border: "1px solid #333" }}>
