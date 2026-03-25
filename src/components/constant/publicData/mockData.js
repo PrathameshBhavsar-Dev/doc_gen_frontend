@@ -195,7 +195,7 @@ export const companies = [
 
   {
     id: 4,
-    name: "Devcons Software Solution Pvt. Ltd.",
+    name: "Devcons Software Solutions Pvt. Ltd.",
     shortName: "Devcons",
     date: "28-12-2022",
     logo: devconslogo,
