@@ -207,7 +207,7 @@ const finalData = calculateSalaryBreakup(annualCTC);
     sx={{
       display: "grid",
       gridTemplateColumns: "95px 10px auto",
-      mt:14,
+      mt:3,
       fontSize: 14,
       // mb: 4
     }}

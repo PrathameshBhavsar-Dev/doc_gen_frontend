@@ -102,46 +102,80 @@ const SmartMatrixOffer = ({ company, data }) => {
   const position = data.position;
 
   /* ================= CORRECTED LOGIC ================= */
+  const round0 = (num) => Math.round(num);
 
-  const round0 = (num) => Math.round(Number(num) || 0);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.salary || 0));
 
-  /* ✅ INPUT IS ANNUAL */
-  const annualCTC = round0(data.salary || 0);
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
-  /* Salary Percentages */
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+
+  // ================= FIXED PERCENTAGES =================
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+  );
 
-  const foodMonthly = round0(monthlyCTC - used);
-
-  /* PF (Display Only) */
-  const pfMonthly = 3750;
-
+  // ================= SALARY COMPONENTS =================
   const salaryComponents = [
-    { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
+    {
+      name: "Basic",
+      monthly: basicMonthly,
+      annual: round0(basicMonthly * 12),
+    },
     {
       name: "House Rent Allowance",
       monthly: hraMonthly,
-      annual: hraMonthly * 12,
+      annual: round0(hraMonthly * 12),
     },
-    { name: "Dearness Allowance", monthly: daMonthly, annual: daMonthly * 12 },
+    {
+      name: "Dearness Allowance",
+      monthly: daMonthly,
+      annual: round0(daMonthly * 12),
+    },
     {
       name: "Special Allowance",
       monthly: specialMonthly,
-      annual: specialMonthly * 12,
+      annual: round0(specialMonthly * 12),
     },
-    { name: "Food Allowance", monthly: foodMonthly, annual: foodMonthly * 12 },
-    { name: "Provident Fund (PF)", monthly: pfMonthly, annual: pfMonthly * 12 },
+    {
+      name: "Food Allowance",
+      monthly: foodMonthly,
+      annual: round0(foodMonthly * 12),
+    },
+    {
+      name: "Provident Fund (PF)",
+      monthly: pfMonthly,
+      annual: round0(pfMonthly * 12),
+    },
   ];
 
-  const totalMonthly = monthlyCTC;
-  const totalAnnual = annualCTC;
-  const lpa = (annualCTC / 100000).toFixed(1);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+      hraMonthly +
+      daMonthly +
+      specialMonthly +
+      foodMonthly +
+      pfMonthly,
+  );
+
+  const totalAnnual = round0(totalMonthly * 12);
+
+  // ================= LPA =================
+  const lpa =
+    annualCTC % 100000 === 0
+      ? (annualCTC / 100000).toString()
+      : (annualCTC / 100000).toFixed(1);
 
   return (
     <>

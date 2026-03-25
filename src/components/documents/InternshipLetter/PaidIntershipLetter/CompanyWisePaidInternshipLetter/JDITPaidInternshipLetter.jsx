@@ -54,47 +54,40 @@ const JDITPaidInternshipLetter = ({
         : { prefix: "Ms.", subject: "she", possessive: "her" };
 
   /* ================= SALARY ================= */
-   // Helper to keep 2 decimals everywhere
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.stipend || 0));
+  // Source of truth (Annual)
+  const annualCTC = round0(Number(data.stipend || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
   // ================= PERCENTAGE BREAKUP =================
-const basicMonthly = round0(monthlyCTC * 0.40);
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
-const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= ANNUAL VALUES =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const miscAnnual = round0(miscMonthly * 12);
+  // ================= BALANCING BASIC =================
+  const basicMonthly = monthlyCTC - hraMonthly - daMonthly - specialMonthly - foodMonthly;
 
-// ================= SALARY TABLE STRUCTURE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
 
-// ================= TOTALS =================
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
+  // ================= SALARY TABLE STRUCTURE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+  ];
 
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
-
+  // ================= TOTALS =================
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = annualCTC;
 
   return (
     <>
@@ -114,10 +107,10 @@ const totalAnnual = round0(
           </Typography>
 
           <Typography sx={{ ...TEXT, mt: 3 }}>
-            
-             <b> Subject :</b> Letter of intent for the position of Internship as a{" "}
-              <b>{data.designation}</b>
-            
+
+            <b> Subject :</b> Letter of intent for the position of Internship as a{" "}
+            <b>{data.designation}</b>
+
           </Typography>
 
           <Typography sx={{ ...TEXT, mt: 4 }}>
@@ -157,15 +150,15 @@ const totalAnnual = round0(
           </Typography> */}
 
           <Typography sx={{ ...TEXT, mt: 4 }}>
-           Best Regards,
+            Best Regards,
           </Typography>
 
           <Typography sx={{ ...TEXT }}>
-                  <b>Sweety Khade</b>
-                </Typography>
+            <b>Sweety Khade</b>
+          </Typography>
 
           <Box
-            
+
           >
 
             <Box sx={{ display: "flex", gap: "20px", alignItems: "flex-end" }}>
@@ -185,11 +178,11 @@ const totalAnnual = round0(
               )}
             </Box>
             <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              mt: 4,
-            }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                mt: 4,
+              }}
             >
 
               <Box>
@@ -216,18 +209,18 @@ const totalAnnual = round0(
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company?.header} footerSrc={company?.footer}>
-        
-                  <Typography
-                    align="center"
-                    fontWeight={600}
-                    mb={8}
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Salary Annexure
-                  </Typography>
-        
-        
-                  {/* <Box mb={6} fontSize="13px">
+
+        <Typography
+          align="center"
+          fontWeight={600}
+          mb={8}
+          sx={{ textDecoration: "underline" }}
+        >
+          Salary Annexure
+        </Typography>
+
+
+        {/* <Box mb={6} fontSize="13px">
                     <Typography sx={{ fontWeight: 500 }}>Employee Code : {data.employeeId}</Typography>
                     <Typography sx={{ fontWeight: 500 }}>Employee Name : {data.employeeName}</Typography>
                     <Typography sx={{ fontWeight: 500 }}>
@@ -239,105 +232,99 @@ const totalAnnual = round0(
                       })}
                     </Typography>
                   </Box> */}
-        
-                  <Table
-                    sx={{
-                      width: "100%",
-                      border: "1px solid #000",
-                      borderCollapse: "collapse",
-                      "& th, & td": {
-                        border: "1px solid #000",
-                        padding: "4px 6px",
-                        fontSize: "15px",
-                        fontFamily: `"Times New Roman", Times, serif`,
-                        lineHeight: 1.2,
-                      },
-                    }}
-                  >
-                    <TableBody>
-                      <TableRow
-  sx={{
-    backgroundColor: "#0f0f0f",
-    "& .MuiTableCell-root": {
-      color: "#fff !important ",
-      fontWeight: 700,
-    },
-  }}
->
-  <TableCell align="right">Monthly Component</TableCell>
-  <TableCell>Amount (Rs.)</TableCell>
-  <TableCell align="right">Yearly Component</TableCell>
-  <TableCell>Amount (Rs.)</TableCell>
-</TableRow>
-        
-                      <TableRow>
-                        <TableCell>Basic</TableCell>
-                        <TableCell align="right">{basicMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{basicAnnual}</TableCell>
-                      </TableRow>
-        
-        
-                      <TableRow>
-                        <TableCell>House Rent Allowance</TableCell>
-                        <TableCell align="right">{hraMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{hraAnnual}</TableCell>
-                      </TableRow>
-        
-                      <TableRow>
-                        <TableCell>Dearness Allowance</TableCell>
-                        <TableCell align="right">{daMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{daAnnual}</TableCell>
-                      </TableRow>
-        
-                      <TableRow>
-                        <TableCell>Special Allowance</TableCell>
-                        <TableCell align="right">{specialMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{specialAnnual}</TableCell>
-                      </TableRow>
-        
-                      <TableRow>
-                        <TableCell>Food Allowance</TableCell>
-                        <TableCell align="right">{foodMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{foodAnnual}</TableCell>
-                      </TableRow>
-        
-                      <TableRow>
-                        <TableCell>Misc. Allowance</TableCell>
-                        <TableCell align="right">{miscMonthly}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="right">{miscAnnual}</TableCell>
-                      </TableRow>
-        
-                      <TableRow sx={{
-    backgroundColor: "#0f0f0f",
-    "& .MuiTableCell-root": {
-      color: "#fff !important ",
-      fontWeight: 700,
-    },
-  }}>
-                        <TableCell sx={{ fontWeight: 700 }}>Monthly Gross</TableCell>
-                        <TableCell sx={{ fontWeight: 700 }} align="right">
-                          {totalMonthly}
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: 700 }}>Annual CTC</TableCell>
-                        <TableCell sx={{ fontWeight: 700 }} align="right">
-                          {totalAnnual}
-                        </TableCell>
-                      </TableRow>
-        
-                    </TableBody>
-                  </Table>
-        
-                  <Typography mt={6} fontSize="15px" fontWeight={500}>
-                    Please note that the details in this communication are confidential
-                    and you are requested not to share the same with others.
-                  </Typography>
-                
+
+        <Table
+          sx={{
+            width: "100%",
+            border: "1px solid #000",
+            borderCollapse: "collapse",
+            "& th, & td": {
+              border: "1px solid #000",
+              padding: "4px 6px",
+              fontSize: "15px",
+              fontFamily: `"Times New Roman", Times, serif`,
+              lineHeight: 1.2,
+            },
+          }}
+        >
+          <TableBody>
+            <TableRow
+              sx={{
+                backgroundColor: "#0f0f0f",
+                "& .MuiTableCell-root": {
+                  color: "#fff !important ",
+                  fontWeight: 700,
+                },
+              }}
+            >
+              <TableCell align="right">Monthly Component</TableCell>
+              <TableCell>Amount (Rs.)</TableCell>
+              <TableCell align="right">Yearly Component</TableCell>
+              <TableCell>Amount (Rs.)</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>Basic</TableCell>
+              <TableCell align="right">{basicMonthly}</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">{basicAnnual}</TableCell>
+            </TableRow>
+
+
+            <TableRow>
+              <TableCell>House Rent Allowance</TableCell>
+              <TableCell align="right">{hraMonthly}</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">{hraAnnual}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>Dearness Allowance</TableCell>
+              <TableCell align="right">{daMonthly}</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">{daAnnual}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>Special Allowance</TableCell>
+              <TableCell align="right">{specialMonthly}</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">{specialAnnual}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>Food Allowance</TableCell>
+              <TableCell align="right">{foodMonthly}</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">{foodAnnual}</TableCell>
+            </TableRow>
+
+
+            <TableRow sx={{
+              backgroundColor: "#0f0f0f",
+              "& .MuiTableCell-root": {
+                color: "#fff !important ",
+                fontWeight: 700,
+              },
+            }}>
+              <TableCell sx={{ fontWeight: 700 }}>Monthly Gross</TableCell>
+              <TableCell sx={{ fontWeight: 700 }} align="right">
+                {totalMonthly}
+              </TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>Annual CTC</TableCell>
+              <TableCell sx={{ fontWeight: 700 }} align="right">
+                {totalAnnual}
+              </TableCell>
+            </TableRow>
+
+          </TableBody>
+        </Table>
+
+        <Typography mt={6} fontSize="15px" fontWeight={500}>
+          Please note that the details in this communication are confidential
+          and you are requested not to share the same with others.
+        </Typography>
+
       </A4Page>
     </>
   );

@@ -236,16 +236,56 @@ const SmartsoftwareFullAndfinal = ({ company = {}, data = {} }) => {
               <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
             </TableRow>
 
-            {/* SIGNATURE */}
-            <TableRow>
-              <TableCell sx={{ ...cell, ...center }}></TableCell>
-              <TableCell sx={{ ...cell, ...center }}>
-                {company.stamp && <img src={company.stamp} height={60} alt="Stamp" />}
-              </TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>
-                {company.signature && <img src={company.signature} height={45} alt="Signature" />}
-              </TableCell>
-            </TableRow>
+           <TableRow>
+  <TableCell sx={{ ...cell, ...center }}></TableCell>
+
+  {/* STAMP */}
+  <TableCell sx={{ ...cell }}>
+    {company.stamp && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100px", // ✅ increased to match stamp
+        }}
+      >
+        <img
+          src={company.stamp}
+          alt="Stamp"
+          style={{
+            height: "100px",   // ✅ big stamp
+            width: "auto",
+            objectFit: "contain",
+          }}
+        />
+      </Box>
+    )}
+  </TableCell>
+
+  {/* SIGNATURE */}
+  <TableCell colSpan={2} sx={{ ...cell }}>
+    {company.signature && (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100px", // ✅ same as stamp for alignment
+        }}
+      >
+        <img
+          src={company.signature}
+          alt="Signature"
+          style={{
+            height: "80px",   // ✅ balanced size
+            width: "auto",
+          }}
+        />
+      </Box>
+    )}
+  </TableCell>
+</TableRow>
 
             <TableRow>
               <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>

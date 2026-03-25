@@ -655,7 +655,6 @@ import A4Layout from "../../../../layout/A4Page";
 import {
   getProfessionalTax,
   numberToWords,
-  formatCurrency,
 } from "../../../../../utils/salaryCalculations";
 
 /* ================= DATE FORMAT ================= */
@@ -667,6 +666,8 @@ const formatDate = (date) =>
         year: "numeric",
       })
     : "";
+
+const fmt = (n) => Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /* ================= STYLES (SLIGHTLY SMALLER) ================= */
 const CELL = {
@@ -704,51 +705,48 @@ const {
   dearnessAllowance,
   specialAllowance,
   foodAllowance,
-  miscAllowance,
   totalEarning,
   professionalTax,
   totalDeduction,
   netPay,
 } = useMemo(() => {
 
-  const round2 = (num) => Number(Number(num).toFixed(2));
+  const round0 = (num) => Math.round(Number(num || 0));
+  const monthlyGross = round0(Number(totalSalary || 0));
 
-  const monthlyGross = round2(Number(totalSalary || 0));
-
-  // Percentages (TOTAL = 100%)
+  // Percentages
   const PERCENT = {
-    basic: 0.40,
     hra: 0.18,
     da: 0.12,
     special: 0.16,
     food: 0.06,
-    misc: 0.08,
   };
 
   // Monthly breakup
-  const basic      = round2(monthlyGross * PERCENT.basic);
-  const hraCalc    = round2(monthlyGross * PERCENT.hra);
-  const conveyance = round2(monthlyGross * PERCENT.da);// DA
-  const special    = round2(monthlyGross * PERCENT.special);
-  const food       = round2(monthlyGross * PERCENT.food);
-  const others     = round2(monthlyGross * PERCENT.misc);
+  const hraCalc    = round0(monthlyGross * PERCENT.hra);
+  const conveyance = round0(monthlyGross * PERCENT.da); // DA
+  const special    = round0(monthlyGross * PERCENT.special);
+  const food       = round0(monthlyGross * PERCENT.food);
+
+  // Balancing basic
+  const basic      = round0(monthlyGross - (hraCalc + conveyance + special + food));
 
   // Total Earnings
-  const totalEarning =
+  const totalEarning = round0(
     basic +
     hraCalc +
     conveyance +
     special +
-    food +
-    others;
+    food
+  );
 
   // Deductions
-  const otherDeduction = 2000; // you can make this dynamic if needed
+  const otherDeduction = 2000;
   const pt = getProfessionalTax(month, totalEarning);
 
-  const totalDeduction = round2(pt + Number(otherDeduction || 0));
+  const totalDeduction = round0(pt + Number(otherDeduction || 0));
 
-  const netPay = round2(totalEarning - totalDeduction);
+  const netPay = round0(totalEarning - totalDeduction);
 
   return {
     basicSalary: basic,
@@ -756,7 +754,6 @@ const {
     dearnessAllowance: conveyance,
     specialAllowance: special,
     foodAllowance: food,
-    miscAllowance: others,
     totalEarning,
     professionalTax: pt,
     totalDeduction,
@@ -771,7 +768,6 @@ const {
   { label: <b>DEARNESS ALLOWANCE</b>, value: dearnessAllowance },
   { label: <b>SPECIAL ALLOWANCE</b>, value: specialAllowance },
   { label: <b>FOOD ALLOWANCE</b>, value: foodAllowance },
-  { label: <b>MISC ALLOWANCE</b>, value: miscAllowance },
 ];
 
   const deductions = [
@@ -882,7 +878,7 @@ const {
             <TableRow key={i}>
               <TableCell sx={CELL}>{e.label}</TableCell>
               <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-                {formatCurrency(e.value)}
+                {fmt(e.value)}
               </TableCell>
             </TableRow>
           ))}
@@ -890,14 +886,11 @@ const {
           <TableRow>
             <TableCell sx={CELL}><b>Total</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(totalSalary)}            
+              {fmt(totalSalary)}            
               </TableCell>
           </TableRow>
 
-          {/* SMALLER GAP */}
-          <TableRow>
-            <TableCell colSpan={4} sx={{ ...CELL, height: 18 }} />
-          </TableRow>
+         
 
           {/* DEDUCTIONS */}
           <TableRow>
@@ -927,22 +920,15 @@ const {
         colSpan={3}
         sx={{ ...CELL, textAlign: "center" }}
       >
-        {formatCurrency(d.value)}
+        {fmt(d.value)}
       </TableCell>
     </TableRow>
 ))}
 
-{/* <TableRow>
-  <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
-  <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-    {formatCurrency(totalDeductions)}
-  </TableCell>
-</TableRow> */}
-
 <TableRow>
   <TableCell sx={CELL}><b>Total Deduction</b></TableCell>
   <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-    {formatCurrency(totalDeduction)}
+    {fmt(totalDeduction)}
   </TableCell>
 </TableRow>
 
@@ -950,7 +936,7 @@ const {
           <TableRow>
             <TableCell sx={CELL}><b>Net Pay</b></TableCell>
             <TableCell colSpan={3} sx={{ ...CELL, textAlign: "center" }}>
-              {formatCurrency(netPay)}
+              {fmt(netPay)}
             </TableCell>
           </TableRow>
 
@@ -966,17 +952,17 @@ const {
         {/* SIGNATURE */}
         <TableBody>
           <TableRow>
-            <TableCell sx={{ ...CELL, width: "33%", height: "110px", textAlign: "center" }}>
-              {company.stamp && <img src={company.stamp} alt="Stamp" height="80" />}
+            <TableCell sx={{ ...CELL, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle" }}>
+              {company.stamp && <img src={company.stamp} alt="Stamp" style={{ height: "90px", display: "block", margin: "0 auto" }} />}
             </TableCell>
 
-            <TableCell sx={{ ...CELL, width: "34%", height: "110px" }} />
+            <TableCell sx={{ ...CELL, width: "34%", height: "90px", borderTop: "none" }} />
 
-            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "100px", textAlign: "center" }}>
+            <TableCell colSpan={2} sx={{ ...CELL, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle" }}>
               {company.signature && (
                 <>
-                  <img src={company.signature} alt="Signature" height="40" />
-                  <Typography fontWeight="bold" fontSize="11px">
+                  <img src={company.signature} alt="Signature" style={{ height: "40px", display: "block", margin: "0 auto" }} />
+                  <Typography fontWeight="bold" fontSize="11px" mt={1}>
                     Signature
                   </Typography>
                 </>

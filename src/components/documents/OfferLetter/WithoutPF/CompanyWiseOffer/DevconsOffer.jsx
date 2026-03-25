@@ -21,18 +21,64 @@ const DevconsOffer = ({ company, data }) => {
   
 
   // Helper – 2 decimal precision
+// const round0 = (num) => Math.round(num);
+
+//   // Source of truth
+//   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+
+//   // ================= PERCENTAGE BREAKUP =================
+// const basicMonthly = round0(monthlyCTC * 0.40);
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = round0(basicMonthly * 12);
+// const hraAnnual = round0(hraMonthly * 12);
+// const daAnnual = round0(daMonthly * 12);
+// const specialAnnual = round0(specialMonthly * 12);
+// const foodAnnual = round0(foodMonthly * 12);
+// const miscAnnual = round0(miscMonthly * 12);
+
+// // ================= SALARY TABLE STRUCTURE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Misc. Allowance", miscMonthly, miscAnnual],
+// ];
+
+// // ================= TOTALS =================
+// const totalMonthly = round0(
+//   salaryRows.reduce((sum, row) => sum + row[1], 0)
+// );
+
+// const totalAnnual = round0(
+//   salaryRows.reduce((sum, row) => sum + row[2], 0)
+// );
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+// Source of truth (ANNUAL CTC)
+const annualCTC = round0(Number(data.salary || data.ctc || 0));
 
-  // ================= PERCENTAGE BREAKUP =================
+// ================= MONTHLY CTC =================
+const monthlyCTC = round0(annualCTC / 12);
+
+// ================= PERCENTAGE BREAKUP (MONTHLY) =================
 const basicMonthly = round0(monthlyCTC * 0.40);
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
 const foodMonthly = round0(monthlyCTC * 0.06);
-const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+const miscMonthly = round0(monthlyCTC * 0.08);
 
 // ================= ANNUAL VALUES =================
 const basicAnnual = round0(basicMonthly * 12);
@@ -42,7 +88,7 @@ const specialAnnual = round0(specialMonthly * 12);
 const foodAnnual = round0(foodMonthly * 12);
 const miscAnnual = round0(miscMonthly * 12);
 
-// ================= SALARY TABLE STRUCTURE =================
+// ================= SALARY TABLE =================
 const salaryRows = [
   ["Basic", basicMonthly, basicAnnual],
   ["House Rent Allowance", hraMonthly, hraAnnual],
@@ -60,7 +106,6 @@ const totalMonthly = round0(
 const totalAnnual = round0(
   salaryRows.reduce((sum, row) => sum + row[2], 0)
 );
-
   
   
   

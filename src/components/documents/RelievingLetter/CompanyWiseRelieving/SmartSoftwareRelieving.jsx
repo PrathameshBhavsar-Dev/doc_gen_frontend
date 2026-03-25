@@ -127,22 +127,23 @@ const SmartSoftwareRelieving = ({ company, data }) => {
         </Typography>
 
         {/* ================= STAMP (DYNAMIC) ================= */}
-        {company.signature && (
-          <Box
-            component="img"
-            src={company.signature}
-            alt="HR Signature"
-            sx={{ height: "80px", mb: 1 }}
-          />
-        )}
-        {company.stamp && (
-          <Box
-            component="img"
-            src={company.stamp}
-            alt="Company Stamp"
-            sx={{ height: "90px", mb: 1 }}
-          />
-        )}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 3 }}>
+                  {company?.signature && (
+                    <img
+                      src={company.signature}
+                      alt="Signature"
+                      style={{ height: 75 }}
+                    />
+                  )}
+        
+                  {company?.stamp && (
+                    <img
+                      src={company.stamp}
+                      alt="Stamp"
+                      style={{ height: 90 }}
+                    />
+                  )}
+                </Box>
 
         {/* ================= SIGNATURE (DYNAMIC) ================= */}
         

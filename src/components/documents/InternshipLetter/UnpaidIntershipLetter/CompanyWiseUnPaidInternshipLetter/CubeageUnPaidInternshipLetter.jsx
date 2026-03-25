@@ -22,11 +22,13 @@ const formatDate = (date) => {
   if (!date) return "";
 
   const d = new Date(date); // 🔥 dynamic input (string / Date)
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
+  if (isNaN(d)) return "";
 
-  return `${day}/${month}/${year}`;
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 };
 
 
@@ -48,7 +50,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
             fontFamily: "Cambria",
           }}
         >
-          <strong>Date: {formatDate(data.issueDate)}</strong>
+          <strong>Date: {data.issueDate}</strong>
         </Box>
 
         {/* ================= TITLE ================= */}

@@ -49,31 +49,29 @@ const JDITOffer = ({ company, data }) => {
   } = data;
 
   /* 🔥 DERIVED VALUES */
-  const monthlyCTC = Number(salary || 0);
-  const annualCTC = monthlyCTC * 12;
+  const annualCTC = Number(salary || 0);
+  const monthlyCTC = Math.round(annualCTC / 12);
 
-  const basic = Math.round(monthlyCTC * 0.4);
-  const hra = Math.round(monthlyCTC * 0.18);
-  const da = Math.round(monthlyCTC * 0.12);
-  const allowance = Math.round(monthlyCTC * 0.06);
-  const specialAllowance = Math.round(monthlyCTC * 0.16);
+  const hraMonthly = Math.round(monthlyCTC * 0.18);
+  const conveyanceMonthly = Math.round(monthlyCTC * 0.12);
+  const specialMonthly = Math.round(monthlyCTC * 0.16);
+  const medicalMonthly = Math.round(monthlyCTC * 0.06);
 
-  // Calculate Misc Allowance as the balancing figure for any rounding differences
-  const miscAllowance = Math.round(monthlyCTC * 0.08);
+  // Basic is the balancing figure
+  const basicMonthly = monthlyCTC - hraMonthly - conveyanceMonthly - specialMonthly - medicalMonthly;
 
   const salaryComponents = useMemo(() => {
     return [
-      { name: "Basic", monthly: basic, annual: basic * 12 },
-      { name: "HRA", monthly: hra, annual: hra * 12 },
-      { name: "Dearness Allowance", monthly: da, annual: da * 12 },
-      { name: "Special Allowance", monthly: specialAllowance, annual: specialAllowance * 12 },
-      { name: "Food Allowance", monthly: allowance, annual: allowance * 12 },
-      { name: "Misc Allowance", monthly: miscAllowance, annual: miscAllowance * 12 },
+      { name: "Basic Salary", monthly: basicMonthly, annual: basicMonthly * 12 },
+      { name: "House Rent Allowance", monthly: hraMonthly, annual: hraMonthly * 12 },
+      { name: "Dearness Allowance", monthly: conveyanceMonthly, annual: conveyanceMonthly * 12 },
+      { name: "Special Allowance", monthly: specialMonthly, annual: specialMonthly * 12 },
+      { name: "Food Allowance", monthly: medicalMonthly, annual: medicalMonthly * 12 },
     ];
-  }, [basic, hra, da, specialAllowance, allowance, miscAllowance]);
+  }, [basicMonthly, hraMonthly, conveyanceMonthly, specialMonthly, medicalMonthly]);
 
   const totalMonthly = monthlyCTC;
-  const totalAnnual = annualCTC;
+  const totalAnnual = monthlyCTC * 12;
 
   return (
     <>

@@ -25,27 +25,31 @@ const round2 = (num) => Number(Number(num || 0).toFixed(2));
 
 const formatCurrency = (num) =>
   Number(num || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    // minimumFractionDigits: 2,
+    // maximumFractionDigits: 2,
   });
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (monthlyCTC) => {
 
-  // Calculate salary components (100%)
-  let basic = Math.round(monthlyCTC * 0.48);
-  let hra = Math.round(monthlyCTC * 0.18);
-  let da = Math.round(monthlyCTC * 0.12);
-  let special = Math.round(monthlyCTC * 0.16);
-  let food = Math.round(monthlyCTC * 0.06);
-
-  // Fix rounding difference
-  const calculated = basic + hra + da + special + food;
-  basic += monthlyCTC - calculated;
-
-  // Static PF
+  // ✅ PF STATIC
   const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+
+  // % based components
+  const hra = Math.round(monthlyCTC * 0.18);
+  const da = Math.round(monthlyCTC * 0.12);
+  const special = Math.round(monthlyCTC * 0.16);
+  const food = Math.round(monthlyCTC * 0.06);
+
+  // ✅ Step 1: sabka total
+  const totalOthers = hra + da + special + food + pfMonthly;
+
+  // ✅ Step 2: Basic = remaining
+  let basic = monthlyCTC - totalOthers;
+
+  // ✅ Safety (rounding fix)
+  const finalTotal = basic + totalOthers;
+  basic += (monthlyCTC - finalTotal);
 
   return [
     ["Basic Salary", basic, basic * 12],
@@ -53,7 +57,7 @@ const generateSalaryBreakup = (monthlyCTC) => {
     ["Dearness Allowance", da, da * 12],
     ["Special Allowance", special, special * 12],
     ["Food Allowance", food, food * 12],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfMonthly * 12],
   ];
 };
 /* ================= MAIN COMPONENT ================= */
@@ -66,8 +70,7 @@ const annualCTC = monthlyCTC * 12;
 
 const salaryRows = generateSalaryBreakup(monthlyCTC);
 
-  const monthlyGross = salaryRows
-  .filter(row => row[0] !== "Provident Fund (PF)")
+ const monthlyGross = salaryRows
   .reduce((sum, row) => sum + row[1], 0);
 
   return (

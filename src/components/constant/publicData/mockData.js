@@ -19,7 +19,7 @@ import smartholderHeader from "../../../assets/images/SmartSoftware/smart-header
 // import smartholderFooter from '../assets/images/SmartSoftware/smart-footer.png';
 import smartholderWatermark from "../../../assets/images/SmartSoftware/Watermark.png";
 import smartholderSignature from "../../../assets/images/SmartSoftware/Sign.png";
-import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.jpeg";
+import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.png";
 import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
 import smartLogo from "../../../assets/images/SmartSoftware/Sign.png";
 

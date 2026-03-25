@@ -43,7 +43,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         sx={{
           textAlign: "center",
           fontWeight: 600,
-          // textDecoration: "underline",
+          textDecoration: "underline",
           fontSize: "14pt",
           mb: "8mm",
         }}

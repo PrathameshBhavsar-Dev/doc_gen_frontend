@@ -95,33 +95,33 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
 
     return `${inWords(Math.round(num))} Rupees Only`;
   };
-  /* ================= SMARTMATRIX PF LOGIC ================= */
+  /* ================= CUBEAGE SALARY LOGIC ================= */
 
-  const monthlyCTC = round0(data.totalSalary || 0);
+  const annualCTC = round0(Number(data.totalSalary || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // Percentage Breakup
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+  const pfAnnual = round0(pfMonthly * 12);
+
+  // ================= FIXED PERCENTAGES =================
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
   const foodMonthly = round0(monthlyCTC * 0.06);
 
-  // PF (Display only)
-  const pfMonthly = 3750;
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-  // Annual
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
-
-  // Gross WITHOUT PF
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
 
   const salaryRows = [
     ["Basic", basicMonthly, basicAnnual],
@@ -129,8 +129,16 @@ const NeweageConfirmation = ({ company = {}, data = {} }) => {
     ["Dearness Allowance", daMonthly, daAnnual],
     ["Special Allowance", specialMonthly, specialAnnual],
     ["Food Allowance", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual]
   ];
+
+  /* ===== TOTALS ===== */
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
   return (
     <>

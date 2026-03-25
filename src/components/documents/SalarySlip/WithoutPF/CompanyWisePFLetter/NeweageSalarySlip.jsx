@@ -12,10 +12,10 @@ import {
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
 /* ================= STYLES ================= */
@@ -79,11 +79,11 @@ const NeweageSalarySlip = ({ company, data }) => {
   const foodAllowance = round2(monthlyGross * PERCENT.food);
   const miscAllowance = round2(
     monthlyGross -
-      (basicSalary +
-        hra +
-        dearnessAllowance +
-        specialAllowance +
-        foodAllowance),
+    (basicSalary +
+      hra +
+      dearnessAllowance +
+      specialAllowance +
+      foodAllowance),
   );
 
   // Deductions
@@ -114,9 +114,9 @@ const NeweageSalarySlip = ({ company, data }) => {
   const formatMonthYear = (month) =>
     month
       ? new Date(`${month}-01`).toLocaleDateString("en-GB", {
-          month: "long",
-          year: "numeric",
-        })
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   /* ================= RENDER ================= */

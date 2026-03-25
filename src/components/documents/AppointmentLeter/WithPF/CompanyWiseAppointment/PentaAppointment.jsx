@@ -33,31 +33,35 @@ const formatCurrency = (v) =>
 const generateSalaryBreakup = (annualCTC) => {
   const monthlyCTC = Math.round(annualCTC / 12);
 
-  // Apply percentages directly on full monthly CTC
-  let basic = Math.round(monthlyCTC * 0.48);
+  // ✅ PF STATIC (included in calculation)
+  const pfMonthly = 3750;
+  const pfAnnual = pfMonthly * 12;
+
+  // % components
   let hra = Math.round(monthlyCTC * 0.18);
   let da = Math.round(monthlyCTC * 0.12);
   let special = Math.round(monthlyCTC * 0.16);
   let food = Math.round(monthlyCTC * 0.06);
 
-  // Fix rounding difference
+  // ✅ Add PF also in total
   const calculated =
-    basic + hra + da + special + food;
+    hra + da + special + food + pfMonthly;
 
-  const diff = monthlyCTC - calculated;
+  // ✅ Basic = remaining
+  let basic = monthlyCTC - calculated;
 
-  basic += diff; // adjust only Basic
+  // ✅ Rounding fix
+  const totalCheck =
+    basic + hra + da + special + food + pfMonthly;
 
-  // PF Static (NOT calculated)
-  const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+  basic += (monthlyCTC - totalCheck);
 
   return [
-    ["Basic Salary ", basic, basic * 12],
-    ["House Rent Allowance ", hra, hra * 12],
-    ["Dearness Allowance ", da, da * 12],
-    ["Special Allowance ", special, special * 12],
-    ["Food Allowance ", food, food * 12],
+    ["Basic Salary", basic, basic * 12],
+    ["House Rent Allowance", hra, hra * 12],
+    ["Dearness Allowance", da, da * 12],
+    ["Special Allowance", special, special * 12],
+    ["Food Allowance", food, food * 12],
     ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 };

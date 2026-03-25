@@ -30,7 +30,8 @@ const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Number(n || 0).toLocaleString("en-IN");
+
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -57,17 +58,18 @@ const numberToWords = (num = 0) => {
 
 /* ================== COMPONENT ================== */
 const RPFullAndFinal = ({ company = {}, data = {} }) => {
+  
   const totalDays = Number(data.workdays || 0);
   const paidDays = Number(data.paiddays || 0);
   const ratio = totalDays ? paidDays / totalDays : 0;
 
   const gross = Number(data.totalSalary || 0);
 
-  const basic = +(gross * 0.48);
-  const hra = +(gross * 0.18);
-  const da = +(gross * 0.12);
-  const special = +(gross * 0.16);
-  const food = +(gross * 0.06);
+  const basic = Math.round(gross * 0.48);
+const hra = Math.round(gross * 0.18);
+const da = Math.round(gross * 0.12);
+const special = Math.round(gross * 0.16);
+const food = Math.round(gross * 0.06);
 
   const pfAllowance = 3750; // Static PF Allowance
 

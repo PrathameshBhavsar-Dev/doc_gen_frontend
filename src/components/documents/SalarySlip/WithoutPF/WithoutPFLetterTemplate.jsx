@@ -1,15 +1,15 @@
 import React from "react";
 
- import CubeageSalarySlip from "../WithoutPF/CompanyWisePFLetter/CubeageSalarySlip";
- import JDITSalarySlip from "../WithoutPF/CompanyWisePFLetter/JDITSalarySlip";
- import NeweageSalarySlip from "../WithoutPF/CompanyWisePFLetter/NeweageSalarySlip";
- import PentaSalarySlip from "../WithoutPF/CompanyWisePFLetter/PentaSalarySlip";
-import DevconsSalarySlip from "../WithoutPF/CompanyWisePFLetter/DevconsSalarySlip";
-import RPSalarySlip from "../WithoutPF/CompanyWisePFLetter/RPSalarySlip";
-import NimbjaSalarySlip from "../WithoutPF/CompanyWisePFLetter/NimbjaSalarySlip";
- import SmartMatrixSalarySlip from "../WithoutPF/CompanyWisePFLetter/SmartMatrixSalarySlip";
- import SmartSoftwareSalarySlip from "../WithoutPF/CompanyWisePFLetter/SmartSoftwareSalarySlip";
-import QuickSalarySlip from "../WithoutPF/CompanyWisePFLetter/QuickSalarySlip";
+ import CubeageSalarySlip from "./CompanyWisePFLetter/CubeageSalarySlip";
+ import JDITSalarySlip from "./CompanyWisePFLetter/JDITSalarySlip";
+ import NeweageSalarySlip from "./CompanyWisePFLetter/NeweageSalarySlip";
+ import PentaSalarySlip from "./CompanyWisePFLetter/PentaSalarySlip";
+import DevconsSalarySlip from "./CompanyWisePFLetter/DevconsSalarySlip";
+import RPSalarySlip from "./CompanyWisePFLetter/RPSalarySlip";
+import NimbjaSalarySlip from "./CompanyWisePFLetter/NimbjaSalarySlip";
+ import SmartMatrixSalarySlip from "./CompanyWisePFLetter/SmartMatrixSalarySlip";
+ import SmartSoftwareSalarySlip from "./CompanyWisePFLetter/SmartSoftwareSalarySlip";
+import QuickSalarySlip from "./CompanyWisePFLetter/QuickSalarySlip";
 
 
 const companyComponentMap = {

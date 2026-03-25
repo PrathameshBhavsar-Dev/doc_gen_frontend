@@ -7,7 +7,6 @@ import {
   TableCell,
   TableBody,
   TableHead,
-  TableContainer,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 
@@ -17,7 +16,7 @@ import {
   numberToWords,
 } from "../../../../../utils/salaryCalculations";
 
-export default function SmartSoftwareOffer({ company, data }) {
+export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
     issueDate = new Date(),
     employeeName = "",
@@ -26,19 +25,23 @@ export default function SmartSoftwareOffer({ company, data }) {
     joiningDate = "",
     salary = 0,
     mrms = "",
-  } = data || {};
+  } = data;
 
-  /* ================= TEXT STYLES ================= */
+  /* ================= TITLE & PRONOUNS ================= */
+  const title = (mrms || "").toLowerCase().trim();
 
-  const baseText = {
-    fontSize: "11pt",
-    lineHeight: 1.6,
-  };
+  const pronouns =
+    ["miss", "miss.", "mrs", "mrs.", "ms", "ms."].includes(title)
+      ? { subject: "She", object: "her", possessive: "her" }
+      : ["mx", "mx."].includes(title)
+      ? { subject: "They", object: "them", possessive: "their" }
+      : { subject: "He", object: "him", possessive: "his" };
 
-  const labelStyle = {
-    fontWeight: 600,
-  };
+  const displayTitle = title
+    ? title.charAt(0).toUpperCase() + title.slice(1)
+    : "Mr.";
 
+<<<<<<< HEAD
   const para = {
     mt: "16px",
     textAlign: "justify",
@@ -54,50 +57,110 @@ export default function SmartSoftwareOffer({ company, data }) {
   const displayTitle = mrms ? `${mrms}.` : "";
 
   const firstName = employeeName?.split(" ")[0] || "";
+=======
+  const firstName = candidateName.split(" ")[0] || "";
+>>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
 
   const formattedJoiningDate = joiningDate
-    ? new Date(joiningDate).toLocaleDateString("en-US", {
-        month: "long",
+    ? new Date(joiningDate).toLocaleDateString("en-IN", {
         day: "2-digit",
+        month: "long",
         year: "numeric",
       })
     : "";
 
-  /* ================= SALARY CALCULATION (48%,18%,12%,16%,6%) ================= */
-
+  /* ================= SALARY BREAKUP ================= */
   const totalAnnual = Number(salary) || 0;
-  const totalMonthly = Math.round(totalAnnual / 12);
 
   const salaryComponents = useMemo(() => {
-    const basic = Math.round(totalAnnual * 0.48);
-    const hra = Math.round(totalAnnual * 0.18);
-    const conveyance = Math.round(totalAnnual * 0.12);
-    const special = Math.round(totalAnnual * 0.16);
+    const round0 = (num) => Math.round(num);
 
-    const misc = totalAnnual - (basic + hra + conveyance + special);
+    const annualCTC = round0(Number(totalAnnual || 0));
+    const monthlyCTC = round0(annualCTC / 12);
+
+    const pfMonthly = 3750;
+
+    const hraMonthly = round0(monthlyCTC * 0.18);
+    const daMonthly = round0(monthlyCTC * 0.12);
+    const specialMonthly = round0(monthlyCTC * 0.16);
+    const foodMonthly = round0(monthlyCTC * 0.06);
+
+    const basicMonthly = round0(
+      monthlyCTC -
+        (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+    );
+
+    const basicAnnual = round0(basicMonthly * 12);
+    const hraAnnual = round0(hraMonthly * 12);
+    const daAnnual = round0(daMonthly * 12);
+    const specialAnnual = round0(specialMonthly * 12);
+    const foodAnnual = round0(foodMonthly * 12);
+    const pfAnnual = round0(pfMonthly * 12);
 
     return [
-      { name: "Basic Salary", annual: basic, monthly: Math.round(basic / 12) },
-      { name: "HRA ", annual: hra, monthly: Math.round(hra / 12) },
-      { name: "Conveyance Allowance", annual: conveyance, monthly: Math.round(conveyance / 12) },
-      { name: "Special Allowance", annual: special, monthly: Math.round(special / 12) },
-      { name: "Food Allowance", annual: misc, monthly: Math.round(misc / 12) },
+      { name: "Basic Salary ", annual: basicAnnual, monthly: basicMonthly },
+      { name: "HRA ", annual: hraAnnual, monthly: hraMonthly },
+      { name: "Conveyance Allowance ", annual: daAnnual, monthly: daMonthly },
+      { name: "Special Allowance ", annual: specialAnnual, monthly: specialMonthly },
+      { name: "Food Allowance ", annual: foodAnnual, monthly: foodMonthly },
+      { name: "PF ", annual: pfAnnual, monthly: pfMonthly },
     ];
   }, [totalAnnual]);
 
+  // ✅ TOTAL FIX (INCLUDING PF)
+  const totalMonthly = salaryComponents.reduce(
+    (sum, item) => sum + item.monthly,
+    0
+  );
+
+  const totalAnnualFinal = salaryComponents.reduce(
+    (sum, item) => sum + item.annual,
+    0
+  );
+
   const salaryInWords = numberToWords(totalAnnual);
 
-  /* ================= PF ================= */
+  /* ================= REMOVE .00 LOGIC (ADDED ONLY) */
+  const NoDecimal = (value) => {
+    return formatCurrency(value).replace(/\.00$/, "");
+  };
 
-  const monthlyPF = 3750;
-  const annualPF = monthlyPF * 12;
+  /* ================= STYLES ================= */
+  const baseText = {
+    fontFamily: "Verdana, Geneva, sans-serif",
+    fontSize: "14px",
+    lineHeight: 1.8,
+    color: "#000",
+  };
 
-  /* ================= TABLE CELL STYLE ================= */
+  const para = { ...baseText, mt: "12px" };
+  const paraLarge = { ...baseText, mt: "24px" };
 
-  const tableCellStyle = {
-    border: "1px solid #333",
-    fontSize: "9.75pt",
-    py: "0.35mm",
+  const labelStyle = {
+    display: "inline-block",
+    width: "110px",
+  };
+
+  const tableCell = {
+    fontFamily: "Verdana, Geneva, sans-serif",
+    fontSize: "13px",
+    lineHeight: 1.4,
+    border: "1px solid #000",
+    padding: "4px 6px",
+  };
+
+  const tableHeader = {
+    ...tableCell,
+    backgroundColor: "#32a1c2ff",
+    color: "#fff",
+    fontWeight: "bold",
+  };
+
+  const tableTotal = {
+    ...tableCell,
+    backgroundColor: "#32a1c2ff",
+    color: "#fff",
+    fontWeight: "bold",
   };
 
   return (
@@ -135,7 +198,7 @@ export default function SmartSoftwareOffer({ company, data }) {
           <Typography sx={para}>
             We are pleased to offer you the position of {position}. As discussed,
             you are requested to join on {formattedJoiningDate}. Your total Gross salary
-            will be Rs. {formatCurrency(totalAnnual)} ({salaryInWords}) per year.
+            will be Rs. {NoDecimal(totalAnnual)} ({salaryInWords}) per year.
           </Typography>
 
           <Typography sx={paraLarge}>
@@ -183,11 +246,13 @@ export default function SmartSoftwareOffer({ company, data }) {
       </A4Layout>
 
       {/* ================= PAGE 2 ================= */}
-      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Typography align="center" sx={{ mb: "24px" }}>
-          <b>Annexure A – Salary Structure</b>
-        </Typography>
+      <A4Layout company={{ ...company, watermark: null, watermarkImage: null }}>
+        <Box sx={baseText}>
+          <Typography align="center" sx={{ mb: "24px" }}>
+            <b>Annexure A – Salary Structure</b>
+          </Typography>
 
+<<<<<<< HEAD
         <Typography sx={{ mb: 2 }}>
           <b>Name : {employeeName}</b>
           <span style={{ marginLeft: "120px" }}>
@@ -204,67 +269,65 @@ export default function SmartSoftwareOffer({ company, data }) {
               width: "100%",
             }}
           >
+=======
+          <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
+>>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
             <TableHead>
-              <TableRow
-                sx={{
-                  backgroundColor: "#32a1c2ff",
-                  "& th": {
-                    fontWeight: 600,
-                    fontSize: "10pt",
-                    border: "1px solid #333",
-                  },
-                }}
-              >
-                <TableCell>Salary Components</TableCell>
-                <TableCell align="center">Per month (Rs.)</TableCell>
-                <TableCell align="center">Per Annum (Rs.)</TableCell>
+              <TableRow>
+                <TableCell sx={tableHeader}>Salary Component</TableCell>
+                <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
+                <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell sx={tableCellStyle}>{row.name}</TableCell>
-                  <TableCell align="center" sx={tableCellStyle}>
-                    {formatCurrency(row.monthly)}
+                  <TableCell sx={tableCell}>{row.name}</TableCell>
+                  <TableCell sx={tableCell} align="right">
+                    {NoDecimal(row.monthly)}
                   </TableCell>
-                  <TableCell align="center" sx={tableCellStyle}>
-                    {formatCurrency(row.annual)}
+                  <TableCell sx={tableCell} align="right">
+                    {NoDecimal(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
               <TableRow>
-                <TableCell sx={tableCellStyle}>Provident Fund (PF)</TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(monthlyPF)}
+                <TableCell sx={tableTotal}>Total Monthly Gross Salary</TableCell>
+                <TableCell sx={tableTotal} align="right">
+                  {NoDecimal(totalMonthly)}
                 </TableCell>
-                <TableCell align="center" sx={tableCellStyle}>
-                  {formatCurrency(annualPF)}
-                </TableCell>
-              </TableRow>
-
-              <TableRow
-                sx={{
-                  backgroundColor: "#32a1c2ff",
-                  "& td": {
-                    fontWeight: 600,
-                    fontSize: "10pt",
-                    border: "1px solid #333",
-                  },
-                }}
-              >
-                <TableCell>Total Monthly Gross Salary</TableCell>
-                <TableCell align="center">
-                  {formatCurrency(totalMonthly)}
-                </TableCell>
-                <TableCell align="center">
-                  {formatCurrency(totalAnnual)}
+                <TableCell sx={tableTotal} align="right">
+                  {NoDecimal(totalAnnualFinal)}
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
-        </TableContainer>
+
+        </Box>
+
+
+         <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+            <Box>
+              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+                {company.signature && (
+                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                )}
+                {company.stamp && (
+                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                )}
+              </Box>
+              <Typography>{company.hrName}</Typography>
+              <Typography>HR Relations Lead</Typography>
+            </Box>
+
+            <Box sx={{ width: "45%", mt: 8 }}>
+              <Typography>Signature : ___________________</Typography>
+              <Typography>Candidate Name : {candidateName}</Typography>
+            </Box>
+          </Box>
+        
       </A4Layout>
     </>
   );
