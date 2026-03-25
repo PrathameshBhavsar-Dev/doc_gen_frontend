@@ -402,13 +402,8 @@ const PentaOffer = ({ company, data }) => {
 
         <SignatureBlock
           company={company}
-<<<<<<< HEAD
           employeeName={data.employeeName}
           showCandidate={true}
-=======
-          candidateName={data.candidateName}
-          showCandidateName={true}
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
         />
 
         {/* </Box> */}

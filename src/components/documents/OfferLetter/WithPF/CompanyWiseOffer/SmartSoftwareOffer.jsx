@@ -37,11 +37,6 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
       ? { subject: "They", object: "them", possessive: "their" }
       : { subject: "He", object: "him", possessive: "his" };
 
-  const displayTitle = title
-    ? title.charAt(0).toUpperCase() + title.slice(1)
-    : "Mr.";
-
-<<<<<<< HEAD
   const para = {
     mt: "16px",
     textAlign: "justify",
@@ -57,9 +52,6 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const displayTitle = mrms ? `${mrms}.` : "";
 
   const firstName = employeeName?.split(" ")[0] || "";
-=======
-  const firstName = candidateName.split(" ")[0] || "";
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
@@ -133,8 +125,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     color: "#000",
   };
 
-  const para = { ...baseText, mt: "12px" };
-  const paraLarge = { ...baseText, mt: "24px" };
+  // const para = { ...baseText, mt: "12px" };
+  // const paraLarge = { ...baseText, mt: "24px" };
 
   const labelStyle = {
     display: "inline-block",
@@ -252,26 +244,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             <b>Annexure A – Salary Structure</b>
           </Typography>
 
-<<<<<<< HEAD
-        <Typography sx={{ mb: 2 }}>
-          <b>Name : {employeeName}</b>
-          <span style={{ marginLeft: "120px" }}>
-            <b>Designation : {position}</b>
-          </span>
-        </Typography>
-
-        <TableContainer sx={{ mb: "4mm" }}>
-          <Table
-            size="small"
-            sx={{
-              border: "1px solid #333",
-              borderCollapse: "collapse",
-              width: "100%",
-            }}
-          >
-=======
           <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
             <TableHead>
               <TableRow>
                 <TableCell sx={tableHeader}>Salary Component</TableCell>
