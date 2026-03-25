@@ -227,7 +227,7 @@ export const companies = [
 
   {
     id: 5,
-    name: "RP Business Solution LLP",
+    name: "RP Business Solutions LLP",
     shortName: "RP Business",
     date: "11-07-2023",
     logo: rpblogo,
@@ -428,7 +428,7 @@ export const documentTypes = [
   {
     id: 1,
     name: "Salary Slip",
-    template: "salary_slip",
+    template: "salaryslip_letter",
     fields: [
       {
         name: "mrms",
@@ -538,7 +538,7 @@ export const documentTypes = [
         required: true,
       },
       {
-        name: "employeePhone",
+        name: "employeeNumber",
         label: "Phone Number",
         type: "number",
         required: true,
