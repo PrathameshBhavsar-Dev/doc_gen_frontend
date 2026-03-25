@@ -247,7 +247,10 @@ const DocumentCreate = () => {
 
         title: documentData.mrms,
         employeeName: documentData.employeeName,
-        email: documentData.employeeEmail,
+
+        // ✅ FIXED
+        employeeEmail: documentData.employeeEmail,
+        employeeNumber: documentData.employeeNumber || "EMP001", // or from input
 
         position: documentData.position,
         department: documentData.department || "IT",
@@ -283,10 +286,6 @@ const DocumentCreate = () => {
         issueDate: payload.issueDate,
       });
 
-      const res = await apiService.apipost(apiUrl, payload);
-
-      const documentId = res?.data?._id;
-
       navigate(`/document/preview`, {
         state: {
           documentData,
@@ -294,7 +293,7 @@ const DocumentCreate = () => {
           selectedCompany
         }
       });
-      
+
     } catch (error) {
       console.error("❌ FULL ERROR:", error.response?.data || error);
     }

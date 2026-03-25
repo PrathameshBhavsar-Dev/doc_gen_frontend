@@ -24,16 +24,16 @@ const Login = () => {
     }
 
     setLoading(true);
+
     try {
       const result = await login({ email, password });
 
       console.log("Login result:", result);
 
-      if (result.success) {
+      if (result.success && result.user) {
         const role = result.user.role;
 
-        console.log("Navigating to:", role);
-
+        // ✅ Safe navigation
         if (role === "admin") {
           navigate("/admin/dashboard");
         } else {
@@ -44,7 +44,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Invalid email or password.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
