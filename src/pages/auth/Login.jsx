@@ -83,7 +83,7 @@ const Login = () => {
               document generator.
             </h2>
           </div>
-        </div>
+        </div> 
 
         {/* RIGHT SIDE */}
         <div className="flex items-center justify-center">
