@@ -166,7 +166,7 @@
 
 //         <Box>
 //           <Typography>Signature : ________________________</Typography>
-//           <Typography>Candidate Name : {data.candidateName}</Typography>
+//           <Typography>Candidate Name : {data.employeeName}</Typography>
 //         </Box>
 //       </Box>
 //     </A4Page>
@@ -372,7 +372,7 @@ const NimbjaOfferPage2 = ({ company, data }) => {
           </Typography>
           <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
             <strong>Candidate Name:</strong>{" "}
-            <strong>{data.candidateName}</strong>
+            <strong>{data.employeeName}</strong>
           </Typography>
         </Box>
       </Box>
