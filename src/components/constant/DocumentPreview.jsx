@@ -404,122 +404,140 @@ const DocumentPreview = () => {
   /* ── Download PDF (full) ── */
   const handleDownloadPDF = async () => {
     if (!documentRef.current) return;
-    setLoading(true); setLoadingLabel("Saving & generating PDF…"); setError("");
+
+    setLoading(true);
+    setLoadingLabel("Saving & generating PDF…");
+    setError("");
+
     try {
-      const key = previewDocType?.template?.replace(/-/g, "_");
+      // ✅ NORMALIZE TEMPLATE KEY (ROBUST)
+      const key = previewDocType?.template
+        ?.toLowerCase()
+        ?.replace(/[\s-]+/g, "_") // spaces & hyphens → underscore
+        ?.replace(/([a-z])([A-Z])/g, "$1_$2") // camelCase → snake_case
+        ?.toLowerCase();
+
       if (!key) throw new Error("Missing doc type key");
+
+      console.log("🚨 ORIGINAL TEMPLATE:", previewDocType?.template);
+      console.log("🔥 NORMALIZED KEY:", key);
+
+      const base = {
+        company: previewCompany?.name,
+        issuedTo: user?.id,
+        employeeName: previewData.employeeName,
+        employeeEmail: previewData.employeeEmail,
+        employeeNumber: previewData.employeeNumber || "EMP001",
+      };
 
       const validSalaryTypes = ["withPF", "withoutPF"];
 
-      function buildPayload(template, previewData, user, company) {
-        const base = {
-          company: company?.name,
-          issuedTo: user?.id,
-          employeeName: previewData.employeeName,
+      // ✅ PAYLOAD BUILDERS (CLEAN APPROACH)
+      const payloadBuilders = {
+        salaryslip_letter: () => ({
+          ...base,
+          title: previewData.mrms,
+          designation: previewData.position || "Employee",
+          totalSalary: Number(previewData.salary) || 0,
+          doj: previewData.joiningDate || new Date(),
+          salaryType: validSalaryTypes.includes(previewData.salaryType)
+            ? previewData.salaryType
+            : "withPF",
+          department: previewData.department || "",
+          pan: previewData.pan || "",
+          gender: previewData.gender || "Other",
+          workdays: previewData.workdays || 22,
+          dob: previewData.dob || "1990-01-01",
+          mode: previewData.mode || "Bank Transfer",
+          accountNo: previewData.accountNo || "",
+          month:
+            previewData.month ||
+            new Date().toLocaleString("default", { month: "long" }),
+        }),
+
+        offer_letter: () => ({
+          ...base,
+          title: previewData.mrms,
+          position: previewData.position || previewData.designation,
+          department: previewData.department || "General",
+          employmentType: previewData.appointmentType || "Full-time",
+          salary: Number(previewData.salary) || 0,
+          location: previewData.location || "Pune",
+          offerValidTill:
+            previewData.offerValidTill ||
+            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          offerType: previewData.offerType || "withPF",
+          joiningDate: previewData.joiningDate,
+          issueDate: previewData.issueDate,
+        }),
+
+        appointment_letter: () => ({
+          ...base,
+          title: previewData.mrms,
+          position: previewData.position || previewData.designation,
+          department: previewData.department || "General",
+          joiningDate: previewData.joiningDate,
+          issueDate: previewData.issueDate,
+          salary: Number(previewData.salary) || 0,
+          address: previewData.address || "",
+          probationPeriod: previewData.probationPeriod || "3 months",
+          workLocation:
+            previewData.workLocation || previewData.location || "Pune",
+          appointmentType: previewData.appointmentType || "Full-time",
+        }),
+
+        confirmation_letter: () => ({
+          ...base,
+
+          title: previewData.mrms,
+
           employeeEmail: previewData.employeeEmail,
-          employeeNumber: previewData.employeeNumber || "EMP001",
-        };
+          employeePhone: previewData.employeePhone,
 
-        const validSalaryTypes = ["withPF", "withoutPF"];
+          effectiveDate: previewData.effectiveDate,
+          issueDate: previewData.issueDate,
 
-        switch (template) {
-          case "salaryslip_letter":
-            return {
-              ...base,
-              title: previewData.mrms,
+          totalSalary: Number(previewData.totalSalary) || 0,
 
-              designation: previewData.position || "Employee",
-              totalSalary: Number(previewData.salary) || 0,
-              doj: previewData.joiningDate || new Date(),
-              salaryType: validSalaryTypes.includes(previewData.salaryType)
-                ? previewData.salaryType
-                : "withPF",
+          address: previewData.address || "",
 
-              department: previewData.department || "",
-              pan: previewData.pan || "",
-              gender: previewData.gender || "Other",
-              workdays: previewData.workdays || 22,
-              dob: previewData.dob || "1990-01-01",
-              mode: previewData.mode || "Bank Transfer",
-              accountNo: previewData.accountNo || "",
-              month:
-                previewData.month ||
-                new Date().toLocaleString("default", { month: "long" }),
-            };
+          position: previewData.position,
+          department: previewData.department || "",
 
-          case "offer_letter":
-            return {
-              ...base,
+          confirmationType: previewData.confirmationType || "withPF",
+        }),
+      };
 
-              title: previewData.mrms,
-
-              // ✅ FIX HERE
-              position: previewData.position || previewData.designation,
-
-              department: previewData.department || "General",
-              employmentType: previewData.appointmentType || "Full-time",
-              salary: Number(previewData.salary) || 0,
-              location: previewData.location || "Pune",
-
-              offerValidTill:
-                previewData.offerValidTill ||
-                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-
-              offerType: previewData.offerType || "withPF",
-
-              joiningDate: previewData.joiningDate,
-              issueDate: previewData.issueDate,
-            };
-          case "appointment_letter":
-            return {
-              ...base,
-
-              title: previewData.mrms,
-
-              position: previewData.position || previewData.designation,
-              department: previewData.department || "General",
-
-              joiningDate: previewData.joiningDate,
-              issueDate: previewData.issueDate,
-
-              salary: Number(previewData.salary) || 0,
-
-              // ✅ REQUIRED FIELDS (FIXED)
-              address: previewData.address || "",
-              probationPeriod: previewData.probationPeriod || "3 months",
-              workLocation: previewData.workLocation || previewData.location || "Pune",
-              appointmentType: previewData.appointmentType || "Full-time",
-            };
-          // 👉 add more cases later for other docs
-
-          default:
-            throw new Error("Invalid document type");
-        }
+      // ✅ VALIDATE TEMPLATE
+      if (!payloadBuilders[key]) {
+        console.error("❌ Unsupported template:", key);
+        throw new Error(`Invalid document type: ${key}`);
       }
 
-      const payload = buildPayload(
-        previewDocType?.template,
-        previewData,
-        user,
-        previewCompany
-      );
+      const payload = payloadBuilders[key]();
 
       console.log("🔥 FINAL SAVE PAYLOAD:", payload);
 
+      // ✅ API CALL
       await apiService.apipost(API.generateDoc(key), payload);
 
+      // ✅ GENERATE PDF
       window.scrollTo(0, 0);
-      await new Promise(r => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 300));
+
       await generatePDF(
         documentRef.current,
         `${previewDocType.name}-${new Date().toISOString().slice(0, 10)}`
       );
+
       toast("PDF saved & downloaded ✓");
     } catch (err) {
-      console.error(err);
+      console.error("❌ ERROR:", err);
       setError("Failed to save or generate PDF. Please try again.");
       toast("Export failed", "error");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   /* ── Download PDF (content only) ── */

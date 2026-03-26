@@ -13,24 +13,13 @@ import { useLocation, useNavigate } from "react-router-dom"; // ✅
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef, useState, useEffect } from "react";
-<<<<<<< HEAD
-import { generatePDF } from '../../utils/pdfUtils'; // adjust path as needed
-=======
 import { generatePDF } from "../../utils/pdfUtils"; // adjust path as needed
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
 
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-<<<<<<< HEAD
-  const [doc, setDoc] = useState(null);
-
-  const docId = state?.id;
-  const docType = state?.type;
-=======
   const [doc, setDoc] = useState(state?.document || null);
 
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -63,11 +52,7 @@ const UserDetailPage = () => {
 
       await api.downloadFile(
         `/api/v1/documents/${routeType}/download/${doc._id}`,
-<<<<<<< HEAD
-        `${doc.documentType}.pdf`
-=======
         `${doc.documentType}.pdf`,
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
       );
     } catch (err) {
       console.error(err);
@@ -79,43 +64,11 @@ const UserDetailPage = () => {
 
     window.open(
       `http://localhost:5000/api/v1/documents/${routeType}/preview/${doc._id}`,
-<<<<<<< HEAD
-      "_blank"
-=======
       "_blank",
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
     );
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (!docId || !docType) return;
-
-    const fetchDocument = async () => {
-      try {
-        const api = new ApiService();
-
-        const routeType = mapDocTypeToRoute(docType);
-
-        const url = ServerUrl.getDocByUserId(routeType, docId);
-
-        console.log("Fetching:", url);
-
-        const res = await api.apiget(url);
-
-        setDoc(res.data);
-      } catch (err) {
-        console.error("Error fetching document:", err);
-      }
-    };
-
-    fetchDocument();
-  }, [docId, docType]);
-
-  return (
-    <div className="min-h-screen bg-gray-100" ref={documentRef}>
-
-=======
     if (!doc && state?.id && state?.type) {
       const fetchDocument = async () => {
         try {
@@ -137,7 +90,6 @@ const UserDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100" ref={documentRef}>
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
       {/* ================= PAGE CONTENT ================= */}
       <div className="p-4 sm:p-6">
         {/* Back */}
@@ -177,17 +129,10 @@ const UserDetailPage = () => {
                 Generated on{" "}
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-<<<<<<< HEAD
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
-=======
                       month: "short",
                       day: "numeric",
                       year: "numeric",
                     })
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
                   : "—"}
               </span>
             </div>
@@ -210,15 +155,9 @@ const UserDetailPage = () => {
             </div>
             <p className="text-sm text-gray-500">Employee Name</p>
             <p className="font-medium mb-4">{doc?.employeeName}</p>
-<<<<<<< HEAD
-
-            <p className="text-sm text-gray-500">Employee ID</p>
-            <p className="font-medium">{doc?.employeeId}</p>          </div>
-=======
             <p className="text-sm text-gray-500">Employee ID</p>
             <p className="font-medium">{doc?.employeeId}</p>{" "}
           </div>
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
 
           {/* Company */}
           <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm">
@@ -255,11 +194,7 @@ const UserDetailPage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 text-sm">
             <div>
               <p className="text-gray-500">Document Type</p>
-<<<<<<< HEAD
-              <p className="font-medium">{doc?.documentType}</p>
-=======
               <p className="font-medium mt-2">{doc?.documentType}</p>
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
             </div>
 
             {/* <div>
@@ -269,15 +204,6 @@ const UserDetailPage = () => {
 
             <div>
               <p className="text-gray-500">Date</p>
-<<<<<<< HEAD
-              <p className="font-medium">
-                {doc?.createdAt
-                  ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
-=======
               <p className="font-medium mt-2">
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
@@ -285,28 +211,18 @@ const UserDetailPage = () => {
                       day: "numeric",
                       year: "numeric",
                     })
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
                   : "—"}
               </p>
             </div>
 
             <div>
               <p className="text-gray-500">Generated By</p>
-<<<<<<< HEAD
-              <p className="font-medium">{doc?.issuedTo}</p>
-            </div>
-
-            <div>
-              <p className="text-gray-500">Payment Status</p>
-              <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-=======
               <p className="font-medium mt-2">{doc?.issuedBy}</p>
             </div>
 
             <div>
               <p className="text-gray-500 mb-2">Payment Status</p>
               <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium ">
->>>>>>> b9912123f20954d0cd4db3bbacd6f98649686ed9
                 {doc?.paymentStatus}
               </span>
             </div>
