@@ -470,6 +470,26 @@ const DocumentPreview = () => {
               joiningDate: previewData.joiningDate,
               issueDate: previewData.issueDate,
             };
+          case "appointment_letter":
+            return {
+              ...base,
+
+              title: previewData.mrms,
+
+              position: previewData.position || previewData.designation,
+              department: previewData.department || "General",
+
+              joiningDate: previewData.joiningDate,
+              issueDate: previewData.issueDate,
+
+              salary: Number(previewData.salary) || 0,
+
+              // ✅ REQUIRED FIELDS (FIXED)
+              address: previewData.address || "",
+              probationPeriod: previewData.probationPeriod || "3 months",
+              workLocation: previewData.workLocation || previewData.location || "Pune",
+              appointmentType: previewData.appointmentType || "Full-time",
+            };
           // 👉 add more cases later for other docs
 
           default:
