@@ -29,7 +29,7 @@ const formatIndianCurrency = (value) => {
 const NimbjaOfferPage1 = ({ company, data }) => {
   const offerDate = formatDate(data.issueDate);
   const joiningDate = formatDate(data.joiningDate);
-  const firstName = data.candidateName?.split(" ")[0] || "";
+  const firstName = data.employeeName?.split(" ")[0] || "";
   /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
   const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
@@ -114,7 +114,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
               fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
             }}
           >
-            {data.candidateName}
+            {data.employeeName}
           </Typography>
         </Typography>
 
@@ -306,7 +306,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
                 }}
               >
                 <strong>Candidate Name:</strong>{" "}
-                <strong>{data.candidateName}</strong> {/* 🔑 NAME BOLD */}
+                <strong>{data.employeeName}</strong> {/* 🔑 NAME BOLD */}
               </Typography>
             </Grid>
           </Grid>

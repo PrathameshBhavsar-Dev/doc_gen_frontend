@@ -195,7 +195,7 @@ export const companies = [
 
   {
     id: 4,
-    name: "Devcons Software Solution Pvt. Ltd.",
+    name: "Devcons Software Solutions Pvt. Ltd.",
     shortName: "Devcons",
     date: "28-12-2022",
     logo: devconslogo,
@@ -227,7 +227,7 @@ export const companies = [
 
   {
     id: 5,
-    name: "RP Business Solution LLP",
+    name: "RP Business Solutions LLP",
     shortName: "RP Business",
     date: "11-07-2023",
     logo: rpblogo,
@@ -307,7 +307,7 @@ export const companies = [
     footerImage: Nimbja_footer,
     watermarkImage: null,
     address:
-      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Gurav, Pimpri-Chinchwad, Pune- 411027",
+      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Saudagar, Pimpri-Chinchwad, Pune- 411027",
     email: "hr@nimbjasolution.com",
     phone: "+91 7066561234",
     website: "https://nimbjasolution.com/",
@@ -428,7 +428,7 @@ export const documentTypes = [
   {
     id: 1,
     name: "Salary Slip",
-    template: "salary-slip",
+    template: "salaryslip_letter",
     fields: [
       {
         name: "mrms",
@@ -516,7 +516,7 @@ export const documentTypes = [
   {
     id: 2,
     name: "Offer Letter",
-    template: "offer-letter",
+    template: "offer_letter",
     fields: [
       {
         name: "mrms",
@@ -526,7 +526,7 @@ export const documentTypes = [
         required: true,
       },
       {
-        name: "candidateName",
+        name: "employeeName",
         label: "Employee Name",
         type: "text",
         required: true,
@@ -538,7 +538,7 @@ export const documentTypes = [
         required: true,
       },
       {
-        name: "employeePhone",
+        name: "employeeNumber",
         label: "Phone Number",
         type: "number",
         required: true,
@@ -608,7 +608,7 @@ export const documentTypes = [
   {
     id: 3,
     name: "Appointment Letter",
-    template: "appointment-letter",
+    template: "appointment_letter",
     fields: [
       {
         name: "mrms",
@@ -695,7 +695,7 @@ export const documentTypes = [
   {
     id: 4,
     name: "Experience Letter",
-    template: "experience-letter",
+    template: "experience_letter",
     fields: [
       {
         name: "mrms",
@@ -767,7 +767,7 @@ export const documentTypes = [
   {
     id: 5,
     name: "Relieving Letter",
-    template: "relieving-letter",
+    template: "relieving_letter",
     fields: [
       {
         name: "mrms",
@@ -839,7 +839,7 @@ export const documentTypes = [
   {
     id: 6,
     name: "Employment Verification Letter",
-    template: "employment-verification",
+    template: "employment_verification",
     fields: [
       {
         name: "mrms",
@@ -923,7 +923,7 @@ export const documentTypes = [
   {
     id: 7,
     name: "Increment Letter",
-    template: "increment-letter",
+    template: "increment_letter",
     fields: [
       {
         name: "mrms",
@@ -1252,7 +1252,7 @@ export const documentTypes = [
   {
     id: 11,
     name: "Internship Certificate",
-    template: "internship-certificate",
+    template: "internship_certificate",
     fields: [
       {
         name: "mrms",
@@ -1346,7 +1346,7 @@ export const documentTypes = [
   {
     id: 12,
     name: "Completion Certificate",
-    template: "completion-certificate",
+    template: "completion_certificate",
     fields: [
       {
         name: "mrms",
@@ -1504,7 +1504,7 @@ export const documentTypes = [
   {
     id: 14,
     name: "Termination Letter",
-    template: "termination-letter",
+    template: "termination_letter",
     fields: [
       {
         name: "mrms",
@@ -1687,7 +1687,7 @@ export const documentTypes = [
   {
     id: 16,
     name: "Full and final Letter",
-    template: "fullandfinal-letter",
+    template: "fullandfinal_letter",
     fields: [
       {
         name: "mrms",
@@ -1786,7 +1786,7 @@ export const documentTypes = [
   {
     id: 17,
     name: "Confirmation Letter",
-    template: "confirmation-letter",
+    template: "confirmation_letter",
     fields: [
       {
         name: "mrms",

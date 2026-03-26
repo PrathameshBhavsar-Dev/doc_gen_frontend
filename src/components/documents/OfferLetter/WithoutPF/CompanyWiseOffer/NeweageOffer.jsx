@@ -90,7 +90,7 @@ const NeweageOffer = ({ company, data }) => {
 
   const {
     mrms = "",
-    candidateName = "",
+    employeeName = "",
     address = "",
     position = "",
     joiningDate = "",
@@ -130,7 +130,7 @@ const NeweageOffer = ({ company, data }) => {
 
           {/* Name & Designation */}
           <Typography sx={{ ...TEXT, mb: 1 }}>
-            <b>Name</b> : {mrms} {candidateName}
+            <b>Name</b> : {mrms} {employeeName}
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -138,7 +138,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           {/* Body */}
-          <Typography sx={{ ...TEXT, mb: 2 }}>Dear {candidateName},</Typography>
+          <Typography sx={{ ...TEXT, mb: 2 }}>Dear {employeeName},</Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
             Congratulations! <b>{COMPANY_NAME}</b> is excited to call you our
@@ -206,7 +206,7 @@ const NeweageOffer = ({ company, data }) => {
             {/* ACCEPTANCE */}
             <Box>
               <Typography mt={8}>Signature: ______________</Typography>
-              <Typography mt={2}>Name: {candidateName}</Typography>
+              <Typography mt={2}>Name: {employeeName}</Typography>
             </Box>
           </Box>
         </Box>
@@ -362,7 +362,7 @@ const NeweageOffer = ({ company, data }) => {
             {/* ACCEPTANCE */}
             <Box>
               <Typography mt={12}>Signature: ______________</Typography>
-              <Typography mt={2}>Name: {data.candidateName}</Typography>
+              <Typography mt={2}>Name: {data.employeeName}</Typography>
             </Box>
           </Box>
         </Box>
