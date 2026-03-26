@@ -28,6 +28,8 @@ class ROUTES {
   // Documents
   static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
   static DOCUMENT_PREVIEW = `${this.DOCUMENT_BASE}/preview`;
+  // static DOCUMENT_PREVIEW_BY_ID = `${this.DOCUMENT_BASE}/preview/:id`;
+  static DOCUMENT_PREVIEW_BY_ID = "/document/preview/:docType/:id";
   static DOCUMENT_GENERATE = `${this.DOCUMENT_BASE}/generate`;
 
 }

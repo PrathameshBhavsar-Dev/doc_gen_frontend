@@ -50,14 +50,18 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await apiService.apipost("/users/login", credentials);
 
-      if (response.success && response.data) {
-        const userData = response.data;
+      if (response.success) {
+        const { user, accessToken } = response;
 
-        // ✅ persist user
-        localStorage.setItem("user", JSON.stringify(userData));
-        setUser(userData);
+        // ✅ Store token
+        localStorage.setItem("token", accessToken);
 
-        return { success: true, user: userData };
+        // ✅ Store user (safe copy)
+        localStorage.setItem("user", JSON.stringify(user));
+
+        setUser(user);
+
+        return { success: true, user };
       }
 
       return { success: false, error: response.message };
@@ -73,14 +77,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ================= LOGOUT =================
-  const logout = () => {
-    // ❌ DO NOT depend on backend for logout (you are not using JWT)
-    // Just clear state
-
-    localStorage.removeItem("user");
-    setUser(null);
-
-    return { success: true };
+  const logout = async () => {
+    try {
+      await apiService.apipost("/users/logout"); // clear cookies (backend)
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      // ✅ clear frontend state
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   // ================= UPDATE PROFILE =================
