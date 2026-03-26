@@ -55,78 +55,78 @@ const PentaIncrement = ({ company, data }) => {
     /* ================= SALARY LOGIC (MONTHLY BASED) ================= */
 
     const formatNumber = (num) => {
-  return Number(num || 0).toLocaleString("en-IN");
-};
+        return Number(num || 0).toLocaleString("en-IN");
+    };
 
-const round0 = (num) => Math.round(num);
+    const round0 = (num) => Math.round(num);
 
-// Monthly CTC
-const monthlyCTC = round0(Number(data.newCTC || 0));
+    // Monthly CTC
+    const monthlyCTC = round0(Number(data.newCTC || 0));
 
 
-// ✅ PF STATIC
-const pfMonthly = 3750;
+    // ✅ PF STATIC
+    const pfMonthly = 3750;
 
-// % components (excluding Basic)
-let hraMonthly = round0(monthlyCTC * 0.18);
-let daMonthly = round0(monthlyCTC * 0.12);
-let specialMonthly = round0(monthlyCTC * 0.16);
-let foodMonthly = round0(monthlyCTC * 0.06);
+    // % components (excluding Basic)
+    let hraMonthly = round0(monthlyCTC * 0.18);
+    let daMonthly = round0(monthlyCTC * 0.12);
+    let specialMonthly = round0(monthlyCTC * 0.16);
+    let foodMonthly = round0(monthlyCTC * 0.06);
 
-// ✅ Add PF in total
-const totalOthers =
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly;
+    // ✅ Add PF in total
+    const totalOthers =
+        hraMonthly +
+        daMonthly +
+        specialMonthly +
+        foodMonthly +
+        pfMonthly;
 
-// ✅ Basic = remaining
-let basicMonthly = monthlyCTC - totalOthers;
+    // ✅ Basic = remaining
+    let basicMonthly = monthlyCTC - totalOthers;
 
-// ✅ Rounding Fix
-const finalCheck =
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly;
+    // ✅ Rounding Fix
+    const finalCheck =
+        basicMonthly +
+        hraMonthly +
+        daMonthly +
+        specialMonthly +
+        foodMonthly +
+        pfMonthly;
 
-basicMonthly += (monthlyCTC - finalCheck);
+    basicMonthly += (monthlyCTC - finalCheck);
 
-// Annual
-const basicAnnual = basicMonthly * 12;
-const hraAnnual = hraMonthly * 12;
-const daAnnual = daMonthly * 12;
-const specialAnnual = specialMonthly * 12;
-const foodAnnual = foodMonthly * 12;
-const pfAnnual = pfMonthly * 12;
+    // Annual
+    const basicAnnual = basicMonthly * 12;
+    const hraAnnual = hraMonthly * 12;
+    const daAnnual = daMonthly * 12;
+    const specialAnnual = specialMonthly * 12;
+    const foodAnnual = foodMonthly * 12;
+    const pfAnnual = pfMonthly * 12;
 
-// Salary Rows
-const salaryComponents = [
-  { name: "Basic", monthly: formatNumber(basicMonthly), annual: formatNumber(basicAnnual) },
-  { name: "House Rent Allowance", monthly: formatNumber(hraMonthly), annual: formatNumber(hraAnnual) },
-  { name: "Dearness Allowance", monthly: formatNumber(daMonthly), annual: formatNumber(daAnnual) },
-  { name: "Special Allowance", monthly: formatNumber(specialMonthly), annual: formatNumber(specialAnnual) },
-  { name: "Food Allowance", monthly: formatNumber(foodMonthly), annual: formatNumber(foodAnnual) },
-  { name: "Provident Fund (PF)", monthly: formatNumber(pfMonthly), annual: formatNumber(pfAnnual) },
-];
+    // Salary Rows
+    const salaryComponents = [
+        { name: "Basic", monthly: formatNumber(basicMonthly), annual: formatNumber(basicAnnual) },
+        { name: "House Rent Allowance", monthly: formatNumber(hraMonthly), annual: formatNumber(hraAnnual) },
+        { name: "Dearness Allowance", monthly: formatNumber(daMonthly), annual: formatNumber(daAnnual) },
+        { name: "Special Allowance", monthly: formatNumber(specialMonthly), annual: formatNumber(specialAnnual) },
+        { name: "Food Allowance", monthly: formatNumber(foodMonthly), annual: formatNumber(foodAnnual) },
+        { name: "Provident Fund (PF)", monthly: formatNumber(pfMonthly), annual: formatNumber(pfAnnual) },
+    ];
 
-// ✅ Total INCLUDING PF (CTC)
-const totalMonthly =
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly;
+    // ✅ Total INCLUDING PF (CTC)
+    const totalMonthly =
+        basicMonthly +
+        hraMonthly +
+        daMonthly +
+        specialMonthly +
+        foodMonthly +
+        pfMonthly;
 
-const totalAnnual = totalMonthly * 12;
+    const totalAnnual = totalMonthly * 12;
 
-// ✅ 👉 YAHAN ADD KARO
-const totalMonthlyFormatted = formatNumber(totalMonthly);
-const totalAnnualFormatted = formatNumber(totalAnnual);
+    // ✅ 👉 YAHAN ADD KARO
+    const totalMonthlyFormatted = formatNumber(totalMonthly);
+    const totalAnnualFormatted = formatNumber(totalAnnual);
 
     return (
         <>

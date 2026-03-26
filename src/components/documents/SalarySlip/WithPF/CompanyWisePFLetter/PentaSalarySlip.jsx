@@ -1,17 +1,14 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
 /* ===================== HELPERS ===================== */
 const money = (v) =>
-  Math.round(Number(v || 0)).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  Number(v || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
 
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString("en-GB") : "";
 
-/* Month → September 2025 */
 const formatMonthYear = (value) => {
   if (!value) return "";
   const date =
@@ -25,14 +22,9 @@ const formatMonthYear = (value) => {
   });
 };
 
-/* Number → Words (India Format – NO IMPORT ERROR) */
+/* Number → Words */
 const numberToWords = (num) => {
-  const a = [
-    "", "One", "Two", "Three", "Four", "Five", "Six",
-    "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-    "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
-  ];
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
   const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
   if (num === 0) return "Zero Only";
@@ -40,13 +32,10 @@ const numberToWords = (num) => {
   const inWords = (n) => {
     if (n < 20) return a[n];
     if (n < 100) return `${b[Math.floor(n / 10)]} ${a[n % 10]}`;
-    if (n < 1000)
-      return `${a[Math.floor(n / 100)]} Hundred ${inWords(n % 100)}`;
-    if (n < 100000)
-      return `${inWords(Math.floor(n / 1000))} Thousand ${inWords(n % 1000)}`;
+    if (n < 1000) return `${a[Math.floor(n / 100)]} Hundred ${inWords(n % 100)}`;
+    if (n < 100000) return `${inWords(Math.floor(n / 1000))} Thousand ${inWords(n % 1000)}`;
     return `${inWords(Math.floor(n / 100000))} Lakh ${inWords(n % 100000)}`;
   };
-
 
   return `${inWords(num).trim()} Only`;
 };
@@ -64,103 +53,54 @@ const row = { display: "flex", width: "100%" };
 const bold = { fontWeight: "bold" };
 
 /* ===================== COMPONENT ===================== */
-const PentaSalarySlip = ({ company, data }) => {
-  /* ===== AUTO SALARY CALCULATION ===== */
-  //  const totalSalary = Number(data.totalSalary || 35000);
+const PentaSalarySlip = ({ company, data = {} }) => {
 
-  // // Earnings (100% Proper Split)
-  // const basic = +(totalSalary * 0.48).toFixed(2);
-  // const hra = +(totalSalary * 0.18).toFixed(2);
-  // const da = +(totalSalary * 0.12).toFixed(2);
-  // const special = +(totalSalary * 0.16).toFixed(2);
+  const totalSalary = Number(data.totalSalary) || 0;
+  const monthValue = data.month || new Date();
 
-  // // 🔥 FOOD = AUTO BALANCE (No % issue)
-  // const food = +(
-  //   totalSalary - (basic + hra + da + special)
-  // ).toFixed(2);
+  /* ===== PF ===== */
+  const pf = 3750; // static PF
 
-  // // ===== DEDUCTIONS =====
-  // const pf = 3750;
-  // const pt = Number(data.pt || 200);
-  // const otherDeduction = Number(data.otherDeduction || 2000);
+  /* ===== SALARY BREAKUP ===== */
+  const round2 = (num) => Number(num.toFixed(2));
 
-  // // ===== TOTALS =====
-  // const totalEarning = totalSalary; // Always equal
-  // const totalDeduction = +(pf + pt + otherDeduction).toFixed(2);
-  // const netPay = +(totalEarning - totalDeduction).toFixed(2);
+  const hra = round2(totalSalary * 0.18);
+  const da = round2(totalSalary * 0.12);
+  const special = round2(totalSalary * 0.16);
+  const food = round2(totalSalary * 0.06);
 
-  // const netPayWords = numberToWords(Math.round(netPay));
+  // ✅ BASIC includes PF adjustment
+  let basic = round2(totalSalary - (hra + da + special + food + pf));
 
-  const totalSalary = Number(data.totalSalary || 35000);
-
-  // ✅ PF STATIC
-  const pf = 3750;
-
-  // Earnings (excluding Basic)
-  const hra = +(totalSalary * 0.18).toFixed(2);
-  const da = +(totalSalary * 0.12).toFixed(2);
-  const special = +(totalSalary * 0.16).toFixed(2);
-  const food = +(totalSalary * 0.06).toFixed(2);
-
-  // ✅ Basic = remaining (INCLUDING PF)
-  let basic = +(totalSalary - (hra + da + special + food + pf)).toFixed(2);
-
-  // ✅ Rounding Fix (IMPORTANT FIX)
+  // ✅ Rounding Fix
   const finalCheck = basic + hra + da + special + food + pf;
+  basic += round2(totalSalary - finalCheck);
 
-  basic += +(totalSalary - finalCheck).toFixed(2);
+  const totalEarning = round2(totalSalary);
 
-  // ===== DEDUCTIONS =====
-  const pt = Number(data.pt || 200);
+  /* ===== DEDUCTIONS ===== */
+  const pt = getProfessionalTax(monthValue, totalEarning);
 
-  const otherDeduction = Number(data.otherDeduction || 2000);
+  const otherDeduction = Number(data.otherDeduction) || 2000;
 
-  // ===== TOTALS =====
-  const totalEarning = totalSalary;
+  const totalDeduction = round2(pf + pt + otherDeduction);
 
-  // PF already included in CTC but also deducted
-  const totalDeduction = +(pf + pt + otherDeduction).toFixed(2);
+  const netPay = round2(totalEarning - totalDeduction);
 
-  const netPay = Math.round(totalEarning - totalDeduction).toFixed(2);
   const netPayWords = numberToWords(Math.round(netPay));
 
-
   return (
-    <Box
-      sx={{
-        width: "210mm",
-        minHeight: "297mm",
-        backgroundColor: "#fff",
-        fontFamily: "Cambria, 'Times New Roman', serif",
-      }}
-    >
-      {/* WATERMARK */}
-      <Box
-        component="img"
-        src={company.watermark || company.watermarkImage}
-        alt="Watermark"
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%) rotate(-30deg)",
-          width: "70%",
-          opacity: company.brandColors?.watermarkOpacity || 0.05,
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
+    <Box sx={{ width: "210mm", minHeight: "297mm", backgroundColor: "#fff", fontFamily: "Cambria, 'Times New Roman', serif" }}>
 
-      <img src={company.Penta_watermark} alt="" style={{ width: "50%" }} />
-      {/* HEADER */}
       <img src={company.headerImage} alt="" style={{ width: "100%" }} />
 
-      <Box sx={{ px: "15mm", pt: "18mm", pb: "40mm" }}>
-        {/* COMPANY INFO */}
+      <Box sx={{ px: "15mm", pt: "18mm", pb: "30mm" }}>
+
+        {/* HEADER */}
         <Box sx={{ border: "1px solid #000" }}>
           <Box sx={{ borderBottom: "1px solid #000", p: "4px" }}>
             <Typography align="center" fontWeight="bold">
-              {company.name.toUpperCase()}
+              {company.name?.toUpperCase()}
             </Typography>
           </Box>
 
@@ -172,14 +112,15 @@ const PentaSalarySlip = ({ company, data }) => {
 
           <Box sx={{ p: "4px" }}>
             <Typography align="center" fontWeight="bold">
-              Salary Slip {formatMonthYear(data.month)}
+              Salary Slip {formatMonthYear(monthValue)}
             </Typography>
           </Box>
         </Box>
 
-        {/* MAIN TABLE */}
+        {/* TABLE */}
         <Box sx={{ border: "1px solid #000", borderTop: "none" }}>
-          {/* EMP INFO */}
+
+          {/* EMP */}
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Employee Name</Box>
             <Box sx={{ ...cell, width: "25%" }}>{data.employeeName}</Box>
@@ -194,32 +135,21 @@ const PentaSalarySlip = ({ company, data }) => {
             <Box sx={{ ...cell, width: "25%" }}>{formatDate(data.doj)}</Box>
           </Box>
 
-          <Box sx={row}>
-            <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
-            <Box sx={{ ...cell, width: "25%" }}>
-              Bank Name– {data.mode}
-              <br />
-              Account No – {data.accountNo}
-            </Box>
-            <Box sx={{ ...cell, width: "25%", ...bold }}>Working Days</Box>
-            <Box sx={{ ...cell, width: "25%" }}>{data.workdays}</Box>
-          </Box>
-
-          {/* HEADERS */}
+          {/* HEAD */}
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Earnings</Box>
             <Box sx={{ ...cell, width: "25%", ...bold, justifyContent: "flex-end" }}>Amount</Box>
-            <Box sx={{ ...cell, width: "25%", ...bold }}>Deduntuctions</Box>
+            <Box sx={{ ...cell, width: "25%", ...bold }}>Deductions</Box>
             <Box sx={{ ...cell, width: "25%", ...bold, justifyContent: "flex-end" }}>Amount</Box>
           </Box>
 
           {[
             ["BASIC", basic, "PF", pf],
             ["HRA", hra, "PT", pt],
-            ["DEARNESS ALLOWANCE", da, "Other Deduction", otherDeduction],
-            ["SPECIAL ALLOWANCE", special, "", ""],
-            ["FOOD ALLOWANCE", food, "", ""],
-            ["PF", pf]
+            ["DA", da, "Other Deduction", otherDeduction],
+            ["SPECIAL", special, "", ""],
+            ["FOOD", food, "", ""],
+            ["PF", pf, "", ""],
           ].map((r, i) => (
             <Box sx={row} key={i}>
               <Box sx={{ ...cell, width: "25%", ...bold }}>{r[0]}</Box>
@@ -227,7 +157,8 @@ const PentaSalarySlip = ({ company, data }) => {
               <Box sx={{ ...cell, width: "25%" }}>{r[2]}</Box>
               <Box sx={{ ...cell, width: "25%", justifyContent: "flex-end" }}>
                 {r[3] ? money(r[3]) : ""}
-              </Box>            </Box>
+              </Box>
+            </Box>
           ))}
 
           {/* TOTAL */}
@@ -242,55 +173,22 @@ const PentaSalarySlip = ({ company, data }) => {
             </Box>
           </Box>
 
-          {/* NET PAY */}
+          {/* NET */}
           <Box sx={row}>
-            <Box sx={{ ...cell, width: "25%", ...bold, }}>Net Pay</Box>
-            <Box sx={{ ...cell, width: "75%", ...bold, }}>
+            <Box sx={{ ...cell, width: "25%", ...bold }}>Net Pay</Box>
+            <Box sx={{ ...cell, width: "75%", ...bold }}>
               {money(netPay)}
             </Box>
           </Box>
 
-          {/* IN WORDS */}
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>In Words</Box>
             <Box sx={{ ...cell, width: "75%" }}>{netPayWords}</Box>
           </Box>
 
-          {/* SIGNATURE */}
-          <Box sx={{ ...row, height: "120px" }}>
-
-            {/* Empty Left Space */}
-            <Box sx={{ ...cell, width: "50%" }} />
-
-            {/* Stamp (centered nicely) */}
-            <Box
-              sx={{
-                ...cell,
-                width: "25%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-end", // pushes stamp slightly downward
-                pb: 2
-              }}
-            >
-              <Box
-                component="img" src={company.stamp} sx={{ height: 95, width: "auto", objectFit: "contain" }} />
-            </Box>
-
-            {/* Signature (right aligned like slip) */}
-            <Box
-              sx={{ ...cell, width: "25%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
-              <Box
-                component="img" src={company.signature} sx={{ height: 40, width: "auto", objectFit: "contain" }} />
-
-              <Typography fontSize={12} fontWeight="bold" mt={0.5}> Signature </Typography>
-            </Box>
-
-          </Box>
         </Box>
       </Box>
 
-      {/* FOOTER */}
       <img src={company.footerImage} alt="" style={{ width: "100%" }} />
     </Box>
   );

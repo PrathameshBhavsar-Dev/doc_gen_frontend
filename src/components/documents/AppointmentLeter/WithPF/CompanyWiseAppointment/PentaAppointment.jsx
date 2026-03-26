@@ -23,10 +23,12 @@ const formatDate = (date) =>
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Number(v || 0).toLocaleString("en-IN", 
+  //   {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // }
+);
 
 
 /* ================= SALARY BREAKUP ================= */
