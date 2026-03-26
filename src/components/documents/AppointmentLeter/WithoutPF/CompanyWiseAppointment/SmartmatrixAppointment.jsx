@@ -39,10 +39,11 @@ const formatOneCurrency = (salary) => {
 const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
   // 🔥 Input salary is MONTHLY
-  const monthlySalary = Number(data.salary || 0);
+  // INPUT = Annual CTC
+  const annualSalary = Number(data.salary || 0);
 
-  // Convert to annual
-  const annualSalary = monthlySalary * 12;
+  // Convert to monthly
+  const monthlySalary = annualSalary / 12;
   return (
     <>
       {/* ================= FIRST PAGE ================= */}
@@ -380,11 +381,11 @@ const SmartMatrixAppointment = ({ company, data }) => {
         {(() => {
           const round2 = (num) => Number(num.toFixed(2));
 
-          // 🔥 INPUT IS MONTHLY SALARY
-          const monthlyCTC = round2(Number(data.salary || 0));
+          // ✅ INPUT IS ANNUAL CTC
+          const annualCTC = round2(Number(data.salary || 0));
 
-          // Convert to Annual
-          const annualCTC = round2(monthlyCTC * 12);
+          // Convert to Monthly
+          const monthlyCTC = round2(annualCTC / 12);
 
           // Annual breakup (percentage based)
           const basicAnnual = round2(annualCTC * 0.4);
@@ -450,7 +451,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "58mm", // ⬇️ pushes date just BELOW header
+                  top: "50mm", // ⬇️ pushes date just BELOW header
                   right: "18mm",
                   fontSize: "12pt",
                   fontFamily:
@@ -470,7 +471,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   fontSize: "11pt",
                   lineHeight: "1.6",
                   mb: "6mm",
-                  mt: "38mm",
+                  mt: "20mm",
                 }}
               >
                 <Typography
