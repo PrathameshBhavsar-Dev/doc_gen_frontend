@@ -506,6 +506,28 @@ const DocumentPreview = () => {
 
           confirmationType: previewData.confirmationType || "withPF",
         }),
+
+        increment_letter: () => ({
+          ...base,
+
+          title: previewData.mrms,
+
+          // designation: previewData.position || previewData.designation,
+          department: previewData.department || "",
+
+          performanceYear: Number(previewData.performanceYear) || new Date().getFullYear(),
+
+          newCTC: Number(previewData.newCTC) || 0,
+
+          incrementPercentage: previewData.incrementPercentage
+            ? Number(previewData.incrementPercentage)
+            : undefined,
+
+          effectiveDate: previewData.effectiveDate,
+          issueDate: previewData.issueDate,
+
+          incrementType: previewData.incrementType || "withPF",
+        }),
       };
 
       // ✅ VALIDATE TEMPLATE
