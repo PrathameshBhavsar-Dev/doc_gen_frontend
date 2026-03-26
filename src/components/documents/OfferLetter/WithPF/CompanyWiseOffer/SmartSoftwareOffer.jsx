@@ -297,7 +297,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {candidateName}</Typography>
+              <Typography>Candidate Name : {employeeName}</Typography>
             </Box>
           </Box>
         

@@ -307,7 +307,7 @@ export const companies = [
     footerImage: Nimbja_footer,
     watermarkImage: null,
     address:
-      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Gurav, Pimpri-Chinchwad, Pune- 411027",
+      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Saudagar, Pimpri-Chinchwad, Pune- 411027",
     email: "hr@nimbjasolution.com",
     phone: "+91 7066561234",
     website: "https://nimbjasolution.com/",
