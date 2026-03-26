@@ -600,8 +600,8 @@ const JDITOffer = ({ company, data }) => {
           </Box>
         </Box>
 
-        <Box sx={{ mt: 5 }}>
-          <Typography sx={{ ...TEXT, mb: 1 }}>
+        <Box sx={{ mt: 0 }}>
+          <Typography sx={{ ...TEXT, mb: 6 }}>
             For <b>JDIT SOFTWARE SOLUTIONS PVT. LTD.</b>
           </Typography>
 
@@ -610,23 +610,52 @@ const JDITOffer = ({ company, data }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
-              mb: 2,
+              gap: 1,
+              mb: 1,
+              height: 64, // adjust as needed
+              overflow: "hidden",
             }}
           >
             {company.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: "60px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{
+                    height: "40px",
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
+
             {company.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: "80px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{
+                    height: "60px",       // reduced from 80px
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
           </Box>
 
@@ -638,7 +667,8 @@ const JDITOffer = ({ company, data }) => {
               {signatoryDesignation}
             </Typography>
           </Box>
-          <Typography sx={{ ...TEXT, mt: 1 }}>
+
+          <Typography sx={{ ...TEXT, mt: 0 }}>
             <b>{company.hrName}</b>
           </Typography>
           <Typography sx={{ ...TEXT }}>

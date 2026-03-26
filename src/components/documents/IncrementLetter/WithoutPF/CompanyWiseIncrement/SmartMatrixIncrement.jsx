@@ -35,8 +35,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
 
   /* ================= CORRECT LOGIC (INPUT IS MONTHLY) ================= */
 
-  const monthlyGross = round2(data.newCTC || 0); // INPUT IS MONTHLY
-  const annualCTC = round2(monthlyGross * 12); // Annual derived from monthly
+  const annualCTC = round2(data.newCTC || 0); // INPUT = ANNUAL
+  const monthlyGross = round2(annualCTC / 12); // convert to monthly
 
   // Percentage Structure (As per Image)
   const PERCENT = {

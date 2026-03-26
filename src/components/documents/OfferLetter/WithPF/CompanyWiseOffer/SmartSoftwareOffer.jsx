@@ -37,9 +37,19 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
         ? { subject: "They", object: "them", possessive: "their" }
         : { subject: "He", object: "him", possessive: "his" };
 
-  const displayTitle = title
-    ? title.charAt(0).toUpperCase() + title.slice(1)
-    : "Mr.";
+  const para = {
+    mt: "16px",
+    textAlign: "justify",
+  };
+
+  const paraLarge = {
+    mt: "20px",
+    textAlign: "justify",
+  };
+
+  /* ================= FORMATTED VALUES ================= */
+
+  const displayTitle = mrms ? `${mrms}.` : "";
 
   const firstName = employeeName?.split(" ")[0] || "";
 
@@ -115,8 +125,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     color: "#000",
   };
 
-  const para = { ...baseText, mt: "12px" };
-  const paraLarge = { ...baseText, mt: "24px" };
+  // const para = { ...baseText, mt: "12px" };
+  // const paraLarge = { ...baseText, mt: "24px" };
 
   const labelStyle = {
     display: "inline-block",
@@ -233,30 +243,15 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           <Typography align="center" sx={{ mb: "24px" }}>
             <b>Annexure A – Salary Structure</b>
           </Typography>
-
-          <Typography sx={{ mb: 2 }}>
-            <b>Name : {employeeName}</b>
-            <span style={{ marginLeft: "120px" }}>
-              <b>Designation : {position}</b>
-            </span>
-          </Typography>
-
-          <TableContainer sx={{ mb: "4mm" }}>
-            <Table
-              size="small"
-              sx={{
-                border: "1px solid #333",
-                borderCollapse: "collapse",
-                width: "100%",
-              }}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={tableHeader}>Salary Component</TableCell>
-                  <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
-                  <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
-                </TableRow>
-              </TableHead>
+       <TableContainer>
+          <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={tableHeader}>Salary Component</TableCell>
+                <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
+                <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
+              </TableRow>
+            </TableHead>
 
               <TableBody>
                 {salaryComponents.map((row, i) => (
@@ -285,16 +280,24 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </TableContainer>
         </Box>
 
+      <Box>
+         <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+            <Box>
+              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+                {company.signature && (
+                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                )}
+                {company.stamp && (
+                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                )}
+              </Box>
+              <Typography>{company.hrName}</Typography>
+              <Typography>HR Relations Lead</Typography>
+            </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
-          <Box>
-            <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
-              {company.signature && (
-                <Box component="img" src={company.signature} sx={{ height: "80px" }} />
-              )}
-              {company.stamp && (
-                <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
-              )}
+            <Box sx={{ width: "45%", mt: 8 }}>
+              <Typography>Signature : ___________________</Typography>
+              <Typography>Candidate Name : {employeeName}</Typography>
             </Box>
             <Typography>{company.hrName}</Typography>
             <Typography>HR Relations Lead</Typography>
