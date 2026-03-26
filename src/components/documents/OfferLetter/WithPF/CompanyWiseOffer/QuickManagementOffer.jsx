@@ -1,6 +1,4 @@
 
-<<<<<<< HEAD
-=======
 // /* ================= HELPERS ================= */
 // const formatDate = (date) => {
 //   if (!date) return "";
@@ -384,7 +382,6 @@
 
 
 // };
->>>>>>> c8a8714e0542fbbf75a90fa382d75424db6f21d4
 import React from "react";
 
 /* ================= HELPERS ================= */

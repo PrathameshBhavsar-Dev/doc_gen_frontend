@@ -24,7 +24,7 @@ const formatMonthYear = (value) => {
 
 /* Number → Words */
 const numberToWords = (num) => {
-  const a = ["", "One", "Two", "Three", "Four", "Five", "Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
   const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
   if (num === 0) return "Zero Only";
@@ -135,6 +135,16 @@ const PentaSalarySlip = ({ company, data = {} }) => {
             <Box sx={{ ...cell, width: "25%" }}>{formatDate(data.doj)}</Box>
           </Box>
 
+          <Box sx={row}>
+            <Box sx={{ ...cell, width: "25%", ...bold }}>Mode</Box>
+            <Box sx={{ ...cell, width: "25%" }}>
+              Bank Name– {data.mode}
+              <br />
+              Account No – {data.accountNo}
+            </Box>
+            <Box sx={{ ...cell, width: "25%", ...bold }}>Working Days</Box>
+            <Box sx={{ ...cell, width: "25%" }}>{data.workdays}</Box>
+          </Box>
           {/* HEAD */}
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Earnings</Box>
@@ -185,11 +195,46 @@ const PentaSalarySlip = ({ company, data = {} }) => {
             <Box sx={{ ...cell, width: "25%", ...bold }}>In Words</Box>
             <Box sx={{ ...cell, width: "75%" }}>{netPayWords}</Box>
           </Box>
+          <Box sx={{ ...row, height: "120px" }}>
+
+            {/* Empty Left Space */}
+            <Box sx={{ ...cell, width: "50%" }} />
+
+            {/* Stamp (centered nicely) */}
+            <Box
+              sx={{
+                ...cell,
+                width: "25%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end", // pushes stamp slightly downward
+                pb: 2
+              }}
+            >
+              <Box
+                component="img" src={company.stamp} sx={{ height: 95, width: "auto", objectFit: "contain" }} />
+            </Box>
+
+            {/* Signature (right aligned like slip) */}
+            <Box
+              sx={{ ...cell, width: "25%", display: "flex", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" }}>
+              <Box
+                component="img" src={company.signature} sx={{ height: 40, width: "auto", objectFit: "contain" }} />
+
+              <Typography fontSize={12} fontWeight="bold" mt={0.5}> Signature </Typography>
+            </Box>
+
+          </Box>
 
         </Box>
       </Box>
 
-      <img src={company.footerImage} alt="" style={{ width: "100%" }} />
+       {/* FOOTER */}
+           {company.footer && (
+             <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+               <img src={company.footer} width="100%" alt="footer" />
+             </Box>
+           )}
     </Box>
   );
 };
