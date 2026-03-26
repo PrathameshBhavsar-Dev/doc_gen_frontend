@@ -76,38 +76,33 @@ const RPAppointment = ({ company, data }) => {
 
 // const totalAnnual = totalMonthly * 12;
 
-////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////// monthly - Annually ////////////////////////////////////
 
 const round0 = (num) => Math.round(num);
 
-// ================= ANNUAL CTC INPUT =================
+// ================= ANNUAL CTC =================
 const annualCTC = round0(Number(data.salary || 0));
 
 // ================= MONTHLY CTC =================
 const monthlyCTC = round0(annualCTC / 12);
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
-
-// ================= FIXED PERCENTAGES =================
+// ================= UPDATED PERCENTAGES =================
+const basicMonthly = round0(monthlyCTC * 0.48);
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
 const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= ADJUSTED BASIC =================
-const basicMonthly = round0(
-  monthlyCTC -
-  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-);
+// ================= STATIC PF =================
+const pfMonthly = 3750;
 
-// ================= ANNUAL =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const pfAnnual = round0(pfMonthly * 12);
+// ================= ANNUAL VALUES =================
+const basicAnnual = basicMonthly * 12;
+const hraAnnual = hraMonthly * 12;
+const daAnnual = daMonthly * 12;
+const specialAnnual = specialMonthly * 12;
+const foodAnnual = foodMonthly * 12;
+const pfAnnual = pfMonthly * 12;
 
 // ================= SALARY TABLE =================
 const salaryRows = [
@@ -119,17 +114,72 @@ const salaryRows = [
   ["Provident Fund (PF)", pfMonthly, pfAnnual],
 ];
 
-// ================= TOTAL =================
-const totalMonthly = round0(
+// ================= TOTAL EARNINGS =================
+const totalMonthly =
   basicMonthly +
   hraMonthly +
   daMonthly +
   specialMonthly +
-  foodMonthly +
-  pfMonthly
-);
+  foodMonthly;
 
-const totalAnnual = round0(totalMonthly * 12);
+const totalAnnual = totalMonthly * 12;
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+// const round0 = (num) => Math.round(num);
+
+// // ================= ANNUAL CTC INPUT =================
+// const annualCTC = round0(Number(data.salary || 0));
+
+// // ================= MONTHLY CTC =================
+// const monthlyCTC = round0(annualCTC / 12);
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= FIXED PERCENTAGES =================
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= ADJUSTED BASIC =================
+// const basicMonthly = round0(
+//   monthlyCTC -
+//   (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+// );
+
+// // ================= ANNUAL =================
+// const basicAnnual = round0(basicMonthly * 12);
+// const hraAnnual = round0(hraMonthly * 12);
+// const daAnnual = round0(daMonthly * 12);
+// const specialAnnual = round0(specialMonthly * 12);
+// const foodAnnual = round0(foodMonthly * 12);
+// const pfAnnual = round0(pfMonthly * 12);
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual],
+// ];
+
+// // ================= TOTAL =================
+// const totalMonthly = round0(
+//   basicMonthly +
+//   hraMonthly +
+//   daMonthly +
+//   specialMonthly +
+//   foodMonthly +
+//   pfMonthly
+// );
+
+// const totalAnnual = round0(totalMonthly * 12);
 
 
   const formatLakhsPerAnnum = (amount) => {
@@ -191,7 +241,7 @@ const totalAnnual = round0(totalMonthly * 12);
                 {/* INTRO */}
                 <Typography mt={2} textAlign="justify" fontSize={15}>
                   Further to your acceptance of our Letter of Offer dated{" "}
-                  <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in
+                  <b>{formatDate(data.offerDate)}</b>. we are pleased to appoint you in
                   our organization with effect from{" "}
                   <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
                   given below:

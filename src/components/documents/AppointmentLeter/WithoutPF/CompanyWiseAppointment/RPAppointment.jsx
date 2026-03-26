@@ -201,7 +201,7 @@ const totalMonthly = round0(
           {/* INTRO */}
           <Typography mt={2} textAlign="justify" fontSize={15}>
             Further to your acceptance of our Letter of Offer dated{" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in
+            <b>{formatDate(data.offerDate)}</b>. we are pleased to appoint you in
             our organization with effect from{" "}
             <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
             given below:

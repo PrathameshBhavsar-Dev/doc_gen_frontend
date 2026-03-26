@@ -145,13 +145,13 @@ const totalAnnual = round0(
     </Typography> */}
 
             {/* NAME */}
-            <Typography sx={{ mb: 2, fontWeight: 700 }}>
+            <Typography sx={{ mb: 2, }}>
               <b>Name</b> : {data.mrms} {data.employeeName}
             </Typography>
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-            Subject : Letter of intent for the position of <b>{data.position}</b>
+           <b>Subject</b>: Letter of intent for the position of <b>{data.position}</b>
             </Typography>
 
 

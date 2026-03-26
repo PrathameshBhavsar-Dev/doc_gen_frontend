@@ -177,7 +177,7 @@ const totalAnnual = round0(
 
     <Typography mt={2} fontSize={15}  textAlign="justify">
       Further to your acceptance of our Letter of Offer dated{" "}
-      <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our
+      <b>{formatDate(data.offerDate)}</b>, we are pleased to appoint you in our
       organization with effect from{" "}
       <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
       given below:
