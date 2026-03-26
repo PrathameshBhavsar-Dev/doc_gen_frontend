@@ -155,6 +155,6 @@ const SmartSoftwareUnPaidInternshipLetter = ({ company, data }) => {
       )}
     </Box>
   );
-}; 
+};
  
 export default SmartSoftwareUnPaidInternshipLetter;
