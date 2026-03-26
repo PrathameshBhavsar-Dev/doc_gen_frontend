@@ -1,12 +1,11 @@
 import React from "react";
 import {
+  Box,
   Typography,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableRow,
-  Paper,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
@@ -65,52 +64,61 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
   const salaryMonth = `${monthName} ${year}`;
 
   /* ================= EARNINGS BREAKUP (100%) ================= */
-  const monthlyGross = round2(totalSalary);
+ const round0 = (num) => Math.round(num);
 
-  const PERCENT = {
-    basic: 0.48,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
+// ================= MONTHLY INPUT =================
+const monthlyCTC = round0(totalSalary);
 
-  const BASIC = round2(monthlyGross * PERCENT.basic);
-  const HRA = round2(monthlyGross * PERCENT.hra);
-  const DA = round2(monthlyGross * PERCENT.da);
-  const SPECIAL = round2(monthlyGross * PERCENT.special);
-  const FOOD = round2(monthlyGross * PERCENT.food);
-  const PF_DISPLAY = 3750;
+// ================= ANNUAL =================
+const annualCTC = round0(monthlyCTC * 12);
 
-  /* ================= TOTAL EARNINGS ================= */
-  const totalEarning = BASIC + HRA + DA + SPECIAL + FOOD;
+// ================= FIXED PF =================
+const PF = 3750;
 
-  /* ================= DEDUCTIONS ================= */
-  const PF = 3750;
+// ================= OTHER COMPONENTS =================
+const HRA = round0(monthlyCTC * 0.18);
+const DA = round0(monthlyCTC * 0.12);
+const SPECIAL = round0(monthlyCTC * 0.16);
+const FOOD = round0(monthlyCTC * 0.06);
 
-  // const OTHER_DEDUCTION = 2000;
+// ================= ADJUSTED BASIC =================
+const BASIC = round0(
+  monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
+);
 
-  /* ================= NET PAY ================= */
-  const pt = getProfessionalTax(month, totalEarning);
-  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
-  const netPay = round2(totalEarning - totalDeduction);
+// ================= TOTAL EARNINGS =================
+const totalEarning = round0(
+  BASIC + HRA + DA + SPECIAL + FOOD + PF
+);
+
+// ================= NET PAY =================
+const pt = getProfessionalTax(month, totalEarning);
+const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
+const netPay = round0(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
-      <TableContainer
-        component={Paper}
+      <Box
         sx={{
           border: "1px solid black",
-          borderRadius: 0,
-          boxShadow: "none",
+          width: "100%",
+          boxSizing: "border-box",
           "& .MuiTableCell-root": {
             border: "1px solid black",
             padding: "4px 6px",
             fontFamily: "Bahnschrift",
+            color: "#000",
           },
         }}
       >
-        <Table size="small">
+        <Table size="small" sx={{ 
+          borderCollapse: "collapse", 
+          width: "100%", 
+          tableLayout: "fixed", // Force fixed layout for perfect alignment
+          "& .MuiTableCell-root": {
+            width: "25%", // Each of the 4 columns gets exactly 25%
+          }
+        }}>
           <TableBody>
 
             {/* HEADER */}
@@ -276,7 +284,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
           </TableBody>
         </Table>
-      </TableContainer>
+      </Box>
     </A4Page>
   );
 

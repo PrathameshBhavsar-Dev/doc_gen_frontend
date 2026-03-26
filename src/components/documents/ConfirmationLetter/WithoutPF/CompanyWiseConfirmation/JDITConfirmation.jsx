@@ -554,15 +554,16 @@ const JDITConfirmation = ({ company, data }) => {
 
   /* ================= SALARY BREAKUP ================= */
   const round0 = (num) => Math.round(num);
-  const monthlyCTC = parseFloat(totalSalary || 0);
+  const annualCTC = parseFloat(totalSalary || 0);
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // Custom percentage breakup for JDIT (calculated on monthly CTC)
-  const basicMonthly = round0(monthlyCTC * 0.4);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const conveyanceMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
   const medicalMonthly = round0(monthlyCTC * 0.06);
-  const otherMonthly = round0(monthlyCTC * 0.08);
+
+  // Basic is the balancing figure
+  const basicMonthly = monthlyCTC - hraMonthly - conveyanceMonthly - specialMonthly - medicalMonthly;
 
   const salaryComponents = [
     { name: "Basic Salary", monthly: basicMonthly },
@@ -570,21 +571,13 @@ const JDITConfirmation = ({ company, data }) => {
     { name: "Dearness Allowance", monthly: conveyanceMonthly },
     { name: "Special Allowance", monthly: specialMonthly },
     { name: "Food Allowance", monthly: medicalMonthly },
-    { name: "Misc. Allowance", monthly: otherMonthly },
   ].map((item) => ({
     ...item,
     annual: round0(item.monthly * 12),
   }));
 
-  const totalMonthly = salaryComponents.reduce(
-    (sum, item) => sum + item.monthly,
-    0
-  );
-
-  const finalAnnual = salaryComponents.reduce(
-    (sum, item) => sum + item.annual,
-    0
-  );
+  const totalMonthly = monthlyCTC;
+  const finalAnnual = monthlyCTC * 12;
 
   return (
     <>
@@ -656,23 +649,23 @@ const JDITConfirmation = ({ company, data }) => {
         </Typography>
 
         <Box sx={{ mt: 3 }}>
-  <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-    <img
-      src={company.signature}
-      alt="Signature"
-      style={{ height: "50px" }}
-    />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+            <img
+              src={company.signature}
+              alt="Signature"
+              style={{ height: "50px" }}
+            />
 
-    <img
-      src={company.stamp}
-      alt="Stamp"
-      style={{ height: "100px" }}
-    />
-  </Box>
+            <img
+              src={company.stamp}
+              alt="Stamp"
+              style={{ height: "100px" }}
+            />
+          </Box>
 
-  <Typography>{company.hrName}</Typography>
-  <Typography>HR Manager</Typography>
-</Box>
+          <Typography>{company.hrName}</Typography>
+          <Typography>HR Manager</Typography>
+        </Box>
       </A4Layout>
 
       {/* ================= PAGE 2 ================= */}
@@ -685,100 +678,100 @@ const JDITConfirmation = ({ company, data }) => {
         </Typography>
 
         <TableContainer>
-  <Table
-    size="small"
-    sx={{
-      border: "1px solid #333",
-      borderCollapse: "collapse",
-    }}
-  >
-    <TableHead>
-      <TableRow sx={{ backgroundColor: "#000" }}>
-        <TableCell
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          Salary Component
-        </TableCell>
+          <Table
+            size="small"
+            sx={{
+              border: "1px solid #333",
+              borderCollapse: "collapse",
+            }}
+          >
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#000" }}>
+                <TableCell
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  Salary Component
+                </TableCell>
 
-        <TableCell
-          align="center"
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          Per Month (Rs.)
-        </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  Per Month (Rs.)
+                </TableCell>
 
-        <TableCell
-          align="center"
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          Per Annum (Rs.)
-        </TableCell>
-      </TableRow>
-    </TableHead>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  Per Annum (Rs.)
+                </TableCell>
+              </TableRow>
+            </TableHead>
 
-    <TableBody>
-      {salaryComponents.map((row, i) => (
-        <TableRow key={i}>
-          <TableCell sx={{ border: "1px solid #333" }}>
-            {row.name}
-          </TableCell>
-          <TableCell align="center" sx={{ border: "1px solid #333" }}>
-            {formatCurrency(row.monthly)}
-          </TableCell>
-          <TableCell align="center" sx={{ border: "1px solid #333" }}>
-            {formatCurrency(row.annual)}
-          </TableCell>
-        </TableRow>
-      ))}
+            <TableBody>
+              {salaryComponents.map((row, i) => (
+                <TableRow key={i}>
+                  <TableCell sx={{ border: "1px solid #333" }}>
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="center" sx={{ border: "1px solid #333" }}>
+                    {formatCurrency(row.monthly)}
+                  </TableCell>
+                  <TableCell align="center" sx={{ border: "1px solid #333" }}>
+                    {formatCurrency(row.annual)}
+                  </TableCell>
+                </TableRow>
+              ))}
 
-      <TableRow sx={{ backgroundColor: "#000" }}>
-        <TableCell
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          Total Gross Salary
-        </TableCell>
+              <TableRow sx={{ backgroundColor: "#000" }}>
+                <TableCell
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  Total Gross Salary
+                </TableCell>
 
-        <TableCell
-          align="center"
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          {formatCurrency(totalMonthly)}
-        </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  {formatCurrency(totalMonthly)}
+                </TableCell>
 
-        <TableCell
-          align="center"
-          sx={{
-            border: "1px solid #333",
-            color: "#fff !important",
-            fontWeight: 600,
-          }}
-        >
-          {formatCurrency(finalAnnual)}
-        </TableCell>
-      </TableRow>
-    </TableBody>
-  </Table>
-</TableContainer>
+                <TableCell
+                  align="center"
+                  sx={{
+                    border: "1px solid #333",
+                    color: "#fff !important",
+                    fontWeight: 600,
+                  }}
+                >
+                  {formatCurrency(finalAnnual)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </A4Layout>
     </>
   );

@@ -130,16 +130,30 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
   };
 
   /* Earnings */
-  const basic = round2(monthlyGross * PERCENT.basic);
-  const hra = round2(monthlyGross * PERCENT.hra);
-  const da = round2(monthlyGross * PERCENT.da);
-  const special = round2(monthlyGross * PERCENT.special);
+  // const basic = round2(monthlyGross * PERCENT.basic);
+  // const hra = round2(monthlyGross * PERCENT.hra);
+  // const da = round2(monthlyGross * PERCENT.da);
+  // const special = round2(monthlyGross * PERCENT.special);
 
-  /* 🔥 Devcons food allowance is DIFFERENT */
-  const food = round2(monthlyGross - (basic + hra + da + special));
+  // /* 🔥 Devcons food allowance is DIFFERENT */
+  // const food = round2(monthlyGross - (basic + hra + da + special));
 
-  /* PF (Employer – shown in earnings) */
+  // /* PF (Employer – shown in earnings) */
+  // const pfAllowance = 3750;
+
+  // ================= STATIC PF =================
   const pfAllowance = 3750;
+
+  // ================= FIXED PERCENTAGES =================
+  const hra = round2(monthlyGross * 0.18);
+  const da = round2(monthlyGross * 0.12);
+  const special = round2(monthlyGross * 0.16);
+  const food = round2(monthlyGross * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basic = round2(
+    monthlyGross - (hra + da + special + food + pfAllowance),
+  );
 
   /* Total Earnings */
   const totalEarning = monthlyGross;
@@ -204,7 +218,11 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>
+              <TableCell
+                colSpan={4}
+                align="center"
+                sx={{ fontWeight: "bold", fontSize: "10pt !important" }}
+              >
                 {company?.address || "Company Address"}
               </TableCell>
             </TableRow>
@@ -250,7 +268,11 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
-              <TableCell>{bankMode}</TableCell>
+              <TableCell>
+                {bankMode}
+                <br></br>
+                {data.accountNo}
+              </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
               <TableCell>{totalWorkdays}</TableCell>
             </TableRow>
@@ -258,25 +280,25 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             {/* Earnings & Deduction Section */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>BASIC</TableCell>
-              <TableCell align="right">{formatCurrency(basic)}</TableCell>
+              <TableCell align="center">{formatCurrency(basic)}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>HRA</TableCell>
-              <TableCell align="right">{formatCurrency(hra)}</TableCell>
+              <TableCell align="center">{formatCurrency(hra)}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>PT</TableCell>
-              <TableCell align="right">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>
                 DEARNESS ALLOWANCE
               </TableCell>
-              <TableCell align="right">{formatCurrency(da)}</TableCell>
+              <TableCell align="center">{formatCurrency(da)}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Other Deduction</TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {formatCurrency(otherDeduction)}
               </TableCell>
             </TableRow>
@@ -285,21 +307,23 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 SPECIAL ALLOWANCE
               </TableCell>
-              <TableCell align="right">{formatCurrency(special)}</TableCell>
+              <TableCell align="center">{formatCurrency(special)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>FOOD ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(food)}</TableCell>
+              <TableCell align="center">{formatCurrency(food)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>PF ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(pfAllowance)}</TableCell>
+              <TableCell align="center">
+                {formatCurrency(pfAllowance)}
+              </TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
@@ -307,11 +331,11 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             {/* Totals */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total Earnings</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalEarning)}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalDed)}
               </TableCell>
             </TableRow>
@@ -319,7 +343,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
               <TableCell
-                align="right"
+                align="center"
                 sx={{ fontWeight: "bold", fontSize: "13pt" }}
               >
                 {formatCurrency(netPay)}
@@ -337,7 +361,15 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
               <TableCell colSpan={2}></TableCell>
               <TableCell align="center">
                 {stamp && (
-                  <Box component="img" src={stamp} sx={{ width: 115 }} />
+                  <Box
+                    component="img"
+                    src={stamp}
+                    sx={{
+                      width: 115,
+                      display: "block",
+                      margin: "0 auto",
+                    }}
+                  />
                 )}
               </TableCell>
               <TableCell align="center">

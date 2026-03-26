@@ -76,7 +76,7 @@ const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -137,29 +137,39 @@ const JditFullAndFinal = ({ company, data }) => {
   const paidDays = Number(data.paiddays || 0);
   const ratio = totalDays ? paidDays / totalDays : 0;
 
-  const gross = Number(data.totalSalary || 0);
+  const round0 = (num) => Math.round(Number(num || 0));
+  const gross = round0(data.totalSalary || 0);
 
-  const basic = +(gross * 0.48);
-  const hra = +(gross * 0.18);
-  const da = +(gross * 0.12);
-  const special = +(gross * 0.16);
-  const food = +(gross * 0.06);
+  const PERCENT = {
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+  };
+
+  const hra = round0(gross * PERCENT.hra);
+  const da = round0(gross * PERCENT.da);
+  const special = round0(gross * PERCENT.special);
+  const food = round0(gross * PERCENT.food);
 
   // ✅ PF Allowance Static
   const pfAllowance = 3750;
 
+  const basic = round0(gross - (hra + da + special + food + pfAllowance));
+
   const earned = (v) => +(v * ratio);
 
   const totalActual =
-    basic + hra + da + special + food
+    basic + hra + da + special + food + pfAllowance
 
   const totalEarned =
     earned(basic) +
     earned(hra) +
     earned(da) +
     earned(special) +
-    earned(food)
-    // pfAllowance; // static earned
+    earned(food) +
+    earned(pfAllowance)
+  // pfAllowance; // static earned
 
   /* ---------- DEDUCTIONS ---------- */
   const pf = 3750;
@@ -174,192 +184,197 @@ const JditFullAndFinal = ({ company, data }) => {
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <Box sx={{ width: "95%", margin: "0 auto" }}>
-              <Table sx={{ borderCollapse: "collapse" }}>
-                <TableBody>
-      
-                   {/* TITLE */}
-                              <TableRow>
-                                <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center    }}>
-                                  Full & Final Settlement Statement
-                                </TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center  }}>
-                                  {company.name}
-                                </TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell colSpan={4} sx={{ ...cell, ...center }}>
-                                  {company.address}
-                                </TableCell>
-                              </TableRow>
-                  
-                              {/* EMP DETAILS */}
-                              <TableRow>
-                                <TableCell sx={cell}>Name of the employee</TableCell>
-                                <TableCell sx={cell}>{data.employeeName}</TableCell>
-                                <TableCell sx={cell}>F&F Date</TableCell>
-                                <TableCell sx={cell}>{formatDate(data.date)}</TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell sx={cell}>Employee ID</TableCell>
-                                <TableCell sx={cell}>{data.employeeId}</TableCell>
-                                <TableCell sx={cell}>Joining Date</TableCell>
-                                <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell sx={cell}>Designation</TableCell>
-                                <TableCell sx={cell}>{data.designation}</TableCell>
-                                <TableCell sx={cell}>Date of Resignation</TableCell>
-                                <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell sx={cell}>Department</TableCell>
-                                <TableCell sx={cell}>{data.department}</TableCell>
-                                <TableCell sx={cell}>Date of Leaving</TableCell>
-                                <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
-                              </TableRow>
-                  
-                              {/* SALARY PARTICULARS */}
-                              <TableRow >
-                                <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
-                                  Salary particulars
-                                </TableCell>
-                                <TableCell sx={{ ...cell, ...bold, ...center }}>For the month</TableCell>
-                                <TableCell sx={{ ...cell, ...center }}>{formatMonth(data.month)}</TableCell>
-                              </TableRow>
-                  
-                              <TableRow>
-                                <TableCell sx={cell}>Total Day in the month</TableCell>
-                                <TableCell sx={{ ...cell, ...center }}>{totalDays}</TableCell>
-                                <TableCell sx={cell}>Paid days</TableCell>
-                                <TableCell sx={{ ...cell, ...center }}>{paidDays}</TableCell>
-                              </TableRow>
-      
-                  {/* Earnings Section */}
-                  <TableRow >
-                    <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
-                  </TableRow>
-      
-                  {[
-                    ["Basic", basic],
-                    ["HRA", hra],
-                    ["Dearness Allowance", da],
-                    ["Special Allowances", special],
-                    ["Food Allowances", food],
-                    ["PF Allowance", pfAllowance], // replaced misc
-                  ].map(([label, val]) => (
-                    <TableRow key={label}>
-                      <TableCell colSpan={2} sx={cell}>{label}</TableCell>
-                      <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
-                      <TableCell sx={{ ...cell, ...right }}>
-                        {label === "PF Allowance"
-                          ? formatAmt(pfAllowance)
-                          : formatAmt(earned(val))}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-      
-                  <TableRow>
-                    <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell> 
-                  </TableRow>
-      
-                  {/* Deductions */}
-                  <TableRow>
-                    <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                      Less Deductions (-)
-                    </TableCell>
-                  </TableRow>
-      
-                  <TableRow>
-                    <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
-                    <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
-                  </TableRow>
-      
-                  <TableRow>
-                    <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
-                    <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
-                  </TableRow>
-      
-                  <TableRow>
-                    <TableCell colSpan={3} sx={cell}>Others</TableCell>
-                    <TableCell sx={{ ...cell, ...right }}>{formatAmt(others)}</TableCell>
-                  </TableRow>
-      
-                  <TableRow>
-                    <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalDeductions)}</TableCell>
-                  </TableRow>
-      
-                   {/* OTHER EARNINGS */}
-                                          <TableRow>
-                                            <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                                              Other Earnings
-                                            </TableCell>
-                                          </TableRow>
-                              
-                                          <TableRow>
-                                            <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
-                                            <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                                              00
-                                            </TableCell>
-                                          </TableRow>
-                              
-                                          <TableRow>
-                                            <TableCell colSpan={2} sx={cell}>Total </TableCell>
-                                            <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                                              {formatAmt(totalEarned)}
-                                            </TableCell>
-                                          </TableRow>
-      
-                  {/* Net Pay */}
-                  <TableRow>
-                    <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Net Payable (Rs)</TableCell>
-                    <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(netPay)}</TableCell>
-                  </TableRow>
-      
-                  <TableRow>
-                    <TableCell sx={cell}>Amount in Words</TableCell>
-                    <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
-                  </TableRow>
-      
-                   {/* SIGNATURE */}
-                              <TableRow>
-                                <TableCell sx={{ ...cell, ...center, padding: "2px" }}></TableCell>
-                              
-                                <TableCell sx={{ ...cell, ...center, padding: "2px" }}>
-                                  {company.stamp && (
-                                    <img
-                                      src={company.stamp}
-                                      alt="Stamp"
-                                      style={{ height: 75, display: "block", margin: "0 auto" }}
-                                    />
-                                  )}
-                                </TableCell>
-                              
-                                <TableCell colSpan={2} sx={{ ...cell, ...center, padding: "3px" }}>
-                                  {company.signature && (
-                                    <img
-                                      src={company.signature}
-                                      alt="Signature"
-                                      style={{ height: 60, display: "block", margin: "0 auto" }}
-                                    />
-                                  )}
-                                </TableCell>
-                              </TableRow>
-      
-                </TableBody>
-              </Table>
-            </Box>
+        <Table sx={{ borderCollapse: "collapse" }}>
+          <TableBody>
+
+            {/* TITLE */}
+            <TableRow>
+              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+                Full & Final Settlement Statement
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+                {company.name}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={4} sx={{ ...cell, ...center }}>
+                {company.address}
+              </TableCell>
+            </TableRow>
+
+            {/* EMP DETAILS */}
+            <TableRow>
+              <TableCell sx={cell}>Name of the employee</TableCell>
+              <TableCell sx={cell}>{data.employeeName}</TableCell>
+              <TableCell sx={cell}>F&F Date</TableCell>
+              <TableCell sx={cell}>{formatDate(data.date)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={cell}>Employee ID</TableCell>
+              <TableCell sx={cell}>{data.employeeId}</TableCell>
+              <TableCell sx={cell}>Joining Date</TableCell>
+              <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={cell}>Designation</TableCell>
+              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>Date of Resignation</TableCell>
+              <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={cell}>Department</TableCell>
+              <TableCell sx={cell}>{data.department}</TableCell>
+              <TableCell sx={cell}>Date of Leaving</TableCell>
+              <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
+            </TableRow>
+
+            {/* SALARY PARTICULARS */}
+            <TableRow >
+              <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
+                Salary particulars
+              </TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...center }}>For the month</TableCell>
+              <TableCell sx={{ ...cell, ...center }}>{formatMonth(data.month)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={cell}>Total Day in the month</TableCell>
+              <TableCell sx={{ ...cell, ...center }}>{totalDays}</TableCell>
+              <TableCell sx={cell}>Paid days</TableCell>
+              <TableCell sx={{ ...cell, ...center }}>{paidDays}</TableCell>
+            </TableRow>
+
+            {/* Earnings Section */}
+            <TableRow >
+              <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
+            </TableRow>
+
+            {[
+              ["Basic", basic],
+              ["HRA", hra],
+              ["Dearness Allowance", da],
+              ["Special Allowances", special],
+              ["Food Allowances", food],
+              ["PF Allowance", pfAllowance], // replaced misc
+            ].map(([label, val]) => (
+              <TableRow key={label}>
+                <TableCell colSpan={2} sx={cell}>{label}</TableCell>
+                <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
+                <TableCell sx={{ ...cell, ...right }}>
+                  {label === "PF Allowance"
+                    ? formatAmt(pfAllowance)
+                    : formatAmt(earned(val))}
+                </TableCell>
+              </TableRow>
+            ))}
+
+            <TableRow>
+              <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
+            </TableRow>
+
+            {/* Deductions */}
+            <TableRow>
+              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+                Less Deductions (-)
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={3} sx={cell}>Others</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(others)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalDeductions)}</TableCell>
+            </TableRow>
+
+            {/* OTHER EARNINGS */}
+            <TableRow>
+              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+                Other Earnings
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={2} sx={cell}>Leave encashment </TableCell>
+              <TableCell colSpan={2} sx={{ ...cell, ...right }}>
+                00
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={2} sx={cell}>Total </TableCell>
+              <TableCell colSpan={2} sx={{ ...cell, ...right }}>
+                {formatAmt(totalEarned)}
+              </TableCell>
+            </TableRow>
+
+            {/* Net Pay */}
+            <TableRow>
+              <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Net Payable (Rs)</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(netPay)}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={cell}>Amount in Words</TableCell>
+              <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
+            </TableRow>
+
+            {/* SIGNATURE */}
+            <TableRow>
+              <TableCell sx={{ ...cell, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "2px" }}></TableCell>
+
+              <TableCell sx={{ ...cell, width: "34%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "10px", borderTop: "none" }}>
+                {company.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: "90px", display: "block", margin: "0 auto" }}
+                  />
+                )}
+              </TableCell>
+
+              <TableCell colSpan={2} sx={{ ...cell, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "3px" }}>
+                {company.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: "40px", display: "block", margin: "0 auto" }}
+                  />
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
+              <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
+              <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
+            </TableRow>
+
+          </TableBody>
+        </Table>
+      </Box>
     </A4Page>
   );
 };

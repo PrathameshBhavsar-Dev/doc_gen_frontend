@@ -301,10 +301,14 @@ export const calculateIncrement = (currentCTC, incrementPercentage) => {
  * @returns {string} - Formatted currency string
  */
 
-export const formatCurrency = (amount, decimals = 2) => {
-  if (amount == null || isNaN(amount)) {
-    return Number(0).toFixed(decimals);
-  }
+export const formatCurrency = (amount) => {
+  if (amount == null || isNaN(amount)) return "0";
+
+  return Number(amount).toLocaleString("en-IN", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+
 
   return new Intl.NumberFormat("en-IN", {
     minimumFractionDigits: decimals,

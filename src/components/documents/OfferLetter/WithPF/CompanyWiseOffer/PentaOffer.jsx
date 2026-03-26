@@ -31,23 +31,40 @@ const calculateSalaryBreakup = (annualCTC) => {
   // ✅ Monthly CTC
   const monthlyCTC = round2(annualCTC / 12);
 
-  // ✅ 48 + 18 + 12 + 16 + 8 = 100%
-  const basicMonthly = round2(monthlyCTC * 0.48);
+  // ✅ PF STATIC
+  const pfMonthly = 3750;
+  const pfAnnual = round2(pfMonthly * 12);
+
+  // ✅ Other components (% based)
   const hraMonthly = round2(monthlyCTC * 0.18);
   const daMonthly = round2(monthlyCTC * 0.12);
   const foodMonthly = round2(monthlyCTC * 0.16);
   const specialMonthly = round2(monthlyCTC * 0.06);
 
-  // ✅ Annual = Monthly × 12
+  // ✅ TOTAL of all except Basic
+  const totalOthers =
+    hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly;
+
+  // ✅ BASIC = REMAINING
+  let basicMonthly = round2(monthlyCTC - totalOthers);
+
+  // ✅ Rounding Fix
+  const finalCheck =
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    foodMonthly +
+    specialMonthly +
+    pfMonthly;
+
+  basicMonthly += round2(monthlyCTC - finalCheck);
+
+  // ✅ Annual values
   const basicAnnual = round2(basicMonthly * 12);
   const hraAnnual = round2(hraMonthly * 12);
   const daAnnual = round2(daMonthly * 12);
   const foodAnnual = round2(foodMonthly * 12);
   const specialAnnual = round2(specialMonthly * 12);
-
-  // ✅ PF Static (ONLY DISPLAY)
-  const pfMonthly = 3750;
-  const pfAnnual = round2(pfMonthly * 12);
 
   const salaryBreakup = [
     { label: "Basic", perMonth: basicMonthly, perYear: basicAnnual },
@@ -58,22 +75,14 @@ const calculateSalaryBreakup = (annualCTC) => {
     { label: "Provident Fund (PF)", perMonth: pfMonthly, perYear: pfAnnual }, // show only
   ];
 
-  // ✅ Total WITHOUT PF
+  // ✅ Total WITHOUT PF (Gross)
   const totalPerMonth = round2(
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    foodMonthly +
-    specialMonthly
-  );
+  basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
+);
 
-  const totalPerYear = round2(
-    basicAnnual +
-    hraAnnual +
-    daAnnual +
-    foodAnnual +
-    specialAnnual
-  );
+ const totalPerYear = round2(
+  basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
+);
 
   return { salaryBreakup, totalPerMonth, totalPerYear };
 };

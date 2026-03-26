@@ -4,16 +4,17 @@ import A4Layout from "../../../../layout/A4Page";
 import {
   formatCurrency,
   numberToWords,
+  getProfessionalTax,
 } from "../../../../../utils/salaryCalculations";
 
 /* ================= DATE FORMAT ================= */
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
 /* ================= STYLES ================= */
@@ -47,65 +48,64 @@ const NeweageSalarySlip = ({ company, data }) => {
     totalSalary,
   } = data;
 
-  /* ================= SMARTMATRIX LOGIC (EXACT) ================= */
-
-  const round2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
-  const monthlyGross = round2(totalSalary);
-
-  const [year, monthNum] = (month || "2025-01").split("-");
-  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
-    month: "long",
-  });
-
-  /* Earnings Percentages (Same as your SmartMatrix code) */
-  const PERCENT = {
-    basic: 0.48,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
+  /* ================= CUBEAGE SALARY LOGIC ================= */
+  const getTotalDaysInMonth = (monthStr) => {
+    if (!monthStr) return 31;
+    const [year, monthNum] = monthStr.split("-");
+    return new Date(year, monthNum, 0).getDate();
   };
 
-  const basic = round2(monthlyGross * PERCENT.basic);
-  const hra = round2(monthlyGross * PERCENT.hra);
-  const da = round2(monthlyGross * PERCENT.da);
-  const special = round2(monthlyGross * PERCENT.special);
+  const totalDays = getTotalDaysInMonth(month);
+  const presentDays = workdays || totalDays;
 
-  /* FOOD = remainder (IMPORTANT) */
-  const food = round2(monthlyGross - (basic + hra + da + special));
+  const round0 = (n) => Math.round(Number(n) || 0);
+  const monthlyCTC = parseFloat(totalSalary || 0);
+
+  const earnedCTC = (monthlyCTC * presentDays) / totalDays;
+
+  const hra = round0(earnedCTC * 0.18);
+  const da = round0(earnedCTC * 0.12);
+  const lta = round0(earnedCTC * 0.16);
+  const allow = round0(earnedCTC * 0.06);
+  const pfAllowance = 3750;
+
+  const basic = round0(earnedCTC) - (hra + da + lta + allow + pfAllowance);
+
+  const grandTotalA = basic + hra + da + lta + allow + pfAllowance;
 
   /* ================= DEDUCTIONS ================= */
-
-  const PF = 3750; // constant
-  const pt = monthName.toLowerCase() === "february" ? 300 : 200;
+  const pfDeduction = 3750;
+  const pt = getProfessionalTax(month, grandTotalA);
   const otherDeduction = 2000;
 
-  const totalEarnings = monthlyGross; // PF not included
-  const totalDeductions = round2(PF + pt + otherDeduction);
-  const netPay = round2(monthlyGross - totalDeductions);
+  const totalDeductions = round0(pfDeduction + pt + otherDeduction);
+  const netPay = round0(grandTotalA - totalDeductions);
+
+  const totalEarnings = grandTotalA;
 
   /* ================= ARRAYS ================= */
 
   const earnings = [
     { label: "BASIC", value: basic },
-    { label: "HRA", value: hra },
-    { label: "DEARNESS ALLOWANCE", value: da },
-    { label: "SPECIAL ALLOWANCE", value: special },
-    { label: "FOOD ALLOWANCE", value: food },
-    { label: "PF ALLOWANCE", value: PF },
+    { label: "H.R.A.", value: hra },
+    { label: "D.A.", value: da },
+    { label: "L.T.A.", value: lta },
+    { label: "ALLOWANCE (Shift+Skill)", value: allow },
+    { label: "PF ALLOWANCE", value: pfAllowance },
   ];
 
   const deductions = [
-    { label: "PF", value: PF },
-    { label: "PT", value: pt },
-    { label: "Other Deduction", value: otherDeduction },
+    { label: "P.F.", value: pfDeduction },
+    { label: "P.T.", value: pt },
+    { label: "Other Deductions", value: otherDeduction },
   ];
 
   const formatMonthYear = (month) =>
     month
       ? new Date(`${month}-01`).toLocaleDateString("en-GB", {
-          month: "long",
-          year: "numeric",
-        })
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   /* ================= RENDER ================= */

@@ -19,7 +19,7 @@ import smartholderHeader from "../../../assets/images/SmartSoftware/smart-header
 // import smartholderFooter from '../assets/images/SmartSoftware/smart-footer.png';
 import smartholderWatermark from "../../../assets/images/SmartSoftware/Watermark.png";
 import smartholderSignature from "../../../assets/images/SmartSoftware/Sign.png";
-import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.jpeg";
+import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.png";
 import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
 import smartLogo from "../../../assets/images/SmartSoftware/Sign.png";
 
@@ -307,7 +307,7 @@ export const companies = [
     footerImage: Nimbja_footer,
     watermarkImage: null,
     address:
-      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Gurav, Pimpri-Chinchwad, Pune- 411027",
+      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Saudagar, Pimpri-Chinchwad, Pune- 411027",
     email: "hr@nimbjasolution.com",
     phone: "+91 7066561234",
     website: "https://nimbjasolution.com/",

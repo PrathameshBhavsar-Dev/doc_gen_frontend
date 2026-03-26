@@ -23,12 +23,19 @@ const formatDate = (date) =>
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+// const formatCurrency = (v) =>
+//   Number(v || 0).toLocaleString("en-IN", {
+//     minimumFractionDigits: 2,
+//     maximumFractionDigits: 2,
+//   });
+ 
 
+
+  export const formatCurrency = (value) => {
+  const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
+
+  return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
+};
 /* ================= SALARY BREAKUP ================= */
 /* 40%, 18%, 12%, 16%, 6%, 8% = 100% */
 
@@ -154,14 +161,23 @@ const SmartSoftwareAppointment = ({ company, data }) => {
               For {company.name?.toUpperCase()}
             </Typography>
 
-            <Box sx={{ mt: 1 }}>
-              {company.signature && (
-                <img src={company.signature} alt="signature" height={60} />
-              )}
-              {company.stamp && (
-                <img src={company.stamp} alt="stamp" height={70} />
-              )}
-            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 3 }}>
+                              {company?.signature && (
+                                <img
+                                  src={company.signature}
+                                  alt="Signature"
+                                  style={{ height: 75 }}
+                                />
+                              )}
+                    
+                              {company?.stamp && (
+                                <img
+                                  src={company.stamp}
+                                  alt="Stamp"
+                                  style={{ height: 90 }}
+                                />
+                              )}
+                            </Box>
 
             <Typography mt={1}>{company.hrName}</Typography>
             <Typography fontSize={14.30}>HR Department</Typography>

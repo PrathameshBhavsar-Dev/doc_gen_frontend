@@ -615,21 +615,20 @@ const JDITConfirmation = ({ company, data }) => {
 
   /* ================= SALARY CALCULATION ================= */
   const round0 = (num) => Math.round(num);
-  const monthlyCTC = parseFloat(totalSalary || 0);
+  const annualCTC = parseFloat(totalSalary || 0);
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // JDIT Percentage Breakup calculated on Monthly CTC
-  const basicMonthly = round0(monthlyCTC * 0.48);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const conveyanceMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
   const medicalMonthly = round0(monthlyCTC * 0.06);
 
   // Static PF
   const monthlyPF = 3750;
-
-  // Balancing Figure
-  const specialMonthly = round0(monthlyCTC * 0.16);
-
   const annualPF = monthlyPF * 12;
+
+  // Basic is the balancing figure
+  const basicMonthly = monthlyCTC - hraMonthly - conveyanceMonthly - specialMonthly - medicalMonthly - monthlyPF;
 
   const salaryComponents = [
     { name: "Basic Salary", monthly: basicMonthly },
@@ -642,13 +641,8 @@ const JDITConfirmation = ({ company, data }) => {
     annual: round0(item.monthly * 12),
   }));
 
-  const totalMonthly = round0(
-    salaryComponents.reduce((sum, item) => sum + item.monthly, 0)
-  );
-
-  const totalAnnual = round0(
-    salaryComponents.reduce((sum, item) => sum + item.annual, 0)
-  );
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = monthlyCTC * 12;
 
   /* ================= TABLE STYLE ================= */
   const tableCellStyle = {
@@ -664,42 +658,43 @@ const JDITConfirmation = ({ company, data }) => {
         headerSrc={company.headerImage}
         footerSrc={company.footerImage}
       >
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px", textAlign: "right"
- }}>
+        <Typography sx={{
+          ...TEXT, mb: 2, fontSize: "15px", textAlign: "right"
+        }}>
           {formatDate(issueDate)}
         </Typography>
 
-        <Typography sx={{...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           <b>Name</b> : {mrms} {NAME}
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           <b>Address</b> : {address}
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           Dear {NAME},
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"    }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           We are pleased to confirm your continued services at the position of{" "}
           <b>{position}</b> with <b>{COMPANY_NAME}</b> with effective date{" "}
           <b>{formatDate(effectiveDate)}</b> considering your performance and
           support towards the organization.
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           If there is any change in the date of joining, changes can be taken
           under consideration.
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           Your total Gross salary will be Rs.{" "}
           <b>{formatCurrency(totalAnnual)}</b> (
           <b>{numberToWords(totalAnnual)} </b>) per year.
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px"  }}>
+        <Typography sx={{ ...TEXT, mb: 2, fontSize: "15px" }}>
           Subject to various deductions as per company and government policy.
         </Typography>
 
@@ -713,7 +708,7 @@ const JDITConfirmation = ({ company, data }) => {
           the beginning of a long and mutually beneficial association.
         </Typography>
 
-        <Typography sx={{ ...TEXT, mb: 4,fontSize: "15px" }}>
+        <Typography sx={{ ...TEXT, mb: 4, fontSize: "15px" }}>
           Kindly acknowledge the duplicate copy of this letter as an acceptance
           of this offer.
         </Typography>
@@ -734,19 +729,19 @@ const JDITConfirmation = ({ company, data }) => {
                 alt="Signature"
                 style={{ height: "50px" }}
               />
-          
+
               <img
                 src={company.stamp}
                 alt="Stamp"
                 style={{ height: "100px" }}
               />
             </Box>
-          
+
             <Typography>{company.hrName}</Typography>
             <Typography>HR Manager</Typography>
           </Box>
 
-          <Box sx={{  mt: 8 }}>
+          <Box sx={{ mt: 8 }}>
             <Typography>Signature : ___________________</Typography>
             <Typography>Candidate Name : {NAME}</Typography>
           </Box>

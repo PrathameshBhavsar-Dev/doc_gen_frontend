@@ -38,10 +38,11 @@ const formatOneCurrency = (salary) => {
 
 const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
-  const monthlySalary = Number(data.salary || 0);
+  // INPUT = Annual CTC
+  const annualSalary = Number(data.salary || 0);
 
-  // Convert to annual
-  const annualSalary = monthlySalary * 12;
+  // Convert to monthly
+  const monthlySalary = annualSalary / 12;
   return (
     <>
       {/* ================= FIRST PAGE ================= */}
@@ -378,57 +379,76 @@ const SmartMatrixAppointment = ({ company, data }) => {
         {(() => {
           const round0 = (num) => Math.round(num);
 
-          //  INPUT IS MONTHLY SALARY
-          const monthlyCTC = round0(Number(data.salary || 0));
+          // ================= ANNUAL CTC INPUT =================
+          const annualCTC = round0(Number(data.salary || 0));
 
-          // Convert to annual
-          const annualCTC = round0(monthlyCTC * 12);
+          // ================= MONTHLY CTC =================
+          const monthlyCTC = round0(annualCTC / 12);
 
-          // Monthly breakup (based on monthly CTC directly)
-          const basicMonthly = round0(monthlyCTC * 0.48);
-          const hraMonthly = round0(monthlyCTC * 0.18);
-          const daMonthly = round0(monthlyCTC * 0.12);
-          const foodMonthly = round0(monthlyCTC * 0.06);
-
-          // Remaining goes to Special
-          const specialMonthly =
-            monthlyCTC - (basicMonthly + hraMonthly + daMonthly + foodMonthly);
-
-          // Static PF (if required)
+          // ================= STATIC PF =================
           const pfMonthly = 3750;
 
+          // ================= FIXED PERCENTAGES =================
+          const hraMonthly = round0(monthlyCTC * 0.18);
+          const daMonthly = round0(monthlyCTC * 0.12);
+          const specialMonthly = round0(monthlyCTC * 0.16);
+          const foodMonthly = round0(monthlyCTC * 0.06);
+
+          // ================= ADJUSTED BASIC =================
+          const basicMonthly = round0(
+            monthlyCTC -
+              (hraMonthly +
+                daMonthly +
+                specialMonthly +
+                foodMonthly +
+                pfMonthly),
+          );
+
+          // ================= ANNUAL =================
           const salaryComponents = [
-            { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
+            {
+              name: "Basic",
+              monthly: basicMonthly,
+              annual: round0(basicMonthly * 12),
+            },
             {
               name: "House Rent Allowance",
               monthly: hraMonthly,
-              annual: hraMonthly * 12,
+              annual: round0(hraMonthly * 12),
             },
             {
               name: "Dearness Allowance",
               monthly: daMonthly,
-              annual: daMonthly * 12,
+              annual: round0(daMonthly * 12),
             },
             {
               name: "Special Allowance",
               monthly: specialMonthly,
-              annual: specialMonthly * 12,
+              annual: round0(specialMonthly * 12),
             },
             {
               name: "Food Allowance",
               monthly: foodMonthly,
-              annual: foodMonthly * 12,
+              annual: round0(foodMonthly * 12),
             },
             {
               name: "Provident Fund (PF)",
               monthly: pfMonthly,
-              annual: pfMonthly * 12,
+              annual: round0(pfMonthly * 12),
             },
           ];
 
-          // Totals
-          const totalMonthly = monthlyCTC;
-          const totalAnnual = annualCTC;
+          // ================= TOTAL =================
+          const totalMonthly = round0(
+            basicMonthly +
+              hraMonthly +
+              daMonthly +
+              specialMonthly +
+              foodMonthly +
+              pfMonthly,
+          );
+
+          const totalAnnual = round0(totalMonthly * 12);
 
           return (
             <>
@@ -438,9 +458,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "58mm", // ⬇️ pushes date just BELOW header
+                  top: "50mm", // ⬇️ pushes date just BELOW header
                   right: "18mm",
-                  fontSize: "11pt",
+                  fontSize: "13pt",
                   fontFamily:
                     '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                 }}
@@ -458,7 +478,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   fontSize: "11pt",
                   lineHeight: "1.6",
                   mb: "6mm",
-                  mt: "38mm",
+                  mt: "20mm",
                 }}
               >
                 <Typography

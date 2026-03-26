@@ -138,7 +138,7 @@
 //           </Typography>
 
 //           {/* ✅ FIXED SENTENCE */}
-         
+
 //          <Typography mt={2} fontSize={15} textAlign="justify">
 //                      Further to your acceptance, Offer dated {" "}
 //                      <b>{formatDate(data. issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
@@ -189,7 +189,7 @@
 //               </Typography>
 
 //              <Box sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}>
-  
+
 //   {company.signature && (
 //     <img
 //       src={company.signature}
@@ -355,59 +355,57 @@ const JDITAppointment = ({ company, data }) => {
 
   const round0 = (num) => Math.round(Number(num || 0));
 
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.salary || 0));
 
-  const monthlyCTC = round0(Number(data.salary || 0));
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // 🔹 Round to whole number (no decimals)
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= MONTHLY CTC =================
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC - (hraMonthly + daMonthly + specialMonthly + foodMonthly)
+  );
 
-// ================= PERCENTAGE BREAKUP =================
-const basicMonthly   = round0(monthlyCTC * 0.40);
-const hraMonthly     = round0(monthlyCTC * 0.18);
-const daMonthly      = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly    = round0(monthlyCTC * 0.06);
-const miscMonthly    = round0(monthlyCTC * 0.08);
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
 
-// ================= ANNUAL VALUES =================
-const basicAnnual   = round0(basicMonthly * 12);
-const hraAnnual     = round0(hraMonthly * 12);
-const daAnnual      = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual    = round0(foodMonthly * 12);
-const miscAnnual    = round0(miscMonthly * 12);
+  // ================= SALARY TABLE STRUCTURE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+  ];
 
-// ================= SALARY TABLE STRUCTURE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
+  // ================= TOTALS =================
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
 
-// ================= TOTALS =================
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
-
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-
-)
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-   const annualCTC = Number(data.salary || 0);
   // const salaryRows = generateSalaryBreakup(annualCTC);
 
   /* ================= TERMS ================= */
   const terms = [
     <> Your Designation will be <strong>"{data.position}"</strong>.   </>,
-    <>Your total emoluments will be <strong>Rs. {totalAnnual / 100000} </strong>Lakhs per annum.</>,
+    <>Your total emoluments will be <strong>Rs. {totalAnnual.toLocaleString('en-IN')} </strong> per annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
     `You shall be due for salary revision not before one year from your date of joining.`,
@@ -464,11 +462,11 @@ const totalAnnual = round0(
           </Typography>
 
           {/* ✅ FIXED SENTENCE */}
-         
-         <Typography mt={2} fontSize={15} textAlign="justify">
-                     Further to your acceptance, Offer dated {" "}
-                     <b>{formatDate(data. issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
-                   </Typography>
+
+          <Typography mt={2} fontSize={15} textAlign="justify">
+            Further to your acceptance, Offer dated {" "}
+            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+          </Typography>
 
           <Box component="ol" start={1} sx={{ pl: 3, mt: 1 }}>
             {terms.slice(0, 11).map((t, i) => (
@@ -515,32 +513,32 @@ const totalAnnual = round0(
               </Typography>
 
               <Box sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}>
-  
-   {company.signature && (
-    <img
-      src={company.signature}
-      alt="signature"
-      style={{
-        height: "65px",
-        width: "auto",
-        objectFit: "contain"
-      }}
-    />
-  )}
 
-  {company.stamp && (
-    <img
-      src={company.stamp}
-      alt="stamp"
-      style={{
-        height: "90px",
-        width: "auto",
-        objectFit: "contain"
-      }}
-    />
-  )}
+                {company.signature && (
+                  <img
+                    src={company.signature}
+                    alt="signature"
+                    style={{
+                      height: "65px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
+                )}
 
- </Box>
+                {company.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="stamp"
+                    style={{
+                      height: "90px",
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
+                )}
+
+              </Box>
 
               <Typography fontWeight={600} mt={2}>
                 {company.hrName}
@@ -569,9 +567,9 @@ const totalAnnual = round0(
       <A4Page
         headerSrc={company.headerImage}
         footerSrc={company.footer}>
-           <Typography align="right" fontSize={14} marginTop={2}>
-                {formatDate(data.issueDate)}
-              </Typography>
+        <Typography align="right" fontSize={14} marginTop={2}>
+          {formatDate(data.issueDate)}
+        </Typography>
         <Typography align="center" fontWeight={700} mb={3}>
           Salary Structure - Break Up
         </Typography>
@@ -603,7 +601,7 @@ const totalAnnual = round0(
         </Box>
 
         {/* SALARY TABLE */}
-         <Table
+        <Table
           sx={{
             mt: 2,
             width: "100%",
@@ -616,83 +614,83 @@ const totalAnnual = round0(
           }}
         >
           <TableHead>
-  <TableRow>
-    <TableCell
-      align="left"
-      sx={{
-        backgroundColor: "#000",
-        color: "#fff !important",
-        fontWeight: 600,
-      }}
-    >
-      Salary Components
-    </TableCell>
+            <TableRow>
+              <TableCell
+                align="left"
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                Salary Components
+              </TableCell>
 
-    <TableCell
-      align="left"
-      sx={{
-        backgroundColor: "#000",
-        color: "#fff !important",
-        fontWeight: 600,
-      }}
-    >
-      Per Month
-    </TableCell>
+              <TableCell
+                align="left"
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                Per Month
+              </TableCell>
 
-    <TableCell
-      align="left"
-      sx={{
-        backgroundColor: "#000",
-        color: "#fff !important",
-        fontWeight: 600,
-      }}
-    >
-      Per Annum
-    </TableCell>
-  </TableRow>
-</TableHead>
+              <TableCell
+                align="left"
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                Per Annum
+              </TableCell>
+            </TableRow>
+          </TableHead>
 
           <TableBody>
             {salaryRows.map(([name, m, a], i) => (
-    <TableRow key={i}>
-      <TableCell>{name}</TableCell>
-      <TableCell>{formatCurrency(m)}</TableCell>
-      <TableCell>{formatCurrency(a)}</TableCell>
-    </TableRow>
-  ))}
+              <TableRow key={i}>
+                <TableCell>{name}</TableCell>
+                <TableCell>{formatCurrency(m)}</TableCell>
+                <TableCell>{formatCurrency(a)}</TableCell>
+              </TableRow>
+            ))}
 
 
             <TableRow>
-  <TableCell
-    sx={{
-      backgroundColor: "#000",
-      color: "#fff !important",
-      fontWeight: 600,
-    }}
-  >
-    Monthly Gross Salary
-  </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                Monthly Gross Salary
+              </TableCell>
 
-  <TableCell
-    sx={{
-      backgroundColor: "#000",
-      color: "#fff !important",
-      fontWeight: 600,
-    }}
-  >
-    {formatCurrency(totalMonthly)}
-  </TableCell>
+              <TableCell
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                {formatCurrency(totalMonthly)}
+              </TableCell>
 
-  <TableCell
-    sx={{
-      backgroundColor: "#000",
-      color: "#fff !important",
-      fontWeight: 600,
-    }}
-  >
-    {formatCurrency(totalAnnual)}
-  </TableCell>
-</TableRow>
+              <TableCell
+                sx={{
+                  backgroundColor: "#000",
+                  color: "#fff !important",
+                  fontWeight: 600,
+                }}
+              >
+                {formatCurrency(totalAnnual)}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </A4Page>

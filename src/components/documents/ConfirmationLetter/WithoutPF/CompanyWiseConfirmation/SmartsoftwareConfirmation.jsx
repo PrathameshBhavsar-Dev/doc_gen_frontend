@@ -80,6 +80,11 @@ const SmartsoftwareConfirmation = ({ company, data }) => {
     (sum, item) => sum + item.annual,
     0
   );
+  const formatCurrency = (value) => {
+  const num = Math.round(Number(value) || 0); // 🔥 remove decimals
+
+  return num.toLocaleString("en-IN"); // 🔥 8,667 (no .00)
+};
 
   return (
     <>
@@ -251,25 +256,7 @@ const SmartsoftwareConfirmation = ({ company, data }) => {
 
 
       
-              <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
-                <Box>
-                  <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
-                    {company.signature && (
-                      <Box component="img" src={company.signature} sx={{ height: "80px" }} />
-                    )}
-                    {company.stamp && (
-                      <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
-                    )}
-                  </Box>
-                  <Typography>{company.hrName}</Typography>
-                  <Typography>HR Relations Lead</Typography>
-                </Box>
-      
-                <Box sx={{ width: "45%", mt: 8 }}>
-                  <Typography>Signature : ___________________</Typography>
-                  <Typography>Candidate Name : {employeeName}</Typography>
-                </Box>
-              </Box>
+              
       </A4Layout>
     </>
   );

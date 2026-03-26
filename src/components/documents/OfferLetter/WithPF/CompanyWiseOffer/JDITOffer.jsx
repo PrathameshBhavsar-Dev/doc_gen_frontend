@@ -48,33 +48,33 @@ const JDITOffer = ({ company, data }) => {
   } = data;
 
   /* 🔥 DERIVED VALUES */
-  const monthlyCTC = Number(salary || 0);
-  const annualCTC = monthlyCTC * 12;
+  const annualCTC = Number(salary || 0);
+  const monthlyCTC = Math.round(annualCTC / 12);
 
-  const basic = Math.round(monthlyCTC * 0.48);
-  const hra = Math.round(monthlyCTC * 0.18);
-  const da = Math.round(monthlyCTC * 0.12);
-  const allowance = Math.round(monthlyCTC * 0.06);
+  const hraMonthly = Math.round(monthlyCTC * 0.18);
+  const conveyanceMonthly = Math.round(monthlyCTC * 0.12);
+  const specialMonthly = Math.round(monthlyCTC * 0.16);
+  const medicalMonthly = Math.round(monthlyCTC * 0.06);
 
-  // Hardcode PF value
-  const pfValue = 3750;
+  // Static PF
+  const monthlyPF = 3750;
 
-  // Calculate Special Allowance as the balancing figure
-  const specialAllowance = Math.round(monthlyCTC * 0.16);
+  // Basic is the balancing figure
+  const basicMonthly = monthlyCTC - hraMonthly - conveyanceMonthly - specialMonthly - medicalMonthly - monthlyPF;
 
   const salaryComponents = useMemo(() => {
     return [
-      { name: "Basic", monthly: basic, annual: basic * 12 },
-      { name: "HRA", monthly: hra, annual: hra * 12 },
-      { name: "Dearness Allowance", monthly: da, annual: da * 12 },
-      { name: "Special Allowance", monthly: specialAllowance, annual: specialAllowance * 12 },
-      { name: "Food Allowance", monthly: allowance, annual: allowance * 12 },
-      { name: "Provident Fund (PF)", monthly: pfValue, annual: pfValue * 12 },
+      { name: "Basic Salary", monthly: basicMonthly, annual: basicMonthly * 12 },
+      { name: "House Rent Allowance", monthly: hraMonthly, annual: hraMonthly * 12 },
+      { name: "Dearness Allowance", monthly: conveyanceMonthly, annual: conveyanceMonthly * 12 },
+      { name: "Special Allowance", monthly: specialMonthly, annual: specialMonthly * 12 },
+      { name: "Food Allowance", monthly: medicalMonthly, annual: medicalMonthly * 12 },
+      { name: "Provident Fund (PF)", monthly: monthlyPF, annual: monthlyPF * 12 },
     ];
-  }, [basic, hra, da, specialAllowance, allowance, pfValue]);
+  }, [basicMonthly, hraMonthly, conveyanceMonthly, specialMonthly, medicalMonthly, monthlyPF]);
 
   const totalMonthly = monthlyCTC;
-  const totalAnnual = annualCTC;
+  const totalAnnual = monthlyCTC * 12;
 
   return (
     <>
@@ -600,8 +600,8 @@ const JDITOffer = ({ company, data }) => {
           </Box>
         </Box>
 
-        <Box sx={{ mt: 5 }}>
-          <Typography sx={{ ...TEXT, mb: 1 }}>
+        <Box sx={{ mt: 0 }}>
+          <Typography sx={{ ...TEXT, mb: 6 }}>
             For <b>JDIT SOFTWARE SOLUTIONS PVT. LTD.</b>
           </Typography>
 
@@ -610,23 +610,52 @@ const JDITOffer = ({ company, data }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
-              mb: 2,
+              gap: 1,
+              mb: 1,
+              height: 64, // adjust as needed
+              overflow: "hidden",
             }}
           >
             {company.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: "60px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{
+                    height: "40px",
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
+
             {company.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: "80px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{
+                    height: "60px",       // reduced from 80px
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
           </Box>
 
@@ -638,7 +667,8 @@ const JDITOffer = ({ company, data }) => {
               {signatoryDesignation}
             </Typography>
           </Box>
-          <Typography sx={{ ...TEXT, mt: 1 }}>
+
+          <Typography sx={{ ...TEXT, mt: 0 }}>
             <b>{company.hrName}</b>
           </Typography>
           <Typography sx={{ ...TEXT }}>

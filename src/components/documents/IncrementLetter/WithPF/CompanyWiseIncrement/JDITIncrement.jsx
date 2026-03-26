@@ -49,30 +49,30 @@ export default function JDITIncrement({ company, data }) {
   const firstName = employeeName.split(" ")[0] || "";
 
   /* ================= SALARY LOGIC ================= */
-  // Helper to keep 2 decimals everywhere
   const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.newCTC || 0));
+  // Source of truth (Annual CTC)
+  const annualCTC = round0(Number(data.newCTC || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
   // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.48);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
   const foodMonthly = round0(monthlyCTC * 0.06);
 
   /* ================= STATIC PF ================= */
   const pfMonthly = 3750;
 
-  /* ================= BALANCING FIGURE ================= */
-  const specialMonthly = round0(monthlyCTC * 0.16);
+  // ================= BALANCING BASIC =================
+  const basicMonthly = monthlyCTC - hraMonthly - daMonthly - specialMonthly - foodMonthly - pfMonthly;
 
   // ================= ANNUAL VALUES =================
   const basicAnnual = round0(basicMonthly * 12);
   const hraAnnual = round0(hraMonthly * 12);
   const daAnnual = round0(daMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
   const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
   const pfAnnual = round0(pfMonthly * 12);
 
   // ================= SALARY TABLE STRUCTURE =================
@@ -82,24 +82,12 @@ export default function JDITIncrement({ company, data }) {
     ["Dearness Allowance", daMonthly, daAnnual],
     ["Special Allowance", specialMonthly, specialAnnual],
     ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 
   // ================= TOTALS =================
-  const totalMonthly = round0(
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    specialMonthly +
-    foodMonthly
-  );
-
-  const totalAnnual = round0(
-    basicAnnual +
-    hraAnnual +
-    daAnnual +
-    specialAnnual +
-    foodAnnual
-  );
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = monthlyCTC * 12;
 
   const salaryInWords = numberToWords(totalAnnual);
 
@@ -273,39 +261,6 @@ export default function JDITIncrement({ company, data }) {
                 </TableRow>
               ))}
 
-              <TableRow>
-                <TableCell
-                  sx={{
-                    border: "1px solid #333",
-                    fontSize: "9.75pt",
-                    py: "0.35mm",
-                  }}
-                >
-                  Provident Fund (PF)
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #333",
-                    fontSize: "9.75pt",
-                    py: "0.35mm",
-                  }}
-                >
-                  {formatCurrency(pfMonthly)}
-                </TableCell>
-
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #333",
-                    fontSize: "9.75pt",
-                    py: "0.35mm",
-                  }}
-                >
-                  {formatCurrency(pfAnnual)}
-                </TableCell>
-              </TableRow>
 
               {/* Totals Row */}
               <TableRow sx={{ backgroundColor: "#000" }}>

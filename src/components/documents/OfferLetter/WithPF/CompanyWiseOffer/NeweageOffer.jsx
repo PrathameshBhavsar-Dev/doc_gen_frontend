@@ -47,16 +47,17 @@ const NeweageOffer = ({ company, data }) => {
   const annualCTC = round0(data.salary || 0);
   const monthlyCTC = round0(annualCTC / 12);
 
-  /* Salary Split */
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  const pfMonthly = 3750;
+
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
-  const foodMonthly = round0(monthlyCTC - used);
-
-  const pfMonthly = 3750;
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   const salaryComponents = [
     { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
@@ -73,7 +74,7 @@ const NeweageOffer = ({ company, data }) => {
     },
     { name: "Food Allowance", monthly: foodMonthly, annual: foodMonthly * 12 },
     {
-      name: "Provident Fund",
+      name: "Provident Fund (PF)",
       monthly: pfMonthly,
       annual: pfMonthly * 12,
     },
