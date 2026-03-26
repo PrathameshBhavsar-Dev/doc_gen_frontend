@@ -658,6 +658,12 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "offerDate",
+        label: "Offer Date",
+        type: "date",
+        required: true,
+      },
+      {
         name: "probationPeriod",
         label: "Probation Period (months)",
         type: "number",
