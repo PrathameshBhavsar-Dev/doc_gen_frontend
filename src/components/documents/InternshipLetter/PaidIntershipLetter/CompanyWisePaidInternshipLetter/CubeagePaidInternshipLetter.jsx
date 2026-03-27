@@ -10,8 +10,6 @@ import {
 
 /* ================= PAGE LAYOUT ================= */
 const PageLayout = ({ children, company, data }) => {
-  const header = data?.header || company?.header;
-
   return (
     <Box
       sx={{
@@ -44,8 +42,33 @@ const PageLayout = ({ children, company, data }) => {
         </Box>
       )}
 
-      {/* HEADER */}
-      {header && <img src={header} alt="header" width="100%" />}
+      {/* HEADER: Logo + Address (Matching Offer Letter style) */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+          gap: 1,
+          px: 4,
+          py: 2,
+          borderBottom: "2px solid #ccc",
+        }}
+      >
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}>
+          {company.logo && (
+            <img src={company.logo} alt="logo" style={{ height: 100 }} />
+          )}
+        </Box>
+        <Box sx={{ width: "100%" }}>
+          <Typography fontSize="12px" mt={1}>
+            <strong>Office:</strong> {company.address || "Office No. 102-6, First Floor Ganesham-4 Commercial, BRTS Road Pimple Saudagar, Pune-411027"}
+          </Typography>
+          <Typography fontSize="12px">
+            <strong>Contact No:</strong> {company.phone || "9112100661"} || <strong>Email:</strong> {company.email || "contact@cubeagetech.com, hr@cubeagetech.com"}
+          </Typography>
+        </Box>
+      </Box>
 
       <Box sx={{ px: 8, py: 3, position: "relative", zIndex: 2 }}>
         {children}
@@ -69,8 +92,9 @@ const formatDate = (date) => {
 
 const formatCurrency = (num) =>
   Number(num).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    // Rounding is now handled in logic, decimals removed from display
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   });
 
 const numberToWords = (num) => {
@@ -98,24 +122,24 @@ const CubeagePaidInternshipLetter = ({ company = {}, data = {} }) => {
   const firstName = data.employeeName?.split(" ")[0] || data.internName?.split(" ")[0] || "";
 
   /* ================= SALARY LOGIC ================= */
-  const round2 = (num) => Number(num.toFixed(2));
+  const round0 = (num) => Math.round(Number(num) || 0);
 
-  const monthlyCTC = round2(Number(data.stipend || 0));
-  const annualCTC = round2(monthlyCTC * 12);
+  const monthlyCTC = round0(Number(data.stipend || 0));
+  const annualCTC = round0(monthlyCTC * 12);
 
-  const basicMonthly = round2(monthlyCTC * 0.40);
-  const hraMonthly = round2(monthlyCTC * 0.18);
-  const daMonthly = round2(monthlyCTC * 0.12);
-  const specialMonthly = round2(monthlyCTC * 0.16);
-  const foodMonthly = round2(monthlyCTC * 0.06);
-  const miscMonthly = round2(monthlyCTC - (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly));
+  const basicMonthly = round0(monthlyCTC * 0.40);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+  const miscMonthly = round0(monthlyCTC - (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly));
 
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
-  const miscAnnual = round2(miscMonthly * 12);
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const miscAnnual = round0(miscMonthly * 12);
 
   const salaryComponents = [
     { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
@@ -126,8 +150,8 @@ const CubeagePaidInternshipLetter = ({ company = {}, data = {} }) => {
     { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
   ];
 
-  const totalMonthly = round2(salaryComponents.reduce((sum, r) => sum + r.monthly, 0));
-  const totalAnnual = round2(salaryComponents.reduce((sum, r) => sum + r.annual, 0));
+  const totalMonthly = round0(salaryComponents.reduce((sum, r) => sum + r.monthly, 0));
+  const totalAnnual = round0(salaryComponents.reduce((sum, r) => sum + r.annual, 0));
 
   const companyName = company?.name || company?.companyName;
 

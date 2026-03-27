@@ -152,7 +152,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography textAlign="justify" mb={3} lineHeight={1.8} fontSize="15px">
-          The employment will commence on the <strong>{formatDate(joiningDate)}</strong>. In this opportunity your compensation will be <strong> ₹ {annualCTC.toLocaleString('en-IN')} per year</strong>.
+          The employment will commence on the <strong>{formatDate(joiningDate)}</strong>. In this opportunity your compensation will be <strong> ₹ {data.salary.toLocaleString('en-IN')} per year</strong>.
         </Typography>
 
         <Typography textAlign="justify" mb={3} lineHeight={1.8} fontSize="15px">
@@ -230,7 +230,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
                 <TableRow sx={{ backgroundColor: "#bfbfbf" }}>
                   <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>Gross Salary (CTC)</TableCell>
                   <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>{fmt(monthlyCTC)}</TableCell>
-                  <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>{fmt(annualCTC)}</TableCell>
+                  <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>{fmt(monthlyCTC * 12)}</TableCell>
                 </TableRow>
 
               </TableBody>
