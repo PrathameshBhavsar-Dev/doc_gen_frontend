@@ -528,6 +528,42 @@ const DocumentPreview = () => {
 
           incrementType: previewData.incrementType || "withPF",
         }),
+
+        fullandfinal_letter: () => ({
+          ...base,
+
+          // ✅ REQUIRED (from BaseDocument)
+          title: previewData.mrms || "Mr.",
+
+          // ✅ REQUIRED
+          designation: previewData.position || previewData.designation || "Employee",
+
+          department: previewData.department || "",
+
+          fnfDate: previewData.fnfDate || new Date(),
+
+          month:
+            previewData.month ||
+            new Date().toISOString().slice(0, 7),
+
+          totalSalary: Number(previewData.salary || previewData.totalSalary) || 0,
+
+          // ✅ FIX HERE (these were missing)
+          doj: previewData.joiningDate || new Date(),
+          resignationDate: previewData.resignationDate || new Date(),
+          leavingDate: previewData.leavingDate || new Date(),
+
+          leaveEncashment: Number(previewData.leaveEncashment) || 0,
+
+          paidDays: Number(previewData.paidDays) || 0,
+
+          finalType:
+            ["withPF", "withoutPF"].includes(previewData.finalType)
+              ? previewData.finalType
+              : "withPF",
+
+          workdays: Number(previewData.workdays) || 0,
+        }),
       };
 
       // ✅ VALIDATE TEMPLATE
