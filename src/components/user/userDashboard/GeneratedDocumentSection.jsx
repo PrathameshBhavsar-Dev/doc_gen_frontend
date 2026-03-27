@@ -217,10 +217,10 @@ function GeneratedDocumentSection() {
                   <Typography sx={{ fontSize: "14px" }}>
                     {item.createdAt
                       ? new Date(item.createdAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
                       : item.date || "—"}
                   </Typography>
 
@@ -405,43 +405,41 @@ function GeneratedDocumentSection() {
             </Box>
 
             {/* PAGE NUMBERS */}
-            {[...Array(totalPages)].map((_, i) => {
-              const pageNum = i + 1;
-              const active = page === pageNum;
+            {(() => {
+              const pages = [];
+              const delta = 2;
+              for (let i = Math.max(2, page - delta); i <= Math.min(totalPages - 1, page + delta); i++) {
+                pages.push(i);
+              }
+              if (page - delta > 2) pages.unshift("...");
+              if (page + delta < totalPages - 1) pages.push("...");
+              const allPages = [1, ...pages, ...(totalPages > 1 ? [totalPages] : [])];
 
-              return (
-                <Box
-                  key={pageNum}
-                  onClick={() => setPage(pageNum)}
-                  sx={{
-                    minWidth: 32,
-                    height: 32,
-                    px: 1,
-                    borderRadius: "8px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    background: active
-                      ? "linear-gradient(to bottom right, #393B8B, #AD78D2)"
-                      : "transparent",
-                    color: active ? "#fff" : "#374151",
-                    boxShadow: active
-                      ? "0 4px 12px rgba(79,70,229,0.25)"
-                      : "none",
-                    "&:hover": {
-                      background: active
-                        ? "linear-gradient(to bottom right, #2f3175, #9f63c7)"
-                        : "#E5E7EB",
-                    },
-                  }}
-                >
-                  {pageNum}
-                </Box>
+              return allPages.map((pageNum, idx) =>
+                pageNum === "..." ? (
+                  <Box key={`dots-${idx}`} sx={{ px: 1, color: "#9CA3AF", fontSize: "13px" }}>…</Box>
+                ) : (
+                  <Box
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    sx={{
+                      minWidth: 32, height: 32, px: 1, borderRadius: "8px",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer", fontSize: "13px", fontWeight: 600,
+                      background: page === pageNum ? "linear-gradient(to bottom right, #393B8B, #AD78D2)" : "transparent",
+                      color: page === pageNum ? "#fff" : "#374151",
+                      boxShadow: page === pageNum ? "0 4px 12px rgba(79,70,229,0.25)" : "none",
+                      "&:hover": {
+                        background: page === pageNum ? "linear-gradient(to bottom right, #2f3175, #9f63c7)" : "#E5E7EB",
+                      },
+                    }}
+                  >
+                    {pageNum}
+                  </Box>
+                )
               );
-            })}
+            })()}
+
 
             {/* NEXT */}
             <Box

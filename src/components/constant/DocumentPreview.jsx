@@ -528,6 +528,63 @@ const DocumentPreview = () => {
 
           incrementType: previewData.incrementType || "withPF",
         }),
+        experience_letter: () => ({
+          ...base,
+          title: previewData.mrms,
+          designation: previewData.position || previewData.designation || "Employee",
+          department: previewData.department || "",
+          joiningDate: previewData.joiningDate,
+          relievingDate: previewData.lastWorkingDay || previewData.relievingDate,
+          issueDate: previewData.issueDate,
+        }),
+
+        relieving_letter: () => ({
+  ...base,
+  title: previewData.mrms,
+  designation: previewData.designation || "Employee",
+  department: previewData.department || "",
+  joiningDate: previewData.joiningDate,
+  lastWorkingDay: previewData.lastWorkingDay,
+  noticePeriod: previewData.noticePeriod || "",
+  handoverStatus: previewData.handoverStatus || "Not Applicable",
+  issueDate: previewData.issueDate,
+}),
+
+
+        internship_certificate: () => ({
+  ...base,
+  title: previewData.mrms,
+  designation: previewData.designation || "Intern",
+  address: previewData.address || "",
+  internshipType: previewData.internshipType || "unpaid",
+  stipend: Number(previewData.stipend) || 0,
+  startDate: previewData.startDate,
+  endDate: previewData.endDate,
+  issueDate: previewData.issueDate,
+}),
+
+
+
+        completion_certificate: () => ({
+  ...base,
+  title: previewData.mrms,
+  designation: previewData.designation || "Intern",
+  department: previewData.department || "",
+  projectName: previewData.projectName || "",
+  startDate: previewData.startDate,
+  completionDate: previewData.completionDate,
+  roleinProject: previewData.roleinProject || previewData.role || "",
+  technologies: previewData.technologies
+    ? previewData.technologies.split(",").map(t => t.trim()).filter(Boolean)
+    : [""],
+  achievements: previewData.achievements
+    ? previewData.achievements.split(",").map(a => a.trim()).filter(Boolean)
+    : [],
+  clientName: previewData.clientName || "",
+  issueDate: previewData.issueDate,
+}),
+
+
 
         fullandfinal_letter: () => ({
           ...base,
