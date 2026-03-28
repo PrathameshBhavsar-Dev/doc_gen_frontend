@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import SalaryStructureTable from "../../../../common/SalaryStructureTable";
+
 import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaAppointment = ({ company, data }) => {
   if (!company || !data) return null;
@@ -31,43 +31,39 @@ const NimbjaAppointment = ({ company, data }) => {
 
   /* ================= SALARY LOGIC ================= */
 
-  // 🔹 Round to whole number (no decimals)
-  const round0 = (num) => Math.round(num);
+ const round0 = (num) => Math.round(num);
 
-  // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.salary || 0));
+const annualCTC = round0(
+  Number(data.totalSalary || data.salary || data.ctc || 0),
+);
 
-  // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.4);
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-  const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+ // ✅ MONTHLY
+ const monthlyCTC = round0(annualCTC / 12);
 
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = round0(basicMonthly * 12);
-  const hraAnnual = round0(hraMonthly * 12);
-  const daAnnual = round0(daMonthly * 12);
-  const specialAnnual = round0(specialMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
-  const miscAnnual = round0(miscMonthly * 12);
+ // ✅ BREAKUP (LAST = ADJUSTMENT)
+ let salaryRows = [
+   ["Basic", round0(monthlyCTC * 0.4)],
+   ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+   ["HRA", round0(monthlyCTC * 0.12)],
+   ["City Allowance", round0(monthlyCTC * 0.16)],
+   ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+   ["Performance Bonus", 0], // 🔥 IMPORTANT
+ ];
 
-  // ================= SALARY TABLE STRUCTURE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Performance Bonus", miscMonthly, miscAnnual],
-  ];
+ // ✅ FIX ROUNDING
+ const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+ salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
-  // ================= TOTALS =================
-  const totalMonthly = round0(salaryRows.reduce((sum, row) => sum + row[1], 0));
+ // ✅ FINAL ROWS (WITH ANNUAL)
+ const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+   name,
+   monthly,
+   monthly * 12,
+ ]);
 
-  const totalAnnual = round0(salaryRows.reduce((sum, row) => sum + row[2], 0));
-
+ // ✅ TOTALS (MATCH OFFER LOGIC)
+ const totalMonthly = monthlyCTC;
+ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
   /* ================= TERMS SPLIT ================= */
   const page1Terms = (data.terms || []).slice(0, 8);
   const page2Terms = (data.terms || []).slice(8);
@@ -212,8 +208,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
               >
                 2. Your total emoluments will be{" "}
-                <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong> Lakh per
-                annum.
+                <strong>Rs. {formatCurrency(annualCTC)}/-</strong> per annum
               </Typography>
             </li>
 
@@ -474,7 +469,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.signature}
                     alt="Signature"
-                    sx={{ width: 180, mt: "10mm", ml: "-2mm", height: 40 }}
+                    sx={{ width: 180, mt: "-7mm", ml: "-2mm", height: 40 }}
                   />
                 </Grid>
                 <Grid item>
@@ -482,7 +477,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110 }}
+                    sx={{ width: 100 }}
                   />
                 </Grid>
               </Grid>
@@ -503,6 +498,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       fontWeight: "400",
                       fontSize: "4mm",
+                      mt: "-3mm",
                     }}
                   >
                     {company?.hrName}
@@ -513,6 +509,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       fontWeight: "400",
                       fontSize: "4mm",
+                      mt: "-2mm",
                     }}
                   >
                     HR Manager-HR Services
@@ -533,7 +530,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       textAlign: "right",
                       marginRight: "-3mm",
-                      mt: "-2mm",
+                      mt: "-6mm",
                     }}
                   >
                     Name: {data.employeeName}
@@ -601,13 +598,41 @@ const NimbjaAppointment = ({ company, data }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <Table>
+            <TableBody>
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell>
+                  <b>Salary Components</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Per month (Rs.)</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Per Annum (Rs.)</b>
+                </TableCell>
+              </TableRow>
+
+              {finalSalaryRows.map(([name, monthly, annual], i) => (
+                <TableRow key={i}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell align="right">{formatCurrency(monthly)}</TableCell>
+                  <TableCell align="right">{formatCurrency(annual)}</TableCell>
+                </TableRow>
+              ))}
+
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell>
+                  <b>Total Monthly Gross Salary</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>{formatCurrency(totalMonthly)}</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>{formatCurrency(totalAnnual)}</b>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Box>
         {/* Signature Block */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 12 }}>
