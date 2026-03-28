@@ -4,13 +4,13 @@ import { useAuth } from "../core/contexts/AuthContext";
 import ROUTES from "../core/constants/routes.constant";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isLoggedIn, user, isLoading } = useAuth();
 
-  // ✅ Wait until auth loads
-  if (loading) return <div>Loading...</div>;
+  // ✅ Wait until auth state is ready
+  if (isLoading) return <div>Loading...</div>;
 
   // ❌ Not logged in
-  if (!isAuthenticated || !user) {
+  if (!isLoggedIn || !user) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 

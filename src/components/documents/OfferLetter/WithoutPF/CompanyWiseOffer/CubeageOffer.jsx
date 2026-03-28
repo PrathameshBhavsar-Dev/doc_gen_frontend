@@ -105,8 +105,8 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
     ["SPECIAL ALLOWANCE", special],
   ];
 
-  const candidateName = data.candidateName || data.employeeName || "";
-  const displayName = candidateName ? `${data.mrms || "Mr."} ${candidateName}`.trim() : "";
+  const employeeName = data.employeeName || data.employeeName || "";
+  const displayName = employeeName ? `${data.mrms || "Mr."} ${employeeName}`.trim() : "";
   const position = data.position || "Software Test Engineer";
   const location = data.location || data.workLocation || company.city || "Pune";
   const joiningDate = data.joiningDate || "25 July 2023";

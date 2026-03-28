@@ -198,14 +198,14 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear {data.employeeName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
 
-          <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
+          <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}</Typography>
 
           <Typography sx={{ mb: "6mm" }}>
             With reference to your application and subsequent interviews you had
             with us, we are pleased to confirm your offer of employment to join{" "}
-            {company.name}. We value your abilities and believe that you will
+            {company.name} We value your abilities and believe that you will
             find our work environment to be challenging as well as fulfilling.
           </Typography>
 

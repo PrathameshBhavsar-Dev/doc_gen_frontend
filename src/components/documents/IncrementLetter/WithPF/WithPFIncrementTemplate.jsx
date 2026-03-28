@@ -10,7 +10,7 @@ import RPIcrement from "../WithPF/CompanyWiseIncrement/RPIncrement";
 import SmartMatrixIncrement from "../WithPF/CompanyWiseIncrement/SmartMatrixIncrement";
 import SmartSoftwareIncrement from "../WithPF/CompanyWiseIncrement/SmartSoftwareIncrement";
 import NimbjaIncrement from "../WithPF/CompanyWiseIncrement/NimbjaIncrement";
-import QuickIncrement from "../WithPF/CompanyWiseIncrement/QMSIncrement";
+import QuickIncrement from "../WithPF/CompanyWiseIncrement/QuickIncrement";
 
 
 // same company ids, just Increment components
