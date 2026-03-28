@@ -290,7 +290,7 @@ const totalAnnual = round0(totalMonthly * 12);
 
   <li>
     <Typography fontSize={14} mt={1}>
-     2. Your total emoluments will be <b>{formatLakhsPerAnnum(totalAnnual)}</b>.
+     2. Your total emoluments will be <b>{formatLakhsPerAnnum(data.salary)}</b>.
     </Typography>
   </li>
 

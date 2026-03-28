@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import {
   Box,
@@ -193,7 +190,7 @@ const totalAnnual = round0(totalMonthly * 12);
 
             <Typography sx={{ mb: 1, textAlign: "justify" }}>
               The starting salary for this position is{" "}
-              <b>{formatCurrency(totalAnnual)}</b> per annum. Payment is on monthly basis
+              <b>{formatCurrency(data.salary)}</b> per annum. Payment is on monthly basis
               by direct deposit.
             </Typography>
 
