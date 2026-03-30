@@ -19,7 +19,7 @@ const NimbjaOffer = ({ company, data }) => {
 
   // ================= HELPERS =================
   const round0 = (num) => Math.round(num);
-
+         
   // ================= CTC =================
  const annualCTC = Number(data.salary || data.ctc || 0);
 
