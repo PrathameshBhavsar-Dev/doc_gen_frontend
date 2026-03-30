@@ -74,7 +74,7 @@ const CubeageCertification = ({ company, data }) => {
           We are pleased to certify that <strong>{data.employeeName}</strong>,
           has joined our group to work on internship with organization name{" "}
           <strong>Cubeage Technology Services Pvt. Ltd.</strong> The internship
-          <br />
+
           program held on <strong>{formatDate(data.startDate)}</strong> to{" "}
           <strong>{formatDate(data.completionDate)}</strong>.
         </Typography>
@@ -83,7 +83,7 @@ const CubeageCertification = ({ company, data }) => {
           sx={{ fontSize: "14px", mb: "6mm", fontFamily: "Bahnschrift" }}
         >
           During the internship period, <strong>{data.employeeName}</strong> was
-          actively participated in project <br />
+          actively participated in project
           related tasks, shown their skills and abilities in{" "}
           <strong>{data.role}</strong>.
         </Typography>
@@ -98,11 +98,8 @@ const CubeageCertification = ({ company, data }) => {
         >
           Through this internship experience,{" "}
           <strong>{data.employeeName}</strong> adopted practical knowledge,{" "}
-          <br />
-          best practices and exposure to real-world scenarios,which will
-          undoubtedly
-          <br />
-          enhance their academic and professional development.
+          best practices and exposure to real-world scenarios, which will
+          undoubtedly enhance their academic and professional development.
         </Typography>
 
         <Typography
@@ -114,7 +111,7 @@ const CubeageCertification = ({ company, data }) => {
           }}
         >
           Thank you for your successful completion & cooperation and support in
-          <br />
+
           facilitating this internship opportunity.
         </Typography>
 
@@ -154,7 +151,7 @@ const CubeageCertification = ({ company, data }) => {
           )}
         </Box>
 
-        <Typography sx={{ fontSize: "14px", mt: "18mm", fontFamily: "Verdana" }}>
+        <Typography sx={{ fontSize: "14px", mt: "5mm", fontFamily: "Verdana" }}>
           <strong>Cubeage Technology Services Pvt. Ltd.</strong>
         </Typography>
       </Box>

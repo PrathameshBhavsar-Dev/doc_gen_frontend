@@ -84,28 +84,32 @@ const TC = (extra = {}) => ({
   ...extra,
 });
 
-/* ============================================================ */
-
 const CubeageOffer = ({ company = {}, data = {} }) => {
+  // ================= ANNUAL CTC INPUT =================
   const annualCTC = round0(Number(data.salary || 0));
+
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
-  const basic = round0(monthlyCTC * 0.40);
-  const hra = round0(monthlyCTC * 0.18);
-  const da = round0(monthlyCTC * 0.12);
-  const lta = round0(monthlyCTC * 0.16);
-  const allow = round0(monthlyCTC * 0.06);
+  // ================= FIXED PERCENTAGES =================
+  const basicMonthly = round0(monthlyCTC * 0.40);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const ltaMonthly = round0(monthlyCTC * 0.16);
+  const allowMonthly = round0(monthlyCTC * 0.06);
 
-  // Special allowance as the balancing figure
-  const special = monthlyCTC - (basic + hra + da + lta + allow);
+  // ================= SPECIAL ALLOWANCE (Balancing) =================
+  const specialMonthly = round0(
+    monthlyCTC -
+    (basicMonthly + hraMonthly + daMonthly + ltaMonthly + allowMonthly)
+  );
 
   const rows = [
-    ["Basic", basic],
-    ["HRA", hra],
-    ["DA", da],
-    ["LTA", lta],
-    ["ALLOWANCE (Shift+Skill)", allow],
-    ["SPECIAL ALLOWANCE", special],
+    ["Basic", basicMonthly],
+    ["House Rent Allowance", hraMonthly],
+    ["Dearness Allowance", daMonthly],
+    ["Leave Travel Allowance", ltaMonthly],
+    ["Allowance (Shift+Skill)", allowMonthly],
   ];
 
   const employeeName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.employeeName || "";
@@ -120,7 +124,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       {/* ================= PAGE 1 ================= */}
       <PageLayout company={company}>
 
-        <Typography align="center" fontWeight="bold" fontSize="16px" mb={3}>
+        <Typography align="center" fontWeight="bold" fontSize="16px" mb={2}>
           Appointment Letter
         </Typography>
 
@@ -129,13 +133,11 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={2}>
-          <strong>
-            Employee Name: {employeeName}</strong>
+          Employee Name: <strong>{employeeName}</strong>
         </Typography>
 
         <Typography mb={2}>
-          <strong>
-            Dear {employeeName}</strong>,
+          Dear <strong>{employeeName}</strong>,
         </Typography>
 
         <Typography textAlign="justify" mb={2}>
@@ -256,13 +258,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             at the request of the Company at any time during the course of your employment.
           </Typography>
 
-          <Typography textAlign="justify">
-            9.4 Confidential Information means information relating to the business, products,
-            affairs and finances of the Company or any of its associated company or subsidiary
-            for the time being confidential to it or to them and trade secrets (including without
-            limitation, technical data and know-how) relating to the business of the Company or
-            of any of its Associated Company/ies or of any of its or their suppliers, clients or customers.
-          </Typography>
+
         </Box>
 
       </PageLayout>
@@ -271,6 +267,15 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       <PageLayout company={company}>
 
         {/* Clauses 10–12 */}
+        <Box sx={{ pl: 3 }}>
+          <Typography textAlign="justify" mb={1}>
+            9.4 Confidential Information means information relating to the business, products,
+            affairs and finances of the Company or any of its associated company or subsidiary
+            for the time being confidential to it or to them and trade secrets (including without
+            limitation, technical data and know-how) relating to the business of the Company or
+            of any of its Associated Company/ies or of any of its or their suppliers, clients or customers.
+          </Typography>
+        </Box>
 
         <Typography fontWeight="bold">10. Travel</Typography>
         <Typography mb={2}>
@@ -285,35 +290,35 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography fontWeight="bold">12. Termination</Typography>
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Your services can be terminated by either party after giving one month’s notice.
           If your services are terminated at your initiative, the company reserves the right
           to insist on full compliance to the notice period and may initiate appropriate legal remedies.
         </Typography>
 
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Your employment is subject to positive Background Verification done by the Company.
           If any document/s or information submitted by you is/are found to be false,
           your offer shall stand terminated with immediate effect without any prior notice
           and you will not be entitled to any dues / claims.
         </Typography>
 
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Please note that you are expected to keep the salary package strictly confidential
           and you cannot discuss or divulge any details to any of your colleagues.
         </Typography>
 
-        <Typography mt={3}>
+        <Typography mt={1}>
           If the offer is acceptable to you, you are requested to get in touch with us
           on your joining day to complete your joining formalities.
         </Typography>
 
-        <Typography mt={2}>
+        <Typography mt={1}>
           You are requested to sign on the copy of this letter as your acceptance
           of the above terms and conditions and submit the same to us on your joining day.
         </Typography>
 
-        <Typography mt={3}>
+        <Typography mt={2}>
           We look forward to have you on our team.
         </Typography>
 
@@ -323,7 +328,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
-            mt: 8,
+            mt: 3,
           }}
         >
 
@@ -416,107 +421,51 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
 
             {/* Header */}
             <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  padding: "10px",
-                })}
-              >
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
                 Components
               </TableCell>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  padding: "10px",
-                })}
-              >
-                Amount / Month (₹)
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+                Monthly (₹)
               </TableCell>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  textAlign: "center",
-                  padding: "10px",
-                })}
-              >
-                Amount / Annum (₹)
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+                Annual (₹)
               </TableCell>
             </TableRow>
 
-            {/* Salary Rows */}
-            {[
-              ["Basic", basic],
-              ["H.R.A.", hra],
-              ["D.A.", da],
-              ["L.T.A.", lta],
-              ["Allowance (Shift+Skill)", allow],
-              ["Special Allowance", special],
-            ].map(([label, value]) => (
+            {/* Earnings */}
+            {rows.map(([label, value]) => (
               <TableRow key={label}>
-                <TableCell
-                  sx={TC({
-                    fontSize: "14px",
-                    padding: "10px",
-                  })}
-                >
-                  {label}
-                </TableCell>
-                <TableCell
-                  sx={TC({
-                    fontSize: "14px",
-                    textAlign: "center",
-                    padding: "10px",
-                  })}
-                >
+                <TableCell sx={TC()}>{label}</TableCell>
+                <TableCell sx={TC({ textAlign: "center" })}>
                   {fmt(value)}
                 </TableCell>
-                <TableCell
-                  sx={TC({
-                    fontSize: "14px",
-                    textAlign: "center",
-                    padding: "10px",
-                  })}
-                >
+                <TableCell sx={TC({ textAlign: "center" })}>
                   {fmt(value * 12)}
                 </TableCell>
               </TableRow>
             ))}
 
-            {/* Gross Salary */}
-            <TableRow sx={{ backgroundColor: "#f0f0f0" }}>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  padding: "12px",
-                })}
-              >
-                Gross Salary (CTC)
+            {/* Special Allowance */}
+            <TableRow>
+              <TableCell sx={TC()}>Special Allowance</TableCell>
+              <TableCell sx={TC({ textAlign: "center" })}>
+                {fmt(specialMonthly)}
               </TableCell>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  textAlign: "center",
-                  padding: "12px",
-                })}
-              >
-                {fmt(basic + hra + da + lta + allow + special)}
+              <TableCell sx={TC({ textAlign: "center" })}>
+                {fmt(specialMonthly * 12)}
               </TableCell>
-              <TableCell
-                sx={TC({
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  textAlign: "center",
-                  padding: "12px",
-                })}
-              >
-                {fmt((basic + hra + da + lta + allow + special) * 12)}
+            </TableRow>
+
+            {/* Final CTC */}
+            <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
+              <TableCell sx={TC({ fontWeight: "bold", fontSize: "15px" })}>
+                Total CTC
+              </TableCell>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+                {fmt(monthlyCTC)}
+              </TableCell>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+                {fmt(annualCTC)}
               </TableCell>
             </TableRow>
 

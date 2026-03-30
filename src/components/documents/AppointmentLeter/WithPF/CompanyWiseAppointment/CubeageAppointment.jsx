@@ -278,13 +278,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             at the request of the Company at any time during the course of your employment.
           </Typography>
 
-          <Typography textAlign="justify">
-            9.4 Confidential Information means information relating to the business, products,
-            affairs and finances of the Company or any of its associated company or subsidiary
-            for the time being confidential to it or to them and trade secrets (including without
-            limitation, technical data and know-how) relating to the business of the Company or
-            of any of its Associated Company/ies or of any of its or their suppliers, clients or customers.
-          </Typography>
+
         </Box>
 
       </PageLayout>
@@ -293,6 +287,15 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       <PageLayout company={company}>
 
         {/* Clauses 10–12 */}
+        <Box sx={{ pl: 3 }}>
+          <Typography textAlign="justify" mb={1}>
+            9.4 Confidential Information means information relating to the business, products,
+            affairs and finances of the Company or any of its associated company or subsidiary
+            for the time being confidential to it or to them and trade secrets (including without
+            limitation, technical data and know-how) relating to the business of the Company or
+            of any of its Associated Company/ies or of any of its or their suppliers, clients or customers.
+          </Typography>
+        </Box>
 
         <Typography fontWeight="bold">10. Travel</Typography>
         <Typography mb={2}>
@@ -307,35 +310,35 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography fontWeight="bold">12. Termination</Typography>
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Your services can be terminated by either party after giving one month’s notice.
           If your services are terminated at your initiative, the company reserves the right
           to insist on full compliance to the notice period and may initiate appropriate legal remedies.
         </Typography>
 
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Your employment is subject to positive Background Verification done by the Company.
           If any document/s or information submitted by you is/are found to be false,
           your offer shall stand terminated with immediate effect without any prior notice
           and you will not be entitled to any dues / claims.
         </Typography>
 
-        <Typography textAlign="justify" mb={2}>
+        <Typography textAlign="justify" mb={1}>
           Please note that you are expected to keep the salary package strictly confidential
           and you cannot discuss or divulge any details to any of your colleagues.
         </Typography>
 
-        <Typography mt={3}>
+        <Typography mt={1}>
           If the offer is acceptable to you, you are requested to get in touch with us
           on your joining day to complete your joining formalities.
         </Typography>
 
-        <Typography mt={2}>
+        <Typography mt={1}>
           You are requested to sign on the copy of this letter as your acceptance
           of the above terms and conditions and submit the same to us on your joining day.
         </Typography>
 
-        <Typography mt={3}>
+        <Typography mt={2}>
           We look forward to have you on our team.
         </Typography>
 
@@ -345,7 +348,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
-            mt: 8,
+            mt: 3,
           }}
         >
 

@@ -290,7 +290,8 @@ const CubeageConfirmationLetter = ({ company = {}, data = {} }) => {
             </TableBody>
           </Table>
 
-          <Typography mt={2} fontSize="12px" fontStyle="italic">
+          <Typography mt={4} fontSize="13px" marginBottom="2px"
+            fontStyle="italic">
             *PVLP will be payable to you on yearly basis subject to performance
             review.
           </Typography>
