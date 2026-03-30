@@ -81,7 +81,7 @@ const NeweageOffer = ({ company, data }) => {
   ];
 
   const {
-    candidateName = "",
+    employeeName = "",
     position = "",
     issueDate = "",
     joiningDate = "",
@@ -116,7 +116,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 1 }}>
-            <b>Name</b> : {candidateName}
+            <b>Name</b> : {employeeName}
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -124,7 +124,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
-            Dear {candidateName.split(" ")[0]},
+            Dear {employeeName.split(" ")[0]},
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -217,7 +217,7 @@ const NeweageOffer = ({ company, data }) => {
             {/* ACCEPTANCE */}
             <Box>
               <Typography mt={10}>Signature: ______________</Typography>
-              <Typography mt={2}>Name: {data.candidateName}</Typography>
+              <Typography mt={2}>Name: {data.employeeName}</Typography>
             </Box>
           </Box>
         </Box>
@@ -373,7 +373,7 @@ const NeweageOffer = ({ company, data }) => {
           {/* ACCEPTANCE */}
           <Box>
             <Typography mt={12}>Signature: ______________</Typography>
-            <Typography mt={2}>Name: {data.candidateName}</Typography>
+            <Typography mt={2}>Name: {data.employeeName}</Typography>
           </Box>
         </Box>
       </A4Layout>

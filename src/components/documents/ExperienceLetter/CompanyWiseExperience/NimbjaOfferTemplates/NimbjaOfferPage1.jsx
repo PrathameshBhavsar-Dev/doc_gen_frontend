@@ -28,6 +28,11 @@ const formatIndianCurrency = (value) => {
   return Number(value).toLocaleString("en-IN");
 };
 
+const NimbjaOfferPage1 = ({ company, data }) => {
+  const offerDate = formatDate(data.issueDate);
+  const joiningDate = formatDate(data.joiningDate);
+  const firstName = data.employeeName?.split(" ")[0] || "";
+  /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
 
 const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
@@ -110,7 +115,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
               fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
             }}
           >
-            {data.candidateName}
+            {data.employeeName}
           </Typography>
         </Typography>
 
@@ -227,7 +232,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
 
         {/* ================= SIGNATURE BLOCK ================= */}
         {/* ================= SIGNATURE BLOCK (ABOVE FOOTER) ================= */}
-        <Box
+        {/* <Box
           sx={{
             mt: "5mm",
             mb: "20mm", // 🔑 IMPORTANT: pushes content ABOVE footer
@@ -238,9 +243,9 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             container
             justifyContent="space-between"
             alignItems="flex-start"
-          >
+          > */}
             {/* LEFT — HR */}
-            <Grid item>
+            {/* <Grid item>
               {company.signature && (
                 <Box
                   component="img"
@@ -251,6 +256,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
                     display: "block",
                     mb: "19mm",
                     mt: "9mm",
+                    Gap: "3",
                   }}
                 />
               )}
@@ -270,10 +276,10 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
                   <strong>HR Relations Lead</strong>
                 </Typography>
               </strong>
-            </Grid>
+            </Grid> */}
 
             {/* RIGHT — STAMP + CANDIDATE */}
-            <Grid item>
+            {/* <Grid item>
               {company.stamp && (
                 <Box
                   component="img"
@@ -304,11 +310,45 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
                 }}
               >
                 <strong>Candidate Name:</strong>{" "}
-                <strong>{data.candidateName}</strong> {/* 🔑 NAME BOLD */}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
+                <strong>{data.employeeName}</strong> {/* 🔑 NAME BOLD */}
+              {/* </Typography>
+            </Grid> */} 
+          {/* </Grid>
+        </Box> */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+                <Box>
+                  <Box sx={{ display: "flex", gap: 3 }}>
+                    {company?.signature && (
+                      <img
+                        src={company.signature}
+                        alt="Signature"
+                        style={{ height: 45, marginTop: "7mm" }}
+                      />
+                    )}
+                    {company?.stamp && (
+                      <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                    )}
+                  </Box>
+                  <strong>
+                    <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
+                      <strong>{company.hrName}</strong>
+                    </Typography>
+                    <Typography sx={{ fontFamily: "Bahnschrift" }}>
+                      <strong>HR Relations Lead</strong>
+                    </Typography>
+                  </strong>
+                </Box>
+        
+                <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+                  <Typography sx={{ fontFamily: "Bahnschrift" }}>
+                    <strong>Signature:</strong> __________________
+                  </Typography>
+                  <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+                    <strong>Candidate Name:</strong>{" "}
+                    <strong>{data.employeeName}</strong>
+                  </Typography>
+                </Box>
+              </Box>
       </Box>
     </A4Page>
   );

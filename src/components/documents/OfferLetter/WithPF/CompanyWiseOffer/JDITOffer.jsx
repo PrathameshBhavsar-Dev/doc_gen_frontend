@@ -36,7 +36,7 @@ const JDITOffer = ({ company, data }) => {
   /* 🔥 OFFER LETTER FIELD NAMES */
   const {
     issueDate,
-    candidateName,
+    employeeName,
     position,
     joiningDate,
     employeeId,
@@ -125,7 +125,7 @@ const JDITOffer = ({ company, data }) => {
         <Typography align="center" sx={TEXT}>And</Typography>
 
         <Typography align="center" sx={{ ...TEXT, fontWeight: "bold", mb: 2 }}>
-          {candidateName}
+          {employeeName}
         </Typography>
 
         {/* ---- full width divider like screenshot ---- */}
@@ -147,7 +147,7 @@ const JDITOffer = ({ company, data }) => {
             ➢ Position: <b>{position}</b>
           </Typography>
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
-            ➢ Employee’s Name: <b>{candidateName}</b>
+            ➢ Employee’s Name: <b>{employeeName}</b>
           </Typography>
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
             ➢ Business / Work Hours per Day: <b>As per business requirement of the client.</b>
@@ -182,7 +182,7 @@ const JDITOffer = ({ company, data }) => {
 
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
         <Typography sx={{ ...TEXT, mb: 2 }}>
-          <b>Name : {candidateName}</b>
+          <b>Name : {employeeName}</b>
           <span style={{ marginLeft: "120px" }}>
             <b>Designation :{position}</b>
           </span>
@@ -584,7 +584,7 @@ const JDITOffer = ({ company, data }) => {
                 Employee Signature: ______________________
               </Typography>
               <Typography sx={{ ...TEXT, fontWeight: "bold" }}>
-                Employee Full Name: {candidateName}
+                Employee Full Name: {employeeName}
               </Typography>
             </Box>
 
@@ -600,8 +600,8 @@ const JDITOffer = ({ company, data }) => {
           </Box>
         </Box>
 
-        <Box sx={{ mt: 5 }}>
-          <Typography sx={{ ...TEXT, mb: 1 }}>
+        <Box sx={{ mt: 0 }}>
+          <Typography sx={{ ...TEXT, mb: 6 }}>
             For <b>JDIT SOFTWARE SOLUTIONS PVT. LTD.</b>
           </Typography>
 
@@ -610,23 +610,52 @@ const JDITOffer = ({ company, data }) => {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
-              mb: 2,
+              gap: 1,
+              mb: 1,
+              height: 64, // adjust as needed
+              overflow: "hidden",
             }}
           >
             {company.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: "60px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{
+                    height: "40px",
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
+
             {company.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: "80px" }}
-              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{
+                    height: "60px",       // reduced from 80px
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             )}
           </Box>
 
@@ -638,7 +667,8 @@ const JDITOffer = ({ company, data }) => {
               {signatoryDesignation}
             </Typography>
           </Box>
-          <Typography sx={{ ...TEXT, mt: 1 }}>
+
+          <Typography sx={{ ...TEXT, mt: 0 }}>
             <b>{company.hrName}</b>
           </Typography>
           <Typography sx={{ ...TEXT }}>

@@ -24,16 +24,16 @@ const Login = () => {
     }
 
     setLoading(true);
+
     try {
       const result = await login({ email, password });
 
       console.log("Login result:", result);
 
-      if (result.success) {
+      if (result.success && result.user) {
         const role = result.user.role;
 
-        console.log("Navigating to:", role);
-
+        // ✅ Safe navigation
         if (role === "admin") {
           navigate("/admin/dashboard");
         } else {
@@ -44,7 +44,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Invalid email or password.");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const Login = () => {
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
 
         {/* LEFT SIDE */}
-        <div className="relative rounded-3xl overflow-hidden min-h-[600px] text-white flex flex-col justify-between p-10 bg-[#07061a]">
+        <div className="relative rounded-3xl overflow-hidden min-h-150 text-white flex flex-col justify-between p-10 bg-[#07061a]">
           <div className="absolute inset-0">
             <SilkBackground />
           </div>

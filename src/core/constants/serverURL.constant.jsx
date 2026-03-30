@@ -18,7 +18,7 @@ class ServerUrl {
   static API_DASHBOARD = ServerUrl.API_MODULE_ADMIN + "/dashboard-stats";
 
   // ================= DOCUMENTS =================
-  static API_MODULE_DOCUMENTS = "/api/v1/documents";
+  static API_MODULE_DOCUMENTS = "/documents";
 
   // base
   static doc = (type) => `${this.API_MODULE_DOCUMENTS}/${type}`;
