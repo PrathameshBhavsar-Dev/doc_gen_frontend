@@ -18,12 +18,11 @@ import { generatePDF } from "../../utils/pdfUtils"; // adjust path as needed
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [doc, setDoc] = useState(state?.document || null);
+  const [doc, setDoc] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const docId = state?.id;
   const [error, setError] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
   useEffect(() => {
     if (state?.autoDownload && doc) {
       setTimeout(() => {
@@ -64,7 +63,6 @@ const UserDetailPage = () => {
         useCORS: true,
         backgroundColor: "#ffffff",
       });
-
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
 
@@ -86,6 +84,10 @@ const UserDetailPage = () => {
       }
 
       pdf.save(`${doc?.documentType || "Document"}.pdf`);
+      await api.downloadFile(
+        `/api/v1/documents/${routeType}/download/${doc._id}`,
+        `${doc.documentType}.pdf`,
+      );
     } catch (err) {
       console.error(err);
       setError("Failed to generate PDF");

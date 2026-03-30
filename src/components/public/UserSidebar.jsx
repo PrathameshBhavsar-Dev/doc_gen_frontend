@@ -40,10 +40,14 @@ const UserSidebar = ({ collapsed, setCollapsed }) => {
   };
 
   const handleLogout = async () => {
-    await logout();
-
-    // redirect after logout
-    navigate("/login", { replace: true });
+    try {
+      await logout(); // calls backend + clears localStorage (from AuthContext)
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      // ✅ Always navigate (even if API fails)
+      navigate("/login", { replace: true });
+    }
   };
 
   useEffect(() => {

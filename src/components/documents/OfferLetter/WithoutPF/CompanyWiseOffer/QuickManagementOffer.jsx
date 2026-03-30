@@ -25,7 +25,7 @@ const salaryStructure = [
 const QuickManagementOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const { mrms, candidateName, address, position, salary, issueDate } = data;
+  const { mrms, employeeName, address, position, salary, issueDate } = data;
 
   const annualCTC = Number(salary || 0);
   const monthlyCTC = Math.round(annualCTC / 12);
@@ -49,7 +49,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <span style={styles.label}>Name</span>
           <span style={styles.colon}>:</span>
           <span style={styles.value}>
-            {mrms} {candidateName}
+            {mrms} {employeeName}
           </span>
         </div>
 
@@ -70,7 +70,7 @@ const QuickManagementOffer = ({ company, data }) => {
         </div>
 
 
-        <p>Dear {getFirstName(candidateName)},</p>
+        <p>Dear {getFirstName(employeeName)},</p>
 
         <p style={styles.paragraph}>
           Thank you for exploring career opportunities with{" "}
@@ -118,7 +118,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.candidateBlock}>
             <p>Signature : ____________</p>
             <p>
-              Candidate Name : <strong>{candidateName}</strong>
+              Candidate Name : <strong>{employeeName}</strong>
             </p>
           </div>
         </div>
@@ -169,7 +169,6 @@ const QuickManagementOffer = ({ company, data }) => {
         </table>
 
         {/* PAGE-2 SIGN */}
-        {/* PAGE-2 SIGN */}
         <div style={styles.annexureSignRow}>
           {/* LEFT SIDE — HR */}
           <div style={styles.annexureLeft}>
@@ -191,7 +190,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.annexureRight}>
             <div>Signature : ____________</div>
             <div>
-              Candidate : <strong>{candidateName}</strong>
+              Candidate : <strong>{employeeName}</strong>
             </div>
           </div>
         </div>
@@ -338,6 +337,7 @@ const styles = {
 
   annexureLeft: {
     textAlign: "left",
+    marginLeft: "60px"
   },
 
   annexureRight: {
@@ -367,53 +367,6 @@ const styles = {
 
 
 
-  // annexureSignRow: {
-  //   display: "flex",
-  //   justifyContent: "flex-start",   // 🔥 important
-  //   alignItems: "flex-end",
-  //   gap: 80,                        // 🔥 sign & candidate ke beech gap
-  //   marginTop: 70,
-  //   fontFamily: "Verdana",
-  //   fontSize: 11,
-  // },
 
-  // annexureLeft: {
-  //   lineHeight: "14px",
-  // },
-
-  // hrName: {
-  //   fontWeight: "bold",
-  //   marginBottom: 6,
-  // },
-
-  // hrSignWrap: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   gap: 20,          // sign & stamp gap
-  //   height: 70,
-  //   marginTop: 12,
-  //   marginBottom: 6,
-  // },
-
-  // signInline: {
-  //   height: 52,
-  // },
-
-  // stampInline: {
-  //   height: 74,
-  //   marginLeft: -8,
-  // },
-
-  // annexureRight: {
-  //   lineHeight: "16px",
-  //   whiteSpace: "nowrap",   // text ek block me rahe
-  // },
-
-  //  annexureLeft: {
-  //     // textAlign: "left",
-  //     marginLeft: "120px",
-  //     marginTop: "40px",
-  //     fontSize: "14px",
-  //   },
 
 };

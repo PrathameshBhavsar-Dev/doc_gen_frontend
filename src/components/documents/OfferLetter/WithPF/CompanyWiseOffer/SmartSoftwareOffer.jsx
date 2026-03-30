@@ -7,6 +7,7 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  TableContainer,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 
@@ -19,7 +20,7 @@ import {
 export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
     issueDate = new Date(),
-    candidateName = "",
+    employeeName = "",
     address = "",
     position = "",
     joiningDate = "",
@@ -34,21 +35,31 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     ["miss", "miss.", "mrs", "mrs.", "ms", "ms."].includes(title)
       ? { subject: "She", object: "her", possessive: "her" }
       : ["mx", "mx."].includes(title)
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
 
-  const displayTitle = title
-    ? title.charAt(0).toUpperCase() + title.slice(1)
-    : "Mr.";
+  const para = {
+    mt: "16px",
+    textAlign: "justify",
+  };
 
-  const firstName = candidateName.split(" ")[0] || "";
+  const paraLarge = {
+    mt: "20px",
+    textAlign: "justify",
+  };
+
+  /* ================= FORMATTED VALUES ================= */
+
+  const displayTitle = mrms ? `${mrms}.` : "";
+
+  const firstName = employeeName?.split(" ")[0] || "";
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
   /* ================= SALARY BREAKUP ================= */
@@ -69,7 +80,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
     const basicMonthly = round0(
       monthlyCTC -
-        (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
     );
 
     const basicAnnual = round0(basicMonthly * 12);
@@ -115,8 +126,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     color: "#000",
   };
 
-  const para = { ...baseText, mt: "12px" };
-  const paraLarge = { ...baseText, mt: "24px" };
+  // const para = { ...baseText, mt: "12px" };
+  // const paraLarge = { ...baseText, mt: "24px" };
 
   const labelStyle = {
     display: "inline-block",
@@ -159,7 +170,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>
-            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {candidateName}
+            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {employeeName}
           </Typography>
 
           <Typography sx={{ mt: "12px" }}>
@@ -221,7 +232,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {candidateName}</Typography>
+              <Typography>Candidate Name : {employeeName}</Typography>
             </Box>
           </Box>
         </Box>
@@ -233,64 +244,63 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           <Typography align="center" sx={{ mb: "24px" }}>
             <b>Annexure A – Salary Structure</b>
           </Typography>
+          <TableContainer>
+            <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={tableHeader}>Salary Component</TableCell>
+                  <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
+                  <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
+                </TableRow>
+              </TableHead>
 
-          <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={tableHeader}>Salary Component</TableCell>
-                <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
-                <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
-              </TableRow>
-            </TableHead>
+              <TableBody>
+                {salaryComponents.map((row, i) => (
+                  <TableRow key={i}>
+                    <TableCell sx={tableCell}>{row.name}</TableCell>
+                    <TableCell sx={tableCell} align="right">
+                      {NoDecimal(row.monthly)}
+                    </TableCell>
+                    <TableCell sx={tableCell} align="right">
+                      {NoDecimal(row.annual)}
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-            <TableBody>
-              {salaryComponents.map((row, i) => (
-                <TableRow key={i}>
-                  <TableCell sx={tableCell}>{row.name}</TableCell>
-                  <TableCell sx={tableCell} align="right">
-                    {NoDecimal(row.monthly)}
+                <TableRow>
+                  <TableCell sx={tableTotal}>Total Monthly Gross Salary</TableCell>
+                  <TableCell sx={tableTotal} align="right">
+                    {NoDecimal(totalMonthly)}
                   </TableCell>
-                  <TableCell sx={tableCell} align="right">
-                    {NoDecimal(row.annual)}
+                  <TableCell sx={tableTotal} align="right">
+                    {NoDecimal(totalAnnualFinal)}
                   </TableCell>
                 </TableRow>
-              ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+          <Box>
+            <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+              {company.signature && (
+                <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+              )}
+              {company.stamp && (
+                <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+              )}
+            </Box>
+            <Typography>{company.hrName}</Typography>
+            <Typography>HR Relations Lead</Typography>
+          </Box>
 
-              <TableRow>
-                <TableCell sx={tableTotal}>Total Monthly Gross Salary</TableCell>
-                <TableCell sx={tableTotal} align="right">
-                  {NoDecimal(totalMonthly)}
-                </TableCell>
-                <TableCell sx={tableTotal} align="right">
-                  {NoDecimal(totalAnnualFinal)}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-
+          <Box sx={{ width: "45%", mt: 8 }}>
+            <Typography>Signature : ___________________</Typography>
+            <Typography>Candidate Name : {employeeName}</Typography>
+          </Box>
         </Box>
 
 
-         <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
-            <Box>
-              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
-                {company.signature && (
-                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
-                )}
-                {company.stamp && (
-                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
-                )}
-              </Box>
-              <Typography>{company.hrName}</Typography>
-              <Typography>HR Relations Lead</Typography>
-            </Box>
-
-            <Box sx={{ width: "45%", mt: 8 }}>
-              <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {candidateName}</Typography>
-            </Box>
-          </Box>
-        
       </A4Layout>
     </>
   );

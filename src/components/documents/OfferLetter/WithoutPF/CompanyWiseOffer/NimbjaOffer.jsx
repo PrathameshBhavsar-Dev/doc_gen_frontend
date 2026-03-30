@@ -12,14 +12,41 @@ import A4Page from "../../../../layout/A4Page";
 const NimbjaOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
+  // 👉 MOVE SALARY LOGIC HERE
+  const round0 = (num) => Math.round(num);
+
+  const annualCTC = round0(Number(data.salary || data.ctc || 0));
+  const monthlyCTC = round0(annualCTC / 12);
+
+  const salaryRows = [
+    ["Basic", round0(monthlyCTC * 0.4)],
+    ["HRA", round0(monthlyCTC * 0.18)],
+    ["DA", round0(monthlyCTC * 0.12)],
+    ["Special", round0(monthlyCTC * 0.16)],
+    ["Food", round0(monthlyCTC * 0.06)],
+    ["Misc", round0(monthlyCTC * 0.08)],
+  ].map(([name, monthly]) => [name, monthly, monthly * 12]);
+
+  const totalMonthly = salaryRows.reduce((s, r) => s + r[1], 0);
+  const totalAnnual = salaryRows.reduce((s, r) => s + r[2], 0);
+
   return (
     <>
-      {/* ================= PAGE 1 : OFFER LETTER ================= */}
+      <NimbjaOfferPage1
+        company={company}
+        data={data}
+        salaryRows={salaryRows}
+        totalMonthly={totalMonthly}
+        totalAnnual={totalAnnual}
+      />
 
-      <NimbjaOfferPage1 company={company} data={data} />
-
-      {/* ================= PAGE 2 : ANNEXURE / SALARY ================= */}
-      <NimbjaOfferPage2 company={company} data={data} />
+      <NimbjaOfferPage2
+        company={company}
+        data={data}
+        salaryRows={salaryRows}
+        totalMonthly={totalMonthly}
+        totalAnnual={totalAnnual}
+      />
     </>
   );
 };
