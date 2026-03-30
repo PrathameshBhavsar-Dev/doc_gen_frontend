@@ -178,7 +178,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
 
       {/* ---------- HEADER IMAGE ---------- */}
       {company.header && (
-        <Box mt={-10} mb={10}>
+        <Box mt={-10} mb={3}>
           <img
             src={company.header}
             alt="Company Header"

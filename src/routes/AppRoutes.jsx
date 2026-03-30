@@ -102,7 +102,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route
-            path={ROUTES.ADMIN_DASHBOARD}
+            path={ROUTES.ADMIN_DASHBOARD} l
             element={<LazyLoad component={AdminDashboard} />}
           />
           <Route
