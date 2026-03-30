@@ -320,7 +320,7 @@ const DP_STYLES = `
 /* ─── Doc label map ─── */
 const DOC_LABELS = {
   salaryslip_letter: "Salary Slip",
-  internship_certificate: "Internship Certificate",
+  internshipcertificate_letter: "Internship Certificate",
   offer_letter: "Offer Letter",
   completion_certificate: "Completion Certificate",
   increment_letter: "Increment Letter",
@@ -382,7 +382,7 @@ const DocumentPreview = () => {
     const p = { data: previewData, company: previewCompany };
     const map = {
       salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
-      internship_certificate: <InternshipLetterTemplate {...p} />,
+      internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
       offer_letter: <OfferTemplate {...p} />,
       completion_certificate: <CertificationLetterTemplate {...p} />,
       increment_letter: <IncrementTemplate {...p} />,
@@ -539,52 +539,50 @@ const DocumentPreview = () => {
         }),
 
         relieving_letter: () => ({
-  ...base,
-  title: previewData.mrms,
-  designation: previewData.designation || "Employee",
-  department: previewData.department || "",
-  joiningDate: previewData.joiningDate,
-  lastWorkingDay: previewData.lastWorkingDay,
-  noticePeriod: previewData.noticePeriod || "",
-  handoverStatus: previewData.handoverStatus || "Not Applicable",
-  issueDate: previewData.issueDate,
-}),
+          ...base,
+          title: previewData.mrms,
+          designation: previewData.designation || "Employee",
+          department: previewData.department || "",
+          joiningDate: previewData.joiningDate,
+          lastWorkingDay: previewData.lastWorkingDay,
+          noticePeriod: previewData.noticePeriod || "",
+          handoverStatus: previewData.handoverStatus || "Not Applicable",
+          issueDate: previewData.issueDate,
+        }),
 
 
-        internship_certificate: () => ({
-  ...base,
-  title: previewData.mrms,
-  designation: previewData.designation || "Intern",
-  address: previewData.address || "",
-  internshipType: previewData.internshipType || "unpaid",
-  stipend: Number(previewData.stipend) || 0,
-  startDate: previewData.startDate,
-  endDate: previewData.endDate,
-  issueDate: previewData.issueDate,
-}),
+        internshipcertificate_letter: () => ({
+          ...base,
+          title: previewData.mrms,
+          designation: previewData.designation || "Intern",
+          address: previewData.address || "",
+          internshipType: previewData.internshipType || "unpaid",
+          stipend: Number(previewData.stipend) || 0,
+          startDate: previewData.startDate,
+          endDate: previewData.endDate,
+          issueDate: previewData.issueDate,
+        }),
 
 
 
         completion_certificate: () => ({
-  ...base,
-  title: previewData.mrms,
-  designation: previewData.designation || "Intern",
-  department: previewData.department || "",
-  projectName: previewData.projectName || "",
-  startDate: previewData.startDate,
-  completionDate: previewData.completionDate,
-  roleinProject: previewData.roleinProject || previewData.role || "",
-  technologies: previewData.technologies
-    ? previewData.technologies.split(",").map(t => t.trim()).filter(Boolean)
-    : [""],
-  achievements: previewData.achievements
-    ? previewData.achievements.split(",").map(a => a.trim()).filter(Boolean)
-    : [],
-  clientName: previewData.clientName || "",
-  issueDate: previewData.issueDate,
-}),
-
-
+          ...base,
+          title: previewData.mrms,
+          designation: previewData.designation || "Intern",
+          department: previewData.department || "",
+          projectName: previewData.projectName || "",
+          startDate: previewData.startDate,
+          completionDate: previewData.completionDate,
+          roleinProject: previewData.roleinProject || previewData.role || "",
+          technologies: previewData.technologies
+            ? previewData.technologies.split(",").map(t => t.trim()).filter(Boolean)
+            : [""],
+          achievements: previewData.achievements
+            ? previewData.achievements.split(",").map(a => a.trim()).filter(Boolean)
+            : [],
+          clientName: previewData.clientName || "",
+          issueDate: previewData.issueDate,
+        }),
 
         fullandfinal_letter: () => ({
           ...base,
