@@ -12,6 +12,8 @@ const formatDate = (date) =>
       })
     : "";
 
+    
+
 /* ================= BASE TEXT STYLE ================= */
 const baseText = {
   fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
@@ -26,19 +28,18 @@ const formatIndianCurrency = (value) => {
   return Number(value).toLocaleString("en-IN");
 };
 
-const NimbjaOfferPage1 = ({ company, data }) => {
-  const offerDate = formatDate(data.issueDate);
-  const joiningDate = formatDate(data.joiningDate);
-  const firstName = data.employeeName?.split(" ")[0] || "";
+// const NimbjaOfferPage1 = ({ company, data }) => {
+//   const offerDate = formatDate(data.issueDate);
+//   const joiningDate = formatDate(data.joiningDate);
+//   const firstName = data.employeeName?.split(" ")[0] || "";
   /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
-  const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
 
-  // 🔥 INPUT IS MONTHLY
-  const monthlyGross = round2(data.salary || data.newCTC || 0);
+const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
+  const offerDate = formatDate(data.issueDate);
+  
 
-  // Annual derived
-  const totalAnnual = round2(monthlyGross * 12);
+  const firstName = data.candidateName?.trim().split(" ")[0];
   return (
     <A4Page
       headerSrc={company.header}
@@ -91,7 +92,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
             marginTop: "-8mm",
             mb: "5mm",
             fontFamily: "Verdana",
-            textDecoration: "underline",
+            // textDecoration: "underline",
             fontSize: "15px",
           }}
         >
@@ -136,7 +137,6 @@ const NimbjaOfferPage1 = ({ company, data }) => {
           <Typography
             component="span"
             sx={{
-              
               display: "inline",
               paddingBottom: "1px",
               fontFamily: "Bahnschrift",
@@ -184,7 +184,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
           had with us.
           <br />
           We are pleased to offer you the role of{" "}
-          <strong>{data.position}.</strong>
+          <strong>{data.designation}.</strong>
         </Typography>
         <Typography
           sx={{ ...baseText, textAlign: "justify", mb: "2mm", mt: "2mm" }}
@@ -196,7 +196,7 @@ const NimbjaOfferPage1 = ({ company, data }) => {
         <Typography sx={{ ...baseText, textAlign: "justify", mb: "5mm" }}>
           On Joining, your all-inclusive Cost to the Company (CTC) will be{" "}
           <Typography component="span" sx={{ fontWeight: 600 }}>
-            Rs. {formatIndianCurrency(totalAnnual)}/-
+            Rs. {formatIndianCurrency(data.salary || data.ctc)}/-
           </Typography>{" "}
           as per Annexure A. This offer is made on the basis of your having
           furnished to the Company information and documents in support of your
@@ -208,8 +208,11 @@ const NimbjaOfferPage1 = ({ company, data }) => {
           <br />
           You are required to join the services of the Company at the earliest,
           but in any case, not later than{" "}
-          <Typography component="span" sx={{ fontWeight: 600 }}>
-            {joiningDate}.
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}
+          >
+            {formatDate(data.offerValidTill)}.
           </Typography>
         </Typography>
         <Typography sx={{ ...baseText, textAlign: "justify", mb: "5mm" }}>

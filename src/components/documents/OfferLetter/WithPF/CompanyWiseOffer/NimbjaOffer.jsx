@@ -19,7 +19,7 @@ const NimbjaOffer = ({ company, data }) => {
 
   // ================= HELPERS =================
   const round0 = (num) => Math.round(num);
-
+         
   // ================= CTC =================
  const annualCTC = Number(data.salary || data.ctc || 0);
 
@@ -58,8 +58,8 @@ const NimbjaOffer = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
-            zIndex: 0,
+            opacity: 0.4,
+            zIndex: -1,
             pointerEvents: "none",
           }}
         />
@@ -94,7 +94,7 @@ const NimbjaOffer = ({ company, data }) => {
               marginTop: "-8mm",
               mb: "5mm",
               fontFamily: "Verdana",
-              
+
               fontSize: "15px",
             }}
           >
@@ -151,7 +151,7 @@ const NimbjaOffer = ({ company, data }) => {
             entitled to forthwith terminate your employment without notice. You
             are required to join the services of the Company at the earliest,
             but in any case, not later than{" "}
-            <b>{formatDate(data.joiningDate)}.</b>
+            <b>{formatDate(data.offerValidTill)}.</b>
           </Typography>
 
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
@@ -226,7 +226,7 @@ const NimbjaOffer = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: -1,
             pointerEvents: "none",
           }}

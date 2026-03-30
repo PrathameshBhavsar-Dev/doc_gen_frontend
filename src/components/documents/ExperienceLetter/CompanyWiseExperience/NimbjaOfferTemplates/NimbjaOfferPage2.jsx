@@ -1,17 +1,3 @@
-// import React from "react";
-// import {
-//   Typography,
-//   Table,
-//   TableHead,
-//   TableBody,
-//   TableRow,
-//   TableCell,
-//   TableContainer,
-//   Box,
-//   Grid,
-// } from "@mui/material";
-// import A4Page from "../../../../layout/A4Page";
-// import { formatCurrency } from "../../../../../utils/salaryCalculations";
 
 // const NimbjaOfferPage2 = ({ company, data }) => {
 //   const annualSalary = Number(data.salary) || 0;
@@ -178,102 +164,33 @@
 import React from "react";
 import {
   Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableContainer,
+
   Box,
-  Grid,
+
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
 
 
-const NimbjaOfferPage2 = ({ company, data }) => {
-  /* ===== helper for consistent rounding ===== */
-  /* ======================================================
-   ✅ SMARTMATRIX LOGIC (INPUT IS MONTHLY)
-====================================================== */
-
-  const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
-
-  /* 🔥 INPUT IS MONTHLY */
-  const monthlyGross = round2(data.salary || data.newCTC || 0);
-
-  /* ANNUAL DERIVED */
-  const annualCTC = round2(monthlyGross * 12);
-
-  /* Same Percentage Structure */
-  const PERCENT = {
-    basic: 0.4,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
-
-  /* Monthly Calculation */
-  const basicMonthly = round2(monthlyGross * PERCENT.basic);
-  const hraMonthly = round2(monthlyGross * PERCENT.hra);
-  const daMonthly = round2(monthlyGross * PERCENT.da);
-  const specialMonthly = round2(monthlyGross * PERCENT.special);
-  const foodMonthly = round2(monthlyGross * PERCENT.food);
-
-  /* Adjustment to prevent rounding mismatch */
-  const miscMonthly = round2(
-    monthlyGross -
-      (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly),
-  );
-
-  /* Annual Derived from Monthly */
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
-  const miscAnnual = round2(miscMonthly * 12);
-
-  /* Salary Rows */
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouquet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Performance Bonus", miscMonthly, miscAnnual],
-  ];
-
-  /* Totals (Guaranteed Correct) */
-  const totalMonthly = monthlyGross;
-  const totalAnnual = annualCTC;
-
+const NimbjaOfferPage2 = ({
+  company,
+  data,
+  salaryRows,
+  totalMonthly,
+  totalAnnual,
+}) => {
   /* ================= TABLE STYLES (UNCHANGED) ================= */
-  const CELL = {
-    border: "1px solid #000",
-    fontFamily: '"Bahnschrift", "Segoe UI", sans-serif',
-    fontSize: "11pt",
-    padding: "6px 8px",
-    lineHeight: 1.4,
-  };
 
-  const GREEN_ROW = {
-    backgroundColor: "#9BBB59",
-  };
 
   const formatDate = (date) =>
     date
-      ? new Date(date).toLocaleDateString("en-US", {
+      ? new Date(date).toLocaleDateString("en-IN", {
           month: "long",
           day: "2-digit",
           year: "numeric",
         })
       : "";
-
-      
-
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -378,6 +295,6 @@ const NimbjaOfferPage2 = ({ company, data }) => {
       </Box>
     </A4Page>
   );
-};;;
+};
 
 export default NimbjaOfferPage2;
