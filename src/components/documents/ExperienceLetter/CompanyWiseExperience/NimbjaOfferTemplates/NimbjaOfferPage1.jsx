@@ -28,10 +28,10 @@ const formatIndianCurrency = (value) => {
   return Number(value).toLocaleString("en-IN");
 };
 
-const NimbjaOfferPage1 = ({ company, data }) => {
-  const offerDate = formatDate(data.issueDate);
-  const joiningDate = formatDate(data.joiningDate);
-  const firstName = data.employeeName?.split(" ")[0] || "";
+// const NimbjaOfferPage1 = ({ company, data }) => {
+//   const offerDate = formatDate(data.issueDate);
+//   const joiningDate = formatDate(data.joiningDate);
+//   const firstName = data.employeeName?.split(" ")[0] || "";
   /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
 
