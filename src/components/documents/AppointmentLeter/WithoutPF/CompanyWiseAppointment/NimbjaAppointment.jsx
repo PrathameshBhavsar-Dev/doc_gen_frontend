@@ -313,7 +313,7 @@ const annualCTC = round0(
           <Box component="ol" start={10} sx={{ pl: "6mm", m: 0, mt: "-7mm" }}>
             <li>
               <Typography
-                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-8mm" }}
+                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
               >
                 10.This appointment is subject to your being medically fit.
               </Typography>
@@ -598,37 +598,120 @@ const annualCTC = round0(
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <Table>
-            <TableBody>
+          <Table
+            sx={{
+              width: "100%",
+              border: "1px solid #000",
+              "& td": {
+                border: "1px solid #000",
+                padding: "6px",
+                fontSize: "14px",
+                fontFamily: "Bahnschrift",
+            }}}
+          >
+            {/* HEADER */}
+            <TableHead>
               <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-                <TableCell>
-                  <b>Salary Components</b>
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    width: "50%",
+                  }}
+                >
+                  Salary Components
                 </TableCell>
-                <TableCell align="right">
-                  <b>Per month (Rs.)</b>
+
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "25%",
+                  }}
+                >
+                  Per Month (₹)
                 </TableCell>
-                <TableCell align="right">
-                  <b>Per Annum (Rs.)</b>
+
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "25%",
+                  }}
+                >
+                  Per Annum (₹)
                 </TableCell>
               </TableRow>
+            </TableHead>
 
+            {/* BODY */}
+            <TableBody>
               {finalSalaryRows.map(([name, monthly, annual], i) => (
                 <TableRow key={i}>
-                  <TableCell>{name}</TableCell>
-                  <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-                  <TableCell align="right">{formatCurrency(annual)}</TableCell>
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "left",
+                      padding: "6px",
+                    }}
+                  >
+                    {name}
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "right",
+                      padding: "6px",
+                    }}
+                  >
+                    {formatCurrency(monthly)}
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "right",
+                      padding: "6px",
+                    }}
+                  >
+                    {formatCurrency(annual)}
+                  </TableCell>
                 </TableRow>
               ))}
 
+              {/* TOTAL ROW */}
               <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-                <TableCell>
-                  <b>Total Monthly Gross Salary</b>
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Total Monthly Gross Salary
                 </TableCell>
-                <TableCell align="right">
-                  <b>{formatCurrency(totalMonthly)}</b>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatCurrency(totalMonthly)}
                 </TableCell>
-                <TableCell align="right">
-                  <b>{formatCurrency(totalAnnual)}</b>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatCurrency(totalAnnual)}
                 </TableCell>
               </TableRow>
             </TableBody>
