@@ -161,11 +161,11 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
         alt="watermark"
         sx={{
           position: "absolute",
-          top: "90%",
+          top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "30%",
-          opacity: 0.6,
+          width: "50%",
+          opacity: 0.4,
           zIndex: 0,
           pointerEvents: "none",
         }}

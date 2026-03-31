@@ -20,11 +20,11 @@ const NimbjaOffer = ({ company, data }) => {
 
   const salaryRows = [
     ["Basic", round0(monthlyCTC * 0.4)],
-    ["HRA", round0(monthlyCTC * 0.18)],
-    ["DA", round0(monthlyCTC * 0.12)],
-    ["Special", round0(monthlyCTC * 0.16)],
-    ["Food", round0(monthlyCTC * 0.06)],
-    ["Misc", round0(monthlyCTC * 0.08)],
+    ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+    ["HRA", round0(monthlyCTC * 0.12)],
+    ["City Allowance", round0(monthlyCTC * 0.16)],
+    ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+    ["Performance Bonus", round0(monthlyCTC * 0.08)],
   ].map(([name, monthly]) => [name, monthly, monthly * 12]);
 
   const totalMonthly = salaryRows.reduce((s, r) => s + r[1], 0);
