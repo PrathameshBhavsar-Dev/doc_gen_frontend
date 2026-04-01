@@ -260,18 +260,19 @@ const totalAnnual = round0(totalMonthly * 12);
       Dear {firstName},
     </Typography>
 
-    <Typography
-      align="center"
-      fontWeight={700}
-      mt={1}
-      sx={{
-        textDecoration: "underline",
-        textUnderlineOffset: "4px",
-        textDecorationThickness: "1.5px",
-      }}
-    >
-      Letter of Appointment
-    </Typography>
+    <Box sx={{ textAlign: "center", width: "100%" }}>
+                <Typography
+                  fontWeight={700}
+                  mt={1}
+                  sx={{
+                    display: "inline-block",
+                    borderBottom: "2px solid black",
+                    paddingBottom: "4px",
+                  }}
+                >
+                  Letter of Appointment
+                </Typography>
+              </Box>
 
     <Typography mt={2} fontSize={15} textAlign="justify">
       Further to your acceptance of our Letter of Offer dated{" "}
@@ -493,7 +494,7 @@ const totalAnnual = round0(totalMonthly * 12);
             border: "1px solid #000",
             "& th, & td": {
               border: "1px solid #000",
-              padding: "6px",
+              padding: "7px",
               fontSize: "14px",
             },
           }}

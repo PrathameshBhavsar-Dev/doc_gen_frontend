@@ -206,7 +206,7 @@ const totalAnnual = round0(
             </Typography>
 
             {/* SIGNATURE */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
               {company?.signature && (
                 <img src={company.signature} alt="Signature" style={{ height: 60 }} />
               )}
@@ -260,7 +260,7 @@ const totalAnnual = round0(
                   borderCollapse: "collapse",
                   "& th, & td": {
                     border: "1px solid #000",
-                    padding: "6px",
+                    padding: "7px",
                     fontSize: "15px",
                   },
                 }}
