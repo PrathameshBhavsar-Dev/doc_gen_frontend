@@ -145,13 +145,13 @@ const totalAnnual = round0(
     </Typography> */}
 
             {/* NAME */}
-            <Typography sx={{ mb: 2, fontWeight: 700 }}>
+            <Typography sx={{ mb: 2, }}>
               <b>Name</b> : {data.mrms} {data.employeeName}
             </Typography>
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-            Subject : Letter of intent for the position of <b>{data.position}</b>
+           <b>Subject</b>: Letter of intent for the position of <b>{data.position}</b>
             </Typography>
 
 
@@ -181,7 +181,7 @@ const totalAnnual = round0(
 
             <Typography sx={{ mb: 1, textAlign: "justify" }}>
               The starting salary for this position is{" "}
-              <b>{formatCurrency(totalAnnual)}</b> per annum. Payment is on monthly basis
+              <b>{formatCurrency(data.salary)}</b> per annum. Payment is on monthly basis
               by direct deposit.
             </Typography>
 
@@ -206,7 +206,7 @@ const totalAnnual = round0(
             </Typography>
 
             {/* SIGNATURE */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
               {company?.signature && (
                 <img src={company.signature} alt="Signature" style={{ height: 60 }} />
               )}
@@ -260,7 +260,7 @@ const totalAnnual = round0(
                   borderCollapse: "collapse",
                   "& th, & td": {
                     border: "1px solid #000",
-                    padding: "6px",
+                    padding: "7px",
                     fontSize: "15px",
                   },
                 }}

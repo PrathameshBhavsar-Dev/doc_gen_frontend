@@ -179,7 +179,7 @@ const NeweagePaidInternshipLetter = ({
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
             <b>{formatCurrency(annualStipend)}</b> (
-            <b>{numberToWords(annualStipend)}</b>) per year.
+            <b>{numberToWords(annualStipend)}</b>) Per Year.
           </Typography>
 
           <Typography sx={{ ...TEXT, mt: 2 }}>
