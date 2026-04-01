@@ -175,7 +175,7 @@ export const companies = [
     footerImage: null,
     watermarkImage: null,
     address:
-      "Office No. 102-A, First Floor Ganesham - A Commercial, Pimple Saudagar, Pune- 411027",
+      "Office No. 102-A, First Floor Ganesham - A Commercial, BRTS Road, Pimple Saudagar, Pune- 411027",
     email: "contact@smartmatrixds.com",
     phone: "+91 9112108484",
     website: "https://smartmatrixds.com/",
