@@ -324,10 +324,10 @@ const PentaConfirmation = ({ company = {}, data = {} }) => {
 
   /* ================= SALARY LOGIC ================= */
 
-  // Annual CTC
-const monthlyCTC = round0(Number(data.totalSalary || 0));1
+  // ✅ FIXED (removed extra `1`)
+  const monthlyCTC = round0(Number(data.totalSalary || 0));
 
-    // ===== Percentage Breakup =====
+  // ===== Percentage Breakup =====
   const basicMonthly = round0(monthlyCTC * 0.4);
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
@@ -336,12 +336,12 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
   const miscMonthly = round0(monthlyCTC * 0.08);
 
   // ===== Annual Values =====
-  const basicAnnual = round0(basicMonthly * 12);
-  const hraAnnual = round0(hraMonthly * 12);
-  const daAnnual = round0(daMonthly * 12);
-  const specialAnnual = round0(specialMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
-  const miscAnnual = round0(miscMonthly * 12);
+  const basicAnnual = basicMonthly * 12;
+  const hraAnnual = hraMonthly * 12;
+  const daAnnual = daMonthly * 12;
+  const specialAnnual = specialMonthly * 12;
+  const foodAnnual = foodMonthly * 12;
+  const miscAnnual = miscMonthly * 12;
 
   // ===== Salary Table Rows =====
   const salaryRows = [
@@ -399,7 +399,7 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
             <Typography fontWeight={600}>:</Typography>
             <Typography>
               Letter of Confirmation for continued services as{" "}
-              <Strong>{data.position}</Strong>
+              <strong>{data.position}</strong>
             </Typography>
           </Box>
 
@@ -411,8 +411,8 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
             We are pleased to confirm your continued services at the position
             of <strong>{data.position}</strong> with{" "}
             <strong>{company.name}</strong> with effective date{" "}
-            <strong>{formatDate(data.effectiveDate)}</strong>,
-            considering your performance and support towards the organization.
+            <strong>{formatDate(data.effectiveDate)}</strong>, considering your
+            performance and support towards the organization.
           </Typography>
 
           <Typography fontSize={14} textAlign="justify" mt={2}>
@@ -423,48 +423,31 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
           <Typography fontSize={14} textAlign="justify" mt={2}>
             Subject to various deductions as per company and government policy.
             The roles and responsibilities and other terms and conditions of
-            your employment will be specified in your letter of appointment.
-            We welcome you to {company.name} family and hope it would be the
+            your employment will be specified in your letter of appointment. We
+            welcome you to {company.name} family and hope it would be the
             beginning of a long and mutually beneficial association.
           </Typography>
 
-          {/* Signature Section */}
-          <Box
-            sx={{
-              mt: 6,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+          {/* Signature */}
+          <Box mt={6} display="flex" justifyContent="space-between">
             <Box>
               <Typography>
                 For <strong>{company.name}</strong>
               </Typography>
 
-<Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-  {company.signature && (
-    <img
-      src={company.signature}
-      alt="Sign"
-      style={{ height: "30px", width: "auto" }}
-    />
-  )}
-
-  {company.stamp && (
-    <img
-      src={company.stamp}
-      alt="Stamp"
-      style={{ height: "95px", width: "auto" }}
-    />
-  )}
-</Box>
+              <Box mt={2} display="flex" alignItems="center" gap={2}>
+                {company.signature && (
+                  <img src={company.signature} alt="Sign" style={{ height: 30 }} />
+                )}
+                {company.stamp && (
+                  <img src={company.stamp} alt="Stamp" style={{ height: 95 }} />
+                )}
+              </Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
               </Typography>
-              <Typography fontSize={13}>
-                HR Relations Lead
-              </Typography>
+              <Typography fontSize={13}>HR Relations Lead</Typography>
             </Box>
 
             <Box mt={10}>
@@ -475,7 +458,7 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
         </Box>
       </A4Page>
 
-      {/* ================= PAGE 2 – SALARY STRUCTURE ================= */}
+      {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Typography align="center" fontWeight={700} mt={4} mb={3}>
           Annexure A - Salary Structure
@@ -494,15 +477,9 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
         >
           <TableHead>
             <TableRow sx={{ backgroundColor: "#1cc9e0" }}>
-              <TableCell>
-                <strong>Salary Components</strong>
-              </TableCell>
-              <TableCell align="right">
-                <strong>Per Month (Rs.)</strong>
-              </TableCell>
-              <TableCell align="right">
-                <strong>Per Annum (Rs.)</strong>
-              </TableCell>
+              <TableCell><strong>Salary Components</strong></TableCell>
+              <TableCell align="right"><strong>Per Month (Rs.)</strong></TableCell>
+              <TableCell align="right"><strong>Per Annum (Rs.)</strong></TableCell>
             </TableRow>
           </TableHead>
 
@@ -510,19 +487,13 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
             {salaryRows.map(([name, monthly, annual], index) => (
               <TableRow key={index}>
                 <TableCell>{name}</TableCell>
-                <TableCell align="right">
-                  {formatCurrency(monthly)}
-                </TableCell>
-                <TableCell align="right">
-                  {formatCurrency(annual)}
-                </TableCell>
+                <TableCell align="right">{formatCurrency(monthly)}</TableCell>
+                <TableCell align="right">{formatCurrency(annual)}</TableCell>
               </TableRow>
             ))}
 
             <TableRow sx={{ backgroundColor: "#1cc9e0" }}>
-              <TableCell>
-                <strong>Total Monthly Gross Salary</strong>
-              </TableCell>
+              <TableCell><strong>Total Monthly Gross Salary</strong></TableCell>
               <TableCell align="right">
                 <strong>{formatCurrency(totalMonthly)}</strong>
               </TableCell>
@@ -533,32 +504,18 @@ const monthlyCTC = round0(Number(data.totalSalary || 0));1
           </TableBody>
         </Table>
 
-        {/* Signature Section */}
-        <Box
-          sx={{
-            mt: 8,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
+        {/* Signature */}
+        <Box mt={8} display="flex" justifyContent="space-between">
           <Box>
-           <Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-  {company.signature && (
-    <img
-      src={company.signature}
-      alt="Sign"
-      style={{ height: "30px", width: "auto" }}
-    />
-  )}
+            <Box mt={2} display="flex" alignItems="center" gap={2}>
+              {company.signature && (
+                <img src={company.signature} alt="Sign" style={{ height: 30 }} />
+              )}
+              {company.stamp && (
+                <img src={company.stamp} alt="Stamp" style={{ height: 95 }} />
+              )}
+            </Box>
 
-  {company.stamp && (
-    <img
-      src={company.stamp}
-      alt="Stamp"
-      style={{ height: "95px", width: "auto" }}
-    />
-  )}
-</Box>
             <Typography mt={1}>{company.hrName}</Typography>
             <Typography fontSize={13}>HR Relations Lead</Typography>
           </Box>

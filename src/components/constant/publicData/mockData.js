@@ -273,7 +273,7 @@ export const companies = [
     footerImage: Penta_footer,
     watermarkImage: Penta_watermark,
     address:
-      "Office No. 102-C, First Floor, Ganesham Commercial -A, Survey No. 21/18-21/24, BRTS Road, Pimple Saudagar, Pune- 4110271",
+      "Office No. 102-C, First Floor, Ganesham Commercial -A, BRTS Road, Pimple Saudagar, Pune- 4110271",
     email: "hr@pentasoftwareconsultancy.com",
     phone: "+91 7066541234",
     website: "https://pentasoftwareconsultancy.com/",
@@ -1258,7 +1258,7 @@ export const documentTypes = [
   {
     id: 11,
     name: "Internship Certificate",
-    template: "internship_certificate",
+    template: "internshipcertificate_letter",
     fields: [
       {
         name: "mrms",

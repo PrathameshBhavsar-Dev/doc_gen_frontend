@@ -30,7 +30,8 @@ const formatDate = (date) =>
   date ? new Date(date).toLocaleDateString("en-GB") : "";
 
 const numberFormat = (num) =>
-  Math.round(Number(num || 0)).toLocaleString("en-IN", {
+  Math.round(Number(num || 0)).toLocaleString("en-IN", 
+    {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
@@ -164,22 +165,17 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
 
   return (
     <Box
-      sx={{
-        width: "210mm",
-        minHeight: "297mm",
-        p: "20mm",
-        fontFamily: "Cambria, serif",
-        color: "#000",
+       sx={{
+    width: "210mm",
+    minHeight: "297mm",
+    pt: "16mm",   // reduce top padding
+    px: "20mm",
+    pb: "20mm",
       }}
     >
-      {/* 🔹 UI CODE EXACT SAME – NOT TOUCHED */}
-
-
-
-
       {/* ---------- HEADER IMAGE ---------- */}
       {company.header && (
-        <Box mt={-10} mb={10}>
+        <Box mt={-10} mb={3}>
           <img
             src={company.header}
             alt="Company Header"

@@ -1,11 +1,6 @@
 import React from "react";
-// import PaidInternshipLetterTemplate from "./PaidIntershipLetter/PaidInternshipTemplate";
-// import UnPaidInternshipLetterTemplate from "./UnpaidIntershipLetter/UnpaidinternshipTemplate";
-// import WithPFIncrementLetterTemplate from "../IncrementLetter/WithPF/WithPFIncrementTemplate";
-// import WithoutPFIncrementLetterTemplate from "../IncrementLetter/WithoutPF/WithoutPFIncrementTemplate";
 import WithoutPFOfferLetterTemplate from "./WithoutPF/WithoutPFOfferLetterTemplate";
 import WithPFOfferLetterTemplate from "./WithPF/WithPFOfferLetterTemplate";
-
 
 const OfferTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData

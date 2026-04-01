@@ -16,22 +16,22 @@ const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
   Math.round(Number(v || 0)).toLocaleString("en-IN",
-  //    {
-  //   minimumFractionDigits: 2,
-  //   maximumFractionDigits: 2,
-  // }
-);
+    //    {
+    //   minimumFractionDigits: 2,
+    //   maximumFractionDigits: 2,
+    // }
+  );
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
   const round2 = (n) => Number(n.toFixed(2));
 
-  const basic   = round2(annualCTC * 0.40);
-  const hra     = round2(annualCTC * 0.18);
-  const da      = round2(annualCTC * 0.12);
+  const basic = round2(annualCTC * 0.40);
+  const hra = round2(annualCTC * 0.18);
+  const da = round2(annualCTC * 0.12);
   const special = round2(annualCTC * 0.16);
-  const food    = round2(annualCTC * 0.06);
-  const misc    = round2(annualCTC * 0.08);
+  const food = round2(annualCTC * 0.06);
+  const misc = round2(annualCTC * 0.08);
 
   return [
     ["Basic ", basic / 12, basic],
@@ -167,32 +167,32 @@ const QuickAppointment = ({ company, data }) => {
               </Typography>
 
               <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3, mt: 3 }}>
-  {company.signature && (
-    <Box
-      component="img"
-      src={company.signature}
-      alt="Authorized Sign"
-      sx={{
-        height: 40,
-        width: "auto",
-        objectFit: "contain"
-      }}
-    />
-  )}
+                {company.signature && (
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="Authorized Sign"
+                    sx={{
+                      height: 40,
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
+                )}
 
-  {company.stamp && (
-    <Box
-      component="img"
-      src={company.stamp}
-      alt="Company Stamp"
-      sx={{
-        height: 95,
-        width: "auto",
-        objectFit: "contain"
-      }}
-    />
-  )}
-</Box>
+                {company.stamp && (
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="Company Stamp"
+                    sx={{
+                      height: 95,
+                      width: "auto",
+                      objectFit: "contain"
+                    }}
+                  />
+                )}
+              </Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
@@ -220,10 +220,10 @@ const QuickAppointment = ({ company, data }) => {
       {/* ================= PAGE 3 ================= */}
       <A4Page headerSrc={company.header}>
 
-           <Typography fontSize={15} mt={2}>
-            <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
-            {String(data.employeeId).padStart(4, "0")}
-          </Typography>
+        <Typography fontSize={15} mt={2}>
+          <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
+          {String(data.employeeId).padStart(4, "0")}
+        </Typography>
         <Typography align="center" fontWeight={700} mb={3} mt={5}>
           Salary Structure – Break Up
         </Typography>

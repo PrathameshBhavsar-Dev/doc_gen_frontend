@@ -9,6 +9,7 @@ import { generatePDF } from "../../utils/pdfUtils";
 import ROUTES from "../../core/constants/routes.constant";
 import ApiService from "../../core/services/api.service";
 import API from "../../core/constants/serverURL.constant";
+import { buildPayload, normalizeTemplateKey } from "../../utils/documentPayloadBuilder";
 
 // Templates
 import ExperienceLetterTemplate from "../documents/ExperienceLetter/ExperienceLetterTemplate";
@@ -320,7 +321,7 @@ const DP_STYLES = `
 /* ─── Doc label map ─── */
 const DOC_LABELS = {
   salaryslip_letter: "Salary Slip",
-  internship_certificate: "Internship Certificate",
+  internshipcertificate_letter: "Internship Certificate",
   offer_letter: "Offer Letter",
   completion_certificate: "Completion Certificate",
   increment_letter: "Increment Letter",
@@ -352,6 +353,9 @@ const DocumentPreview = () => {
   const [snackSev, setSnackSev] = useState("success");
   const [zoom, setZoom] = useState(100);
 
+  const key = normalizeTemplateKey(previewDocType?.template);
+  const payload = buildPayload(key, previewData, user, previewCompany);
+
   /* ── ALWAYS inject/re-inject styles on every mount ── */
   useEffect(() => {
     // Remove any stale tag first, then re-add fresh
@@ -382,7 +386,7 @@ const DocumentPreview = () => {
     const p = { data: previewData, company: previewCompany };
     const map = {
       salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
-      internship_certificate: <InternshipLetterTemplate {...p} />,
+      internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
       offer_letter: <OfferTemplate {...p} />,
       completion_certificate: <CertificationLetterTemplate {...p} />,
       increment_letter: <IncrementTemplate {...p} />,
@@ -402,196 +406,101 @@ const DocumentPreview = () => {
   };
 
   /* ── Download PDF (full) ── */
-  const handleDownloadPDF = async () => {
-    if (!documentRef.current) return;
+  // const handleDownloadPDF = async () => {
+  //   if (!documentRef.current) return;
 
+  //   setLoading(true);
+  //   setLoadingLabel("Saving & generating PDF…");
+  //   setError("");
+
+  //   try {
+  //     const key = normalizeTemplateKey(previewDocType?.template);
+
+  //     if (!key) throw new Error("Missing doc type key");
+
+  //     console.log("🔥 NORMALIZED KEY:", key);
+
+  //     // ✅ SINGLE SOURCE OF TRUTH
+  //     const payload = buildPayload(
+  //       key,
+  //       previewData,
+  //       user,
+  //       previewCompany
+  //     );
+
+  //     console.log("🔥 FINAL PAYLOAD:", payload);
+
+  //     await apiService.apipost(API.generateDoc(key), payload);
+
+  //     // ✅ GENERATE PDF
+  //     window.scrollTo(0, 0);
+  //     await new Promise((r) => setTimeout(r, 300));
+
+  //     const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
+  //       }-${new Date().toISOString().slice(0, 10)}.pdf`;
+
+  //     await generatePDF(documentRef.current, filename);
+
+  //     toast("PDF saved & downloaded ✓");
+  //   } catch (err) {
+  //     console.error("❌ ERROR:", err);
+  //     setError("Failed to save or generate PDF.");
+  //     toast("Export failed", "error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleDownloadPDF = async () => {
     setLoading(true);
     setLoadingLabel("Saving & generating PDF…");
     setError("");
 
     try {
-      // ✅ NORMALIZE TEMPLATE KEY (ROBUST)
-      const key = previewDocType?.template
-        ?.toLowerCase()
-        ?.replace(/[\s-]+/g, "_") // spaces & hyphens → underscore
-        ?.replace(/([a-z])([A-Z])/g, "$1_$2") // camelCase → snake_case
-        ?.toLowerCase();
-
+      const key = normalizeTemplateKey(previewDocType?.template);
       if (!key) throw new Error("Missing doc type key");
 
-      console.log("🚨 ORIGINAL TEMPLATE:", previewDocType?.template);
       console.log("🔥 NORMALIZED KEY:", key);
 
-      const base = {
-        company: previewCompany?.name,
-        issuedTo: user?.id,
-        employeeName: previewData.employeeName,
-        employeeEmail: previewData.employeeEmail,
-        employeeNumber: previewData.employeeNumber || "EMP001",
-      };
+      const payload = buildPayload(key, previewData, user, previewCompany);
+      console.log("🔥 FINAL PAYLOAD:", payload);
 
-      const validSalaryTypes = ["withPF", "withoutPF"];
-
-      // ✅ PAYLOAD BUILDERS (CLEAN APPROACH)
-      const payloadBuilders = {
-        salaryslip_letter: () => ({
-          ...base,
-          title: previewData.mrms,
-          designation: previewData.position || "Employee",
-          totalSalary: Number(previewData.salary) || 0,
-          doj: previewData.joiningDate || new Date(),
-          salaryType: validSalaryTypes.includes(previewData.salaryType)
-            ? previewData.salaryType
-            : "withPF",
-          department: previewData.department || "",
-          pan: previewData.pan || "",
-          gender: previewData.gender || "Other",
-          workdays: previewData.workdays || 22,
-          dob: previewData.dob || "1990-01-01",
-          mode: previewData.mode || "Bank Transfer",
-          accountNo: previewData.accountNo || "",
-          month:
-            previewData.month ||
-            new Date().toLocaleString("default", { month: "long" }),
-        }),
-
-        offer_letter: () => ({
-          ...base,
-          title: previewData.mrms,
-          position: previewData.position || previewData.designation,
-          department: previewData.department || "General",
-          employmentType: previewData.appointmentType || "Full-time",
-          salary: Number(previewData.salary) || 0,
-          location: previewData.location || "Pune",
-          offerValidTill:
-            previewData.offerValidTill ||
-            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          offerType: previewData.offerType || "withPF",
-          joiningDate: previewData.joiningDate,
-          issueDate: previewData.issueDate,
-        }),
-
-        appointment_letter: () => ({
-          ...base,
-          title: previewData.mrms,
-          position: previewData.position || previewData.designation,
-          department: previewData.department || "General",
-          joiningDate: previewData.joiningDate,
-          issueDate: previewData.issueDate,
-          salary: Number(previewData.salary) || 0,
-          address: previewData.address || "",
-          probationPeriod: previewData.probationPeriod || "3 months",
-          workLocation:
-            previewData.workLocation || previewData.location || "Pune",
-          appointmentType: previewData.appointmentType || "Full-time",
-        }),
-
-        confirmation_letter: () => ({
-          ...base,
-
-          title: previewData.mrms,
-
-          employeeEmail: previewData.employeeEmail,
-          employeePhone: previewData.employeePhone,
-
-          effectiveDate: previewData.effectiveDate,
-          issueDate: previewData.issueDate,
-
-          totalSalary: Number(previewData.totalSalary) || 0,
-
-          address: previewData.address || "",
-
-          position: previewData.position,
-          department: previewData.department || "",
-
-          confirmationType: previewData.confirmationType || "withPF",
-        }),
-
-        increment_letter: () => ({
-          ...base,
-
-          title: previewData.mrms,
-
-          // designation: previewData.position || previewData.designation,
-          department: previewData.department || "",
-
-          performanceYear: Number(previewData.performanceYear) || new Date().getFullYear(),
-
-          newCTC: Number(previewData.newCTC) || 0,
-
-          incrementPercentage: previewData.incrementPercentage
-            ? Number(previewData.incrementPercentage)
-            : undefined,
-
-          effectiveDate: previewData.effectiveDate,
-          issueDate: previewData.issueDate,
-
-          incrementType: previewData.incrementType || "withPF",
-        }),
-
-        fullandfinal_letter: () => ({
-          ...base,
-
-          // ✅ REQUIRED (from BaseDocument)
-          title: previewData.mrms || "Mr.",
-
-          // ✅ REQUIRED
-          designation: previewData.position || previewData.designation || "Employee",
-
-          department: previewData.department || "",
-
-          fnfDate: previewData.fnfDate || new Date(),
-
-          month:
-            previewData.month ||
-            new Date().toISOString().slice(0, 7),
-
-          totalSalary: Number(previewData.salary || previewData.totalSalary) || 0,
-
-          // ✅ FIX HERE (these were missing)
-          doj: previewData.joiningDate || new Date(),
-          resignationDate: previewData.resignationDate || new Date(),
-          leavingDate: previewData.leavingDate || new Date(),
-
-          leaveEncashment: Number(previewData.leaveEncashment) || 0,
-
-          paidDays: Number(previewData.paidDays) || 0,
-
-          finalType:
-            ["withPF", "withoutPF"].includes(previewData.finalType)
-              ? previewData.finalType
-              : "withPF",
-
-          workdays: Number(previewData.workdays) || 0,
-        }),
-      };
-
-      // ✅ VALIDATE TEMPLATE
-      if (!payloadBuilders[key]) {
-        console.error("❌ Unsupported template:", key);
-        throw new Error(`Invalid document type: ${key}`);
-      }
-
-      const payload = payloadBuilders[key]();
-
-      console.log("🔥 FINAL SAVE PAYLOAD:", payload);
-
-      // ✅ API CALL
       await apiService.apipost(API.generateDoc(key), payload);
 
-      // ✅ GENERATE PDF
-      window.scrollTo(0, 0);
-      await new Promise((r) => setTimeout(r, 300));
+      // ✅ Template component map
+      const templateMap = {
+        salaryslip_letter: SalarySlipLetterTemplate,
+        internshipcertificate_letter: InternshipLetterTemplate,
+        offer_letter: OfferTemplate,
+        completion_certificate: CertificationLetterTemplate,
+        increment_letter: IncrementTemplate,
+        appointment_letter: AppointmentLetterTemplate,
+        experience_letter: ExperienceLetterTemplate,
+        relieving_letter: RelievingLetterTemplate,
+        fullandfinal_letter: FullandfinalLetterTemplate,
+        confirmation_letter: ConfirmationLetterTemplate,
+      };
 
+      const TemplateComponent = templateMap[key];
+
+      if (!TemplateComponent) {
+        throw new Error(`No template found for key: ${key}`);
+      }
+
+      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
+        }-${new Date().toISOString().slice(0, 10)}`;
+
+      // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(
-        documentRef.current,
-        `${previewDocType.name}-${new Date().toISOString().slice(0, 10)}`
+        TemplateComponent,
+        { data: previewData, company: previewCompany },
+        filename
       );
 
       toast("PDF saved & downloaded ✓");
     } catch (err) {
       console.error("❌ ERROR:", err);
-      setError("Failed to save or generate PDF. Please try again.");
+      setError("Failed to save or generate PDF.");
       toast("Export failed", "error");
     } finally {
       setLoading(false);

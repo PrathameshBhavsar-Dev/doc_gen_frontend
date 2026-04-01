@@ -7,6 +7,7 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  TableContainer,
 } from "@mui/material";
 import A4Layout from "../../../../layout/A4Page";
 
@@ -243,15 +244,15 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           <Typography align="center" sx={{ mb: "24px" }}>
             <b>Annexure A – Salary Structure</b>
           </Typography>
-       <TableContainer>
-          <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={tableHeader}>Salary Component</TableCell>
-                <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
-                <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
-              </TableRow>
-            </TableHead>
+          <TableContainer>
+            <Table sx={{ borderCollapse: "collapse", width: "100%" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={tableHeader}>Salary Component</TableCell>
+                  <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
+                  <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
+                </TableRow>
+              </TableHead>
 
               <TableBody>
                 {salaryComponents.map((row, i) => (
@@ -279,25 +280,15 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             </Table>
           </TableContainer>
         </Box>
-
-      <Box>
-         <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
-            <Box>
-              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
-                {company.signature && (
-                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
-                )}
-                {company.stamp && (
-                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
-                )}
-              </Box>
-              <Typography>{company.hrName}</Typography>
-              <Typography>HR Relations Lead</Typography>
-            </Box>
-
-            <Box sx={{ width: "45%", mt: 8 }}>
-              <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {employeeName}</Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+          <Box>
+            <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+              {company.signature && (
+                <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+              )}
+              {company.stamp && (
+                <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+              )}
             </Box>
             <Typography>{company.hrName}</Typography>
             <Typography>HR Relations Lead</Typography>
@@ -305,9 +296,10 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
           <Box sx={{ width: "45%", mt: 8 }}>
             <Typography>Signature : ___________________</Typography>
-            <Typography>Candidate Name : {candidateName}</Typography>
+            <Typography>Candidate Name : {employeeName}</Typography>
           </Box>
         </Box>
+
 
       </A4Layout>
     </>
