@@ -311,7 +311,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
                 <TableCell sx={cell}></TableCell>
 
                 <TableCell sx={{ ...cell, textAlign: "center" }}>
-                  <strong>{formatCurrency(totalEarned)}</strong>
+                  <strong>{formatCurrency(Math.round(totalEarned))}</strong>
                 </TableCell>
               </TableRow>
 
