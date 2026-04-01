@@ -80,7 +80,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             fontWeight: 600,
             textAlign: "right",
             mb: "9mm",
-            mt: "1mm",
+            mt: "-2mm",
           }}
         >
           {offerDate}
@@ -107,7 +107,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
           }}
         >
-          Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:{" "}
+          Name      : {data.mrms} {data.employeeName}{" "}
           <Typography
             component="span"
             sx={{
@@ -244,8 +244,8 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             justifyContent="space-between"
             alignItems="flex-start"
           > */}
-            {/* LEFT — HR */}
-            {/* <Grid item>
+        {/* LEFT — HR */}
+        {/* <Grid item>
               {company.signature && (
                 <Box
                   component="img"
@@ -278,8 +278,8 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
               </strong>
             </Grid> */}
 
-            {/* RIGHT — STAMP + CANDIDATE */}
-            {/* <Grid item>
+        {/* RIGHT — STAMP + CANDIDATE */}
+        {/* <Grid item>
               {company.stamp && (
                 <Box
                   component="img"
@@ -311,44 +311,44 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
               >
                 <strong>Candidate Name:</strong>{" "}
                 <strong>{data.employeeName}</strong> {/* 🔑 NAME BOLD */}
-              {/* </Typography>
-            </Grid> */} 
-          {/* </Grid>
+        {/* </Typography>
+            </Grid> */}
+        {/* </Grid>
         </Box> */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-                <Box>
-                  <Box sx={{ display: "flex", gap: 3 }}>
-                    {company?.signature && (
-                      <img
-                        src={company.signature}
-                        alt="Signature"
-                        style={{ height: 45, marginTop: "7mm" }}
-                      />
-                    )}
-                    {company?.stamp && (
-                      <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
-                    )}
-                  </Box>
-                  <strong>
-                    <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
-                      <strong>{company.hrName}</strong>
-                    </Typography>
-                    <Typography sx={{ fontFamily: "Bahnschrift" }}>
-                      <strong>HR Relations Lead</strong>
-                    </Typography>
-                  </strong>
-                </Box>
-        
-                <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
-                  <Typography sx={{ fontFamily: "Bahnschrift" }}>
-                    <strong>Signature:</strong> __________________
-                  </Typography>
-                  <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
-                    <strong>Candidate Name:</strong>{" "}
-                    <strong>{data.employeeName}</strong>
-                  </Typography>
-                </Box>
-              </Box>
+          <Box>
+            <Box sx={{ display: "flex", gap: 3 }}>
+              {company?.signature && (
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{ height: 45, marginTop: "7mm" }}
+                />
+              )}
+              {company?.stamp && (
+                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+              )}
+            </Box>
+            <strong>
+              <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
+                <strong>{company.hrName}</strong>
+              </Typography>
+              <Typography sx={{ fontFamily: "Bahnschrift" }}>
+                <strong>HR Relations Lead</strong>
+              </Typography>
+            </strong>
+          </Box>
+
+          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+              <strong>Signature:</strong> __________________
+            </Typography>
+            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+              <strong>Candidate Name:</strong>{" "}
+              <strong>{data.employeeName}</strong>
+            </Typography>
+          </Box>
+        </Box>
       </Box>
     </A4Page>
   );

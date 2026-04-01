@@ -102,7 +102,7 @@ const NimbjaOffer = ({ company, data }) => {
           </Typography>
           {/* NAME */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
-            Name : {data.mrms} {data.employeeName}
+            Name :  {data.mrms} {data.employeeName}
           </Typography>
 
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
@@ -163,25 +163,63 @@ const NimbjaOffer = ({ company, data }) => {
           </Typography>
 
           {/* SIGNATURE */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {company?.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: 42, marginTop: "2mm" }}
-              />
-            )}
-            {company?.stamp && (
-              <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
-            )}
-          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start", // 🔥 aligns both blocks properly
+              mt: 4,
+            }}
+          >
+            {/* LEFT SIDE (HR) */}
+            <Box>
+              <Box sx={{ display: "flex", gap: 3, alignItems: "flex-end" }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 45 }}
+                  />
+                )}
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: 100 }}
+                  />
+                )}
+              </Box>
 
-          <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
-            {company.hrName}
-          </Typography>
-          <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
-            HR Manager
-          </Typography>
+              <Typography
+                sx={{ fontWeight: 600, fontFamily: "Bahnschrift", mt: 1 }}
+              >
+                {company.hrName}
+              </Typography>
+
+              <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
+                HR Manager
+              </Typography>
+            </Box>
+
+            {/* RIGHT SIDE (CANDIDATE) */}
+            <Box
+              minWidth="250px"
+              sx={{
+                fontFamily: "Bahnschrift",
+                textAlign: "left",
+                marginTop:"26mm"
+              }}
+            >
+              <Typography sx={{ fontFamily: "Bahnschrift", mt: "1mm" }}>
+                <strong>Signature:</strong> __________________
+              </Typography>
+
+              <Typography sx={{ mt: 1, fontFamily: "Bahnschrift", }}>
+                <strong>Candidate Name:</strong>{" "}
+                <strong>{data.employeeName}</strong>
+              </Typography>
+            </Box>
+          </Box>
         </Box>
         {/* </Box> */}
       </A4Page>

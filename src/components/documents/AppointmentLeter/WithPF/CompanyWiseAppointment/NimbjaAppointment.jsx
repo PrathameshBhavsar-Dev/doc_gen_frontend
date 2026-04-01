@@ -281,7 +281,7 @@ const annualCTC = Number(data.salary || 0);
           <Box component="ol" start={10} sx={{ pl: "6mm", m: 0, mt: "-7mm" }}>
             <li>
               <Typography
-                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-8mm" }}
+                sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
               >
                 10. This appointment is subject to your being medically fit.
               </Typography>
