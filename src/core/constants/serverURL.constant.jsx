@@ -41,7 +41,7 @@ class ServerUrl {
     COMPLETION: "completion_letter",
     FULLANDFINAL: "fullandfinal_letter",
     INCREMENT: "increment_letter",
-    INTERNSHIP: "internship_letter",
+    INTERNSHIP: "internshipcertificate_letter",
     CONFIRMATION: "confirmation_letter",
   };
 }

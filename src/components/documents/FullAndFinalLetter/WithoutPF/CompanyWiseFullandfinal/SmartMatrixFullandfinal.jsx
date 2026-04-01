@@ -119,19 +119,19 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
             <TableBody>
               {/* TITLE */}
               <TableRow>
-                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
+                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "12pt" }}>
                   <strong>Full & Final Settlement Statement</strong>
                 </TableCell>
               </TableRow>
 
               {/* COMPANY */}
               <TableRow>
-                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
+                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "12pt" }}>
                   <strong>{company.name}</strong>
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "11pt" }}>
+                <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "13px" }}>
                   <strong>{company.address}</strong>
                 </TableCell>
               </TableRow>
@@ -311,7 +311,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
                 <TableCell sx={cell}></TableCell>
 
                 <TableCell sx={{ ...cell, textAlign: "center" }}>
-                  <strong>{formatCurrency(totalEarned)}</strong>
+                  <strong>{formatCurrency(Math.round(totalEarned))}</strong>
                 </TableCell>
               </TableRow>
 

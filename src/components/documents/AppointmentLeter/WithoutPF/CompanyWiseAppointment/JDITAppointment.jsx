@@ -341,10 +341,8 @@ const formatDate = (date) =>
 // const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Number(v || 0).toLocaleString("en-IN", )
+  
 
 /* ================= SALARY BREAKUP ================= */
 /* ================= SALARY LOGIC (DEVCON STYLE) ================= */
@@ -404,25 +402,25 @@ const JDITAppointment = ({ company, data }) => {
 
   /* ================= TERMS ================= */
   const terms = [
-    <> Your Designation will be <strong>"{data.position}"</strong>.   </>,
-    <>Your total emoluments will be <strong>Rs. {totalAnnual.toLocaleString('en-IN')} </strong> per annum.</>,
-    `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
-    `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
-    `You shall be due for salary revision not before one year from your date of joining.`,
-    `The Management reserves the right to change the different components/allowances in the total emoluments package, at its own discretion, at any time in future. However, your total monthly salary will be protected.our services are terminable with one month’s notice on either side.`,
-    `You will be on probation for a period of six months from the first of the calendar month following the date of your joining, after which you will be confirmed if your work is found satisfactory. The probation period can be extended at the discretion of the Company. You shall continue to be on probation, till your services are confirmed in writing by a letter of confirmation. In case your performance is not found satisfactory during such period of probation or extended period of probation and you shall be informed of the same in writing.`,
-    `Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period`,
-    `The Company shall have the right to terminate your service without notice, if the information given by you at a time of interview or in the application is found to be incorrect or in case of any serious misconduct or if reference check leads to an adverse report of your credentials.`,
-    `This appointment is subject to your being medically fit`,
-    `The age of retirement will be 58 years`,
-    `You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs`,
-    `You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.`,
-    `You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company/Firm/Person.`,
-    `You will keep the Company informed of any change in your residential address.`,
-    `You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.`,
-    `You will governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition. `,
-    `The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
-    `You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
+    <>1.  Your Designation will be <strong>"{data.position}"</strong>.   </>,
+    <>2. Your total emoluments will be <strong>Rs. {totalAnnual.toLocaleString('en-IN')} </strong> per annum.</>,
+    `3. Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
+    `4. Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
+    `5. You shall be due for salary revision not before one year from your date of joining.`,
+    `6. The Management reserves the right to change the different components/allowances in the total emoluments package, at its own discretion, at any time in future. However, your total monthly salary will be protected.our services are terminable with one month’s notice on either side.`,
+    `7. You will be on probation for a period of six months from the first of the calendar month following the date of your joining, after which you will be confirmed if your work is found satisfactory. The probation period can be extended at the discretion of the Company. You shall continue to be on probation, till your services are confirmed in writing by a letter of confirmation. In case your performance is not found satisfactory during such period of probation or extended period of probation and you shall be informed of the same in writing.`,
+    `8. Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period`,
+    `9. The Company shall have the right to terminate your service without notice, if the information given by you at a time of interview or in the application is found to be incorrect or in case of any serious misconduct or if reference check leads to an adverse report of your credentials.`,
+    `10. This appointment is subject to your being medically fit`,
+    `11. The age of retirement will be 58 years`,
+    `12. You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs`,
+    `13. You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.`,
+    `14. You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company/Firm/Person.`,
+    `15. You will keep the Company informed of any change in your residential address.`,
+    `16. You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.`,
+    `17. You will governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition. `,
+    `18. The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
+    `19.You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
   ];
   return (
     <>
@@ -465,7 +463,7 @@ const JDITAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance, Offer dated {" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+            <b>{formatDate(data.offerDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
           </Typography>
 
           <Box component="ol" start={1} sx={{ pl: 3, mt: 1 }}>

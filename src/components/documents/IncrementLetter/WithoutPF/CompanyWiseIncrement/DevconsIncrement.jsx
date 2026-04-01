@@ -152,7 +152,7 @@ const totalAnnual = round0(
               })}
             </strong>
             . Your salary will increase to{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong> per annum.
+            <strong>{formatCurrency(data.newCTC)}</strong> per annum.
           </Typography>
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
