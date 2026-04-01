@@ -102,7 +102,7 @@ const NimbjaOffer = ({ company, data }) => {
           </Typography>
           {/* NAME */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
-            Name :  {data.mrms} {data.employeeName}
+            Name : {data.mrms} {data.employeeName}
           </Typography>
 
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
@@ -158,7 +158,9 @@ const NimbjaOffer = ({ company, data }) => {
             Thanking you and looking forward to having you with us.
           </Typography>
 
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+          <Typography
+            sx={{ mb: 2, fontFamily: "Bahnschrift", fontSize: "20px" }}
+          >
             For <b>{company.name} </b>
           </Typography>
 
@@ -173,19 +175,19 @@ const NimbjaOffer = ({ company, data }) => {
           >
             {/* LEFT SIDE (HR) */}
             <Box>
-              <Box sx={{ display: "flex", gap: 3, alignItems: "flex-end" }}>
+              <Box sx={{ display: "flex", gap: 3 }}>
                 {company?.signature && (
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: 45 }}
+                    style={{ height: 45, marginTop: "7mm" }}
                   />
                 )}
                 {company?.stamp && (
                   <img
                     src={company.stamp}
                     alt="Stamp"
-                    style={{ height: 100 }}
+                    style={{ height: 100, marginLeft: "-2mm" }}
                   />
                 )}
               </Box>
@@ -193,11 +195,13 @@ const NimbjaOffer = ({ company, data }) => {
               <Typography
                 sx={{ fontWeight: 600, fontFamily: "Bahnschrift", mt: 1 }}
               >
-                {company.hrName}
+                <strong>{company.hrName}</strong>
               </Typography>
 
-              <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
-                HR Manager
+              <Typography
+                sx={{ fontWeight: 600, fontFamily: "Bahnschrift", mt: -1 }}
+              >
+                <strong>HR Relations Lead </strong>
               </Typography>
             </Box>
 
@@ -207,14 +211,14 @@ const NimbjaOffer = ({ company, data }) => {
               sx={{
                 fontFamily: "Bahnschrift",
                 textAlign: "left",
-                marginTop:"26mm"
+                marginTop: "26mm",
               }}
             >
               <Typography sx={{ fontFamily: "Bahnschrift", mt: "1mm" }}>
                 <strong>Signature:</strong> __________________
               </Typography>
 
-              <Typography sx={{ mt: 1, fontFamily: "Bahnschrift", }}>
+              <Typography sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
                 <strong>Candidate Name:</strong>{" "}
                 <strong>{data.employeeName}</strong>
               </Typography>
@@ -298,19 +302,19 @@ const NimbjaOffer = ({ company, data }) => {
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
-              {company.hrName}
+              <strong>{company.hrName}</strong>
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
-              HR Relations Lead
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1mm" }}>
+              <strong>HR Relations Lead</strong>
             </Typography>
           </Box>
 
           <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
-              Signature: __________________
+              <strong>Signature:</strong> __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
-              Candidate Name: {data.employeeName}
+            <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
+              <strong>Candidate Name: {data.employeeName}</strong>
             </Typography>
           </Box>
         </Box>

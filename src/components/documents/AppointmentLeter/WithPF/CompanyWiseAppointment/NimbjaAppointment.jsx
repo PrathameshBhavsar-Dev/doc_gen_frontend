@@ -87,7 +87,7 @@ const annualCTC = Number(data.salary || 0);
 
           {/* ================= REF ================= */}
           <Typography
-            sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+            sx={{ mb: "mm", fontSize: "11pt", fontFamily: "Bahnschrift",mt:"-2mm" }}
           >
             <strong>
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
@@ -99,7 +99,7 @@ const annualCTC = Number(data.salary || 0);
             sx={{
               mb: "2mm",
               fontWeight: 600,
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
               mt: "3mm",
             }}
@@ -111,7 +111,7 @@ const annualCTC = Number(data.salary || 0);
               mb: "10mm",
               mt: "-3mm",
               whiteSpace: "pre-line",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -121,9 +121,9 @@ const annualCTC = Number(data.salary || 0);
           {/* ================= SALUTATION ================= */}
           <Typography
             sx={{
-              mb: "3mm",
-              mt: "-5mm",
-              fontSize: "11pt",
+              mb: "mm",
+              mt: "-7mm",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -148,9 +148,9 @@ const annualCTC = Number(data.salary || 0);
           {/* INTRO */}
           <Typography
             sx={{
-              mb: "5mm",
+              mb: "3mm",
               textAlign: "justify",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -165,7 +165,7 @@ const annualCTC = Number(data.salary || 0);
           <Box component="ol" sx={{ pl: "6mm", m: 0 }}>
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 1. Your Designation will be <strong>{data.position}</strong>.
               </Typography>
@@ -173,7 +173,7 @@ const annualCTC = Number(data.salary || 0);
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 2. Your total emoluments will be{" "}
                 <strong>Rs. {formatCurrency(annualCTC)}/-</strong> per annum
@@ -185,21 +185,21 @@ const annualCTC = Number(data.salary || 0);
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
                 3. Full details of your pay package are given in the enclosure
                 this letter. However, please
                 <br />
-                    note that, LTA is payable after completion of one year of
+                note that, LTA is payable after completion of one year of
                 service, subject to your getting
               </Typography>
             </li>
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 4. Whilst you are located abroad, the terms applicable will be
                 intimated at the relevant point of time.
@@ -208,7 +208,7 @@ const annualCTC = Number(data.salary || 0);
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 5. You shall be due for salary revision not before one year from
                 your date of joining.
@@ -220,7 +220,7 @@ const annualCTC = Number(data.salary || 0);
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -236,7 +236,7 @@ const annualCTC = Number(data.salary || 0);
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -250,10 +250,10 @@ const annualCTC = Number(data.salary || 0);
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                8. Your services are terminable with one month’s notice on either
-                side or salary in lieu of notice period.
+                8. Your services are terminable with one month’s notice on
+                either side or salary in lieu of notice period.
               </Typography>
             </li>
 
@@ -262,7 +262,7 @@ const annualCTC = Number(data.salary || 0);
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -586,16 +586,16 @@ const annualCTC = Number(data.salary || 0);
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               {company.hrName}
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1mm" }}>
               HR Relations Lead
             </Typography>
           </Box>
 
-          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+          <Box minWidth="250px" sx={{ mt: 15, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
               Signature: __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+            <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
               Candidate Name: {data.employeeName}
             </Typography>
           </Box>
