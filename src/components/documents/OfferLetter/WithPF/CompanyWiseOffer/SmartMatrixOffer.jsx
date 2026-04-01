@@ -91,10 +91,10 @@ const SmartMatrixOffer = ({ company, data }) => {
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   const offerDate = fmtDate(data.issueDate);
@@ -122,7 +122,7 @@ const SmartMatrixOffer = ({ company, data }) => {
   // ================= ADJUSTED BASIC =================
   const basicMonthly = round0(
     monthlyCTC -
-      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
   );
 
   // ================= SALARY COMPONENTS =================
@@ -162,11 +162,11 @@ const SmartMatrixOffer = ({ company, data }) => {
   // ================= TOTAL =================
   const totalMonthly = round0(
     basicMonthly +
-      hraMonthly +
-      daMonthly +
-      specialMonthly +
-      foodMonthly +
-      pfMonthly,
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly,
   );
 
   const totalAnnual = round0(totalMonthly * 12);
@@ -198,7 +198,7 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear {data.employeeName},</Typography>
 
           <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}</Typography>
 
@@ -343,6 +343,59 @@ const SmartMatrixOffer = ({ company, data }) => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* ✅ Replace TableContainer/Table with plain HTML table */}
+        {/* <table style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          border: "2px solid #000",
+          fontSize: "14px",
+          fontFamily: "Calibri, sans-serif",
+        }}>
+          <thead>
+            <tr style={{ backgroundColor: "#f28c28" }}>
+              {["Salary Components", "Per month (Rs.)", "Per Annum (Rs.)"].map((h, i) => (
+                <th key={i} style={{
+                  border: "1px solid #000",
+                  padding: "10px 12px",
+                  fontWeight: 700,
+                  textAlign: i === 0 ? "left" : "center",
+                  verticalAlign: "middle",
+                  height: "40px",
+                }}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {salaryComponents.map((row, i) => (
+              <tr key={i}>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", verticalAlign: "middle", height: "38px" }}>
+                  {row.name}
+                </td>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
+                  {formatCurrency(row.monthly)}
+                </td>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
+                  {formatCurrency(row.annual)}
+                </td>
+              </tr>
+            ))}
+            <tr style={{ backgroundColor: "#f28c28" }}>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, verticalAlign: "middle", height: "40px" }}>
+                Total Monthly Gross Salary
+              </td>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
+                {formatCurrency(totalMonthly)}
+              </td>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
+                {formatCurrency(totalAnnual)}
+              </td>
+            </tr>
+          </tbody>
+        </table> */}
+        
         {/* Signature Block */}
         <Typography
           sx={{ mt: "20mm", fontFamily: "Verdana, Geneva, sans-serif" }}

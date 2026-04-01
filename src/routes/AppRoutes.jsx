@@ -95,6 +95,10 @@ const AppRoutes = () => {
             path={ROUTES.DOCUMENT_CREATE}
             element={<LazyLoad component={DocumentCreate} />}
           />
+          <Route
+            path={ROUTES.EDIT_DOCUMENT}
+            element={<LazyLoad component={DocumentCreate} />}
+          />
         </Route>
       </Route>
 

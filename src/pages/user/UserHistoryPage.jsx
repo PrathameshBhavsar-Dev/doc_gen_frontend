@@ -51,7 +51,13 @@ const UserHistoryPage = () => {
           name: doc.employeeName,
           id: doc.employeeId,
           company: doc.company,
-          generatedBy: doc.issuedBy,
+
+          // ✅ FIX HERE
+          generatedBy:
+            typeof doc.issuedBy === "object"
+              ? doc.issuedBy?.name
+              : doc.issuedBy,
+
           date: doc.createdAt,
           status: doc.paymentStatus,
           totalDocs: 0,
@@ -99,8 +105,8 @@ const UserHistoryPage = () => {
   });
 
   const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
   ];
 
   const years = Array.from(
@@ -113,7 +119,7 @@ const UserHistoryPage = () => {
 
   return (
     <Box sx={{ minHeight: "100vh", width: "100%" }}>
-      
+
       {/* HEADER */}
       <Box
         sx={{
