@@ -411,7 +411,7 @@ const totalAnnual = round0(
             border: "1px solid #000",
             "& th, & td": {
               border: "1px solid #000",
-              padding: "6px",
+              padding: "7px",
               fontSize: "14px",
             },
           }}
