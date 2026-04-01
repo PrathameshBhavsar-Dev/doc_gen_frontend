@@ -87,7 +87,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
           border: "1px solid #000",
           borderRadius: 0,
           boxShadow: "none",
-          mt: "5mm",
+          mt: "8mm",
         }}
       >
         <Table size="small">
@@ -106,7 +106,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "10pt" }}>
+              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "12px" }}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>

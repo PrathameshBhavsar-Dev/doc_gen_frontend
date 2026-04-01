@@ -397,9 +397,7 @@ const SmartMatrixOffer = ({ company, data }) => {
         </table> */}
         
         {/* Signature Block */}
-        <Typography
-          sx={{ mt: "20mm", fontFamily: "Verdana, Geneva, sans-serif" }}
-        >
+        <Typography sx={{ mt: "20mm" }}>
           <strong>{company.name}</strong>
         </Typography>
 

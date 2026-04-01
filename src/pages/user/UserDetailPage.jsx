@@ -23,8 +23,13 @@ const UserDetailPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-
+  useEffect(() => {
+    if (state?.autoDownload && doc) {
+      setTimeout(() => {
+        handleDownload();
+      }, 300); // wait for render
+    }
+  }, [state, doc]);
   const mapDocTypeToRoute = (type) => {
     const map = {
       AppointmentLetter: "appointment_letter",
@@ -45,17 +50,49 @@ const UserDetailPage = () => {
   const documentRef = useRef();
   /* ================= PDF GENERATION (FULL) ================= */
   const handleDownload = async () => {
+    if (!documentRef.current) return;
+
+    setLoading(true);
+    setError("");
+
     try {
-      const api = new ApiService();
+      const content = documentRef.current; // or specific class if needed
 
-      const routeType = mapDocTypeToRoute(doc.documentType);
+      const canvas = await html2canvas(content, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
 
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${doc?.documentType || "Document"}.pdf`);
       await api.downloadFile(
         `/api/v1/documents/${routeType}/download/${doc._id}`,
         `${doc.documentType}.pdf`,
       );
     } catch (err) {
       console.error(err);
+      setError("Failed to generate PDF");
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -152,8 +152,8 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
         >
           <Typography
             align="right"
-            mb={3}
-            sx={{ fontFamily: "Bahnschrift", marginTop: "-10mm", mb: "8mm" }}
+            mb={5}
+            sx={{ fontFamily: "Bahnschrift", mt: "-10mm", mb: "8mm" }}
           >
             {formatDate(data.issueDate)}
           </Typography>
@@ -163,7 +163,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               marginTop: "-8mm",
               mb: "5mm",
               fontFamily: "Verdana",
-              textDecoration: "underline",
+              // textDecoration: "underline",
               fontSize: "15px",
             }}
           >
@@ -188,7 +188,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             sx={{ fontFamily: "Bahnschrift" }}
           >
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.designation}</strong> with{" "}
+            <strong>{data.position}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
             date <strong>{formatDate(data.effectiveDate)}</strong>, considering
             your performance and support towards the organization.
@@ -200,7 +200,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           >
             If there is any change in the date of joining, changes can be taken
             under consideration. Your total Gross salary will be Rs.{" "}
-            <strong>{formatCurrency(annualCTC)}</strong> per year.
+            <strong>{formatCurrency(annualCTC)}</strong>/- per year.
           </Typography>
           <Typography
             mb={2}
