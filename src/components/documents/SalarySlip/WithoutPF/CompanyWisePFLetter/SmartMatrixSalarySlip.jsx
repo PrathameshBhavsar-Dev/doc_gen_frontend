@@ -87,7 +87,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
           border: "1px solid #000",
           borderRadius: 0,
           boxShadow: "none",
-          mt: "5mm",
+          mt: "8mm",
         }}
       >
         <Table size="small">
