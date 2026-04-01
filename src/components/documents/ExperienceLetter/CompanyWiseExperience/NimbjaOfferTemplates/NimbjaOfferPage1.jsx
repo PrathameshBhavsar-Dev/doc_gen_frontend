@@ -16,7 +16,7 @@ const formatDate = (date) =>
 
 /* ================= BASE TEXT STYLE ================= */
 const baseText = {
-  fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
+  fontFamily: "Bahnschrift",
   fontSize: "11pt",
   letterSpacing: "0.15px",
   lineHeight: 1.5,
@@ -39,7 +39,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
   const offerDate = formatDate(data.issueDate);
   
 
-  const firstName = data.candidateName?.trim().split(" ")[0];
+const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
   return (
     <A4Page
       headerSrc={company.header}
@@ -92,110 +92,55 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             marginTop: "-8mm",
             mb: "5mm",
             fontFamily: "Verdana",
-            // textDecoration: "underline",
+
             fontSize: "15px",
           }}
         >
           Offer Letter
         </Typography>
-
-        {/* ================= DETAILS ================= */}
-        <Typography
-          sx={{
-            ...baseText,
-            mb: "2.5mm",
-            fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
-          }}
-        >
-          Name      : {data.mrms} {data.employeeName}{" "}
-          <Typography
-            component="span"
-            sx={{
-              fontWeight: "",
-              fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
-            }}
-          >
-            {data.employeeName}
-          </Typography>
+        {/* NAME */}
+        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+          Name : {data.mrms} {data.employeeName}
         </Typography>
 
-        <Typography sx={{ ...baseText, mb: "2.5mm" }}>
-          Address&nbsp;&nbsp;&nbsp;:{" "}
-          <Typography
-            component="span"
-            sx={{
-              fontWeight: "",
-              fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
-            }}
-          >
-            {data.address}
-          </Typography>
+        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
+          Address : {data.address}
         </Typography>
 
-        <Typography sx={{ ...baseText, mb: "5mm", fontFamily: "Bahnschrift" }}>
-          Subject&nbsp;&nbsp;&nbsp;&nbsp;:{" "}
-          <Typography
-            component="span"
-            sx={{
-              display: "inline",
-              paddingBottom: "1px",
-              fontFamily: "Bahnschrift",
-            }}
-          >
-            Letter of intent for the position of {data.position}.
-          </Typography>
+        {/* SUBJECT */}
+        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
+          Subject : Letter of intent for the position of {data.position}
         </Typography>
 
-        {/* ================= GREETING ================= */}
-        <Typography sx={{ ...baseText, mb: "5mm" }}>
-          Dear{" "}
-          <Typography
-            component="span"
-            sx={{ fontWeight: 400, fontFamily: "Bahnschrift" }}
-          >
-            {firstName}
-          </Typography>
-          ,
+        <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
+          Dear {firstName},
         </Typography>
 
         {/* ================= PARAGRAPHS ================= */}
         <Typography
-          sx={{
-            ...baseText,
-            textAlign: "justify",
-            mb: "5mm",
-            marginTop: "-2mm",
-          }}
+          sx={{ mb: 2, textAlign: "justify", fontFamily: "Bahnschrift" }}
         >
-          Welcome to{" "}
-          <Typography
-            component="span"
-            sx={{
-              fontWeight: 500,
-              fontFamily: 'Bahnschrift, "Segoe UI", Arial, sans-serif',
-            }}
-          >
-            {company.name}
-          </Typography>
-          Quality is not just a destination but a journey in which every
-          employee contributes. We invite you to be part of this journey!
-          <br />
-          This has reference to your application and subsequent interviews you
-          had with us.
-          <br />
-          We are pleased to offer you the role of{" "}
-          <strong>{data.designation}.</strong>
-        </Typography>
-        <Typography
-          sx={{ ...baseText, textAlign: "justify", mb: "2mm", mt: "2mm" }}
-        >
-          {/* with us. We are pleased to offer you the role of{" "} */}
-          <Typography component="span" sx={{ fontWeight: 600 }}></Typography>
+          Welcome to {company.name} Quality is not just a destination but a
+          journey in which every employee contributes. We invite you to be part
+          of this journey! This has reference to your application and subsequent
+          interviews you had with us. We are pleased to offer you the role of{" "}
+          <b>{data.position} </b>
+          {/* {new Date(data.joiningDate).toLocaleDateString("en-US", {
+                month: "long",
+                day: "2-digit",
+                year: "numeric",
+              })} */}
+          .
         </Typography>
 
-        <Typography sx={{ ...baseText, textAlign: "justify", mb: "5mm" }}>
+        <Typography
+          sx={{ mb: 2, textAlign: "justify", fontFamily: "Bahnschrift" }}
+        >
           On Joining, your all-inclusive Cost to the Company (CTC) will be{" "}
-          <Typography component="span" sx={{ fontWeight: 600 }}>
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}
+          >
             Rs. {formatIndianCurrency(data.salary || data.ctc)}/-
           </Typography>{" "}
           as per Annexure A. This offer is made on the basis of your having
@@ -204,10 +149,12 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
           letter from your last employer and other particulars on or before your
           day of joining. The Company shall conduct a background and reference
           check as per Company policy and this appointment is conditional upon
-          receiving positive feedback.
-          <br />
-          You are required to join the services of the Company at the earliest,
-          but in any case, not later than{" "}
+          receiving positive feedback. If at any time it is found that you have
+          furnished false information or withheld or suppressed any material
+          fact or information, the Company shall be entitled to forthwith
+          terminate your employment without notice. You are required to join the
+          services of the Company at the earliest, but in any case, not later
+          than{" "}
           <Typography
             component="span"
             sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}
@@ -215,19 +162,12 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             {formatDate(data.offerValidTill)}.
           </Typography>
         </Typography>
-        <Typography sx={{ ...baseText, textAlign: "justify", mb: "5mm" }}>
-          Thanking you and looking forward to having you with us. .
+        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+          Thanking you and looking forward to having you with us.
         </Typography>
 
-        <Typography
-          sx={{
-            ...baseText,
-            mb: "5mm",
-            fontFamily: "Bahnschrift",
-            fontSize: "18pt",
-          }}
-        >
-          For <strong>{company.name}</strong>
+        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", fontSize: "20px" }}>
+          For <b>{company.name} </b>
         </Typography>
 
         {/* ================= SIGNATURE BLOCK ================= */}
@@ -333,7 +273,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
               <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
                 <strong>{company.hrName}</strong>
               </Typography>
-              <Typography sx={{ fontFamily: "Bahnschrift" }}>
+              <Typography sx={{ fontFamily: "Bahnschrift", mt: -1 }}>
                 <strong>HR Relations Lead</strong>
               </Typography>
             </strong>
@@ -343,7 +283,7 @@ const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
               <strong>Signature:</strong> __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+            <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
               <strong>Candidate Name:</strong>{" "}
               <strong>{data.employeeName}</strong>
             </Typography>

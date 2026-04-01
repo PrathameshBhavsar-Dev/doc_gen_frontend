@@ -277,7 +277,7 @@ const NimbjaOfferPage2 = ({
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               <strong>{company.hrName}</strong>
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: -1 }}>
               <strong>HR Relations Lead</strong>
             </Typography>
           </strong>
@@ -287,7 +287,7 @@ const NimbjaOfferPage2 = ({
           <Typography sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Signature:</strong> __________________
           </Typography>
-          <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+          <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
             <strong>Candidate Name:</strong>{" "}
             <strong>{data.employeeName}</strong>
           </Typography>

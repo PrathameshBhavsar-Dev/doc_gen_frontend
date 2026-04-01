@@ -231,7 +231,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: 50, marginTop: "4mm" }}
+                    style={{ height: 45, marginTop: "4mm" }}
                   />
                 )}
                 {company?.stamp && (
@@ -250,11 +250,11 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               </Typography>
             </Box>
 
-            <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+            <Box minWidth="250px" sx={{ mt: 13.5, fontFamily: "Bahnschrift" }}>
               <Typography sx={{ fontFamily: "Bahnschrift" }}>
                 Signature: __________________
               </Typography>
-              <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+              <Typography mt={2} sx={{ mt: "1", fontFamily: "Bahnschrift" }}>
                 Candidate Name: {data.employeeName}
               </Typography>
             </Box>
@@ -328,16 +328,16 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               {company.hrName}
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1" }}>
               HR Relations Lead
             </Typography>
           </Box>
 
-          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+          <Box minWidth="250px" sx={{ mt: 14, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
               Signature: __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+            <Typography mt={2} sx={{ mt: "1", fontFamily: "Bahnschrift" }}>
               Candidate Name: {data.employeeName}
             </Typography>
           </Box>

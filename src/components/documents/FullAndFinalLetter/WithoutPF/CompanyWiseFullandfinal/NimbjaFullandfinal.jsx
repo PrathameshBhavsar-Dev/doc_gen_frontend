@@ -185,6 +185,7 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
             width: "95%", // control width
             margin: "0 auto", // center table
             tableLayout: "fixed", // prevents stretching
+            fontFamily: "Bahnschrift",
           }}
         >
           {" "}
