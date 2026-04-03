@@ -382,7 +382,13 @@
 
 
 // };
+
+
+
+
 import React from "react";
+import A4Page from "../../../../layout/A4Page";
+
 
 /* ================= HELPERS ================= */
 const formatDate = (date) => {
@@ -445,25 +451,21 @@ const QuickManagementOffer = ({ company, data }) => {
   const totalAnnual = round0(totalMonthly * 12);
 
   return (
-    <div style={styles.wrapper}>
+    <>
+    <A4Page
+            headerSrc={company.header}
+            // footerSrc={company.footer}
+          // watermarkSrc={company.watermark}
+          >
 
       {/* ================= PAGE 1 ================= */}
-      <div style={styles.page}>
-         <img
+      <div>
+         {/* <img
           src={company.header}
           alt="Company Header"
           style={{ width: "100%", display: "block" }}
-        />
-        {/* <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div> */}
+        /> */}
+
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
@@ -489,8 +491,9 @@ const QuickManagementOffer = ({ company, data }) => {
           </span>
         </div>
 
-        <p>Dear {getFirstName(employeeName)},</p>
-
+<p style={{ fontSize: "14px" }}>
+  Dear {getFirstName(employeeName)},
+</p>
         <p style={styles.paragraph1}>
           Thank you for exploring career opportunities with{" "}
           <strong>QUICK MANAGEMENT SERVICES</strong>. You have successfully
@@ -517,7 +520,7 @@ const QuickManagementOffer = ({ company, data }) => {
           formalities, you will be issued a Letter of Appointment.
         </p>
 
-        <p>Yours Sincerely,</p>
+        <p style={{ fontSize: "14px" }}>Yours Sincerely,</p>
 
         <div style={styles.signRow}>
           <div>
@@ -549,13 +552,16 @@ const QuickManagementOffer = ({ company, data }) => {
 
       <div style={styles.pageBreak} />
 
+      </A4Page>
+
       {/* ================= PAGE 2 ================= */}
-      <div style={styles.page}>
-        <img
+      <A4Page
+         headerSrc={company.header}>
+        {/* <img
           src={company.header}
           alt="Company Header"
           style={{ width: "100%", display: "block" }}
-        />
+        /> */}
 
         <p style={styles.annexureTitle}>Annexure A Salary Structure</p>
 
@@ -586,7 +592,7 @@ const QuickManagementOffer = ({ company, data }) => {
 
         <div style={styles.annexureSignRow}>
           <div style={styles.annexureLeft}>
-            <div style={{ ...styles.hrName, fontSize: "16px" }}>
+            <div style={{ ...styles.hrName, fontSize: "14px" }}>
               {company.hrName}
             </div>
             <div style={styles.hrSignWrap}>
@@ -608,14 +614,16 @@ const QuickManagementOffer = ({ company, data }) => {
           </div>
         </div>
 
-      </div>
-    </div>
+      </A4Page>
+    </>
   );
 };
 
 export default QuickManagementOffer;
 
 /* ================= STYLES ================= */
+const baseFont = "14px";
+
 const styles = {
   wrapper: { background: "#eee", padding: 20 },
 
@@ -625,8 +633,7 @@ const styles = {
     background: "#fff",
     margin: "auto",
     padding: "40px",
-    fontFamily: "Times New Roman",
-    fontSize: "12px",
+    fontSize: baseFont,
     position: "relative",
   },
 
@@ -635,12 +642,12 @@ const styles = {
   header: { textAlign: "center", marginBottom: 20 },
   logo: { height: 45 },
 
-  companyName: { fontSize: 18, fontWeight: "bold", color: "#0070C0" },
+  companyName: { fontSize: baseFont, fontWeight: "bold", color: "#0070C0" },
   headerLine: { height: 2, background: "#000", margin: "8px 0" },
-  headerAddress: { fontWeight: "bold", fontSize: 10 },
-  headerContact: { fontWeight: "bold", fontSize: 10 },
+  headerAddress: { fontWeight: "bold", fontSize: baseFont },
+  headerContact: { fontWeight: "bold", fontSize: baseFont },
 
-  date: { textAlign: "right", marginBottom: 15 },
+  date: { textAlign: "right", marginBottom: 15, fontSize: baseFont },
 
   detailRow: {
     display: "grid",
@@ -648,11 +655,12 @@ const styles = {
     columnGap: "4px",
     marginBottom: 4,
     alignItems: "start",
+    fontSize: baseFont,
   },
 
-  label: { fontWeight: "bold" },
-  colon: { textAlign: "center" },
-  value: { lineHeight: "16px" },
+  label: { fontWeight: "bold", fontSize: baseFont },
+  colon: { textAlign: "center", fontSize: baseFont },
+  value: { lineHeight: "14px", fontSize: baseFont },
 
   subjectRow: {
     display: "grid",
@@ -660,14 +668,26 @@ const styles = {
     columnGap: "4px",
     margin: "15px 0",
     fontWeight: "bold",
+    fontSize: baseFont,
   },
 
-  paragraph1: { textAlign: "justify", marginBottom: 10 },
+  paragraph1: {
+    textAlign: "justify",
+    marginBottom: 10,
+    fontSize: baseFont,
+  },
+
+  paragraph: {
+    textAlign: "center",
+    marginTop: 130,
+    fontSize: baseFont,
+  },
 
   signRow: {
     display: "flex",
     justifyContent: "space-between",
     marginTop: 40,
+    fontSize: baseFont,
   },
 
   signStampRow: {
@@ -679,23 +699,26 @@ const styles = {
   signImg: { height: 50, marginTop: 25 },
   stampImgInline: { height: 100, marginTop: 25 },
 
-  hrName: { fontSize: 11 },
+  hrName: { fontSize: baseFont },
 
-  candidateBlock: { textAlign: "left", fontSize: 11, marginTop: 130 },
-  paragraph: { textAlign: "center", marginTop: 130 },
-
+  candidateBlock: {
+    textAlign: "left",
+    fontSize: baseFont,
+    marginTop: 130,
+  },
 
   annexureTitle: {
     textAlign: "center",
     fontWeight: "bold",
     marginBottom: 20,
+    fontSize: baseFont,
   },
 
   salaryTable: {
     width: "75%",
     margin: "0 auto",
     borderCollapse: "collapse",
-    fontSize: "11px",
+    fontSize: baseFont,
   },
 
   th: {
@@ -703,12 +726,14 @@ const styles = {
     padding: "5px",
     backgroundColor: "#00AEEF",
     textAlign: "center",
+    fontSize: baseFont,
   },
 
   td: {
     border: "1px solid #000",
     padding: "5px",
     textAlign: "center",
+    fontSize: baseFont,
   },
 
   annexureSignRow: {
@@ -716,11 +741,11 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "flex-end",
     marginTop: "50px",
-    fontSize: "14px",
+    fontSize: "9px",
   },
 
-  annexureLeft: { textAlign: "left" },
-  annexureRight: { textAlign: "right" },
+  annexureLeft: { textAlign: "left", fontSize: baseFont },
+  annexureRight: { textAlign: "right", fontSize: baseFont },
 
   hrSignWrap: {
     display: "flex",
@@ -729,6 +754,6 @@ const styles = {
     marginBottom: "6px",
   },
 
-  signInline: { height: "50px" },
+  signInline: { height: "60px" },
   stampInline: { height: "100px", opacity: 0.9 },
 };
