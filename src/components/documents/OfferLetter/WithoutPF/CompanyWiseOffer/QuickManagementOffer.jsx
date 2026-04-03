@@ -42,7 +42,6 @@ const QuickManagementOffer = ({ company, data }) => {
           style={{ width: "100%", display: "block" }}
         />
 
-
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
         <div style={styles.detailRow}>
@@ -52,7 +51,6 @@ const QuickManagementOffer = ({ company, data }) => {
             {mrms} {employeeName}
           </span>
         </div>
-
 
         <div style={styles.detailRow}>
           <span style={styles.label}>Address</span>
@@ -182,7 +180,7 @@ const QuickManagementOffer = ({ company, data }) => {
                 <img src={company.stamp} alt="Stamp" style={styles.stampInline} />
               )}
             </div>
-
+ 
             <div>HR Department, Pune</div>
           </div>
 
@@ -233,7 +231,7 @@ const styles = {
 
   detailRow: {
     display: "grid",
-    gridTemplateColumns: "80px 10px 1fr", // 🔥 image jaisa spacing
+    gridTemplateColumns: "80px 10px 1fr", 
     columnGap: "4px",
     marginBottom: 4,
     alignItems: "start",
