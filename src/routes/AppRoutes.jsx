@@ -95,6 +95,10 @@ const AppRoutes = () => {
             path={ROUTES.DOCUMENT_CREATE}
             element={<LazyLoad component={DocumentCreate} />}
           />
+          <Route
+            path={ROUTES.EDIT_DOCUMENT}
+            element={<LazyLoad component={DocumentCreate} />}
+          />
         </Route>
       </Route>
 
@@ -102,7 +106,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route
-            path={ROUTES.ADMIN_DASHBOARD}
+            path={ROUTES.ADMIN_DASHBOARD} l
             element={<LazyLoad component={AdminDashboard} />}
           />
           <Route

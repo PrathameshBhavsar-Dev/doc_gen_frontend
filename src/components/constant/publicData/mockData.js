@@ -273,7 +273,7 @@ export const companies = [
     footerImage: Penta_footer,
     watermarkImage: Penta_watermark,
     address:
-      "Office No. 102-C, First Floor, Ganesham Commercial -A, Survey No. 21/18-21/24, BRTS Road, Pimple Saudagar, Pune- 4110271",
+      "Office No. 102-C, First Floor, Ganesham Commercial -A, BRTS Road, Pimple Saudagar, Pune- 4110271",
     email: "hr@pentasoftwareconsultancy.com",
     phone: "+91 7066541234",
     website: "https://pentasoftwareconsultancy.com/",
@@ -658,6 +658,12 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "offerDate",
+        label: "Offer Date",
+        type: "date",
+        required: true,
+      },
+      {
         name: "probationPeriod",
         label: "Probation Period (months)",
         type: "number",
@@ -930,32 +936,32 @@ export const documentTypes = [
         label: "Identity",
         type: "select",
         options: ["Mr.", "Mrs.", "Miss.", "Mx."],
-        required: true,
+        // required: true,
       },
       {
         name: "employeeName",
         label: "Employee Name",
         type: "text",
-        required: true,
+        // required: true,
       },
       {
         name: "employeeId",
         label: "Employee ID",
         type: "text",
-        required: true,
+        // required: true,
       },
       {
         name: "employeeEmail",
         label: "Employee Email",
         type: "email",
-        required: true,
+        // required: true,
       },
 
       {
         name: "employeePhone",
         label: "Phone Number",
         type: "number",
-        required: true,
+        // required: true,
       },
       // {
       //   name: "designation",
@@ -973,20 +979,20 @@ export const documentTypes = [
         name: "newCTC",
         label: "Increment Package",
         type: "number",
-        required: true,
+        // required: true,
       },
       {
         name: "effectiveDate",
         label: "Effective Date",
         type: "date",
-        required: true,
+        // required: true,
       },
       {
         name: "incrementType",
         label: "Offer Type",
         type: "select",
         options: ["withPF", "withoutPF"],
-        required: true,
+        // required: true,
       },
       { name: "issueDate", label: "Issue Date", type: "date", required: true },
     ],
@@ -1252,7 +1258,7 @@ export const documentTypes = [
   {
     id: 11,
     name: "Internship Certificate",
-    template: "internship_certificate",
+    template: "internshipcertificate_letter",
     fields: [
       {
         name: "mrms",
