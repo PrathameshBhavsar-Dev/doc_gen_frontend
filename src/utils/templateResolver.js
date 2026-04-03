@@ -30,7 +30,8 @@ export const getTemplateComponent = (type) => {
       return RelievingLetterTemplate;
 
     case "internship_letter":
-    case "internship_certificate":  // ✅ added
+    case "internship_certificate":   // ✅ ADD THIS
+    case "internshipcertificate_letter":
       return InternshipTemplate;
 
     case "completion_certificate":
