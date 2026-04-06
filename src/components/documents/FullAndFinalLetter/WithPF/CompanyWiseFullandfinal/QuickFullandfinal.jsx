@@ -56,9 +56,7 @@ const getSalaryBreakup = (totalSalary = 0) => {
 
   return {
     basic,
-    hra,
-    da,
-    special,
+    hra, da, special,
     food,
     pf: 3750,
     pt: 200,
