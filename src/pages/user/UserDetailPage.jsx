@@ -10,26 +10,23 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom"; // ✅
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { useRef, useState, useEffect } from "react";
 import { generatePDF } from "../../utils/pdfUtils"; // adjust path as needed
+import { getTemplateComponent } from "../../utils/templateResolver.js";
+import ApiService from "../../core/services/api.service.jsx";
+import ServerUrl from "../../core/constants/serverURL.constant.jsx";
+import {
+  resolveCompany,
+  resolveTypeField,
+} from "../../utils/companyRegistry.js";
+import ROUTES from "../../core/constants/routes.constant.jsx";
 
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [doc, setDoc] = useState(state?.document || null);
+  const [downloadingId, setDownloadingId] = useState(null);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  useEffect(() => {
-    if (state?.autoDownload && doc) {
-      setTimeout(() => {
-        handleDownload();
-      }, 300); // wait for render
-    }
-  }, [state, doc]);
   const mapDocTypeToRoute = (type) => {
     const map = {
       AppointmentLetter: "appointment_letter",
@@ -49,60 +46,110 @@ const UserDetailPage = () => {
 
   const documentRef = useRef();
   /* ================= PDF GENERATION (FULL) ================= */
-  const handleDownload = async () => {
-    if (!documentRef.current) return;
+  const handleDownload = async (e, item) => {
+    e?.stopPropagation?.();
 
-    setLoading(true);
-    setError("");
+    if (!item) {
+      console.error("Invalid document item:", item);
+      return;
+    }
+
+    /* ================= SAFE DOCUMENT TYPE ================= */
+    const rawType =
+      typeof item.documentType === "object"
+        ? item.documentType?.name
+        : item.documentType;
+
+    if (!rawType) {
+      console.error("Missing documentType:", item);
+      return;
+    }
+
+    const normalizedType = rawType
+      .replace(/([a-z])([A-Z])/g, "$1_$2")
+      .replace(/[\s\-]+/g, "_")
+      .toLowerCase();
+
+    /* ================= TEMPLATE ================= */
+    const TemplateComponent = getTemplateComponent(normalizedType);
+
+    if (!TemplateComponent) {
+      console.error("No template found for type:", normalizedType);
+      return;
+    }
+
+    /* ================= COMPANY ================= */
+    const companyObject = resolveCompany(item?.company);
+
+    if (!companyObject) {
+      console.error("Could not resolve company for:", item?.company);
+      return;
+    }
+
+    /* ================= TYPE RESOLUTION ================= */
+    const resolvedType = resolveTypeField(item);
+
+    /* ================= ENRICH DATA ================= */
+    const enrichedData = {
+      ...item,
+
+      // normalize all possible type keys
+      offerType: resolvedType || item?.offerType,
+      appointmentType: resolvedType || item?.appointmentType,
+      incrementType: resolvedType || item?.incrementType,
+      confirmationType: resolvedType || item?.confirmationType,
+      salaryType: resolvedType || item?.salaryType,
+      finalType: resolvedType || item?.finalType,
+      internshipType: resolvedType || item?.internshipType,
+    };
+
+    console.log("✅ normalizedType:", normalizedType);
+    console.log("✅ companyObject:", companyObject);
+    console.log("✅ enrichedData:", enrichedData);
+
+    /* ================= FILE NAME SAFE ================= */
+    const safeType =
+      typeof item.documentType === "object"
+        ? item.documentType?.name
+        : item.documentType;
+
+    const safeEmployee = item.employeeName?.replace(/\s+/g, "_") || "Employee";
+
+    const fileName = `${safeType || "document"}-${safeEmployee}`;
+
+    /* ================= LOADING STATE ================= */
+    const docId = item._id || item.id;
+    setDownloadingId(docId);
 
     try {
-      const content = documentRef.current; // or specific class if needed
-
-      const canvas = await html2canvas(content, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-      });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save(`${doc?.documentType || "Document"}.pdf`);
-      await api.downloadFile(
-        `/api/v1/documents/${routeType}/download/${doc._id}`,
-        `${doc.documentType}.pdf`,
+      await generatePDF(
+        TemplateComponent,
+        { data: enrichedData, company: companyObject },
+        fileName,
       );
     } catch (err) {
-      console.error(err);
-      setError("Failed to generate PDF");
+      console.error("❌ Download failed:", err);
     } finally {
-      setLoading(false);
+      setDownloadingId(null);
     }
   };
 
-  const handlePreview = () => {
-    const routeType = mapDocTypeToRoute(doc.documentType);
+  const handlePreview = (doc) => {
+    if (!doc || !doc.documentType) {
+      console.error("Invalid doc for preview", doc);
+      return;
+    }
 
-    window.open(
-      `http://localhost:5000/api/v1/documents/${routeType}/preview/${doc._id}`,
-      "_blank",
-    );
+    navigate(ROUTES.DOCUMENT_PREVIEW, {
+      state: {
+        documentData: doc,
+        selectedDocType: {
+          template: doc.documentType,
+          name: doc.documentType,
+        },
+        selectedCompany: doc.company || {},
+      },
+    });
   };
 
   useEffect(() => {
@@ -165,10 +212,10 @@ const UserDetailPage = () => {
                 Generated on{" "}
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </span>
             </div>
@@ -243,10 +290,10 @@ const UserDetailPage = () => {
               <p className="font-medium mt-2">
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </p>
             </div>
@@ -268,7 +315,7 @@ const UserDetailPage = () => {
         {/* ================= BUTTONS ================= */}
         <div className="flex flex-col text-sm sm:flex-row gap-4 mt-8">
           <button
-            onClick={handleDownload}
+            onClick={(e) => handleDownload(e, doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
             text-white px-6 py-3 rounded-xl shadow transition
             bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
@@ -279,7 +326,7 @@ const UserDetailPage = () => {
           </button>
 
           <button
-            onClick={handlePreview}
+            onClick={() => handlePreview(doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
             bg-gray-200 text-gray-700 px-6 py-3 rounded-xl
             hover:bg-gray-300 transition"
