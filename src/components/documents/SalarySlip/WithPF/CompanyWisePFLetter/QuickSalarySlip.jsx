@@ -30,8 +30,10 @@ const formatDate = (date) =>
   date ? new Date(date).toLocaleDateString("en-GB") : "";
 
 const numberFormat = (num) =>
-  Number(num || 0).toLocaleString("en-IN", {
+  Math.round(Number(num || 0)).toLocaleString("en-IN", 
+    {
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
 
 const safe = (val) => (val !== undefined && val !== null ? val : "");
@@ -40,7 +42,6 @@ const safe = (val) => (val !== undefined && val !== null ? val : "");
 const getSalaryBreakup = (data) => {
   const total = Number(data.totalSalary || 0);
 
-  // 🔹 Manual fallback (UNCHANGED)
   if (!total) {
     return {
       basic: data.basic,
@@ -48,22 +49,26 @@ const getSalaryBreakup = (data) => {
       da: data.da,
       special: data.special,
       food: data.food,
-      //   misc: data.misc,
-      pt: data.pt,
+      pf: data.pf ?? 3750,
+      pt: data.pt ?? 200,
     };
   }
 
-  // 🔹 AUTO calculation (CORRECTED)
-  const basic = +(total * 0.48).toFixed(2);
+  // ✅ FIXED PF (Penta)
+  const pf = Number(data.pf ?? 3750);
+
+  // ✅ Earnings
   const hra = +(total * 0.18).toFixed(2);
   const da = +(total * 0.12).toFixed(2);
   const special = +(total * 0.16).toFixed(2);
   const food = +(total * 0.06).toFixed(2);
 
-  // 🔥 BALANCE → no loss, no extra
-  const misc = +(
-    total - (basic + hra + da + special + food)
-  ).toFixed(2);
+  // ✅ BASIC = remaining AFTER PF
+  let basic = +(total - (hra + da + special + food + pf)).toFixed(2);
+
+  // ✅ ROUND FIX
+  const finalCheck = basic + hra + da + special + food + pf;
+  basic += +(total - finalCheck).toFixed(2);
 
   return {
     basic,
@@ -71,8 +76,8 @@ const getSalaryBreakup = (data) => {
     da,
     special,
     food,
-    pf: data.pf ?? 3750,
-    pt: data.pt ?? 200,
+    pf,
+    pt: Number(data.pt ?? 200),
   };
 };
 
@@ -149,13 +154,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
   ];
 
-  const totalEarning = earnings.reduce(
-    (sum, e) =>
-      e.label === "PF"
-        ? sum   // ❌ Do NOT count PF
-        : sum + Number(e.value || 0),
-    0
-  );
+ const totalEarning = Number(data.totalSalary || 0);
   const totalDeduction = deductions.reduce(
     (sum, d) => sum + Number(d.value || 0),
     0
@@ -166,22 +165,17 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
 
   return (
     <Box
-      sx={{
-        width: "210mm",
-        minHeight: "297mm",
-        p: "20mm",
-        fontFamily: "Cambria, serif",
-        color: "#000",
+       sx={{
+    width: "210mm",
+    minHeight: "297mm",
+    pt: "16mm",   // reduce top padding
+    px: "20mm",
+    pb: "20mm",
       }}
     >
-      {/* 🔹 UI CODE EXACT SAME – NOT TOUCHED */}
-
-
-
-
       {/* ---------- HEADER IMAGE ---------- */}
       {company.header && (
-        <Box mt={-10} mb={10}>
+        <Box mt={-10} mb={3}>
           <img
             src={company.header}
             alt="Company Header"

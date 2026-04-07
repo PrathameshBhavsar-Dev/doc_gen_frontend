@@ -19,7 +19,7 @@ import smartholderHeader from "../../../assets/images/SmartSoftware/smart-header
 // import smartholderFooter from '../assets/images/SmartSoftware/smart-footer.png';
 import smartholderWatermark from "../../../assets/images/SmartSoftware/Watermark.png";
 import smartholderSignature from "../../../assets/images/SmartSoftware/Sign.png";
-import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.jpeg";
+import vandanaSignature from "../../../assets/images/SmartSoftware/Sign2.png";
 import smartholderStamp from "../../../assets/images/SmartSoftware/Stamp.png";
 import smartLogo from "../../../assets/images/SmartSoftware/Sign.png";
 
@@ -175,7 +175,7 @@ export const companies = [
     footerImage: null,
     watermarkImage: null,
     address:
-      "Office No. 102-A, First Floor Ganesham - A Commercial, Pimple Saudagar, Pune- 411027",
+      "Office No. 102-A, First Floor Ganesham - A Commercial, BRTS Road, Pimple Saudagar, Pune- 411027",
     email: "contact@smartmatrixds.com",
     phone: "+91 9112108484",
     website: "https://smartmatrixds.com/",
@@ -195,7 +195,7 @@ export const companies = [
 
   {
     id: 4,
-    name: "Devcons Software Solution Pvt. Ltd.",
+    name: "Devcons Software Solutions Pvt. Ltd.",
     shortName: "Devcons",
     date: "28-12-2022",
     logo: devconslogo,
@@ -227,7 +227,7 @@ export const companies = [
 
   {
     id: 5,
-    name: "RP Business Solution LLP",
+    name: "RP Business Solutions LLP",
     shortName: "RP Business",
     date: "11-07-2023",
     logo: rpblogo,
@@ -273,7 +273,7 @@ export const companies = [
     footerImage: Penta_footer,
     watermarkImage: Penta_watermark,
     address:
-      "Office No. 102-C, First Floor, Ganesham Commercial -A, Survey No. 21/18-21/24, BRTS Road, Pimple Saudagar, Pune- 4110271",
+      "Office No. 102-C, First Floor, Ganesham Commercial -A, BRTS Road, Pimple Saudagar, Pune- 4110271",
     email: "hr@pentasoftwareconsultancy.com",
     phone: "+91 7066541234",
     website: "https://pentasoftwareconsultancy.com/",
@@ -307,7 +307,7 @@ export const companies = [
     footerImage: Nimbja_footer,
     watermarkImage: null,
     address:
-      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Gurav, Pimpri-Chinchwad, Pune- 411027",
+      "Office No. 4, 2nd Floor, Ganesham Commercial A, 13, Nashik Phata Road, Pimple Saudagar, Pimpri-Chinchwad, Pune- 411027",
     email: "hr@nimbjasolution.com",
     phone: "+91 7066561234",
     website: "https://nimbjasolution.com/",
@@ -428,7 +428,7 @@ export const documentTypes = [
   {
     id: 1,
     name: "Salary Slip",
-    template: "salary-slip",
+    template: "salaryslip_letter",
     fields: [
       {
         name: "mrms",
@@ -516,7 +516,7 @@ export const documentTypes = [
   {
     id: 2,
     name: "Offer Letter",
-    template: "offer-letter",
+    template: "offer_letter",
     fields: [
       {
         name: "mrms",
@@ -526,7 +526,7 @@ export const documentTypes = [
         required: true,
       },
       {
-        name: "candidateName",
+        name: "employeeName",
         label: "Employee Name",
         type: "text",
         required: true,
@@ -538,7 +538,7 @@ export const documentTypes = [
         required: true,
       },
       {
-        name: "employeePhone",
+        name: "employeeNumber",
         label: "Phone Number",
         type: "number",
         required: true,
@@ -608,7 +608,7 @@ export const documentTypes = [
   {
     id: 3,
     name: "Appointment Letter",
-    template: "appointment-letter",
+    template: "appointment_letter",
     fields: [
       {
         name: "mrms",
@@ -658,6 +658,12 @@ export const documentTypes = [
         required: true,
       },
       {
+        name: "offerDate",
+        label: "Offer Date",
+        type: "date",
+        required: true,
+      },
+      {
         name: "probationPeriod",
         label: "Probation Period (months)",
         type: "number",
@@ -695,7 +701,7 @@ export const documentTypes = [
   {
     id: 4,
     name: "Experience Letter",
-    template: "experience-letter",
+    template: "experience_letter",
     fields: [
       {
         name: "mrms",
@@ -767,7 +773,7 @@ export const documentTypes = [
   {
     id: 5,
     name: "Relieving Letter",
-    template: "relieving-letter",
+    template: "relieving_letter",
     fields: [
       {
         name: "mrms",
@@ -839,7 +845,7 @@ export const documentTypes = [
   {
     id: 6,
     name: "Employment Verification Letter",
-    template: "employment-verification",
+    template: "employment_verification",
     fields: [
       {
         name: "mrms",
@@ -923,70 +929,70 @@ export const documentTypes = [
   {
     id: 7,
     name: "Increment Letter",
-    template: "increment-letter",
+    template: "increment_letter",
     fields: [
       {
         name: "mrms",
         label: "Identity",
         type: "select",
         options: ["Mr.", "Mrs.", "Miss.", "Mx."],
-        required: true,
+        // required: true,
       },
       {
         name: "employeeName",
         label: "Employee Name",
         type: "text",
-        required: true,
+        // required: true,
       },
       {
         name: "employeeId",
         label: "Employee ID",
         type: "text",
-        required: true,
+        // required: true,
       },
       {
         name: "employeeEmail",
         label: "Employee Email",
         type: "email",
-        required: true,
+        // required: true,
       },
 
       {
         name: "employeePhone",
         label: "Phone Number",
         type: "number",
-        required: true,
+        // required: true,
       },
-      {
-        name: "designation",
-        label: "Designation",
-        type: "text",
-        required: true,
-      },
-      {
-        name: "department",
-        label: "Department",
-        type: "text",
-        required: false,
-      },
+      // {
+      //   name: "designation",
+      //   label: "Designation",
+      //   type: "text",
+      //   required: true,
+      // },
+      // {
+      //   name: "department",
+      //   label: "Department",
+      //   type: "text",
+      //   required: false,
+      // },
       {
         name: "newCTC",
         label: "Increment Package",
         type: "number",
-        required: true,
+        // required: true,
       },
       {
         name: "effectiveDate",
         label: "Effective Date",
         type: "date",
-        required: true,
+        // required: true,
       },
       {
         name: "incrementType",
         label: "Offer Type",
         type: "select",
         options: ["withPF", "withoutPF"],
-        required: true,
+        // required: true,
       },
       { name: "issueDate", label: "Issue Date", type: "date", required: true },
     ],
@@ -1252,7 +1258,7 @@ export const documentTypes = [
   {
     id: 11,
     name: "Internship Certificate",
-    template: "internship-certificate",
+    template: "internshipcertificate_letter",
     fields: [
       {
         name: "mrms",
@@ -1346,7 +1352,7 @@ export const documentTypes = [
   {
     id: 12,
     name: "Completion Certificate",
-    template: "completion-certificate",
+    template: "completion_certificate",
     fields: [
       {
         name: "mrms",
@@ -1504,7 +1510,7 @@ export const documentTypes = [
   {
     id: 14,
     name: "Termination Letter",
-    template: "termination-letter",
+    template: "termination_letter",
     fields: [
       {
         name: "mrms",
@@ -1687,7 +1693,7 @@ export const documentTypes = [
   {
     id: 16,
     name: "Full and final Letter",
-    template: "fullandfinal-letter",
+    template: "fullandfinal_letter",
     fields: [
       {
         name: "mrms",
@@ -1786,7 +1792,7 @@ export const documentTypes = [
   {
     id: 17,
     name: "Confirmation Letter",
-    template: "confirmation-letter",
+    template: "confirmation_letter",
     fields: [
       {
         name: "mrms",

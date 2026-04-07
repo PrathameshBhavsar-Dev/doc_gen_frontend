@@ -87,25 +87,36 @@ const TC = (extra = {}) => ({
 /* ============================================================ */
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
+  // ================= ANNUAL CTC INPUT =================
   const annualCTC = round0(Number(data.salary || 0));
+
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
-  const basic = round0(monthlyCTC * 0.48);
-  const hra = round0(monthlyCTC * 0.18);
-  const da = round0(monthlyCTC * 0.12);
-  const allowance = round0(monthlyCTC * 0.16);
-  // Special allowance as the balancing figure
-  const special = monthlyCTC - (basic + hra + da + allowance);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   const rows = [
-    ["Basic", basic],
-    ["HRA", hra],
-    ["DA", da],
-    ["ALLOWANCE", allowance],
-    ["SPECIAL ALLOWANCE", special],
+    ["Basic", basicMonthly],
+    ["House Rent Allowance", hraMonthly],
+    ["Dearness Allowance", daMonthly],
+    ["Special Allowance", specialMonthly],
+    ["Food Allowance", foodMonthly],
   ];
 
-  const candidateName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.candidateName || "";
+  const employeeName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.employeeName || "";
   const position = data.position || "";
   const location = data.workLocation || company.city || "";
   const joiningDate = data.joiningDate || "";
@@ -113,16 +124,15 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
   /* ---------------- PF Calculations ---------------- */
 
   // Fixed PF requirement
-  const employeePF = 3750;
+  const employeePF = pfMonthly;
 
-  const grossMonthly =
-    basic + hra + da + allowance + special;
+  const grossMonthly = round0(
+    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly
+  );
 
-  const grossAnnual = grossMonthly * 12;
+  const grossAnnual = round0(grossMonthly * 12);
 
   const totalDeductionsMonthly = employeePF;
-
-  const totalDeductionsAnnual = totalDeductionsMonthly * 12;
 
   /* CTC = Gross Only (No Employer PF) */
   const totalCTCMonthly = grossMonthly;
@@ -143,11 +153,11 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={2}>
-          Employee Name: <strong>{candidateName}</strong>
+          Employee Name: <strong>{employeeName}</strong>
         </Typography>
 
         <Typography mb={2}>
-          Dear <strong>{candidateName}</strong>,
+          Dear <strong>{employeeName}</strong>,
         </Typography>
 
         <Typography textAlign="justify" mb={2}>
@@ -381,7 +391,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
           <Box>
             <Typography fontWeight="bold">Accepted By:</Typography>
             <Typography mt={6}>_________________________</Typography>
-            <Typography>{candidateName}</Typography>
+            <Typography>{employeeName}</Typography>
             <Typography>Date: __________________</Typography>
           </Box>
 
@@ -405,7 +415,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={1} fontSize="14px">
-          <strong>Name:{candidateName}</strong>
+          <strong>Name:{employeeName}</strong>
         </Typography>
 
         <Typography mb={1} fontSize="14px">

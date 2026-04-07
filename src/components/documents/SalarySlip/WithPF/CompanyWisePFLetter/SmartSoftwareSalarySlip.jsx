@@ -545,7 +545,6 @@
 
 // export default SmartSoftwareSalarySlip;
 
-
 import React from "react";
 import {
   Typography,
@@ -559,31 +558,25 @@ import {
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency, getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
-/* ================= HELPERS ================= */
-const num = (v) => Number(v) || 0;
-const round2 = (v) => Math.round(num(v) * 100) / 100;
-
 /* ================= NUMBER TO WORDS ================= */
-const numberToWords = (numVal = 0) => {
-  if (!numVal) return "Zero Rupees Only";
+const numberToWords = (num = 0) => {
+  if (!num) return "Zero Rupees Only";
 
-  const a = [
-    "", "One", "Two", "Three", "Four", "Five", "Six",
-    "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-    "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
-  ];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+  const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"];
+  const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
-  const w = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + w(n % 100) : "");
-    if (n < 100000) return w(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + w(n % 1000) : "");
-    return w(Math.floor(n / 100000)) + " Lakh";
+  const convert = (n) => {
+    if (n < 10) return ones[n];
+    if (n < 20) return teens[n - 10];
+    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+    if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + convert(n % 100) : "");
+    if (n < 100000) return convert(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + convert(n % 1000) : "");
+    if (n < 10000000) return convert(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + convert(n % 100000) : "");
+    return convert(Math.floor(n / 10000000)) + " Crore";
   };
 
-  return `${w(Math.round(numVal))} Rupees Only`;
+  return `${convert(Math.round(num))} Rupees Only`;
 };
 
 /* ================= COMPONENT ================= */
@@ -600,43 +593,46 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     pan = "-",
     mode = "-",
     workdays = "-",
-    bankName = "-",
     accountNo = "-",
     month = "-",
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
 
-  /* ===== MONTH FORMAT ===== */
-  const [year, monthNum] = month.split("-");
-  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
-  const salaryMonth = `${monthName} ${year}`;
+  /* ================= MONTH ================= */
+  const [year, monthNum] = month ? month.split("-") : ["", ""];
+  const monthName = monthNum
+    ? new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" })
+    : "";
+  const salaryMonth = monthName && year ? `${monthName} ${year}` : "-";
 
-  /* ================= EARNINGS BREAKUP ================= */
-  const monthlyGross = round2(totalSalary);
+  /* ================= SALARY LOGIC ================= */
+  const round0 = (v) => Math.round(Number(v) || 0);
 
-  const PERCENT = {
-    basic: 0.48,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
+  const monthlyCTC = round0(totalSalary);
 
-  const BASIC = round2(monthlyGross * PERCENT.basic);
-  const HRA = round2(monthlyGross * PERCENT.hra);
-  const DA = round2(monthlyGross * PERCENT.da);
-  const SPECIAL = round2(monthlyGross * PERCENT.special);
-  const FOOD = round2(monthlyGross * PERCENT.food);
-
-  /* ================= DEDUCTIONS ================= */
   const PF = 3750;
-  const pt = getProfessionalTax(month, monthlyGross);
-  const totalDeduction = round2(PF + pt + Number(otherDeduction || 0));
 
-  /* ================= NET PAY ================= */
-  const totalEarning = BASIC + HRA + DA + SPECIAL + FOOD;
-  const netPay = round2(totalEarning - totalDeduction);
+  const HRA = round0(monthlyCTC * 0.18);
+  const DA = round0(monthlyCTC * 0.12);
+  const SPECIAL = round0(monthlyCTC * 0.16);
+  const FOOD = round0(monthlyCTC * 0.06);
+
+  const BASIC = round0(
+    monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
+  );
+
+  const totalEarning = round0(
+    BASIC + HRA + DA + SPECIAL + FOOD + PF
+  );
+
+  const pt = month ? getProfessionalTax(month, totalEarning) : 0;
+
+  const totalDeduction = round0(
+    PF + pt + Number(otherDeduction || 0)
+  );
+
+  const netPay = round0(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -646,45 +642,36 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
           border: "1px solid black",
           borderRadius: 0,
           boxShadow: "none",
+
+          // ✅ FULL TABLE BORDER
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            padding: "4px 6px",
+            padding: "6px",
             fontFamily: "Bahnschrift",
           },
         }}
       >
-        <Table
-          size="small"
-          sx={{
-            tableLayout: "fixed",
-            width: "100%",
-            "& td, & th": {
-              width: "25%",
-            },
-          }}
-        >
+        <Table size="small">
           <TableBody>
 
             {/* HEADER */}
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold", fontSize: "14pt" }}>
-                SMART SOFTWARE SERVICES (I) PVT. LTD.
+              <TableCell colSpan={4} align="center"><b>SMART SOFTWARE SERVICES (I) PVT. LTD.</b></TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell colSpan={4} align="center">
+                <b>406 Changbhale Heights, Near Kalpataru Estate Phase III, Pimple Gurav, Pune 411061</b>
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>
-                406 Changbhale Heights, Near Kalpataru Estate Phase III, Pimple Gurav, Pune 411 061
+              <TableCell colSpan={4} align="center">
+                <b>Salary Slip {salaryMonth}</b>
               </TableCell>
             </TableRow>
 
-            <TableRow>
-              <TableCell colSpan={4} align="center" sx={{ fontWeight: "bold" }}>
-                Salary Slip {salaryMonth}
-              </TableCell>
-            </TableRow>
-
-            {/* EMPLOYEE DETAILS */}
+            {/* DETAILS */}
             <TableRow>
               <TableCell>Employee Name</TableCell>
               <TableCell>{employeeName}</TableCell>
@@ -700,17 +687,10 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell>DOJ</TableCell>
-              <TableCell>{doj}</TableCell>
-              <TableCell>PAN</TableCell>
-              <TableCell>{pan}</TableCell>
-            </TableRow>
-
-            <TableRow>
               <TableCell>Designation</TableCell>
               <TableCell>{designation}</TableCell>
-              <TableCell>DOB</TableCell>
-              <TableCell>{dob}</TableCell>
+              <TableCell>PAN</TableCell>
+              <TableCell>{pan}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -720,39 +700,33 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell>{workdays}</TableCell>
             </TableRow>
 
+            {/* HEADER */}
             <TableRow>
-              <TableCell>Account No.</TableCell>
-              <TableCell>{accountNo}</TableCell>
-              <TableCell />
-              <TableCell />
+              <TableCell align="center"><b>Earnings</b></TableCell>
+              <TableCell align="center"><b>Amount</b></TableCell>
+              <TableCell align="center"><b>Deductions</b></TableCell>
+              <TableCell align="center"><b>Amount</b></TableCell>
             </TableRow>
 
-            {/* EARNINGS / DEDUCTIONS */}
-            <TableRow>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>Earnings</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>Amount</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>Deductions</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>Amount</TableCell>
-            </TableRow>
-
+            {/* ROWS */}
             <TableRow>
               <TableCell>BASIC</TableCell>
               <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
-              <TableCell align="center">PF</TableCell>
+              <TableCell>PF</TableCell>
               <TableCell align="center">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>HRA</TableCell>
               <TableCell align="center">{formatCurrency(HRA)}</TableCell>
-              <TableCell align="center">PT</TableCell>
+              <TableCell>PT</TableCell>
               <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell>CONVEYANCE ALLOWANCE</TableCell>
+              <TableCell>DEARNESS ALLOWANCE</TableCell>
               <TableCell align="center">{formatCurrency(DA)}</TableCell>
-              <TableCell align="center">Other Deduction</TableCell>
+              <TableCell>Other Deduction</TableCell>
               <TableCell align="center">{formatCurrency(otherDeduction)}</TableCell>
             </TableRow>
 
@@ -770,6 +744,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell />
             </TableRow>
 
+            {/* PF ROW */}
             <TableRow>
               <TableCell>PF</TableCell>
               <TableCell align="center">{formatCurrency(PF)}</TableCell>
@@ -779,74 +754,51 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
             {/* TOTAL */}
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalEarning)}</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }} align="center">Total Deduction</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(totalDeduction)}</TableCell>
+              <TableCell><b>Total</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(totalEarning)}</b></TableCell>
+              <TableCell><b>Total Deduction</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(totalDeduction)}</b></TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{formatCurrency(netPay)}</TableCell>
+              <TableCell><b>Net Pay</b></TableCell>
+              <TableCell align="center"><b>{formatCurrency(netPay)}</b></TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>In Words</TableCell>
+              <TableCell><b>In Words</b></TableCell>
               <TableCell colSpan={3}>{numberToWords(netPay)}</TableCell>
             </TableRow>
 
-            {/* SIGNATURE */}
+            {/* SIGN */}
             <TableRow>
-              <TableCell
-                sx={{ border: "1px solid #000", paddingLeft: "150px" }}
-              ></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
 
-              <TableCell
-                sx={{ border: "1px solid #000", paddingLeft: "150px" }}
-              ></TableCell>
-              <TableCell
-                sx={{
-                  border: "1px solid #000",
-                  verticalAlign: "top",
-                  padding: "10px",
-                  width: "50%",
-                  textAlign: "center",
-                }}
-              >
-                {company.stamp && (
+              <TableCell align="center">
+                {company?.stamp && (
                   <img
                     src={company.stamp}
                     alt="Stamp"
-                    style={{ height: "100px" }}
+                    style={{ height: 120 }}
                   />
                 )}
               </TableCell>
 
-              <TableCell
-                sx={{
-                  border: "1px solid #000",
-                  verticalAlign: "top",
-                  padding: "10px",
-                  width: "50%",
-                }}
-              >
-                {company.signature && (
+              <TableCell align="center">
+                {company?.signature && (
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: "60px", marginBottom: "6px" }}
-
+                    style={{ height: 80 }}
                   />
-
                 )}
-                <Typography textAlign="Center"><b>Signature</b></Typography>
-
+                <Typography><b>Signature</b></Typography>
               </TableCell>
-
-
             </TableRow>
+
           </TableBody>
         </Table>
       </TableContainer>
@@ -855,4 +807,3 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 };
 
 export default SmartSoftwareSalarySlip;
-

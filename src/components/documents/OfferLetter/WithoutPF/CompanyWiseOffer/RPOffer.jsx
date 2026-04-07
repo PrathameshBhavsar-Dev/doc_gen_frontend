@@ -63,28 +63,69 @@ const RPOffer = ({ company, data }) => {
 ===================================================== */
 
 // helper
-  const round0 = (num) => Math.round(num);
+//   const round0 = (num) => Math.round(num);
 
-// source of truth
-const monthlyCTC = round0(Number(data.salary|| 0));
+// // source of truth
+// const monthlyCTC = round0(Number(data.salary|| 0));
 
- // ================= PERCENTAGE BREAKUP =================
-const basicMonthly = round0(monthlyCTC * 0.40);
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
-const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+//  // ================= PERCENTAGE BREAKUP =================
+// const basicMonthly = round0(monthlyCTC * 0.40);
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
 
-// ================= ANNUAL VALUES =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const miscAnnual = round0(miscMonthly * 12);
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = round0(basicMonthly * 12);
+// const hraAnnual = round0(hraMonthly * 12);
+// const daAnnual = round0(daMonthly * 12);
+// const specialAnnual = round0(specialMonthly * 12);
+// const foodAnnual = round0(foodMonthly * 12);
+// const miscAnnual = round0(miscMonthly * 12);
 
-// ================= SALARY TABLE STRUCTURE =================
+// // ================= SALARY TABLE STRUCTURE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Misc. Allowance", miscMonthly, miscAnnual],
+// ];
+
+// // ================= TOTALS =================
+// const totalMonthly = round0(
+//   salaryRows.reduce((sum, row) => sum + row[1], 0)
+// );
+
+// const totalAnnual = round0(
+//   salaryRows.reduce((sum, row) => sum + row[2], 0)
+// );
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+const round0 = (num) => Math.round(num);
+
+// ================= ANNUAL CTC (SOURCE) =================
+const annualCTC = round0(Number(data.salary || 0));
+
+// ================= PERCENTAGE BREAKUP (ANNUAL) =================
+const basicAnnual = round0(annualCTC * 0.40);
+const hraAnnual = round0(annualCTC * 0.18);
+const daAnnual = round0(annualCTC * 0.12);
+const specialAnnual = round0(annualCTC * 0.16);
+const foodAnnual = round0(annualCTC * 0.06);
+const miscAnnual = round0(annualCTC * 0.08); // 8%
+
+// ================= MONTHLY VALUES =================
+const basicMonthly = round0(basicAnnual / 12);
+const hraMonthly = round0(hraAnnual / 12);
+const daMonthly = round0(daAnnual / 12);
+const specialMonthly = round0(specialAnnual / 12);
+const foodMonthly = round0(foodAnnual / 12);
+const miscMonthly = round0(miscAnnual / 12);
+
+// ================= SALARY TABLE =================
 const salaryRows = [
   ["Basic", basicMonthly, basicAnnual],
   ["House Rent Allowance", hraMonthly, hraAnnual],
@@ -95,13 +136,15 @@ const salaryRows = [
 ];
 
 // ================= TOTALS =================
+const totalAnnual = round0(
+  salaryRows.reduce((sum, row) => sum + row[2], 0)
+);
+
 const totalMonthly = round0(
   salaryRows.reduce((sum, row) => sum + row[1], 0)
 );
 
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
+
 
 
 
@@ -224,7 +267,7 @@ return (
                 color: "#000"
               }}
             >
-              <strong>Name</strong> : {data.mrms} {data.candidateName}
+              <strong>Name</strong> : {data.mrms} {data.employeeName}
             </Typography>
 
             <Typography
@@ -261,7 +304,7 @@ return (
                 fontWeight: 500,
               }}
             >
-               Dear {data?.candidateName?.split(" ")[0]},
+               Dear {data?.employeeName?.split(" ")[0]},
             </Typography>
 
 
@@ -405,7 +448,7 @@ return (
                   Signature : __________________
                 </Typography>
                 <Typography sx={{ mt: 1 }}>
-                  Candidate Name : {data.candidateName}
+                  Candidate Name : {data.employeeName}
                 </Typography>
               </Box>
             </Box>
@@ -562,7 +605,7 @@ return (
                 Signature : ____________________
               </Typography>
               <Typography>
-                Candidate : {data.candidateName}
+                Candidate : {data.employeeName}
               </Typography>
             </Box>
           </Box>

@@ -43,7 +43,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         sx={{
           textAlign: "center",
           fontWeight: 600,
-          // textDecoration: "underline",
+          textDecoration: "underline",
           fontSize: "14pt",
           mb: "8mm",
         }}
@@ -56,18 +56,18 @@ const SmartMatrixCertification = ({ company, data }) => {
         <Typography sx={{ mb: "6mm" }}>
           We are pleased to certify that{data.employeeName}, has joined our
           group to work on internship with organization{" "}
-          <strong>{company.name}</strong>. The internship program held on{" "}
+          <strong>{company.name}</strong> The internship program held on{" "}
           {startDate} to {endDate}.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          During the internship period, {data.employeeName} was actively
+          During the internship period, <strong>{data.employeeName}</strong> was actively
           participated in project related tasks, shown their skills and
-          abilities as {data.role}.
+          abilities as <strong>{data.role}</strong>.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          Through this internship experience, {data.employeeName} adopted
+          Through this internship experience, <strong>{data.employeeName}</strong>adopted
           practical knowledge, best practices and exposure to real-world
           scenarios, which will undoubtedly enhance their academic and
           professional development.

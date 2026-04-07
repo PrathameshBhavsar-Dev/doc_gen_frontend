@@ -433,7 +433,7 @@ const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -494,39 +494,48 @@ const JditFullAndFinal = ({ company, data }) => {
   const paidDays = Number(data.paiddays || 0);
   const ratio = paidDays / totalDays;
 
-  /* ---------- PENTA SALARY LOGIC ---------- */
-  const gross = Number(data.totalSalary || 0);
+  /* ---------- JDIT SALARY LOGIC ---------- */
+  const round0 = (num) => Math.round(Number(num || 0));
+  const gross = round0(data.totalSalary || 0);
 
-  const basic = +(gross * 0.4).toFixed(2);
-  const hra = +(gross * 0.18).toFixed(2);
-  const da = +(gross * 0.12).toFixed(2);
-  const special = +(gross * 0.16).toFixed(2);
-  const food = +(gross * 0.06).toFixed(2);
-  const pfAllowance = +(gross - (basic + hra + da + special + food)).toFixed(2);
+  const PERCENT = {
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+  };
 
-  const earned = (v) => +(v * ratio).toFixed(2);
+  const hra = round0(gross * PERCENT.hra);
+  const da = round0(gross * PERCENT.da);
+  const special = round0(gross * PERCENT.special);
+  const food = round0(gross * PERCENT.food);
+
+  // Balancing basic
+  const basic = round0(gross - (hra + da + special + food));
+
+  const earned = (v) => round0(v * ratio);
 
   const totalActual =
-    basic + hra + da + special + food + pfAllowance;
+    basic + hra + da + special + food;
 
   const totalEarned =
     earned(basic) +
     earned(hra) +
     earned(da) +
     earned(special) +
-    earned(food) +
-    earned(pfAllowance);
+    earned(food);
 
   /* ---------- DEDUCTIONS ---------- */
   // const pf = 1800;
   const pt = 200;
   const others = 2000;
-  const totalDeductions = pt + others;
+  const totalDeductions = round0(pt + others);
 
-  const netPay =
+  const netPay = round0(
     totalEarned -
     totalDeductions +
-    Number(data.leaveencashment || 0);
+    Number(data.leaveencashment || 0)
+  );
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -599,7 +608,7 @@ const JditFullAndFinal = ({ company, data }) => {
             </TableRow>
 
             {/* EARNINGS */}
-            <TableRow sx={{ background: "#f2dede" }}>
+            <TableRow >
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
               <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
@@ -611,7 +620,6 @@ const JditFullAndFinal = ({ company, data }) => {
               ["Dearness Allowance", da],
               ["Special Allowances", special],
               ["Food Allowances", food],
-              ["Misc Allowances", pfAllowance],
             ].map(([label, val]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>{label}</TableCell>
@@ -686,24 +694,24 @@ const JditFullAndFinal = ({ company, data }) => {
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell sx={{ ...cell, ...center, padding: "2px" }}></TableCell>
+              <TableCell sx={{ ...cell, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "2px" }}></TableCell>
 
-              <TableCell sx={{ ...cell, ...center, padding: "2px" }}>
+              <TableCell sx={{ ...cell, width: "34%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "10px", borderTop: "none" }}>
                 {company.stamp && (
                   <img
                     src={company.stamp}
                     alt="Stamp"
-                    style={{ height: 70, display: "block", margin: "0 auto" }}
+                    style={{ height: "90px", display: "block", margin: "0 auto" }}
                   />
                 )}
               </TableCell>
 
-              <TableCell colSpan={2} sx={{ ...cell, ...center, padding: "3px" }}>
+              <TableCell colSpan={2} sx={{ ...cell, width: "33%", height: "90px", textAlign: "center", verticalAlign: "middle", padding: "3px" }}>
                 {company.signature && (
                   <img
                     src={company.signature}
                     alt="Signature"
-                    style={{ height: 60, display: "block", margin: "0 auto" }}
+                    style={{ height: "40px", display: "block", margin: "0 auto" }}
                   />
                 )}
               </TableCell>

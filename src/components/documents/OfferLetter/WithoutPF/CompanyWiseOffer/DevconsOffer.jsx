@@ -21,18 +21,64 @@ const DevconsOffer = ({ company, data }) => {
   
 
   // Helper – 2 decimal precision
+// const round0 = (num) => Math.round(num);
+
+//   // Source of truth
+//   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+
+//   // ================= PERCENTAGE BREAKUP =================
+// const basicMonthly = round0(monthlyCTC * 0.40);
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = round0(basicMonthly * 12);
+// const hraAnnual = round0(hraMonthly * 12);
+// const daAnnual = round0(daMonthly * 12);
+// const specialAnnual = round0(specialMonthly * 12);
+// const foodAnnual = round0(foodMonthly * 12);
+// const miscAnnual = round0(miscMonthly * 12);
+
+// // ================= SALARY TABLE STRUCTURE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Misc. Allowance", miscMonthly, miscAnnual],
+// ];
+
+// // ================= TOTALS =================
+// const totalMonthly = round0(
+//   salaryRows.reduce((sum, row) => sum + row[1], 0)
+// );
+
+// const totalAnnual = round0(
+//   salaryRows.reduce((sum, row) => sum + row[2], 0)
+// );
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+// Source of truth (ANNUAL CTC)
+const annualCTC = round0(Number(data.salary || data.ctc || 0));
 
-  // ================= PERCENTAGE BREAKUP =================
+// ================= MONTHLY CTC =================
+const monthlyCTC = round0(annualCTC / 12);
+
+// ================= PERCENTAGE BREAKUP (MONTHLY) =================
 const basicMonthly = round0(monthlyCTC * 0.40);
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
 const foodMonthly = round0(monthlyCTC * 0.06);
-const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+const miscMonthly = round0(monthlyCTC * 0.08);
 
 // ================= ANNUAL VALUES =================
 const basicAnnual = round0(basicMonthly * 12);
@@ -42,7 +88,7 @@ const specialAnnual = round0(specialMonthly * 12);
 const foodAnnual = round0(foodMonthly * 12);
 const miscAnnual = round0(miscMonthly * 12);
 
-// ================= SALARY TABLE STRUCTURE =================
+// ================= SALARY TABLE =================
 const salaryRows = [
   ["Basic", basicMonthly, basicAnnual],
   ["House Rent Allowance", hraMonthly, hraAnnual],
@@ -60,11 +106,10 @@ const totalMonthly = round0(
 const totalAnnual = round0(
   salaryRows.reduce((sum, row) => sum + row[2], 0)
 );
-
   
   
   
-  const firstName = data.candidateName?.trim().split(" ")[0];
+  const firstName = data.employeeName?.trim().split(" ")[0];
 
 
 
@@ -100,13 +145,13 @@ const totalAnnual = round0(
     </Typography> */}
 
             {/* NAME */}
-            <Typography sx={{ mb: 2, fontWeight: 700 }}>
-              <b>Name</b> : {data.mrms} {data.candidateName}
+            <Typography sx={{ mb: 2, }}>
+              <b>Name</b> : {data.mrms} {data.employeeName}
             </Typography>
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-            Subject : Letter of intent for the position of <b>{data.position}</b>
+           <b>Subject</b>: Letter of intent for the position of <b>{data.position}</b>
             </Typography>
 
 
@@ -136,7 +181,7 @@ const totalAnnual = round0(
 
             <Typography sx={{ mb: 1, textAlign: "justify" }}>
               The starting salary for this position is{" "}
-              <b>{formatCurrency(totalAnnual)}</b> per annum. Payment is on monthly basis
+              <b>{formatCurrency(data.salary)}</b> per annum. Payment is on monthly basis
               by direct deposit.
             </Typography>
 
@@ -161,7 +206,7 @@ const totalAnnual = round0(
             </Typography>
 
             {/* SIGNATURE */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
               {company?.signature && (
                 <img src={company.signature} alt="Signature" style={{ height: 60 }} />
               )}
@@ -215,7 +260,7 @@ const totalAnnual = round0(
                   borderCollapse: "collapse",
                   "& th, & td": {
                     border: "1px solid #000",
-                    padding: "6px",
+                    padding: "7px",
                     fontSize: "15px",
                   },
                 }}

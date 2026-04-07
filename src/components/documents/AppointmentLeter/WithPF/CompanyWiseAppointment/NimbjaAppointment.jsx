@@ -41,45 +41,9 @@ const NimbjaAppointment = ({ company, data }) => {
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs Per Annum`;
   };
 
-  /* ================= SALARY LOGIC ================= */
-  const round0 = (num) => Math.round(num);
-
-  // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.salary || 0));
-
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
-
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
-
+  
   // ================= SALARY TABLE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  ];
-
-  // ================= TOTAL EARNINGS =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
+const annualCTC = Number(data.salary || 0);
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -113,7 +77,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-5mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -123,7 +87,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
           {/* ================= REF ================= */}
           <Typography
-            sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+            sx={{ mb: "mm", fontSize: "11pt", fontFamily: "Bahnschrift",mt:"-2mm" }}
           >
             <strong>
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
@@ -135,7 +99,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               mb: "2mm",
               fontWeight: 600,
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
               mt: "3mm",
             }}
@@ -147,7 +111,7 @@ const NimbjaAppointment = ({ company, data }) => {
               mb: "10mm",
               mt: "-3mm",
               whiteSpace: "pre-line",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -157,9 +121,9 @@ const NimbjaAppointment = ({ company, data }) => {
           {/* ================= SALUTATION ================= */}
           <Typography
             sx={{
-              mb: "3mm",
-              mt: "-5mm",
-              fontSize: "11pt",
+              mb: "mm",
+              mt: "-7mm",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -184,9 +148,9 @@ const NimbjaAppointment = ({ company, data }) => {
           {/* INTRO */}
           <Typography
             sx={{
-              mb: "5mm",
+              mb: "3mm",
               textAlign: "justify",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -201,18 +165,18 @@ const NimbjaAppointment = ({ company, data }) => {
           <Box component="ol" sx={{ pl: "6mm", m: 0 }}>
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                1.Your Designation will be <strong>{data.position}</strong>.
+                1. Your Designation will be <strong>{data.position}</strong>.
               </Typography>
             </li>
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                2.Your total emoluments will be{" "}
-                <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong>
+                2. Your total emoluments will be{" "}
+                <strong>Rs. {formatCurrency(annualCTC)}/-</strong> per annum
               </Typography>
             </li>
 
@@ -221,32 +185,32 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                3.Full details of your pay package are given in the enclosure this
-                letter. However, please
+                3. Full details of your pay package are given in the enclosure
+                this letter. However, please
                 <br />
-                  note that, LTA is payable after completion of one year of
+                note that, LTA is payable after completion of one year of
                 service, subject to your getting
               </Typography>
             </li>
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                4.Whilst you are located abroad, the terms applicable will be
+                4. Whilst you are located abroad, the terms applicable will be
                 intimated at the relevant point of time.
               </Typography>
             </li>
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                5.You shall be due for salary revision not before one year from
+                5. You shall be due for salary revision not before one year from
                 your date of joining.
               </Typography>
             </li>
@@ -256,11 +220,11 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                6.The Management reserves the right to change the different
+                6. The Management reserves the right to change the different
                 components/allowances in the total emoluments package at its
                 discretion at any time in future. However, your total monthly
                 salary will be protected.
@@ -272,11 +236,11 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                7.You will be on probation for a period of six months from the
+                7. You will be on probation for a period of six months from the
                 first of the calendar month following your date of joining,
                 after which you will be confirmed if your performance is found
                 satisfactory. The probation period may be extended at the
@@ -286,10 +250,10 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                8.Your services are terminable with one month’s notice on either
-                side or salary in lieu of notice period.
+                8. Your services are terminable with one month’s notice on
+                either side or salary in lieu of notice period.
               </Typography>
             </li>
 
@@ -298,11 +262,11 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
-                9.The Company shall have the right to terminate your service
+                9. The Company shall have the right to terminate your service
                 without notice, if the information furnished by you is found
                 incorrect or in case of any serious misconduct.
               </Typography>
@@ -319,13 +283,13 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "2mm", fontFamily: "Bahnschrift", mt: "-12mm" }}
               >
-                10.This appointment is subject to your being medically fit.
+                10. This appointment is subject to your being medically fit.
               </Typography>
             </li>
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                11.The age of retirement will be 58 years.
+                11. The age of retirement will be 58 years.
               </Typography>
             </li>
 
@@ -379,7 +343,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will not, without previous written permission of the
+                14. You will not, without previous written permission of the
                 Company, carry on any business or engage yourself in the
                 services or employment of any other Company/Firm/Person.
               </Typography>
@@ -387,7 +351,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography sx={{ mb: "2mm", fontFamily: "Bahnschrift" }}>
-                You will keep the Company informed of any change in your
+                15. You will keep the Company informed of any change in your
                 residential address.
               </Typography>
             </li>
@@ -480,7 +444,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110, mt: "-5mm", mb: "2mm" }}
+                    sx={{ width: 110, mt: "-5mm", mb: "2mm", height: 110 }}
                   />
                 </Grid>
               </Grid>
@@ -532,7 +496,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       textAlign: "right",
                       marginRight: "-3mm",
-                      mt: "-7mm",
+                      mt: "-9mm",
                     }}
                   >
                     Name: {data.employeeName}
@@ -541,13 +505,13 @@ const NimbjaAppointment = ({ company, data }) => {
                   <Typography
                     sx={{
                       fontFamily: "Bahnschrift",
-                      mt: "2mm", // 🔑 small Word-like gap
+                      mt: "1mm", // 🔑 small Word-like gap
                       textAlign: "left",
-                      mb:"2mm",
+                      mb: "mm",
                       ml: "73mm",
                     }}
                   >
-                    Date : _________________
+                    Date : ________________
                   </Typography>
                 </Box>
               </Box>
@@ -561,7 +525,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -578,15 +542,9 @@ const NimbjaAppointment = ({ company, data }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <SalaryStructureTable ctc={annualCTC} />
         </Box>
-            <Box
+        <Box
           component="img"
           src={company.watermark}
           alt="watermark"
@@ -618,26 +576,26 @@ const NimbjaAppointment = ({ company, data }) => {
                 <img
                   src={company.signature}
                   alt="Signature"
-                  style={{ height: 45, marginTop:"10mm" }}
+                  style={{ height: 45, marginTop: "10mm" }}
                 />
               )}
               {company?.stamp && (
-                <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+                <img src={company.stamp} alt="Stamp" style={{ height: 110 }} />
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               {company.hrName}
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1mm" }}>
               HR Relations Lead
             </Typography>
           </Box>
 
-          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+          <Box minWidth="250px" sx={{ mt: 15, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
               Signature: __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+            <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
               Candidate Name: {data.employeeName}
             </Typography>
           </Box>

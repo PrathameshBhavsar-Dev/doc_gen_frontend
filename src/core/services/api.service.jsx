@@ -1,51 +1,153 @@
-import axios from 'axios';
-import ApiInterceptor from './interceptor.service';
+import axios from "axios";
 
 class ApiService {
-  apiget(url) {
-    return ApiInterceptor.init().get(`${url}`);
-  }
+  constructor() {
+    // Base URL
+    this.baseURL = import.meta.env.VITE_API_URL;
 
-  apipost(url, body) {
-    return ApiInterceptor.init().post(`${url}`, body);
-  }
-
-  apiput(url, body) {
-    return ApiInterceptor.init().put(`${url}`, body);
-  }
-  apipatch(url, body) {
-    return ApiInterceptor.init().patch(`${url}`, body);
-  }
-
-  apidelete(url, config={}) {
-    return ApiInterceptor.init().delete(`${url}`, config);
-  }
-
-async fetchImageAsBase64(url) {
-  try {
-    const response = await fetch(url, { mode: 'cors' }); // requires CORS enabled on server
-    if (!response.ok) throw new Error('Failed to fetch image');
-
-    const blob = await response.blob();
-    return await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  } catch (err) {
-    console.error("Failed to convert image to Base64:", err);
-    return null;
-  }
-}
-
-
-   apipostForm(url, formData) {
-    return ApiInterceptor.init().post(`${url}`, formData, {
+    // Axios instance
+    this.api = axios.create({
+      baseURL: this.baseURL,
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
+      // ❌ Removed withCredentials (we are using JWT headers, not cookies)
     });
+
+    // ================= REQUEST INTERCEPTOR =================
+    this.api.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    // ================= RESPONSE INTERCEPTOR =================
+    this.api.interceptors.response.use(
+      (response) => {
+        return response.data; // Always return clean data
+      },
+      (error) => {
+        // 🔥 Handle Unauthorized (Token expired / invalid)
+        if (error.response?.status === 401) {
+          console.warn("Unauthorized! Logging out...");
+
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+
+          // Redirect to login
+          window.location.href = "/login";
+        }
+
+        // 🔥 Handle Forbidden
+        if (error.response?.status === 403) {
+          console.error("Access denied (403)");
+        }
+
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  // ================= GET =================
+  async apiget(url, config = {}) {
+    try {
+      return await this.api.get(url, config);
+    } catch (error) {
+      console.error(`GET ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= POST =================
+  async apipost(url, data = {}, config = {}) {
+    try {
+      return await this.api.post(url, data, config);
+    } catch (error) {
+      console.error(`POST ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= PUT =================
+  async apiput(url, data = {}, config = {}) {
+    try {
+      return await this.api.put(url, data, config);
+    } catch (error) {
+      console.error(`PUT ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= PATCH =================
+  async apipatch(url, data = {}, config = {}) {
+    try {
+      return await this.api.patch(url, data, config);
+    } catch (error) {
+      console.error(`PATCH ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= DELETE =================
+  async apidelete(url, config = {}) {
+    try {
+      return await this.api.delete(url, config);
+    } catch (error) {
+      console.error(`DELETE ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= FILE UPLOAD =================
+  async uploadFile(url, formData, onUploadProgress = null) {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      if (onUploadProgress) {
+        config.onUploadProgress = onUploadProgress;
+      }
+
+      return await this.api.post(url, formData, config);
+    } catch (error) {
+      console.error(`File upload to ${url} failed:`, error);
+      throw error;
+    }
+  }
+
+  // ================= FILE DOWNLOAD =================
+  async downloadFile(url, filename) {
+    try {
+      const response = await this.api.get(url, {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response]);
+      const urlBlob = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.setAttribute("download", filename);
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      return true;
+    } catch (error) {
+      console.error(`File download from ${url} failed:`, error);
+      throw error;
+    }
   }
 }
 

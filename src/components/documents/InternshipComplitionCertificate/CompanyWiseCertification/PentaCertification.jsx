@@ -1,14 +1,32 @@
+
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import A4Page from "../../../layout/A4Page";
 
-const  PentaCertification = ({ company, data }) => {
+const PentaCertification = ({ company, data }) => {
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "long",
       year: "numeric",
     });
+
+  // ✅ Normalize title (Mr, Mr., MISS, etc.)
+  const normalizeTitle = (title) =>
+    (title || "").toLowerCase().replace(".", "").trim();
+
+  const title = normalizeTitle(data?.mrms);
+
+  // ✅ Pronoun logic (based on title)
+  const pronoun =
+    title === "miss" || title === "mrs" || title === "ms"
+      ? { subject: "she", object: "her", possessive: "her" }
+      : title === "mx"
+      ? { subject: "they", object: "them", possessive: "their" }
+      : { subject: "he", object: "him", possessive: "his" };
+
+  // ✅ Capitalize helper
+  const cap = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 
   return (
     <Box
@@ -42,9 +60,7 @@ const  PentaCertification = ({ company, data }) => {
           <Typography sx={{ mt: 6, textAlign: "justify" }}>
             This is to certify that{" "}
             <strong>
-              {data.mrms} {data.employeeName}
-            </strong>{" "}
-            has done his/her internship at{" "}
+              {data.mrms}{data.employeeName}</strong>{" "}has completed {pronoun.possessive} internship at{" "}
             <strong>
               PENTA SOFTWARE CONSULTANCY SERVICES (I) PVT. LTD.
             </strong>{" "}
@@ -53,16 +69,16 @@ const  PentaCertification = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
-            During the internship, he/she has demonstrated dedication,
-            sincerity, and self-motivation to learn new skills. His/her
-            performance met our expectations and assigned tasks were completed
-            successfully.
+            During the internship, {pronoun.subject} has demonstrated dedication,
+            sincerity, and self-motivation to learn new skills.{" "}
+            {cap(pronoun.possessive)} performance met our expectations and
+            assigned tasks were completed successfully.
           </Typography>
 
           <Typography sx={{ mb: 7, textAlign: "justify" }}>
-            He/She was designated as{" "}
-            <strong>{data.designation}</strong>. We wish him/her all the best
-            for future career endeavors.
+            {cap(pronoun.subject)} was designated as{" "}
+            <strong>{data.designation}</strong>. We wish {pronoun.object} all the
+            best for future career endeavors.
           </Typography>
 
           {/* SIGN OFF */}
@@ -76,9 +92,9 @@ const  PentaCertification = ({ company, data }) => {
           <Box sx={{ display: "flex", alignItems: "flex-end", gap: 3 }}>
             {company?.signature && (
               <img
-                src={company.signature}
+                src={company.jaya_sign}
                 alt="Signature"
-                style={{ height: 60 }}
+                style={{ height: 45 }}
               />
             )}
 
@@ -86,7 +102,7 @@ const  PentaCertification = ({ company, data }) => {
               <img
                 src={company.stamp}
                 alt="Stamp"
-                style={{ height: 90 }}
+                style={{ height: 110 }}
               />
             )}
           </Box>
@@ -94,8 +110,11 @@ const  PentaCertification = ({ company, data }) => {
           <Typography sx={{ fontWeight: 600, mt: 2 }}>
             {company.ceoName || company.hrName}
           </Typography>
+
           <Typography sx={{ fontSize: "14px" }}>
-            {company.ceoName ? "Chief Executive Officer" : "HR Manager"}
+            {company.ceoName
+              ? "Chief Executive Officer"
+              : "HR Manager"}
           </Typography>
         </Box>
       </A4Page>

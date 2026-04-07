@@ -15,49 +15,54 @@ const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GN", {
       month: "long",
-       day: "2-digit",
+      day: "2-digit",
       year: "numeric",
     })
     : "";
 
-const round2 = (n) => Number(Number(n || 0).toFixed(2));
+const round0 = (n) => Number(Number(n || 0).toFixed(2));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+const formatCurrency = (value) => {
+  if (value == null || value === "") return "";
+
+  return Math.round(value).toLocaleString("en-IN");
+};
+
 
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
   const monthlyCTC = Math.round(annualCTC / 12);
 
-  // Apply percentages directly on full monthly CTC
-  let basic = Math.round(monthlyCTC * 0.48);
+  // ✅ PF STATIC (included in calculation)
+  const pfMonthly = 3750;
+  const pfAnnual = pfMonthly * 12;
+
+  // % components
   let hra = Math.round(monthlyCTC * 0.18);
   let da = Math.round(monthlyCTC * 0.12);
   let special = Math.round(monthlyCTC * 0.16);
   let food = Math.round(monthlyCTC * 0.06);
 
-  // Fix rounding difference
+  // ✅ Add PF also in total
   const calculated =
-    basic + hra + da + special + food;
+    hra + da + special + food + pfMonthly;
 
-  const diff = monthlyCTC - calculated;
+  // ✅ Basic = remaining
+  let basic = monthlyCTC - calculated;
 
-  basic += diff; // adjust only Basic
+  // ✅ Rounding fix
+  const totalCheck =
+    basic + hra + da + special + food + pfMonthly;
 
-  // PF Static (NOT calculated)
-  const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+  basic += (monthlyCTC - totalCheck);
 
   return [
-    ["Basic Salary ", basic, basic * 12],
-    ["House Rent Allowance ", hra, hra * 12],
-    ["Dearness Allowance ", da, da * 12],
-    ["Special Allowance ", special, special * 12],
-    ["Food Allowance ", food, food * 12],
+    ["Basic Salary", basic, basic * 12],
+    ["House Rent Allowance", hra, hra * 12],
+    ["Dearness Allowance", da, da * 12],
+    ["Special Allowance", special, special * 12],
+    ["Food Allowance", food, food * 12],
     ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 };
@@ -78,23 +83,23 @@ const PentaAppointment = ({ company, data }) => {
     <>Your total emoluments will be <strong>Rs. {
       annualCTC / 100000
     } </strong>Lakhs Per Annum.</>,
-    `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
-    `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
-    `You shall be due for salary revision not before one year from your date of joining.`,
-    `The Management reserves the right to change the different components/allowances in the total emoluments package, at its own discretion, at any time in future. However, your total monthly salary will be protected.our services are terminable with one month’s notice on either side.`,
-    `You will be on probation for a period of six months from the first of the calendar month following the date of your joining, after which you will be confirmed if your work is found satisfactory. The probation period can be extended at the discretion of the Company. You shall continue to be on probation, till your services are confirmed in writing by a letter of confirmation. In case your performance is not found satisfactory during such period of probation or extended period of probation and you shall be informed of the same in writing.`,
-    `Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period`,
-    `The Company shall have the right to terminate your service without notice, if the information given by you at a time of interview or in the application is found to be incorrect or in case of any serious misconduct or if reference check leads to an adverse report of your credentials.`,
-    `This appointment is subject to your being medically fit`,
-    `The age of retirement will be 58 years`,
-    `You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs`,
-    `You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.`,
-    `You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company/Firm/Person.`,
-    `You will keep the Company informed of any change in your residential address.`,
-    `You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.`,
-    `You will governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition. `,
-    `The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
-    `You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
+    `1. Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
+    `2. Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
+    `3. You shall be due for salary revision not before one year from your date of joining.`,
+    `4. The Management reserves the right to change the different components/allowances in the total emoluments package, at its own discretion, at any time in future. However, your total monthly salary will be protected.our services are terminable with one month’s notice on either side.`,
+    `5. You will be on probation for a period of six months from the first of the calendar month following the date of your joining, after which you will be confirmed if your work is found satisfactory. The probation period can be extended at the discretion of the Company. You shall continue to be on probation, till your services are confirmed in writing by a letter of confirmation. In case your performance is not found satisfactory during such period of probation or extended period of probation and you shall be informed of the same in writing.`,
+    `6. Your services are terminable with one month’s notice on either side. The Company may, at its discretion, choose to terminate your services with one month’s total salary in lieu of notice period`,
+    `7. The Company shall have the right to terminate your service without notice, if the information given by you at a time of interview or in the application is found to be incorrect or in case of any serious misconduct or if reference check leads to an adverse report of your credentials.`,
+    `8. This appointment is subject to your being medically fit`,
+    `9. The age of retirement will be 58 years`,
+    `10. You will devote whole time and attention to your duties to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information, which may become known to you in the course of your duties concerning the Company’s trade secret or affairs`,
+    `11. You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.`,
+    `12. You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company/Firm/Person.`,
+    `13. You will keep the Company informed of any change in your residential address.`,
+    `14. You will be required to attend to your work according to the exigencies and urgency of the various jobs, from time to time and you will adhere to the requirements of the Company.`,
+    `15. You will governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition. `,
+    `16. The Company reserves the right to transfer you to any of our offices/ factories/ establishments/ group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.`,
+    `17. You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.`,
   ];
 
 
@@ -143,12 +148,12 @@ const PentaAppointment = ({ company, data }) => {
             LETTER OF APPOINTMENT
           </Typography>
 
-         <Typography mt={2} fontSize={15} textAlign="justify">
-                     Further to your acceptance, Offer dated {" "}
-                     <b>{formatDate(data. issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
-                   </Typography>
+          <Typography mt={2} fontSize={15} textAlign="justify">
+            Further to your acceptance, Offer dated {" "}
+            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+          </Typography>
 
-          <Box component="ol" sx={{ pl: 3, mt: 1 }}>
+          {/* <Box component="ol" sx={{ pl: 3, mt: 1 }}>
             {terms.slice(0, 11).map((t, i) => (
               <li key={i}>
                 <Typography fontSize={14} textAlign="justify" mb={1}>
@@ -156,7 +161,16 @@ const PentaAppointment = ({ company, data }) => {
                 </Typography>
               </li>
             ))}
-          </Box>
+          </Box> */}
+          <Box component="ol" sx={{ pl: 3, mt: 1 }}>
+  {terms.slice(0, 11).map((t, i) => (
+    <li key={i}>
+      <Typography fontSize={14} textAlign="justify" mb={1}>
+        {t}
+      </Typography>
+    </li>
+  ))}
+</Box>
         </Box>
       </A4Page>
 
@@ -165,15 +179,15 @@ const PentaAppointment = ({ company, data }) => {
         headerSrc={company.header}
         footerSrc={company.footer}
       >
-        <Box component="ol" start={12} sx={{ pl: 3,  mt: 2}}>
-          {terms.slice(8).map((t, i) => (
-            <li key={i}>
-              <Typography fontSize={14} textAlign="justify" mb={1}>
-                {t}
-              </Typography>
-            </li>
-          ))}
-        </Box>
+       <Box component="ol" start={12} sx={{ pl: 3, mt: 2 }}>
+  {terms.slice(11).map((t, i) => (
+    <li key={i}>
+      <Typography fontSize={14} textAlign="justify" mb={1}>
+        {t}
+      </Typography>
+    </li>
+  ))}
+</Box>
 
         <Box
           sx={{
@@ -183,33 +197,33 @@ const PentaAppointment = ({ company, data }) => {
           }}
         >
           {/* COMPANY SIGNATURE */}
-         <Box sx={{ mt: 4 }}>
-  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-    {company.signature && (
-      <img
-        src={company.signature}
-        alt="Authorized Sign"
-        style={{ height: "35px", width: "auto", objectFit: "contain" }}
-      />
-    )}
+          <Box sx={{ mt: 4 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {company.signature && (
+                <img
+                  src={company.signature}
+                  alt="Authorized Sign"
+                  style={{ height: "35px", width: "auto", objectFit: "contain" }}
+                />
+              )}
 
-    {company.stamp && (
-      <img
-        src={company.stamp}
-        alt="Company Stamp"
-        style={{ height: "100px", width: "auto", objectFit: "contain" }}
-      />
-    )}
-  </Box>
+              {company.stamp && (
+                <img
+                  src={company.stamp}
+                  alt="Company Stamp"
+                  style={{ height: "100px", width: "auto", objectFit: "contain" }}
+                />
+              )}
+            </Box>
 
-  <Typography fontWeight={600} mt={1}>
-    {company.hrName}
-  </Typography>
+            <Typography fontWeight={600} mt={1}>
+              {company.hrName}
+            </Typography>
 
-  <Typography fontSize={13}>
-    <strong>Group Leader - Shared HR Services</strong>
-  </Typography>
-</Box>
+            <Typography fontSize={13}>
+              <strong>Group Leader - Shared HR Services</strong>
+            </Typography>
+          </Box>
 
           {/* ACCEPTANCE */}
           <Box>

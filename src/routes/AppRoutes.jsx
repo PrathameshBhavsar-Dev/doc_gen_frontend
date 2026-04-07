@@ -4,13 +4,14 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import ROUTES from "../core/constants/routes.constant";
 import { LazyLoad } from "../core";
+import { useAuth } from "../core/contexts/AuthContext";
 
 import UserLayout from "../components/layout/UserLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
 /* ======================= AUTH ======================= */
 const Login = lazy(() => import("../pages/auth/Login"));
-const Signup = lazy(() => import("../pages/auth/Signup"));
+// const Signup = lazy(() => import("../pages/auth/Signup"));
 
 /* ======================= ADMIN ======================= */
 const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
@@ -24,7 +25,6 @@ const AdminCompanyManagementPage = lazy(
 const AdminSettingPage = lazy(() => import("../pages/admin/AdminSettingPage"));
 const AdminAddCompany = lazy(() => import("../components/admin/companyManagement/AddCompany"));
 const AdminCompanyDetails = lazy(() => import("../components/admin/companyManagement/CompanyDetails"));
-
 
 /* ======================= USER ======================= */
 const UserDashboardPage = lazy(() => import("../pages/user/UserDashboardPage"));
@@ -45,11 +45,24 @@ const DocumentPreview = lazy(
 );
 
 const AppRoutes = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <Routes>
-      {/* ================= AUTH ROUTES ================= */}
-      <Route path={ROUTES.LOGIN} element={<LazyLoad component={Login} />} />
-      <Route path={ROUTES.SIGNUP} element={<LazyLoad component={Signup} />} />
+      {/* ================= PUBLIC ROUTES ================= */}
+      <Route
+        path={ROUTES.LOGIN}
+        element={
+          isLoggedIn ? (
+            <Navigate to={ROUTES.USER_DASHBOARD} replace />
+          ) : (
+            <LazyLoad component={Login} />
+          )
+        }
+      />
+
+      {/* Default redirect */}
+      <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
 
       {/* ================= USER ROUTES ================= */}
       <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
@@ -82,6 +95,10 @@ const AppRoutes = () => {
             path={ROUTES.DOCUMENT_CREATE}
             element={<LazyLoad component={DocumentCreate} />}
           />
+          <Route
+            path={ROUTES.EDIT_DOCUMENT}
+            element={<LazyLoad component={DocumentCreate} />}
+          />
         </Route>
       </Route>
 
@@ -89,7 +106,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route
-            path={ROUTES.ADMIN_DASHBOARD}
+            path={ROUTES.ADMIN_DASHBOARD} l
             element={<LazyLoad component={AdminDashboard} />}
           />
           <Route
@@ -125,8 +142,14 @@ const AppRoutes = () => {
           path={ROUTES.DOCUMENT_PREVIEW}
           element={<LazyLoad component={DocumentPreview} />}
         />
+        <Route
+          path={ROUTES.DOCUMENT_PREVIEW_BY_ID}
+          element={<LazyLoad component={DocumentPreview} />}
+        />
       </Route>
 
+      {/* ================= 404 ================= */}
+      <Route path="*" element={<Navigate to={ROUTES.LOGIN} replace />} />
     </Routes>
   );
 };

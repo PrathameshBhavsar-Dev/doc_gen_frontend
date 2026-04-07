@@ -91,10 +91,10 @@ const SmartMatrixOffer = ({ company, data }) => {
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   const offerDate = fmtDate(data.issueDate);
@@ -102,46 +102,80 @@ const SmartMatrixOffer = ({ company, data }) => {
   const position = data.position;
 
   /* ================= CORRECTED LOGIC ================= */
+  const round0 = (num) => Math.round(num);
 
-  const round0 = (num) => Math.round(Number(num) || 0);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.salary || 0));
 
-  /* ✅ INPUT IS ANNUAL */
-  const annualCTC = round0(data.salary || 0);
+  // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
-  /* Salary Percentages */
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+
+  // ================= FIXED PERCENTAGES =================
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+  );
 
-  const foodMonthly = round0(monthlyCTC - used);
-
-  /* PF (Display Only) */
-  const pfMonthly = 3750;
-
+  // ================= SALARY COMPONENTS =================
   const salaryComponents = [
-    { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
+    {
+      name: "Basic",
+      monthly: basicMonthly,
+      annual: round0(basicMonthly * 12),
+    },
     {
       name: "House Rent Allowance",
       monthly: hraMonthly,
-      annual: hraMonthly * 12,
+      annual: round0(hraMonthly * 12),
     },
-    { name: "Dearness Allowance", monthly: daMonthly, annual: daMonthly * 12 },
+    {
+      name: "Dearness Allowance",
+      monthly: daMonthly,
+      annual: round0(daMonthly * 12),
+    },
     {
       name: "Special Allowance",
       monthly: specialMonthly,
-      annual: specialMonthly * 12,
+      annual: round0(specialMonthly * 12),
     },
-    { name: "Food Allowance", monthly: foodMonthly, annual: foodMonthly * 12 },
-    { name: "Provident Fund (PF)", monthly: pfMonthly, annual: pfMonthly * 12 },
+    {
+      name: "Food Allowance",
+      monthly: foodMonthly,
+      annual: round0(foodMonthly * 12),
+    },
+    {
+      name: "Provident Fund (PF)",
+      monthly: pfMonthly,
+      annual: round0(pfMonthly * 12),
+    },
   ];
 
-  const totalMonthly = monthlyCTC;
-  const totalAnnual = annualCTC;
-  const lpa = (annualCTC / 100000).toFixed(1);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly,
+  );
+
+  const totalAnnual = round0(totalMonthly * 12);
+
+  // ================= LPA =================
+  const lpa =
+    annualCTC % 100000 === 0
+      ? (annualCTC / 100000).toString()
+      : (annualCTC / 100000).toFixed(1);
 
   return (
     <>
@@ -164,14 +198,14 @@ const SmartMatrixOffer = ({ company, data }) => {
             textAlign: "justify",
           }}
         >
-          <Typography sx={{ mb: "6mm" }}>Dear {data.candidateName},</Typography>
+          <Typography sx={{ mb: "6mm" }}>Dear {data.employeeName},</Typography>
 
-          <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}.</Typography>
+          <Typography sx={{ mb: "6mm" }}>Welcome to {company.name}</Typography>
 
           <Typography sx={{ mb: "6mm" }}>
             With reference to your application and subsequent interviews you had
             with us, we are pleased to confirm your offer of employment to join{" "}
-            {company.name}. We value your abilities and believe that you will
+            {company.name} We value your abilities and believe that you will
             find our work environment to be challenging as well as fulfilling.
           </Typography>
 
@@ -309,10 +343,61 @@ const SmartMatrixOffer = ({ company, data }) => {
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* ✅ Replace TableContainer/Table with plain HTML table */}
+        {/* <table style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          border: "2px solid #000",
+          fontSize: "14px",
+          fontFamily: "Calibri, sans-serif",
+        }}>
+          <thead>
+            <tr style={{ backgroundColor: "#f28c28" }}>
+              {["Salary Components", "Per month (Rs.)", "Per Annum (Rs.)"].map((h, i) => (
+                <th key={i} style={{
+                  border: "1px solid #000",
+                  padding: "10px 12px",
+                  fontWeight: 700,
+                  textAlign: i === 0 ? "left" : "center",
+                  verticalAlign: "middle",
+                  height: "40px",
+                }}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {salaryComponents.map((row, i) => (
+              <tr key={i}>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", verticalAlign: "middle", height: "38px" }}>
+                  {row.name}
+                </td>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
+                  {formatCurrency(row.monthly)}
+                </td>
+                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
+                  {formatCurrency(row.annual)}
+                </td>
+              </tr>
+            ))}
+            <tr style={{ backgroundColor: "#f28c28" }}>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, verticalAlign: "middle", height: "40px" }}>
+                Total Monthly Gross Salary
+              </td>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
+                {formatCurrency(totalMonthly)}
+              </td>
+              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
+                {formatCurrency(totalAnnual)}
+              </td>
+            </tr>
+          </tbody>
+        </table> */}
+        
         {/* Signature Block */}
-        <Typography
-          sx={{ mt: "20mm", fontFamily: "Verdana, Geneva, sans-serif" }}
-        >
+        <Typography sx={{ mt: "20mm" }}>
           <strong>{company.name}</strong>
         </Typography>
 

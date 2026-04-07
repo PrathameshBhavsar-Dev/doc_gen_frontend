@@ -18,41 +18,10 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
   const round0 = (num) => Math.round(num);
 
   // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.newCTC || 0));
-
-  // ================= UPDATED PERCENTAGES =================
-  const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
-
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
+const annualCTC = Number(data.newCTC || 0);
 
   // ================= SALARY TABLE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  ];
 
-  // ================= TOTAL EARNINGS =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
-
-  const totalAnnual = totalMonthly * 12;
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
@@ -96,11 +65,11 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "47%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -129,7 +98,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             sx={{
               textAlign: "right",
               mb: 6,
-              mt: "-4mm",
+              mt: "-12mm",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -171,7 +140,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
               })}
             </strong>
             . Your salary will increase to{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong> per annum.
+            <strong>{formatCurrency(annualCTC)}</strong> per annum.
           </Typography>
 
           <Typography
@@ -192,7 +161,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.CEO && (
-              <img src={company.CEO} alt="Signature" style={{ height: 90 }} />
+              <img src={company.CEO} alt="Signature" style={{ height: 60 }} />
             )}
             {company?.stamp && (
               <img
@@ -227,11 +196,11 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           alt="watermark"
           sx={{
             position: "absolute",
-            top: "50%",
+            top: "55%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
+            opacity: 0.4,
             zIndex: 0,
             pointerEvents: "none",
           }}
@@ -249,7 +218,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-8mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -266,13 +235,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <SalaryStructureTable ctc={annualCTC} />
         </Box>
       </A4Page>
     </>

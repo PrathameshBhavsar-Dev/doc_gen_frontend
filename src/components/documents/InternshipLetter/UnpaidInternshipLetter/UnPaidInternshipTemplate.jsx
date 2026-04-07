@@ -1,30 +1,26 @@
 import React from "react";
 // import CubeageUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/CubeageUnPaidInternshipLetter";
-   import PentaUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/PentaUnPaidInternshipLetter"
+import PentaUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/PentaUnPaidInternshipLetter"
 // import RPUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/RPUnPaidInternshipLetter";
 // import SmartMatrixUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartMatrixUnPaidInternshipLetter";
 // import NimbjaUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NimbjaUnPaidInternshipLetter";
 // import DevconsUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnPaidInternshipLetter";
 import QuickUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/QuickUnpaidInternshipLetter";
 import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
-// import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter";
-import  NeweageUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/NeweageUnPaidInternshipLetter";
+import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter"; // ✅ uncommented
+import NeweageUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/NeweageUnPaidInternshipLetter";
 
-// 
-// same company ids, just Increment components
 const companyComponentMap = {
   // 1: CubeageUnPaidInternshipLetter,
-  2:  NeweageUnPaidInternshipLetter,
+  2: NeweageUnPaidInternshipLetter,
   // 3: SmartMatrixUnPaidInternshipLetter,
   // 4: DevconsUnPaidInternshipLetter,
   // 5: RPUnPaidInternshipLetter,
-     6: PentaUnPaidInternshipLetter,
+  6: PentaUnPaidInternshipLetter,
   // 7: NimbjaUnPaidInternshipLetter,
-  8: JDITUnPaidInternshipLetter,
+  8: JDITUnPaidInternshipLetter, // ✅ now defined
   9: QuickUnPaidInternshipLetter,
   10: SmartSoftwareUnPaidInternshipLetter,
-   
-  
 };
 
 const UnPaidInternshipLetterTemplate = ({ company, data }) => {

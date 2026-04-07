@@ -6,7 +6,7 @@ import PentaCertificate from "./CompanyWiseCompletionCertificate/PentaCertificat
 // import JDITExperience from "./CompanyWiseExperience/JDITExperience";
 // import NeweageExperience from "./CompanyWiseExperience/NeweageExperience";
 // import PentaExperience from "./CompanyWiseExperience/PentaExperience";
-// import RPExperience from "./CompanyWiseExperience/RPExperience";
+ import RPCertificate from "./CompanyWiseCompletionCertificate/RPCertificate";
 // import SmartMatrixExperience from "./CompanyWiseExperience/SmartMatrixExperience";
 // import SmartSoftwareExperience from "./CompanyWiseExperience/SmartSoftwareExperience";
 // import QuickExperience from "./CompanyWiseExperience/QuickExperience";
@@ -17,7 +17,7 @@ const companyComponentMap = {
 //   2: NeweageExperience,
 //   3: SmartMatrixExperience,
 //   4: DevconsExperience,
-//   5: RPExperience,
+   5: RPCertificate,
      6: PentaCertificate,
 //   8: JDITExperience,
 //   9: QuickExperience,

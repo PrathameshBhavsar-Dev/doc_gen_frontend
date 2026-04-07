@@ -1,17 +1,3 @@
-// import React from "react";
-// import {
-//   Typography,
-//   Table,
-//   TableHead,
-//   TableBody,
-//   TableRow,
-//   TableCell,
-//   TableContainer,
-//   Box,
-//   Grid,
-// } from "@mui/material";
-// import A4Page from "../../../../layout/A4Page";
-// import { formatCurrency } from "../../../../../utils/salaryCalculations";
 
 // const NimbjaOfferPage2 = ({ company, data }) => {
 //   const annualSalary = Number(data.salary) || 0;
@@ -166,7 +152,7 @@
 
 //         <Box>
 //           <Typography>Signature : ________________________</Typography>
-//           <Typography>Candidate Name : {data.candidateName}</Typography>
+//           <Typography>Candidate Name : {data.employeeName}</Typography>
 //         </Box>
 //       </Box>
 //     </A4Page>
@@ -178,102 +164,33 @@
 import React from "react";
 import {
   Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableContainer,
+
   Box,
-  Grid,
+
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import SalaryStructureTable from "../../../../common/SalaryStructureTable";
 
 
-const NimbjaOfferPage2 = ({ company, data }) => {
-  /* ===== helper for consistent rounding ===== */
-  /* ======================================================
-   ✅ SMARTMATRIX LOGIC (INPUT IS MONTHLY)
-====================================================== */
-
-  const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
-
-  /* 🔥 INPUT IS MONTHLY */
-  const monthlyGross = round2(data.salary || data.newCTC || 0);
-
-  /* ANNUAL DERIVED */
-  const annualCTC = round2(monthlyGross * 12);
-
-  /* Same Percentage Structure */
-  const PERCENT = {
-    basic: 0.4,
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
-
-  /* Monthly Calculation */
-  const basicMonthly = round2(monthlyGross * PERCENT.basic);
-  const hraMonthly = round2(monthlyGross * PERCENT.hra);
-  const daMonthly = round2(monthlyGross * PERCENT.da);
-  const specialMonthly = round2(monthlyGross * PERCENT.special);
-  const foodMonthly = round2(monthlyGross * PERCENT.food);
-
-  /* Adjustment to prevent rounding mismatch */
-  const miscMonthly = round2(
-    monthlyGross -
-      (basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly),
-  );
-
-  /* Annual Derived from Monthly */
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
-  const miscAnnual = round2(miscMonthly * 12);
-
-  /* Salary Rows */
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouquet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Performance Bonus", miscMonthly, miscAnnual],
-  ];
-
-  /* Totals (Guaranteed Correct) */
-  const totalMonthly = monthlyGross;
-  const totalAnnual = annualCTC;
-
+const NimbjaOfferPage2 = ({
+  company,
+  data,
+  salaryRows,
+  totalMonthly,
+  totalAnnual,
+}) => {
   /* ================= TABLE STYLES (UNCHANGED) ================= */
-  const CELL = {
-    border: "1px solid #000",
-    fontFamily: '"Bahnschrift", "Segoe UI", sans-serif',
-    fontSize: "11pt",
-    padding: "6px 8px",
-    lineHeight: 1.4,
-  };
 
-  const GREEN_ROW = {
-    backgroundColor: "#9BBB59",
-  };
 
   const formatDate = (date) =>
     date
-      ? new Date(date).toLocaleDateString("en-US", {
+      ? new Date(date).toLocaleDateString("en-IN", {
           month: "long",
           day: "2-digit",
           year: "numeric",
         })
       : "";
-
-      
-
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -320,6 +237,18 @@ const NimbjaOfferPage2 = ({ company, data }) => {
           </strong>
         </Typography> */}
         {/* 🔥 ONLY THIS PART IS REPLACED */}
+
+        <Typography
+          sx={{
+            textAlign: "right",
+            mb: "5mm",
+            mt: "-8mm",
+            fontSize: "11pt",
+            fontFamily: "Bahnschrift",
+          }}
+        >
+          {formatDate(data.issueDate)}
+        </Typography>
         <SalaryStructureTable
           salaryRows={salaryRows}
           totalMonthly={totalMonthly}
@@ -337,7 +266,7 @@ const NimbjaOfferPage2 = ({ company, data }) => {
               <img
                 src={company.signature}
                 alt="Signature"
-                style={{ height: 45 }}
+                style={{ height: 45, marginTop: "7mm" }}
               />
             )}
             {company?.stamp && (
@@ -348,7 +277,7 @@ const NimbjaOfferPage2 = ({ company, data }) => {
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               <strong>{company.hrName}</strong>
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: -1 }}>
               <strong>HR Relations Lead</strong>
             </Typography>
           </strong>
@@ -358,14 +287,14 @@ const NimbjaOfferPage2 = ({ company, data }) => {
           <Typography sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Signature:</strong> __________________
           </Typography>
-          <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+          <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
             <strong>Candidate Name:</strong>{" "}
-            <strong>{data.candidateName}</strong>
+            <strong>{data.employeeName}</strong>
           </Typography>
         </Box>
       </Box>
     </A4Page>
   );
-};;;
+};
 
 export default NimbjaOfferPage2;

@@ -18,9 +18,9 @@ const RPAppointment = ({ company, data }) => {
 
   /* ================= HELPERS ================= */
 
-    const round2 = (num) => Number(Number(num).toFixed(2));
+//     const round2 = (num) => Number(Number(num).toFixed(2));
 
-  const firstName = data.employeeName?.split(" ")[0] || "";
+   const firstName = data.employeeName?.split(" ")[0] || "";
 
   const formatDate = (date) =>
     date
@@ -31,15 +31,63 @@ const RPAppointment = ({ company, data }) => {
         })
       : "";
 
-   /* ================= SALARY LOGIC ================= */
+//    /* ================= SALARY LOGIC ================= */
 
-  const round0 = (num) => Math.round(num);
+//   const round0 = (num) => Math.round(num);
+
+// // ================= MONTHLY CTC =================
+// const monthlyCTC = round0(Number(data.salary || 0));
+
+// // ================= UPDATED PERCENTAGES =================
+// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= ANNUAL VALUES =================
+// const basicAnnual = basicMonthly * 12;
+// const hraAnnual = hraMonthly * 12;
+// const daAnnual = daMonthly * 12;
+// const specialAnnual = specialMonthly * 12;
+// const foodAnnual = foodMonthly * 12;
+// const pfAnnual = pfMonthly * 12;
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+// ];
+
+// // ================= TOTAL EARNINGS =================
+// const totalMonthly =
+//   basicMonthly +
+//   hraMonthly +
+//   daMonthly +
+//   specialMonthly +
+//   foodMonthly;
+
+// const totalAnnual = totalMonthly * 12;
+
+/////////////////////////// monthly - Annually ////////////////////////////////////
+
+const round0 = (num) => Math.round(num);
+
+// ================= ANNUAL CTC =================
+const annualCTC = round0(Number(data.salary || 0));
 
 // ================= MONTHLY CTC =================
-const monthlyCTC = round0(Number(data.salary || 0));
+const monthlyCTC = round0(annualCTC / 12);
 
 // ================= UPDATED PERCENTAGES =================
-const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+const basicMonthly = round0(monthlyCTC * 0.48);
 const hraMonthly = round0(monthlyCTC * 0.18);
 const daMonthly = round0(monthlyCTC * 0.12);
 const specialMonthly = round0(monthlyCTC * 0.16);
@@ -63,7 +111,7 @@ const salaryRows = [
   ["Dearness Allowance", daMonthly, daAnnual],
   ["Special Allowance", specialMonthly, specialAnnual],
   ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  ["Provident Fund (PF)", pfMonthly, pfAnnual],
 ];
 
 // ================= TOTAL EARNINGS =================
@@ -77,6 +125,61 @@ const totalMonthly =
 const totalAnnual = totalMonthly * 12;
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+// const round0 = (num) => Math.round(num);
+
+// // ================= ANNUAL CTC INPUT =================
+// const annualCTC = round0(Number(data.salary || 0));
+
+// // ================= MONTHLY CTC =================
+// const monthlyCTC = round0(annualCTC / 12);
+
+// // ================= STATIC PF =================
+// const pfMonthly = 3750;
+
+// // ================= FIXED PERCENTAGES =================
+// const hraMonthly = round0(monthlyCTC * 0.18);
+// const daMonthly = round0(monthlyCTC * 0.12);
+// const specialMonthly = round0(monthlyCTC * 0.16);
+// const foodMonthly = round0(monthlyCTC * 0.06);
+
+// // ================= ADJUSTED BASIC =================
+// const basicMonthly = round0(
+//   monthlyCTC -
+//   (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+// );
+
+// // ================= ANNUAL =================
+// const basicAnnual = round0(basicMonthly * 12);
+// const hraAnnual = round0(hraMonthly * 12);
+// const daAnnual = round0(daMonthly * 12);
+// const specialAnnual = round0(specialMonthly * 12);
+// const foodAnnual = round0(foodMonthly * 12);
+// const pfAnnual = round0(pfMonthly * 12);
+
+// // ================= SALARY TABLE =================
+// const salaryRows = [
+//   ["Basic", basicMonthly, basicAnnual],
+//   ["House Rent Allowance", hraMonthly, hraAnnual],
+//   ["Dearness Allowance", daMonthly, daAnnual],
+//   ["Special Allowance", specialMonthly, specialAnnual],
+//   ["Food Allowance", foodMonthly, foodAnnual],
+//   ["Provident Fund (PF)", pfMonthly, pfAnnual],
+// ];
+
+// // ================= TOTAL =================
+// const totalMonthly = round0(
+//   basicMonthly +
+//   hraMonthly +
+//   daMonthly +
+//   specialMonthly +
+//   foodMonthly +
+//   pfMonthly
+// );
+
+// const totalAnnual = round0(totalMonthly * 12);
 
 
   const formatLakhsPerAnnum = (amount) => {
@@ -138,7 +241,7 @@ const totalAnnual = totalMonthly * 12;
                 {/* INTRO */}
                 <Typography mt={2} textAlign="justify" fontSize={15}>
                   Further to your acceptance of our Letter of Offer dated{" "}
-                  <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in
+                  <b>{formatDate(data.offerDate)}</b>. we are pleased to appoint you in
                   our organization with effect from{" "}
                   <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
                   given below:
@@ -160,19 +263,19 @@ const totalAnnual = totalMonthly * 12;
                 >
                   <li>
                     <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                      Your Designation will be <b>“{data.position}”</b>.
+                     1. Your Designation will be <b>“{data.position}”</b>.
                     </Typography>
                   </li>
       
                   <li>
                     <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                      Your total emoluments will <b>{formatLakhsPerAnnum(totalAnnual)}.</b>
+                     2. Your total emoluments will <b>{formatLakhsPerAnnum(totalAnnual)}.</b>
                     </Typography>
                   </li>
       
                   <li>
                     <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                      Full details of your pay package are given in the enclosure to this
+                     3. Full details of your pay package are given in the enclosure to this
                       letter. However, please note that LTA is payable after completion of
                       one year of service, subject to your getting confirmed in the service.
                       If the company provides accommodation / transit accommodation,
@@ -183,21 +286,21 @@ const totalAnnual = totalMonthly * 12;
       
                   <li>
                     <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                      Whilst you are located abroad, the terms applicable will be intimated
+                    4. Whilst you are located abroad, the terms applicable will be intimated
                       at the relevant point of time.
                     </Typography>
                   </li>
       
                   <li>
                     <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                      You shall be due for salary revision not before one year from your
+                    5. You shall be due for salary revision not before one year from your
                       date of joining.
                     </Typography>
                   </li>
       
                   <li>
                     <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                      The Management reserves the right to change the different
+                   6. The Management reserves the right to change the different
                       components/allowances in the total emoluments package, at its own
                       discretion, at any time in future. However, your total monthly salary
                       will be protected.
@@ -206,7 +309,7 @@ const totalAnnual = totalMonthly * 12;
       
                   <li>
                     <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                      You will be on probation for a period of six months from the first of
+                   7. You will be on probation for a period of six months from the first of
                       the calendar month following the date of your joining, after which
                       you will be confirmed if your work is found satisfactory.
                     </Typography>
@@ -214,14 +317,14 @@ const totalAnnual = totalMonthly * 12;
       
                   <li>
                     <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                      Your services are terminable with one month’s notice on either side.
+                    8. Your services are terminable with one month’s notice on either side.
                       The Company may, at its discretion, choose to terminate your services
                       with one month’s total salary in lieu of notice period.
                     </Typography>
                   </li>
                   <li>
                     <Typography fontSize={15} textAlign="justify">
-                      The Company shall have the right to terminate your service without notice,
+                  9.  The Company shall have the right to terminate your service without notice,
                       if the information given by you at a time of interview or in the application
                       is found to be incorrect or in case of any serious misconduct or if reference
                       check leads to an adverse report of your credentials.
@@ -257,16 +360,16 @@ const totalAnnual = totalMonthly * 12;
             }}
           >
             {[
-              "This appointment is subject to your being medically fit.",
-              "The age of retirement will be 58 years.",
-              "You will devote whole time and attention to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information which may become known to you in the course of your duties concerning the Company’s trade secret or affairs.",
-              "You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.",
-              "You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company / Firm / Person.",
-              "You will keep the Company informed of any change in your residential address.",
-              "You will be required to attend to your work according to the exigencies and urgency of the various jobs from time to time and you will adhere to the requirements of the Company.",
-              "You will be governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition.",
-              "The Company reserves the right to transfer you to any of our offices / factories / establishments / group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.",
-              "You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.",
+              "10. This appointment is subject to your being medically fit.",
+              "11. The age of retirement will be 58 years.",
+              "12. You will devote whole time and attention to your duties to promote the interests of the company and you will undertake herewith not to divulge or utilize any information which may become known to you in the course of your duties concerning the Company’s trade secret or affairs.",
+              "13. You will be required to give an undertaking on confidentiality and non-competition as per the document given to you separately.",
+              "14. You will not, without previous written permission of the Company, carry on any business or engage yourself in the services or employment of any other Company / Firm / Person.",
+              "15. You will keep the Company informed of any change in your residential address.",
+              "16. You will be required to attend to your work according to the exigencies and urgency of the various jobs from time to time and you will adhere to the requirements of the Company.",
+              "17. You will be governed by the service conditions applicable to the employees of the Company as amended from time to time and you will abide by the same as well as by the terms of the agreement between yourself and the Company and also as per the undertaking on confidentiality and non-competition.",
+              "18. The Company reserves the right to transfer you to any of our offices / factories / establishments / group companies, whether now in existence or to be set hereafter. However, your present posting will be at Pune.",
+              "19. You are requested to sign and return the duplicate copy of this letter as a token of your acceptance of the above terms and conditions.",
             ].map((text, index) => (
               <li key={index}>
                 <Typography

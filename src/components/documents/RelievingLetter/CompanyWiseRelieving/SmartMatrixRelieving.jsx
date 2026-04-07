@@ -18,7 +18,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         minHeight: "297mm",
         position: "relative",
         fontFamily: "'Roboto', 'Calibri', 'Segoe UI', sans-serif",
-        fontSize: "12pt",
+        fontSize: "13pt",
         lineHeight: "1.6",
         color: "#000",
         backgroundColor: "#fff",
@@ -60,7 +60,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
       {/* ================= CONTENT ================= */}
       <div
         style={{
-          padding: "10mm 20mm 15mm 20mm",
+          padding: "10mm 20mm 5mm 20mm",
           position: "relative",
           zIndex: 1,
         }}
@@ -147,7 +147,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         <br />
         <p
           style={{
-            marginTop: "5mm",
+            marginTop: "3mm",
             marginBottom: "0",
             fontWeight: "400",
             fontFamily: "Verdana",

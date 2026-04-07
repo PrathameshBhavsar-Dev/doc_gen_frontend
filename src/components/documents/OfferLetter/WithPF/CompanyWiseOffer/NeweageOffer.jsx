@@ -47,16 +47,17 @@ const NeweageOffer = ({ company, data }) => {
   const annualCTC = round0(data.salary || 0);
   const monthlyCTC = round0(annualCTC / 12);
 
-  /* Salary Split */
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  const pfMonthly = 3750;
+
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-  const used = basicMonthly + hraMonthly + daMonthly + specialMonthly;
-  const foodMonthly = round0(monthlyCTC - used);
-
-  const pfMonthly = 3750;
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
   const salaryComponents = [
     { name: "Basic", monthly: basicMonthly, annual: basicMonthly * 12 },
@@ -73,14 +74,14 @@ const NeweageOffer = ({ company, data }) => {
     },
     { name: "Food Allowance", monthly: foodMonthly, annual: foodMonthly * 12 },
     {
-      name: "Provident Fund",
+      name: "Provident Fund (PF)",
       monthly: pfMonthly,
       annual: pfMonthly * 12,
     },
   ];
 
   const {
-    candidateName = "",
+    employeeName = "",
     position = "",
     issueDate = "",
     joiningDate = "",
@@ -115,7 +116,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 1 }}>
-            <b>Name</b> : {candidateName}
+            <b>Name</b> : {employeeName}
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -123,7 +124,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
-            Dear {candidateName.split(" ")[0]},
+            Dear {employeeName.split(" ")[0]},
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
@@ -216,7 +217,7 @@ const NeweageOffer = ({ company, data }) => {
             {/* ACCEPTANCE */}
             <Box>
               <Typography mt={10}>Signature: ______________</Typography>
-              <Typography mt={2}>Name: {data.candidateName}</Typography>
+              <Typography mt={2}>Name: {data.employeeName}</Typography>
             </Box>
           </Box>
         </Box>
@@ -372,7 +373,7 @@ const NeweageOffer = ({ company, data }) => {
           {/* ACCEPTANCE */}
           <Box>
             <Typography mt={12}>Signature: ______________</Typography>
-            <Typography mt={2}>Name: {data.candidateName}</Typography>
+            <Typography mt={2}>Name: {data.employeeName}</Typography>
           </Box>
         </Box>
       </A4Layout>

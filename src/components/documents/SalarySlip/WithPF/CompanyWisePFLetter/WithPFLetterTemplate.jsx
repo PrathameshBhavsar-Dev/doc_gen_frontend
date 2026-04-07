@@ -8,7 +8,7 @@ import NeweageSalarySlip from "./NeweageSalarySlip";
 import SmartMatrixSalarySlip from "./SmartMatrixSalarySlip";
 import SmartSoftwareSalarySlip from "./SmartSoftwareSalarySlip";
 import PentaSalarySlip from "./PentaSalarySlip";
-import QuickSalarySlip from "../../WithPF/CompanyWisePFLetter/QMSSalarySlip";
+import QuickSalarySlip from "./QuickSalarySlip";
 
 // same company ids, just Increment components
 const companyComponentMap = {

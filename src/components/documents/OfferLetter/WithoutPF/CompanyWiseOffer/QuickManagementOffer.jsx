@@ -25,7 +25,7 @@ const salaryStructure = [
 const QuickManagementOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const { mrms, candidateName, address, position, salary, issueDate } = data;
+  const { mrms, employeeName, address, position, salary, issueDate } = data;
 
   const annualCTC = Number(salary || 0);
   const monthlyCTC = Math.round(annualCTC / 12);
@@ -35,17 +35,12 @@ const QuickManagementOffer = ({ company, data }) => {
 
       {/* ================= PAGE 1 ================= */}
       <div style={styles.page}>
-        {/* HEADER */}
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+
+        <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        />
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
@@ -53,10 +48,9 @@ const QuickManagementOffer = ({ company, data }) => {
           <span style={styles.label}>Name</span>
           <span style={styles.colon}>:</span>
           <span style={styles.value}>
-            {mrms} {candidateName}
+            {mrms} {employeeName}
           </span>
         </div>
-
 
         <div style={styles.detailRow}>
           <span style={styles.label}>Address</span>
@@ -74,7 +68,7 @@ const QuickManagementOffer = ({ company, data }) => {
         </div>
 
 
-        <p>Dear {getFirstName(candidateName)},</p>
+        <p>Dear {getFirstName(employeeName)},</p>
 
         <p style={styles.paragraph}>
           Thank you for exploring career opportunities with{" "}
@@ -122,7 +116,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.candidateBlock}>
             <p>Signature : ____________</p>
             <p>
-              Candidate Name : <strong>{candidateName}</strong>
+              Candidate Name : <strong>{employeeName}</strong>
             </p>
           </div>
         </div>
@@ -136,16 +130,11 @@ const QuickManagementOffer = ({ company, data }) => {
 
       {/* ================= PAGE 2 ================= */}
       <div style={styles.page}>
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+        <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        />
 
         <p style={styles.annexureTitle}>Annexure A Salary Structure</p>
 
@@ -178,7 +167,6 @@ const QuickManagementOffer = ({ company, data }) => {
         </table>
 
         {/* PAGE-2 SIGN */}
-        {/* PAGE-2 SIGN */}
         <div style={styles.annexureSignRow}>
           {/* LEFT SIDE — HR */}
           <div style={styles.annexureLeft}>
@@ -192,7 +180,7 @@ const QuickManagementOffer = ({ company, data }) => {
                 <img src={company.stamp} alt="Stamp" style={styles.stampInline} />
               )}
             </div>
-
+ 
             <div>HR Department, Pune</div>
           </div>
 
@@ -200,7 +188,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.annexureRight}>
             <div>Signature : ____________</div>
             <div>
-              Candidate : <strong>{candidateName}</strong>
+              Candidate : <strong>{employeeName}</strong>
             </div>
           </div>
         </div>
@@ -243,7 +231,7 @@ const styles = {
 
   detailRow: {
     display: "grid",
-    gridTemplateColumns: "80px 10px 1fr", // 🔥 image jaisa spacing
+    gridTemplateColumns: "80px 10px 1fr", 
     columnGap: "4px",
     marginBottom: 4,
     alignItems: "start",
@@ -347,6 +335,7 @@ const styles = {
 
   annexureLeft: {
     textAlign: "left",
+    marginLeft: "60px"
   },
 
   annexureRight: {
@@ -376,53 +365,6 @@ const styles = {
 
 
 
-  // annexureSignRow: {
-  //   display: "flex",
-  //   justifyContent: "flex-start",   // 🔥 important
-  //   alignItems: "flex-end",
-  //   gap: 80,                        // 🔥 sign & candidate ke beech gap
-  //   marginTop: 70,
-  //   fontFamily: "Verdana",
-  //   fontSize: 11,
-  // },
 
-  // annexureLeft: {
-  //   lineHeight: "14px",
-  // },
-
-  // hrName: {
-  //   fontWeight: "bold",
-  //   marginBottom: 6,
-  // },
-
-  // hrSignWrap: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   gap: 20,          // sign & stamp gap
-  //   height: 70,
-  //   marginTop: 12,
-  //   marginBottom: 6,
-  // },
-
-  // signInline: {
-  //   height: 52,
-  // },
-
-  // stampInline: {
-  //   height: 74,
-  //   marginLeft: -8,
-  // },
-
-  // annexureRight: {
-  //   lineHeight: "16px",
-  //   whiteSpace: "nowrap",   // text ek block me rahe
-  // },
-
-  //  annexureLeft: {
-  //     // textAlign: "left",
-  //     marginLeft: "120px",
-  //     marginTop: "40px",
-  //     fontSize: "14px",
-  //   },
 
 };

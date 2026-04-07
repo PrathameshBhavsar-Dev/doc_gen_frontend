@@ -96,18 +96,25 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(num);
 
-  // 🔹 Source of Truth → Monthly salary entered by user
-  const monthlyCTC = round0(Number(data.totalSalary || 0));
+  // ================= INPUT IS ANNUAL =================
+  const annualCTC = round0(Number(data.totalSalary || 0));
+  const monthlyCTC = round0(annualCTC / 12);
 
-  // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.48);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
+  const pfAnnual = pfMonthly * 12;
+
+  // ================= FIXED PERCENTAGES =================
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
   const foodMonthly = round0(monthlyCTC * 0.06);
 
-  // ================= STATIC PF =================
-  const pfMonthly = 3750;
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+  );
 
   // ================= ANNUAL VALUES =================
   const basicAnnual = basicMonthly * 12;
@@ -115,9 +122,8 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   const daAnnual = daMonthly * 12;
   const specialAnnual = specialMonthly * 12;
   const foodAnnual = foodMonthly * 12;
-  const pfAnnual = pfMonthly * 12;
 
-  // ================= SALARY TABLE =================
+  // ================= SALARY TABLE (UNCHANGED STRUCTURE) =================
   const salaryRows = [
     ["Basic", basicMonthly, basicAnnual],
     ["House Rent Allowance", hraMonthly, hraAnnual],
@@ -127,9 +133,15 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
     ["Provident Fund (PF)", pfMonthly, pfAnnual],
   ];
 
-  // ================= TOTAL GROSS (WITHOUT PF) =================
-  const totalMonthly =
-    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly;
+  // ================= TOTAL (WITH PF) =================
+  const totalMonthly = round0(
+    basicMonthly +
+      hraMonthly +
+      daMonthly +
+      specialMonthly +
+      foodMonthly +
+      pfMonthly,
+  );
 
   const totalAnnual = totalMonthly * 12;
 
@@ -243,7 +255,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography align="center" fontWeight={600} mb={4}>
+        <Typography align="center" fontWeight={600} mb={4} mt={4}>
           Annexure A – Salary Structure
         </Typography>
 
@@ -292,9 +304,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             </TableRow>
           </TableBody>
         </Table>
-        <Typography
-          sx={{ fontFamily: "Verdana", fontSize: "14pt", marginTop: "50px" }}
-        >
+        <Typography sx={{ fontSize: "14pt", marginTop: "80px" }}>
           <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 5 }}>

@@ -95,8 +95,8 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   const round0 = (num) => Math.round(num);
 
   // 🔹 Source of Truth → Monthly Salary entered by user
-  const monthlyCTC = round0(Number(data.totalSalary || 0));
-
+  const annualCTC = round0(Number(data.totalSalary || 0));
+  const monthlyCTC = round0(annualCTC / 12);
   // ================= PERCENTAGE BREAKUP =================
   const basicMonthly = round0(monthlyCTC * 0.4);
   const hraMonthly = round0(monthlyCTC * 0.18);
@@ -236,7 +236,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Typography align="center" fontWeight={600} mb={4}>
+        <Typography align="center" fontWeight={600} mb={4} mt={5}>
           Annexure A – Salary Structure
         </Typography>
 
@@ -285,9 +285,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             </TableRow>
           </TableBody>
         </Table>
-        <Typography
-          sx={{ fontFamily: "Verdana", fontSize: "14pt", marginTop: "60px" }}
-        >
+        <Typography sx={{ fontSize: "14pt", marginTop: "70px" }}>
           <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 5 }}>

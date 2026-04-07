@@ -14,10 +14,8 @@ const formatDate = (date) => {
 
 const formatCurrency = (value) => {
   if (value == null || value === "") return "";
-  return Number(value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+
+  return Math.round(value).toLocaleString("en-IN");
 };
 
 /* ===================== SALARY CALCULATION ===================== */
@@ -26,28 +24,45 @@ const calculateSalaryBreakup = (annualCTC) => {
     return { salaryBreakup: [], totalPerMonth: 0, totalPerYear: 0 };
   }
 
-  const round2 = (num) => Number(num.toFixed(2));
-
+const round0 = (num) => Math.round(num);
   // ✅ Monthly CTC
-  const monthlyCTC = round2(annualCTC / 12);
+  // const monthlyCTC = round0(annualCTC / 12);
 
-  // ✅ 48 + 18 + 12 + 16 + 8 = 100%
-  const basicMonthly = round2(monthlyCTC * 0.48);
-  const hraMonthly = round2(monthlyCTC * 0.18);
-  const daMonthly = round2(monthlyCTC * 0.12);
-  const foodMonthly = round2(monthlyCTC * 0.16);
-  const specialMonthly = round2(monthlyCTC * 0.06);
-
-  // ✅ Annual = Monthly × 12
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-
-  // ✅ PF Static (ONLY DISPLAY)
+  // ✅ PF STATIC
   const pfMonthly = 3750;
-  const pfAnnual = round2(pfMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  // ✅ Other components (% based)
+ const monthlyCTC = round0(annualCTC / 12);
+const hraMonthly = round0(monthlyCTC * 0.18);
+const daMonthly = round0(monthlyCTC * 0.12);
+const foodMonthly = round0(monthlyCTC * 0.16);
+const specialMonthly = round0(monthlyCTC * 0.06);
+
+  // ✅ TOTAL of all except Basic
+  const totalOthers =
+    hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly;
+
+  // ✅ BASIC = REMAINING
+  let basicMonthly = round0(monthlyCTC - totalOthers);
+
+  // ✅ Rounding Fix
+  const finalCheck =
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    foodMonthly +
+    specialMonthly +
+    pfMonthly;
+
+basicMonthly += Math.round(monthlyCTC - finalCheck);
+
+  // ✅ Annual values
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
 
   const salaryBreakup = [
     { label: "Basic", perMonth: basicMonthly, perYear: basicAnnual },
@@ -58,22 +73,14 @@ const calculateSalaryBreakup = (annualCTC) => {
     { label: "Provident Fund (PF)", perMonth: pfMonthly, perYear: pfAnnual }, // show only
   ];
 
-  // ✅ Total WITHOUT PF
-  const totalPerMonth = round2(
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    foodMonthly +
-    specialMonthly
-  );
+  // ✅ Total WITHOUT PF (Gross)
+  const totalPerMonth = round0(
+  basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
+);
 
-  const totalPerYear = round2(
-    basicAnnual +
-    hraAnnual +
-    daAnnual +
-    foodAnnual +
-    specialAnnual
-  );
+ const totalPerYear = round0(
+  basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
+);
 
   return { salaryBreakup, totalPerMonth, totalPerYear };
 };
@@ -119,7 +126,7 @@ const Page = ({ company, children }) => (
 );
 
 /* ===================== SIGNATURE + STAMP ===================== */
-const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
+const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
   return (
     <Box
       sx={{
@@ -163,16 +170,44 @@ const SignatureBlock = ({ company, candidateName, showCandidate = true }) => {
       </Box>
 
       {/* CANDIDATE SIGN */}
-      {showCandidate && (
-        <Box sx={{ textAlign: "right" }}>
-          <Typography sx={{ fontSize: 14, fontWeight: "bold" }}>
-            Signature: ___________________
-          </Typography>
-          <Typography sx={{ fontSize: 14 }}>
-            Candidate Name: {candidateName}
-          </Typography>
-        </Box>
-      )}
+     {showCandidate && (
+  <Box
+    sx={{
+      width: 320,
+      ml: "auto",
+      textAlign: "right",
+    }}
+  >
+    {/* Signature */}
+    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+      Signature: ______________________
+    </Typography>
+
+    {/* Candidate Name */}
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+        fontSize: 16,
+        mt: 0.5,
+      }}
+    >
+      <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
+        Candidate Name:
+      </Box>
+
+      <Box
+        sx={{
+          maxWidth: 180,              // controls when it wraps
+          wordBreak: "break-word",
+          textAlign: "left",          // keeps wrapping clean
+        }}
+      >
+        {employeeName}
+      </Box>
+    </Box>
+  </Box>
+)}
     </Box>
   );
 };
@@ -211,7 +246,7 @@ const PentaOffer = ({ company, data }) => {
         >
           <Typography fontWeight="bold">Name</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.mrms} {data.candidateName}</Typography>
+          <Typography>{data.mrms} {data.employeeName}</Typography>
 
           <Typography fontWeight="bold">Address</Typography>
           <Typography fontWeight="bold">:</Typography>
@@ -227,7 +262,7 @@ const PentaOffer = ({ company, data }) => {
 
         {/* REST OF CONTENT UNCHANGED */}
         <Typography sx={{ fontSize: 14, mb: 1 }}>
-          Dear {data.candidateName?.split(" ")[0]},
+          Dear {data.employeeName?.split(" ")[0]},
         </Typography>
 
         <Typography sx={{ fontSize: 14, lineHeight: 1.9, mb: 1 }}>
@@ -282,7 +317,7 @@ const PentaOffer = ({ company, data }) => {
 
         <SignatureBlock
           company={company}
-          candidateName={data.candidateName}
+          employeeName={data.employeeName}
         />
         {/* </Box> */}
 
@@ -365,7 +400,7 @@ const PentaOffer = ({ company, data }) => {
 
         <SignatureBlock
           company={company}
-          candidateName={data.candidateName}
+          employeeName={data.employeeName}
           showCandidate={true}
         />
 

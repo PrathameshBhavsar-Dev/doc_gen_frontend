@@ -24,37 +24,48 @@ const formatDate = (date) =>
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Number(v || 0).toLocaleString("en-IN",
+  //    {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 2,
+  // }
+);
 
 /* ================= SALARY BREAKUP WITH PF ================= */
 
 const generateSalaryBreakup = (monthlyCTC) => {
 
-  // Calculate salary components (100%)
-  let basic = Math.round(monthlyCTC * 0.48);
-  let hra = Math.round(monthlyCTC * 0.18);
-  let da = Math.round(monthlyCTC * 0.12);
-  let special = Math.round(monthlyCTC * 0.16);
-  let food = Math.round(monthlyCTC * 0.06);
+  const round = (n) => Math.round(n);
 
-  // Fix rounding difference
-  const calculated = basic + hra + da + special + food;
-  basic += monthlyCTC - calculated;
-
-  // Static PF
+  // ✅ PF STATIC (included in CTC)
   const pfMonthly = 3750;
   const pfAnnual = pfMonthly * 12;
 
+  // ✅ % based components
+  const hra = round(monthlyCTC * 0.18);
+  const da = round(monthlyCTC * 0.12);
+  const special = round(monthlyCTC * 0.16);
+  const food = round(monthlyCTC * 0.06);
+
+  // ✅ Step 1: total of all except Basic
+  const totalOthers = hra + da + special + food + pfMonthly;
+
+  // ✅ Step 2: Basic = remaining
+  // basic + hra + da + special + food + pf = monthlyCTC 
+  let basic = round(monthlyCTC - totalOthers);
+
+  // ✅ Step 3: FINAL ROUND FIX (no ₹1 mismatch)
+  // const finalCheck = basic + totalOthers;
+  // basic += (monthlyCTC - finalCheck);
+
+  // ✅ RETURN (same format as your code)
   return [
     ["Basic Salary", basic, basic * 12],
     ["House Rent Allowance", hra, hra * 12],
     ["Dearness Allowance", da, da * 12],
     ["Special Allowance", special, special * 12],
     ["Food Allowance", food, food * 12],
-    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual], // ✅ included in CTC
   ];
 };
 
@@ -63,14 +74,14 @@ const generateSalaryBreakup = (monthlyCTC) => {
 const QuickConfirmation = ({ company, data }) => {
   if (!company || !data) return null;
 
-const monthlyCTC = Number(data.totalSalary || 0);
-const annualCTC = monthlyCTC * 12;
+const annualCTC = Number(data.totalSalary || 0);
+const monthlyCTC = Math.round(annualCTC / 12);
 
 const salaryRows = generateSalaryBreakup(monthlyCTC);
 
- const monthlyGross = salaryRows
-  .filter(row => row[0] !== "Provident Fund (PF)")
-  .reduce((sum, row) => sum + row[1], 0);
+//  const monthlyGross = salaryRows
+//   .filter(row => row[0] !== "Provident Fund (PF)")
+//   .reduce((sum, row) => sum + row[1], 0);
 
   return (
     <>
@@ -224,7 +235,7 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
             <TableRow sx={{ backgroundColor: "#87CEEB" }}>
               <TableCell><strong>Total Monthly Gross Salary</strong></TableCell>
               <TableCell align="right">
-                <strong>{formatCurrency(monthlyGross)}</strong>
+                <strong>{formatCurrency(monthlyCTC)}</strong>
               </TableCell>
               <TableCell align="right">
                 <strong>{formatCurrency(annualCTC)}</strong>

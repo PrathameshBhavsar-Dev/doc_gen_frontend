@@ -1,4 +1,3 @@
-// import React from "react";
 
 // /* ================= HELPERS ================= */
 // const formatDate = (date) => {
@@ -25,7 +24,7 @@
 // const QuickManagementOffer = ({ company, data }) => {
 //   if (!company || !data) return null;
 
-//   const { mrms, candidateName, address, position, salary, issueDate } = data;
+//   const { mrms, employeeName, address, position, salary, issueDate } = data;
 
 //   const annualCTC = Number(salary || 0);
 //   const monthlyCTC = Math.round(annualCTC / 12);
@@ -53,7 +52,7 @@
 //   <span style={styles.label}>Name</span>
 //   <span style={styles.colon}>:</span>
 //   <span style={styles.value}>
-//     {mrms} {candidateName}
+//     {mrms} {employeeName}
 //   </span>
 // </div>
 
@@ -74,7 +73,7 @@
 // </div>
 
 
-//         <p>Dear {getFirstName(candidateName)},</p>
+//         <p>Dear {getFirstName(employeeName)},</p>
 
 //         <p style={styles.paragraph}>
 //           Thank you for exploring career opportunities with{" "}
@@ -122,7 +121,7 @@
 //           <div style={styles.candidateBlock}>
 //             <p>Signature : ____________</p>
 //             <p>
-//               Candidate Name : <strong>{candidateName}</strong>
+//               Candidate Name : <strong>{employeeName}</strong>
 //             </p>
 //           </div>
 //         </div>
@@ -200,7 +199,7 @@
 //   <div style={styles.annexureRight}>
 //     <div>Signature : ____________</div>
 //     <div>
-//       Candidate : <strong>{candidateName}</strong>
+//       Candidate : <strong>{employeeName}</strong>
 //     </div>
 //   </div>
 // </div>
@@ -383,7 +382,13 @@
 
 
 // };
+
+
+
+
 import React from "react";
+import A4Page from "../../../../layout/A4Page";
+
 
 /* ================= HELPERS ================= */
 const formatDate = (date) => {
@@ -397,43 +402,70 @@ const formatDate = (date) => {
 
 const getFirstName = (name = "") => name.split(" ")[0];
 
-/* ================= SALARY STRUCTURE ================= */
-const salaryStructure = [
-  { label: "Basic", percent: 0.48 },
-  { label: "House Rent Allowance", percent: 0.18 },
-  { label: "Dearness Allowance", percent: 0.12 },
-  { label: "Special Allowance", percent: 0.16 },
-  { label: "Food Allowance", percent: 0.06 },
-  // { label: "Misc. Allowance", percent: 0.08 },
-];
-
 const QuickManagementOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const { mrms, candidateName, address, position, salary, issueDate } = data;
+  const { mrms, employeeName, address, position, salary, issueDate } = data;
 
-  const annualCTC = Number(salary || 0);
-  const monthlyCTC = Math.round(annualCTC / 12);
+  /* ===== PARSE INPUT ===== */
+  const parseNumber = (value) => {
+    if (!value) return 0;
+    return Number(String(value).replace(/,/g, ""));
+  };
+  const round0 = (n) => Math.round(n || 0);
 
-  /* ===== PF STATIC (ONLY DISPLAY) ===== */
+  const annualCTC = round0(parseNumber(salary));
+  const monthlyCTC = round0(annualCTC / 12);
+
+  /* ===== CUBEAGE SALARY LOGIC (WITH PF) ===== */
   const pfMonthly = 3750;
-  const pfAnnual = pfMonthly * 12;
+
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+
+  const basicMonthly = round0(
+    monthlyCTC - (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
+
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
+
+  const salaryRows = [
+    { label: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { label: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { label: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { label: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { label: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { label: "Provident Fund (PF)", monthly: pfMonthly, annual: pfAnnual },
+  ];
+
+  const totalMonthly = round0(
+    basicMonthly + hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly
+  );
+  const totalAnnual = round0(totalMonthly * 12);
 
   return (
-    <div style={styles.wrapper}>
+    <>
+    <A4Page
+            headerSrc={company.header}
+            // footerSrc={company.footer}
+          // watermarkSrc={company.watermark}
+          >
 
       {/* ================= PAGE 1 ================= */}
-      <div style={styles.page}>
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+      <div>
+         {/* <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        /> */}
+
 
         <div style={styles.date}>{formatDate(issueDate)}</div>
 
@@ -441,7 +473,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <span style={styles.label}>Name</span>
           <span style={styles.colon}>:</span>
           <span style={styles.value}>
-            {mrms} {candidateName}
+            {mrms} {employeeName}
           </span>
         </div>
 
@@ -459,8 +491,9 @@ const QuickManagementOffer = ({ company, data }) => {
           </span>
         </div>
 
-        <p>Dear {getFirstName(candidateName)},</p>
-
+<p style={{ fontSize: "14px" }}>
+  Dear {getFirstName(employeeName)},
+</p>
         <p style={styles.paragraph1}>
           Thank you for exploring career opportunities with{" "}
           <strong>QUICK MANAGEMENT SERVICES</strong>. You have successfully
@@ -487,7 +520,7 @@ const QuickManagementOffer = ({ company, data }) => {
           formalities, you will be issued a Letter of Appointment.
         </p>
 
-        <p>Yours Sincerely,</p>
+        <p style={{ fontSize: "14px" }}>Yours Sincerely,</p>
 
         <div style={styles.signRow}>
           <div>
@@ -507,7 +540,7 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.candidateBlock}>
             <p>Signature : ____________</p>
             <p>
-              Candidate Name : <strong>{candidateName}</strong>
+              Candidate Name : <strong>{employeeName}</strong>
             </p>
           </div>
         </div>
@@ -519,18 +552,16 @@ const QuickManagementOffer = ({ company, data }) => {
 
       <div style={styles.pageBreak} />
 
+      </A4Page>
+
       {/* ================= PAGE 2 ================= */}
-      <div style={styles.page}>
-        <div style={styles.header}>
-          <img src={company.logo} alt="logo" style={styles.logo} />
-          <div style={styles.companyName}>QUICK MANAGEMENT SERVICES</div>
-          <div style={styles.headerLine} />
-          <div style={styles.headerAddress}>Address : {company.address}</div>
-          <div style={styles.headerContact}>
-            Email : {company.email} | {company.phone}
-            <div style={styles.headerLine} />
-          </div>
-        </div>
+      <A4Page
+         headerSrc={company.header}>
+        {/* <img
+          src={company.header}
+          alt="Company Header"
+          style={{ width: "100%", display: "block" }}
+        /> */}
 
         <p style={styles.annexureTitle}>Annexure A Salary Structure</p>
 
@@ -543,36 +574,27 @@ const QuickManagementOffer = ({ company, data }) => {
             </tr>
           </thead>
           <tbody>
-            {salaryStructure.map((item) => {
-              const yearly = Math.round(annualCTC * item.percent);
-              const monthly = Math.round(yearly / 12);
-              return (
-                <tr key={item.label}>
-                  <td style={styles.td}>{item.label}</td>
-                  <td style={styles.td}>{monthly.toLocaleString("en-IN")}</td>
-                  <td style={styles.td}>{yearly.toLocaleString("en-IN")}</td>
-                </tr>
-              );
-            })}
-
-            {/* ===== PF ROW (STATIC – NOT INCLUDED IN TOTAL) ===== */}
-            <tr>
-              <td style={styles.td}>Provident Fund (PF)</td>
-              <td style={styles.td}>{pfMonthly.toLocaleString("en-IN")}</td>
-              <td style={styles.td}>{pfAnnual.toLocaleString("en-IN")}</td>
-            </tr>
+            {salaryRows.map((row) => (
+              <tr key={row.label}>
+                <td style={styles.td}>{row.label}</td>
+                <td style={styles.td}>{row.monthly.toLocaleString("en-IN")}</td>
+                <td style={styles.td}>{row.annual.toLocaleString("en-IN")}</td>
+              </tr>
+            ))}
 
             <tr style={{ fontWeight: "bold" }}>
               <td style={styles.td}>Total Monthly Gross Salary</td>
-              <td style={styles.td}>{monthlyCTC.toLocaleString("en-IN")}</td>
-              <td style={styles.td}>{annualCTC.toLocaleString("en-IN")}</td>
+              <td style={styles.td}>{totalMonthly.toLocaleString("en-IN")}</td>
+              <td style={styles.td}>{totalAnnual.toLocaleString("en-IN")}</td>
             </tr>
           </tbody>
         </table>
 
         <div style={styles.annexureSignRow}>
           <div style={styles.annexureLeft}>
-            <div style={styles.hrName}>{company.hrName}</div>
+            <div style={{ ...styles.hrName, fontSize: "14px" }}>
+              {company.hrName}
+            </div>
             <div style={styles.hrSignWrap}>
               {company.signature && (
                 <img src={company.signature} alt="" style={styles.signInline} />
@@ -587,19 +609,21 @@ const QuickManagementOffer = ({ company, data }) => {
           <div style={styles.annexureRight}>
             <div>Signature : ____________</div>
             <div>
-              Candidate : <strong>{candidateName}</strong>
+              Candidate : <strong>{employeeName}</strong>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
+      </A4Page>
+    </>
   );
 };
 
 export default QuickManagementOffer;
 
 /* ================= STYLES ================= */
+const baseFont = "14px";
+
 const styles = {
   wrapper: { background: "#eee", padding: 20 },
 
@@ -609,8 +633,7 @@ const styles = {
     background: "#fff",
     margin: "auto",
     padding: "40px",
-    fontFamily: "Times New Roman",
-    fontSize: "12px",
+    fontSize: baseFont,
     position: "relative",
   },
 
@@ -619,12 +642,12 @@ const styles = {
   header: { textAlign: "center", marginBottom: 20 },
   logo: { height: 45 },
 
-  companyName: { fontSize: 18, fontWeight: "bold", color: "#0070C0" },
+  companyName: { fontSize: baseFont, fontWeight: "bold", color: "#0070C0" },
   headerLine: { height: 2, background: "#000", margin: "8px 0" },
-  headerAddress: { fontWeight: "bold", fontSize: 10 },
-  headerContact: { fontWeight: "bold", fontSize: 10 },
+  headerAddress: { fontWeight: "bold", fontSize: baseFont },
+  headerContact: { fontWeight: "bold", fontSize: baseFont },
 
-  date: { textAlign: "right", marginBottom: 15 },
+  date: { textAlign: "right", marginBottom: 15, fontSize: baseFont },
 
   detailRow: {
     display: "grid",
@@ -632,11 +655,12 @@ const styles = {
     columnGap: "4px",
     marginBottom: 4,
     alignItems: "start",
+    fontSize: baseFont,
   },
 
-  label: { fontWeight: "bold" },
-  colon: { textAlign: "center" },
-  value: { lineHeight: "16px" },
+  label: { fontWeight: "bold", fontSize: baseFont },
+  colon: { textAlign: "center", fontSize: baseFont },
+  value: { lineHeight: "14px", fontSize: baseFont },
 
   subjectRow: {
     display: "grid",
@@ -644,14 +668,26 @@ const styles = {
     columnGap: "4px",
     margin: "15px 0",
     fontWeight: "bold",
+    fontSize: baseFont,
   },
 
-  paragraph1: { textAlign: "justify", marginBottom: 10 },
+  paragraph1: {
+    textAlign: "justify",
+    marginBottom: 10,
+    fontSize: baseFont,
+  },
+
+  paragraph: {
+    textAlign: "center",
+    marginTop: 130,
+    fontSize: baseFont,
+  },
 
   signRow: {
     display: "flex",
     justifyContent: "space-between",
     marginTop: 40,
+    fontSize: baseFont,
   },
 
   signStampRow: {
@@ -663,23 +699,26 @@ const styles = {
   signImg: { height: 50, marginTop: 25 },
   stampImgInline: { height: 100, marginTop: 25 },
 
-  hrName: { fontSize: 11 },
+  hrName: { fontSize: baseFont },
 
-  candidateBlock: { textAlign: "left", fontSize: 11, marginTop: 130 },
-  paragraph: { textAlign: "center", marginTop: 130 },
-
+  candidateBlock: {
+    textAlign: "left",
+    fontSize: baseFont,
+    marginTop: 130,
+  },
 
   annexureTitle: {
     textAlign: "center",
     fontWeight: "bold",
     marginBottom: 20,
+    fontSize: baseFont,
   },
 
   salaryTable: {
     width: "75%",
     margin: "0 auto",
     borderCollapse: "collapse",
-    fontSize: "11px",
+    fontSize: baseFont,
   },
 
   th: {
@@ -687,12 +726,14 @@ const styles = {
     padding: "5px",
     backgroundColor: "#00AEEF",
     textAlign: "center",
+    fontSize: baseFont,
   },
 
   td: {
     border: "1px solid #000",
     padding: "5px",
     textAlign: "center",
+    fontSize: baseFont,
   },
 
   annexureSignRow: {
@@ -700,11 +741,11 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "flex-end",
     marginTop: "50px",
-    fontSize: "14px",
+    fontSize: "9px",
   },
 
-  annexureLeft: { textAlign: "left" },
-  annexureRight: { textAlign: "right" },
+  annexureLeft: { textAlign: "left", fontSize: baseFont },
+  annexureRight: { textAlign: "right", fontSize: baseFont },
 
   hrSignWrap: {
     display: "flex",
@@ -713,6 +754,6 @@ const styles = {
     marginBottom: "6px",
   },
 
-  signInline: { height: "50px" },
+  signInline: { height: "60px" },
   stampInline: { height: "100px", opacity: 0.9 },
 };

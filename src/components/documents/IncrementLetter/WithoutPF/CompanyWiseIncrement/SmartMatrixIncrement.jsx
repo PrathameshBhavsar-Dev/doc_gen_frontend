@@ -35,8 +35,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
 
   /* ================= CORRECT LOGIC (INPUT IS MONTHLY) ================= */
 
-  const monthlyGross = round2(data.newCTC || 0); // INPUT IS MONTHLY
-  const annualCTC = round2(monthlyGross * 12); // Annual derived from monthly
+  const annualCTC = round2(data.newCTC || 0); // INPUT = ANNUAL
+  const monthlyGross = round2(annualCTC / 12); // convert to monthly
 
   // Percentage Structure (As per Image)
   const PERCENT = {
@@ -121,6 +121,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
               fontWeight: 500,
               fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
               mb: "12mm",
+              mt: "8mm",
             }}
           >
             {formatDate(data.issueDate)}
@@ -185,19 +186,12 @@ const SmartMatrixIncrement = ({ company, data }) => {
           </Typography>
 
           {/* COMPANY NAME (BOLD IN WORD) */}
-          <Typography
-            sx={{
-              fontSize: "12pt",
-              fontWeight: 600,
-              mb: "5mm",
-              fontFamily: "Verdana",
-            }}
-          >
-            <strong>{company.name}</strong>
+          <Typography sx={{ fontSize: "14pt", marginTop: "80px" }}>
+            <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
           </Typography>
 
           {/* STAMP + SIGNATURE */}
-          <Box sx={{ mt: "3mm" }}>
+          <Box sx={{ mt: "6mm" }}>
             {/* STAMP + SIGNATURE SIDE BY SIDE */}
             <Box
               sx={{
@@ -207,21 +201,21 @@ const SmartMatrixIncrement = ({ company, data }) => {
                 mb: "4mm",
               }}
             >
-              {/* STAMP */}
-              {company.stamp && (
-                <img
-                  src={company.CEO}
-                  alt="Company Stamp"
-                  style={{ width: "45mm" }}
-                />
-              )}
-
               {/* SIGNATURE */}
               {company.signature && (
                 <img
+                  src={company.CEO}
+                  alt="Company Stamp"
+                  style={{ width: "35mm" }}
+                />
+              )}
+
+              {/* STAMP */}
+              {company.stamp && (
+                <img
                   src={company.stamp}
                   alt="HR Signature"
-                  style={{ width: "35mm" }}
+                  style={{ width: "30mm" }}
                 />
               )}
             </Box>

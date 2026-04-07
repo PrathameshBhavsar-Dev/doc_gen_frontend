@@ -227,12 +227,12 @@ const NimbjaFullAndFinal = ({ company = {}, data = {} }) => {
             </TableRow>
 
             {[
-              ["Basic", basic],
-              ["HRA", hra],
-              ["Dearness Allowance", da],
-              ["Special Allowances", special],
-              ["Food Allowances", food],
-              ["Misc Allowances", pfAllowance],
+              ["BasicS", basic],
+              ["Bouqet Of Benefits", hra],
+              ["HRA", da],
+              ["City Allowances", special],
+              ["Superannuation Fund", food],
+              ["Provident Fund(PF)", pfAllowance],
             ].map(([label, val]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>

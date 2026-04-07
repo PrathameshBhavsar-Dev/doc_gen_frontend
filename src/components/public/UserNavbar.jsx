@@ -24,7 +24,6 @@ import React from "react";
 
 //         </div>
 
-
 //         {/* Right Side */}
 //         <div className="flex items-center gap-2 sm:gap-3">
 //           {/* User Name (hidden on very small devices) */}
@@ -34,9 +33,9 @@ import React from "react";
 
 //           {/* Avatar */}
 //           <div
-//             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full 
-//           bg-gradient-to-b from-[#0E145E] to-[#B37BD6] 
-//           text-white flex items-center justify-center 
+//             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full
+//           bg-gradient-to-b from-[#0E145E] to-[#B37BD6]
+//           text-white flex items-center justify-center
 //           text-xs sm:text-sm font-semibold shadow-md"
 //           >
 //             {user.name.charAt(0)}
@@ -49,48 +48,43 @@ import React from "react";
 
 // export default UserNavbar;
 
-
-
 import { Menu } from "lucide-react";
+import { useAuth } from "../../core/contexts/AuthContext"; // ✅ ADD THIS
 
 const UserNavbar = ({ setMobileOpen }) => {
-  const user = {
-    name: "Admin",
-  };
+  const { user } = useAuth(); // ✅ GET USER FROM CONTEXT
 
   return (
     <div className="w-full bg-white shadow-md">
       <div className="h-14 sm:h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
-
         {/* LEFT SIDE */}
         <div className="flex items-center gap-3">
-
-          {/* Hamburger (Mobile Only) */}
+          {/* Hamburger */}
           <button
             onClick={() => setMobileOpen(true)}
             className="lg:hidden p-2 rounded-md hover:bg-gray-100"
           >
             <Menu size={22} />
           </button>
-          
         </div>
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* 🔥 Dynamic Name */}
           <span className="hidden sm:block text-sm text-gray-600 font-medium">
-            {user.name}
+            {user?.name || "User"}
           </span>
 
+          {/* 🔥 Avatar */}
           <div
             className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full 
             bg-gradient-to-b from-[#0E145E] to-[#B37BD6] 
             text-white flex items-center justify-center 
             text-xs sm:text-sm font-semibold shadow-md"
           >
-            {user.name.charAt(0)}
+            {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
         </div>
-
       </div>
     </div>
   );

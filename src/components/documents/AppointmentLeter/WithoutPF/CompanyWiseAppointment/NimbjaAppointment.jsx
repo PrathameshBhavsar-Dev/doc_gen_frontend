@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
-import SalaryStructureTable from "../../../../common/SalaryStructureTable";
+
 import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 const NimbjaAppointment = ({ company, data }) => {
   if (!company || !data) return null;
@@ -31,43 +31,39 @@ const NimbjaAppointment = ({ company, data }) => {
 
   /* ================= SALARY LOGIC ================= */
 
-  // 🔹 Round to whole number (no decimals)
-  const round0 = (num) => Math.round(num);
+ const round0 = (num) => Math.round(num);
 
-  // ================= MONTHLY CTC =================
-  const monthlyCTC = round0(Number(data.salary || 0));
+const annualCTC = round0(
+  Number(data.totalSalary || data.salary || data.ctc || 0),
+);
 
-  // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.4);
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-  const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+ // ✅ MONTHLY
+ const monthlyCTC = round0(annualCTC / 12);
 
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = round0(basicMonthly * 12);
-  const hraAnnual = round0(hraMonthly * 12);
-  const daAnnual = round0(daMonthly * 12);
-  const specialAnnual = round0(specialMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
-  const miscAnnual = round0(miscMonthly * 12);
+ // ✅ BREAKUP (LAST = ADJUSTMENT)
+ let salaryRows = [
+   ["Basic", round0(monthlyCTC * 0.4)],
+   ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+   ["HRA", round0(monthlyCTC * 0.12)],
+   ["City Allowance", round0(monthlyCTC * 0.16)],
+   ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+   ["Performance Bonus", 0], // 🔥 IMPORTANT
+ ];
 
-  // ================= SALARY TABLE STRUCTURE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["Bouqet Of Benefits", hraMonthly, hraAnnual],
-    ["HRA", daMonthly, daAnnual],
-    ["City Allowance", specialMonthly, specialAnnual],
-    ["Superannuation Fund", foodMonthly, foodAnnual],
-    ["Performance Bonus", miscMonthly, miscAnnual],
-  ];
+ // ✅ FIX ROUNDING
+ const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+ salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
-  // ================= TOTALS =================
-  const totalMonthly = round0(salaryRows.reduce((sum, row) => sum + row[1], 0));
+ // ✅ FINAL ROWS (WITH ANNUAL)
+ const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+   name,
+   monthly,
+   monthly * 12,
+ ]);
 
-  const totalAnnual = round0(salaryRows.reduce((sum, row) => sum + row[2], 0));
-
+ // ✅ TOTALS (MATCH OFFER LOGIC)
+ const totalMonthly = monthlyCTC;
+ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
   /* ================= TERMS SPLIT ================= */
   const page1Terms = (data.terms || []).slice(0, 8);
   const page2Terms = (data.terms || []).slice(8);
@@ -114,7 +110,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-12mm",
+              mt: "-7mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
@@ -124,7 +120,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
           {/* ================= REF ================= */}
           <Typography
-            sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+            sx={{ mb: "4mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
           >
             <strong>
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
@@ -136,7 +132,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               mb: "2mm",
               fontWeight: 600,
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
               mt: "3mm",
             }}
@@ -148,7 +144,7 @@ const NimbjaAppointment = ({ company, data }) => {
               mb: "10mm",
               mt: "-3mm",
               whiteSpace: "pre-line",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -159,8 +155,8 @@ const NimbjaAppointment = ({ company, data }) => {
           <Typography
             sx={{
               mb: "3mm",
-              mt: "-5mm",
-              fontSize: "11pt",
+              mt: "-8mm",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -173,9 +169,10 @@ const NimbjaAppointment = ({ company, data }) => {
               textAlign: "center",
               fontWeight: 600,
               textDecoration: "underline",
-              mb: "5mm",
+              mb: "3mm",
               fontSize: "12pt",
               fontFamily: "Bahnschrift",
+              textDecoration: "underline",
             }}
           >
             Letter of Appointment
@@ -184,9 +181,9 @@ const NimbjaAppointment = ({ company, data }) => {
           {/* INTRO */}
           <Typography
             sx={{
-              mb: "5mm",
+              mb: "3mm",
               textAlign: "justify",
-              fontSize: "11pt",
+              fontSize: "12pt",
               fontFamily: "Bahnschrift",
             }}
           >
@@ -201,7 +198,7 @@ const NimbjaAppointment = ({ company, data }) => {
           <Box component="ol" sx={{ pl: "6mm", m: 0 }}>
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "2mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 1. Your Designation will be <strong>{data.position}</strong>.
               </Typography>
@@ -209,11 +206,10 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "2mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 2. Your total emoluments will be{" "}
-                <strong>Rs. {formatLakhsPerAnnum(totalAnnual)}</strong> Lakh per
-                annum.
+                <strong>Rs. {formatCurrency(annualCTC)}/-</strong> per annum
               </Typography>
             </li>
 
@@ -222,7 +218,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -236,7 +232,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 4. Whilst you are located abroad, the terms applicable will be
                 intimated at the relevant point of time.
@@ -245,7 +241,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 5. You shall be due for salary revision not before one year from
                 your date of joining.
@@ -257,7 +253,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -273,7 +269,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -287,7 +283,7 @@ const NimbjaAppointment = ({ company, data }) => {
 
             <li>
               <Typography
-                sx={{ mb: "3mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}
+                sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
                 8. Your services are terminable with one month’s notice on
                 either side or salary in lieu thereof.
@@ -299,7 +295,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 sx={{
                   mb: "3mm",
                   textAlign: "justify",
-                  fontSize: "11pt",
+                  fontSize: "12pt",
                   fontFamily: "Bahnschrift",
                 }}
               >
@@ -474,7 +470,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.signature}
                     alt="Signature"
-                    sx={{ width: 180, mt: "10mm", ml: "-2mm", height: 40 }}
+                    sx={{ width: 180, mt: "-7mm", ml: "-2mm", height: 40 }}
                   />
                 </Grid>
                 <Grid item>
@@ -482,7 +478,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     component="img"
                     src={company?.stamp}
                     alt="Stamp"
-                    sx={{ width: 110 }}
+                    sx={{ width: 100 }}
                   />
                 </Grid>
               </Grid>
@@ -503,6 +499,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       fontWeight: "400",
                       fontSize: "4mm",
+                      mt: "-3mm",
                     }}
                   >
                     {company?.hrName}
@@ -513,6 +510,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       fontWeight: "400",
                       fontSize: "4mm",
+                      mt: "-2mm",
                     }}
                   >
                     HR Manager-HR Services
@@ -533,7 +531,7 @@ const NimbjaAppointment = ({ company, data }) => {
                       fontFamily: "Bahnschrift",
                       textAlign: "right",
                       marginRight: "-3mm",
-                      mt: "-2mm",
+                      mt: "-6mm",
                     }}
                   >
                     Name: {data.employeeName}
@@ -601,13 +599,125 @@ const NimbjaAppointment = ({ company, data }) => {
           </Typography>
 
           {/* 🔥 ONLY THIS PART IS REPLACED */}
-          <SalaryStructureTable
-            salaryRows={salaryRows}
-            totalMonthly={totalMonthly}
-            totalAnnual={totalAnnual}
-            data={data}
-            formatDate={formatDate}
-          />
+          <Table
+            sx={{
+              width: "100%",
+              border: "1px solid #000",
+              "& td": {
+                border: "1px solid #000",
+                padding: "6px",
+                fontSize: "14px",
+                fontFamily: "Bahnschrift",
+              },
+            }}
+          >
+            {/* HEADER */}
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "left",
+                    width: "50%",
+                  }}
+                >
+                  Salary Components
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "25%",
+                  }}
+                >
+                  Per Month (₹)
+                </TableCell>
+
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                    width: "25%",
+                  }}
+                >
+                  Per Annum (₹)
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            {/* BODY */}
+            <TableBody>
+              {finalSalaryRows.map(([name, monthly, annual], i) => (
+                <TableRow key={i}>
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "left",
+                      padding: "6px",
+                    }}
+                  >
+                    {name}
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "right",
+                      padding: "6px",
+                    }}
+                  >
+                    {formatCurrency(monthly)}
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      border: "1px solid #000",
+                      textAlign: "right",
+                      padding: "6px",
+                    }}
+                  >
+                    {formatCurrency(annual)}
+                  </TableCell>
+                </TableRow>
+              ))}
+
+              {/* TOTAL ROW */}
+              <TableRow sx={{ backgroundColor: "#a0ed64" }}>
+                <TableCell
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Total Monthly Gross Salary
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatCurrency(totalMonthly)}
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    border: "1px solid #000",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formatCurrency(totalAnnual)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </Box>
         {/* Signature Block */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 12 }}>
@@ -634,16 +744,16 @@ const NimbjaAppointment = ({ company, data }) => {
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
               {company.hrName}
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1mm" }}>
               HR Relations Lead
             </Typography>
           </Box>
 
-          <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
+          <Box minWidth="250px" sx={{ mt: 13.5, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
-              Signature: __________________
+               Signature: __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
+            <Typography mt={2} sx={{ mt: "1", fontFamily: "Bahnschrift" }}>
               Candidate Name: {data.employeeName}
             </Typography>
           </Box>
