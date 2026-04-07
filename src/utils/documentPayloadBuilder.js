@@ -58,8 +58,7 @@ export const buildPayload = (key, previewData, user, previewCompany) => {
 
     offer_letter: () => ({
       ...base,
-      title: previewData.mrms,
-      position: previewData.position || previewData.designation,
+      title: previewData.mrms || previewData.title || "Mr/Ms", position: previewData.position || previewData.designation,
       department: previewData.department || "General",
       employmentType: previewData.appointmentType || "Full-time",
       salary: Number(previewData.salary) || 0,
