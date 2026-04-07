@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCurrency } from "../../../../../utils/salaryCalculations";
+import { formatCurrency  } from "../../../../../utils/salaryCalculations";
 import A4Page from "../../../../layout/A4Page";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   TableCell,
   TableContainer,
 } from "@mui/material";
-import SalaryStructureTable from "../../../../common/SalaryStructureTable";
+
 import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
 
 /* ================= DATE FORMAT ================= */
@@ -27,43 +27,50 @@ const formatDate = (date) => {
 
 const NimbjaIncrement = ({ company, data }) => {
   /* ================= SALARY LOGIC (DEVCONS – CUSTOM ANNEXURE) ================= */
+    console.log("FINAL DATA:", data);
+ const round0 = (num) => Math.round(num);
 
-  // Helper to keep 2 decimals everywhere
-  const round0 = (num) => Math.round(num);
 
-  // Source of truth
-  const monthlyCTC = round0(Number(data.newCTC || 0));
 
-  // ================= PERCENTAGE BREAKUP =================
-  const basicMonthly = round0(monthlyCTC * 0.4);
-  const hraMonthly = round0(monthlyCTC * 0.18);
-  const daMonthly = round0(monthlyCTC * 0.12);
-  const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
-  const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+const annualCTC = round0(
+  Number(data?.newCTC ?? data?.totalSalary ?? data?.salary ?? data?.ctc ?? 0),
+);
 
-  // ================= ANNUAL VALUES =================
-  const basicAnnual = round0(basicMonthly * 12);
-  const hraAnnual = round0(hraMonthly * 12);
-  const daAnnual = round0(daMonthly * 12);
-  const specialAnnual = round0(specialMonthly * 12);
-  const foodAnnual = round0(foodMonthly * 12);
-  const miscAnnual = round0(miscMonthly * 12);
+ // ✅ MONTHLY
+ const monthlyCTC = round0(annualCTC / 12);
 
-  // ================= SALARY TABLE STRUCTURE =================
-  const salaryRows = [
-    ["Basic", basicMonthly, basicAnnual],
-    ["House Rent Allowance", hraMonthly, hraAnnual],
-    ["Dearness Allowance", daMonthly, daAnnual],
-    ["Special Allowance", specialMonthly, specialAnnual],
-    ["Food Allowance", foodMonthly, foodAnnual],
-    ["Misc. Allowance", miscMonthly, miscAnnual],
-  ];
+ // ✅ BREAKUP (LAST = ADJUSTMENT)
+ let salaryRows = [
+   ["Basic", round0(monthlyCTC * 0.4)],
+   ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+   ["HRA", round0(monthlyCTC * 0.12)],
+   ["City Allowance", round0(monthlyCTC * 0.16)],
+   ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+   ["Performance Bonus", 0], // 🔥 IMPORTANT
+ ];
 
-  // ================= TOTALS =================
-  const totalMonthly = round0(salaryRows.reduce((sum, row) => sum + row[1], 0));
+ // ✅ FIX ROUNDING
+ const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+ salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
-  const totalAnnual = round0(salaryRows.reduce((sum, row) => sum + row[2], 0));
+ // ✅ FINAL ROWS (WITH ANNUAL)
+ const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+   name,
+   monthly,
+   monthly * 12,
+ ]);
+
+ // ✅ TOTALS (MATCH OFFER LOGIC)
+ const totalMonthly = monthlyCTC;
+ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
+
+ const formatLakhsPerAnnum = (amount) => {
+   if (!amount || isNaN(amount)) return "0";
+
+   const lakhs = amount / 100000;
+
+   return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
+ };
 
   return (
     <>
@@ -172,7 +179,7 @@ const NimbjaIncrement = ({ company, data }) => {
               })}
             </strong>
             . Your salary will increase to{" "}
-            <strong>{formatCurrency(totalAnnual)}</strong> per annum.
+            <strong>{formatCurrency(annualCTC)} </strong> per annum
           </Typography>
 
           <Typography
@@ -299,63 +306,26 @@ const NimbjaIncrement = ({ company, data }) => {
             }}
           >
             <TableBody>
-              {/* Header Row */}
-              <TableRow>
-                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+              <TableRow sx={{ backgroundColor: "#8bc34a" }}>
+                <TableCell align="center">
                   <b>Salary Components</b>
                 </TableCell>
-                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+                <TableCell align="center">
                   <b>Per month (Rs.)</b>
                 </TableCell>
-                <TableCell sx={{ backgroundColor: "#8bc34a" }} align="center">
+                <TableCell align="center">
                   <b>Per Annum (Rs.)</b>
                 </TableCell>
               </TableRow>
 
-              {/* Salary Rows */}
-              <TableRow>
-                <TableCell>Basic</TableCell>
-                <TableCell align="right">
-                  {formatCurrency(basicMonthly)}
-                </TableCell>
-                <TableCell align="right">
-                  {formatCurrency(basicAnnual)}
-                </TableCell>
-              </TableRow>
+              {finalSalaryRows.map(([name, monthly, annual], i) => (
+                <TableRow key={i}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell align="right">{formatCurrency(monthly)}</TableCell>
+                  <TableCell align="right">{formatCurrency(annual)}</TableCell>
+                </TableRow>
+              ))}
 
-              <TableRow>
-                <TableCell>Bouqet Of Benefits</TableCell>
-                <TableCell align="right">
-                  {formatCurrency(hraMonthly)}
-                </TableCell>
-                <TableCell align="right">{formatCurrency(hraAnnual)}</TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>HRA</TableCell>
-                <TableCell align="right">{formatCurrency(daMonthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(daAnnual)}</TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>City Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(specialMonthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(specialAnnual)}</TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>Superannuation Fund</TableCell>
-                <TableCell align="right">{formatCurrency(foodMonthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(foodAnnual)}</TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>Performance Bonus</TableCell>
-                <TableCell align="right">{formatCurrency(miscMonthly)}</TableCell>
-                <TableCell align="right">{formatCurrency(miscAnnual)}</TableCell>
-              </TableRow>
-
-              {/* Total Row */}
               <TableRow sx={{ backgroundColor: "#8bc34a" }}>
                 <TableCell sx={{ fontWeight: 700 }}>Total Salary</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>

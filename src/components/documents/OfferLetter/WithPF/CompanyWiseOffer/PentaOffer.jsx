@@ -14,10 +14,8 @@ const formatDate = (date) => {
 
 const formatCurrency = (value) => {
   if (value == null || value === "") return "";
-  return Number(value).toLocaleString("en-IN", {
-    // minimumFractionDigits: 2,
-    // maximumFractionDigits: 2,
-  });
+
+  return Math.round(value).toLocaleString("en-IN");
 };
 
 /* ===================== SALARY CALCULATION ===================== */
@@ -26,27 +24,27 @@ const calculateSalaryBreakup = (annualCTC) => {
     return { salaryBreakup: [], totalPerMonth: 0, totalPerYear: 0 };
   }
 
-  const round2 = (num) => Number(num.toFixed(2));
-
+const round0 = (num) => Math.round(num);
   // ✅ Monthly CTC
-  const monthlyCTC = round2(annualCTC / 12);
+  // const monthlyCTC = round0(annualCTC / 12);
 
   // ✅ PF STATIC
   const pfMonthly = 3750;
-  const pfAnnual = round2(pfMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
   // ✅ Other components (% based)
-  const hraMonthly = round2(monthlyCTC * 0.18);
-  const daMonthly = round2(monthlyCTC * 0.12);
-  const foodMonthly = round2(monthlyCTC * 0.16);
-  const specialMonthly = round2(monthlyCTC * 0.06);
+ const monthlyCTC = round0(annualCTC / 12);
+const hraMonthly = round0(monthlyCTC * 0.18);
+const daMonthly = round0(monthlyCTC * 0.12);
+const foodMonthly = round0(monthlyCTC * 0.16);
+const specialMonthly = round0(monthlyCTC * 0.06);
 
   // ✅ TOTAL of all except Basic
   const totalOthers =
     hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly;
 
   // ✅ BASIC = REMAINING
-  let basicMonthly = round2(monthlyCTC - totalOthers);
+  let basicMonthly = round0(monthlyCTC - totalOthers);
 
   // ✅ Rounding Fix
   const finalCheck =
@@ -57,14 +55,14 @@ const calculateSalaryBreakup = (annualCTC) => {
     specialMonthly +
     pfMonthly;
 
-  basicMonthly += round2(monthlyCTC - finalCheck);
+basicMonthly += Math.round(monthlyCTC - finalCheck);
 
   // ✅ Annual values
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
 
   const salaryBreakup = [
     { label: "Basic", perMonth: basicMonthly, perYear: basicAnnual },
@@ -76,11 +74,11 @@ const calculateSalaryBreakup = (annualCTC) => {
   ];
 
   // ✅ Total WITHOUT PF (Gross)
-  const totalPerMonth = round2(
+  const totalPerMonth = round0(
   basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
 );
 
- const totalPerYear = round2(
+ const totalPerYear = round0(
   basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
 );
 
