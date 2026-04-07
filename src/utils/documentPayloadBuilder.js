@@ -1,9 +1,26 @@
 export const normalizeTemplateKey = (template) => {
-  return template
-    ?.toLowerCase()
-    ?.replace(/[\s-]+/g, "_")
-    ?.replace(/([a-z])([A-Z])/g, "$1_$2")
-    ?.toLowerCase();
+  if (!template) return "";
+
+  const normalized = template
+    .replace(/([a-z])([A-Z])/g, "$1_$2")
+    .replace(/[\s\-]+/g, "_")
+    .toLowerCase();
+
+  // ✅ Fix missing suffix cases
+  const map = {
+    internshipcertificate: "internship_certificate", // ✅ FIXED
+    internship_certificate: "internship_certificate", // ✅ IMPORTANT
+    salaryslip: "salaryslip_letter",
+    offer: "offer_letter",
+    increment: "increment_letter",
+    appointment: "appointment_letter",
+    confirmation: "confirmation_letter",
+    experience: "experience_letter",
+    relieving: "relieving_letter",
+    fullandfinal: "fullandfinal_letter",
+  };
+
+  return map[normalized] || normalized;
 };
 
 export const buildPayload = (key, previewData, user, previewCompany) => {
@@ -41,8 +58,7 @@ export const buildPayload = (key, previewData, user, previewCompany) => {
 
     offer_letter: () => ({
       ...base,
-      title: previewData.mrms,
-      position: previewData.position || previewData.designation,
+      title: previewData.mrms || previewData.title || "Mr/Ms", position: previewData.position || previewData.designation,
       department: previewData.department || "General",
       employmentType: previewData.appointmentType || "Full-time",
       salary: Number(previewData.salary) || 0,
