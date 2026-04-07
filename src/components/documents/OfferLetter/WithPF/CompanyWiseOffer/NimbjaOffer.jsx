@@ -19,7 +19,7 @@ const NimbjaOffer = ({ company, data }) => {
 
   // ================= HELPERS =================
   const round0 = (num) => Math.round(num);
-
+         
   // ================= CTC =================
  const annualCTC = Number(data.salary || data.ctc || 0);
 
@@ -58,8 +58,8 @@ const NimbjaOffer = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.6,
-            zIndex: 0,
+            opacity: 0.4,
+            zIndex: -1,
             pointerEvents: "none",
           }}
         />
@@ -94,7 +94,7 @@ const NimbjaOffer = ({ company, data }) => {
               marginTop: "-8mm",
               mb: "5mm",
               fontFamily: "Verdana",
-              
+
               fontSize: "15px",
             }}
           >
@@ -151,37 +151,79 @@ const NimbjaOffer = ({ company, data }) => {
             entitled to forthwith terminate your employment without notice. You
             are required to join the services of the Company at the earliest,
             but in any case, not later than{" "}
-            <b>{formatDate(data.joiningDate)}.</b>
+            <b>{formatDate(data.offerValidTill)}.</b>
           </Typography>
 
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
             Thanking you and looking forward to having you with us.
           </Typography>
 
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
+          <Typography
+            sx={{ mb: 2, fontFamily: "Bahnschrift", fontSize: "20px" }}
+          >
             For <b>{company.name} </b>
           </Typography>
 
           {/* SIGNATURE */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {company?.signature && (
-              <img
-                src={company.signature}
-                alt="Signature"
-                style={{ height: 42, marginTop: "2mm" }}
-              />
-            )}
-            {company?.stamp && (
-              <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
-            )}
-          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start", // 🔥 aligns both blocks properly
+              mt: 4,
+            }}
+          >
+            {/* LEFT SIDE (HR) */}
+            <Box>
+              <Box sx={{ display: "flex", gap: 3 }}>
+                {company?.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Signature"
+                    style={{ height: 45, marginTop: "7mm" }}
+                  />
+                )}
+                {company?.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: 100, marginLeft: "-2mm" }}
+                  />
+                )}
+              </Box>
 
-          <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
-            {company.hrName}
-          </Typography>
-          <Typography sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}>
-            HR Manager
-          </Typography>
+              <Typography
+                sx={{ fontWeight: 600, fontFamily: "Bahnschrift", mt: 1 }}
+              >
+                <strong>{company.hrName}</strong>
+              </Typography>
+
+              <Typography
+                sx={{ fontWeight: 600, fontFamily: "Bahnschrift", mt: -1 }}
+              >
+                <strong>HR Relations Lead </strong>
+              </Typography>
+            </Box>
+
+            {/* RIGHT SIDE (CANDIDATE) */}
+            <Box
+              minWidth="250px"
+              sx={{
+                fontFamily: "Bahnschrift",
+                textAlign: "left",
+                marginTop: "26mm",
+              }}
+            >
+              <Typography sx={{ fontFamily: "Bahnschrift", mt: "1mm" }}>
+                <strong>Signature:</strong> __________________
+              </Typography>
+
+              <Typography sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
+                <strong>Candidate Name:</strong>{" "}
+                <strong>{data.employeeName}</strong>
+              </Typography>
+            </Box>
+          </Box>
         </Box>
         {/* </Box> */}
       </A4Page>
@@ -226,7 +268,7 @@ const NimbjaOffer = ({ company, data }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "50%",
-            opacity: 0.5,
+            opacity: 0.4,
             zIndex: -1,
             pointerEvents: "none",
           }}
@@ -260,19 +302,19 @@ const NimbjaOffer = ({ company, data }) => {
               )}
             </Box>
             <Typography mt={1} sx={{ fontFamily: "Bahnschrift" }}>
-              {company.hrName}
+              <strong>{company.hrName}</strong>
             </Typography>
-            <Typography sx={{ fontFamily: "Bahnschrift" }}>
-              HR Relations Lead
+            <Typography sx={{ fontFamily: "Bahnschrift", mt: "-1mm" }}>
+              <strong>HR Relations Lead</strong>
             </Typography>
           </Box>
 
           <Box minWidth="250px" sx={{ mt: 13, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
-              Signature: __________________
+              <strong>Signature:</strong> __________________
             </Typography>
-            <Typography mt={2} sx={{ mt: 1.5, fontFamily: "Bahnschrift" }}>
-              Candidate Name: {data.employeeName}
+            <Typography mt={2} sx={{ mt: "-1mm", fontFamily: "Bahnschrift" }}>
+              <strong>Candidate Name: {data.employeeName}</strong>
             </Typography>
           </Box>
         </Box>

@@ -53,11 +53,11 @@ const NimbjaExperience = ({ company, data }) => {
         alt="watermark"
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "41%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: "50%",
-          opacity: 0.6,
+          opacity: 0.4,
           zIndex: 0,
           pointerEvents: "none",
         }}
@@ -143,7 +143,7 @@ const NimbjaExperience = ({ company, data }) => {
         </p>
 
         {/* ================= SIGNATURE SECTION ================= */}
-        <div style={{ marginTop: "15mm" }}>
+        <div style={{ marginTop: "14mm" }}>
           <p style={{ marginBottom: "8mm" }}>Sincerely,</p>
 
           {/* SIGNATURE + STAMP SIDE BY SIDE */}

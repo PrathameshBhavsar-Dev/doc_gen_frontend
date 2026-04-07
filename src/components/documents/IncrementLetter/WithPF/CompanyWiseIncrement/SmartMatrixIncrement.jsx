@@ -160,38 +160,31 @@ const SmartMatrixIncrement = ({ company, data }) => {
             continued success at {company.name}.
           </Typography>
 
-          <Typography
-            sx={{
-              fontSize: "12pt",
-              fontWeight: 600,
-              mb: "5mm",
-              fontFamily: "Verdana",
-            }}
-          >
-            <strong>{company.name}</strong>
+          <Typography sx={{ fontSize: "14pt", marginTop: "80px" }}>
+            <strong>SmartMatrix Digital Services Pvt Ltd.</strong>
           </Typography>
 
-          <Box sx={{ mt: "3mm" }}>
+          <Box sx={{ mt: "5mm" }}>
             <Box sx={{ display: "flex", alignItems: "flex-end", gap: "10mm" }}>
               {company.stamp && (
                 <img
                   src={company.CEO}
                   alt="Company Stamp"
-                  style={{ width: "45mm" }}
+                  style={{ width: "35mm" }}
                 />
               )}
               {company.signature && (
                 <img
                   src={company.stamp}
                   alt="HR Signature"
-                  style={{ width: "35mm" }}
+                  style={{ width: "30mm" }}
                 />
               )}
             </Box>
 
             <Typography
               sx={{
-                fontSize: "12pt",
+                fontSize: "13pt",
                 fontWeight: 600,
                 fontFamily: '"Verdana","Segoe UI",Arial,sans-serif',
               }}
@@ -202,7 +195,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
 
             <Typography
               sx={{
-                fontSize: "11pt",
+                fontSize: "12pt",
                 fontWeight: 400,
                 fontFamily: '"Verdana","Segoe UI",Arial,sans-serif',
               }}
