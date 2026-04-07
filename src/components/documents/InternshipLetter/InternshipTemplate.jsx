@@ -1,6 +1,6 @@
 import React from "react";
 import PaidInternshipLetterTemplate from "./PaidIntershipLetter/PaidInternshipTemplate";
-import UnPaidInternshipLetterTemplate from "./UnpaidInternshipLetter/UnpaidInternshipTemplate";
+import UnPaidInternshipLetterTemplate from "./UnpaidInternshipLetter/UnPaidInternshipTemplate";
 
 
 
