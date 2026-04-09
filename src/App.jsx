@@ -6,7 +6,6 @@ import { CompanyProvider } from "./core/contexts/CompanyContext";
 import { DocumentProvider } from "./core/contexts/DocumentContext";
 import ScrollToTop from "./pages/ScrollToTop";
 import "./App.css";
-// import DocumentCreate from "./components/constant/DocumentCreate";
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
           <BrowserRouter>
             <ScrollToTop />
             <AppRoutes />
-              {/* <DocumentCreate /> */}
           </BrowserRouter>
         </DocumentProvider>
       </CompanyProvider>

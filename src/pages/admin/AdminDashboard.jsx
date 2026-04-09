@@ -7,7 +7,6 @@ const UserDashboardPage = () => {
   return (
     <div className="min-h-screen">
       <AdminHeroDashboardSection/>
-
       <AnalyticSection />
       <GeneratedDocumentSection />
     </div>
