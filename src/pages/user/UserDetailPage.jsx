@@ -140,14 +140,36 @@ const UserDetailPage = () => {
       return;
     }
 
+    // Get the raw document type
+    const rawType =
+      typeof doc.documentType === "object"
+        ? doc.documentType?.name
+        : doc.documentType;
+
+    // Use mapDocTypeToRoute to get the correct normalized type
+    const normalizedType = mapDocTypeToRoute(rawType);
+
+    if (!normalizedType) {
+      console.error("Could not map document type:", rawType);
+      return;
+    }
+
+    // Resolve company like in handleDownload
+    const companyObject = resolveCompany(doc?.company);
+
+    if (!companyObject) {
+      console.error("Could not resolve company for:", doc?.company);
+      return;
+    }
+
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
         documentData: doc,
         selectedDocType: {
-          template: doc.documentType,
-          name: doc.documentType,
+          template: normalizedType, // Use the mapped type
+          name: rawType,
         },
-        selectedCompany: doc.company || {},
+        selectedCompany: companyObject,
       },
     });
   };

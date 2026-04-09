@@ -20,27 +20,26 @@ const formatDate = (date) =>
     })
     : "";
 
-const round2 = (n) => Number(Number(n || 0).toFixed(2));
+const round0 = (n) => Number(Number(n || 0).toFixed(2));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN",
-    //   {
-    //   minimumFractionDigits: 2,
-    //   maximumFractionDigits: 2,
-    // }
-  );
+const formatCurrency = (value) => {
+  if (value == null || value === "") return "";
+
+  return Math.round(value).toLocaleString("en-IN");
+};
+
 
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
-  const round2 = (n) => Number(n.toFixed(2));
+  const round0 = (n) => Number(n.toFixed(2));
 
-  const basic = round2(annualCTC * 0.40);
-  const hra = round2(annualCTC * 0.18);
-  const da = round2(annualCTC * 0.12);
-  const special = round2(annualCTC * 0.16);
-  const food = round2(annualCTC * 0.06);
-  const misc = round2(annualCTC * 0.08);
+  const basic = round0(annualCTC * 0.40);
+  const hra = round0(annualCTC * 0.18);
+  const da = round0(annualCTC * 0.12);
+  const special = round0(annualCTC * 0.16);
+  const food = round0(annualCTC * 0.06);
+  const misc = round0(annualCTC * 0.08);
 
   return [
     ["Basic Salary ", basic / 12, basic],

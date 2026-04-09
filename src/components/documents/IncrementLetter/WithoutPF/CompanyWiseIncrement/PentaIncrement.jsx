@@ -7,7 +7,7 @@ const PentaIncrement = ({ company, data }) => {
   /* ================= SALARY LOGIC (DEVCONS – CUSTOM ANNEXURE) ================= */
 
   // Helper to keep 2 decimals everywhere
-  const round0 = (num) => Number(num.toFixed(2));
+const round0 = (num) => Math.round(num);
 
   // Source of truth
   const monthlyCTC = round0(Number(data.newCTC || 0));
