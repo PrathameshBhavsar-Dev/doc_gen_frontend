@@ -15,7 +15,10 @@ import { generatePDF } from "../../utils/pdfUtils"; // adjust path as needed
 import { getTemplateComponent } from "../../utils/templateResolver.js";
 import ApiService from "../../core/services/api.service.jsx";
 import ServerUrl from "../../core/constants/serverURL.constant.jsx";
-import { resolveCompany, resolveTypeField } from "../../utils/companyRegistry.js";
+import {
+  resolveCompany,
+  resolveTypeField,
+} from "../../utils/companyRegistry.js";
 import ROUTES from "../../core/constants/routes.constant.jsx";
 
 const UserDetailPage = () => {
@@ -110,8 +113,7 @@ const UserDetailPage = () => {
         ? item.documentType?.name
         : item.documentType;
 
-    const safeEmployee =
-      item.employeeName?.replace(/\s+/g, "_") || "Employee";
+    const safeEmployee = item.employeeName?.replace(/\s+/g, "_") || "Employee";
 
     const fileName = `${safeType || "document"}-${safeEmployee}`;
 
@@ -123,7 +125,7 @@ const UserDetailPage = () => {
       await generatePDF(
         TemplateComponent,
         { data: enrichedData, company: companyObject },
-        fileName
+        fileName,
       );
     } catch (err) {
       console.error("❌ Download failed:", err);
@@ -232,10 +234,10 @@ const UserDetailPage = () => {
                 Generated on{" "}
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </span>
             </div>
@@ -310,10 +312,10 @@ const UserDetailPage = () => {
               <p className="font-medium mt-2">
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </p>
             </div>

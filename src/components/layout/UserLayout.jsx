@@ -4,13 +4,11 @@ import UserNavbar from "../public/UserNavbar";
 import UserSidebar from "../public/UserSidebar";
 
 const UserLayout = () => {
-
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-[#FFFEF8]">
-
+    <div className="flex h-screen bg-white">
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
@@ -29,10 +27,7 @@ const UserLayout = () => {
         ${collapsed ? "w-20" : "w-64"}
         `}
       >
-        <UserSidebar
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-        />
+        <UserSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
       {/* Content */}
@@ -43,7 +38,6 @@ const UserLayout = () => {
           <Outlet />
         </div>
       </div>
-
     </div>
   );
 };
