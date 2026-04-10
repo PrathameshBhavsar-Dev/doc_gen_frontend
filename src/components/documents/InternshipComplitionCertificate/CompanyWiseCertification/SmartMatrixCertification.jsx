@@ -61,16 +61,16 @@ const SmartMatrixCertification = ({ company, data }) => {
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          During the internship period, <strong>{data.employeeName}</strong> was actively
-          participated in project related tasks, shown their skills and
+          During the internship period, <strong>{data.employeeName}</strong> was
+          actively participated in project related tasks, shown their skills and
           abilities as <strong>{data.role}</strong>.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>
-          Through this internship experience, <strong>{data.employeeName}</strong>adopted
-          practical knowledge, best practices and exposure to real-world
-          scenarios, which will undoubtedly enhance their academic and
-          professional development.
+          Through this internship experience,{" "}
+          <strong>{data.employeeName}</strong> adopted practical knowledge, best
+          practices and exposure to real-world scenarios, which will undoubtedly
+          enhance their academic and professional development.
         </Typography>
 
         <Typography sx={{ mb: "8mm" }}>
