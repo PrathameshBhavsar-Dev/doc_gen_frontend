@@ -90,7 +90,7 @@ const HeroDashBoardSection = () => {
           </div>
 
           {/* Right Side - Button */}
-          <div className="flex justify-start sm:justify-end">
+          <div className="flex justify-start sm:justify-end gap-3">
             <button
               onClick={() => navigate("/user/form")}
               className="
@@ -103,7 +103,21 @@ const HeroDashBoardSection = () => {
     hover:scale-105
   "
             >
-              + Profile Creation
+              + Create New Profile
+            </button>
+            <button
+              // onClick={() => navigate("/user/form")}
+              className="
+    px-5 py-2.5 
+    rounded-lg 
+    bg-gradient-to-r from-[#1C1D68] to-[#B37BD6]
+    text-white text-sm font-medium
+    shadow-md hover:shadow-lg
+    transition-all duration-300
+    hover:scale-105
+  "
+            >
+              + Existing Profile
             </button>
           </div>
         </div>
