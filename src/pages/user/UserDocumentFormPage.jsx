@@ -1,234 +1,186 @@
-import React from "react";
-import { Box, Typography, TextField, MenuItem, Button } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { companies } from "../../components/constant/publicData/mockData";
-
-/* ========================= */
-/* Clean Field Component */
-/* ========================= */
-
-const Field = ({ label, required, children }) => (
-  <Box>
-    <Typography
-      sx={{
-        fontSize: 13,
-        fontWeight: 500,
-        color: "#344054",
-        mb: 1,
-      }}
-    >
-      {label}
-      {required && (
-        <Box component="span" sx={{ color: "#DC2626" }}>
-          {" "}
-          *
-        </Box>
-      )}
-    </Typography>
-    {children}
-  </Box>
-);
-
-const inputSX = {
-  "& .MuiOutlinedInput-root": {
-    height: 44,
-    borderRadius: "12px",
-    backgroundColor: "#F9FAFB",
-    fontSize: "14px",
-    "& fieldset": {
-      borderColor: "#E5E7EB",
-    },
-    "&:hover fieldset": {
-      borderColor: "#D1D5DB",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#6366F1",
-    },
+import React, { useState } from "react";
+import { companies } from "../../components/constant/publicData/mockData"; // adjust path
+import { FiEye } from "react-icons/fi";
+const fields = [
+  { name: "company", label: "Company", type: "select", required: true },
+  { name: "fullName", label: "Full Name", type: "text", required: true },
+  {
+    name: "gender",
+    label: "Gender",
+    type: "select",
+    options: ["Male", "Female", "Other"],
+    required: true,
   },
-};
+  { name: "mobile", label: "Mobile No", type: "text", required: true },
+  { name: "email", label: "Email ID", type: "email", required: true },
+  { name: "pan", label: "PAN No", type: "text", required: true },
+  { name: "dob", label: "Date of Birth", type: "date", required: true },
 
-/* ========================= */
-/* Page */
-/* ========================= */
+  {
+    name: "currentAddress",
+    label: "Current Address",
+    type: "text",
+    span: 2,
+    required: true,
+  },
+  {
+    name: "permanentAddress",
+    label: "Permanent Address",
+    type: "text",
+    span: 2,
+    required: true,
+  },
+
+  { name: "offerDate", label: "Offer Date", type: "date", required: true },
+  { name: "joiningDate", label: "Joining Date", type: "date", required: true },
+
+  { name: "joiningCTC", label: "Joining CTC", type: "text", required: true },
+  { name: "currentCTC", label: "Current CTC", type: "text" },
+
+  {
+    name: "joiningDesignation",
+    label: "Joining Designation",
+    type: "text",
+    required: true,
+  },
+  { name: "currentDesignation", label: "Current Designation", type: "text" },
+
+  { name: "resignationDate", label: "Resignation Date", type: "date" },
+  { name: "relievingDate", label: "Relieving Date", type: "date" },
+
+  { name: "bankName", label: "Bank Name", type: "text", required: true },
+  { name: "accountNo", label: "Account No", type: "text", required: true },
+];
 
 const UserDocumentFormPage = () => {
-  return (
-    <Box
-      sx={{
-        backgroundColor: "#F3F4F6",
-        minHeight: "100vh",
-        py: 5,
-      }}
-    >
-      {/* OUTER WRAPPER (controls alignment properly) */}
-      <Box
-        sx={{
-          maxWidth: "1280px",
-          mx: "auto",
-          px: 4,
-        }}
-      >
-        {/* HEADER */}
-        <Box display="flex" alignItems="center" gap={1} mb={4}>
-          <ArrowBackIcon sx={{ fontSize: 20, cursor: "pointer" }} />
-          <Typography
-            sx={{
-              fontSize: 20,
-              fontWeight: 600,
-              color: "#1F2937",
-            }}
+  const [formData, setFormData] = useState({});
+
+  const handleChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const renderField = (field) => {
+    const baseClass =
+      "w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm text-[#1E293B] placeholder:text-[#94A3B8] outline-none transition-all duration-200 ease-in-out shadow-sm focus:border-[#6366F1] focus:bg-white focus:ring-4 focus:ring-[#6366F1]/10";
+
+    if (field.type === "select") {
+      return (
+        <div className="relative">
+          <select
+            className={`
+          w-full h-[44px] px-3 pr-10
+          rounded-xl 
+          bg-[#F8FAFC] 
+          border border-[#E2E8F0]
+          text-sm text-[#1E293B]
+          appearance-none
+          outline-none
+          transition-all duration-200 ease-in-out
+          shadow-sm
+          focus:border-[#6366F1] 
+          focus:bg-white 
+          focus:ring-4 focus:ring-[#6366F1]/10
+          hover:border-[#CBD5F5]
+          cursor-pointer
+        `}
+            onChange={(e) => handleChange(field.name, e.target.value)}
           >
-            Offer Letter
-          </Typography>
-        </Box>
+            <option value="">Select {field.label}</option>
 
-        {/* CARD */}
-        <Box
-          sx={{
-            backgroundColor: "#FFFFFF",
-            borderRadius: "24px",
-            px: { xs: 3, md: 6 },
-            py: { xs: 4, md: 6 },
-            boxShadow: "0px 8px 30px rgba(0,0,0,0.05)",
-          }}
-        >
-          {/* 5 COLUMN GRID SYSTEM */}
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                md: "repeat(5, 1fr)",
-              },
-              gap: 4,
-            }}
-          >
-            {/* ROW 1 */}
-            <Box sx={{ gridColumn: { md: "span 2" } }}>
-              <Field label="Company" required>
-                <TextField fullWidth select defaultValue="" sx={inputSX}>
-                  <MenuItem value="">Select Company</MenuItem>
+            {field.name === "company"
+              ? companies.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))
+              : field.options?.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+          </select>
 
-                  {companies.map((company) => (
-                    <MenuItem key={company.id} value={company.id}>
-                      {company.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Field>
-            </Box>
-
-            {/* EMPTY SPACING */}
-            <Box sx={{ display: { xs: "none", md: "block" } }} />
-            <Box sx={{ display: { xs: "none", md: "block" } }} />
-            <Box sx={{ display: { xs: "none", md: "block" } }} />
-
-            {/* ROW 2 */}
-            <Field label="Identity" required>
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Mr/Mrs</MenuItem>
-              </TextField>
-            </Field>
-
-            <Field label="Employee name" required>
-              <TextField fullWidth sx={inputSX} placeholder="Enter name" />
-            </Field>
-
-            <Box sx={{ gridColumn: { md: "span 2" } }}>
-              <Field label="Address" required>
-                <TextField
-                  fullWidth
-                  sx={inputSX}
-                  placeholder="Enter address eg. XYZ road, RS colony, Pune"
-                />
-              </Field>
-            </Box>
-
-            <Field label="Reporting manager">
-              <TextField fullWidth sx={inputSX} placeholder="Enter name" />
-            </Field>
-
-            {/* ROW 3 */}
-            <Field label="Designation" required>
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Select designation</MenuItem>
-              </TextField>
-            </Field>
-
-            <Field label="Department" required>
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Select department</MenuItem>
-              </TextField>
-            </Field>
-
-            <Field label="Issue date" required>
-              <TextField fullWidth placeholder="Select date" sx={inputSX} />
-            </Field>
-
-            <Field label="Joining date" required>
-              <TextField fullWidth placeholder="Select date" sx={inputSX} />
-            </Field>
-
-            <Field label="Joining annual CTC" required>
-              <TextField
-                fullWidth
-                sx={inputSX}
-                placeholder="Enter annual CTC"
-              />
-            </Field>
-
-            {/* ROW 4 */}
-            <Field label="Work Location" required>
-              <TextField fullWidth sx={inputSX} placeholder="Enter location" />
-            </Field>
-
-            <Field label="Offer valid till" required>
-              <TextField fullWidth placeholder="Select date" sx={inputSX} />
-            </Field>
-
-            <Field label="Employment type" required>
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Select type</MenuItem>
-              </TextField>
-            </Field>
-
-            <Field label="Offer type" required>
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Select with PF/ without PF</MenuItem>
-              </TextField>
-            </Field>
-
-            <Field label="Probation period (in months)">
-              <TextField fullWidth select defaultValue="" sx={inputSX}>
-                <MenuItem value="">Select months</MenuItem>
-              </TextField>
-            </Field>
-          </Box>
-
-          {/* BUTTON */}
-          <Box mt={7}>
-            <Button
-              startIcon={<VisibilityIcon />}
-              sx={{
-                backgroundColor: "#E5E7EB",
-                color: "#344054",
-                textTransform: "none",
-                fontWeight: 500,
-                borderRadius: "12px",
-                px: 4,
-                py: 1.2,
-                "&:hover": {
-                  backgroundColor: "#D1D5DB",
-                },
-              }}
+          {/* Custom Dropdown Arrow */}
+          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+            <svg
+              className="w-4 h-4 text-[#64748B]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
             >
-              Preview Document
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <input
+        type={field.type}
+        className={baseClass}
+        placeholder={`Enter ${field.label}`}
+        onChange={(e) => handleChange(field.name, e.target.value)}
+      />
+    );
+  };
+  return (
+    <div className="bg-white w-full  overflow-x-hidden ">
+      <div className="rounded-2xl p-1 sm:p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] max-w-[1400px] mx-auto">
+        {/* Header */}
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1E293B] mb-6">
+          User Profile Form
+        </h2>
+
+        {/* Form Grid */}
+        <div
+          className="
+        grid 
+        grid-cols-1 
+        sm:grid-cols-2 
+        md:grid-cols-3 
+        lg:grid-cols-4 
+        gap-x-4 sm:gap-x-6 
+        gap-y-4 sm:gap-y-5
+      "
+        >
+          {fields.map((field) => (
+            <div
+              key={field.name}
+              className={`flex flex-col gap-1 
+              ${field.span === 2 ? "sm:col-span-2 lg:col-span-2" : ""}
+            `}
+            >
+              <label className="text-xs font-medium text-[#475569]">
+                {field.label}
+                {field.required && <span className="text-red-500"> *</span>}
+              </label>
+
+              {renderField(field)}
+            </div>
+          ))}
+        </div>
+
+        {/* Button */}
+        <div className="mt-8 flex justify-start">
+          <button
+            className="
+            flex items-center gap-2 
+            px-5 py-2.5 
+            rounded-lg 
+            bg-gradient-to-r from-[#1C1D68] to-[#B37BD6]
+            text-white text-sm font-medium
+            shadow-md hover:shadow-lg
+            transition-all duration-300
+            hover:scale-105
+          "
+          >
+            Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
