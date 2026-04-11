@@ -5,7 +5,7 @@ import ServerUrl from "../../../core/constants/serverURL.constant";
 import icon from "../../../assets/images/Icon.png";
 import icon1 from "../../../assets/images/Icon1.png";
 import icon2 from "../../../assets/images/Icon2.png";
-import icon3 from "../../../assets/images/Icon3.png";
+import ROUTES from "../../../core/constants/routes.constant";
 
 const HeroDashBoardSection = () => {
   const [totalDocuments, setTotalDocuments] = useState("-");
@@ -89,10 +89,9 @@ const HeroDashBoardSection = () => {
             </p>
           </div>
 
-          {/* Right Side - Button */}
           <div className="flex justify-start sm:justify-end gap-3">
             <button
-              onClick={() => navigate("/user/form")}
+              onClick={() => navigate(ROUTES.USER_FORM)}
               className="
     px-5 py-2.5 
     rounded-lg 
@@ -100,13 +99,12 @@ const HeroDashBoardSection = () => {
     text-white text-sm font-medium
     shadow-md hover:shadow-lg
     transition-all duration-300
-    hover:scale-105
-  "
+    hover:scale-105"
             >
               + Create New Profile
             </button>
             <button
-              // onClick={() => navigate("/user/form")}
+              onClick={() => navigate(ROUTES.USER_EMPLOYEE_DATA)}
               className="
     px-5 py-2.5 
     rounded-lg 
@@ -114,10 +112,9 @@ const HeroDashBoardSection = () => {
     text-white text-sm font-medium
     shadow-md hover:shadow-lg
     transition-all duration-300
-    hover:scale-105
-  "
+    hover:scale-105"
             >
-              + Existing Profile
+              Existing Profile
             </button>
           </div>
         </div>

@@ -16,7 +16,7 @@ const basicFields = [
     required: true,
   },
   { name: "fullName", label: "Full Name", type: "text", required: true },
-
+  
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "email", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },

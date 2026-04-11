@@ -24,6 +24,8 @@ class ROUTES {
   static USER_SETTINGS = `${this.USER_BASE}/settings`;
   static USERDOCUMENT_DETAIL = `${this.USER_BASE}/document-detail`;
   static USER_FORM = `${this.USER_BASE}/form`;
+  static USER_EMPLOYEE_DATA = `${this.USER_BASE}/employee-data`;
+  static USER_EMPLOYEE_DOCUMENTS = `${this.USER_BASE}/employee-documents`;
 
   // Documents
   static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
