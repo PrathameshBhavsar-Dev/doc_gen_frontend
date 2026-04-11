@@ -35,6 +35,10 @@ const UserDetailPage = lazy(() => import("../pages/user/UserDetailPage"));
 const UserDocumentFormPage = lazy(
   () => import("../pages/user/UserDocumentFormPage"),
 );
+const UserEmployeePage = lazy(() => import("../pages/user/UserEmployeePage"));
+const UserEmployeeDocumentsPage = lazy(
+  () => import("../pages/user/UserEmployeeDocumentsPage"),
+);
 
 /* ======================= DOCUMENT ======================= */
 const DocumentCreate = lazy(
@@ -98,6 +102,14 @@ const AppRoutes = () => {
           <Route
             path={ROUTES.EDIT_DOCUMENT}
             element={<LazyLoad component={DocumentCreate} />}
+          />
+          <Route
+            path={ROUTES.USER_EMPLOYEE_DATA}
+            element={<LazyLoad component={UserEmployeePage} />}
+          />
+          <Route
+            path={ROUTES.USER_EMPLOYEE_DOCUMENTS}
+            element={<LazyLoad component={UserEmployeeDocumentsPage} />}
           />
         </Route>
       </Route>
