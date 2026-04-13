@@ -1,116 +1,218 @@
-import React, { useMemo } from 'react';
-import { ArrowLeft, Download, Eye, FileText, User, Building, CheckCircle, Clock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import ROUTES from "../../core/constants/routes.constant";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FiArrowLeft, FiEdit, FiFileText } from "react-icons/fi";
+import { documentTypes } from "../../components/constant/publicData/mockData";
 
 const UserEmployeeDocumentsPage = () => {
-  const documents = [
-    { type: 'Offer Letter', fileSize: '245 KB', date: 'Feb 15, 2026', generatedBy: 'Aditi Khade', status: 'Completed', checked: true },
-    { type: 'Appointment Letter', checked: false },
-    { type: 'Experience Letter', checked: false },
-    { type: 'Salary Slip', checked: false },
-    { type: 'Increment Letter', checked: false },
-    { type: 'Confirmation Letter', checked: false },
-  ];
-
+  const { state } = useLocation();
   const navigate = useNavigate();
 
-  // Split docs
-  const { generatedDocs, pendingDocs } = useMemo(() => {
-    return {
-      generatedDocs: documents.filter(d => d.checked),
-      pendingDocs: documents.filter(d => !d.checked)
-    };
-  }, [documents]);
+  const [selectedDocs, setSelectedDocs] = useState([]);
+
+  if (!state) return <div className="p-6">No data found</div>;
+
+  const excludedDocIds = [6, 8, 9, 10, 13, 14, 15];
+
+  const filteredDocuments = documentTypes.filter(
+    (doc) => !excludedDocIds.includes(doc.id),
+  );
+
+  const docs = filteredDocuments.map((doc, index) => ({
+    id: doc.id,
+    name: doc.name,
+    status: index % 2 === 0 ? "Generated" : "Pending",
+    createdAt: index % 2 === 0 ? "12 Feb 2026" : "-",
+    payment: index % 2 === 0 ? "Paid" : "Pending",
+  }));
+
+  // ✅ Toggle single doc
+  const toggleDoc = (id) => {
+    setSelectedDocs((prev) =>
+      prev.includes(id) ? prev.filter((d) => d !== id) : [...prev, id],
+    );
+  };
+
+  // ✅ Select All
+  const allSelected = selectedDocs.length === docs.length;
+
+  const toggleAll = () => {
+    setSelectedDocs(allSelected ? [] : docs.map((d) => d.id));
+  };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#F8FAFF] via-[#EEF2FF] to-[#F5F3FF] px-6 py-6 relative">
+      {/* BACKGROUND GLOW */}
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-[#6366F1]/10 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#A78BFA]/10 blur-[120px] rounded-full"></div>
 
-        {/* Back */}
-        <button className="flex items-center gap-2 text-gray-600 hover:text-black mb-6"
-          onClick={() => navigate(ROUTES.USER_EMPLOYEE_DATA)}>
-          <ArrowLeft size={20} /> Back
-        </button>
+      <div className="max-w-[1350px] mx-auto px-4 flex flex-col gap-6 relative">
+        {/* HEADER */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-lg hover:bg-white/50 transition"
+            >
+              <FiArrowLeft />
+            </button>
 
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#0E145E] to-[#B37BD6] rounded-3xl p-8 text-white shadow-xl mb-8">
-          <h1 className="text-3xl font-bold mb-2">Employee Documents</h1>
-          <p className="text-sm opacity-80">Manage and preview all generated documents</p>
-        </div>
-
-        {/* Info Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <div className="flex items-center gap-3 mb-4">
-              <User className="text-blue-600" />
-              <h2 className="font-semibold">Employee</h2>
+            <div>
+              <h2 className="text-[20px] font-semibold text-[#1E293B]">
+                {state.fullName || state.name}
+              </h2>
+              <p className="text-[14px] text-[#64748B]">{state.company}</p>
             </div>
-            <p className="font-medium">Rahul Sharma</p>
-            <p className="text-sm text-gray-500">EMP001</p>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <div className="flex items-center gap-3 mb-4">
-              <Building className="text-purple-600" />
-              <h2 className="font-semibold">Company</h2>
-            </div>
-            <p className="font-medium">Nimbja Security Solutions</p>
+          <div className="flex gap-3">
+            <button className="px-4 py-2 rounded-xl bg-white/70 backdrop-blur text-[14px] flex items-center gap-1 shadow-sm hover:shadow transition">
+              <FiEdit /> Edit
+            </button>
+
+            <button
+              disabled={selectedDocs.length === 0}
+              onClick={() => {
+                console.log("Generate docs:", selectedDocs);
+              }}
+              className={`
+                px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
+                ${
+                  selectedDocs.length === 0
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-gradient-to-r from-[#6366F1] to-[#A78BFA] text-white shadow-md hover:shadow-lg"
+                }
+              `}
+            >
+              <FiFileText />
+              Generate {selectedDocs.length > 0 && `(${selectedDocs.length})`}
+            </button>
           </div>
         </div>
 
-        {/* Generated Docs */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <CheckCircle className="text-green-600" /> Generated Documents
-          </h2>
+        {/* PROFILE SECTION */}
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
+          <h3 className="text-[15px] font-semibold text-[#6366F1] uppercase mb-5">
+            Profile Information
+          </h3>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {generatedDocs.map((doc, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 shadow-md hover:shadow-xl transition">
-                <div className="flex justify-between items-start mb-3">
-                  <FileText className="text-indigo-600" />
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">{doc.status}</span>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-7 gap-x-12">
+            {[
+              { label: "Full Name", value: state.fullName || state.name },
+              { label: "Email", value: state.email },
+              { label: "Mobile", value: state.mobile },
+              { label: "PAN", value: state.pan },
+              { label: "DOB", value: state.dob },
+              { label: "Department", value: state.department },
+              { label: "Joining Date", value: state.joiningDate },
+              { label: "CTC", value: state.currentCTC },
+            ].map((item) => (
+              <div key={item.label}>
+                <p className="text-[12px] text-[#64748B]">{item.label}</p>
+                <p className="text-[15px] font-medium text-[#1E293B]">
+                  {item.value || "-"}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* DOCUMENT SECTION */}
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
+          {/* TOP BAR */}
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-[15px] font-semibold text-[#6366F1] uppercase">
+              Documents
+            </h3>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={toggleAll}
+                className="text-[13px] text-[#6366F1] font-medium hover:underline"
+              >
+                {allSelected ? "Unselect All" : "Select All"}
+              </button>
+
+              <p className="text-[13px] text-[#64748B]">
+                {docs.filter((d) => d.status === "Generated").length} /{" "}
+                {docs.length}
+              </p>
+            </div>
+          </div>
+
+          {/* DOCUMENT GRID (NO SCROLL) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {docs.map((doc) => (
+              <div
+                key={doc.id}
+                onClick={() => toggleDoc(doc.id)}
+                className={`
+                  group relative flex flex-col justify-between
+                  p-6 rounded-2xl cursor-pointer
+                  backdrop-blur-xl
+                  transition-all duration-300
+                  ${
+                    selectedDocs.includes(doc.id)
+                      ? "bg-[#EEF2FF] border border-[#6366F1]"
+                      : "bg-gradient-to-br from-[#EEF2FF]/70 via-[#F8FAFF] to-[#FAF5FF]/70"
+                  }
+                  shadow-[0_4px_15px_rgba(99,102,241,0.08)]
+                  hover:shadow-[0_10px_30px_rgba(99,102,241,0.18)]
+                  hover:-translate-y-[4px]
+                `}
+              >
+                {/* CHECKBOX */}
+                <div className="absolute top-3 right-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedDocs.includes(doc.id)}
+                    onChange={() => toggleDoc(doc.id)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-4 h-4 accent-[#6366F1] cursor-pointer"
+                  />
                 </div>
 
-                <h3 className="font-semibold mb-2">{doc.type}</h3>
-                <p className="text-sm text-gray-500">{doc.fileSize}</p>
-                <p className="text-sm text-gray-500">{doc.date}</p>
+                {/* ACCENT */}
+                <div className="absolute left-0 top-0 h-full w-[4px] bg-gradient-to-b from-[#6366F1] to-[#A78BFA]"></div>
 
-                <div className="flex gap-2 mt-4">
-                  <button className="flex-1 bg-indigo-600 text-white py-2 rounded-lg text-sm flex items-center justify-center gap-1">
-                    <Eye size={16} /> Preview
-                  </button>
-                  <button className="flex-1 border py-2 rounded-lg text-sm flex items-center justify-center gap-1">
-                    <Download size={16} /> Download
+                <div className="pl-3">
+                  <p className="text-[15px] font-semibold text-[#1E293B]">
+                    {doc.name}
+                  </p>
+
+                  <div className="flex flex-col gap-1 mt-3 text-[13px] text-[#64748B]">
+                    <span>Created: {doc.createdAt}</span>
+                    <span>Payment: {doc.payment}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-6 pl-3">
+                  <span
+                    className={`
+                      text-[12px] px-3 py-[5px] rounded-full font-medium
+                      ${
+                        doc.status === "Generated"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-gray-100 text-gray-500"
+                      }
+                    `}
+                  >
+                    {doc.status}
+                  </span>
+
+                  <button
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-[14px] text-[#6366F1] font-semibold hover:underline"
+                  >
+                    {doc.status === "Generated" ? "View" : "Generate"}
                   </button>
                 </div>
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Pending Docs */}
-        <section>
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Clock className="text-yellow-600" /> Not Generated Yet
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pendingDocs.map((doc, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-dashed border-gray-300">
-                <FileText className="text-gray-400 mb-3" />
-                <h3 className="font-medium text-gray-700">{doc.type}</h3>
-                <p className="text-xs text-gray-400 mt-1">Not generated</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
+        </div>
       </div>
     </div>
   );
 };
 
 export default UserEmployeeDocumentsPage;
-
