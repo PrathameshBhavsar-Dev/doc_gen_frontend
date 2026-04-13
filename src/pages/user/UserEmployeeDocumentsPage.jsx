@@ -6,8 +6,8 @@ import { documentTypes } from "../../components/constant/publicData/mockData";
 const UserEmployeeDocumentsPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-
   const [selectedDocs, setSelectedDocs] = useState([]);
+  const isMultiSelect = selectedDocs.length > 1;
 
   if (!state) return <div className="p-6">No data found</div>;
 
@@ -40,7 +40,13 @@ const UserEmployeeDocumentsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8FAFF] via-[#EEF2FF] to-[#F5F3FF] px-6 py-6 relative">
+    <div
+      className="
+min-h-screen 
+
+px-6 py-6 relative
+"
+    >
       {/* BACKGROUND GLOW */}
       <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-[#6366F1]/10 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#A78BFA]/10 blur-[120px] rounded-full"></div>
@@ -79,7 +85,7 @@ const UserEmployeeDocumentsPage = () => {
                 ${
                   selectedDocs.length === 0
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[#6366F1] to-[#A78BFA] text-white shadow-md hover:shadow-lg"
+                    : "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
                 }
               `}
             >
@@ -91,7 +97,7 @@ const UserEmployeeDocumentsPage = () => {
 
         {/* PROFILE SECTION */}
         <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
-          <h3 className="text-[15px] font-semibold text-[#6366F1] uppercase mb-5">
+          <h3 className="text-[15px] font-semibold text-[#1e208e] uppercase mb-5">
             Profile Information
           </h3>
 
@@ -120,14 +126,14 @@ const UserEmployeeDocumentsPage = () => {
         <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-[0_10px_40px_rgba(99,102,241,0.08)]">
           {/* TOP BAR */}
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-[15px] font-semibold text-[#6366F1] uppercase">
+            <h3 className="text-[15px] font-semibold text-[#1e208e] uppercase">
               Documents
             </h3>
 
             <div className="flex items-center gap-4">
               <button
                 onClick={toggleAll}
-                className="text-[13px] text-[#6366F1] font-medium hover:underline"
+                className="text-[13px] text-[#1e208e] font-medium hover:underline"
               >
                 {allSelected ? "Unselect All" : "Select All"}
               </button>
@@ -147,7 +153,7 @@ const UserEmployeeDocumentsPage = () => {
                 onClick={() => toggleDoc(doc.id)}
                 className={`
                   group relative flex flex-col justify-between
-                  p-6 rounded-2xl cursor-pointer
+                  p-6 rounded-r-2xl cursor-pointer
                   backdrop-blur-xl
                   transition-all duration-300
                   ${
@@ -167,7 +173,7 @@ const UserEmployeeDocumentsPage = () => {
                     checked={selectedDocs.includes(doc.id)}
                     onChange={() => toggleDoc(doc.id)}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-4 h-4 accent-[#6366F1] cursor-pointer"
+                    className="w-4 h-4 accent-[#222476] cursor-pointer"
                   />
                 </div>
 
@@ -200,8 +206,22 @@ const UserEmployeeDocumentsPage = () => {
                   </span>
 
                   <button
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-[14px] text-[#6366F1] font-semibold hover:underline"
+                    disabled={isMultiSelect}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isMultiSelect) return;
+                      console.log(
+                        doc.status === "Generated" ? "View" : "Generate",
+                      );
+                    }}
+                    className={`
+    text-[14px] font-semibold transition
+    ${
+      isMultiSelect
+        ? "text-gray-400 cursor-not-allowed"
+        : "text-[#373891] hover:underline"
+    }
+  `}
                   >
                     {doc.status === "Generated" ? "View" : "Generate"}
                   </button>
@@ -211,6 +231,68 @@ const UserEmployeeDocumentsPage = () => {
           </div>
         </div>
       </div>
+      {selectedDocs.length > 1 && (
+        <div
+          className="
+    fixed bottom-6 right-6
+    bg-white/80 backdrop-blur-xl
+    border border-[#E2E8F0]
+    shadow-xl
+    px-5 py-3 rounded-xl
+    flex items-center gap-4
+  "
+        >
+          <span className="text-[13px] text-[#475569]">
+            {selectedDocs.length} selected
+          </span>
+
+          {/* VIEW BUTTON (only if all selected are generated) */}
+          <button
+            disabled={
+              !selectedDocs.every((id) => {
+                const doc = docs.find((d) => d.id === id);
+                return doc.status === "Generated";
+              })
+            }
+            className={`
+        px-3 py-1.5 rounded-lg text-sm font-medium transition
+        ${
+          selectedDocs.every((id) => {
+            const doc = docs.find((d) => d.id === id);
+            return doc.status === "Generated";
+          })
+            ? "bg-[#EEF2FF] text-[#6366F1] hover:bg-[#E0E7FF]"
+            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+        }
+      `}
+          >
+            View
+          </button>
+
+          {/* GENERATE BUTTON (only if pending exists) */}
+          <button
+            disabled={
+              !selectedDocs.some((id) => {
+                const doc = docs.find((d) => d.id === id);
+                return doc.status !== "Generated";
+              })
+            }
+            className={`
+        px-4 py-1.5 rounded-lg text-sm font-medium transition
+        ${
+          selectedDocs.some((id) => {
+            const doc = docs.find((d) => d.id === id);
+            return doc.status !== "Generated";
+          })
+            ? "bg-gradient-to-r from-[#6366F1] to-[#A78BFA] text-white"
+            : "bg-gray-200 text-gray-400 cursor-not-allowed"
+        }
+      `}
+          >
+            Generate
+          </button>
+        </div>
+      )}
     </div>
   );
 };
