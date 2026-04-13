@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiSearch, FiEye, FiEdit, FiFileText } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 const dummyProfiles = [
@@ -38,15 +39,31 @@ const ProfileListPage = () => {
       <div className="max-w-[1350px] ">
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl font-semibold text-[#1E293B]">
-              Employee Profiles
-            </h2>
-            <p className="text-sm text-[#64748B]">
-              Manage and generate documents for employees
-            </p>
-          </div>
+          <div className="flex items-center gap-2">
+            {/* BACK BUTTON */}
+            <button
+              onClick={() => navigate(-1)}
+              className="
+      w-9 h-9 flex items-center justify-center
+      rounded-lg
+      bg-[#F1F2F6]
+      hover:bg-[#E4E7EC]
+      transition-all duration-200
+    "
+            >
+              <FiArrowLeft className="text-[16px] text-[#334155]" />
+            </button>
 
+            {/* TITLE */}
+            <div>
+              <h2 className="text-2xl font-semibold text-[#1E293B]">
+                Employee Profiles
+              </h2>
+              <p className="text-sm text-[#64748B]">
+                Manage and generate documents for employees
+              </p>
+            </div>
+          </div>
           <div className="flex gap-3 w-full md:w-auto">
             {/* SEARCH */}
             <div className="relative w-full md:w-[280px]">

@@ -22,7 +22,7 @@ const UserEmployeeDocumentsPage = () => {
     name: doc.name,
     status: index % 2 === 0 ? "Generated" : "Pending",
     createdAt: index % 2 === 0 ? "12 Feb 2026" : "-",
-    payment: index % 2 === 0 ? "Paid" : "Pending",
+    // payment: index % 2 === 0 ? "Paid" : "Pending",
   }));
 
   // ✅ Toggle single doc
@@ -44,7 +44,7 @@ const UserEmployeeDocumentsPage = () => {
       className="
 min-h-screen 
 
-px-6 py-6 relative
+ relative
 "
     >
       {/* BACKGROUND GLOW */}
@@ -187,7 +187,7 @@ px-6 py-6 relative
 
                   <div className="flex flex-col gap-1 mt-3 text-[13px] text-[#64748B]">
                     <span>Created: {doc.createdAt}</span>
-                    <span>Payment: {doc.payment}</span>
+                    {/* <span>Payment: {doc.payment}</span> */}
                   </div>
                 </div>
 
@@ -261,7 +261,7 @@ px-6 py-6 relative
             const doc = docs.find((d) => d.id === id);
             return doc.status === "Generated";
           })
-            ? "bg-[#EEF2FF] text-[#6366F1] hover:bg-[#E0E7FF]"
+            ? "bg-[#EEF2FF] text-[#2e2f85] hover:bg-[#E0E7FF]"
             : "bg-gray-200 text-gray-400 cursor-not-allowed"
         }
       `}
@@ -284,7 +284,7 @@ px-6 py-6 relative
             const doc = docs.find((d) => d.id === id);
             return doc.status !== "Generated";
           })
-            ? "bg-gradient-to-r from-[#6366F1] to-[#A78BFA] text-white"
+            ? "bg-gradient-to-r from-[#2e2f85] to-[#A78BFA] text-white"
             : "bg-gray-200 text-gray-400 cursor-not-allowed"
         }
       `}
