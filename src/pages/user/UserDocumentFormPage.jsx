@@ -88,6 +88,7 @@ const UserDocumentFormPage = () => {
       [name]: "",
     }));
   };
+  
   /* ---------------- DOCUMENT SELECT ---------------- */
   const handleDocSelect = (doc) => {
     // If ALL selected
