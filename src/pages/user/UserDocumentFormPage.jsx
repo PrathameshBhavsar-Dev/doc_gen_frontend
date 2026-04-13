@@ -16,7 +16,7 @@ const basicFields = [
     required: true,
   },
   { name: "fullName", label: "Full Name", type: "text", required: true },
-  
+
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "email", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
@@ -146,6 +146,9 @@ const UserDocumentFormPage = () => {
       position: "joiningDesignation",
       mode: "bankName",
       gender: "mrms",
+      dateofresignation: "resignationDate",
+      doj: "joiningDate",
+      lastWorkingDay: "relievingDate",
     };
     return map[name] || name;
   };
@@ -406,7 +409,7 @@ const UserDocumentFormPage = () => {
           {/* ---------------- DOCUMENT FIELDS ---------------- */}
           {selectedDocs.length > 0 && (
             <div className="mt-10 p-5 rounded-2xl bg-[#F8FAFF]/70 border border-dashed border-[#C7D2FE] transition-all duration-300">
-              <div className="text-xs text-[#6366F1] font-medium mb-4">
+              <div className="text-xs bg-gradient-to-r from-[#0E145E] to-[#B37BD6] bg-clip-text text-transparent font-medium mb-4">
                 Document Details
               </div>
 
@@ -426,11 +429,11 @@ const UserDocumentFormPage = () => {
   hover:shadow-[0_8px_25px_rgba(99,102,241,0.12)]
 "
                   >
-                    <div className="absolute left-0 top-0 h-full w-[4px] bg-gradient-to-b from-[#6366F1] to-[#A78BFA] rounded-l-2xl"></div>
+                    <div className="absolute left-0 top-0 h-full w-[4px] bg-gradient-to-b from-[#0E145E] to-[#B37BD6] rounded-l-2xl"></div>
                     {/* Document Title */}
-                    <h3 className="text-sm font-semibold text-[#4338CA] mb-4 flex items-center gap-2">
+                    <h3 className="text-sm font-semibold text-[#362b97] mb-4 flex items-center gap-2">
                       {" "}
-                      <span className="w-2 h-2 rounded-full bg-[#A78BFA]"></span>
+                      <span className="w-2 h-2 rounded-full bg-[#4927af]"></span>
                       {doc.name}
                     </h3>
 
