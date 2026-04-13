@@ -4,6 +4,8 @@ import {
   documentTypes,
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 /* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
@@ -78,6 +80,7 @@ const UserDocumentFormPage = () => {
   const [selectedDocs, setSelectedDocs] = useState([]);
   const ALL_DOC_ID = "ALL_DOCS";
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
@@ -373,9 +376,28 @@ const UserDocumentFormPage = () => {
         <div className="rounded-3xl p-6 bg-white/80 backdrop-blur-md border border-[#E2E8F0]/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300">
           {/* HEADER */}
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-[#1E293B] tracking-tight">
-              User Profile Form
-            </h2>
+            {/* LEFT SIDE */}
+            <div className="flex items-center gap-2">
+              {/* BACK BUTTON */}
+              <button
+                onClick={() => navigate(-1)}
+                className="
+        w-9 h-9 flex items-center justify-center
+        rounded-xl
+        bg-[#F8FAFC]
+        border border-[#E2E8F0]
+        hover:bg-[#F1F5F9]
+        transition-all duration-200
+      "
+              >
+                <FiArrowLeft className="text-[16px] text-[#334155]" />
+              </button>
+
+              {/* TITLE */}
+              <h2 className="text-xl font-semibold text-[#1E293B] tracking-tight">
+                User Profile Form
+              </h2>
+            </div>
           </div>
 
           {/* ---------------- BASIC DETAILS ---------------- */}
