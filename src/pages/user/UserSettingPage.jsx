@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   ArrowLeft,
@@ -9,7 +8,6 @@ import {
   Lock,
   Globe,
 } from "lucide-react";
-
 
 const UserSettingPage = () => {
   return (
