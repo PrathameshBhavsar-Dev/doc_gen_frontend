@@ -5,8 +5,9 @@ import {
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
+import { FiZap } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-
+import { FiCheck } from "react-icons/fi";
 /* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
@@ -18,6 +19,7 @@ const basicFields = [
     required: true,
   },
   { name: "fullName", label: "Full Name", type: "text", required: true },
+  { name: "id", label: "Employee ID", type: "text", required: true },
 
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "email", label: "Email ID", type: "email", required: true },
@@ -36,7 +38,7 @@ const basicFields = [
     label: "Permanent Address",
     type: "text",
     span: 2,
-    required: true,
+    required: false,
   },
 
   { name: "offerDate", label: "Offer Date", type: "date", required: true },
@@ -58,21 +60,28 @@ const basicFields = [
     required: true,
   },
   { name: "department", label: "Department", type: "text", required: true },
-  {
-    name: "resignationDate",
-    label: "Resignation Date",
-    type: "date",
-    required: true,
-  },
-  {
-    name: "relievingDate",
-    label: "Relieving Date",
-    type: "date",
-    required: true,
-  },
+  // {
+  //   name: "resignationDate",
+  //   label: "Resignation Date",
+  //   type: "date",
+  //   required: true,
+  // },
+  // {
+  //   name: "relievingDate",
+  //   label: "Relieving Date",
+  //   type: "date",
+  //   required: true,
+  // },
 
   { name: "bankName", label: "Bank Name", type: "text", required: true },
   { name: "accountNo", label: "Account No", type: "text", required: true },
+  {
+    name: "offerType",
+    label: "Offer Type",
+    type: "select",
+    options: ["withPF", "withoutPF"],
+    required: true,
+  },
 ];
 
 const UserDocumentFormPage = () => {
@@ -86,9 +95,11 @@ const UserDocumentFormPage = () => {
     setFormData({ ...formData, [name]: value });
 
     // ✅ remove error when user fixes input
+    const error = validateField(name, value);
+
     setErrors((prev) => ({
       ...prev,
-      [name]: "",
+      [name]: error,
     }));
   };
   /* ---------------- DOCUMENT SELECT ---------------- */
@@ -149,9 +160,21 @@ const UserDocumentFormPage = () => {
       position: "joiningDesignation",
       mode: "bankName",
       gender: "mrms",
-      dateofresignation: "resignationDate",
+      // dateofresignation: "resignationDate",
       doj: "joiningDate",
-      lastWorkingDay: "relievingDate",
+      totalSalary: "currentCTC",
+      salary: "currentCTC",
+      currentSalary: "currentCTC",
+      newCTC: "currentCTC",
+      stipend: "currentCTC",
+      salaryType: "offerType",
+      finalType: "offerType",
+      confirmationType: "offerType",
+      incrementType: "offerType",
+      appointmentType: "offerType",
+      employeeId: "id",
+
+      // lastWorkingDay: "relievingDate",
     };
     return map[name] || name;
   };
@@ -163,15 +186,15 @@ const UserDocumentFormPage = () => {
     });
   };
 
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [showGeneratePopup, setShowGeneratePopup] = useState(false);
+  const [showSavePopup, setShowSavePopup] = useState(false);
   const handleSave = () => {
     let newErrors = {};
 
     // ✅ Basic fields validation
     basicFields.forEach((field) => {
-      if (field.required && !formData[field.name]) {
-        newErrors[field.name] = "Please fill all the required fields";
-      }
+      const error = validateField(field.name, formData[field.name]);
+      if (error) newErrors[field.name] = error;
     });
 
     // ✅ Document fields validation
@@ -183,8 +206,9 @@ const UserDocumentFormPage = () => {
       const filteredFields = getFilteredFieldsByDoc(doc);
 
       filteredFields.forEach((field) => {
-        if (field.required && shouldShowField(field) && !formData[field.name]) {
-          newErrors[field.name] = "Please fill all the required fields";
+        if (field.required && shouldShowField(field)) {
+          const error = validateField(field.name, formData[field.name]);
+          if (error) newErrors[field.name] = error;
         }
       });
     });
@@ -196,9 +220,9 @@ const UserDocumentFormPage = () => {
 
     // ✅ Continue
     if (selectedDocs.length > 0) {
-      setShowConfirm(true);
+      setShowGeneratePopup(true); // document flow
     } else {
-      console.log("Profile Saved:", formData);
+      setShowSavePopup(true); // profile-only flow
     }
   };
   /* ---------------- FIELD RENDER ---------------- */
@@ -263,6 +287,55 @@ const UserDocumentFormPage = () => {
     ? filteredDocuments // show ALL documents
     : selectedDocs; // normal selected ones
 
+  const validateField = (name, value) => {
+    if (!value) return "This field is required";
+
+    switch (name) {
+      case "fullName":
+        if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
+        break;
+
+      case "mobile":
+        if (!/^[6-9]\d{9}$/.test(value))
+          return "Enter valid 10-digit mobile number";
+        break;
+
+      case "email":
+        if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
+        break;
+
+      case "pan":
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value))
+          return "Enter valid PAN (ABCDE1234F)";
+        break;
+
+      case "accountNo":
+        if (!/^\d{9,18}$/.test(value))
+          return "Account number must be 9-18 digits";
+        break;
+
+      case "joiningCTC":
+      case "currentCTC":
+        if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
+        break;
+
+      case "dob":
+        if (new Date(value) > new Date()) return "DOB cannot be future date";
+        break;
+
+      case "joiningDate":
+      case "offerDate":
+      case "resignationDate":
+      case "relievingDate":
+        if (isNaN(new Date(value))) return "Invalid date";
+        break;
+
+      default:
+        break;
+    }
+
+    return "";
+  };
   return (
     <div className="min-h-screen w-full  overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto ">
@@ -510,75 +583,186 @@ const UserDocumentFormPage = () => {
           </div>
         </div>
       </div>
-      {showConfirm && (
+      {showGeneratePopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-xs"></div>
-
-          {/* Modal */}
-          <div
-            className="
-        relative z-10 
-        w-full max-w-md 
-        rounded-2xl 
-        bg-white 
-        p-6 sm:p-7 
-        shadow-[0_20px_50px_rgba(0,0,0,0.15)]
-        animate-fadeIn
+          {/* LIGHT OVERLAY (no attention stealing) */}
+          <div className="absolute inset-0 bg-black/[0.04] backdrop-blur-[2px]"></div>
+          {/* MODAL */}
+          <div className="relative z-10 w-full max-w-md">
+            <div
+              className="
+        relative
+        rounded-2xl
+        bg-white
+        border border-[#E2E8F0]
+        shadow-[0_10px_30px_rgba(0,0,0,0.06)]
+        p-6
       "
-          >
-            {/* Title */}
-            <h3 className="text-lg sm:text-xl font-semibold text-[#1E293B] mb-2">
-              Generate Document?
-            </h3>
+            >
+              {/* LEFT ACCENT */}
+              <div
+                className="absolute left-0 top-0 h-full w-[3px] 
+          bg-gradient-to-b from-[#0E145E] to-[#B37BD6] 
+          rounded-l-2xl"
+              ></div>
 
-            {/* Description */}
-            <p className="text-sm text-[#64748B] mb-6 leading-relaxed">
-              Your profile has been saved successfully. Do you want to generate
-              the selected document now?
-            </p>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row justify-end gap-3">
-              {/* Cancel */}
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="
-            w-full sm:w-auto
-            px-4 py-2.5 
-            rounded-lg 
-            border border-[#E2E8F0] 
-            text-sm text-[#475569]
-            hover:bg-[#F8FAFC]
-            transition-all
+              {/* HEADER */}
+              <div className="flex items-start gap-3 mb-3">
+                <div
+                  className="
+            w-9 h-9 flex items-center justify-center
+            rounded-lg
+            bg-[#EEF2FF]
           "
-              >
-                Cancel
-              </button>
+                >
+                  <FiZap className="text-[16px] text-[#0E145E]" />
+                </div>
 
-              {/* Generate */}
-              <button
-                onClick={() => {
-                  setShowConfirm(false);
-                  console.log(
-                    "Generate Document with:",
-                    formData,
-                    selectedDocs,
-                  );
-                }}
-                className="
-            w-full sm:w-auto
-            px-4 py-2.5 
-            rounded-lg 
-            bg-gradient-to-r from-[#6366F1] to-[#A78BFA]
-            text-white text-sm font-medium
-            shadow-md
-            hover:shadow-lg
-            transition-all duration-300
+                <div>
+                  <h3 className="text-[15px] font-semibold text-[#1E293B]">
+                    Generate Documents
+                  </h3>
+                  <p className="text-[13px] text-[#64748B] mt-1">
+                    Profile saved successfully. Generate selected documents now?
+                  </p>
+                </div>
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex justify-end gap-2 mt-5">
+                <button
+                  onClick={() => setShowGeneratePopup(false)}
+                  className="
+  px-6 py-2.5 
+  rounded-xl 
+  text-sm font-medium
+  bg-[#F8FAFC]
+  border border-[#E2E8F0]
+  text-[#475569]
+
+  shadow-[0_2px_6px_rgba(0,0,0,0.04)]
+  hover:bg-[#F1F5F9]
+  hover:shadow-[0_6px_14px_rgba(0,0,0,0.08)]
+
+  transition-all duration-300
+  hover:scale-[1.02]
+  active:scale-[0.97]
+"
+                >
+                  Later
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowGeneratePopup(false);
+                    console.log("Generate Document:", formData, selectedDocs);
+                  }}
+                  className="
+  px-6 py-2.5 
+  rounded-xl 
+  bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
+  text-white text-sm font-medium
+  shadow-[0_6px_18px_rgba(99,102,241,0.25)]
+  hover:shadow-[0_10px_25px_rgba(99,102,241,0.35)]
+  transition-all duration-300
+  hover:scale-[1.03]
+  active:scale-[0.97]
+"
+                >
+                  Generate
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showSavePopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/[0.04] backdrop-blur-[2px]"></div>
+          <div className="relative z-10 w-full max-w-md">
+            <div
+              className="
+        relative
+        rounded-2xl
+        bg-white
+        border border-[#E2E8F0]
+        shadow-[0_10px_30px_rgba(0,0,0,0.06)]
+        p-6
+      "
+            >
+              {/* LEFT ACCENT */}
+              <div
+                className="absolute left-0 top-0 h-full w-[3px] 
+          bg-gradient-to-b from-[#0E145E] to-[#B37BD6] 
+          rounded-l-2xl"
+              ></div>
+
+              {/* HEADER */}
+              <div className="flex items-start gap-3 mb-3">
+                <div
+                  className="
+            w-9 h-9 flex items-center justify-center
+            rounded-lg
+            bg-[#EEF2FF]
           "
-              >
-                Generate
-              </button>
+                >
+                  <FiCheck className="text-[16px] text-[#0E145E]" />
+                </div>
+
+                <div>
+                  <h3 className="text-[15px] font-semibold text-[#1E293B]">
+                    Save Profile
+                  </h3>
+                  <p className="text-[13px] text-[#64748B] mt-1">
+                    Do you want to save the profile details?
+                  </p>
+                </div>
+              </div>
+
+              {/* ACTIONS */}
+              <div className="flex justify-end gap-2 mt-5">
+                <button
+                  onClick={() => setShowSavePopup(false)}
+                  className="
+  px-6 py-2.5 
+  rounded-xl 
+  text-sm font-medium
+  bg-[#F8FAFC]
+  border border-[#E2E8F0]
+  text-[#475569]
+
+  shadow-[0_2px_6px_rgba(0,0,0,0.04)]
+  hover:bg-[#F1F5F9]
+  hover:shadow-[0_6px_14px_rgba(0,0,0,0.08)]
+
+  transition-all duration-300
+  hover:scale-[1.02]
+  active:scale-[0.97]
+"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={() => {
+                    setShowSavePopup(false);
+                    console.log("Profile Saved:", formData);
+                  }}
+                  className="
+  px-6 py-2.5 
+  rounded-xl 
+  bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
+  text-white text-sm font-medium
+  shadow-[0_6px_18px_rgba(99,102,241,0.25)]
+  hover:shadow-[0_10px_25px_rgba(99,102,241,0.35)]
+  transition-all duration-300
+  hover:scale-[1.03]
+  active:scale-[0.97]
+"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
