@@ -325,8 +325,6 @@ const UserDocumentFormPage = () => {
 
       case "joiningDate":
       case "offerDate":
-      case "resignationDate":
-      case "relievingDate":
         if (isNaN(new Date(value))) return "Invalid date";
         break;
 
