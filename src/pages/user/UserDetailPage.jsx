@@ -194,9 +194,9 @@ const UserDetailPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100" ref={documentRef}>
+    <div className="" ref={documentRef}>
       {/* ================= PAGE CONTENT ================= */}
-      <div className="p-4 sm:p-6">
+      <div className="">
         {/* Back */}
         <div
           onClick={() => navigate(-1)}
@@ -225,7 +225,7 @@ const UserDetailPage = () => {
             </h1>
 
             <div className="flex flex-wrap gap-3 mt-2 text-sm items-center">
-              <span className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
+              <span className="flex items-center gap-1 font-semibold bg-white/20 px-3 py-1 rounded-full">
                 <CheckCircle size={14} />
                 Completed
               </span>
@@ -251,9 +251,9 @@ const UserDetailPage = () => {
             <div className="flex items-center gap-3 mb-4">
               <div
                 className="p-2 rounded-lg"
-                style={{ backgroundColor: "#E7E9FF" }}
+                style={{ backgroundColor: "#E0E7FF" }}
               >
-                <User size={18} color="#0E145E" />
+                <User size={18} color="#4F39F6" />
               </div>
 
               <h2 className="font-semibold text-lg">Employee Information</h2>
@@ -339,7 +339,7 @@ const UserDetailPage = () => {
           <button
             onClick={(e) => handleDownload(e, doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
-            text-white px-6 py-3 rounded-xl shadow transition
+            text-white px-6 py-3 rounded-xl font-semibold shadow transition
             bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
             hover:opacity-90"
           >
@@ -350,7 +350,7 @@ const UserDetailPage = () => {
           <button
             onClick={() => handlePreview(doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
-            bg-gray-200 text-gray-700 px-6 py-3 rounded-xl
+            bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl
             hover:bg-gray-300 transition"
           >
             <Eye size={18} />

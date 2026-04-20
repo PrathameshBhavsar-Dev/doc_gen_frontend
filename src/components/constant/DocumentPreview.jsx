@@ -332,15 +332,21 @@ const DOC_LABELS = {
   confirmation_letter: "Confirmation Letter",
 };
 
+
 /* ═══════════════════════════════════════════════════════════ */
 const DocumentPreview = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const previewData = location.state?.documentData;
-  const previewDocType = location.state?.selectedDocType;
-  const previewCompany = location.state?.selectedCompany;
+const {
+  formData: previewData,
+  selectedDocs,
+  salarySlipMonths,
+  companyData: previewCompany,
+} = location.state || {};
+
+const previewDocType = selectedDocs?.[0]; // assuming single doc
 
   const documentRef = useRef(null);
   const apiService = new ApiService();
@@ -354,7 +360,14 @@ const DocumentPreview = () => {
   const [zoom, setZoom] = useState(100);
 
   const key = normalizeTemplateKey(previewDocType?.template);
-  const payload = buildPayload(key, previewData, user, previewCompany);
+  // const payload = buildPayload(key, previewData, user, previewCompany);
+
+  useEffect(() => {
+    if (!previewData || !user || !previewCompany) return;
+
+    const payload = buildPayload(key, previewData, user, previewCompany);
+    console.log(payload);
+  }, [previewData, user, previewCompany, key]);
 
   /* ── ALWAYS inject/re-inject styles on every mount ── */
   useEffect(() => {
@@ -374,6 +387,20 @@ const DocumentPreview = () => {
     };
   }, []); // runs on mount, cleans up on unmount
 
+
+  // const {
+  //   formData,
+  //   selectedDocs,
+  //   salarySlipMonths,
+  //   companyData,
+  // } = location.state || {};
+
+  console.log("Preview Data:", {
+    previewData,
+    selectedDocs,
+    salarySlipMonths,
+    previewCompany,
+  });
   /* ── Auth guard ── */
   useEffect(() => {
     if (!user) { navigate("/login"); return; }
@@ -405,51 +432,6 @@ const DocumentPreview = () => {
     setSnackMsg(msg); setSnackSev(sev); setSnackOpen(true);
   };
 
-  /* ── Download PDF (full) ── */
-  // const handleDownloadPDF = async () => {
-  //   if (!documentRef.current) return;
-
-  //   setLoading(true);
-  //   setLoadingLabel("Saving & generating PDF…");
-  //   setError("");
-
-  //   try {
-  //     const key = normalizeTemplateKey(previewDocType?.template);
-
-  //     if (!key) throw new Error("Missing doc type key");
-
-  //     console.log("🔥 NORMALIZED KEY:", key);
-
-  //     // ✅ SINGLE SOURCE OF TRUTH
-  //     const payload = buildPayload(
-  //       key,
-  //       previewData,
-  //       user,
-  //       previewCompany
-  //     );
-
-  //     console.log("🔥 FINAL PAYLOAD:", payload);
-
-  //     await apiService.apipost(API.generateDoc(key), payload);
-
-  //     // ✅ GENERATE PDF
-  //     window.scrollTo(0, 0);
-  //     await new Promise((r) => setTimeout(r, 300));
-
-  //     const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
-  //       }-${new Date().toISOString().slice(0, 10)}.pdf`;
-
-  //     await generatePDF(documentRef.current, filename);
-
-  //     toast("PDF saved & downloaded ✓");
-  //   } catch (err) {
-  //     console.error("❌ ERROR:", err);
-  //     setError("Failed to save or generate PDF.");
-  //     toast("Export failed", "error");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleDownloadPDF = async () => {
     setLoading(true);
