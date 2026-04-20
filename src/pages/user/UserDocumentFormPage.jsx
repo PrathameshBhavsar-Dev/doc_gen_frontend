@@ -264,7 +264,7 @@ const UserDocumentFormPage = () => {
   const normalizeFieldName = (name) => {
     const map = {
       employeeName: "employeeName",
-      employeeEmail: "email",
+      employeeEmail: "employeeEmail",
       employeePhone: "mobile",
       employeeNumber: "mobile",
       address: "currentAddress",
@@ -367,26 +367,26 @@ docsToProcess.forEach(doc => {
   if (targetKey && targetKey !== "salary") {
     payload[targetKey] = formData.salary;
   }
+  const designationFieldMap = {
+        salaryslip_letter: "designation",
+  
+    offer_letter: "position",
+    appointment_letter: "position",
+    increment_letter: "designation",
+    experience_letter: "designation",
+    relieving_letter: "designation",
+    internshipcertificate_letter: "designation",
+    completion_certificate : "designation",
+    fullandfinal_letter: "designation",
+    confirmation_letter: "designation",
+  };
+  // ✅ DESIGNATION MAPPING
+  const designationKey = designationFieldMap[docKey];
+  
+  if (designationKey && designationKey !== "joiningDesignation") {
+    payload[designationKey] = formData.joiningDesignation;
+  }
 });
-const designationFieldMap = {
-      salaryslip_letter: "designation",
-
-  offer_letter: "position",
-  appointment_letter: "position",
-  increment_letter: "designation",
-  experience_letter: "designation",
-  relieving_letter: "designation",
-  internshipcertificate_letter: "designation",
-  completion_certificate : "designation",
-  fullandfinal_letter: "designation",
-  confirmation_letter: "designation",
-};
-// ✅ DESIGNATION MAPPING
-const designationKey = designationFieldMap[docKey];
-
-if (designationKey && designationKey !== "joiningDesignation") {
-  payload[designationKey] = formData.joiningDesignation;
-}
 
 console.log("FINAL PAYLOAD:", payload);
 
