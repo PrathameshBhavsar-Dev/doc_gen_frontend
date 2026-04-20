@@ -3,6 +3,7 @@ import { FiSearch, FiEye, FiEdit, FiFileText } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
+
 const dummyProfiles = [
   {
     id: 1,
@@ -25,6 +26,8 @@ const dummyProfiles = [
     createdAt: "05 Mar 2026",
   },
 ];
+
+// const navigate = useNavigate();
 
 const ProfileListPage = () => {
   const [search, setSearch] = useState("");
@@ -81,6 +84,7 @@ const ProfileListPage = () => {
 
             {/* CREATE BUTTON */}
             <button
+              onClick={() => navigate(ROUTES.USER_FORM)}
               className="
               px-5 py-2.5 rounded-xl 
               bg-gradient-to-r from-[#0E145E] to-[#B37BD6] 
@@ -186,11 +190,10 @@ transition-all duration-300
                 <span
                   className={`
       px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${
-        profile.paymentStatus === "Paid"
-          ? "bg-green-100 text-green-600"
-          : "bg-red-100 text-red-500"
-      }
+      ${profile.paymentStatus === "Paid"
+                      ? "bg-green-100 text-green-600"
+                      : "bg-red-100 text-red-500"
+                    }
     `}
                 >
                   {profile.paymentStatus}
@@ -207,11 +210,10 @@ transition-all duration-300
                 <span
                   className={`
       px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${
-        profile.status === "Active"
-          ? "bg-green-100 text-green-600"
-          : "bg-gray-100 text-gray-500"
-      }
+      ${profile.status === "Active"
+                      ? "bg-green-100 text-green-600"
+                      : "bg-gray-100 text-gray-500"
+                    }
     `}
                 >
                   {profile.status}

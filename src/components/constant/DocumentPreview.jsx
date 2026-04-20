@@ -354,7 +354,14 @@ const DocumentPreview = () => {
   const [zoom, setZoom] = useState(100);
 
   const key = normalizeTemplateKey(previewDocType?.template);
-  const payload = buildPayload(key, previewData, user, previewCompany);
+  // const payload = buildPayload(key, previewData, user, previewCompany);
+
+  useEffect(() => {
+    if (!previewData || !user || !previewCompany) return;
+
+    const payload = buildPayload(key, previewData, user, previewCompany);
+    console.log(payload);
+  }, [previewData, user, previewCompany, key]);
 
   /* ── ALWAYS inject/re-inject styles on every mount ── */
   useEffect(() => {

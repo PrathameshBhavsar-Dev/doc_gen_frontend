@@ -23,8 +23,7 @@ export const normalizeTemplateKey = (template) => {
   return map[normalized] || normalized;
 };
 
-export const buildPayload = (key, previewData, user, previewCompany) => {
-  const base = {
+export const buildPayload = (key, previewData = {}, user = {}, previewCompany = {}) => {  const base = {
     company: previewCompany?.name,
     issuedTo: user?.id,
     employeeName: previewData.employeeName,
