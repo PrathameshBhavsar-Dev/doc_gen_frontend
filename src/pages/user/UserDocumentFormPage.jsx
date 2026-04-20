@@ -67,7 +67,7 @@ const basicFields = [
   { name: "accountNo", label: "Account No", type: "text", required: true },
   {
     name: "offerType",
-    label: "Offer Type",
+    label: "PF Type",
     type: "select",
     options: ["withPF", "withoutPF"],
     required: true,
@@ -80,6 +80,7 @@ const UserDocumentFormPage = () => {
   const [salarySlipMonths, setSalarySlipMonths] = useState([]); // NEW: Track month range
   const ALL_DOC_ID = "ALL_DOCS";
   const [errors, setErrors] = useState({});
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const navigate = useNavigate();
 
   /* ---------------- HANDLE INPUT ---------------- */
@@ -277,11 +278,7 @@ const UserDocumentFormPage = () => {
       currentSalary: "currentCTC",
       newCTC: "currentCTC",
       stipend: "currentCTC",
-      salaryType: "offerType",
-      finalType: "offerType",
-      confirmationType: "offerType",
-      incrementType: "offerType",
-      appointmentType: "offerType",
+
       employeeId: "id",
     };
     return map[name] || name;
@@ -367,8 +364,14 @@ const UserDocumentFormPage = () => {
           className={baseClass}
           required={field.required}
           value={formData[field.name] || ""}
-          onChange={(e) => handleChange(field.name, e.target.value)}
-        >
+          onChange={(e) => {
+            handleChange(field.name, e.target.value);
+
+            if (field.name === "company") {
+              const companyObj = companies.find(c => c.name === e.target.value);
+              setSelectedCompany(companyObj); // ✅ THIS IS THE FIX
+            }
+          }}        >
           <option value="">Select {field.label}</option>
 
           {field.name === "company"
@@ -695,7 +698,7 @@ const UserDocumentFormPage = () => {
                               };
 
                               console.log("Updated State:", updated.salaryWorkdays);
-                              // return updated;
+                              return updated;
                             });
                           }}
                         />
@@ -823,9 +826,26 @@ const UserDocumentFormPage = () => {
 
                 <button
                   onClick={() => {
-                    setShowGeneratePopup(false);
-                    console.log("Generate Document:", formData, selectedDocs, salarySlipMonths);
-                    navigate(ROUTES.DOCUMENT_PREVIEW, { state: { formData, selectedDocs, salarySlipMonths } });
+                    console.log("Generate Document:", {
+                      formData,
+                      selectedDocs,
+                      salarySlipMonths,
+                      selectedCompany, // 👈 check this
+                    });
+
+                    if (!selectedCompany) {
+                      alert("Please select a company");
+                      return;
+                    }
+
+                    navigate(ROUTES.DOCUMENT_PREVIEW, {
+                      state: {
+                        formData,
+                        selectedDocs,
+                        salarySlipMonths,
+                        companyData: selectedCompany, // ✅ FIX
+                      },
+                    });
                   }}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white text-sm font-medium shadow-[0_6px_18px_rgba(99,102,241,0.25)] hover:shadow-[0_10px_25px_rgba(99,102,241,0.35)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
                 >
