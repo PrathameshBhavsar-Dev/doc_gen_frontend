@@ -1820,7 +1820,7 @@ export const documentTypes = [
         type: "number",
         required: true,
       },
-      // { name: 'employeeId', label: 'Employee ID', type: 'text', required: false },
+      { name: 'employeeId', label: 'Employee ID', type: 'text', required: false },
       {
         name: "effectiveDate",
         label: "Effective Date",
