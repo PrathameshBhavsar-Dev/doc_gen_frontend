@@ -47,7 +47,7 @@ const basicFields = [
   { name: "joiningDate", label: "Joining Date", type: "date", required: true },
 
   { name: "joiningCTC", label: "Joining CTC", type: "text", required: true },
-  { name: "currentCTC", label: "Current CTC", type: "text", required: true },
+  { name: "salary", label: "Current CTC", type: "text", required: true },
 
   {
     name: "joiningDesignation",
@@ -273,10 +273,11 @@ const UserDocumentFormPage = () => {
       mode: "bankName",
       gender: "mrms",
       doj: "joiningDate",
-      totalSalary: "currentCTC",
-      salary: "currentCTC",
-      currentSalary: "currentCTC",
-      newCTC: "currentCTC",
+     totalSalary: "salary",
+salary: "salary",
+currentSalary: "salary",
+newCTC: "salary",
+stipend: "salary",
       stipend: "currentCTC",
 
       employeeId: "id",
@@ -337,13 +338,63 @@ const UserDocumentFormPage = () => {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+   if (Object.keys(newErrors).length > 0) return;
 
-    if (selectedDocs.length > 0) {
-      setShowGeneratePopup(true);
-    } else {
-      setShowSavePopup(true);
-    }
+// ✅ CREATE PAYLOAD HERE
+let payload = { ...formData };
+
+// ✅ HANDLE MULTIPLE DOCS
+const docsToProcess = selectedDocs.find(d => d.id === ALL_DOC_ID)
+  ? filteredDocuments
+  : selectedDocs;
+
+docsToProcess.forEach(doc => {
+  const docKey = normalizeDocName(doc.name); // e.g. appointment_letter
+
+  const salaryFieldMap = {
+    offer_letter: "salary",
+    salaryslip_letter: "totalSalary",
+        appointment_letter: "salary",
+
+    increment_letter: "newCTC",
+    internshipcertificate_letter:"stipend",
+    fullandfinal_letter: "totalSalary",
+    confirmation_letter:"totalSalary"
+  };
+
+  const targetKey = salaryFieldMap[docKey];
+
+  if (targetKey && targetKey !== "salary") {
+    payload[targetKey] = formData.salary;
+  }
+});
+const designationFieldMap = {
+      salaryslip_letter: "designation",
+
+  offer_letter: "position",
+  appointment_letter: "position",
+  increment_letter: "designation",
+  experience_letter: "designation",
+  relieving_letter: "designation",
+  internshipcertificate_letter: "designation",
+  completion_certificate : "designation",
+  fullandfinal_letter: "designation",
+  confirmation_letter: "designation",
+};
+// ✅ DESIGNATION MAPPING
+const designationKey = designationFieldMap[docKey];
+
+if (designationKey && designationKey !== "joiningDesignation") {
+  payload[designationKey] = formData.joiningDesignation;
+}
+
+console.log("FINAL PAYLOAD:", payload);
+
+// ✅ store payload temporarily
+setFormData(payload);
+
+// ✅ show popup instead of navigating
+setShowGeneratePopup(true);
   };
 
   /* ---------------- FIELD RENDER ---------------- */
@@ -444,8 +495,8 @@ const UserDocumentFormPage = () => {
           return "Account number must be 9-18 digits";
         break;
 
-      case "joiningCTC":
-      case "currentCTC":
+    case "joiningCTC":
+case "salary":
         if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
         break;
 
@@ -479,6 +530,12 @@ const UserDocumentFormPage = () => {
     );
   };
 
+  const salaryFieldMap = {
+  offer_letter: "salary",
+  appointment_letter: "totalSalary",
+  increment_letter: "salary",
+  experience_letter: "salary"
+};
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
