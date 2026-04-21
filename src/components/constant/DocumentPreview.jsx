@@ -19,7 +19,7 @@ import {
   buildPayload,
   normalizeTemplateKey,
 } from "../../utils/documentPayloadBuilder";
-
+import { FiFileText } from "react-icons/fi";
 // Templates
 import ExperienceLetterTemplate from "../documents/ExperienceLetter/ExperienceLetterTemplate";
 import RelievingLetterTemplate from "../documents/RelievingLetter/RelievingLetteTemplate";
@@ -358,14 +358,21 @@ const DocumentPreview = () => {
   const state = location.state || {};
 
   const previewData = state.previewData;
-  const selectedDocs = state.selectedDocs;
+  const selectedDocsRaw = state.selectedDocs;
+
+  const selectedDocs = Array.isArray(selectedDocsRaw)
+    ? selectedDocsRaw
+    : selectedDocsRaw
+      ? [selectedDocsRaw]
+      : [];
   const previewCompany = state.previewCompany;
   const salarySlipMonths = state.salarySlipMonths || [];
 
   const [activeDocId, setActiveDocId] = useState(null);
-
   const previewDocType =
-    selectedDocs?.find((d) => d.id === activeDocId) || selectedDocs?.[0];
+    selectedDocs.length > 0
+      ? selectedDocs.find((d) => d?.id === activeDocId) || selectedDocs[0]
+      : null;
   const documentRef = useRef(null);
   const apiService = new ApiService();
 
@@ -388,7 +395,7 @@ const DocumentPreview = () => {
   }, [previewData, user, previewCompany, key]);
 
   useEffect(() => {
-    if (selectedDocs?.length > 0) {
+    if (selectedDocs.length > 0 && selectedDocs[0]?.id) {
       setActiveDocId(selectedDocs[0].id);
     }
   }, [selectedDocs]);
@@ -632,6 +639,69 @@ const DocumentPreview = () => {
         {/* ── Sidebar ── */}
         <aside className="dp-sidebar">
           <div className="dp-card">
+            <div className="dp-card-label">Documents</div>
+
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              {selectedDocs.map((doc) => {
+                const isActive = activeDocId === doc.id;
+
+                return (
+                  <button
+                    key={doc.id}
+                    onClick={() => setActiveDocId(doc.id)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "10px 12px",
+                      borderRadius: "10px",
+                      fontFamily: "DM Sans",
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      transition: "all 0.18s",
+                      border: isActive
+                        ? "1px solid rgba(124,58,237,0.35)"
+                        : "1px solid rgba(124,58,237,0.12)",
+                      background: isActive
+                        ? "linear-gradient(135deg, rgba(124,58,237,0.12), rgba(91,33,182,0.08))"
+                        : "transparent",
+                      color: isActive ? "#5B21B6" : "#6B5E8A",
+                    }}
+                  >
+                    {/* Icon circle (like your UI style) */}
+                    {/* React Icon */}
+                    <div
+                      style={{
+                        width: "26px",
+                        height: "26px",
+                        borderRadius: "8px",
+                        background: isActive
+                          ? "linear-gradient(135deg, #7C3AED, #5B21B6)"
+                          : "#EDE9FE",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: isActive ? "#fff" : "#5B21B6",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <FiFileText size={14} />
+                    </div>
+
+                    {/* Text */}
+                    <span style={{ flex: 1, textAlign: "left" }}>
+                      {doc.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="dp-card">
             <div className="dp-card-label">Status</div>
             <div className="dp-status-pill">
               <span className="dp-status-dot" />
@@ -724,9 +794,9 @@ const DocumentPreview = () => {
         {/* ── Stage ── */}
         <main className="dp-stage">
           {/* 🔥 ADD THIS HERE */}
-          <div className="mb-8 flex justify-center">
-            <div className="flex items-center gap-3 p-2 rounded-2xl bg-white border border-[#E2E8F0] shadow-lg">
-              {selectedDocs?.map((doc) => {
+          {/* <div className="mb-5 flex justify-center">
+            <div className="flex gap-3 p-2 rounded-xl border border-[rgba(124,58,237,0.18)] bg-[rgba(124,58,237,0.06)] backdrop-blur-sm">
+              {selectedDocs.map((doc) => {
                 const isActive = activeDocId === doc.id;
 
                 return (
@@ -734,29 +804,26 @@ const DocumentPreview = () => {
                     key={doc.id}
                     onClick={() => setActiveDocId(doc.id)}
                     className={`
-            relative px-8 py-4 min-w-[180px]
-            text-sm font-semibold rounded-xl
-            transition-all duration-300 ease-in-out
-            flex items-center justify-center
+    px-6 py-2.5 rounded-xl
+    text-[14px] font-semibold
+    transition-all duration-200
+    flex items-center justify-center
 
-            ${
-              isActive
-                ? "bg-gradient-to-r from-[#5B21B6] to-[#7C3AED] text-white shadow-xl scale-[1.08]"
-                : "bg-[#F8FAFC] text-[#475569] hover:bg-[#EEF2FF] border border-[#E2E8F0]"
-            }
-          `}
+    ${
+      isActive
+        ? "bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] text-white shadow-[0_4px_14px_rgba(124,58,237,0.4)]"
+        : "bg-[#F5F3FF] text-[#5B21B6] border border-[#DDD6FE] hover:bg-[#EDE9FE]"
+    }
+
+    active:scale-[0.97]
+  `}
                   >
                     {doc.name}
-
-                    {/* active glow indicator */}
-                    {isActive && (
-                      <span className="absolute -bottom-1 w-2/3 h-[3px] bg-white/60 rounded-full blur-sm" />
-                    )}
                   </button>
                 );
               })}
             </div>
-          </div>
+          </div> */}
 
           <div className="dp-stage-header">
             <div className="dp-stage-title">Document Preview</div>

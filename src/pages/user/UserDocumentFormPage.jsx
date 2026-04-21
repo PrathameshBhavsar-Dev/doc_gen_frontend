@@ -7,7 +7,7 @@ import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiZap } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
 /* ---------------- BASIC FIELDS ---------------- */
@@ -76,7 +76,11 @@ const basicFields = [
 
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
-  const [selectedDocs, setSelectedDocs] = useState([]);
+  const location = useLocation();
+
+  const incomingDocs = location.state?.selectedDocs || [];
+  const employeeData = location.state?.employeeData;
+  const [selectedDocs, setSelectedDocs] = useState(incomingDocs);
   const [salarySlipMonths, setSalarySlipMonths] = useState([]); // NEW: Track month range
   const ALL_DOC_ID = "ALL_DOCS";
   const [errors, setErrors] = useState({});
@@ -96,6 +100,11 @@ const UserDocumentFormPage = () => {
       [name]: error,
     }));
   };
+  useEffect(() => {
+    if (incomingDocs.length > 0) {
+      setSelectedDocs(incomingDocs);
+    }
+  }, [incomingDocs]);
 
   /* ---------------- GENERATE MONTHS BETWEEN RANGE ---------------- */
   const generateMonthsArray = (start, end) => {
@@ -255,34 +264,75 @@ const UserDocumentFormPage = () => {
 
   const normalizeFieldName = (name) => {
     const map = {
+      // ✅ NAME
       employeeName: "employeeName",
-      employeeEmail: "employeeEmail",
+
+      // ✅ EMAIL FIX (IMPORTANT)
+      employeeEmail: "email",
+      emailId: "email",
+      email: "email",
+
+      // ✅ PHONE
       employeePhone: "mobile",
       employeeNumber: "mobile",
+      phone: "mobile",
+
+      // ✅ ADDRESS
       address: "currentAddress",
+
+      // ✅ DESIGNATION
       designation: "joiningDesignation",
       position: "joiningDesignation",
+
+      // ✅ BANK
       mode: "bankName",
+
+      // ✅ GENDER
       gender: "mrms",
+
+      // ✅ DATES
       doj: "joiningDate",
+
+      // ✅ SALARY
       totalSalary: "salary",
-      salary: "salary",
       currentSalary: "salary",
       newCTC: "salary",
       stipend: "salary",
-      stipend: "currentCTC",
 
+      // ✅ ID
       employeeId: "id",
+
+      // ✅ 🔥 PF / OFFER TYPE FIX
+      pfType: "offerType",
+      offerType: "offerType",
+      appointmentType: "offerType",
     };
+
     return map[name] || name;
   };
 
   const getFilteredFieldsByDoc = (doc) => {
-    return doc.fields.filter((field) => {
+    if (!doc) return [];
+
+    // 🔥 ALWAYS GET FULL DOC FROM documentTypes
+    const fullDoc = documentTypes.find((d) => d.id === doc.id);
+
+    if (!fullDoc || !fullDoc.fields) return [];
+
+    return fullDoc.fields.filter((field) => {
       const normalized = normalizeFieldName(field.name);
 
-      // ❌ Skip if already part of basic fields
+      // ✅ direct match
       if (basicFieldNames.includes(normalized)) {
+        return false;
+      }
+
+      // ✅ fallback: loose match (important)
+      if (
+        basicFieldNames.some((basic) =>
+          basic.toLowerCase().includes(field.name.toLowerCase()),
+        )
+      ) {
         return false;
       }
 
@@ -908,10 +958,10 @@ const UserDocumentFormPage = () => {
 
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
-                        formData,
+                        previewData: formData,
                         selectedDocs,
                         salarySlipMonths,
-                        companyData: selectedCompany, // ✅ FIX
+                        previewCompany: selectedCompany,
                       },
                     });
                   }}
