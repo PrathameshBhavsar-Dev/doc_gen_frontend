@@ -256,7 +256,7 @@ const UserDocumentFormPage = () => {
   const normalizeFieldName = (name) => {
     const map = {
       employeeName: "employeeName",
-      employeeEmail: "email",
+      employeeEmail: "employeeEmail",
       employeePhone: "mobile",
       employeeNumber: "mobile",
       address: "currentAddress",

@@ -362,9 +362,10 @@ const DocumentPreview = () => {
   const previewCompany = state.previewCompany;
   const salarySlipMonths = state.salarySlipMonths || [];
 
-  console.log("👀 Preview State:", state);
+  const [activeDocId, setActiveDocId] = useState(null);
 
-  const previewDocType = selectedDocs;
+  const previewDocType =
+    selectedDocs?.find((d) => d.id === activeDocId) || selectedDocs?.[0];
   const documentRef = useRef(null);
   const apiService = new ApiService();
 
@@ -385,6 +386,12 @@ const DocumentPreview = () => {
     const payload = buildPayload(key, previewData, user, previewCompany);
     console.log(payload);
   }, [previewData, user, previewCompany, key]);
+
+  useEffect(() => {
+    if (selectedDocs?.length > 0) {
+      setActiveDocId(selectedDocs[0].id);
+    }
+  }, [selectedDocs]);
 
   /* ── ALWAYS inject/re-inject styles on every mount ── */
   useEffect(() => {
@@ -716,6 +723,41 @@ const DocumentPreview = () => {
 
         {/* ── Stage ── */}
         <main className="dp-stage">
+          {/* 🔥 ADD THIS HERE */}
+          <div className="mb-8 flex justify-center">
+            <div className="flex items-center gap-3 p-2 rounded-2xl bg-white border border-[#E2E8F0] shadow-lg">
+              {selectedDocs?.map((doc) => {
+                const isActive = activeDocId === doc.id;
+
+                return (
+                  <button
+                    key={doc.id}
+                    onClick={() => setActiveDocId(doc.id)}
+                    className={`
+            relative px-8 py-4 min-w-[180px]
+            text-sm font-semibold rounded-xl
+            transition-all duration-300 ease-in-out
+            flex items-center justify-center
+
+            ${
+              isActive
+                ? "bg-gradient-to-r from-[#5B21B6] to-[#7C3AED] text-white shadow-xl scale-[1.08]"
+                : "bg-[#F8FAFC] text-[#475569] hover:bg-[#EEF2FF] border border-[#E2E8F0]"
+            }
+          `}
+                  >
+                    {doc.name}
+
+                    {/* active glow indicator */}
+                    {isActive && (
+                      <span className="absolute -bottom-1 w-2/3 h-[3px] bg-white/60 rounded-full blur-sm" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="dp-stage-header">
             <div className="dp-stage-title">Document Preview</div>
             <div className="dp-stage-meta">
