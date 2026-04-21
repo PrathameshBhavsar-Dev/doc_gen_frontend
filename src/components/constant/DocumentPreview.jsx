@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Typography, Snackbar, Alert } from "@mui/material";
-import { Download, Edit, ArrowBack, Description, ContentCopy } from "@mui/icons-material";
+import {
+  Download,
+  Edit,
+  ArrowBack,
+  Description,
+  ContentCopy,
+} from "@mui/icons-material";
 import { useAuth } from "../../core/contexts/AuthContext";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -9,7 +15,10 @@ import { generatePDF } from "../../utils/pdfUtils";
 import ROUTES from "../../core/constants/routes.constant";
 import ApiService from "../../core/services/api.service";
 import API from "../../core/constants/serverURL.constant";
-import { buildPayload, normalizeTemplateKey } from "../../utils/documentPayloadBuilder";
+import {
+  buildPayload,
+  normalizeTemplateKey,
+} from "../../utils/documentPayloadBuilder";
 
 // Templates
 import ExperienceLetterTemplate from "../documents/ExperienceLetter/ExperienceLetterTemplate";
@@ -332,22 +341,30 @@ const DOC_LABELS = {
   confirmation_letter: "Confirmation Letter",
 };
 
-
 /* ═══════════════════════════════════════════════════════════ */
 const DocumentPreview = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  //   const location = useLocation();
+
+  // const {
+  //   formData: previewData,
+  //   selectedDocs,
+  //   salarySlipMonths,
+  //   companyData: previewCompany,
+  // } = location.state || {};
+
   const location = useLocation();
+  const state = location.state || {};
 
-const {
-  formData: previewData,
-  selectedDocs,
-  salarySlipMonths,
-  companyData: previewCompany,
-} = location.state || {};
+  const previewData = state.previewData;
+  const selectedDocs = state.selectedDocs;
+  const previewCompany = state.previewCompany;
+  const salarySlipMonths = state.salarySlipMonths || [];
 
-const previewDocType = selectedDocs?.[0]; // assuming single doc
+  console.log("👀 Preview State:", state);
 
+  const previewDocType = selectedDocs;
   const documentRef = useRef(null);
   const apiService = new ApiService();
 
@@ -387,7 +404,6 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
     };
   }, []); // runs on mount, cleans up on unmount
 
-
   // const {
   //   formData,
   //   selectedDocs,
@@ -403,7 +419,10 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
   });
   /* ── Auth guard ── */
   useEffect(() => {
-    if (!user) { navigate("/login"); return; }
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     if (!previewCompany || !previewDocType || !previewData)
       navigate(ROUTES.USER_DASHBOARD);
   }, [user, previewCompany, previewDocType, previewData, navigate]);
@@ -423,15 +442,18 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
       fullandfinal_letter: <FullandfinalLetterTemplate {...p} />,
       confirmation_letter: <ConfirmationLetterTemplate {...p} />,
     };
-    return map[previewDocType?.template] || (
-      <Typography sx={{ p: 4, color: "#999" }}>Template not found</Typography>
+    return (
+      map[previewDocType?.template] || (
+        <Typography sx={{ p: 4, color: "#999" }}>Template not found</Typography>
+      )
     );
   };
 
   const toast = (msg, sev = "success") => {
-    setSnackMsg(msg); setSnackSev(sev); setSnackOpen(true);
+    setSnackMsg(msg);
+    setSnackSev(sev);
+    setSnackOpen(true);
   };
-
 
   const handleDownloadPDF = async () => {
     setLoading(true);
@@ -469,14 +491,15 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
         throw new Error(`No template found for key: ${key}`);
       }
 
-      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
-        }-${new Date().toISOString().slice(0, 10)}`;
+      const filename = `${previewDocType?.name || "Document"}-${
+        previewData?.employeeName || "User"
+      }-${new Date().toISOString().slice(0, 10)}`;
 
       // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(
         TemplateComponent,
         { data: previewData, company: previewCompany },
-        filename
+        filename,
       );
 
       toast("PDF saved & downloaded ✓");
@@ -492,26 +515,35 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
   /* ── Download PDF (content only) ── */
   const handleDownloadPDFWord = async () => {
     if (!documentRef.current) return;
-    setLoading(true); setLoadingLabel("Generating content-only PDF…"); setError("");
+    setLoading(true);
+    setLoadingLabel("Generating content-only PDF…");
+    setError("");
     try {
       const content = documentRef.current.querySelector(".a4-content-only");
       if (!content) throw new Error("Missing .a4-content-only");
       const canvas = await html2canvas(content, {
-        scale: 3, useCORS: true, backgroundColor: "#ffffff",
-        ignoreElements: el => {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        ignoreElements: (el) => {
           const alt = el?.getAttribute?.("alt")?.toLowerCase() || "";
           return alt.includes("signature") || alt.includes("stamp");
         },
       });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      const iw = 210, ph = 297;
+      const iw = 210,
+        ph = 297;
       const ih = (canvas.height * iw) / canvas.width;
-      let left = ih, pos = 0;
-      pdf.addImage(imgData, "PNG", 0, pos, iw, ih); left -= ph;
+      let left = ih,
+        pos = 0;
+      pdf.addImage(imgData, "PNG", 0, pos, iw, ih);
+      left -= ph;
       while (left > 0) {
-        pos = -(ih - left); pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, pos, iw, ih); left -= ph;
+        pos = -(ih - left);
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, pos, iw, ih);
+        left -= ph;
       }
       pdf.save(`${previewDocType.name}-ContentOnly.pdf`);
       toast("Content-only PDF downloaded ✓");
@@ -519,16 +551,18 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
       console.error(err);
       setError("Failed to generate content-only PDF.");
       toast("Export failed", "error");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!previewCompany || !previewDocType || !previewData) return null;
 
-  const docLabel = DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
+  const docLabel =
+    DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
 
   return (
     <div className="dp-root">
-
       {/* ── Top Bar ── */}
       <header className="dp-topbar">
         <div className="dp-topbar-left">
@@ -557,13 +591,24 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
         </div>
 
         <div className="dp-topbar-right">
-          <button className="dp-btn dp-btn-ghost" onClick={() => navigate("/document/create")}>
+          <button
+            className="dp-btn dp-btn-ghost"
+            onClick={() => navigate("/document/create")}
+          >
             <Edit sx={{ fontSize: 13 }} /> Edit
           </button>
-          <button className="dp-btn dp-btn-sec" onClick={handleDownloadPDFWord} disabled={loading}>
+          <button
+            className="dp-btn dp-btn-sec"
+            onClick={handleDownloadPDFWord}
+            disabled={loading}
+          >
             <ContentCopy sx={{ fontSize: 13 }} /> Content PDF
           </button>
-          <button className="dp-btn dp-btn-pri" onClick={handleDownloadPDF} disabled={loading}>
+          <button
+            className="dp-btn dp-btn-pri"
+            onClick={handleDownloadPDF}
+            disabled={loading}
+          >
             <Download sx={{ fontSize: 13 }} /> Download PDF
           </button>
         </div>
@@ -577,7 +622,6 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
 
       {/* ── Layout ── */}
       <div className="dp-layout">
-
         {/* ── Sidebar ── */}
         <aside className="dp-sidebar">
           <div className="dp-card">
@@ -609,7 +653,9 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
               <div className="dp-card-label">Issue Date</div>
               <div className="dp-card-val">
                 {new Date(previewData.issueDate).toLocaleDateString("en-IN", {
-                  day: "2-digit", month: "short", year: "numeric",
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
                 })}
               </div>
             </div>
@@ -618,24 +664,51 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
           <div className="dp-card">
             <div className="dp-card-label">Preview Zoom</div>
             <div className="dp-zoom-row">
-              <button className="dp-zoom-btn" onClick={() => setZoom(z => Math.max(50, z - 10))}>−</button>
+              <button
+                className="dp-zoom-btn"
+                onClick={() => setZoom((z) => Math.max(50, z - 10))}
+              >
+                −
+              </button>
               <span className="dp-zoom-val">{zoom}%</span>
-              <button className="dp-zoom-btn" onClick={() => setZoom(z => Math.min(150, z + 10))}>+</button>
+              <button
+                className="dp-zoom-btn"
+                onClick={() => setZoom((z) => Math.min(150, z + 10))}
+              >
+                +
+              </button>
             </div>
           </div>
 
           <div className="dp-card">
             <div className="dp-card-label">Quick Actions</div>
-            <button className="dp-qa-btn" onClick={handleDownloadPDF} disabled={loading}>
-              <div className="dp-qa-icon"><Download sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={handleDownloadPDF}
+              disabled={loading}
+            >
+              <div className="dp-qa-icon">
+                <Download sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Download PDF
             </button>
-            <button className="dp-qa-btn" onClick={handleDownloadPDFWord} disabled={loading}>
-              <div className="dp-qa-icon"><ContentCopy sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={handleDownloadPDFWord}
+              disabled={loading}
+            >
+              <div className="dp-qa-icon">
+                <ContentCopy sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Content Only
             </button>
-            <button className="dp-qa-btn" onClick={() => navigate("/document/create")}>
-              <div className="dp-qa-icon"><Edit sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={() => navigate("/document/create")}
+            >
+              <div className="dp-qa-icon">
+                <Edit sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Edit Document
             </button>
           </div>
@@ -652,7 +725,10 @@ const previewDocType = selectedDocs?.[0]; // assuming single doc
             </div>
           </div>
 
-          <div className="dp-page-wrap" style={{ transform: `scale(${zoom / 100})` }}>
+          <div
+            className="dp-page-wrap"
+            style={{ transform: `scale(${zoom / 100})` }}
+          >
             <div className="dp-a4" ref={documentRef}>
               {renderTemplate()}
             </div>

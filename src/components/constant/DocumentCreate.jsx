@@ -346,9 +346,13 @@ const DocumentCreate = () => {
 
     } else {
       // ✅ CREATE mode — go to preview
-      navigate(`/document/preview`, {
-        state: { documentData, selectedDocType, selectedCompany },
-      });
+     navigate(`/document/preview`, {
+  state: {
+    previewData: documentData,
+    selectedDocs: selectedDocType,
+    previewCompany: selectedCompany,
+  },
+});
 
       // navigate(`/document/preview`, {
       //   state: {

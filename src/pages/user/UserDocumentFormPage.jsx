@@ -129,12 +129,10 @@ const UserDocumentFormPage = () => {
   const handleSalaryMonthChange = (field, value) => {
     handleChange(field, value);
 
-    const startMonth = field === "salarySlipStartMonth"
-      ? value
-      : formData.salarySlipStartMonth;
-    const endMonth = field === "salarySlipEndMonth"
-      ? value
-      : formData.salarySlipEndMonth;
+    const startMonth =
+      field === "salarySlipStartMonth" ? value : formData.salarySlipStartMonth;
+    const endMonth =
+      field === "salarySlipEndMonth" ? value : formData.salarySlipEndMonth;
 
     if (startMonth && endMonth) {
       const months = generateMonthsArray(startMonth, endMonth);
@@ -147,7 +145,7 @@ const UserDocumentFormPage = () => {
   useEffect(() => {
     const months = generateMonthsArray(
       formData.salarySlipStartMonth,
-      formData.salarySlipEndMonth
+      formData.salarySlipEndMonth,
     );
 
     const initialData = {};
@@ -155,14 +153,11 @@ const UserDocumentFormPage = () => {
       initialData[month.value] = "";
     });
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      salaryWorkdays: initialData
+      salaryWorkdays: initialData,
     }));
-  }, [
-    formData.salarySlipStartMonth,
-    formData.salarySlipEndMonth
-  ]);
+  }, [formData.salarySlipStartMonth, formData.salarySlipEndMonth]);
 
   const getWorkingDays = (monthStr) => {
     const [year, month] = monthStr.split("-");
@@ -228,7 +223,7 @@ const UserDocumentFormPage = () => {
       // Reset salary months if salary slip is deselected
       if (doc.name === "Salary Slip") {
         setSalarySlipMonths([]);
-        setFormData(prev => {
+        setFormData((prev) => {
           const newData = { ...prev };
           delete newData.salarySlipStartMonth;
           delete newData.salarySlipEndMonth;
@@ -256,10 +251,7 @@ const UserDocumentFormPage = () => {
   );
 
   /* ---------------- REMOVE DUPLICATE FIELDS ---------------- */
-  const basicFieldNames = useMemo(
-    () => basicFields.map((f) => f.name),
-    []
-  );
+  const basicFieldNames = useMemo(() => basicFields.map((f) => f.name), []);
 
   const normalizeFieldName = (name) => {
     const map = {
@@ -273,11 +265,11 @@ const UserDocumentFormPage = () => {
       mode: "bankName",
       gender: "mrms",
       doj: "joiningDate",
-     totalSalary: "salary",
-salary: "salary",
-currentSalary: "salary",
-newCTC: "salary",
-stipend: "salary",
+      totalSalary: "salary",
+      salary: "salary",
+      currentSalary: "salary",
+      newCTC: "salary",
+      stipend: "salary",
       stipend: "currentCTC",
 
       employeeId: "id",
@@ -338,63 +330,63 @@ stipend: "salary",
 
     setErrors(newErrors);
 
-   if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) return;
 
-// ✅ CREATE PAYLOAD HERE
-let payload = { ...formData };
+    // ✅ CREATE PAYLOAD HERE
+    let payload = { ...formData };
 
-// ✅ HANDLE MULTIPLE DOCS
-const docsToProcess = selectedDocs.find(d => d.id === ALL_DOC_ID)
-  ? filteredDocuments
-  : selectedDocs;
+    // ✅ HANDLE MULTIPLE DOCS
+    const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
+      ? filteredDocuments
+      : selectedDocs;
 
-docsToProcess.forEach(doc => {
-  const docKey = normalizeDocName(doc.name); // e.g. appointment_letter
+    docsToProcess.forEach((doc) => {
+      const docKey = normalizeDocName(doc.name); // e.g. appointment_letter
 
-  const salaryFieldMap = {
-    offer_letter: "salary",
-    salaryslip_letter: "totalSalary",
+      const salaryFieldMap = {
+        offer_letter: "salary",
+        salaryslip_letter: "totalSalary",
         appointment_letter: "salary",
 
-    increment_letter: "newCTC",
-    internshipcertificate_letter:"stipend",
-    fullandfinal_letter: "totalSalary",
-    confirmation_letter:"totalSalary"
-  };
+        increment_letter: "newCTC",
+        internshipcertificate_letter: "stipend",
+        fullandfinal_letter: "totalSalary",
+        confirmation_letter: "totalSalary",
+      };
 
-  const targetKey = salaryFieldMap[docKey];
+      const targetKey = salaryFieldMap[docKey];
 
-  if (targetKey && targetKey !== "salary") {
-    payload[targetKey] = formData.salary;
-  }
-});
-const designationFieldMap = {
-      salaryslip_letter: "designation",
+      if (targetKey && targetKey !== "salary") {
+        payload[targetKey] = formData.salary;
+      }
+      const designationFieldMap = {
+        salaryslip_letter: "designation",
 
-  offer_letter: "position",
-  appointment_letter: "position",
-  increment_letter: "designation",
-  experience_letter: "designation",
-  relieving_letter: "designation",
-  internshipcertificate_letter: "designation",
-  completion_certificate : "designation",
-  fullandfinal_letter: "designation",
-  confirmation_letter: "designation",
-};
-// ✅ DESIGNATION MAPPING
-const designationKey = designationFieldMap[docKey];
+        offer_letter: "position",
+        appointment_letter: "position",
+        increment_letter: "designation",
+        experience_letter: "designation",
+        relieving_letter: "designation",
+        internshipcertificate_letter: "designation",
+        completion_certificate: "designation",
+        fullandfinal_letter: "designation",
+        confirmation_letter: "designation",
+      };
+      // ✅ DESIGNATION MAPPING
+      const designationKey = designationFieldMap[docKey];
 
-if (designationKey && designationKey !== "joiningDesignation") {
-  payload[designationKey] = formData.joiningDesignation;
-}
+      if (designationKey && designationKey !== "joiningDesignation") {
+        payload[designationKey] = formData.joiningDesignation;
+      }
+    });
 
-console.log("FINAL PAYLOAD:", payload);
+    console.log("FINAL PAYLOAD:", payload);
 
-// ✅ store payload temporarily
-setFormData(payload);
+    // ✅ store payload temporarily
+    setFormData(payload);
 
-// ✅ show popup instead of navigating
-setShowGeneratePopup(true);
+    // ✅ show popup instead of navigating
+    setShowGeneratePopup(true);
   };
 
   /* ---------------- FIELD RENDER ---------------- */
@@ -402,9 +394,10 @@ setShowGeneratePopup(true);
     const baseClass = `
       w-full h-[40px] px-3 rounded-xl 
       bg-[#F8FAFC] border text-sm outline-none 
-      ${errors[field.name]
-        ? "border-red-500 focus:ring-red-300"
-        : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
+      ${
+        errors[field.name]
+          ? "border-red-500 focus:ring-red-300"
+          : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
       }
       focus:ring-2
     `;
@@ -419,23 +412,26 @@ setShowGeneratePopup(true);
             handleChange(field.name, e.target.value);
 
             if (field.name === "company") {
-              const companyObj = companies.find(c => c.name === e.target.value);
+              const companyObj = companies.find(
+                (c) => c.name === e.target.value,
+              );
               setSelectedCompany(companyObj); // ✅ THIS IS THE FIX
             }
-          }}        >
+          }}
+        >
           <option value="">Select {field.label}</option>
 
           {field.name === "company"
             ? companies.map((c) => (
-              <option key={c.id} value={c.name}>
-                {c.name}
-              </option>
-            ))
+                <option key={c.id} value={c.name}>
+                  {c.name}
+                </option>
+              ))
             : field.options?.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
         </select>
       );
     }
@@ -469,7 +465,7 @@ setShowGeneratePopup(true);
     : selectedDocs;
 
   const validateField = (name, value) => {
-    if (!value) return "This field is required";
+    if (!value) return "Please fill the required fields";
 
     switch (name) {
       case "fullName":
@@ -495,8 +491,8 @@ setShowGeneratePopup(true);
           return "Account number must be 9-18 digits";
         break;
 
-    case "joiningCTC":
-case "salary":
+      case "joiningCTC":
+      case "salary":
         if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
         break;
 
@@ -516,24 +512,21 @@ case "salary":
     return "";
   };
 
-  const normalizeDocName = (name) =>
-    name?.toLowerCase().replace(/\s+/g, "_");
+  const normalizeDocName = (name) => name?.toLowerCase().replace(/\s+/g, "_");
 
   /* ---------------- CHECK IF SALARY SLIP IS SELECTED ---------------- */
   const isSalarySlipSelected = () => {
     return selectedDocs.some(
-      (d) =>
-        normalizeDocName(d.name) === "salary_slip" ||
-        d.id === ALL_DOC_ID
+      (d) => normalizeDocName(d.name) === "salary_slip" || d.id === ALL_DOC_ID,
     );
   };
 
   const salaryFieldMap = {
-  offer_letter: "salary",
-  appointment_letter: "totalSalary",
-  increment_letter: "salary",
-  experience_letter: "salary"
-};
+    offer_letter: "salary",
+    appointment_letter: "totalSalary",
+    increment_letter: "salary",
+    experience_letter: "salary",
+  };
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
@@ -561,17 +554,19 @@ case "salary":
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     📄
                   </div>
@@ -603,21 +598,24 @@ case "salary":
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     <FiEye
-                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
-                        }`}
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
                     />
                   </div>
 
@@ -702,7 +700,12 @@ case "salary":
                     type="month"
                     className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
                     value={formData.salarySlipStartMonth || ""}
-                    onChange={(e) => handleSalaryMonthChange("salarySlipStartMonth", e.target.value)}
+                    onChange={(e) =>
+                      handleSalaryMonthChange(
+                        "salarySlipStartMonth",
+                        e.target.value,
+                      )
+                    }
                   />
                 </div>
 
@@ -715,7 +718,12 @@ case "salary":
                     className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
                     value={formData.salarySlipEndMonth || ""}
                     min={formData.salarySlipStartMonth || ""}
-                    onChange={(e) => handleSalaryMonthChange("salarySlipEndMonth", e.target.value)}
+                    onChange={(e) =>
+                      handleSalaryMonthChange(
+                        "salarySlipEndMonth",
+                        e.target.value,
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -738,21 +746,26 @@ case "salary":
                           placeholder="Enter workdays"
                           min="1"
                           max="31"
-                          value={String(formData.salaryWorkdays?.[month.value] ?? "")}
+                          value={String(
+                            formData.salaryWorkdays?.[month.value] ?? "",
+                          )}
                           onChange={(e) => {
                             const val = e.target.value;
                             console.log("Typing:", month.value, val);
 
-                            setFormData(prev => {
+                            setFormData((prev) => {
                               const updated = {
                                 ...prev,
                                 salaryWorkdays: {
                                   ...(prev.salaryWorkdays || {}),
-                                  [month.value]: val
-                                }
+                                  [month.value]: val,
+                                },
                               };
 
-                              console.log("Updated State:", updated.salaryWorkdays);
+                              console.log(
+                                "Updated State:",
+                                updated.salaryWorkdays,
+                              );
                               return updated;
                             });
                           }}
