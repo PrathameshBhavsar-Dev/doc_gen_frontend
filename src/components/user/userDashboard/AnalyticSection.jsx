@@ -36,7 +36,7 @@ const getCalendarData = () => {
 };
 
 const cardStyle =
-  "bg-white rounded-2xl p-5 border border-gray-100 shadow-md";
+  "bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_6px_30px_rgba(0,0,0,0.06)] transition-all duration-300";
 
 /* ================= COMPONENT ================= */
 const AnalyticSection = () => {
@@ -81,7 +81,7 @@ const AnalyticSection = () => {
   };
 
   const getPageNumbers = () => {
-    const delta = 2;          // pages shown around current page
+    const delta = 2; // pages shown around current page
     const range = [];
     const rangeWithDots = [];
 
@@ -165,8 +165,18 @@ const AnalyticSection = () => {
     if (!Array.isArray(documents)) return [];
 
     const monthsOrder = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     const counts = {};
@@ -192,9 +202,12 @@ const AnalyticSection = () => {
       const hour = d.getHours();
 
       const label =
-        hour === 0 ? "12 AM"
-          : hour < 12 ? `${hour} AM`
-            : hour === 12 ? "12 PM"
+        hour === 0
+          ? "12 AM"
+          : hour < 12
+            ? `${hour} AM`
+            : hour === 12
+              ? "12 PM"
               : `${hour - 12} PM`;
 
       hours[label] = (hours[label] || 0) + 1;
@@ -205,8 +218,7 @@ const AnalyticSection = () => {
 
   /* ================= RENDER ================= */
   return (
-    <div className="min-h-screen p-4 font-inter bg-gray-50">
-
+    <div className="min-h-screen p-6 font-inter bg-gradient-to-br from-gray-50 via-gray-50 to-purple-50/30">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-800">Analytics</h2>
@@ -231,9 +243,10 @@ const AnalyticSection = () => {
         <>
           {/* ================= TOP SECTION ================= */}
           <div className="grid grid-cols-12 gap-6 mb-8">
-
             {/* DOCUMENT TYPES */}
-            <div className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-3`}>
+            <div
+              className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-3`}
+            >
               <h3 className="font-semibold mb-4">Document Types</h3>
 
               <ResponsiveContainer width="100%" height={220}>
@@ -254,7 +267,8 @@ const AnalyticSection = () => {
                       const y = cy + radius * Math.sin(-midAngle * RADIAN);
                       return (
                         <text
-                          x={x} y={y}
+                          x={x}
+                          y={y}
                           fill="#555"
                           textAnchor="middle"
                           dominantBaseline="central"
@@ -281,20 +295,30 @@ const AnalyticSection = () => {
                       className="w-3 h-3 rounded-full flex-shrink-0"
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
-                    <span className="text-xs text-gray-600 truncate">{entry.name}</span>
+                    <span className="text-xs text-gray-600 truncate">
+                      {entry.name}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* TODAY ACTIVITY */}
-            <div className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-6`}>
+            <div
+              className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-6`}
+            >
               <h3 className="font-semibold mb-4">Today's Activity</h3>
 
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={getTodayHourlyData()} barCategoryGap="40%">
                   <defs>
-                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="barGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="0%" stopColor="#B37BD6" stopOpacity={1} />
                       <stop offset="100%" stopColor="#393B8B" stopOpacity={1} />
                     </linearGradient>
@@ -302,7 +326,12 @@ const AnalyticSection = () => {
                   <XAxis dataKey="time" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={18} />
+                  <Bar
+                    dataKey="value"
+                    fill="url(#barGradient)"
+                    radius={[6, 6, 0, 0]}
+                    barSize={18}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -314,7 +343,7 @@ const AnalyticSection = () => {
               </h3>
 
               <div className="grid grid-cols-7 gap-2 text-center text-sm mb-2">
-                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
                   <div key={i} className="text-gray-500 font-medium text-xs">
                     {day}
                   </div>
@@ -325,24 +354,23 @@ const AnalyticSection = () => {
                 {daysArray.map((day, i) => (
                   <div
                     key={i}
-                    className={`p-2 rounded-lg transition-colors ${day === date
+                    className={`p-2 rounded-lg transition-colors ${
+                      day === date
                         ? "bg-[#8965BD] text-white font-semibold"
                         : day
                           ? "text-gray-700 hover:bg-gray-100 cursor-pointer"
                           : "text-gray-300"
-                      }`}
+                    }`}
                   >
-                    {day || ''}
+                    {day || ""}
                   </div>
                 ))}
               </div>
             </div>
-            
           </div>
 
           {/* ================= BOTTOM SECTION ================= */}
           <div className="grid grid-cols-12 gap-6">
-
             {/* TOP COMPANIES */}
             <div className={`${cardStyle} col-span-12 xl:col-span-6`}>
               <h3 className="font-semibold mb-4">Top Performing Companies</h3>
@@ -355,7 +383,13 @@ const AnalyticSection = () => {
                   margin={{ top: 0, right: 10, left: 60, bottom: 0 }}
                 >
                   <defs>
-                    <linearGradient id="horizontalBarGradient" x1="0" y1="0" x2="1" y2="0">
+                    <linearGradient
+                      id="horizontalBarGradient"
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="0"
+                    >
                       <stop offset="0%" stopColor="#393B8B" stopOpacity={1} />
                       <stop offset="100%" stopColor="#B37BD6" stopOpacity={1} />
                     </linearGradient>
@@ -363,7 +397,12 @@ const AnalyticSection = () => {
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" />
                   <Tooltip />
-                  <Bar dataKey="value" fill="url(#horizontalBarGradient)" radius={[0, 6, 6, 0]} barSize={30} />
+                  <Bar
+                    dataKey="value"
+                    fill="url(#horizontalBarGradient)"
+                    radius={[0, 6, 6, 0]}
+                    barSize={30}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -371,17 +410,33 @@ const AnalyticSection = () => {
             {/* MONTHLY */}
             <div className={`${cardStyle} col-span-12 xl:col-span-6`}>
               <h3 className="font-semibold mb-4">Monthly Activity</h3>
-              <p className="text-sm text-gray-400 -mt-3 mb-4">Documents generated this month</p>
+              <p className="text-sm text-gray-400 -mt-3 mb-4">
+                Documents generated this month
+              </p>
 
               <ResponsiveContainer width="100%" height={260}>
-                <AreaChart data={getMonthlyData()} margin={{ top: 20, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart
+                  data={getMonthlyData()}
+                  margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+                >
                   <defs>
-                    <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="areaGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="0%" stopColor="#B37BD6" stopOpacity={0.4} />
                       <stop offset="100%" stopColor="#393B8B" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid vertical={true} horizontal={false} strokeDasharray="4 4" stroke="#e0e0e0" />
+                  <CartesianGrid
+                    vertical={true}
+                    horizontal={false}
+                    strokeDasharray="4 4"
+                    stroke="#e0e0e0"
+                  />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} />
                   <YAxis hide />
                   <Tooltip />
@@ -392,7 +447,12 @@ const AnalyticSection = () => {
                     fill="url(#areaGradient)"
                     type="monotone"
                     dot={false}
-                    label={{ position: "top", fontSize: 11, fill: "#8B6CEB", fontWeight: 500 }}
+                    label={{
+                      position: "top",
+                      fontSize: 11,
+                      fill: "#8B6CEB",
+                      fontWeight: 500,
+                    }}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -402,7 +462,6 @@ const AnalyticSection = () => {
           {/* ================= PAGINATION ================= */}
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-1 mt-8 flex-wrap">
-
               {/* Prev */}
               <button
                 onClick={() => goToPage(currentPage - 1)}
@@ -417,21 +476,25 @@ const AnalyticSection = () => {
               {/* Page numbers */}
               {getPageNumbers().map((page, idx) =>
                 page === "..." ? (
-                  <span key={`dots-${idx}`} className="px-2 py-1.5 text-gray-400 text-sm select-none">
+                  <span
+                    key={`dots-${idx}`}
+                    className="px-2 py-1.5 text-gray-400 text-sm select-none"
+                  >
                     …
                   </span>
                 ) : (
                   <button
                     key={page}
                     onClick={() => goToPage(page)}
-                    className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${page === currentPage
+                    className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                      page === currentPage
                         ? "bg-purple-500 text-white shadow-sm"
                         : "border border-gray-200 text-gray-600 hover:bg-gray-100"
-                      }`}
+                    }`}
                   >
                     {page}
                   </button>
-                )
+                ),
               )}
 
               {/* Next */}
@@ -457,4 +520,4 @@ const AnalyticSection = () => {
   );
 };
 
-export default AnalyticSection; 
+export default AnalyticSection;
