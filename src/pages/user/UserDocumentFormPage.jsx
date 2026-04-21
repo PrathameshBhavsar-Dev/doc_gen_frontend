@@ -7,6 +7,7 @@ import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 import { FiZap } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
+import { FiFileText } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
@@ -303,9 +304,6 @@ const UserDocumentFormPage = () => {
       employeeId: "id",
 
       // ✅ 🔥 PF / OFFER TYPE FIX
-      pfType: "offerType",
-      offerType: "offerType",
-      appointmentType: "offerType",
     };
 
     return map[name] || name;
@@ -618,7 +616,11 @@ const UserDocumentFormPage = () => {
                         : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
                     }`}
                   >
-                    📄
+                    <FiFileText
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
+                    />
                   </div>
 
                   <p className="text-[14px] font-medium leading-tight">

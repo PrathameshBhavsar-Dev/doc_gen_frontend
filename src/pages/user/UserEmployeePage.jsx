@@ -158,7 +158,7 @@ transition-all duration-300
                 <div
                   className="
       w-10 h-10 rounded-xl 
-      bg-gradient-to-br from-[#6366F1] to-[#A78BFA]
+      bg-gradient-to-br from-[#0E145E] to-[#B37BD6]
       flex items-center justify-center 
       text-white text-sm font-semibold
     "
@@ -190,10 +190,11 @@ transition-all duration-300
                 <span
                   className={`
       px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${profile.paymentStatus === "Paid"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-red-100 text-red-500"
-                    }
+      ${
+        profile.paymentStatus === "Paid"
+          ? "bg-green-100 text-green-600"
+          : "bg-red-100 text-red-500"
+      }
     `}
                 >
                   {profile.paymentStatus}
@@ -210,10 +211,11 @@ transition-all duration-300
                 <span
                   className={`
       px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${profile.status === "Active"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-gray-100 text-gray-500"
-                    }
+      ${
+        profile.status === "Active"
+          ? "bg-green-100 text-green-600"
+          : "bg-gray-100 text-gray-500"
+      }
     `}
                 >
                   {profile.status}
