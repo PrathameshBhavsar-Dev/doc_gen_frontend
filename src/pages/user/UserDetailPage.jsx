@@ -24,7 +24,17 @@ import ROUTES from "../../core/constants/routes.constant.jsx";
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [doc, setDoc] = useState(state?.document || null);
+  const [doc, setDoc] = useState(
+    state?.document ||
+      state?.previewData || // 🔥 from preview
+      state?.documentData || // 🔥 fallback
+      null,
+  );
+
+  const company =
+    state?.selectedCompany ||
+    state?.previewCompany ||
+    resolveCompany(doc?.company);
   const [downloadingId, setDownloadingId] = useState(null);
 
   const mapDocTypeToRoute = (type) => {
@@ -164,12 +174,15 @@ const UserDetailPage = () => {
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        documentData: doc,
-        selectedDocType: {
-          template: normalizedType, // Use the mapped type
-          name: rawType,
-        },
-        selectedCompany: companyObject,
+        previewData: doc,
+        selectedDocs: [
+          {
+            template: normalizedType,
+            name: rawType,
+            id: doc?.id || doc?._id,
+          },
+        ],
+        previewCompany: companyObject,
       },
     });
   };
@@ -278,7 +291,7 @@ const UserDetailPage = () => {
             </div>
 
             <p className="text-sm text-gray-500">Company Name</p>
-            <p className="font-medium">{doc?.company}</p>
+            <p className="font-medium">{company?.name || doc?.company}</p>
           </div>
         </div>
 
