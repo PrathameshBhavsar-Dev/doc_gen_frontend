@@ -302,8 +302,6 @@ const UserDocumentFormPage = () => {
 
       // ✅ ID
       employeeId: "id",
-
-      // ✅ 🔥 PF / OFFER TYPE FIX
     };
 
     return map[name] || name;
