@@ -4,10 +4,9 @@ import React from "react";
 import WithPFIncrementLetterTemplate from "../IncrementLetter/WithPF/WithPFIncrementTemplate";
 import WithoutPFIncrementLetterTemplate from "../IncrementLetter/WithoutPF/WithoutPFIncrementTemplate";
 
-
 const IncrementTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const IncrementType = data?.incrementType; // "paid" | "unpaid"
+  const IncrementType = data?.incrementType || data.offerType; // "paid" | "unpaid"
 
   if (!IncrementType) {
     return <div>PFTypename type not selected</div>;

@@ -300,10 +300,14 @@ const UserDocumentFormPage = () => {
       newCTC: "salary",
       stipend: "salary",
 
+      salaryType: "offerType",
+      appointmentType: "offerType",
+      confirmationType: "offerType",
+      finalType: "offerType",
+      incrementType: "offerType",
+
       // ✅ ID
       employeeId: "id",
-
-      // ✅ 🔥 PF / OFFER TYPE FIX
     };
 
     return map[name] || name;
@@ -357,29 +361,38 @@ const UserDocumentFormPage = () => {
       const filteredFields = getFilteredFieldsByDoc(doc);
 
       filteredFields.forEach((field) => {
+        // ✅ SKIP month & workdays (handled separately)
+        if (
+          normalizeDocName(doc.name) === "salary_slip" &&
+          ["month", "workdays"].includes(field.name)
+        ) {
+          return;
+        }
+
+        // ✅ FIX: map salaryType → offerType
+        let value = formData[field.name];
+
+        if (["salaryType", "appointmentType", "pfType"].includes(field.name)) {
+          value = formData.offerType;
+        }
+
         if (field.required && shouldShowField(field)) {
-          const error = validateField(field.name, formData[field.name]);
+          const error = validateField(field.name, value);
           if (error) newErrors[field.name] = error;
         }
       });
     });
 
-    // const normalizedData = {
-    //   ...formData,
-    //   technologies: normalizeArray(formData.technologies),
-    // };
-
-    // const payload = {
-    //   employee: normalizedData,
-    //   documents: selectedDocs,
-    // };
-
-    // console.log("FINAL PAYLOAD:", payload);
-
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) {
+      console.log("VALIDATION FAILED:", newErrors);
+      alert("Please fill all required fields");
+      return;
+    }
 
+    const yearlySalary = Number(formData.salary || 0);
+    const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
     let payload = { ...formData };
 
@@ -404,9 +417,49 @@ const UserDocumentFormPage = () => {
 
       const targetKey = salaryFieldMap[docKey];
 
-      if (targetKey && targetKey !== "salary") {
-        payload[targetKey] = formData.salary;
+      if (targetKey) {
+        const monthlyDocs = [
+          "salaryslip_letter",
+          "fullandfinal_letter",
+          // "confirmation_letter",
+        ];
+
+        if (targetKey) {
+          const monthlyDocs = ["salaryslip_letter", "fullandfinal_letter"];
+
+          if (targetKey) {
+            const monthlyDocs = ["salaryslip_letter", "fullandfinal_letter"];
+
+            // ✅ IMPORTANT: DO NOT override base salary
+            if (monthlyDocs.includes(docKey)) {
+              // Only for salary slip & FNF → set monthly field
+              payload[targetKey] = monthlySalary;
+            } else {
+              // For all other docs → keep yearly (DO NOTHING)
+              // because formData.salary already has yearly value
+            }
+          }
+        }
       }
+      const pfFieldMap = {
+        salaryslip_letter: "salaryType",
+        offer_letter: "offerType",
+        appointment_letter: "appointmentType",
+        increment_letter: "pfType",
+        experience_letter: "pfType",
+        relieving_letter: "pfType",
+        internshipcertificate_letter: "pfType",
+        completion_certificate: "pfType",
+        fullandfinal_letter: "pfType",
+        confirmation_letter: "pfType",
+      };
+
+      const pfKey = pfFieldMap[docKey];
+
+      if (pfKey) {
+        payload[pfKey] = formData.offerType;
+      }
+
       const designationFieldMap = {
         salaryslip_letter: "designation",
 
@@ -431,10 +484,39 @@ const UserDocumentFormPage = () => {
     console.log("FINAL PAYLOAD:", payload);
 
     // ✅ store payload temporarily
-    setFormData(payload);
+    // setFormData(payload);
 
     // ✅ show popup instead of navigating
-    setShowGeneratePopup(true);
+    // setShowGeneratePopup(true);
+
+    if (isSalarySlipSelected()) {
+      if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) {
+        alert("Please select salary slip start and end month");
+        return;
+      }
+
+      if (!salarySlipMonths.length) {
+        alert("Invalid month range");
+        return;
+      }
+
+      for (let month of salarySlipMonths) {
+        const days = formData.salaryWorkdays?.[month.value];
+
+        if (!days || Number(days) <= 0) {
+          alert(`Enter valid workdays for ${month.label}`);
+          return;
+        }
+      }
+    }
+    navigate(ROUTES.DOCUMENT_PREVIEW, {
+      state: {
+        previewData: payload, // ✅ final form data
+        selectedDocs: selectedDocs, // ✅ selected docs
+        salarySlipMonths: salarySlipMonths, // ✅ months array
+        previewCompany: selectedCompany, // ✅ company object
+      },
+    });
   };
 
   /* ---------------- FIELD RENDER ---------------- */
@@ -735,101 +817,6 @@ const UserDocumentFormPage = () => {
             </div>
           </div>
 
-          {/* ---------------- SALARY SLIP MONTH SELECTOR ---------------- */}
-          {isSalarySlipSelected() && (
-            <div className="mb-8 p-5 rounded-2xl bg-[#F8FAFF]/70 border border-dashed border-[#C7D2FE]">
-              <h3 className="text-sm font-semibold text-[#362b97] mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#4927af]"></span>
-                Salary Slip Period
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-[#475569]">
-                    Start Month <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="month"
-                    className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
-                    value={formData.salarySlipStartMonth || ""}
-                    onChange={(e) =>
-                      handleSalaryMonthChange(
-                        "salarySlipStartMonth",
-                        e.target.value,
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-[#475569]">
-                    End Month <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="month"
-                    className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
-                    value={formData.salarySlipEndMonth || ""}
-                    min={formData.salarySlipStartMonth || ""}
-                    onChange={(e) =>
-                      handleSalaryMonthChange(
-                        "salarySlipEndMonth",
-                        e.target.value,
-                      )
-                    }
-                  />
-                </div>
-              </div>
-
-              {/* DYNAMIC MONTH FIELDS */}
-              {salarySlipMonths.length > 0 && (
-                <div className="mt-6">
-                  <h4 className="text-xs font-semibold text-[#475569] mb-3">
-                    Workdays per Month
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                    {salarySlipMonths.map((month) => (
-                      <div key={month.value} className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-[#475569]">
-                          {month.label} <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="number"
-                          className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
-                          placeholder="Enter workdays"
-                          min="1"
-                          max="31"
-                          value={String(
-                            formData.salaryWorkdays?.[month.value] ?? "",
-                          )}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            console.log("Typing:", month.value, val);
-
-                            setFormData((prev) => {
-                              const updated = {
-                                ...prev,
-                                salaryWorkdays: {
-                                  ...(prev.salaryWorkdays || {}),
-                                  [month.value]: val,
-                                },
-                              };
-
-                              console.log(
-                                "Updated State:",
-                                updated.salaryWorkdays,
-                              );
-                              return updated;
-                            });
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* ---------------- DOCUMENT FIELDS ---------------- */}
           {selectedDocs.length > 0 && (
             <div className="mt-10 p-5 rounded-2xl bg-[#F8FAFF]/70 border border-dashed border-[#C7D2FE] transition-all duration-300">
@@ -837,6 +824,112 @@ const UserDocumentFormPage = () => {
                 Document Details
               </div>
 
+              {/* ---------------- SALARY SLIP MONTH SELECTOR ---------------- */}
+              {isSalarySlipSelected() && (
+                <div
+                  className="
+    mb-8 p-5 rounded-2xl 
+    bg-gradient-to-r from-[#EEF2FF]/70 via-[#F8FAFF] to-[#FAF5FF]/70
+    border border-[#E2E8F0]/60
+    relative
+    transition-all duration-300
+    hover:shadow-[0_8px_25px_rgba(99,102,241,0.12)]
+  "
+                >
+                  <div className="absolute left-0 top-0 h-full w-[4px] bg-gradient-to-b from-[#0E145E] to-[#B37BD6] rounded-l-2xl"></div>{" "}
+                  <h3 className="text-sm font-semibold text-[#362b97] mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#4927af]"></span>
+                    Salary Slip
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-medium text-[#475569]">
+                        Start Month <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="month"
+                        className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
+                        value={formData.salarySlipStartMonth || ""}
+                        onChange={(e) =>
+                          handleSalaryMonthChange(
+                            "salarySlipStartMonth",
+                            e.target.value,
+                          )
+                        }
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-medium text-[#475569]">
+                        End Month <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="month"
+                        className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
+                        value={formData.salarySlipEndMonth || ""}
+                        min={formData.salarySlipStartMonth || ""}
+                        onChange={(e) =>
+                          handleSalaryMonthChange(
+                            "salarySlipEndMonth",
+                            e.target.value,
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  {/* DYNAMIC MONTH FIELDS */}
+                  {salarySlipMonths.length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="text-xs font-semibold text-[#475569] mb-3">
+                        Workdays per Month
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                        {salarySlipMonths.map((month) => (
+                          <div
+                            key={month.value}
+                            className="flex flex-col gap-1"
+                          >
+                            <label className="text-xs font-medium text-[#475569]">
+                              {month.label}{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="number"
+                              className="w-full h-[40px] px-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-sm outline-none focus:border-[#6366F1] focus:ring-[#6366F1]/20 focus:ring-2"
+                              placeholder="Enter workdays"
+                              min="1"
+                              max="31"
+                              value={String(
+                                formData.salaryWorkdays?.[month.value] ?? "",
+                              )}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                console.log("Typing:", month.value, val);
+
+                                setFormData((prev) => {
+                                  const updated = {
+                                    ...prev,
+                                    salaryWorkdays: {
+                                      ...(prev.salaryWorkdays || {}),
+                                      [month.value]: val,
+                                    },
+                                  };
+
+                                  console.log(
+                                    "Updated State:",
+                                    updated.salaryWorkdays,
+                                  );
+                                  return updated;
+                                });
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               {docsToRender.map((doc) => {
                 // Skip Salary Slip as we handle it separately above
                 if (doc.name === "Salary Slip") return null;

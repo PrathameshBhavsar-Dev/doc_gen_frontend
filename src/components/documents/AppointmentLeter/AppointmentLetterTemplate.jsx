@@ -2,10 +2,9 @@ import React from "react";
 import WithPFAppointmentLetterTemplate from "./WithPF/WithPFAppointmentLetterTemplate";
 import WithoutPFAppointmentLetterTemplate from "./WithoutPF/WithoutPFAppointmentLetterTemplate";
 
-
 const AppointmentLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const AppointmentType = data?.appointmentType; // "paid" | "unpaid"
+  const AppointmentType = data?.appointmentType || data?.offerType; // "paid" | "unpaid"
 
   if (!AppointmentType) {
     return <div>appointment type not selected</div>;
