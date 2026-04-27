@@ -384,20 +384,6 @@ const DocumentPreview = () => {
   const [snackSev, setSnackSev] = useState("success");
   const [zoom, setZoom] = useState(100);
 
-  const getGenderFromTitle = (mrms) => {
-    switch (mrms) {
-      case "Mr.":
-        return "Male";
-      case "Mrs.":
-      case "Miss.":
-        return "Female";
-      case "Mx.":
-        return "Other";
-      default:
-        return "Other";
-    }
-  };
-
   const generateSalarySlipDocs = (formData, months) => {
     if (!months || months.length === 0) return [];
 
@@ -410,7 +396,7 @@ const DocumentPreview = () => {
       // ✅ FIX ALL MISSING FIELDS
       salaryType: formData.offerType,
       doj: formData.joiningDate,
-      gender: getGenderFromTitle(formData.mrms),
+      gender: formData.mrms,
       totalSalary: formData.totalSalary ?? formData.salary,
       mode: formData.bankName,
     }));
@@ -630,8 +616,9 @@ const DocumentPreview = () => {
         throw new Error(`No template found for key: ${key}`);
       }
 
-      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
-        }-${new Date().toISOString().slice(0, 10)}`;
+      const filename = `${previewDocType?.name || "Document"}-${
+        previewData?.employeeName || "User"
+      }-${new Date().toISOString().slice(0, 10)}`;
 
       // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(
