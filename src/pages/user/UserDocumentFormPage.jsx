@@ -22,10 +22,10 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "id", label: "Employee ID", type: "text", required: true },
+  { name: "employeeId", label: "Employee ID", type: "text", required: true },
 
   { name: "mobile", label: "Mobile No", type: "text", required: true },
-  { name: "email", label: "Email ID", type: "email", required: true },
+  { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
   { name: "dob", label: "Date of Birth", type: "date", required: true },
 
@@ -57,7 +57,7 @@ const basicFields = [
     required: true,
   },
   {
-    name: "currentDesignation",
+    name: "designation",
     label: "Current Designation",
     type: "text",
     required: true,
@@ -90,17 +90,39 @@ const UserDocumentFormPage = () => {
 
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
+    let updatedData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+
+    // ✅ Correct field name here
+    const titleGenderMap = {
+      "Mr.": "Male",
+      "Mrs.": "Female",
+      "Miss.": "Female",
+      "Mx.": "Other",
+    };
+
+    if (name === "mrms") {
+      updatedData.gender = titleGenderMap[value] || "";
+    }
+
+    setFormData(updatedData);
+
     const error = validateField(name, value);
 
-    setErrors((prev) => ({
-      ...prev,
+    let updatedErrors = {
+      ...errors,
       [name]: error,
-    }));
+    };
+
+    if (name === "mrms") {
+      updatedErrors.gender = validateField("gender", updatedData.gender);
+    }
+
+    setErrors(updatedErrors);
   };
+
   useEffect(() => {
     if (incomingDocs.length > 0) {
       setSelectedDocs(incomingDocs);
@@ -524,10 +546,9 @@ const UserDocumentFormPage = () => {
     const baseClass = `
       w-full h-[40px] px-3 rounded-xl 
       bg-[#F8FAFC] border text-sm outline-none 
-      ${
-        errors[field.name]
-          ? "border-red-500 focus:ring-red-300"
-          : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
+      ${errors[field.name]
+        ? "border-red-500 focus:ring-red-300"
+        : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
       }
       focus:ring-2
     `;
@@ -553,15 +574,15 @@ const UserDocumentFormPage = () => {
 
           {field.name === "company"
             ? companies.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))
             : field.options?.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
         </select>
       );
     }
@@ -684,24 +705,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      }`}
                   >
                     <FiFileText
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
@@ -732,24 +750,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      }`}
                   >
                     <FiEye
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
