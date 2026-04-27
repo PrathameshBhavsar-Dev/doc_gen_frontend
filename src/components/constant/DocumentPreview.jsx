@@ -405,7 +405,8 @@ const DocumentPreview = () => {
 
   if (!key) {
     throw new Error("Invalid document type (empty key)");
-  } // ✅ ALWAYS CLEAN DATA BEFORE API
+  }
+  4; // ✅ ALWAYS CLEAN DATA BEFORE API
   const baseData = Array.isArray(previewData)
     ? previewData[0]?.data || {}
     : previewData;
