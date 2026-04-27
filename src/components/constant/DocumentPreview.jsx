@@ -384,13 +384,105 @@ const DocumentPreview = () => {
   const [snackSev, setSnackSev] = useState("success");
   const [zoom, setZoom] = useState(100);
 
+  const generateSalarySlipDocs = (formData, months) => {
+    if (!months || months.length === 0) return [];
+
+    return months.map((month) => ({
+      ...formData,
+
+      month: month.value,
+      workdays: formData.salaryWorkdays?.[month.value] || 0,
+
+      // ✅ FIX ALL MISSING FIELDS
+      salaryType: formData.offerType,
+      doj: formData.joiningDate,
+      gender: formData.mrms,
+      totalSalary: formData.totalSalary ?? formData.salary,
+      mode: formData.bankName,
+    }));
+  };
   const key = normalizeTemplateKey(previewDocType?.template);
-  // const payload = buildPayload(key, previewData, user, previewCompany);
+
+  if (!key) {
+    throw new Error("Invalid document type (empty key)");
+  } // ✅ ALWAYS CLEAN DATA BEFORE API
+  const baseData = Array.isArray(previewData)
+    ? previewData[0]?.data || {}
+    : previewData;
+
+  let cleanedData = { ...baseData };
+
+  // ✅ ensure required field
+  if (!cleanedData.issueDate) {
+    cleanedData.issueDate = new Date().toISOString();
+  }
+
+  // ✅ remove salary fields for non-salary docs
+  if (key !== "salaryslip_letter" && key !== "fullandfinal_letter") {
+    delete cleanedData.totalSalary;
+    delete cleanedData.salaryType;
+    delete cleanedData.salarySlipMonths;
+    delete cleanedData.salaryWorkdays;
+  }
+
+  // ✅ NOW build payload correctly
+  const payload = buildPayload(key, cleanedData, user, previewCompany);
+  const isSalarySlip = key === "salaryslip_letter";
+
+  let salarySlipDocs = [previewData];
+
+  if (isSalarySlip) {
+    if (salarySlipMonths.length > 0) {
+      salarySlipDocs = generateSalarySlipDocs(previewData, salarySlipMonths);
+    } else {
+      salarySlipDocs = [previewData];
+    }
+  }
 
   useEffect(() => {
     if (!previewData || !user || !previewCompany) return;
 
-    const payload = buildPayload(key, previewData, user, previewCompany);
+    const baseData = Array.isArray(previewData)
+      ? previewData[0]?.data || {}
+      : previewData;
+
+    let cleanedData = { ...baseData };
+
+    // ✅ REQUIRED FIELD FIXES (CRITICAL)
+    cleanedData.title = cleanedData.mrms; // 👈 required enum
+    cleanedData.issuedTo = cleanedData.employeeId; // 👈 REQUIRED
+    cleanedData.issuedBy = user?._id; // 👈 REQUIRED
+
+    // ✅ ensure issueDate
+    if (!cleanedData.issueDate) {
+      cleanedData.issueDate = new Date().toISOString();
+    }
+
+    // ✅ salary cleanup
+    if (key !== "salaryslip_letter" && key !== "fullandfinal_letter") {
+      delete cleanedData.totalSalary;
+      delete cleanedData.salaryType;
+      delete cleanedData.salarySlipMonths;
+      delete cleanedData.salaryWorkdays;
+    }
+
+    // ✅ OPTIONAL FIELD MAPPING
+    cleanedData.position =
+      cleanedData.position ||
+      cleanedData.designation ||
+      cleanedData.joiningDesignation;
+
+    if (!cleanedData.joiningDate && cleanedData.doj) {
+      cleanedData.joiningDate = cleanedData.doj;
+    }
+
+    // ✅ FINAL PAYLOAD
+    let payload = null;
+
+    if (key) {
+      payload = buildPayload(key, cleanedData, user, previewCompany);
+    }
+    console.log("🔥 FINAL PAYLOAD:", payload);
     console.log(payload);
   }, [previewData, user, previewCompany, key]);
 
@@ -443,24 +535,33 @@ const DocumentPreview = () => {
 
   /* ── Template renderer ── */
   const renderTemplate = () => {
-    const p = { data: previewData, company: previewCompany };
-    const map = {
-      salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
-      internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
-      offer_letter: <OfferTemplate {...p} />,
-      completion_certificate: <CertificationLetterTemplate {...p} />,
-      increment_letter: <IncrementTemplate {...p} />,
-      appointment_letter: <AppointmentLetterTemplate {...p} />,
-      experience_letter: <ExperienceLetterTemplate {...p} />,
-      relieving_letter: <RelievingLetterTemplate {...p} />,
-      fullandfinal_letter: <FullandfinalLetterTemplate {...p} />,
-      confirmation_letter: <ConfirmationLetterTemplate {...p} />,
-    };
-    return (
-      map[previewDocType?.template] || (
-        <Typography sx={{ p: 4, color: "#999" }}>Template not found</Typography>
-      )
-    );
+    // ✅ ALWAYS MAKE IT ARRAY
+    const docsArray = Array.isArray(previewData)
+      ? previewData
+      : [{ docKey: previewDocType?.template, data: previewData }];
+
+    return docsArray.map((doc, index) => {
+      const p = { data: doc.data, company: previewCompany };
+
+      const map = {
+        salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
+        internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
+        offer_letter: <OfferTemplate {...p} />,
+        completion_certificate: <CertificationLetterTemplate {...p} />,
+        increment_letter: <IncrementTemplate {...p} />,
+        appointment_letter: <AppointmentLetterTemplate {...p} />,
+        experience_letter: <ExperienceLetterTemplate {...p} />,
+        relieving_letter: <RelievingLetterTemplate {...p} />,
+        fullandfinal_letter: <FullandfinalLetterTemplate {...p} />,
+        confirmation_letter: <ConfirmationLetterTemplate {...p} />,
+      };
+
+      return (
+        <div key={index}>
+          {map[doc.docKey] || <div>Template not found</div>}
+        </div>
+      );
+    });
   };
 
   const toast = (msg, sev = "success") => {
@@ -478,11 +579,12 @@ const DocumentPreview = () => {
       const key = normalizeTemplateKey(previewDocType?.template);
       if (!key) throw new Error("Missing doc type key");
 
-      console.log("🔥 NORMALIZED KEY:", key);
+      console.log(" NORMALIZED KEY:", key);
 
       const payload = buildPayload(key, previewData, user, previewCompany);
-      console.log("🔥 FINAL PAYLOAD:", payload);
+      console.log(" FINAL PAYLOAD:", payload);
 
+      console.log(" CLEANED DATA:", cleanedData);
       await apiService.apipost(API.generateDoc(key), payload);
 
       // ✅ Template component map
@@ -498,6 +600,14 @@ const DocumentPreview = () => {
         fullandfinal_letter: FullandfinalLetterTemplate,
         confirmation_letter: ConfirmationLetterTemplate,
       };
+      // ✅ required for completion certificate
+      if (key === "completion_certificate") {
+        cleanedData.technologies =
+          cleanedData.technologies ||
+          cleanedData.skills ||
+          cleanedData.department ||
+          "General Training"; // fallback
+      }
 
       const TemplateComponent = templateMap[key];
 
@@ -518,7 +628,8 @@ const DocumentPreview = () => {
 
       toast("PDF saved & downloaded ✓");
     } catch (err) {
-      console.error("❌ ERROR:", err);
+      console.error("❌ FULL ERROR:", err);
+      console.error("❌ BACKEND RESPONSE:", err.response?.data);
       setError("Failed to save or generate PDF.");
       toast("Export failed", "error");
     } finally {
@@ -793,38 +904,6 @@ const DocumentPreview = () => {
 
         {/* ── Stage ── */}
         <main className="dp-stage">
-          {/* 🔥 ADD THIS HERE */}
-          {/* <div className="mb-5 flex justify-center">
-            <div className="flex gap-3 p-2 rounded-xl border border-[rgba(124,58,237,0.18)] bg-[rgba(124,58,237,0.06)] backdrop-blur-sm">
-              {selectedDocs.map((doc) => {
-                const isActive = activeDocId === doc.id;
-
-                return (
-                  <button
-                    key={doc.id}
-                    onClick={() => setActiveDocId(doc.id)}
-                    className={`
-    px-6 py-2.5 rounded-xl
-    text-[14px] font-semibold
-    transition-all duration-200
-    flex items-center justify-center
-
-    ${
-      isActive
-        ? "bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] text-white shadow-[0_4px_14px_rgba(124,58,237,0.4)]"
-        : "bg-[#F5F3FF] text-[#5B21B6] border border-[#DDD6FE] hover:bg-[#EDE9FE]"
-    }
-
-    active:scale-[0.97]
-  `}
-                  >
-                    {doc.name}
-                  </button>
-                );
-              })}
-            </div>
-          </div> */}
-
           <div className="dp-stage-header">
             <div className="dp-stage-title">Document Preview</div>
             <div className="dp-stage-meta">
@@ -838,9 +917,24 @@ const DocumentPreview = () => {
             className="dp-page-wrap"
             style={{ transform: `scale(${zoom / 100})` }}
           >
-            <div className="dp-a4" ref={documentRef}>
-              {renderTemplate()}
-            </div>
+            {isSalarySlip ? (
+              salarySlipDocs.map((doc, index) => (
+                <div
+                  key={index}
+                  className="dp-a4"
+                  style={{ marginBottom: "20px" }}
+                >
+                  <SalarySlipLetterTemplate
+                    data={doc}
+                    company={previewCompany}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="dp-a4" ref={documentRef}>
+                {renderTemplate()}
+              </div>
+            )}
           </div>
 
           <div className="dp-page-ind">

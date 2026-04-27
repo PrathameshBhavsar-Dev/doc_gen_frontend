@@ -23,12 +23,28 @@ export const normalizeTemplateKey = (template) => {
   return map[normalized] || normalized;
 };
 
-export const buildPayload = (key, previewData = {}, user = {}, previewCompany = {}) => {  const base = {
+export const buildPayload = (
+  key,
+  previewData = {},
+  user = {},
+  previewCompany = {},
+) => {
+  const empId =
+    previewData.employeeId || previewData.id || previewData.employeeNumber;
+
+  const base = {
     company: previewCompany?.name,
-    issuedTo: user?.id,
+
+    employeeId: empId, // ✅ FIXED
     employeeName: previewData.employeeName,
     employeeEmail: previewData.employeeEmail,
-    employeeNumber: previewData.employeeNumber || "EMP001",
+    employeeNumber:
+      previewData.employeeNumber || previewData.mobile || "EMP001",
+
+    title: previewData.title || previewData.mrms,
+
+    issuedTo: empId, // ✅ FIXED
+    issuedBy: user?._id,
   };
 
   const validSalaryTypes = ["withPF", "withoutPF"];
@@ -57,7 +73,8 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
 
     offer_letter: () => ({
       ...base,
-      title: previewData.mrms || previewData.title || "Mr/Ms", position: previewData.position || previewData.designation,
+      title: previewData.mrms || previewData.title || "Mr/Ms",
+      position: previewData.position || previewData.designation,
       department: previewData.department || "General",
       employmentType: previewData.appointmentType || "Full-time",
       salary: Number(previewData.salary) || 0,
@@ -80,8 +97,7 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       salary: Number(previewData.salary) || 0,
       address: previewData.address || "",
       probationPeriod: previewData.probationPeriod || "3 months",
-      workLocation:
-        previewData.workLocation || previewData.location || "Pune",
+      workLocation: previewData.workLocation || previewData.location || "Pune",
       appointmentType: previewData.appointmentType || "Full-time",
     }),
 
@@ -104,8 +120,7 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       title: previewData.mrms,
       department: previewData.department || "",
       performanceYear:
-        Number(previewData.performanceYear) ||
-        new Date().getFullYear(),
+        Number(previewData.performanceYear) || new Date().getFullYear(),
       newCTC: Number(previewData.newCTC) || 0,
       incrementPercentage: previewData.incrementPercentage
         ? Number(previewData.incrementPercentage)
@@ -119,13 +134,10 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       ...base,
       title: previewData.mrms,
       designation:
-        previewData.position ||
-        previewData.designation ||
-        "Employee",
+        previewData.position || previewData.designation || "Employee",
       department: previewData.department || "",
       joiningDate: previewData.joiningDate,
-      relievingDate:
-        previewData.lastWorkingDay || previewData.relievingDate,
+      relievingDate: previewData.lastWorkingDay || previewData.relievingDate,
       issueDate: previewData.issueDate,
     }),
 
@@ -137,8 +149,7 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       joiningDate: previewData.joiningDate,
       lastWorkingDay: previewData.lastWorkingDay,
       noticePeriod: previewData.noticePeriod || "",
-      handoverStatus:
-        previewData.handoverStatus || "Not Applicable",
+      handoverStatus: previewData.handoverStatus || "Not Applicable",
       issueDate: previewData.issueDate,
     }),
 
@@ -162,8 +173,7 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       projectName: previewData.projectName || "",
       startDate: previewData.startDate,
       completionDate: previewData.completionDate,
-      roleinProject:
-        previewData.roleinProject || previewData.role || "",
+      roleinProject: previewData.roleinProject || previewData.role || "",
       technologies: previewData.technologies
         ? previewData.technologies.split(",").map((t) => t.trim())
         : [],
@@ -178,26 +188,17 @@ export const buildPayload = (key, previewData = {}, user = {}, previewCompany = 
       ...base,
       title: previewData.mrms || "Mr.",
       designation:
-        previewData.position ||
-        previewData.designation ||
-        "Employee",
+        previewData.position || previewData.designation || "Employee",
       department: previewData.department || "",
       fnfDate: previewData.fnfDate || new Date(),
-      month:
-        previewData.month ||
-        new Date().toISOString().slice(0, 7),
-      totalSalary:
-        Number(previewData.salary || previewData.totalSalary) || 0,
+      month: previewData.month || new Date().toISOString().slice(0, 7),
+      totalSalary: Number(previewData.salary || previewData.totalSalary) || 0,
       doj: previewData.joiningDate || new Date(),
-      resignationDate:
-        previewData.resignationDate || new Date(),
+      resignationDate: previewData.resignationDate || new Date(),
       leavingDate: previewData.leavingDate || new Date(),
-      leaveEncashment:
-        Number(previewData.leaveEncashment) || 0,
+      leaveEncashment: Number(previewData.leaveEncashment) || 0,
       paidDays: Number(previewData.paidDays) || 0,
-      finalType: validSalaryTypes.includes(
-        previewData.finalType
-      )
+      finalType: validSalaryTypes.includes(previewData.finalType)
         ? previewData.finalType
         : "withPF",
       workdays: Number(previewData.workdays) || 0,
