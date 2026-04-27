@@ -1,3 +1,17 @@
+const getGenderFromTitle = (mrms) => {
+  switch (mrms) {
+    case "Mr.":
+      return "Male";
+    case "Mrs.":
+    case "Miss.":
+      return "Female";
+    case "Mx.":
+      return "Other";
+    default:
+      return "Other";
+  }
+};
+
 export const normalizeTemplateKey = (template) => {
   if (!template) return "";
 
@@ -5,6 +19,7 @@ export const normalizeTemplateKey = (template) => {
     .replace(/([a-z])([A-Z])/g, "$1_$2")
     .replace(/[\s\-]+/g, "_")
     .toLowerCase();
+
 
   // ✅ Fix missing suffix cases
   const map = {
@@ -61,7 +76,7 @@ export const buildPayload = (
         : "withPF",
       department: previewData.department || "",
       pan: previewData.pan || "",
-      gender: previewData.gender || "Other",
+      gender: getGenderFromTitle(previewData.mrms),
       workdays: previewData.workdays || 22,
       dob: previewData.dob || "1990-01-01",
       mode: previewData.mode || "Bank Transfer",
