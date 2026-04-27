@@ -39,7 +39,14 @@ const WithPFLetterTemplate = ({ company, data }) => {
     return <div>No WithPF template available for this company</div>;
   }
 
-  return <WithPFInternshipComponent company={company} data={data} />;
+  const updatedData = {
+    ...data,
+
+    // ✅ FORCE MONTHLY SALARY EVERYWHERE
+    totalSalary: data.totalSalary || Math.round(Number(data.salary || 0) / 12),
+  };
+
+  return <WithPFInternshipComponent company={company} data={updatedData} />;
 };
 
 export default WithPFLetterTemplate;

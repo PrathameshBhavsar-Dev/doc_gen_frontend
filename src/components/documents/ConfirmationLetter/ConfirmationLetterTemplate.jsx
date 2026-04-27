@@ -2,14 +2,11 @@ import React from "react";
 import WithoutPFConfirmationLetterTemplate from "./WithoutPF/WithoutPFConfirmationLetterTemplate";
 import WithPFConfirmationLetterTemplate from "./WithPF/WithPFConfirmationLetterTemplate";
 
-
-
-
 const ConfirmationLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const ConfirmationType = data?.confirmationType; // "paid" | "unpaid"
+  const ConfirmationType = data?.confirmationType || data.offerType; // "paid" | "unpaid"
 
-  if (!ConfirmationType){
+  if (!ConfirmationType) {
     return <div>appointment type not selected</div>;
   }
 
@@ -18,7 +15,9 @@ const ConfirmationLetterTemplate = ({ company, data }) => {
   }
 
   if (ConfirmationType === "withoutPF") {
-    return <WithoutPFConfirmationLetterTemplate company={company} data={data} />;
+    return (
+      <WithoutPFConfirmationLetterTemplate company={company} data={data} />
+    );
   }
 
   return <div>Invalid Confirmation type</div>;

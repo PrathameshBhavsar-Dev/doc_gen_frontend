@@ -13,7 +13,6 @@ const DevconsProjectCompletionLetter = ({ company = {}, data = {} }) => {
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <Box sx={{ px: 6, py: 4 }}>
-
         {/* ================= TITLE ================= */}
         <Typography
           align="center"
@@ -31,8 +30,7 @@ const DevconsProjectCompletionLetter = ({ company = {}, data = {} }) => {
         <Typography mb={3} textAlign="justify" fontSize={18}>
           This is to certify that <b>{data.employeeName}</b> has done his
           internship at <b>DEVCONS SOFTWARE SOLUTIONS PVT. LTD.</b> from{" "}
-          <b>{formatDate(data.startDate)}</b> {" "}
-          <b>{formatDate(data.endDate)}</b>.
+          <b>{formatDate(data.startDate)}</b> <b>{formatDate(data.endDate)}</b>.
         </Typography>
 
         <Typography mb={3} textAlign="justify" fontSize={18}>
@@ -42,9 +40,9 @@ const DevconsProjectCompletionLetter = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={3} textAlign="justify" fontSize={18}>
-          He was designated as Trainee Full Stack Developer with{" "}
-          <b>{data.projectName}</b> – {data.projectDescription}. We wish him
-          all the best for his upcoming career.
+          He was designated as Trainee Full Stack Developer
+          <b>{data.projectName}</b> – {data.projectDescription}. We wish him all
+          the best for his upcoming career.
         </Typography>
 
         {/* ================= SIGNATURE ================= */}
@@ -65,11 +63,7 @@ const DevconsProjectCompletionLetter = ({ company = {}, data = {} }) => {
             )}
 
             {company.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: 90 }}
-              />
+              <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
             )}
           </Box>
 
@@ -79,7 +73,6 @@ const DevconsProjectCompletionLetter = ({ company = {}, data = {} }) => {
 
           <Typography>HR Relations Lead</Typography>
         </Box>
-
       </Box>
     </A4Page>
   );

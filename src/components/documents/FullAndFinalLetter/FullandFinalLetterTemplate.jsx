@@ -3,10 +3,9 @@ import React from "react";
 import WithoutPFFullandfinalTemplate from "./WithoutPF/WithoutPFFullandfinalTemplate";
 import WithPFFullandfinalTemplate from "./WithPF/WithPFFullandfinalTemplate";
 
-
 const FullandfinalLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const FinalType = data?.finalType; // "paid" | "unpaid"
+  const FinalType = data?.finalType || data.offerType; // "paid" | "unpaid"
 
   if (!FinalType) {
     return <div>Final type not selected</div>;

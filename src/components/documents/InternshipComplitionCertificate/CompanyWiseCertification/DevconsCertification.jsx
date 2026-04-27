@@ -49,30 +49,29 @@ const DevconsProjectCompletion = ({ company, data }) => {
 
           {/* BODY */}
           <Typography sx={{ mb: 2, textAlign: "justify" }}>
-            This is to certify that{" "}
-            <strong>
-              {data.employeeName}
-            </strong>{" "}
-            has done {pronouns.possessive} internship at{" "}
+            This is to certify that <strong>{data.employeeName}</strong> has
+            done {pronouns.possessive} internship at{" "}
             <strong>DEVCONS SOFTWARE SOLUTIONS PVT. LTD.</strong> from{" "}
             <strong>{formatDate(data.startDate)}</strong> to{" "}
             <strong>{formatDate(data.completionDate)}</strong>.
           </Typography>
 
-          <Typography sx={{ mb: 9, textAlign: "justify" }}>
-            During the internship, {pronouns.subject.toLowerCase()} has demonstrated{" "}
-            {pronouns.possessive} skills with self-motivation to learn new skills.{" "}
+          <Typography sx={{ mb: 2, textAlign: "justify" }}>
+            During the internship, {pronouns.subject.toLowerCase()} has
+            demonstrated {pronouns.possessive} skills with self-motivation to
+            learn new skills.{" "}
             {pronouns.possessive.charAt(0).toUpperCase() +
               pronouns.possessive.slice(1)}{" "}
-            performance exceeded our expectations and {pronouns.subject.toLowerCase()} was
-            able to complete the given tasks on time. {pronouns.subject} was designated as <strong>{data.role}</strong> with project
-            named <strong>{data.projectName}</strong>. We wish {pronouns.object} all the
-            best for {pronouns.possessive} upcoming career.
+            performance exceeded our expectations and{" "}
+            {pronouns.subject.toLowerCase()} was able to complete the given
+            tasks on time.
           </Typography>
 
-
-          
-
+          <Typography sx={{ mb: 9, textAlign: "justify" }}>
+            {pronouns.subject} was designated as <strong>{data.role}</strong>.
+            We wish {pronouns.object} all the best for {pronouns.possessive}{" "}
+            upcoming career.
+          </Typography>
 
           {/* SIGN OFF */}
           <Typography sx={{ mb: 1 }}>Yours faithfully,</Typography>
@@ -92,20 +91,14 @@ const DevconsProjectCompletion = ({ company, data }) => {
             )}
 
             {company?.stamp && (
-              <img
-                src={company.stamp}
-                alt="Stamp"
-                style={{ height: 85 }}
-              />
+              <img src={company.stamp} alt="Stamp" style={{ height: 85 }} />
             )}
           </Box>
 
           <Typography sx={{ fontWeight: 600, mt: 2, fontSize: "13px" }}>
             {company.hrName}
           </Typography>
-          <Typography sx={{ fontSize: "14px" }}>
-            HR Relations Lead
-          </Typography>
+          <Typography sx={{ fontSize: "14px" }}>HR Relations Lead</Typography>
         </Box>
       </A4Page>
     </Box>
