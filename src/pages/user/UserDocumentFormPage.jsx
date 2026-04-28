@@ -37,7 +37,7 @@ const basicFields = [
     required: true,
   },
   {
-    name: "permanentAddress",
+    name: "address",
     label: "Permanent Address",
     type: "text",
     span: 2,
@@ -269,7 +269,7 @@ const UserDocumentFormPage = () => {
       employeeName: "employeeName",
 
       // ✅ EMAIL FIX (IMPORTANT)
-      employeeEmail: "email",
+      employeeEmail: "employeeEmail",
       emailId: "email",
       email: "email",
 
@@ -279,7 +279,7 @@ const UserDocumentFormPage = () => {
       phone: "mobile",
 
       // ✅ ADDRESS
-      address: "currentAddress",
+      address: "address",
 
       // ✅ DESIGNATION
       designation: "joiningDesignation",
