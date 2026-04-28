@@ -25,7 +25,7 @@ const basicFields = [
   { name: "id", label: "Employee ID", type: "text", required: true },
 
   { name: "mobile", label: "Mobile No", type: "text", required: true },
-  { name: "email", label: "Email ID", type: "email", required: true },
+  { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
   { name: "dob", label: "Date of Birth", type: "date", required: true },
 
@@ -298,7 +298,7 @@ const UserDocumentFormPage = () => {
       totalSalary: "salary",
       currentSalary: "salary",
       newCTC: "salary",
-      stipend: "salary",
+      // stipend: "salary",
 
       salaryType: "offerType",
       appointmentType: "offerType",
@@ -330,13 +330,13 @@ const UserDocumentFormPage = () => {
       }
 
       // ✅ fallback: loose match (important)
-      if (
-        basicFieldNames.some((basic) =>
-          basic.toLowerCase().includes(field.name.toLowerCase()),
-        )
-      ) {
-        return false;
-      }
+      // if (
+      //   basicFieldNames.some((basic) =>
+      //     basic.toLowerCase().includes(field.name.toLowerCase()),
+      //   )
+      // ) {
+      //   return false;
+      // }
 
       return true;
     });
@@ -370,8 +370,18 @@ const UserDocumentFormPage = () => {
         }
 
         // ✅ FIX: map salaryType → offerType
-        let value = formData[field.name];
+        const docKey = normalizeDocName(doc.name);
 
+        let value;
+
+        // ✅ normalize email + phone + name
+        const normalized = normalizeFieldName(field.name);
+
+        if (docKey) {
+          value = formData?.[docKey]?.[field.name] ?? formData[normalized];
+        } else {
+          value = formData[field.name];
+        }
         if (["salaryType", "appointmentType", "pfType"].includes(field.name)) {
           value = formData.offerType;
         }
@@ -396,6 +406,10 @@ const UserDocumentFormPage = () => {
     // ✅ CREATE PAYLOAD HERE
     let payload = { ...formData };
 
+    // ✅ GLOBAL CTC FIX
+    payload.totalSalary = yearlySalary;
+    payload.newCTC = yearlySalary;
+    payload.stipend = yearlySalary;
     // ✅ HANDLE MULTIPLE DOCS
     const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
       ? filteredDocuments
@@ -487,7 +501,7 @@ const UserDocumentFormPage = () => {
     // setFormData(payload);
 
     // ✅ show popup instead of navigating
-    // setShowGeneratePopup(true);
+    setShowGeneratePopup(true);
 
     if (isSalarySlipSelected()) {
       if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) {
@@ -509,43 +523,84 @@ const UserDocumentFormPage = () => {
         }
       }
     }
+
+    const enrichedDocs = docsToProcess.map((doc) => {
+      const fullDoc = documentTypes.find((d) => d.id === doc.id);
+      return fullDoc; // must include template
+    });
+
+    docsToProcess.forEach((doc) => {
+      const docKey = normalizeDocName(doc.name);
+
+      if (formData[docKey]) {
+        Object.entries(formData[docKey]).forEach(([key, value]) => {
+          const normalizedKey = normalizeFieldName(key);
+          if (key === "issueDate") {
+            payload[`${docKey}_issueDate`] = value; // 👈 unique per doc
+          } else {
+            payload[normalizedKey] = value;
+          }
+        });
+      }
+    });
+
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData: payload, // ✅ final form data
-        selectedDocs: selectedDocs, // ✅ selected docs
-        salarySlipMonths: salarySlipMonths, // ✅ months array
-        previewCompany: selectedCompany, // ✅ company object
+        previewData: payload,
+        selectedDocs: enrichedDocs, // ✅ FIXED
+        salarySlipMonths,
+        previewCompany: selectedCompany,
       },
     });
   };
 
   /* ---------------- FIELD RENDER ---------------- */
-  const renderField = (field) => {
+  const renderField = (field, docKey = null) => {
     const baseClass = `
-      w-full h-[40px] px-3 rounded-xl 
-      bg-[#F8FAFC] border text-sm outline-none 
-      ${
-        errors[field.name]
-          ? "border-red-500 focus:ring-red-300"
-          : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
+    w-full h-[40px] px-3 rounded-xl 
+    bg-[#F8FAFC] border text-sm outline-none 
+    ${
+      errors[field.name]
+        ? "border-red-500 focus:ring-red-300"
+        : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
+    }
+    focus:ring-2
+  `;
+
+    // ✅ VALUE FIX (per document)
+    const value = docKey
+      ? formData?.[docKey]?.[field.name] || ""
+      : formData[field.name] || "";
+
+    // ✅ CHANGE HANDLER FIX
+    const handleValueChange = (val) => {
+      if (docKey) {
+        setFormData((prev) => ({
+          ...prev,
+          [docKey]: {
+            ...(prev[docKey] || {}),
+            [field.name]: val,
+          },
+        }));
+      } else {
+        handleChange(field.name, val);
       }
-      focus:ring-2
-    `;
+    };
 
     if (field.type === "select") {
       return (
         <select
           className={baseClass}
-          required={field.required}
-          value={formData[field.name] || ""}
+          value={value ?? ""}
+          placeholder={`Enter ${field.label}`}
           onChange={(e) => {
-            handleChange(field.name, e.target.value);
+            handleValueChange(e.target.value);
 
             if (field.name === "company") {
               const companyObj = companies.find(
                 (c) => c.name === e.target.value,
               );
-              setSelectedCompany(companyObj); // ✅ THIS IS THE FIX
+              setSelectedCompany(companyObj);
             }
           }}
         >
@@ -570,10 +625,9 @@ const UserDocumentFormPage = () => {
       return (
         <textarea
           className={`${baseClass} h-[80px]`}
+          value={value ?? ""}
           placeholder={`Enter ${field.label}`}
-          required={field.required}
-          value={formData[field.name] || ""}
-          onChange={(e) => handleChange(field.name, e.target.value)}
+          onChange={(e) => handleValueChange(e.target.value)}
         />
       );
     }
@@ -582,10 +636,9 @@ const UserDocumentFormPage = () => {
       <input
         type={field.type}
         className={baseClass}
+        value={value ?? ""}
         placeholder={`Enter ${field.label}`}
-        required={field.required}
-        value={formData[field.name] || ""}
-        onChange={(e) => handleChange(field.name, e.target.value)}
+        onChange={(e) => handleValueChange(e.target.value)}
       />
     );
   };
@@ -937,6 +990,8 @@ const UserDocumentFormPage = () => {
                 const filteredFields = getFilteredFieldsByDoc(doc);
                 if (filteredFields.length === 0) return null;
 
+                const docKey = normalizeDocName(doc.name);
+
                 return (
                   <div
                     key={doc.id}
@@ -967,7 +1022,7 @@ const UserDocumentFormPage = () => {
                               )}
                             </label>
 
-                            {renderField(field)}
+                            {renderField(field, docKey)}
 
                             {errors[field.name] && (
                               <p className="text-red-500 text-[11px] mt-1">
@@ -1051,10 +1106,24 @@ const UserDocumentFormPage = () => {
                       return;
                     }
 
+                    const docsToProcess = selectedDocs.find(
+                      (d) => d.id === ALL_DOC_ID,
+                    )
+                      ? filteredDocuments
+                      : selectedDocs;
+
+                    // 🔥 ALWAYS map from documentTypes
+                    const enrichedDocs = docsToProcess.map((doc) => {
+                      const fullDoc = documentTypes.find(
+                        (d) => d.id === doc.id,
+                      );
+                      return { ...fullDoc };
+                    });
+
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
                         previewData: formData,
-                        selectedDocs,
+                        selectedDocs: enrichedDocs, // ✅ FIXED
                         salarySlipMonths,
                         previewCompany: selectedCompany,
                       },
