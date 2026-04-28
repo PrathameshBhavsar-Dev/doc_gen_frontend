@@ -397,37 +397,82 @@ const DocumentPreview = () => {
       salaryType: formData.offerType,
       doj: formData.joiningDate,
       gender: formData.mrms,
-      totalSalary: formData.totalSalary ?? formData.salary,
+      totalSalary:
+        formData.totalSalary ?? formData.newCTC ?? formData.salary ?? 0,
       mode: formData.bankName,
     }));
   };
   const key = normalizeTemplateKey(previewDocType?.template);
 
   if (!key) {
-    throw new Error("Invalid document type (empty key)");
+    console.error("Invalid doc type:", previewDocType);
+    return null; // don't crash UI
   }
-  4; // ✅ ALWAYS CLEAN DATA BEFORE API
+
+  // ALWAYS rebuild fresh data
   const baseData = Array.isArray(previewData)
     ? previewData[0]?.data || {}
     : previewData;
 
-  let cleanedData = { ...baseData };
+  let freshData = { ...baseData };
 
-  // ✅ ensure required field
-  if (!cleanedData.issueDate) {
-    cleanedData.issueDate = new Date().toISOString();
-  }
+  // ✅ FORCE CTC FIX (CRITICAL)
+  freshData.totalSalary =
+    freshData.totalSalary ||
+    freshData.newCTC ||
+    freshData.salary ||
+    freshData.stipend ||
+    0;
 
-  // ✅ remove salary fields for non-salary docs
-  if (key !== "salaryslip_letter" && key !== "fullandfinal_letter") {
-    delete cleanedData.totalSalary;
-    delete cleanedData.salaryType;
-    delete cleanedData.salarySlipMonths;
-    delete cleanedData.salaryWorkdays;
-  }
+  freshData.newCTC =
+    freshData.newCTC || freshData.totalSalary || freshData.salary || 0;
 
-  // ✅ NOW build payload correctly
-  const payload = buildPayload(key, cleanedData, user, previewCompany);
+  freshData.salary =
+    freshData.salary || freshData.totalSalary || freshData.newCTC || 0;
+
+  // ✅ CRITICAL FIX: flatten nested doc data
+  Object.keys(baseData).forEach((key) => {
+    if (
+      typeof baseData[key] === "object" &&
+      baseData[key] !== null &&
+      !Array.isArray(baseData[key])
+    ) {
+      Object.entries(baseData[key]).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") {
+          if (!freshData[k]) {
+            freshData[k] = v; // don't overwrite valid top-level values
+          }
+        }
+      });
+    }
+  });
+  // ✅ FIX required fields
+  freshData.employeeId = freshData.employeeId || freshData.employeeNumber;
+
+  freshData.issuedTo =
+    freshData.employeeId || freshData.employeeNumber || freshData.employeeEmail;
+
+  freshData.issuedBy = user?._id;
+  freshData.title = freshData.mrms;
+
+  const docKeyName = normalizeTemplateKey(previewDocType?.template);
+
+  const docIssueDate =
+    freshData[`${docKeyName}_issueDate`] || freshData.issueDate;
+
+  freshData.issueDate = docIssueDate || new Date().toISOString();
+
+  freshData.totalSalary = Number(freshData.totalSalary || 0);
+  freshData.newCTC = Number(freshData.newCTC || 0);
+  freshData.salary = Number(freshData.salary || 0);
+  // ✅ build payload
+  let payload = buildPayload(key, freshData, user, previewCompany);
+
+  // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
+  payload.issuedTo = freshData.issuedTo;
+
+  console.log("🚀 FINAL PAYLOAD:", payload);
+
   const isSalarySlip = key === "salaryslip_letter";
 
   let salarySlipDocs = [previewData];
@@ -451,8 +496,11 @@ const DocumentPreview = () => {
 
     // ✅ REQUIRED FIELD FIXES (CRITICAL)
     cleanedData.title = cleanedData.mrms; // 👈 required enum
-    cleanedData.issuedTo = cleanedData.employeeId; // 👈 REQUIRED
-    cleanedData.issuedBy = user?._id; // 👈 REQUIRED
+    cleanedData.issuedTo =
+      cleanedData.employeeId ||
+      cleanedData.employeeNumber ||
+      cleanedData.employeeEmail; // fallback
+    //     cleanedData.issuedBy = user?._id; // 👈 REQUIRED
 
     // ✅ ensure issueDate
     if (!cleanedData.issueDate) {
@@ -542,7 +590,7 @@ const DocumentPreview = () => {
       : [{ docKey: previewDocType?.template, data: previewData }];
 
     return docsArray.map((doc, index) => {
-      const p = { data: doc.data, company: previewCompany };
+      const p = { data: freshData, company: previewCompany };
 
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
@@ -582,10 +630,47 @@ const DocumentPreview = () => {
 
       console.log(" NORMALIZED KEY:", key);
 
-      const payload = buildPayload(key, previewData, user, previewCompany);
-      console.log(" FINAL PAYLOAD:", payload);
+      // ✅ ALWAYS REBUILD DATA HERE (DO NOT USE cleanedData)
+      const baseData = Array.isArray(previewData)
+        ? previewData[0]?.data || {}
+        : previewData;
 
-      console.log(" CLEANED DATA:", cleanedData);
+      let freshData = { ...baseData };
+
+      Object.keys(baseData).forEach((key) => {
+        if (
+          typeof baseData[key] === "object" &&
+          baseData[key] !== null &&
+          !Array.isArray(baseData[key])
+        ) {
+          Object.entries(baseData[key]).forEach(([k, v]) => {
+            if (v !== undefined && v !== null && v !== "") {
+              freshData[k] = v;
+            }
+          });
+        }
+      });
+
+      // ✅ REQUIRED FIXES
+      freshData.employeeId =
+        freshData.employeeId ||
+        freshData.employeeNumber ||
+        freshData.employeeEmail;
+
+      freshData.issuedTo = freshData.employeeId;
+      freshData.issuedBy = user?._id;
+      freshData.title = freshData.mrms;
+
+      if (!freshData.issueDate) {
+        freshData.issueDate = new Date().toISOString();
+      }
+
+      // ✅ BUILD PAYLOAD
+      const payload = buildPayload(key, freshData, user, previewCompany);
+
+      console.log("🚀 FINAL PAYLOAD:", payload);
+
+      // console.log(" CLEANED DATA:", cleanedData);
       await apiService.apipost(API.generateDoc(key), payload);
 
       // ✅ Template component map
@@ -603,11 +688,11 @@ const DocumentPreview = () => {
       };
       // ✅ required for completion certificate
       if (key === "completion_certificate") {
-        cleanedData.technologies =
-          cleanedData.technologies ||
-          cleanedData.skills ||
-          cleanedData.department ||
-          "General Training"; // fallback
+        // cleanedData.technologies =
+        //   cleanedData.technologies ||
+        //   cleanedData.skills ||
+        //   cleanedData.department ||
+        ("General Training"); // fallback
       }
 
       const TemplateComponent = templateMap[key];
@@ -623,7 +708,7 @@ const DocumentPreview = () => {
       // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(
         TemplateComponent,
-        { data: previewData, company: previewCompany },
+        { data: freshData, company: previewCompany },
         filename,
       );
 

@@ -1,17 +1,3 @@
-const getGenderFromTitle = (mrms) => {
-  switch (mrms) {
-    case "Mr.":
-      return "Male";
-    case "Mrs.":
-    case "Miss.":
-      return "Female";
-    case "Mx.":
-      return "Other";
-    default:
-      return "Other";
-  }
-};
-
 export const normalizeTemplateKey = (template) => {
   if (!template) return "";
 
@@ -19,7 +5,6 @@ export const normalizeTemplateKey = (template) => {
     .replace(/([a-z])([A-Z])/g, "$1_$2")
     .replace(/[\s\-]+/g, "_")
     .toLowerCase();
-
 
   // ✅ Fix missing suffix cases
   const map = {
@@ -44,21 +29,17 @@ export const buildPayload = (
   user = {},
   previewCompany = {},
 ) => {
-  const empId =
-    previewData.employeeId || previewData.id || previewData.employeeNumber;
-
   const base = {
     company: previewCompany?.name,
-
-    employeeId: empId, // ✅ FIXED
+    // issuedTo: user?.id,
+    // employeeId: user.id,
+    employeeId: previewData.employeeId,
     employeeName: previewData.employeeName,
     employeeEmail: previewData.employeeEmail,
-    employeeNumber:
-      previewData.employeeNumber || previewData.mobile || "EMP001",
-
+    employeeNumber: previewData.employeeNumber || "EMP001",
     title: previewData.title || previewData.mrms,
 
-    issuedTo: empId, // ✅ FIXED
+    issuedTo: previewData.employeeId,
     issuedBy: user?._id,
   };
 
@@ -76,7 +57,7 @@ export const buildPayload = (
         : "withPF",
       department: previewData.department || "",
       pan: previewData.pan || "",
-      gender: getGenderFromTitle(previewData.mrms),
+      gender: previewData.gender || "Other",
       workdays: previewData.workdays || 22,
       dob: previewData.dob || "1990-01-01",
       mode: previewData.mode || "Bank Transfer",
@@ -189,12 +170,16 @@ export const buildPayload = (
       startDate: previewData.startDate,
       completionDate: previewData.completionDate,
       roleinProject: previewData.roleinProject || previewData.role || "",
-      technologies: previewData.technologies
-        ? previewData.technologies.split(",").map((t) => t.trim())
-        : [],
-      achievements: previewData.achievements
-        ? previewData.achievements.split(",").map((a) => a.trim())
-        : [],
+      technologies: Array.isArray(previewData.technologies)
+        ? previewData.technologies
+        : typeof previewData.technologies === "string"
+          ? previewData.technologies.split(",").map((t) => t.trim())
+          : [],
+      achievements: Array.isArray(previewData.achievements)
+        ? previewData.achievements
+        : typeof previewData.achievements === "string"
+          ? previewData.achievements.split(",").map((a) => a.trim())
+          : [],
       clientName: previewData.clientName || "",
       issueDate: previewData.issueDate,
     }),
