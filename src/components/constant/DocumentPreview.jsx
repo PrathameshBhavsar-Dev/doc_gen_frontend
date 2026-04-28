@@ -746,7 +746,7 @@ const DocumentPreview = () => {
         </div>
       )}
 
-      {/* ── Layout ── */}
+      {/* ── Layout ── */}  
       <div className="dp-layout">
         {/* ── Sidebar ── */}
         <aside className="dp-sidebar">

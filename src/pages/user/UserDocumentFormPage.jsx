@@ -22,10 +22,10 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "id", label: "Employee ID", type: "text", required: true },
+  { name: "employeeId", label: "Employee ID", type: "text", required: true },
 
   { name: "mobile", label: "Mobile No", type: "text", required: true },
-  { name: "email", label: "Email ID", type: "email", required: true },
+  { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
   { name: "dob", label: "Date of Birth", type: "date", required: true },
 
@@ -307,7 +307,7 @@ const UserDocumentFormPage = () => {
       incrementType: "offerType",
 
       // ✅ ID
-      employeeId: "id",
+      employeeId: "employeeId",
     };
 
     return map[name] || name;
