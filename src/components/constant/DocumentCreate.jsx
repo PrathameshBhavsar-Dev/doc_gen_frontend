@@ -381,14 +381,6 @@ const DocumentCreate = () => {
           previewCompany: selectedCompany,
         },
       });
-
-      // navigate(`/document/preview`, {
-      //   state: {
-      //     documentData,
-      //     selectedCompany,
-      //     docType: docTypeKey   // ✅ ADD THIS LINE
-      //   },
-      // });
     }
   };
 

@@ -356,6 +356,29 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
+  const flowType = state.flowType || "DIRECT"; // default fallback
+
+  const handleEdit = () => {
+    if (!previewData) return;
+
+    if (flowType === "PROFILE") {
+      navigate(ROUTES.USER_FORM, {
+        state: {
+          document: previewData,
+          flowType: "PROFILE",
+          isEdit: true,
+        },
+      });
+    } else {
+      navigate("/document/create", {
+        state: {
+          document: previewData,
+          flowType: "DIRECT",
+          isEdit: true,
+        },
+      });
+    }
+  };
 
   const previewData = state.previewData;
   const selectedDocsRaw = state.selectedDocs;
@@ -779,9 +802,8 @@ const DocumentPreview = () => {
         throw new Error(`No template found for key: ${key}`);
       }
 
-      const filename = `${previewDocType?.name || "Document"}-${
-        previewData?.employeeName || "User"
-      }-${new Date().toISOString().slice(0, 10)}`;
+      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
+        }-${new Date().toISOString().slice(0, 10)}`;
 
       // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(

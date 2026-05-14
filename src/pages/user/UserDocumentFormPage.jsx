@@ -25,7 +25,7 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "id", label: "Employee ID", type: "text", required: true },
+  { name: "employeeId", label: "Employee ID", type: "text", required: true },
 
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "employeeEmail", label: "Email ID", type: "email", required: true },
@@ -311,7 +311,7 @@ const UserDocumentFormPage = () => {
       incrementType: "offerType",
 
       // ✅ ID
-      employeeId: "id",
+      employeeId: "employeeId",
     };
 
     return map[name] || name;
@@ -572,6 +572,7 @@ const UserDocumentFormPage = () => {
         selectedDocs: enrichedDocs, // ✅ FIXED
         salarySlipMonths,
         previewCompany: selectedCompany,
+        flowType: "PROFILE",
       },
     });
   };
@@ -660,15 +661,15 @@ const UserDocumentFormPage = () => {
 
           {field.name === "company"
             ? companies.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))
             : field.options?.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
         </select>
       );
     }
@@ -796,24 +797,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
                         ? "bg-white/20"
                         : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                      }`}
                   >
                     <FiFileText
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
@@ -844,24 +842,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
                         ? "bg-white/20"
                         : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                      }`}
                   >
                     <FiEye
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
