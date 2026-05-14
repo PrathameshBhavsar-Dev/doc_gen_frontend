@@ -32,6 +32,7 @@ const UserHistoryPage = lazy(() => import("../pages/user/UserHistoryPage"));
 const UserProfilePage = lazy(() => import("../pages/user/UserProfilePage"));
 const UserSettingsPage = lazy(() => import("../pages/user/UserSettingPage"));
 const UserDetailPage = lazy(() => import("../pages/user/UserDetailPage"));
+
 const UserDocumentFormPage = lazy(
   () => import("../pages/user/UserDocumentFormPage"),
 );
@@ -111,6 +112,10 @@ const AppRoutes = () => {
             path={ROUTES.USER_EMPLOYEE_DOCUMENTS}
             element={<LazyLoad component={UserEmployeeDocumentsPage} />}
           />
+          {/* <Route
+            path={ROUTES.PROFILE_PREVIEW}
+            element={<LazyLoad component={UserDocumentFormPage} />}
+          /> */}
         </Route>
       </Route>
 
