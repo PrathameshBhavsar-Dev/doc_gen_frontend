@@ -17,7 +17,7 @@ import {
 const documents = [
   {
     id: 1,
-    docTypeId: 2,   // Offer Letter → mockData id: 2
+    docTypeId: 2, // Offer Letter → mockData id: 2
     title: "Offer Letter",
     description: "Generate offer letters with PF details",
     icon: FileText,
@@ -25,7 +25,7 @@ const documents = [
   },
   {
     id: 2,
-    docTypeId: 3,   // Appointment Letter → mockData id: 3
+    docTypeId: 3, // Appointment Letter → mockData id: 3
     title: "Appointment Letter",
     description: "Create appointment letters with terms",
     icon: Briefcase,
@@ -33,7 +33,7 @@ const documents = [
   },
   {
     id: 3,
-    docTypeId: 1,   // Salary Slip → mockData id: 1
+    docTypeId: 1, // Salary Slip → mockData id: 1
     title: "Salary Slip",
     description: "Generate monthly salary slips with PF",
     icon: Wallet,
@@ -41,7 +41,7 @@ const documents = [
   },
   {
     id: 4,
-    docTypeId: 17,  // Confirmation Letter → mockData id: 17
+    docTypeId: 17, // Confirmation Letter → mockData id: 17
     title: "Confirmation Letter",
     description: "Generate employment confirmations",
     icon: CheckCircle,
@@ -49,7 +49,7 @@ const documents = [
   },
   {
     id: 5,
-    docTypeId: 7,   // Increment Letter → mockData id: 7
+    docTypeId: 7, // Increment Letter → mockData id: 7
     title: "Increment Letter",
     description: "Create salary increment letters",
     icon: TrendingUp,
@@ -57,7 +57,7 @@ const documents = [
   },
   {
     id: 6,
-    docTypeId: 16,  // Full & Final → mockData id: 16
+    docTypeId: 16, // Full & Final → mockData id: 16
     title: "Full & Final Settlement",
     description: "Create full and final settlement letters",
     icon: HandCoins,
@@ -65,7 +65,7 @@ const documents = [
   },
   {
     id: 7,
-    docTypeId: 4,   // Experience Letter → mockData id: 4
+    docTypeId: 4, // Experience Letter → mockData id: 4
     title: "Experience Letter",
     description: "Issue experience certificates",
     icon: Award,
@@ -73,7 +73,7 @@ const documents = [
   },
   {
     id: 8,
-    docTypeId: 12,  // Completion Letter → mockData id: 12
+    docTypeId: 12, // Completion Letter → mockData id: 12
     title: "Completion Letter",
     description: "Generate completion letter",
     icon: ClipboardList,
@@ -81,7 +81,7 @@ const documents = [
   },
   {
     id: 9,
-    docTypeId: 11,  // Internship Certificate → mockData id: 11
+    docTypeId: 11, // Internship Certificate → mockData id: 11
     title: "Internship Certificate",
     description: "Issue internship offer letters",
     icon: GraduationCap,
@@ -89,7 +89,7 @@ const documents = [
   },
   {
     id: 10,
-    docTypeId: 5,   // Relieving Letter → mockData id: 5
+    docTypeId: 5, // Relieving Letter → mockData id: 5
     title: "Relieving Letter",
     description: "Generate relieving letters",
     icon: LogOut,
@@ -106,14 +106,14 @@ const Toggle = ({ enabled, onToggle }) => (
       e.stopPropagation();
       onToggle();
     }}
-    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors 
+    className={`relative inline-flex h-4 xs:h-5 w-8 xs:w-9 items-center rounded-full transition-colors 
                 duration-200 focus:outline-none 
                 ${enabled ? "bg-[#61489A]" : "bg-gray-300"}`}
   >
     <span
-      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow 
+      className={`inline-block h-3 xs:h-3.5 w-3 xs:w-3.5 transform rounded-full bg-white shadow 
                   transition-transform duration-200 
-                  ${enabled ? "translate-x-5" : "translate-x-1"}`}
+                  ${enabled ? "translate-x-4 xs:translate-x-5" : "translate-x-0.5 xs:translate-x-1"}`}
     />
   </button>
 );
@@ -128,17 +128,19 @@ const DocumentCard = ({ doc, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className={`relative flex flex-col bg-white gap-3 rounded-2xl border p-3 sm:p-4 cursor-pointer
+      className={`relative flex flex-col w-45  gap-2 xs:gap-3 rounded-lg xs:rounded-xl sm:rounded-2xl border p-2.5 xs:p-3 sm:p-4 cursor-pointer
                   transition-all duration-300 ease-in-out shadow-lg
                   hover:border-[#B37BD6] hover:-translate-y-1 hover:bg-purple-50
-                  hover:shadow-[#B37BD6] bg-[#FFFEF8]
+                  hover:shadow-[#B37BD6]
                   ${doc.highlighted ? "border-purple-300" : "border-gray-200"}`}
     >
       {/* Top row: icon + toggle */}
       <div className="flex items-start justify-between gap-2">
-        <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center
-                        rounded-xl bg-[#61489A]">
-          <Icon className="text-white" size={18} />
+        <div
+          className="flex h-8 w-8 xs:h-9 xs:w-9 sm:h-10 sm:w-10 md:h-11 md:w-11 shrink-0 items-center justify-center
+                        rounded-lg xs:rounded-xl bg-[#61489A]"
+        >
+          <Icon className="text-white" size={16} />
         </div>
 
         {/* {doc.hasPFToggle && (
@@ -155,12 +157,12 @@ const DocumentCard = ({ doc, onClick }) => {
       </div>
 
       {/* Title */}
-      <h3 className="text-xs sm:text-sm font-semibold text-black leading-snug">
+      <h3 className="text-[11px] xs:text-xs sm:text-sm font-semibold text-black leading-snug wrap-break-word">
         {doc.title}
       </h3>
 
       {/* Description */}
-      <p className="text-[11px] sm:text-[12px] text-gray-500 leading-relaxed">
+      <p className="text-[10px] xs:text-[11px] sm:text-[12px] text-gray-500 leading-relaxed wrap-break-word">
         {doc.description}
       </p>
     </div>
@@ -183,15 +185,17 @@ const DocumentSection = () => {
   };
 
   return (
-    <div className="w-full py-4">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-        {documents.map((doc) => (
-          <DocumentCard
-            key={doc.id}
-            doc={doc}
-            onClick={() => handleCardClick(doc)}
-          />
-        ))}
+    <div className="w-full py-4 sm:py-6 md:py-8 px-2 ">
+      <div className="w-full max-w-screen-2xl mx-auto">
+        <div className="grid grid-cols-2 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:gap-6">
+          {documents.map((doc) => (
+            <DocumentCard
+              key={doc.id}
+              doc={doc}
+              onClick={() => handleCardClick(doc)}
+            />
+          ))}
+        </div>
       </div>
       {/* ✅ Test button removed */}
     </div>

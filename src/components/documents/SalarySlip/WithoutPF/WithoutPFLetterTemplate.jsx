@@ -35,12 +35,12 @@ const SalarySlipTemplate = ({ company, data }) => {
   const updatedData = {
     ...data,
 
-    // ✅ FORCE MONTHLY SALARY EVERYWHERE
+    // ✅ keep already-converted monthly salary
     totalSalary: data.totalSalary || Math.round(Number(data.salary || 0) / 12),
   };
 
-  return <WithPFInternshipComponent company={company} data={updatedData} />;
-  return <SalarySlipComponent company={company} data={data} />;
+  // ✅ render actual salary slip component
+  return <SalarySlipComponent company={company} data={updatedData} />;
 };
 
 export default SalarySlipTemplate;

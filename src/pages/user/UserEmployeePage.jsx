@@ -32,13 +32,15 @@ const dummyProfiles = [
 const ProfileListPage = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const GRID_LAYOUT = "grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
+  const GRID_LAYOUT =
+    "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
   const filteredProfiles = dummyProfiles.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#F6F8FF] via-[#EEF2FF] to-[#FDF4FF] p-6">
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#F6F8FF] via-[#EEF2FF] to-[#FDF4FF] px-4 sm:px-5 lg:px-6 py-4 sm:py-6">
+      {" "}
       <div className="max-w-[1350px] ">
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -67,9 +69,11 @@ const ProfileListPage = () => {
               </p>
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            {" "}
             {/* SEARCH */}
-            <div className="relative w-full md:w-[280px]">
+            <div className="relative w-full sm:w-[260px] md:w-[280px]">
+              {" "}
               <FiSearch className="absolute left-3 top-3 text-[#2f3032]" />
               <input
                 type="text"
@@ -81,12 +85,12 @@ const ProfileListPage = () => {
                 focus:ring-2 focus:ring-[#6366F1]/20 outline-none transition"
               />
             </div>
-
             {/* CREATE BUTTON */}
             <button
               onClick={() => navigate(ROUTES.USER_FORM)}
               className="
-              px-5 py-2.5 rounded-xl 
+w-full sm:w-auto
+px-5 py-2.5 rounded-xl
               bg-gradient-to-r from-[#0E145E] to-[#B37BD6] 
               text-white text-sm font-medium
               shadow-[0_6px_20px_rgba(99,102,241,0.35)]
@@ -101,7 +105,7 @@ const ProfileListPage = () => {
         </div>
 
         {/* CARD TABLE */}
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-x-auto">
           {/* PREMIUM FLOATING HEADER */}
           <div className="relative">
             {/* subtle top fade (depth effect) */}
@@ -111,7 +115,7 @@ const ProfileListPage = () => {
             <div className="relative">
               <div
                 className={`
-    grid ${GRID_LAYOUT}
+    hidden lg:grid ${GRID_LAYOUT}
     gap-6
     px-7 pb-3
     text-[13px]
@@ -141,9 +145,10 @@ const ProfileListPage = () => {
               }
               className={`
 cursor-pointer
-grid items-center ${GRID_LAYOUT}
-gap-6
-px-7 py-5
+grid ${GRID_LAYOUT}
+gap-4 lg:gap-6
+px-4 sm:px-5 lg:px-7
+py-4 sm:py-5
 rounded-2xl
 bg-white/70 backdrop-blur-md
 border border-[#E2E8F0]/50
@@ -177,53 +182,91 @@ transition-all duration-300
               </div>
 
               {/* COMPANY */}
-              <div className="text-[13px] text-[#475569] text-left">
-                {profile.company}
+              <div className="flex flex-col">
+                <span className="text-[11px] text-[#94A3B8] lg:hidden mb-1">
+                  Company
+                </span>
+
+                <div className="text-[13px] text-[#475569]">
+                  {profile.company}
+                </div>
               </div>
 
               {/* ROLE */}
-              <div className="text-[13px] text-[#475569] text-left">
-                {profile.role}
-              </div>
-              {/* PAYMENT STATUS */}
-              <div className="flex justify-start">
-                <span
-                  className={`
-      px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${
-        profile.paymentStatus === "Paid"
-          ? "bg-green-100 text-green-600"
-          : "bg-red-100 text-red-500"
-      }
-    `}
-                >
-                  {profile.paymentStatus}
+              <div className="flex flex-col">
+                <span className="text-[11px] text-[#94A3B8] lg:hidden mb-1">
+                  Role
                 </span>
+
+                <div className="text-[13px] text-[#475569]">{profile.role}</div>
               </div>
 
-              {/* CREATED AT */}
-              <div className="text-[13px] text-[#475569] text-left">
-                {profile.createdAt}
+              {/* PAYMENT */}
+              <div className="flex flex-col">
+                <span className="text-[11px] text-[#94A3B8] lg:hidden mb-1">
+                  Payment
+                </span>
+
+                <div className="flex justify-start">
+                  <span
+                    className={`
+                      px-3 py-[4px]
+                      text-[12px]
+                      rounded-full
+                      font-medium
+                      w-fit
+                      ${
+                        profile.paymentStatus === "Paid"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-500"
+                      }
+                    `}
+                  >
+                    {profile.paymentStatus}
+                  </span>
+                </div>
+              </div>
+
+              {/* CREATED */}
+              <div className="flex flex-col">
+                <span className="text-[11px] text-[#94A3B8] lg:hidden mb-1">
+                  Created
+                </span>
+
+                <div className="text-[13px] text-[#475569]">
+                  {profile.createdAt}
+                </div>
               </div>
 
               {/* STATUS */}
-              <div className="flex justify-start">
-                <span
-                  className={`
-      px-3 py-[4px] text-[12px] rounded-full font-medium
-      ${
-        profile.status === "Active"
-          ? "bg-green-100 text-green-600"
-          : "bg-gray-100 text-gray-500"
-      }
-    `}
-                >
-                  {profile.status}
+              <div className="flex flex-col">
+                <span className="text-[11px] text-[#94A3B8] lg:hidden mb-1">
+                  Status
                 </span>
+
+                <div className="flex justify-start">
+                  <span
+                    className={`
+                      px-3 py-[4px]
+                      text-[12px]
+                      rounded-full
+                      font-medium
+                      w-fit
+                      ${
+                        profile.status === "Active"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-gray-100 text-gray-500"
+                      }
+                    `}
+                  >
+                    {profile.status}
+                  </span>
+                </div>
               </div>
 
               {/* ACTIONS */}
-              <div className="flex justify-end items-center gap-2">
+              <div className="flex justify-start lg:justify-end items-center gap-2 pt-2 lg:pt-0">
+                {" "}
                 {/* VIEW */}
                 <div className="relative group">
                   <button
@@ -250,7 +293,6 @@ transition-all duration-300
                     View Profile
                   </span>
                 </div>
-
                 {/* EDIT */}
                 <div className="relative group">
                   <button
@@ -277,7 +319,6 @@ transition-all duration-300
                     Edit Profile
                   </span>
                 </div>
-
                 {/* DOCUMENT */}
                 <div className="relative group">
                   <button

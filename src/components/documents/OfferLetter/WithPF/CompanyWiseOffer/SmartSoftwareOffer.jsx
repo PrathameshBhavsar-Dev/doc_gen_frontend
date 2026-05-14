@@ -31,12 +31,11 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   /* ================= TITLE & PRONOUNS ================= */
   const title = (mrms || "").toLowerCase().trim();
 
-  const pronouns =
-    ["miss", "miss.", "mrs", "mrs.", "ms", "ms."].includes(title)
-      ? { subject: "She", object: "her", possessive: "her" }
-      : ["mx", "mx."].includes(title)
-        ? { subject: "They", object: "them", possessive: "their" }
-        : { subject: "He", object: "him", possessive: "his" };
+  const pronouns = ["miss", "miss.", "mrs", "mrs.", "ms", "ms."].includes(title)
+    ? { subject: "She", object: "her", possessive: "her" }
+    : ["mx", "mx."].includes(title)
+      ? { subject: "They", object: "them", possessive: "their" }
+      : { subject: "He", object: "him", possessive: "his" };
 
   const para = {
     mt: "16px",
@@ -56,10 +55,10 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
     : "";
 
   /* ================= SALARY BREAKUP ================= */
@@ -80,7 +79,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
     const basicMonthly = round0(
       monthlyCTC -
-      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+        (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
     );
 
     const basicAnnual = round0(basicMonthly * 12);
@@ -94,7 +93,11 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
       { name: "Basic Salary ", annual: basicAnnual, monthly: basicMonthly },
       { name: "HRA ", annual: hraAnnual, monthly: hraMonthly },
       { name: "Conveyance Allowance ", annual: daAnnual, monthly: daMonthly },
-      { name: "Special Allowance ", annual: specialAnnual, monthly: specialMonthly },
+      {
+        name: "Special Allowance ",
+        annual: specialAnnual,
+        monthly: specialMonthly,
+      },
       { name: "Food Allowance ", annual: foodAnnual, monthly: foodMonthly },
       { name: "PF ", annual: pfAnnual, monthly: pfMonthly },
     ];
@@ -103,12 +106,12 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   // ✅ TOTAL FIX (INCLUDING PF)
   const totalMonthly = salaryComponents.reduce(
     (sum, item) => sum + item.monthly,
-    0
+    0,
   );
 
   const totalAnnualFinal = salaryComponents.reduce(
     (sum, item) => sum + item.annual,
-    0
+    0,
   );
 
   const salaryInWords = numberToWords(totalAnnual);
@@ -170,15 +173,24 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>
-            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {employeeName}
+            <Box component="span" sx={labelStyle}>
+              Name
+            </Box>{" "}
+            : {displayTitle} {employeeName}
           </Typography>
 
           <Typography sx={{ mt: "12px" }}>
-            <Box component="span" sx={labelStyle}>Address</Box> : {address}
+            <Box component="span" sx={labelStyle}>
+              Address
+            </Box>{" "}
+            : {address}
           </Typography>
 
           <Typography sx={{ mt: "12px" }}>
-            <Box component="span" sx={labelStyle}>Subject</Box> :
+            <Box component="span" sx={labelStyle}>
+              Subject
+            </Box>{" "}
+            :
             <Box component="span" sx={{ textDecoration: "underline", ml: 1 }}>
               Letter of intent for the position of {position}.
             </Box>
@@ -189,9 +201,10 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={para}>
-            We are pleased to offer you the position of {position}. As discussed,
-            you are requested to join on {formattedJoiningDate}. Your total Gross salary
-            will be Rs. {NoDecimal(totalAnnual)} ({salaryInWords}) per year.
+            We are pleased to offer you the position of {position}. As
+            discussed, you are requested to join on {formattedJoiningDate}. Your
+            total Gross salary will be Rs. {NoDecimal(totalAnnual)} (
+            {salaryInWords}) per year.
           </Typography>
 
           <Typography sx={paraLarge}>
@@ -199,8 +212,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={para}>
-            The roles and responsibilities and other terms and conditions of your
-            employment will be specified in your letter of appointment.
+            The roles and responsibilities and other terms and conditions of
+            your employment will be specified in your letter of appointment.
           </Typography>
 
           <Typography sx={para}>
@@ -209,21 +222,37 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={{ ...para, ml: "50px" }}>
-            Kindly acknowledge the duplicate copy of this letter as an acceptance
-            of this offer.
+            Kindly acknowledge the duplicate copy of this letter as an
+            acceptance of this offer.
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>Yours Sincerely,</Typography>
-          <Typography>For <b>{company.name?.toUpperCase()}</b></Typography>
+          <Typography>
+            For <b>{company.name?.toUpperCase()}</b>
+          </Typography>
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: "40px",
+            }}
+          >
             <Box>
               <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
                 {company.signature && (
-                  <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    sx={{ height: "80px" }}
+                  />
                 )}
                 {company.stamp && (
-                  <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    sx={{ height: "100px" }}
+                  />
                 )}
               </Box>
               <Typography>{company.hrName}</Typography>
@@ -249,8 +278,12 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
               <TableHead>
                 <TableRow>
                   <TableCell sx={tableHeader}>Salary Component</TableCell>
-                  <TableCell sx={tableHeader} align="right">Monthly (Rs.)</TableCell>
-                  <TableCell sx={tableHeader} align="right">Annual (Rs.)</TableCell>
+                  <TableCell sx={tableHeader} align="right">
+                    Monthly (Rs.)
+                  </TableCell>
+                  <TableCell sx={tableHeader} align="right">
+                    Annual (Rs.)
+                  </TableCell>
                 </TableRow>
               </TableHead>
 
@@ -268,7 +301,9 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
                 ))}
 
                 <TableRow>
-                  <TableCell sx={tableTotal}>Total Monthly Gross Salary</TableCell>
+                  <TableCell sx={tableTotal}>
+                    Total Monthly Gross Salary
+                  </TableCell>
                   <TableCell sx={tableTotal} align="right">
                     {NoDecimal(totalMonthly)}
                   </TableCell>
@@ -280,14 +315,24 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             </Table>
           </TableContainer>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
+        <Box
+          sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}
+        >
           <Box>
             <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
               {company.signature && (
-                <Box component="img" src={company.signature} sx={{ height: "80px" }} />
+                <Box
+                  component="img"
+                  src={company.signature}
+                  sx={{ height: "80px" }}
+                />
               )}
               {company.stamp && (
-                <Box component="img" src={company.stamp} sx={{ height: "100px" }} />
+                <Box
+                  component="img"
+                  src={company.stamp}
+                  sx={{ height: "100px" }}
+                />
               )}
             </Box>
             <Typography>{company.hrName}</Typography>
@@ -299,8 +344,6 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             <Typography>Candidate Name : {employeeName}</Typography>
           </Box>
         </Box>
-
-
       </A4Layout>
     </>
   );

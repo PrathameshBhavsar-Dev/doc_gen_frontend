@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  IconButton,
-  Chip,
-} from "@mui/material";
+import { Box, Typography, Paper, IconButton, Chip } from "@mui/material";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -19,7 +13,10 @@ import ApiService from "../../../core/services/api.service";
 import ServerUrl from "../../../core/constants/serverURL.constant";
 import { generatePDF } from "../../../utils/pdfUtils.js";
 import { getTemplateComponent } from "../../../utils/templateResolver.js";
-import { resolveCompany, resolveTypeField } from "../../../utils/companyRegistry.js";
+import {
+  resolveCompany,
+  resolveTypeField,
+} from "../../../utils/companyRegistry.js";
 
 // ✅ Removed: useRef, hiddenDocRef, selectedDoc, TemplateComponent
 
@@ -38,7 +35,9 @@ function GeneratedDocumentSection() {
   const fetchDocuments = async (currentPage = 1) => {
     try {
       setLoading(true);
-      const res = await api.apiget(`${ServerUrl.API_ALL_DOCUMENTS}?page=${currentPage}`);
+      const res = await api.apiget(
+        `${ServerUrl.API_ALL_DOCUMENTS}?page=${currentPage}`,
+      );
       const docs = res?.data || [];
       const totalPages = res?.pages || 1;
       const normalizedDocs = docs.map((item) => ({
@@ -47,7 +46,9 @@ function GeneratedDocumentSection() {
         company: toCamelCase(item.company),
         issuedTo: toCamelCase(item.issuedTo),
         issuedByName:
-          typeof item.issuedBy === "object" ? item.issuedBy?.name : item.issuedBy,
+          typeof item.issuedBy === "object"
+            ? item.issuedBy?.name
+            : item.issuedBy,
       }));
       setTotalCount(res?.total || 0);
       setDocuments(normalizedDocs);
@@ -102,8 +103,8 @@ function GeneratedDocumentSection() {
       internshipType: resolvedType || item?.internshipType,
     };
 
-    console.log("✅ companyObject:", companyObject);  // should show full object with header/footer
-    console.log("✅ enrichedData:", enrichedData);    // should show correct type fields
+    console.log("✅ companyObject:", companyObject); // should show full object with header/footer
+    console.log("✅ enrichedData:", enrichedData); // should show correct type fields
 
     const docId = item._id || item.id;
     setDownloadingId(docId);
@@ -112,7 +113,7 @@ function GeneratedDocumentSection() {
       await generatePDF(
         TemplateComponent,
         { data: enrichedData, company: companyObject },
-        `${item.documentType}-${item.employeeName}`
+        `${item.documentType}-${item.employeeName}`,
       );
     } catch (err) {
       console.error("Download failed:", err);
@@ -122,15 +123,37 @@ function GeneratedDocumentSection() {
   };
 
   return (
-    <Box sx={{ width: "100%", mt: 4 }}>
-      <Typography sx={{ fontSize: "20px", fontWeight: 600, color: "#1F2937", mb: 3 }}>
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "hidden",
+        mt: { xs: 2, sm: 3, md: 4 },
+        px: { xs: 1, sm: 2, md: 0 },
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: { xs: "16px", sm: "18px", md: "20px" },
+          fontWeight: 600,
+          color: "#1F2937",
+          mb: { xs: 2, sm: 2.5, md: 3 },
+          px: { xs: 1, sm: 2 },
+        }}
+      >
         Today's generated documents
       </Typography>
 
-      <Paper sx={{ borderRadius: "16px", boxShadow: "0px 20px 50px rgba(0,0,0,0.06)", overflow: "hidden" }}>
-        <Box sx={{ overflowX: "auto" }}>
+      <Paper
+        sx={{
+          borderRadius: { xs: "12px", sm: "14px", md: "16px" },
+          boxShadow: "0px 20px 50px rgba(0,0,0,0.06)",
+          overflow: "hidden",
+          maxWidth: "100%",
+        }}
+      >
+        {/* Desktop Table View */}
+        <Box sx={{ display: { xs: "none", lg: "block" }, overflowX: "auto" }}>
           <Box sx={{ minWidth: 1100 }}>
-
             {/* Header */}
             <Box
               sx={{
@@ -152,133 +175,736 @@ function GeneratedDocumentSection() {
               <Box>Status</Box>
               <Box textAlign="center">Actions</Box>
             </Box>
+          </Box>
+        </Box>
 
-            {loading && <Box sx={{ p: 4, textAlign: "center" }}>Loading documents...</Box>}
-            {!loading && totalCount === 0 && <Box sx={{ p: 4, textAlign: "center" }}>No documents found</Box>}
+        {/* Mobile Card View */}
+        <Box
+          sx={{
+            display: { xs: "block", xl: "none" },
+            px: { xs: 1.5, sm: 2 },
+            py: { xs: 2, sm: 3 },
+          }}
+        >
+          {loading && (
+            <Box sx={{ p: 2, textAlign: "center", fontSize: "14px" }}>
+              Loading documents...
+            </Box>
+          )}
+          {!loading && totalCount === 0 && (
+            <Box sx={{ p: 2, textAlign: "center", fontSize: "14px" }}>
+              No documents found
+            </Box>
+          )}
 
-            {!loading && documents.map((item, index) => {
+          {!loading &&
+            documents.map((item, index) => {
               const docId = item._id || item.id;
               const isDownloading = downloadingId === docId;
 
               return (
                 <Box
                   key={index}
-                  onClick={() => navigate(ROUTES.USERDOCUMENT_DETAIL, { state: { document: item } })}
-                  sx={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1.5fr 1fr 1fr 1fr", px: 4, py: 3, alignItems: "center", borderTop: "1px solid #F1F1F4", cursor: "pointer", "&:hover": { backgroundColor: "#f9fafb" } }}
+                  onClick={() =>
+                    navigate(ROUTES.USERDOCUMENT_DETAIL, {
+                      state: { document: item },
+                    })
+                  }
+                  sx={{
+                    backgroundColor: "#fff",
+                    borderRadius: "12px",
+                    border: "1px solid #E5E7EB",
+                    p: { xs: 2, sm: 2.5 },
+                    mb: { xs: 2, sm: 2.5 },
+                    cursor: "pointer",
+                    "&:hover": {
+                      backgroundColor: "#f9fafb",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                    },
+                    transition: "all 0.2s",
+                  }}
                 >
-                  {/* Document Type */}
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Box sx={{ width: 40, height: 40, borderRadius: "12px", background: "linear-gradient(to bottom right, #393B8B, #AD78D2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
-                      <InsertDriveFileOutlinedIcon fontSize="small" />
+                  {/* Mobile Card Content */}
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: {
+                        xs: "1fr",
+                        sm: "1fr 1fr",
+                      },
+                      gap: 2,
+                      mb: 2,
+                    }}
+                  >
+                    {/* Document Type & Employee */}
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        DOCUMENT TYPE
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1.5,
+                          mb: 1.5,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: "10px",
+                            background:
+                              "linear-gradient(to bottom right, #393B8B, #AD78D2)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#fff",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <InsertDriveFileOutlinedIcon
+                            sx={{ fontSize: "16px" }}
+                          />
+                        </Box>
+                        <Typography sx={{ fontSize: "13px", fontWeight: 600 }}>
+                          {item.documentType || "Document"}
+                        </Typography>
+                      </Box>
+
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        EMPLOYEE
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: "13px", fontWeight: 500, mb: 0.5 }}
+                      >
+                        {item.employeeName || item.employee || "—"}
+                      </Typography>
+                      <Typography sx={{ fontSize: "11px", color: "#9CA3AF" }}>
+                        {item.employeeId || item.id || "—"}
+                      </Typography>
                     </Box>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      {item.documentType || "Document"}
-                    </Typography>
+
+                    {/* Company & Generated By */}
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        COMPANY
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "13px",
+                          fontWeight: 500,
+                          mb: 2,
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {item.company || "—"}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        GENERATED BY
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "13px",
+                          fontWeight: 500,
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {item.issuedByName || "—"}
+                      </Typography>
+                    </Box>
                   </Box>
 
-                  {/* Employee */}
-                  <Box>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>{item.employeeName || item.employee || "—"}</Typography>
-                    <Typography sx={{ fontSize: "12px", color: "#9CA3AF" }}>{item.employeeId || item.id || "—"}</Typography>
-                  </Box>
+                  {/* Date & Status */}
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: {
+                        xs: "1fr",
+                        sm: "1fr 1fr",
+                      },
+                      gap: 2,
+                      mb: 2,
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        DATE
+                      </Typography>
+                      <Typography sx={{ fontSize: "13px", fontWeight: 500 }}>
+                        {item.createdAt
+                          ? new Date(item.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )
+                          : item.date || "—"}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography
+                        sx={{
+                          fontSize: "11px",
+                          color: "#6B7280",
+                          mb: 0.5,
+                          fontWeight: 600,
+                        }}
+                      >
+                        STATUS
+                      </Typography>
 
-                  {/* Company */}
-                  <Typography sx={{ fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {item.company || "—"}
-                  </Typography>
+                      <Chip
+                        icon={
+                          <CheckCircleOutlineIcon
+                            sx={{
+                              fontSize: { xs: 13, sm: 14 },
+                              color: "#15803D",
+                            }}
+                          />
+                        }
+                        label={item.paymentStatus || "Completed"}
+                        sx={{
+                          backgroundColor: "#DCFCE7",
+                          color: "#15803D",
 
-                  {/* Generated By */}
-                  <Typography sx={{ fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", ml: 5 }}>
-                    {item.issuedByName || "—"}
-                  </Typography>
+                          width: "fit-content",
+                          maxWidth: "100%",
 
-                  {/* Date */}
-                  <Typography sx={{ fontSize: "14px" }}>
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-                      : item.date || "—"}
-                  </Typography>
+                          minHeight: { xs: 26, sm: 28 },
+                          height: "auto",
 
-                  {/* Status */}
-                  <Box>
-                    <Chip
-                      icon={<CheckCircleOutlineIcon sx={{ backgroundColor: "#DCFCE7", fontSize: 18, color: "#15803D" }} />}
-                      label={item.paymentStatus || "Completed"}
-                      sx={{ backgroundColor: "#DCFCE7", color: "#15803D", fontWeight: 500, fontSize: "13px", px: 1, py: 0.5, height: "36px", "& .MuiChip-icon": { marginLeft: "8px" }, "& .MuiChip-label": { paddingRight: "12px" } }}
-                    />
+                          fontWeight: 500,
+                          fontSize: { xs: "10px", sm: "11px" },
+
+                          borderRadius: "999px",
+
+                          display: "flex",
+                          alignItems: "center",
+
+                          px: 0.5,
+
+                          "& .MuiChip-icon": {
+                            marginLeft: "6px",
+                            marginRight: "-2px",
+                            fontSize: { xs: 13, sm: 14 },
+                            color: "#15803D",
+                          },
+
+                          "& .MuiChip-label": {
+                            display: "block",
+                            whiteSpace: "normal",
+                            wordBreak: "break-word",
+                            lineHeight: 1.2,
+
+                            paddingLeft: "4px",
+                            paddingRight: "10px",
+
+                            py: "4px",
+                          },
+                        }}
+                      />
+                    </Box>
                   </Box>
 
                   {/* Actions */}
-                  <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-
-                    {/* Edit */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: {
+                        xs: "flex-start",
+                        sm: "flex-end",
+                      },
+                      flexWrap: "wrap",
+                      rowGap: 1,
+                      gap: 0.75,
+                    }}
+                  >
                     <IconButton
-                      onClick={(e) => { e.stopPropagation(); navigate(ROUTES.EDIT_DOCUMENT, { state: { document: item } }); }}
-                      sx={{ backgroundColor: "#FEF3C7", borderRadius: "12px", width: 36, height: 36, "&:hover": { backgroundColor: "#FDE68A" } }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(ROUTES.EDIT_DOCUMENT, {
+                          state: { document: item },
+                        });
+                      }}
+                      sx={{
+                        backgroundColor: "#FEF3C7",
+                        borderRadius: "10px",
+                        width: 32,
+                        height: 32,
+                        "&:hover": { backgroundColor: "#FDE68A" },
+                      }}
                     >
-                      <FiEdit size={16} color="#D97706" />
+                      <FiEdit size={14} color="#D97706" />
                     </IconButton>
 
-                    {/* View */}
                     <IconButton
-                      onClick={(e) => { e.stopPropagation(); navigate(ROUTES.USERDOCUMENT_DETAIL, { state: { document: item } }); }}
-                      sx={{ backgroundColor: "#E0E7FF", borderRadius: "12px", width: 36, height: 36, "&:hover": { backgroundColor: "#C7D2FE" } }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(ROUTES.USERDOCUMENT_DETAIL, {
+                          state: { document: item },
+                        });
+                      }}
+                      sx={{
+                        backgroundColor: "#E0E7FF",
+                        borderRadius: "10px",
+                        width: 32,
+                        height: 32,
+                        "&:hover": { backgroundColor: "#C7D2FE" },
+                      }}
                     >
-                      <VisibilityOutlinedIcon sx={{ fontSize: 18, color: "#4F46E5" }} />
+                      <VisibilityOutlinedIcon
+                        sx={{ fontSize: 16, color: "#4F46E5" }}
+                      />
                     </IconButton>
 
-                    {/* ✅ Download */}
                     <IconButton
                       onClick={(e) => handleDownload(e, item)}
                       disabled={isDownloading}
-                      sx={{ backgroundColor: isDownloading ? "#F3F4F6" : "#DCFCE7", borderRadius: "12px", width: 36, height: 36, "&:hover": { backgroundColor: isDownloading ? "#F3F4F6" : "#BBF7D0" } }}
+                      sx={{
+                        backgroundColor: isDownloading ? "#F3F4F6" : "#DCFCE7",
+                        borderRadius: "10px",
+                        width: 32,
+                        height: 32,
+                        "&:hover": {
+                          backgroundColor: isDownloading
+                            ? "#F3F4F6"
+                            : "#BBF7D0",
+                        },
+                      }}
                     >
-                      <DownloadOutlinedIcon sx={{ fontSize: 18, color: isDownloading ? "#9CA3AF" : "#16A34A" }} />
+                      <DownloadOutlinedIcon
+                        sx={{
+                          fontSize: 16,
+                          color: isDownloading ? "#9CA3AF" : "#16A34A",
+                        }}
+                      />
                     </IconButton>
-
                   </Box>
                 </Box>
               );
             })}
+        </Box>
+
+        {/* Desktop Table Rows */}
+        <Box sx={{ display: { xs: "none", xl: "block" } }}>
+          <Box>
+            {loading && (
+              <Box sx={{ p: 4, textAlign: "center" }}>Loading documents...</Box>
+            )}
+            {!loading && totalCount === 0 && (
+              <Box sx={{ p: 4, textAlign: "center" }}>No documents found</Box>
+            )}
+
+            {!loading &&
+              documents.map((item, index) => {
+                const docId = item._id || item.id;
+                const isDownloading = downloadingId === docId;
+
+                return (
+                  <Box
+                    key={index}
+                    onClick={() =>
+                      navigate(ROUTES.USERDOCUMENT_DETAIL, {
+                        state: { document: item },
+                      })
+                    }
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: "2fr 1.5fr 1.5fr 1.5fr 1fr 1fr 1fr",
+                      px: { md: 3, lg: 4 },
+                      py: { md: 2.5, lg: 3 },
+                      alignItems: "center",
+                      borderTop: "1px solid #F1F1F4",
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f9fafb" },
+                    }}
+                  >
+                    {/* Document Type */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: { md: 1.5, lg: 2 },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: { md: 36, lg: 40 },
+                          height: { md: 36, lg: 40 },
+                          borderRadius: "12px",
+                          background:
+                            "linear-gradient(to bottom right, #393B8B, #AD78D2)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#fff",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <InsertDriveFileOutlinedIcon
+                          sx={{ fontSize: { md: 18, lg: 20 } }}
+                        />
+                      </Box>
+                      <Typography
+                        sx={{
+                          fontSize: { md: "13px", lg: "14px" },
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item.documentType || "Document"}
+                      </Typography>
+                    </Box>
+
+                    {/* Employee */}
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: { md: "13px", lg: "14px" },
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item.employeeName || item.employee || "—"}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: { md: "11px", lg: "12px" },
+                          color: "#9CA3AF",
+                        }}
+                      >
+                        {item.employeeId || item.id || "—"}
+                      </Typography>
+                    </Box>
+
+                    {/* Company */}
+                    <Typography
+                      sx={{
+                        fontSize: { md: "13px", lg: "14px" },
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {item.company || "—"}
+                    </Typography>
+
+                    {/* Generated By */}
+                    <Typography
+                      sx={{
+                        fontSize: { md: "13px", lg: "14px" },
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        ml: { md: 3, lg: 5 },
+                      }}
+                    >
+                      {item.issuedByName || "—"}
+                    </Typography>
+
+                    {/* Date */}
+                    <Typography sx={{ fontSize: { md: "13px", lg: "14px" } }}>
+                      {item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : item.date || "—"}
+                    </Typography>
+
+                    {/* Status */}
+                    <Box>
+                      <Chip
+                        icon={
+                          <CheckCircleOutlineIcon
+                            sx={{
+                              backgroundColor: "#DCFCE7",
+                              fontSize: { md: 16, lg: 18 },
+                              color: "#15803D",
+                            }}
+                          />
+                        }
+                        label={item.paymentStatus || "Completed"}
+                        sx={{
+                          backgroundColor: "#DCFCE7",
+                          color: "#15803D",
+                          fontWeight: 500,
+                          fontSize: { md: "12px", lg: "13px" },
+                          px: { md: 0.5, lg: 1 },
+                          py: 0.5,
+                          height: { md: "32px", lg: "36px" },
+                          "& .MuiChip-icon": {
+                            marginLeft: { md: "4px", lg: "8px" },
+                          },
+                          "& .MuiChip-label": {
+                            paddingRight: { md: "8px", lg: "12px" },
+                          },
+                        }}
+                      />
+                    </Box>
+
+                    {/* Actions */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: { md: 0.5, lg: 1 },
+                      }}
+                    >
+                      {/* Edit */}
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(ROUTES.EDIT_DOCUMENT, {
+                            state: { document: item },
+                          });
+                        }}
+                        sx={{
+                          backgroundColor: "#FEF3C7",
+                          borderRadius: "12px",
+                          width: { md: 32, lg: 36 },
+                          height: { md: 32, lg: 36 },
+                          "&:hover": { backgroundColor: "#FDE68A" },
+                        }}
+                      >
+                        <FiEdit size={14} color="#D97706" />
+                      </IconButton>
+
+                      {/* View */}
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(ROUTES.USERDOCUMENT_DETAIL, {
+                            state: { document: item },
+                          });
+                        }}
+                        sx={{
+                          backgroundColor: "#E0E7FF",
+                          borderRadius: "12px",
+                          width: { md: 32, lg: 36 },
+                          height: { md: 32, lg: 36 },
+                          "&:hover": { backgroundColor: "#C7D2FE" },
+                        }}
+                      >
+                        <VisibilityOutlinedIcon
+                          sx={{
+                            fontSize: { md: 16, lg: 18 },
+                            color: "#4F46E5",
+                          }}
+                        />
+                      </IconButton>
+
+                      {/* Download */}
+                      <IconButton
+                        onClick={(e) => handleDownload(e, item)}
+                        disabled={isDownloading}
+                        sx={{
+                          backgroundColor: isDownloading
+                            ? "#F3F4F6"
+                            : "#DCFCE7",
+                          borderRadius: "12px",
+                          width: { md: 32, lg: 36 },
+                          height: { md: 32, lg: 36 },
+                          "&:hover": {
+                            backgroundColor: isDownloading
+                              ? "#F3F4F6"
+                              : "#BBF7D0",
+                          },
+                        }}
+                      >
+                        <DownloadOutlinedIcon
+                          sx={{
+                            fontSize: { md: 16, lg: 18 },
+                            color: isDownloading ? "#9CA3AF" : "#16A34A",
+                          }}
+                        />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                );
+              })}
           </Box>
         </Box>
 
         {/* Pagination */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 4, py: 2.5, borderTop: "1px solid #F1F1F4", backgroundColor: "#fff" }}>
-          <Typography sx={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>
-            Showing {(page - 1) * rowsPerPage + 1}–{Math.min(page * rowsPerPage, totalCount)} of {totalCount} results
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: { xs: "center", sm: "space-between" },
+            alignItems: { xs: "stretch", sm: "center" },
+            gap: { xs: 2, sm: 3 },
+            px: { xs: 1.5, sm: 2, lg: 4 },
+            py: { xs: 2.5, sm: 3 },
+            borderTop: "1px solid #F1F1F4",
+            backgroundColor: "#fff",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: { xs: "12px", sm: "13px" },
+              color: "#6B7280",
+              fontWeight: 500,
+              textAlign: { xs: "center", sm: "left" },
+            }}
+          >
+            Showing {(page - 1) * rowsPerPage + 1}–
+            {Math.min(page * rowsPerPage, totalCount)} of {totalCount} results
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, backgroundColor: "#F9FAFB", borderRadius: "12px", p: "4px" }}>
-            <Box onClick={() => page > 1 && setPage(page - 1)} sx={{ px: 2, py: "6px", borderRadius: "8px", cursor: page === 1 ? "not-allowed" : "pointer", color: page === 1 ? "#9CA3AF" : "#374151", fontSize: "13px", fontWeight: 500, "&:hover": { backgroundColor: page === 1 ? "transparent" : "#E5E7EB" } }}>
-              Prev
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: { xs: 0.5, sm: 1 },
+              backgroundColor: "#F9FAFB",
+              borderRadius: "12px",
+              p: { xs: "3px", sm: "4px" },
+              flexWrap: "wrap",
+              justifyContent: { xs: "center", sm: "flex-start" },
+            }}
+          >
+            <Box
+              onClick={() => page > 1 && setPage(page - 1)}
+              sx={{
+                px: { xs: 1.5, sm: 2 },
+                py: { xs: "5px", sm: "6px" },
+                borderRadius: "8px",
+                cursor: page === 1 ? "not-allowed" : "pointer",
+                color: page === 1 ? "#9CA3AF" : "#374151",
+                fontSize: { xs: "12px", sm: "13px" },
+                fontWeight: 500,
+                "&:hover": {
+                  backgroundColor: page === 1 ? "transparent" : "#E5E7EB",
+                },
+              }}
+            >
+              ← Prev
             </Box>
 
             {(() => {
               const pages = [];
               const delta = 2;
-              for (let i = Math.max(2, page - delta); i <= Math.min(totalPages - 1, page + delta); i++) pages.push(i);
+              for (
+                let i = Math.max(2, page - delta);
+                i <= Math.min(totalPages - 1, page + delta);
+                i++
+              )
+                pages.push(i);
               if (page - delta > 2) pages.unshift("...");
               if (page + delta < totalPages - 1) pages.push("...");
-              const allPages = [1, ...pages, ...(totalPages > 1 ? [totalPages] : [])];
+              const allPages = [
+                1,
+                ...pages,
+                ...(totalPages > 1 ? [totalPages] : []),
+              ];
               return allPages.map((pageNum, idx) =>
                 pageNum === "..." ? (
-                  <Box key={`dots-${idx}`} sx={{ px: 1, color: "#9CA3AF", fontSize: "13px" }}>…</Box>
+                  <Box
+                    key={`dots-${idx}`}
+                    sx={{
+                      px: { xs: 0.5, sm: 1 },
+                      color: "#9CA3AF",
+                      fontSize: { xs: "12px", sm: "13px" },
+                    }}
+                  >
+                    …
+                  </Box>
                 ) : (
-                  <Box key={pageNum} onClick={() => setPage(pageNum)} sx={{ minWidth: 32, height: 32, px: 1, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: "13px", fontWeight: 600, background: page === pageNum ? "linear-gradient(to bottom right, #393B8B, #AD78D2)" : "transparent", color: page === pageNum ? "#fff" : "#374151", "&:hover": { background: page === pageNum ? "linear-gradient(to bottom right, #2f3175, #9f63c7)" : "#E5E7EB" } }}>
+                  <Box
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    sx={{
+                      minWidth: { xs: 28, sm: 32 },
+                      height: { xs: 28, sm: 32 },
+                      px: { xs: 0.5, sm: 1 },
+                      borderRadius: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      fontSize: { xs: "12px", sm: "13px" },
+                      fontWeight: 600,
+                      background:
+                        page === pageNum
+                          ? "linear-gradient(to bottom right, #393B8B, #AD78D2)"
+                          : "transparent",
+                      color: page === pageNum ? "#fff" : "#374151",
+                      "&:hover": {
+                        background:
+                          page === pageNum
+                            ? "linear-gradient(to bottom right, #2f3175, #9f63c7)"
+                            : "#E5E7EB",
+                      },
+                    }}
+                  >
                     {pageNum}
                   </Box>
-                )
+                ),
               );
             })()}
 
-            <Box onClick={() => page < totalPages && setPage(page + 1)} sx={{ px: 2, py: "6px", borderRadius: "8px", cursor: page === totalPages ? "not-allowed" : "pointer", color: page === totalPages ? "#9CA3AF" : "#374151", fontSize: "13px", fontWeight: 500, "&:hover": { backgroundColor: page === totalPages ? "transparent" : "#E5E7EB" } }}>
-              Next
+            <Box
+              onClick={() => page < totalPages && setPage(page + 1)}
+              sx={{
+                px: { xs: 1.5, sm: 2 },
+                py: { xs: "5px", sm: "6px" },
+                borderRadius: "8px",
+                cursor: page === totalPages ? "not-allowed" : "pointer",
+                color: page === totalPages ? "#9CA3AF" : "#374151",
+                fontSize: { xs: "12px", sm: "13px" },
+                fontWeight: 500,
+                "&:hover": {
+                  backgroundColor:
+                    page === totalPages ? "transparent" : "#E5E7EB",
+                },
+              }}
+            >
+              Next →
             </Box>
           </Box>
         </Box>
       </Paper>
-
     </Box>
   );
 }
