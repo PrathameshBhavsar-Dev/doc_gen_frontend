@@ -384,6 +384,20 @@ const DocumentPreview = () => {
   const [snackSev, setSnackSev] = useState("success");
   const [zoom, setZoom] = useState(100);
 
+  const getGenderFromTitle = (title) => {
+    switch (title) {
+      case "Mr.":
+        return "Male";
+
+      case "Mrs.":
+      case "Miss.":
+        return "Female";
+
+      default:
+        return "Other";
+    }
+  };
+
   const generateSalarySlipDocs = (formData, months) => {
     if (!months || months.length === 0) return [];
 
@@ -396,7 +410,7 @@ const DocumentPreview = () => {
       // ✅ FIX ALL MISSING FIELDS
       salaryType: formData.offerType,
       doj: formData.joiningDate,
-      gender: formData.mrms,
+      gender: getGenderFromTitle(formData.mrms),
       totalSalary:
         formData.totalSalary ?? formData.newCTC ?? formData.salary ?? 0,
       mode: formData.bankName,
@@ -417,18 +431,56 @@ const DocumentPreview = () => {
   let freshData = { ...baseData };
 
   // ✅ FORCE CTC FIX (CRITICAL)
-  freshData.totalSalary =
-    freshData.totalSalary ||
-    freshData.newCTC ||
-    freshData.salary ||
-    freshData.stipend ||
-    0;
+  // ✅ DO NOT OVERRIDE MONTHLY SALARY
+  if (freshData.totalSalary == null) {
+    freshData.totalSalary = 0;
+  }
 
-  freshData.newCTC =
-    freshData.newCTC || freshData.totalSalary || freshData.salary || 0;
+  // ✅ Annual salary should remain untouched for
+  // offer / appointment / confirmation / increment
 
-  freshData.salary =
-    freshData.salary || freshData.totalSalary || freshData.newCTC || 0;
+  // ✅ Annual docs
+  if (
+    key === "offer_letter" ||
+    key === "appointment_letter" ||
+    key === "confirmation_letter"
+  ) {
+    freshData.salary = Number(freshData.annualCTC || freshData.salary || 0);
+
+    // VERY IMPORTANT
+    freshData.newCTC = Number(
+      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+    );
+
+    freshData.totalSalary = Number(
+      freshData.annualCTC || freshData.salary || 0,
+    );
+  }
+
+  // ✅ Increment uses newCTC
+  if (key === "increment_letter") {
+    freshData.newCTC = Number(
+      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+    );
+  }
+
+  // ✅ Monthly docs only
+  // ✅ Monthly docs only
+  if (key === "salaryslip_letter") {
+    freshData.totalSalary = Number(
+      freshData.monthlyCTC || freshData.totalSalary || 0,
+    );
+  }
+
+  if (key === "fullandfinal_letter") {
+    freshData.totalSalary = Number(
+      freshData.monthlyCTC || freshData.totalSalary || 0,
+    );
+  }
+
+  if (key === "internshipcertificate_letter") {
+    freshData.stipend = Number(freshData.stipend || freshData.monthlyCTC || 0);
+  }
 
   // ✅ CRITICAL FIX: flatten nested doc data
   Object.keys(baseData).forEach((key) => {
@@ -521,9 +573,15 @@ const DocumentPreview = () => {
       cleanedData.designation ||
       cleanedData.joiningDesignation;
 
-    if (!cleanedData.joiningDate && cleanedData.doj) {
-      cleanedData.joiningDate = cleanedData.doj;
-    }
+    // ✅ JOINING DATE NORMALIZATION
+    cleanedData.doj =
+      cleanedData.doj || cleanedData.joiningDate || cleanedData.dateOfJoining;
+
+    cleanedData.joiningDate =
+      cleanedData.joiningDate || cleanedData.doj || cleanedData.dateOfJoining;
+
+    cleanedData.dateOfJoining =
+      cleanedData.dateOfJoining || cleanedData.joiningDate || cleanedData.doj;
 
     // ✅ FINAL PAYLOAD
     let payload = null;
@@ -585,13 +643,21 @@ const DocumentPreview = () => {
   /* ── Template renderer ── */
   const renderTemplate = () => {
     // ✅ ALWAYS MAKE IT ARRAY
-    const docsArray = Array.isArray(previewData)
-      ? previewData
-      : [{ docKey: previewDocType?.template, data: previewData }];
+    const docsArray =
+      key === "salaryslip_letter"
+        ? salarySlipDocs.map((doc) => ({
+            docKey: "salaryslip_letter",
+            data: doc,
+          }))
+        : Array.isArray(previewData)
+          ? previewData
+          : [{ docKey: previewDocType?.template, data: previewData }];
 
     return docsArray.map((doc, index) => {
-      const p = { data: freshData, company: previewCompany };
-
+      const p = {
+        data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
+        company: previewCompany,
+      };
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
         internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
@@ -626,6 +692,13 @@ const DocumentPreview = () => {
 
     try {
       const key = normalizeTemplateKey(previewDocType?.template);
+      // ✅ Monthly salary docs
+      const MONTHLY_DOCS = [
+        "salaryslip_letter",
+        "internshipcertificate_letter",
+        "fullandfinal_letter",
+      ];
+
       if (!key) throw new Error("Missing doc type key");
 
       console.log(" NORMALIZED KEY:", key);
@@ -660,6 +733,15 @@ const DocumentPreview = () => {
       freshData.issuedTo = freshData.employeeId;
       freshData.issuedBy = user?._id;
       freshData.title = freshData.mrms;
+      // ✅ DOJ FIX FOR FULL & FINAL
+      freshData.doj =
+        freshData.doj || freshData.joiningDate || freshData.dateOfJoining;
+
+      freshData.joiningDate =
+        freshData.joiningDate || freshData.doj || freshData.dateOfJoining;
+
+      freshData.dateOfJoining =
+        freshData.dateOfJoining || freshData.joiningDate || freshData.doj;
 
       if (!freshData.issueDate) {
         freshData.issueDate = new Date().toISOString();
@@ -688,10 +770,6 @@ const DocumentPreview = () => {
       };
       // ✅ required for completion certificate
       if (key === "completion_certificate") {
-        // cleanedData.technologies =
-        //   cleanedData.technologies ||
-        //   cleanedData.skills ||
-        //   cleanedData.department ||
         ("General Training"); // fallback
       }
 

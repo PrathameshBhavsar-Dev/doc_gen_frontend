@@ -63,7 +63,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         <Typography sx={{ mb: "6mm" }}>
           During the internship period, <strong>{data.employeeName}</strong> was
           actively participated in project related tasks, shown their skills and
-          abilities as <strong>{data.role}</strong>.
+          abilities as <strong>{data.designation}</strong>.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>

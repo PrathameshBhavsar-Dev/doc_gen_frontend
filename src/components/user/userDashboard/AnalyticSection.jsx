@@ -218,14 +218,16 @@ const AnalyticSection = () => {
 
   /* ================= RENDER ================= */
   return (
-    <div className="min-h-screen p-6 font-inter bg-gradient-to-br from-gray-50 via-gray-50 to-purple-50/30">
+    <div className="min-h-screen p-3 xs:p-4 sm:p-4 md:p-4 lg:p-1 font-inter bg-linear-to-br from-gray-50 via-gray-50 to-purple-50/30">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Analytics</h2>
+      <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2 xs:gap-3 mb-6 sm:mb-8">
+        <h2 className="text-lg xs:text-xl sm:text-2xl font-semibold text-gray-800">
+          Analytics
+        </h2>
 
         {/* Total docs badge */}
         {totalDocs > 0 && (
-          <span className="text-sm text-gray-500">
+          <span className="text-xs xs:text-sm text-gray-500">
             Total documents:&nbsp;
             <span className="font-semibold text-gray-700">{totalDocs}</span>
           </span>
@@ -234,23 +236,25 @@ const AnalyticSection = () => {
 
       {/* Loading overlay */}
       {loading && (
-        <div className="flex items-center justify-center py-10">
-          <div className="w-8 h-8 border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin" />
+        <div className="flex items-center justify-center py-8 sm:py-12">
+          <div className="w-6 h-6 xs:w-8 xs:h-8 border-3 xs:border-4 border-purple-300 border-t-purple-600 rounded-full animate-spin" />
         </div>
       )}
 
       {!loading && (
         <>
           {/* ================= TOP SECTION ================= */}
-          <div className="grid grid-cols-12 gap-6 mb-8">
+          <div className="grid grid-cols-12 gap-3 xs:gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8 md:mb-10">
             {/* DOCUMENT TYPES */}
             <div
-              className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-3`}
+              className={`${cardStyle} col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3`}
             >
-              <h3 className="font-semibold mb-4">Document Types</h3>
+              <h3 className="text-[15px] xs:text-base font-semibold mb-3 xs:mb-4">
+                Document Types
+              </h3>
 
-              <ResponsiveContainer width="100%" height={220}>
-                <PieChart margin={{ top: 30, right: 40, left: 40, bottom: 10 }}>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart margin={{ top: 20, right: 20, left: 20, bottom: 8 }}>
                   <Pie
                     data={getDonutData()}
                     dataKey="value"
@@ -288,14 +292,17 @@ const AnalyticSection = () => {
               </ResponsiveContainer>
 
               {/* Legend */}
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-1">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-x-2 xs:gap-x-3 gap-y-1.5 xs:gap-y-2 mt-2 xs:mt-3">
                 {getDonutData().map((entry, index) => (
-                  <div key={index} className="flex items-center gap-2">
+                  <div
+                    key={index}
+                    className="flex items-center gap-1.5 xs:gap-2"
+                  >
                     <span
-                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      className="w-2.5 h-2.5 xs:w-3 xs:h-3 rounded-full shrink-0"
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
-                    <span className="text-xs text-gray-600 truncate">
+                    <span className="text-[11px] xs:text-xs text-gray-600 truncate">
                       {entry.name}
                     </span>
                   </div>
@@ -305,11 +312,13 @@ const AnalyticSection = () => {
 
             {/* TODAY ACTIVITY */}
             <div
-              className={`${cardStyle} col-span-12 sm:col-span-6 xl:col-span-6`}
+              className={`${cardStyle} col-span-12 sm:col-span-6 lg:col-span-8 xl:col-span-6`}
             >
-              <h3 className="font-semibold mb-4">Today's Activity</h3>
+              <h3 className="text-[15px] xs:text-base font-semibold mb-10 xs:mb-8">
+                Today's Activity
+              </h3>
 
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={180}>
                 <BarChart data={getTodayHourlyData()} barCategoryGap="40%">
                   <defs>
                     <linearGradient
@@ -337,28 +346,33 @@ const AnalyticSection = () => {
             </div>
 
             {/* CALENDAR */}
-            <div className={`${cardStyle} col-span-12 xl:col-span-3`}>
-              <h3 className="font-semibold mb-4">
+            <div
+              className={`${cardStyle} col-span-12 sm:col-span-6 lg:col-span-12 xl:col-span-3`}
+            >
+              <h3 className="text-[16px] xs:text-base font-semibold mb-3 xs:mb-4">
                 {date} {monthName}, {year}
               </h3>
 
-              <div className="grid grid-cols-7 gap-2 text-center text-sm mb-2">
+              <div className="grid grid-cols-7 gap-1 xs:gap-1.5 text-center mb-2 xs:mb-3">
                 {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                  <div key={i} className="text-gray-500 font-medium text-xs">
+                  <div
+                    key={i}
+                    className="text-gray-500 font-medium text-[14px] xs:text-xs"
+                  >
                     {day}
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-7 gap-2 text-center text-sm">
+              <div className="grid grid-cols-7 gap-1 xs:gap-1.5 text-center">
                 {daysArray.map((day, i) => (
                   <div
                     key={i}
-                    className={`p-2 rounded-lg transition-colors ${
+                    className={`p-1.5 xs:p-2 rounded text-[13px] xs:text-xs font-medium transition-colors ${
                       day === date
                         ? "bg-[#8965BD] text-white font-semibold"
                         : day
-                          ? "text-gray-700 hover:bg-gray-100 cursor-pointer"
+                          ? "text-gray-700 hover:bg-gray-100 cursor-pointer rounded-lg"
                           : "text-gray-300"
                     }`}
                   >
@@ -370,12 +384,14 @@ const AnalyticSection = () => {
           </div>
 
           {/* ================= BOTTOM SECTION ================= */}
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-12 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {/* TOP COMPANIES */}
-            <div className={`${cardStyle} col-span-12 xl:col-span-6`}>
-              <h3 className="font-semibold mb-4">Top Performing Companies</h3>
+            <div className={`${cardStyle} col-span-12 lg:col-span-6`}>
+              <h3 className="text-[15px] xs:text-base font-semibold mb-3 xs:mb-4">
+                Top Performing Companies
+              </h3>
 
-              <ResponsiveContainer width="100%" height={260}>
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart
                   data={getTopCompaniesData()}
                   layout="vertical"
@@ -408,16 +424,18 @@ const AnalyticSection = () => {
             </div>
 
             {/* MONTHLY */}
-            <div className={`${cardStyle} col-span-12 xl:col-span-6`}>
-              <h3 className="font-semibold mb-4">Monthly Activity</h3>
-              <p className="text-sm text-gray-400 -mt-3 mb-4">
+            <div className={`${cardStyle} col-span-12 lg:col-span-6`}>
+              <h3 className="text-[15px] xs:text-base font-semibold mb-2 xs:mb-3">
+                Monthly Activity
+              </h3>
+              <p className="text-[13px] xs:text-xs text-gray-400 mb-3 xs:mb-4">
                 Documents generated this month
               </p>
 
-              <ResponsiveContainer width="100%" height={260}>
+              <ResponsiveContainer width="100%" height={240}>
                 <AreaChart
                   data={getMonthlyData()}
-                  margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+                  margin={{ top: 20, left: 0, bottom: 0 }}
                 >
                   <defs>
                     <linearGradient
@@ -461,12 +479,12 @@ const AnalyticSection = () => {
 
           {/* ================= PAGINATION ================= */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-1 mt-8 flex-wrap">
+            <div className="flex items-center justify-center gap-1 xs:gap-1.5 mt-8 sm:mt-10 md:mt-12 flex-wrap col-span-12">
               {/* Prev */}
               <button
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200
+                className="px-2 xs:px-3 py-1 xs:py-1.5 rounded text-xs xs:text-sm font-medium border border-gray-200
                            text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed
                            transition-colors"
               >
@@ -478,7 +496,7 @@ const AnalyticSection = () => {
                 page === "..." ? (
                   <span
                     key={`dots-${idx}`}
-                    className="px-2 py-1.5 text-gray-400 text-sm select-none"
+                    className="px-1 xs:px-2 py-1 xs:py-1.5 text-gray-400 text-xs xs:text-sm select-none"
                   >
                     …
                   </span>
@@ -486,7 +504,7 @@ const AnalyticSection = () => {
                   <button
                     key={page}
                     onClick={() => goToPage(page)}
-                    className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                    className={`w-8 h-8 xs:w-9 xs:h-9 rounded text-xs xs:text-sm font-medium transition-colors ${
                       page === currentPage
                         ? "bg-purple-500 text-white shadow-sm"
                         : "border border-gray-200 text-gray-600 hover:bg-gray-100"
@@ -501,7 +519,7 @@ const AnalyticSection = () => {
               <button
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200
+                className="px-2 xs:px-3 py-1 xs:py-1.5 rounded text-xs xs:text-sm font-medium border border-gray-200
                            text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed
                            transition-colors"
               >
@@ -509,8 +527,8 @@ const AnalyticSection = () => {
               </button>
 
               {/* Page info */}
-              <span className="ml-3 text-sm text-gray-400">
-                Page {currentPage} of {totalPages}
+              <span className="ml-2 xs:ml-3 text-xs xs:text-sm text-gray-400">
+                Pg {currentPage}/{totalPages}
               </span>
             </div>
           )}
