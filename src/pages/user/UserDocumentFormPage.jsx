@@ -8,6 +8,9 @@ import { FiArrowLeft } from "react-icons/fi";
 import { FiZap } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
 import { FiFileText } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
@@ -86,6 +89,7 @@ const UserDocumentFormPage = () => {
   const ALL_DOC_ID = "ALL_DOCS";
   const [errors, setErrors] = useState({});
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
 
   /* ---------------- HANDLE INPUT ---------------- */
@@ -329,21 +333,32 @@ const UserDocumentFormPage = () => {
         return false;
       }
 
-      // ✅ fallback: loose match (important)
-      // if (
-      //   basicFieldNames.some((basic) =>
-      //     basic.toLowerCase().includes(field.name.toLowerCase()),
-      //   )
-      // ) {
-      //   return false;
-      // }
-
       return true;
     });
   };
 
   const [showGeneratePopup, setShowGeneratePopup] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
+
+  const MONTHLY_SALARY_DOCS = [
+    "salary_slip",
+    "internship_certificate",
+    "full_and_final",
+  ];
+
+  const getSalaryByDocType = (docKey, annualSalary) => {
+    const yearly = Number(annualSalary || 0);
+
+    if (
+      docKey === "salary_slip" ||
+      docKey === "internship_certificate" ||
+      docKey === "full_and_final"
+    ) {
+      return Math.round(yearly / 12);
+    }
+
+    return yearly;
+  };
 
   const handleSave = () => {
     let newErrors = {};
@@ -397,7 +412,7 @@ const UserDocumentFormPage = () => {
 
     if (Object.keys(newErrors).length > 0) {
       console.log("VALIDATION FAILED:", newErrors);
-      alert("Please fill all required fields");
+      setShowValidationPopup(true);
       return;
     }
 
@@ -407,62 +422,61 @@ const UserDocumentFormPage = () => {
     let payload = { ...formData };
 
     // ✅ GLOBAL CTC FIX
-    payload.totalSalary = yearlySalary;
-    payload.newCTC = yearlySalary;
-    payload.stipend = yearlySalary;
+    payload.annualCTC = yearlySalary;
+    payload.monthlyCTC = monthlySalary;
+
     // ✅ HANDLE MULTIPLE DOCS
     const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
       ? filteredDocuments
       : selectedDocs;
 
     docsToProcess.forEach((doc) => {
-      const docKey = normalizeDocName(doc.name); // e.g. appointment_letter
+      const docKey = normalizeDocName(doc.name);
 
-      const salaryFieldMap = {
-        offer_letter: "salary",
-        salaryslip_letter: "totalSalary",
-        appointment_letter: "salary",
+      const resolvedSalary = getSalaryByDocType(docKey, formData.salary);
 
-        increment_letter: "newCTC",
-        internshipcertificate_letter: "stipend",
-        fullandfinal_letter: "totalSalary",
-        confirmation_letter: "totalSalary",
-      };
-
-      const targetKey = salaryFieldMap[docKey];
-
-      if (targetKey) {
-        const monthlyDocs = [
-          "salaryslip_letter",
-          "fullandfinal_letter",
-          // "confirmation_letter",
-        ];
-
-        if (targetKey) {
-          const monthlyDocs = ["salaryslip_letter", "fullandfinal_letter"];
-
-          if (targetKey) {
-            const monthlyDocs = ["salaryslip_letter", "fullandfinal_letter"];
-
-            // ✅ IMPORTANT: DO NOT override base salary
-            if (monthlyDocs.includes(docKey)) {
-              // Only for salary slip & FNF → set monthly field
-              payload[targetKey] = monthlySalary;
-            } else {
-              // For all other docs → keep yearly (DO NOTHING)
-              // because formData.salary already has yearly value
-            }
-          }
-        }
+      // Offer Letter
+      if (docKey === "offer_letter") {
+        payload.salary = yearlySalary;
       }
+
+      // Appointment Letter
+      if (docKey === "appointment_letter") {
+        payload.salary = yearlySalary;
+      }
+
+      // Increment Letter
+      if (docKey === "increment_letter") {
+        payload.newCTC = yearlySalary;
+      }
+
+      if (docKey === "confirmation_letter") {
+        payload.newCTC = yearlySalary;
+      }
+
+      // Salary Slip
+      if (docKey === "salary_slip") {
+        payload.totalSalary = monthlySalary;
+      }
+
+      // Internship Certificate
+      if (docKey === "internship_certificate") {
+        payload.stipend = monthlySalary;
+      }
+
+      // Full & Final
+      if (docKey === "full_and_final") {
+        payload.totalSalary = monthlySalary;
+      }
+
       const pfFieldMap = {
-        salaryslip_letter: "salaryType",
+        salary_slip: "salaryType",
         offer_letter: "offerType",
         appointment_letter: "appointmentType",
         increment_letter: "pfType",
         experience_letter: "pfType",
         relieving_letter: "pfType",
-        internshipcertificate_letter: "pfType",
+        internship_certificate: "pfType",
         completion_certificate: "pfType",
         fullandfinal_letter: "pfType",
         confirmation_letter: "pfType",
@@ -475,16 +489,16 @@ const UserDocumentFormPage = () => {
       }
 
       const designationFieldMap = {
-        salaryslip_letter: "designation",
+        salary_slip: "designation",
 
         offer_letter: "position",
         appointment_letter: "position",
         increment_letter: "designation",
         experience_letter: "designation",
         relieving_letter: "designation",
-        internshipcertificate_letter: "designation",
+        internship_certificate: "designation",
         completion_certificate: "designation",
-        fullandfinal_letter: "designation",
+        full_and_final: "designation",
         confirmation_letter: "designation",
       };
       // ✅ DESIGNATION MAPPING
@@ -493,10 +507,18 @@ const UserDocumentFormPage = () => {
       if (designationKey && designationKey !== "joiningDesignation") {
         payload[designationKey] = formData.joiningDesignation;
       }
+      payload.position = formData.joiningDesignation;
+      payload.designation = formData.joiningDesignation;
+      payload.joiningDesignation = formData.joiningDesignation;
+      // ✅ ensure Full & Final receives DOJ
+      payload.doj = formData.joiningDate;
     });
 
     console.log("FINAL PAYLOAD:", payload);
+    // ✅ F&F DOJ FIX
+    payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
+    payload.joiningDate = payload.joiningDate || payload.doj;
     // ✅ store payload temporarily
     // setFormData(payload);
 
@@ -554,18 +576,47 @@ const UserDocumentFormPage = () => {
     });
   };
 
+  const focusField = (fieldName) => {
+    const field = document.querySelector(`[name="${fieldName}"]`);
+
+    if (field) {
+      field.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      field.focus();
+    }
+
+    setShowValidationPopup(false);
+  };
+
   /* ---------------- FIELD RENDER ---------------- */
   const renderField = (field, docKey = null) => {
+    const hasError = errors[field.name];
+
     const baseClass = `
-    w-full h-[40px] px-3 rounded-xl 
-    bg-[#F8FAFC] border text-sm outline-none 
-    ${
-      errors[field.name]
-        ? "border-red-500 focus:ring-red-300"
-        : "border-[#E2E8F0] focus:border-[#6366F1] focus:ring-[#6366F1]/20"
-    }
-    focus:ring-2
-  `;
+  w-full h-[42px] px-4 rounded-2xl
+  bg-white/70 backdrop-blur-md
+  border text-sm outline-none
+  transition-all duration-300
+  ${
+    hasError
+      ? `
+        border-red-400
+        bg-red-50/60
+        shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
+        focus:ring-red-300
+        animate-[shake_0.25s_ease-in-out]
+      `
+      : `
+        border-[#E2E8F0]
+        focus:border-[#6366F1]
+        focus:ring-[#6366F1]/20
+      `
+  }
+  focus:ring-4
+`;
 
     // ✅ VALUE FIX (per document)
     const value = docKey
@@ -590,6 +641,7 @@ const UserDocumentFormPage = () => {
     if (field.type === "select") {
       return (
         <select
+          name={field.name}
           className={baseClass}
           value={value ?? ""}
           placeholder={`Enter ${field.label}`}
@@ -624,6 +676,7 @@ const UserDocumentFormPage = () => {
     if (field.type === "textarea") {
       return (
         <textarea
+          name={field.name}
           className={`${baseClass} h-[80px]`}
           value={value ?? ""}
           placeholder={`Enter ${field.label}`}
@@ -634,6 +687,7 @@ const UserDocumentFormPage = () => {
 
     return (
       <input
+        name={field.name}
         type={field.type}
         className={baseClass}
         value={value ?? ""}
@@ -695,7 +749,12 @@ const UserDocumentFormPage = () => {
     return "";
   };
 
-  const normalizeDocName = (name) => name?.toLowerCase().replace(/\s+/g, "_");
+  const normalizeDocName = (name) =>
+    name
+      ?.toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "");
 
   /* ---------------- CHECK IF SALARY SLIP IS SELECTED ---------------- */
   const isSalarySlipSelected = () => {
@@ -1061,6 +1120,171 @@ const UserDocumentFormPage = () => {
         </div>
       </div>
 
+      {/* ---------------- VALIDATION POPUP ---------------- */}
+      {showValidationPopup && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          {/* BACKDROP */}
+          <div
+            className="absolute inset-0 bg-black/20 backdrop-blur-[4px]"
+            onClick={() => setShowValidationPopup(false)}
+          ></div>
+
+          {/* CARD */}
+          <div
+            className="
+        relative z-10
+        w-full max-w-lg
+        rounded-[28px]
+        overflow-hidden
+        border border-white/30
+        bg-white/80
+        backdrop-blur-2xl
+        shadow-[0_20px_80px_rgba(239,68,68,0.18)]
+        animate-[popup_0.3s_ease]
+      "
+          >
+            {/* TOP GRADIENT */}
+            <div className="h-[5px] bg-gradient-to-r from-red-500 via-orange-400 to-pink-500"></div>
+
+            <div className="p-7">
+              {/* HEADER */}
+              <div className="flex items-start justify-between gap-4">
+                {" "}
+                <div
+                  className="
+              w-14 h-14 rounded-2xl
+              flex items-center justify-center
+              bg-gradient-to-br
+              from-red-100
+              to-orange-100
+              shadow-inner
+            "
+                >
+                  <FiAlertTriangle className="text-[28px] text-red-500" />
+                </div>
+                <div className="flex-1">
+                  <button
+                    onClick={() => setShowValidationPopup(false)}
+                    className="
+    w-9 h-9 rounded-xl
+    ml-85
+    flex items-center justify-center
+    bg-white/70
+    border border-[#E2E8F0]
+    text-[#64748B]
+    hover:bg-red-50
+    hover:text-red-500
+    transition-all duration-300
+  "
+                  >
+                    <FiX className="text-[16px] " />
+                  </button>
+                  <h2 className="text-[20px] font-semibold text-[#0F172A]">
+                    Incomplete Form
+                  </h2>
+
+                  <p className="text-[14px] text-[#64748B] mt-1 leading-relaxed">
+                    Some required information is missing. Please complete the
+                    highlighted fields before generating documents.
+                  </p>
+                </div>
+              </div>
+
+              {/* ERROR COUNT */}
+              <div
+                className="
+            mt-5
+            inline-flex items-center gap-2
+            px-3 py-1.5
+            rounded-full
+            bg-red-50
+            border border-red-100
+          "
+              >
+                <FiAlertTriangle className="text-red-500 text-[12px]" />
+
+                <span className="text-[12px] font-medium text-red-600">
+                  {Object.keys(errors).length} Required Fields Missing
+                </span>
+              </div>
+
+              {/* ERROR LIST */}
+              <div className="mt-5 max-h-[280px] overflow-auto pr-1 space-y-3">
+                {Object.entries(errors).map(([field, message], index) => (
+                  <button
+                    key={field}
+                    onClick={() => focusField(field)}
+                    className="
+  group
+  w-full text-left
+  p-4 rounded-2xl
+  border border-red-100
+  bg-gradient-to-r
+  from-red-50/80
+  to-orange-50/70
+  hover:scale-[1.01]
+  hover:border-red-200
+  hover:shadow-[0_8px_25px_rgba(239,68,68,0.12)]
+  transition-all duration-300
+"
+                    style={{
+                      animationDelay: `${index * 0.04}s`,
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[14px] font-semibold text-[#1E293B] capitalize">
+                          {field.replace(/([A-Z])/g, " $1")}
+                        </p>
+
+                        <p className="text-[12px] text-red-500 mt-1">
+                          {message}
+                        </p>
+                      </div>
+
+                      <div
+                        className="
+    min-w-[32px] h-[32px]
+    rounded-full
+    bg-white
+    flex items-center justify-center
+    text-red-500
+    shadow-sm
+    border border-red-100
+    group-hover:translate-x-[2px]
+    transition-all duration-300
+  "
+                      >
+                        <FiArrowRight className="text-[14px]" />
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setShowValidationPopup(false)}
+                  className="
+              px-6 py-2.5 rounded-2xl
+              bg-gradient-to-r
+              from-[#0E145E]
+              to-[#B37BD6]
+              text-white text-sm font-medium
+              shadow-[0_10px_30px_rgba(99,102,241,0.25)]
+              hover:scale-[1.03]
+              transition-all duration-300
+            "
+                >
+                  Continue Editing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* POPUPS - keeping your existing ones */}
       {showGeneratePopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -1185,6 +1409,28 @@ const UserDocumentFormPage = () => {
       )}
     </div>
   );
+  <style>
+    {`
+    @keyframes popup {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+      }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0px); }
+      25% { transform: translateX(-2px); }
+      50% { transform: translateX(2px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0px); }
+    }
+  `}
+  </style>;
 };
 
 export default UserDocumentFormPage;

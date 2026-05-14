@@ -129,18 +129,6 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
     food: 0.06,
   };
 
-  /* Earnings */
-  // const basic = round2(monthlyGross * PERCENT.basic);
-  // const hra = round2(monthlyGross * PERCENT.hra);
-  // const da = round2(monthlyGross * PERCENT.da);
-  // const special = round2(monthlyGross * PERCENT.special);
-
-  // /* 🔥 Devcons food allowance is DIFFERENT */
-  // const food = round2(monthlyGross - (basic + hra + da + special));
-
-  // /* PF (Employer – shown in earnings) */
-  // const pfAllowance = 3750;
-
   // ================= STATIC PF =================
   const pfAllowance = 3750;
 
