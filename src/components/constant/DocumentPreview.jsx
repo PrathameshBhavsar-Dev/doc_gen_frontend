@@ -1101,7 +1101,12 @@ const DocumentPreview = () => {
 
           <div
             className="dp-page-wrap"
-            style={{ transform: `scale(${zoom / 100})` }}
+            style={{
+              transform: `scale(${zoom / 100})`,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
             {isSalarySlip ? (
               salarySlipDocs.map((doc, index) => (
@@ -1121,12 +1126,12 @@ const DocumentPreview = () => {
                 {renderTemplate()}
               </div>
             )}
-          </div>
 
-          <div className="dp-page-ind">
-            <span className="dp-page-ind-text">Page 1</span>
-            <span className="dp-pip active" />
-            <span className="dp-pip" />
+            <div className="dp-page-ind">
+              <span className="dp-page-ind-text">Page 1</span>
+              <span className="dp-pip active" />
+              <span className="dp-pip" />
+            </div>
           </div>
         </main>
       </div>
