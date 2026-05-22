@@ -802,9 +802,8 @@ const DocumentPreview = () => {
         throw new Error(`No template found for key: ${key}`);
       }
 
-      const filename = `${previewDocType?.name || "Document"}-${
-        previewData?.employeeName || "User"
-      }-${new Date().toISOString().slice(0, 10)}`;
+      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
+        }-${new Date().toISOString().slice(0, 10)}`;
 
       // ✅ Pass component + props, NOT the DOM ref
       await generatePDF(

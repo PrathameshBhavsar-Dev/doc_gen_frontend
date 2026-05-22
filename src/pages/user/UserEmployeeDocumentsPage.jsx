@@ -75,10 +75,9 @@ const UserEmployeeDocumentsPage = () => {
               onClick={() => navigate(ROUTES.USER_FORM)}
               className={`
                 px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
-                ${
-                  selectedDocs.length === 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
+                ${selectedDocs.length === 0
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
                 }
               `}
             >
@@ -149,10 +148,9 @@ const UserEmployeeDocumentsPage = () => {
                   p-6 rounded-r-2xl cursor-pointer
                   backdrop-blur-xl
                   transition-all duration-300
-                  ${
-                    selectedDocs.includes(doc.id)
-                      ? "bg-[#EEF2FF] border border-[#6366F1]"
-                      : "bg-gradient-to-br from-[#EEF2FF]/70 via-[#F8FAFF] to-[#FAF5FF]/70"
+                  ${selectedDocs.includes(doc.id)
+                    ? "bg-[#EEF2FF] border border-[#6366F1]"
+                    : "bg-gradient-to-br from-[#EEF2FF]/70 via-[#F8FAFF] to-[#FAF5FF]/70"
                   }
                   shadow-[0_4px_15px_rgba(99,102,241,0.08)]
                   hover:shadow-[0_10px_30px_rgba(99,102,241,0.18)]
@@ -188,10 +186,9 @@ const UserEmployeeDocumentsPage = () => {
                   <span
                     className={`
                       text-[12px] px-3 py-[5px] rounded-full font-medium
-                      ${
-                        doc.status === "Generated"
-                          ? "bg-green-100 text-green-600"
-                          : "bg-gray-100 text-gray-500"
+                      ${doc.status === "Generated"
+                        ? "bg-green-100 text-green-600"
+                        : "bg-gray-100 text-gray-500"
                       }
                     `}
                   >
@@ -209,11 +206,10 @@ const UserEmployeeDocumentsPage = () => {
                     }}
                     className={`
     text-[14px] font-semibold transition
-    ${
-      isMultiSelect
-        ? "text-gray-400 cursor-not-allowed"
-        : "text-[#373891] hover:underline"
-    }
+    ${isMultiSelect
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#373891] hover:underline"
+                      }
   `}
                   >
                     {doc.status === "Generated" ? "View" : "Generate"}
@@ -249,14 +245,13 @@ const UserEmployeeDocumentsPage = () => {
             }
             className={`
         px-3 py-1.5 rounded-lg text-sm font-medium transition
-        ${
-          selectedDocs.every((id) => {
-            const doc = docs.find((d) => d.id === id);
-            return doc.status === "Generated";
-          })
-            ? "bg-[#EEF2FF] text-[#2e2f85] hover:bg-[#E0E7FF]"
-            : "bg-gray-200 text-gray-400 cursor-not-allowed"
-        }
+        ${selectedDocs.every((id) => {
+              const doc = docs.find((d) => d.id === id);
+              return doc.status === "Generated";
+            })
+                ? "bg-[#EEF2FF] text-[#2e2f85] hover:bg-[#E0E7FF]"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              }
       `}
           >
             View
@@ -291,14 +286,13 @@ const UserEmployeeDocumentsPage = () => {
             }}
             className={`
     px-4 py-1.5 rounded-lg text-sm font-medium transition
-    ${
-      selectedDocs.some((id) => {
-        const doc = docs.find((d) => d.id === id);
-        return doc.status !== "Generated";
-      })
-        ? "bg-gradient-to-r from-[#2e2f85] to-[#A78BFA] text-white"
-        : "bg-gray-200 text-gray-400 cursor-not-allowed"
-    }
+    ${selectedDocs.some((id) => {
+              const doc = docs.find((d) => d.id === id);
+              return doc.status !== "Generated";
+            })
+                ? "bg-gradient-to-r from-[#2e2f85] to-[#A78BFA] text-white"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              }
   `}
           >
             Generate
