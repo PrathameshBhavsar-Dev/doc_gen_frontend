@@ -1,42 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiSearch, FiEye, FiEdit, FiFileText } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
-
-const dummyProfiles = [
-  {
-    id: 1,
-    name: "Janhavi Kundgir",
-    company: "TCS",
-    email: "janhavi@gmail.com",
-    role: "Software Engineer",
-    status: "Active",
-    paymentStatus: "Paid",
-    createdAt: "12 Feb 2026",
-  },
-  {
-    id: 2,
-    name: "Rahul Sharma",
-    company: "Infosys",
-    email: "rahul@gmail.com",
-    role: "Developer",
-    status: "Inactive",
-    paymentStatus: "Pending",
-    createdAt: "05 Mar 2026",
-  },
-];
+import { getAllUsersService } from "../../core/services/v2/userService";
 
 // const navigate = useNavigate();
 
 const ProfileListPage = () => {
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const GRID_LAYOUT =
     "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
-  const filteredProfiles = dummyProfiles.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase()),
+
+  const filteredProfiles = profiles.filter((p) =>
+    p.employeeName
+      ?.toLowerCase()
+      .includes(search.toLowerCase())
   );
+
+  const fetchProfiles = async () => {
+    try {
+
+      setLoading(true);
+      const result = await getAllUsersService({
+        page: 0,
+        size: 5,
+      });
+
+      console.log("Users API Response:", result);
+
+      if (result.success) {
+        setProfiles(result.data.content);
+      } else {
+        console.log(result.message);
+      }
+    } catch (error) {
+      console.log("Fetch Profiles Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading profiles...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#F6F8FF] via-[#EEF2FF] to-[#FDF4FF] px-4 sm:px-5 lg:px-6 py-4 sm:py-6">
@@ -168,15 +186,15 @@ transition-all duration-300
       text-white text-sm font-semibold
     "
                 >
-                  {profile.name.charAt(0)}
+                  {profile.employeeName?.charAt(0) || "U"}
                 </div>
 
                 <div className="min-w-0 leading-tight">
                   <p className="text-[14px] font-semibold text-[#1E293B] truncate">
-                    {profile.name}
+                    {profile.employeeName}
                   </p>
                   <p className="text-[12px] text-[#64748B] truncate">
-                    {profile.email}
+                    {profile.email || "N/A"}
                   </p>
                 </div>
               </div>
@@ -188,7 +206,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-                  {profile.company}
+{profile.company}
                 </div>
               </div>
 
@@ -198,7 +216,7 @@ transition-all duration-300
                   Role
                 </span>
 
-                <div className="text-[13px] text-[#475569]">{profile.role}</div>
+                <div className="text-[13px] text-[#475569]">{profile.designation || "N/A"}</div>
               </div>
 
               {/* PAYMENT */}
@@ -215,14 +233,13 @@ transition-all duration-300
                       rounded-full
                       font-medium
                       w-fit
-                      ${
-                        profile.paymentStatus === "Paid"
-                          ? "bg-green-100 text-green-600"
-                          : "bg-red-100 text-red-500"
+                      ${profile.paymentStatus === "Paid"
+                        ? "bg-green-100 text-green-600"
+                        : "bg-red-100 text-red-500"
                       }
                     `}
                   >
-                    {profile.paymentStatus}
+                    {/* {profile.paymentStatus} */}
                   </span>
                 </div>
               </div>
@@ -234,7 +251,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-                  {profile.createdAt}
+{profile.joiningDate || "N/A"}
                 </div>
               </div>
 
@@ -252,10 +269,9 @@ transition-all duration-300
                       rounded-full
                       font-medium
                       w-fit
-                      ${
-                        profile.status === "Active"
-                          ? "bg-green-100 text-green-600"
-                          : "bg-gray-100 text-gray-500"
+                      ${profile.status === "Active"
+                        ? "bg-green-100 text-green-600"
+                        : "bg-gray-100 text-gray-500"
                       }
                     `}
                   >
