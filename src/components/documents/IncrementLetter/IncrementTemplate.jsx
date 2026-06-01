@@ -6,7 +6,7 @@ import WithoutPFIncrementLetterTemplate from "../IncrementLetter/WithoutPF/Witho
 
 const IncrementTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const IncrementType = data?.incrementType || data.offerType; // "paid" | "unpaid"
+  const IncrementType = data?.incrementType || data.pfType; // "paid" | "unpaid"
 
   if (!IncrementType) {
     return <div>PFTypename type not selected</div>;

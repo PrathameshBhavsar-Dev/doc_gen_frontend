@@ -6,7 +6,7 @@ import WithoutPFLetterTemplate from "./WithoutPF/WithoutPFLetterTemplate";
 
 const SalarySlipLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const SalaryType = data.salaryType || data.offerType; // "paid" | "unpaid"
+  const SalaryType = data.salaryType || data.pfType; // "paid" | "unpaid"
 
   if (!SalaryType) {
     return <div>PFTypename type not selected</div>;

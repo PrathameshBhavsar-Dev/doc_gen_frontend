@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiEdit, FiFileText } from "react-icons/fi";
 import { documentTypes } from "../../components/constant/publicData/mockData";
 import ROUTES from "../../core/constants/routes.constant";
+import { getUserForSeparationService } from "../../core/services/v2/userService";
 
 const UserEmployeeDocumentsPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [selectedDocs, setSelectedDocs] = useState([]);
   const isMultiSelect = selectedDocs.length > 1;
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   if (!state) return <div className="p-6">No data found</div>;
 
@@ -18,13 +21,41 @@ const UserEmployeeDocumentsPage = () => {
     (doc) => !excludedDocIds.includes(doc.id),
   );
 
-  const docs = filteredDocuments.map((doc, index) => ({
-    id: doc.id,
-    name: doc.name,
-    status: index % 2 === 0 ? "Generated" : "Pending",
-    createdAt: index % 2 === 0 ? "12 Feb 2026" : "-",
-    // payment: index % 2 === 0 ? "Paid" : "Pending",
-  }));
+  const backendDocumentKeyMap = {
+    INTERNSHIP_CERTIFICATE: "INTERNSHIP_LETTER",
+    COMPLETION_CERTIFICATE: "COMPLETION_LETTER",
+    FULL_AND_FINAL_LETTER: "FULL_AND_FINAL",
+  };
+
+  const docs = filteredDocuments.map((doc) => {
+    const generatedKey = doc.name
+      ?.toUpperCase()
+      .replace(/&/g, "_AND_")
+      .replace(/\s+/g, "_");
+
+    const backendKey =
+      backendDocumentKeyMap[generatedKey] ||
+      generatedKey;
+
+    const backendDoc =
+      profileData?.documents?.[backendKey];
+
+    return {
+      id: doc.id,
+      name: doc.name,
+      status:
+        backendDoc?.generated
+          ? "Generated"
+          : "Pending",
+
+      createdAt:
+        backendDoc?.data?.issueDate ||
+        "-",
+
+      documentData:
+        backendDoc?.data || null,
+    };
+  });
 
   // ✅ Toggle single doc
   const toggleDoc = (id) => {
@@ -39,6 +70,43 @@ const UserEmployeeDocumentsPage = () => {
   const toggleAll = () => {
     setSelectedDocs(allSelected ? [] : docs.map((d) => d.id));
   };
+
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response =
+          await getUserForSeparationService(
+            state.id
+          );
+        console.log(
+          "SEPARATION RESPONSE:",
+          response
+        );
+        if (response.success) {
+          setProfileData(
+            response.data
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (state?.id) {
+      fetchProfile();
+    }
+  }, [state]);
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -95,14 +163,22 @@ const UserEmployeeDocumentsPage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-7 gap-x-12">
             {[
-              { label: "Full Name", value: state.fullName || state.name },
+              { label: "Employee Name", value: state.employeeName || state.name },
+              { label: "Employee ID", value: state.employeeId || state.name },
               { label: "Email", value: state.email },
-              { label: "Mobile", value: state.mobile },
-              { label: "PAN", value: state.pan },
-              { label: "DOB", value: state.dob },
-              { label: "Department", value: state.department },
+              { label: "Mobile", value: state.phone },
+              { label: "PAN", value: state.panNo },
+              { label: "DOB", value: state.dateOfBirth },
+              { label: "Address", value: state.address },
+              { label: "Offer Date", value: state.offerDate },
               { label: "Joining Date", value: state.joiningDate },
-              { label: "CTC", value: state.currentCTC },
+              { label: "CTC", value: state.CTC },
+              { label: "Designation", value: state.designation },
+              { label: "Department", value: state.department },
+              { label: "Bank Name", value: state.bankName },
+              { label: "Account Number", value: state.accountNo },
+              { label: "PF Type", value: state.pfType },
+
             ].map((item) => (
               <div key={item.label}>
                 <p className="text-[12px] text-[#64748B]">{item.label}</p>

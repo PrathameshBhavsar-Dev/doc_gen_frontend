@@ -105,6 +105,9 @@ function GeneratedDocumentSection() {
 
     console.log("✅ companyObject:", companyObject); // should show full object with header/footer
     console.log("✅ enrichedData:", enrichedData); // should show correct type fields
+    console.log("🚀 TEMPLATE:", TemplateComponent);
+    console.log("🚀 DATA:", freshData);
+    console.log("🚀 COMPANY:", previewCompany);
 
     const docId = item._id || item.id;
     setDownloadingId(docId);
@@ -372,13 +375,13 @@ function GeneratedDocumentSection() {
                       <Typography sx={{ fontSize: "13px", fontWeight: 500 }}>
                         {item.createdAt
                           ? new Date(item.createdAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              },
-                            )
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )
                           : item.date || "—"}
                       </Typography>
                     </Box>
@@ -645,10 +648,10 @@ function GeneratedDocumentSection() {
                     <Typography sx={{ fontSize: { md: "13px", lg: "14px" } }}>
                       {item.createdAt
                         ? new Date(item.createdAt).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
                         : item.date || "—"}
                     </Typography>
 

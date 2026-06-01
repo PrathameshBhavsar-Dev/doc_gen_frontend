@@ -10,10 +10,29 @@ import { getAllUsersService } from "../../core/services/v2/userService";
 const ProfileListPage = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize] = useState(8);
+
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const GRID_LAYOUT =
     "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
+
+  const handlePrevious = () => {
+
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNext = () => {
+
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   const filteredProfiles = profiles.filter((p) =>
     p.employeeName
@@ -21,32 +40,45 @@ const ProfileListPage = () => {
       .includes(search.toLowerCase())
   );
 
-  const fetchProfiles = async () => {
+  const fetchProfiles = async (page = 0) => {
+
     try {
 
       setLoading(true);
+
       const result = await getAllUsersService({
-        page: 0,
-        size: 5,
+        page,
+        size: pageSize,
       });
 
       console.log("Users API Response:", result);
 
       if (result.success) {
+
         setProfiles(result.data.content);
+
+        setCurrentPage(result.data.currentPage);
+
+        setTotalPages(result.data.totalPages);
+
       } else {
+
         console.log(result.message);
       }
+
     } catch (error) {
+
       console.log("Fetch Profiles Error:", error);
+
     } finally {
+
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProfiles();
-  }, []);
+    fetchProfiles(currentPage);
+  }, [currentPage]);
 
   if (loading) {
     return (
@@ -206,7 +238,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-{profile.company}
+                  {profile.company}
                 </div>
               </div>
 
@@ -251,7 +283,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-{profile.joiningDate || "N/A"}
+                  {profile.joiningDate || "N/A"}
                 </div>
               </div>
 
@@ -355,8 +387,7 @@ transition-all duration-300
       bg-[#1E293B] text-white rounded-md
       opacity-0 group-hover:opacity-100
       pointer-events-none
-      transition-all duration-200
-    "
+      transition-all duration-200"
                   >
                     Generate Docs
                   </span>
@@ -371,6 +402,56 @@ transition-all duration-300
               No profiles found
             </div>
           )}
+          {/* PAGINATION */}
+          {
+            totalPages > 0 && (
+              <div className="flex items-center justify-between mt-8">
+
+                <p className="text-sm text-[#64748B]">
+                  Page {currentPage + 1} of {totalPages}
+                </p>
+
+                <div className="flex items-center gap-3">
+
+                  <button
+                    onClick={handlePrevious}
+                    disabled={currentPage === 0}
+                    className="
+            px-4 py-2 rounded-lg border
+            border-[#E2E8F0]
+            bg-white
+            text-sm
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+            hover:bg-[#F8FAFC]
+            transition
+          "
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    onClick={handleNext}
+                    disabled={currentPage === totalPages - 1}
+                    className="
+            px-4 py-2 rounded-lg border
+            border-[#E2E8F0]
+            bg-white
+            text-sm
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+            hover:bg-[#F8FAFC]
+            transition
+          "
+                  >
+                    Next
+                  </button>
+
+                </div>
+
+              </div>
+            )
+          }
         </div>
       </div>
     </div>

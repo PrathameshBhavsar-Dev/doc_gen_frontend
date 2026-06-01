@@ -14,6 +14,9 @@ import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
+import { createProfileService } from "../../core/services/v2/userService";
+import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+
 /* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
@@ -21,7 +24,7 @@ const basicFields = [
     name: "mrms",
     label: "Identity",
     type: "select",
-    options: ["Mr.", "Mrs.", "Miss.", "Mx."],
+    options: ["Mr", "Mrs", "Miss", "Mx"],
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
@@ -81,6 +84,7 @@ const basicFields = [
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const [isSaving, setIsSaving] = useState(false);
 
   const incomingDocs = location.state?.selectedDocs || [];
   const employeeData = location.state?.employeeData;
@@ -91,6 +95,57 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (employeeData) {
+      setFormData({
+        ...employeeData,
+
+        // normalize phone fields
+        mobile:
+          employeeData.mobile ||
+          employeeData.mobileNo ||
+          employeeData.phone ||
+          "",
+
+        // normalize email
+        employeeEmail:
+          employeeData.employeeEmail ||
+          employeeData.email ||
+          "",
+
+        // normalize PAN
+        pan:
+          employeeData.pan ||
+          employeeData.panNo ||
+          "",
+
+        // normalize DOB
+        dob:
+          employeeData.dob ||
+          employeeData.dateOfBirth ||
+          "",
+
+        // normalize address
+        currentAddress:
+          employeeData.currentAddress ||
+          employeeData.address ||
+          "",
+
+        // normalize designation
+        currentDesignation:
+          employeeData.currentDesignation ||
+          employeeData.designation ||
+          "",
+
+        // normalize PF
+        offerType:
+          employeeData.offerType ||
+          employeeData.pfType ||
+          "",
+      });
+    }
+  }, [employeeData]);
 
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
@@ -281,6 +336,8 @@ const UserDocumentFormPage = () => {
       employeePhone: "mobile",
       employeeNumber: "mobile",
       phone: "mobile",
+      mobileNo: "mobile",
+      mobile: "mobile",
 
       // ✅ ADDRESS
       address: "address",
@@ -360,7 +417,56 @@ const UserDocumentFormPage = () => {
     return yearly;
   };
 
-  const handleSave = () => {
+  const saveProfileToBackend = async (payload) => {
+
+    try {
+
+      setIsSaving(true);
+
+      console.log(
+        "PROFILE API PAYLOAD:",
+        JSON.stringify(payload, null, 2)
+      );
+      console.log("FINAL FORM DATA:", formData);
+      console.log("FINAL PHONE:", formData.mobile);
+
+      const response = await createProfileService(payload);
+
+      if (response.success) {
+
+        console.log("PROFILE CREATED SUCCESSFULLY");
+
+        return {
+          success: true,
+          data: response.data,
+        };
+
+      } else {
+
+        alert(response.message);
+
+        return {
+          success: false,
+        };
+      }
+
+    } catch (error) {
+
+      console.error("CREATE PROFILE ERROR:", error);
+
+      alert("Failed to create profile");
+
+      return {
+        success: false,
+      };
+
+    } finally {
+
+      setIsSaving(false);
+    }
+  };
+
+  const handleSave = async () => {
     let newErrors = {};
 
     basicFields.forEach((field) => {
@@ -419,14 +525,22 @@ const UserDocumentFormPage = () => {
     const yearlySalary = Number(formData.salary || 0);
     const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
-    let payload = { ...formData };
+    // let payload = { ...formData };
+    const payload = buildCreateProfilePayload(
+      formData,
+      selectedDocs
+    );
+
+    payload.documentData = {};
 
     // ✅ GLOBAL CTC FIX
     payload.annualCTC = yearlySalary;
     payload.monthlyCTC = monthlySalary;
 
     // ✅ HANDLE MULTIPLE DOCS
-    const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
+    const docsToProcess = selectedDocs.find(
+      (d) => d.id === ALL_DOC_ID
+    )
       ? filteredDocuments
       : selectedDocs;
 
@@ -515,12 +629,48 @@ const UserDocumentFormPage = () => {
     });
 
     console.log("FINAL PAYLOAD:", payload);
+
+    const enrichedFormData = { ...formData };
+
+    docsToProcess.forEach((doc) => {
+      const docKey = normalizeDocName(doc.name);
+
+      if (formData[docKey]) {
+        Object.entries(formData[docKey]).forEach(([key, value]) => {
+          enrichedFormData[key] = value;
+        });
+      }
+    });
+
+    // console.log(
+    //   "INTERNSHIP DATA BEFORE BUILD:",
+    //   formData.internship_certificate
+    // );
+
+    // console.log(
+    //   "ENRICHED DATA:",
+    //   enrichedFormData.internship_certificate
+    // );
+
+    console.log("Preview Data:", formData);
+    console.log(
+      "Internship Type:",
+      formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType
+    );
+
+    const profilePayload =
+      buildCreateProfilePayload(
+        enrichedFormData,
+        docsToProcess
+      );
+
+    console.log("PROFILE API PAYLOAD:", profilePayload);
+
     // ✅ F&F DOJ FIX
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
     payload.joiningDate = payload.joiningDate || payload.doj;
     // ✅ store payload temporarily
-    // setFormData(payload);
 
     // ✅ show popup instead of navigating
     setShowGeneratePopup(true);
@@ -553,18 +703,24 @@ const UserDocumentFormPage = () => {
 
     docsToProcess.forEach((doc) => {
       const docKey = normalizeDocName(doc.name);
-
-      if (formData[docKey]) {
-        Object.entries(formData[docKey]).forEach(([key, value]) => {
-          const normalizedKey = normalizeFieldName(key);
-          if (key === "issueDate") {
-            payload[`${docKey}_issueDate`] = value; // 👈 unique per doc
-          } else {
-            payload[normalizedKey] = value;
-          }
-        });
-      }
+      const backendDocKey = docKey.toUpperCase();
+      if (!formData[docKey]) return;
+      payload.documentData[backendDocKey] = {
+        ...formData[docKey]
+      };
     });
+
+    console.log(
+      "//PROFILE DOCUMENT DATA",
+      JSON.stringify(profilePayload.documentData, null, 2)
+    );
+
+    // SAVE PROFILE TO BACKEND
+    const saveResponse = await saveProfileToBackend(profilePayload);
+
+    if (!saveResponse.success) {
+      return;
+    }
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
@@ -601,21 +757,20 @@ const UserDocumentFormPage = () => {
   bg-white/70 backdrop-blur-md
   border text-sm outline-none
   transition-all duration-300
-  ${
-    hasError
-      ? `
+  ${hasError
+        ? `
         border-red-400
         bg-red-50/60
         shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
         focus:ring-red-300
         animate-[shake_0.25s_ease-in-out]
       `
-      : `
+        : `
         border-[#E2E8F0]
         focus:border-[#6366F1]
         focus:ring-[#6366F1]/20
       `
-  }
+      }
   focus:ring-4
 `;
 
@@ -706,6 +861,7 @@ const UserDocumentFormPage = () => {
     if (!value) return "Please fill the required fields";
 
     switch (name) {
+      case "employeeName":
       case "fullName":
         if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
         break;
@@ -716,6 +872,7 @@ const UserDocumentFormPage = () => {
         break;
 
       case "email":
+      case "employeeEmail":
         if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
         break;
 
@@ -750,6 +907,7 @@ const UserDocumentFormPage = () => {
     return "";
   };
 
+  // ================= NORMALIZE DOCUMENTS =================
   const normalizeDocName = (name) =>
     name
       ?.toLowerCase()
@@ -773,6 +931,7 @@ const UserDocumentFormPage = () => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
+
         {/* ---------------- DOCUMENT SELECTOR ---------------- */}
         <div className="mb-6">
           <h3 className="text-sm font-semibold text-[#475569] mb-2">
@@ -805,8 +964,8 @@ const UserDocumentFormPage = () => {
                 >
                   <div
                     className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
                       }`}
                   >
                     <FiFileText
@@ -850,8 +1009,8 @@ const UserDocumentFormPage = () => {
                 >
                   <div
                     className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
                       }`}
                   >
                     <FiEye
@@ -1097,6 +1256,7 @@ const UserDocumentFormPage = () => {
           <div className="mt-8 flex justify-end">
             <button
               onClick={handleSave}
+              disabled={isSaving}
               className="
                 px-6 py-2.5 
                 rounded-xl 
@@ -1109,7 +1269,7 @@ const UserDocumentFormPage = () => {
                 active:scale-[0.97]
               "
             >
-              Save Profile
+              {isSaving ? "Saving..." : "Save Profile"}
             </button>
           </div>
         </div>
