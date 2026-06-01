@@ -238,7 +238,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-                  {profile.company}
+{profile.company}
                 </div>
               </div>
 
