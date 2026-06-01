@@ -1,5 +1,8 @@
-import { createProfileApi } from "../../api/userApi";
-import { getAllUsersApi } from "../../api/userApi";
+import {
+  createProfileApi,
+  getAllUsersApi,
+  getUserForSeparationApi,
+} from "../../api/userApi";
 
 // CREATE PROFILE SERVICE
 export const createProfileService = async (payload) => {
@@ -26,7 +29,7 @@ export const getAllUsersService = async ({
   page = 0,
   size = 5,
   sortBy = "id",
-  direction = "asc",
+  direction = "desc",
 }) => {
 
   try {
@@ -53,6 +56,40 @@ export const getAllUsersService = async ({
       message:
         error.response?.data?.message ||
         "Failed to fetch users",
+      data: null,
+    };
+  }
+};
+
+// GET USER FOR SEPARATION
+
+export const getUserForSeparationService = async (id) => {
+
+  try {
+
+    const response =
+      await getUserForSeparationApi(id);
+
+    return {
+      success: response.data.success,
+      statusCode: response.data.statusCode,
+      message: response.data.message,
+      data: response.data.data,
+    };
+
+  } catch (error) {
+
+    return {
+
+      success: false,
+
+      statusCode:
+        error.response?.status,
+
+      message:
+        error.response?.data?.message ||
+        "Failed to fetch profile",
+
       data: null,
     };
   }

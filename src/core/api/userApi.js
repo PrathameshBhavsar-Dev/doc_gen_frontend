@@ -14,7 +14,7 @@ export const getAllUsersApi = async ({
   page = 0,
   size = 5,
   sortBy = "id",
-  direction = "asc",
+  direction = "desc",
 }) => {
 
   return await axiosV2Instance.get(
@@ -28,4 +28,13 @@ export const getAllUsersApi = async ({
       },
     }
   );
+};
+
+// GET USER FOR SEPARATION
+export const getUserForSeparationApi = async (id) => {
+
+  return await axiosV2Instance.get(
+    ServerUrlV2.GET_USER_FOR_SEPARATION(id)
+  );
+
 };

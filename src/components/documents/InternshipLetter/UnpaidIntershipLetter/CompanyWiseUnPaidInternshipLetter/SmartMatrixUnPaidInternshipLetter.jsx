@@ -6,13 +6,15 @@ import sign from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png"
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
+
 const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
+  console.log("FINAL TEMPLATE DATA", data);
   return (
     <A4Layout headerSrc={company.header} footerSrc={company.footer}>
       {/* ================= DATE ================= */}

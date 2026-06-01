@@ -23,9 +23,6 @@ const companyComponentMap = {
   8: JDITUnPaidInternshipLetter,
   9: QuickUnPaidInternshipLetter,
   10:SmartSoftwareUnPaidInternshipLetter,
-  
-  
-  
 };
 
 const UnPaidInternshipLetterTemplate = ({ company, data }) => {

@@ -23,6 +23,16 @@ export const normalizeTemplateKey = (template) => {
   return map[normalized] || normalized;
 };
 
+// if (baseData?.documentData?.INTERNSHIP_CERTIFICATE) {
+//   const internship =
+//     baseData.documentData.INTERNSHIP_CERTIFICATE;
+
+//   freshData.internshipType = internship.internshipType;
+//   freshData.startDate = internship.startDate;
+//   freshData.endDate = internship.endDate;
+//   freshData.issueDate = internship.issueDate;
+// }
+
 export const buildPayload = (
   key,
   previewData = {},

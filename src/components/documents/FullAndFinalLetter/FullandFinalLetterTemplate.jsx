@@ -5,7 +5,7 @@ import WithPFFullandfinalTemplate from "./WithPF/WithPFFullandfinalTemplate";
 
 const FullandfinalLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const FinalType = data?.finalType || data.offerType; // "paid" | "unpaid"
+  const FinalType = data?.finalType || data.pfType; // "paid" | "unpaid"
 
   if (!FinalType) {
     return <div>Final type not selected</div>;

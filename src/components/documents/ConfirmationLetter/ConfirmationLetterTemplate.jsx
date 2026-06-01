@@ -4,7 +4,7 @@ import WithPFConfirmationLetterTemplate from "./WithPF/WithPFConfirmationLetterT
 
 const ConfirmationLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const ConfirmationType = data?.confirmationType || data.offerType; // "paid" | "unpaid"
+  const ConfirmationType = data?.confirmationType || data.pfType; // "paid" | "unpaid"
 
   if (!ConfirmationType) {
     return <div>appointment type not selected</div>;
