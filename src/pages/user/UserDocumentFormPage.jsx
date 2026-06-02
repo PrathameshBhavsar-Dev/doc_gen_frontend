@@ -109,40 +109,24 @@ const UserDocumentFormPage = () => {
           "",
 
         // normalize email
-        employeeEmail:
-          employeeData.employeeEmail ||
-          employeeData.email ||
-          "",
+        employeeEmail: employeeData.employeeEmail || employeeData.email || "",
 
         // normalize PAN
-        pan:
-          employeeData.pan ||
-          employeeData.panNo ||
-          "",
+        pan: employeeData.pan || employeeData.panNo || "",
 
         // normalize DOB
-        dob:
-          employeeData.dob ||
-          employeeData.dateOfBirth ||
-          "",
+        dob: employeeData.dob || employeeData.dateOfBirth || "",
 
         // normalize address
         currentAddress:
-          employeeData.currentAddress ||
-          employeeData.address ||
-          "",
+          employeeData.currentAddress || employeeData.address || "",
 
         // normalize designation
         currentDesignation:
-          employeeData.currentDesignation ||
-          employeeData.designation ||
-          "",
+          employeeData.currentDesignation || employeeData.designation || "",
 
         // normalize PF
-        offerType:
-          employeeData.offerType ||
-          employeeData.pfType ||
-          "",
+        offerType: employeeData.offerType || employeeData.pfType || "",
       });
     }
   }, [employeeData]);
@@ -418,50 +402,44 @@ const UserDocumentFormPage = () => {
   };
 
   const saveProfileToBackend = async (payload) => {
-
     try {
-
       setIsSaving(true);
 
-      console.log(
-        "PROFILE API PAYLOAD:",
-        JSON.stringify(payload, null, 2)
-      );
+      console.log("PROFILE API PAYLOAD:", JSON.stringify(payload, null, 2));
       console.log("FINAL FORM DATA:", formData);
       console.log("FINAL PHONE:", formData.mobile);
 
       const response = await createProfileService(payload);
 
       if (response.success) {
-
         console.log("PROFILE CREATED SUCCESSFULLY");
 
         return {
           success: true,
           data: response.data,
         };
-
       } else {
-
         alert(response.message);
 
         return {
           success: false,
         };
       }
-
     } catch (error) {
-
       console.error("CREATE PROFILE ERROR:", error);
+      console.log("STATUS:", error?.response?.status);
+      console.log("RESPONSE:", error?.response?.data);
 
-      alert("Failed to create profile");
+      alert(
+        error?.response?.data?.message ||
+          JSON.stringify(error?.response?.data) ||
+          "Failed to create profile",
+      );
 
       return {
         success: false,
       };
-
     } finally {
-
       setIsSaving(false);
     }
   };
@@ -526,10 +504,7 @@ const UserDocumentFormPage = () => {
     const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
     // let payload = { ...formData };
-    const payload = buildCreateProfilePayload(
-      formData,
-      selectedDocs
-    );
+    const payload = buildCreateProfilePayload(formData, selectedDocs);
 
     payload.documentData = {};
 
@@ -538,9 +513,7 @@ const UserDocumentFormPage = () => {
     payload.monthlyCTC = monthlySalary;
 
     // ✅ HANDLE MULTIPLE DOCS
-    const docsToProcess = selectedDocs.find(
-      (d) => d.id === ALL_DOC_ID
-    )
+    const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
       ? filteredDocuments
       : selectedDocs;
 
@@ -655,14 +628,13 @@ const UserDocumentFormPage = () => {
     console.log("Preview Data:", formData);
     console.log(
       "Internship Type:",
-      formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType
+      formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType,
     );
 
-    const profilePayload =
-      buildCreateProfilePayload(
-        enrichedFormData,
-        docsToProcess
-      );
+    const profilePayload = buildCreateProfilePayload(
+      enrichedFormData,
+      docsToProcess,
+    );
 
     console.log("PROFILE API PAYLOAD:", profilePayload);
 
@@ -706,13 +678,13 @@ const UserDocumentFormPage = () => {
       const backendDocKey = docKey.toUpperCase();
       if (!formData[docKey]) return;
       payload.documentData[backendDocKey] = {
-        ...formData[docKey]
+        ...formData[docKey],
       };
     });
 
     console.log(
       "//PROFILE DOCUMENT DATA",
-      JSON.stringify(profilePayload.documentData, null, 2)
+      JSON.stringify(profilePayload.documentData, null, 2),
     );
 
     // SAVE PROFILE TO BACKEND
@@ -757,20 +729,21 @@ const UserDocumentFormPage = () => {
   bg-white/70 backdrop-blur-md
   border text-sm outline-none
   transition-all duration-300
-  ${hasError
-        ? `
+  ${
+    hasError
+      ? `
         border-red-400
         bg-red-50/60
         shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
         focus:ring-red-300
         animate-[shake_0.25s_ease-in-out]
       `
-        : `
+      : `
         border-[#E2E8F0]
         focus:border-[#6366F1]
         focus:ring-[#6366F1]/20
       `
-      }
+  }
   focus:ring-4
 `;
 
@@ -816,15 +789,15 @@ const UserDocumentFormPage = () => {
 
           {field.name === "company"
             ? companies.map((c) => (
-              <option key={c.id} value={c.name}>
-                {c.name}
-              </option>
-            ))
+                <option key={c.id} value={c.name}>
+                  {c.name}
+                </option>
+              ))
             : field.options?.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
         </select>
       );
     }
@@ -931,7 +904,6 @@ const UserDocumentFormPage = () => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
-
         {/* ---------------- DOCUMENT SELECTOR ---------------- */}
         <div className="mb-6">
           <h3 className="text-sm font-semibold text-[#475569] mb-2">
@@ -956,21 +928,24 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     <FiFileText
-                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
-                        }`}
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
                     />
                   </div>
 
@@ -1001,21 +976,24 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     <FiEye
-                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
-                        }`}
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
                     />
                   </div>
 

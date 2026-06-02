@@ -400,13 +400,20 @@ const DocumentPreview = () => {
   const [zoom, setZoom] = useState(100);
 
   const getGenderFromTitle = (title) => {
-    switch (title) {
+    switch (title?.trim()) {
+      case "Mr":
       case "Mr.":
         return "Male";
 
+      case "Mrs":
       case "Mrs.":
+      case "Miss":
       case "Miss.":
         return "Female";
+
+      case "Mx":
+      case "Mx.":
+        return "Other";
 
       default:
         return "Other";
@@ -423,7 +430,11 @@ const DocumentPreview = () => {
       workdays: formData.salaryWorkdays?.[month.value] || 0,
 
       // ✅ FIX ALL MISSING FIELDS
-      salaryType: formData.offerType,
+      salaryType:
+        formData.salaryType ||
+        formData.offerType ||
+        formData.pfType ||
+        "withPF",
       doj: formData.joiningDate,
       gender: getGenderFromTitle(formData.mrms),
       totalSalary:
@@ -444,6 +455,13 @@ const DocumentPreview = () => {
     : previewData;
 
   let freshData = { ...baseData };
+
+  freshData.panNo = freshData.panNo || freshData.pan;
+  freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob;
+
+  freshData.pan = freshData.pan || freshData.panNo;
+
+  freshData.dob = freshData.dob || freshData.dateOfBirth;
 
   // ✅ FORCE CTC FIX (CRITICAL)
   // ✅ DO NOT OVERRIDE MONTHLY SALARY
@@ -661,18 +679,15 @@ const DocumentPreview = () => {
     const docsArray =
       key === "salaryslip_letter"
         ? salarySlipDocs.map((doc) => ({
-          docKey: "salaryslip_letter",
-          data: doc,
-        }))
+            docKey: "salaryslip_letter",
+            data: doc,
+          }))
         : Array.isArray(previewData)
           ? previewData
           : [{ docKey: previewDocType?.template, data: previewData }];
 
     console.log("TEMPLATE DATA", freshData);
-    console.log(
-      "INTERNSHIP TYPE FROM FRESH DATA",
-      freshData.internshipType
-    );
+    console.log("INTERNSHIP TYPE FROM FRESH DATA", freshData.internshipType);
 
     return docsArray.map((doc, index) => {
       const p = {
@@ -712,42 +727,32 @@ const DocumentPreview = () => {
 
     const normalized = value.toString().toLowerCase();
 
-    if (
-      normalized === "with_pf" ||
-      normalized === "withpf"
-    ) {
+    if (normalized === "with_pf" || normalized === "withpf") {
       return "withPF";
     }
 
-    if (
-      normalized === "without_pf" ||
-      normalized === "withoutpf"
-    ) {
+    if (normalized === "without_pf" || normalized === "withoutpf") {
       return "withoutPF";
     }
 
     return value;
   };
 
-  freshData.offerType = normalizePfType(
-    freshData.offerType
-  );
+  freshData.offerType = normalizePfType(freshData.offerType);
 
   freshData.incrementType = normalizePfType(
-    freshData.incrementType || freshData.offerType
+    freshData.incrementType || freshData.offerType,
   );
 
   freshData.appointmentType = normalizePfType(
-    freshData.appointmentType || freshData.offerType
+    freshData.appointmentType || freshData.offerType,
   );
 
   freshData.salaryType = normalizePfType(
-    freshData.salaryType || freshData.offerType
+    freshData.salaryType || freshData.offerType,
   );
 
-  freshData.pfType = normalizePfType(
-    freshData.pfType || freshData.offerType
-  );
+  freshData.pfType = normalizePfType(freshData.pfType || freshData.offerType);
 
   const handleDownloadPDF = async () => {
     setLoading(true);
@@ -785,11 +790,7 @@ const DocumentPreview = () => {
           !Array.isArray(baseData[parentKey])
         ) {
           Object.entries(baseData[parentKey]).forEach(([k, v]) => {
-            if (
-              v !== undefined &&
-              v !== null &&
-              v !== ""
-            ) {
+            if (v !== undefined && v !== null && v !== "") {
               freshData[k] = v;
             }
           });
@@ -804,22 +805,13 @@ const DocumentPreview = () => {
       const normalizePfType = (value) => {
         if (!value) return "";
 
-        const normalized = value
-          .toString()
-          .trim()
-          .toLowerCase();
+        const normalized = value.toString().trim().toLowerCase();
 
-        if (
-          normalized === "with_pf" ||
-          normalized === "withpf"
-        ) {
+        if (normalized === "with_pf" || normalized === "withpf") {
           return "withPF";
         }
 
-        if (
-          normalized === "without_pf" ||
-          normalized === "withoutpf"
-        ) {
+        if (normalized === "without_pf" || normalized === "withoutpf") {
           return "withoutPF";
         }
 
@@ -827,28 +819,23 @@ const DocumentPreview = () => {
       };
 
       freshData.offerType = normalizePfType(
-        freshData.offerType || freshData.pfType
+        freshData.offerType || freshData.pfType,
       );
 
       freshData.incrementType = normalizePfType(
-        freshData.incrementType ||
-        freshData.offerType
+        freshData.incrementType || freshData.offerType,
       );
 
       freshData.salaryType = normalizePfType(
-        freshData.salaryType ||
-        freshData.offerType
+        freshData.salaryType || freshData.offerType,
       );
 
-      freshData.appointmentType =
-        normalizePfType(
-          freshData.appointmentType ||
-          freshData.offerType
-        );
+      freshData.appointmentType = normalizePfType(
+        freshData.appointmentType || freshData.offerType,
+      );
 
       freshData.pfType = normalizePfType(
-        freshData.pfType ||
-        freshData.offerType
+        freshData.pfType || freshData.offerType,
       );
 
       // =========================
@@ -862,204 +849,138 @@ const DocumentPreview = () => {
 
       freshData.issuedTo = freshData.employeeId;
 
-      freshData.issuedBy =
-        user?._id || "SYSTEM";
+      freshData.issuedBy = user?._id || "SYSTEM";
 
-      freshData.title =
-        freshData.mrms ||
-        freshData.identity ||
-        "Mr";
+      freshData.title = freshData.mrms || freshData.identity || "Mr";
 
       // =========================
       // DOJ FIXES
       // =========================
       freshData.doj =
-        freshData.doj ||
-        freshData.joiningDate ||
-        freshData.dateOfJoining;
+        freshData.doj || freshData.joiningDate || freshData.dateOfJoining;
 
       freshData.joiningDate =
-        freshData.joiningDate ||
-        freshData.doj ||
-        freshData.dateOfJoining;
+        freshData.joiningDate || freshData.doj || freshData.dateOfJoining;
 
       freshData.dateOfJoining =
-        freshData.dateOfJoining ||
-        freshData.joiningDate ||
-        freshData.doj;
+        freshData.dateOfJoining || freshData.joiningDate || freshData.doj;
 
       // =========================
       // ISSUE DATE FIX
       // =========================
       if (!freshData.issueDate) {
-        freshData.issueDate =
-          new Date()
-            .toISOString()
-            .split("T")[0];
+        freshData.issueDate = new Date().toISOString().split("T")[0];
       }
 
       // =========================
       // COMPLETION CERTIFICATE FIX
       // =========================
-      if (
-        key === "completion_certificate" &&
-        !freshData.trainingType
-      ) {
-        freshData.trainingType =
-          "General Training";
+      if (key === "completion_certificate" && !freshData.trainingType) {
+        freshData.trainingType = "General Training";
       }
 
+      console.log("SALARY SLIP DEBUG", {
+        key,
+        offerType: freshData.offerType,
+        salaryType: freshData.salaryType,
+        pfType: freshData.pfType,
+        freshData,
+      });
       // =========================
       // BUILD PAYLOAD
       // =========================
-      const payload = buildPayload(
-        key,
-        freshData,
-        user,
-        previewCompany
-      );
+      const payload = buildPayload(key, freshData, user, previewCompany);
 
-      console.log(
-        "FINAL PAYLOAD:",
-        payload
-      );
+      console.log("FINAL PAYLOAD:", payload);
 
       try {
-
         console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
 
         // TEMPORARY DISABLE
-        // await apiService.apipost(API.generateDoc(key), payload);  
-
-
+        // await apiService.apipost(API.generateDoc(key), payload);
       } catch (apiErr) {
-
         console.error("❌ API ERROR:", apiErr);
-
       }
 
       // =========================
       // TEMPLATE MAP
       // =========================
       const templateMap = {
-        salaryslip_letter:
-          SalarySlipLetterTemplate,
+        salaryslip_letter: SalarySlipLetterTemplate,
 
-        internshipcertificate_letter:
-          InternshipLetterTemplate,
+        internshipcertificate_letter: InternshipLetterTemplate,
 
-        offer_letter:
-          OfferTemplate,
+        offer_letter: OfferTemplate,
 
-        completion_certificate:
-          CertificationLetterTemplate,
+        completion_certificate: CertificationLetterTemplate,
 
-        increment_letter:
-          IncrementTemplate,
+        increment_letter: IncrementTemplate,
 
-        appointment_letter:
-          AppointmentLetterTemplate,
+        appointment_letter: AppointmentLetterTemplate,
 
-        experience_letter:
-          ExperienceLetterTemplate,
+        experience_letter: ExperienceLetterTemplate,
 
-        relieving_letter:
-          RelievingLetterTemplate,
+        relieving_letter: RelievingLetterTemplate,
 
-        fullandfinal_letter:
-          FullandfinalLetterTemplate,
+        fullandfinal_letter: FullandfinalLetterTemplate,
 
-        confirmation_letter:
-          ConfirmationLetterTemplate,
+        confirmation_letter: ConfirmationLetterTemplate,
       };
 
       // =========================
       // GET TEMPLATE
       // =========================
-      const TemplateComponent =
-        templateMap[key];
+      const TemplateComponent = templateMap[key];
 
       if (!TemplateComponent) {
-        throw new Error(
-          `No template found for key: ${key}`
-        );
+        throw new Error(`No template found for key: ${key}`);
       }
 
       // =========================
       // DEBUG LOGS
       // =========================
-      console.log(
-        "TEMPLATE COMPONENT:",
-        TemplateComponent
-      );
+      console.log("TEMPLATE COMPONENT:", TemplateComponent);
 
-      console.log(
-        "PDF DATA:",
-        freshData
-      );
+      console.log("PDF DATA:", freshData);
 
-      console.log(
-        "COMPANY:",
-        previewCompany
-      );
+      console.log("COMPANY:", previewCompany);
 
       // =========================
       // FILE NAME
       // =========================
-      const filename = `${previewDocType?.name || "Document"
-        }-${freshData?.employeeName || "User"
-        }-${new Date()
-          .toISOString()
-          .slice(0, 10)
-        }`;
+      const filename = `${previewDocType?.name || "Document"}-${
+        freshData?.employeeName || "User"
+      }-${new Date().toISOString().slice(0, 10)}`;
 
-      
       // =========================
       // GENERATE PDF
       // =========================
       try {
-
         await generatePDF(
           TemplateComponent,
           {
             data: freshData,
             company: previewCompany,
           },
-          filename
+          filename,
         );
-
       } catch (pdfError) {
-
         console.error("❌ PDF GENERATION FAILED:");
         console.error(pdfError);
 
         alert(pdfError.message || "PDF generation failed");
-
       }
 
       toast("PDF saved & downloaded ✓");
-
     } catch (err) {
+      console.error("FULL DOWNLOAD ERROR:", err);
 
-      console.error(
-        "FULL DOWNLOAD ERROR:",
-        err
-      );
+      console.error("BACKEND ERROR:", err?.response?.data);
 
-      console.error(
-        "BACKEND ERROR:",
-        err?.response?.data
-      );
-
-      setError(
-        err?.message ||
-        "Failed to generate PDF"
-      );
+      setError(err?.message || "Failed to generate PDF");
 
       toast("Export failed", "error");
-
     } finally {
-
       setLoading(false);
     }
   };
