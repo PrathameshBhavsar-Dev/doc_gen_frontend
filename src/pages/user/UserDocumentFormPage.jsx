@@ -17,7 +17,6 @@ import ROUTES from "../../core/constants/routes.constant";
 import { createProfileService } from "../../core/services/v2/userService";
 import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 
-/* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
   {
