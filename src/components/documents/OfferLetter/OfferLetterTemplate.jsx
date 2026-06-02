@@ -4,7 +4,12 @@ import WithPFOfferLetterTemplate from "./WithPF/WithPFOfferLetterTemplate";
 
 const OfferTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const OfferType = data?.offerType; // "paid" | "unpaid"
+  console.log("OfferTemplate Data:", data);
+  console.log("offerType =", data?.offerType);
+  console.log("pfType =", data?.pfType);
+  console.log("full data =", data);
+
+  const OfferType = data?.offerType || data.pfType; // "paid" | "unpaid"
 
   if (!OfferType) {
     return <div>PFTypename type not selected</div>;
