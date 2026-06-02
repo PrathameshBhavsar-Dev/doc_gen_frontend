@@ -348,6 +348,17 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
+  console.log("FULL LOCATION STATE");
+  console.log(state);
+
+  console.log("PREVIEW DATA");
+  console.log(state.previewData);
+
+  console.log("SELECTED DOCS");
+  console.log(state.selectedDocs);
+
+  console.log("PREVIEW COMPANY");
+  console.log(state.previewCompany);
   const flowType = state.flowType || "DIRECT"; // default fallback
 
   const handleEdit = () => {
@@ -431,10 +442,23 @@ const DocumentPreview = () => {
       mode: formData.bankName,
     }));
   };
-  const key = normalizeTemplateKey(previewDocType?.template);
+  // const key = normalizeTemplateKey(previewDocType?.template);
+  console.log("previewDocType", previewDocType);
+  const key =
+    normalizeTemplateKey(
+      previewDocType?.template
+    ) ||
+    normalizeTemplateKey(
+      previewDocType?.name
+        ?.toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\s+/g, "_")
+    );
 
   if (!key) {
     console.error("Invalid doc type:", previewDocType);
+    console.log("Selected Doc:", selectedDoc);
+    console.log("Doc Name:", selectedDoc?.name);
     return null; // don't crash UI
   }
 
@@ -443,6 +467,7 @@ const DocumentPreview = () => {
     ? previewData[0]?.data || {}
     : previewData;
 
+  console.log("REACHED BASE DATA SECTION");
   let freshData = { ...baseData };
 
   // ✅ FORCE CTC FIX (CRITICAL)
@@ -534,11 +559,14 @@ const DocumentPreview = () => {
   freshData.salary = Number(freshData.salary || 0);
   // ✅ build payload
   let payload = buildPayload(key, freshData, user, previewCompany);
+  // console.log("Selected Docs:", selectedDocs);
+  // console.log("Document Type:", selectedDocs?.[0]?.template);
 
   // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
   payload.issuedTo = freshData.issuedTo;
 
-  console.log("🚀 FINAL PAYLOAD:", payload);
+  // console.log("🚀 FINAL PAYLOAD:", payload);
+  // console.log(JSON.stringify(payload, null, 2));
 
   const isSalarySlip = key === "salaryslip_letter";
 
@@ -604,8 +632,8 @@ const DocumentPreview = () => {
     if (key) {
       payload = buildPayload(key, cleanedData, user, previewCompany);
     }
-    console.log("🔥 FINAL PAYLOAD:", payload);
-    console.log(payload);
+    // console.log("🔥 FINAL PAYLOAD:", payload);
+    // console.log(payload);
   }, [previewData, user, previewCompany, key]);
 
   useEffect(() => {
@@ -639,12 +667,12 @@ const DocumentPreview = () => {
   //   companyData,
   // } = location.state || {};
 
-  console.log("Preview Data:", {
-    previewData,
-    selectedDocs,
-    salarySlipMonths,
-    previewCompany,
-  });
+  // console.log("Preview Data:", {
+  //   previewData,
+  //   selectedDocs,
+  //   salarySlipMonths,
+  //   previewCompany,
+  // });
   /* ── Auth guard ── */
   useEffect(() => {
     if (!user) {
@@ -668,11 +696,12 @@ const DocumentPreview = () => {
           ? previewData
           : [{ docKey: previewDocType?.template, data: previewData }];
 
-    console.log("TEMPLATE DATA", freshData);
-    console.log(
-      "INTERNSHIP TYPE FROM FRESH DATA",
-      freshData.internshipType
-    );
+    // console.log("TEMPLATE DATA", freshData);
+    // console.log(
+    //   "INTERNSHIP TYPE FROM FRESH DATA",
+    //   freshData.internshipType
+    // );
+    // console.log("FRESH DATA BEFORE TEMPLATE", freshData);
 
     return docsArray.map((doc, index) => {
       const p = {
@@ -764,7 +793,7 @@ const DocumentPreview = () => {
         throw new Error("Missing document template key");
       }
 
-      console.log("NORMALIZED KEY:", key);
+      // console.log("NORMALIZED KEY:", key);
 
       // =========================
       // BASE DATA
@@ -773,10 +802,14 @@ const DocumentPreview = () => {
         ? previewData[0]?.data || {}
         : previewData || {};
 
+      // console.log("BASE DATA", baseData);
+
       // =========================
       // FLATTEN DOCUMENT DATA
       // =========================
       let freshData = { ...baseData };
+      // console.log("BASE DATA", baseData);
+      // console.log("FRESH DATA", freshData);
 
       Object.keys(baseData).forEach((parentKey) => {
         if (
@@ -919,14 +952,14 @@ const DocumentPreview = () => {
         previewCompany
       );
 
-      console.log(
-        "FINAL PAYLOAD:",
-        payload
-      );
+      // console.log(
+      //   "FINAL PAYLOAD:",
+      //   payload
+      // );
 
       try {
 
-        console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
+        // console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
 
         // TEMPORARY DISABLE
         // await apiService.apipost(API.generateDoc(key), payload);  
@@ -988,20 +1021,20 @@ const DocumentPreview = () => {
       // =========================
       // DEBUG LOGS
       // =========================
-      console.log(
-        "TEMPLATE COMPONENT:",
-        TemplateComponent
-      );
+      // console.log(
+      //   "TEMPLATE COMPONENT:",
+      //   TemplateComponent
+      // );
 
-      console.log(
-        "PDF DATA:",
-        freshData
-      );
+      // console.log(
+      //   "PDF DATA:",
+      //   freshData
+      // );
 
-      console.log(
-        "COMPANY:",
-        previewCompany
-      );
+      // console.log(
+      //   "COMPANY:",
+      //   previewCompany
+      // );
 
       // =========================
       // FILE NAME
@@ -1013,7 +1046,6 @@ const DocumentPreview = () => {
           .slice(0, 10)
         }`;
 
-      
       // =========================
       // GENERATE PDF
       // =========================
