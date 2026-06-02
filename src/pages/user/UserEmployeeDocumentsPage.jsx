@@ -40,7 +40,6 @@ const UserEmployeeDocumentsPage = () => {
     const backendDoc =
       profileData?.documents?.[backendKey];
 
-<<<<<<< HEAD
     const templateMap = {
       "Offer Letter": "offer_letter",
       "Appointment Letter": "appointment_letter",
@@ -59,11 +58,6 @@ const UserEmployeeDocumentsPage = () => {
 
       template: templateMap[doc.name],
 
-=======
-    return {
-      id: doc.id,
-      name: doc.name,
->>>>>>> 72c976b61ec0356ac80ef2c85f3d32efc1eb69a4
       status:
         backendDoc?.generated
           ? "Generated"
@@ -73,7 +67,6 @@ const UserEmployeeDocumentsPage = () => {
         backendDoc?.data?.issueDate ||
         "-",
 
-<<<<<<< HEAD
       documentData: {
         ...backendDoc?.data,
 
@@ -87,10 +80,6 @@ const UserEmployeeDocumentsPage = () => {
 
         employeeEmail: profileData?.email,
       },
-=======
-      documentData:
-        backendDoc?.data || null,
->>>>>>> 72c976b61ec0356ac80ef2c85f3d32efc1eb69a4
     };
   });
 
@@ -202,7 +191,6 @@ const UserEmployeeDocumentsPage = () => {
                 });
               }}
               className={`
-<<<<<<< HEAD
     px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
     ${selectedDocs.some((id) => {
                 const doc = docs.find((d) => d.id === id);
@@ -210,12 +198,6 @@ const UserEmployeeDocumentsPage = () => {
               })
                   ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
-=======
-                px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
-                ${selectedDocs.length === 0
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
->>>>>>> 72c976b61ec0356ac80ef2c85f3d32efc1eb69a4
                 }
   `}
             >
@@ -415,7 +397,6 @@ const UserEmployeeDocumentsPage = () => {
                 return doc.status === "Generated";
               })
             }
-<<<<<<< HEAD
             onClick={() => {
               const selectedGeneratedDocs = docs.filter(
                 (doc) =>
@@ -437,18 +418,6 @@ const UserEmployeeDocumentsPage = () => {
               });
             }}
             className={`...`}
-=======
-            className={`
-        px-3 py-1.5 rounded-lg text-sm font-medium transition
-        ${selectedDocs.every((id) => {
-              const doc = docs.find((d) => d.id === id);
-              return doc.status === "Generated";
-            })
-                ? "bg-[#EEF2FF] text-[#2e2f85] hover:bg-[#E0E7FF]"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }
-      `}
->>>>>>> 72c976b61ec0356ac80ef2c85f3d32efc1eb69a4
           >
             View
           </button>
