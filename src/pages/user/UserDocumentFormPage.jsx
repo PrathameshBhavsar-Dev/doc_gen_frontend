@@ -14,8 +14,9 @@ import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
-import { createProfileService } from "../../core/services/v2/userService";
+import { createProfileService, updateProfileService } from "../../core/services/v2/userService";
 import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 /* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
@@ -84,6 +85,9 @@ const basicFields = [
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const isEditMode = location.state?.isEditMode || false;
+  const userId = location.state?.userId;
+
   const [isSaving, setIsSaving] = useState(false);
 
   const incomingDocs = location.state?.selectedDocs || [];
@@ -95,54 +99,73 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
+  // console.log("location", location.state);
+  // console.log("EDIT MODE:", isEditMode);
+  // console.log("USER ID:", userId);
+  // console.log("EDIT DATA", location.state?.employeeData);
 
   useEffect(() => {
     if (employeeData) {
       setFormData({
         ...employeeData,
 
-        // normalize phone fields
+        company:
+          COMPANY_NAME_MAP[employeeData.company] ||
+          employeeData.company ||
+          "",
+
+        mrms:
+          employeeData.identity === "MR"
+            ? "Mr"
+            : employeeData.identity === "MRS"
+              ? "Mrs"
+              : employeeData.identity === "MISS"
+                ? "Miss"
+                : employeeData.identity === "MX"
+                  ? "Mx"
+                  : "",
+
+        employeeName: employeeData.employeeName || "",
+        employeeId: employeeData.employeeId || "",
+
         mobile:
-          employeeData.mobile ||
           employeeData.mobileNo ||
-          employeeData.phone ||
+          employeeData.mobile ||
           "",
 
-        // normalize email
         employeeEmail:
-          employeeData.employeeEmail ||
           employeeData.email ||
+          employeeData.employeeEmail ||
           "",
 
-        // normalize PAN
-        pan:
-          employeeData.pan ||
-          employeeData.panNo ||
-          "",
+        pan: employeeData.panNo || "",
+        dob: employeeData.dateOfBirth || "",
+        address: employeeData.address || "",
 
-        // normalize DOB
-        dob:
-          employeeData.dob ||
-          employeeData.dateOfBirth ||
-          "",
+        offerDate: employeeData.offerDate || "",
+        joiningDate: employeeData.joiningDate || "",
 
-        // normalize address
-        currentAddress:
-          employeeData.currentAddress ||
-          employeeData.address ||
-          "",
+        bankName: employeeData.bankName || "",
+        accountNo: employeeData.accountNo || "",
 
-        // normalize designation
+        joiningCTC: employeeData.CTC || "",
+        currentCTC: employeeData.CTC || "",
+
         currentDesignation:
-          employeeData.currentDesignation ||
-          employeeData.designation ||
-          "",
+          employeeData.designation || "",
 
-        // normalize PF
+        joiningDesignation:
+          employeeData.designation || "",
+
+        department:
+          employeeData.department || "",
+
         offerType:
-          employeeData.offerType ||
-          employeeData.pfType ||
-          "",
+          employeeData.pfType === "WITH_PF"
+            ? "withPF"
+            : employeeData.pfType === "WITHOUT_PF"
+              ? "withoutPF"
+              : "",
       });
     }
   }, [employeeData]);
@@ -417,51 +440,106 @@ const UserDocumentFormPage = () => {
     return yearly;
   };
 
+  // const saveProfileToBackend = async (payload) => {
+
+
+  //   try {
+
+  //     setIsSaving(true);
+
+  //     console.log(
+  //       "PROFILE API PAYLOAD:",
+  //       JSON.stringify(payload, null, 2)
+  //     );
+  //     console.log("FINAL FORM DATA:", formData);
+  //     console.log("FINAL PHONE:", formData.mobile);
+
+  //     // const response = await createProfileService(payload);
+  //     let response;
+
+  //     if (isEditMode) {
+  //       console.log("UPDATE PROFILE API");
+
+  //       response = await updateProfileService(
+  //         userId,
+  //         payload
+  //       );
+  //     } else {
+  //       console.log("CREATE PROFILE API");
+
+  //       response = await createProfileService(
+  //         payload
+  //       );
+  //     }
+
+  //     if (response.success) {
+
+  //       console.log("PROFILE CREATED SUCCESSFULLY");
+
+  //       return {
+  //         success: true,
+  //         data: response.data,
+  //       };
+
+  //     } else {
+
+  //       alert(response.message);
+
+  //       return {
+  //         success: false,
+  //       };
+  //     }
+
+  //   } catch (error) {
+
+  //     console.error("CREATE PROFILE ERROR:", error);
+
+  //     alert("Failed to create profile");
+
+  //     return {
+  //       success: false,
+  //     };
+
+  //   } finally {
+
+  //     setIsSaving(false);
+  //   }
+  // };
+
   const saveProfileToBackend = async (payload) => {
-
     try {
-
       setIsSaving(true);
 
-      console.log(
-        "PROFILE API PAYLOAD:",
-        JSON.stringify(payload, null, 2)
-      );
-      console.log("FINAL FORM DATA:", formData);
-      console.log("FINAL PHONE:", formData.mobile);
+      // console.log(
+      //   "PROFILE API PAYLOAD:",
+      //   JSON.stringify(payload, null, 2)
+      // );
 
-      const response = await createProfileService(payload);
+      const response = isEditMode
+        ? await updateProfileService(userId, payload)
+        : await createProfileService(payload);
 
-      if (response.success) {
+      // console.log("API RESPONSE:", response);
 
-        console.log("PROFILE CREATED SUCCESSFULLY");
-
+      if (response?.success) {
         return {
           success: true,
           data: response.data,
         };
-
-      } else {
-
-        alert(response.message);
-
-        return {
-          success: false,
-        };
       }
-
-    } catch (error) {
-
-      console.error("CREATE PROFILE ERROR:", error);
-
-      alert("Failed to create profile");
 
       return {
         success: false,
+        message: response?.message,
       };
+    } catch (error) {
+      console.error("SAVE PROFILE ERROR:", error);
 
+      return {
+        success: false,
+        message: error?.message,
+      };
     } finally {
-
       setIsSaving(false);
     }
   };
@@ -652,11 +730,11 @@ const UserDocumentFormPage = () => {
     //   enrichedFormData.internship_certificate
     // );
 
-    console.log("Preview Data:", formData);
-    console.log(
-      "Internship Type:",
-      formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType
-    );
+    // console.log("Preview Data:", formData);
+    // console.log(
+    //   "Internship Type:",
+    //   formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType
+    // );
 
     const profilePayload =
       buildCreateProfilePayload(
@@ -1269,7 +1347,15 @@ const UserDocumentFormPage = () => {
                 active:scale-[0.97]
               "
             >
-              {isSaving ? "Saving..." : "Save Profile"}
+              {
+                isSaving
+                  ? isEditMode
+                    ? "Updating..."
+                    : "Saving..."
+                  : isEditMode
+                    ? "Update Profile"
+                    : "Save Profile"
+              }
             </button>
           </div>
         </div>
