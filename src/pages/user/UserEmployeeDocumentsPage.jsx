@@ -106,14 +106,15 @@ const UserEmployeeDocumentsPage = () => {
           await getUserForSeparationService(
             state.id
           );
-        console.log(
-          "SEPARATION RESPONSE:",
-          response
-        );
+        // console.log(
+        //   "SEPARATION RESPONSE:",
+        //   response
+        // );
         if (response.success) {
           setProfileData(
             response.data
           );
+          console.log("PROFILE DATA", response.data);
         }
       } catch (error) {
         console.error(error);
@@ -125,6 +126,15 @@ const UserEmployeeDocumentsPage = () => {
       fetchProfile();
     }
   }, [state]);
+
+  console.log(
+    "PROFILE DATA FROM API",
+    JSON.stringify(profileData, null, 2)
+  );
+
+  useEffect(() => {
+    console.log("PROFILE DATA STATE", profileData);
+  }, [profileData]);
 
   if (loading) {
     return (
@@ -153,14 +163,26 @@ const UserEmployeeDocumentsPage = () => {
 
             <div>
               <h2 className="text-[20px] font-semibold text-[#1E293B]">
-                {state.fullName || state.name}
+                {profileData?.employeeName}
               </h2>
-              <p className="text-[14px] text-[#64748B]">{state.company}</p>
+              <p className="text-[14px] text-[#64748B]">{profileData?.company}</p>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <button className="px-4 py-2 rounded-xl bg-white/70 backdrop-blur text-[14px] flex items-center gap-1 shadow-sm hover:shadow transition">
+            <button
+              onClick={() =>
+                navigate(ROUTES.USER_FORM, {
+                  state: {
+                    employeeData: profileData,
+                    // selectedDocs: generatedDocs,
+                    isEditMode: true,
+                    userId: profileData.id,
+                  },
+                })
+              }
+              className="px-4 py-2 rounded-xl bg-white/70 backdrop-blur text-[14px] flex items-center gap-1 shadow-sm hover:shadow transition"
+            >
               <FiEdit /> Edit
             </button>
 
@@ -215,21 +237,29 @@ const UserEmployeeDocumentsPage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-7 gap-x-12">
             {[
-              { label: "Employee Name", value: state.employeeName || state.name },
-              { label: "Employee ID", value: state.employeeId || state.name },
-              { label: "Email", value: state.email },
-              { label: "Mobile", value: state.phone },
-              { label: "PAN", value: state.panNo },
-              { label: "DOB", value: state.dateOfBirth },
-              { label: "Address", value: state.address },
-              { label: "Offer Date", value: state.offerDate },
-              { label: "Joining Date", value: state.joiningDate },
-              { label: "CTC", value: state.CTC },
-              { label: "Designation", value: state.designation },
-              { label: "Department", value: state.department },
-              { label: "Bank Name", value: state.bankName },
-              { label: "Account Number", value: state.accountNo },
-              { label: "PF Type", value: state.pfType },
+              { label: "Employee Name", value: profileData?.employeeName },
+              { label: "Employee ID", value: profileData?.employeeId },
+              { label: "Email", value: profileData?.email },
+              { label: "Mobile", value: profileData?.mobileNo },
+
+              { label: "PAN", value: profileData?.panNo },
+              { label: "DOB", value: profileData?.dateOfBirth },
+              { label: "Address", value: profileData?.address },
+
+              { label: "Offer Date", value: profileData?.offerDate },
+              { label: "Joining Date", value: profileData?.joiningDate },
+
+              { label: "CTC", value: profileData?.CTC },
+
+              { label: "Designation", value: profileData?.designation },
+              { label: "Department", value: profileData?.department },
+
+              { label: "Bank Name", value: profileData?.bankName },
+              { label: "Account Number", value: profileData?.accountNo },
+
+              { label: "Company", value: profileData?.company },
+              { label: "Identity", value: profileData?.identity },
+              { label: "PF Type", value: profileData?.pfType },
 
             ].map((item) => (
               <div key={item.label}>
@@ -331,11 +361,11 @@ const UserEmployeeDocumentsPage = () => {
                       if (isMultiSelect) return;
 
                       if (doc.status === "Generated") {
-                        console.log("DOC OBJECT");
-                        console.log(doc);
+                        // console.log("DOC OBJECT");
+                        // console.log(doc);
 
-                        console.log("DOCUMENT DATA");
-                        console.log(doc.documentData);
+                        // console.log("DOCUMENT DATA");
+                        // console.log(doc.documentData);
                         navigate(ROUTES.DOCUMENT_PREVIEW, {
                           state: {
                             selectedDocs: [doc],

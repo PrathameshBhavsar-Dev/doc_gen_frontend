@@ -94,3 +94,16 @@ export const getUserForSeparationService = async (id) => {
     };
   }
 };
+
+export const updateProfileService = async (userId, payload) => {
+  try {
+    const response = await api.patch(
+      `/api/v2/users/${userId}`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
