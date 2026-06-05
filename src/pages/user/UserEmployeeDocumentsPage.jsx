@@ -44,7 +44,7 @@ const UserEmployeeDocumentsPage = () => {
       "Offer Letter": "offer_letter",
       "Appointment Letter": "appointment_letter",
       "Confirmation Letter": "confirmation_letter",
-      "Increment Letter": "increment_letter",
+      "Increment Letter": "increment_letter", 
       "Experience Letter": "experience_letter",
       "Relieving Letter": "relieving_letter",
       "Internship Certificate": "internshipcertificate_letter",
