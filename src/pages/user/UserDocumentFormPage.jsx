@@ -89,7 +89,7 @@ const UserDocumentFormPage = () => {
   const location = useLocation();
   const isEditMode = location.state?.isEditMode || false;
   const userId = location.state?.userId;
-
+  const [previewData, setPreviewData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
   const incomingDocs = location.state?.selectedDocs || [];
@@ -539,7 +539,7 @@ const UserDocumentFormPage = () => {
     // let payload = { ...formData };
     const payload = buildCreateProfilePayload(formData, selectedDocs);
 
-    payload.documentData = {};
+    payload.documentData = payload.documentData || {};
 
     // ✅ GLOBAL CTC FIX
     payload.annualCTC = yearlySalary;
@@ -639,6 +639,21 @@ const UserDocumentFormPage = () => {
 
     const enrichedFormData = { ...formData };
 
+    setPreviewData(enrichedFormData);
+    if (formData?.internship_certificate?.stipend) {
+      const stipend = Number(formData.internship_certificate.stipend);
+
+      enrichedFormData.stipend = stipend;
+      enrichedFormData.internshipType =
+        formData.internship_certificate.internshipType;
+
+      // force preview to use stipend
+      enrichedFormData.salary = stipend;
+      enrichedFormData.totalSalary = stipend;
+      enrichedFormData.monthlyCTC = stipend;
+      enrichedFormData.currentCTC = stipend;
+    }
+
     docsToProcess.forEach((doc) => {
       const docKey = normalizeDocName(doc.name);
 
@@ -714,7 +729,7 @@ const UserDocumentFormPage = () => {
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData: payload,
+        previewData: enrichedFormData,
         selectedDocs: enrichedDocs, // ✅ FIXED
         salarySlipMonths,
         previewCompany: selectedCompany,
@@ -1507,7 +1522,7 @@ const UserDocumentFormPage = () => {
 
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
-                        previewData: formData,
+                        previewData,
                         selectedDocs: enrichedDocs, // ✅ FIXED
                         salarySlipMonths,
                         previewCompany: selectedCompany,
