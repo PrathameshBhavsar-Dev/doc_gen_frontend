@@ -14,8 +14,12 @@ import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
-import { createProfileService } from "../../core/services/v2/userService";
+import {
+  createProfileService,
+  updateProfileService,
+} from "../../core/services/v2/userService";
 import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
@@ -83,6 +87,9 @@ const basicFields = [
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const isEditMode = location.state?.isEditMode || false;
+  const userId = location.state?.userId;
+
   const [isSaving, setIsSaving] = useState(false);
 
   const incomingDocs = location.state?.selectedDocs || [];
@@ -94,38 +101,62 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
+  // console.log("location", location.state);
+  // console.log("EDIT MODE:", isEditMode);
+  // console.log("USER ID:", userId);
+  // console.log("EDIT DATA", location.state?.employeeData);
 
   useEffect(() => {
     if (employeeData) {
       setFormData({
         ...employeeData,
 
-        // normalize phone fields
-        mobile:
-          employeeData.mobile ||
-          employeeData.mobileNo ||
-          employeeData.phone ||
-          "",
+        company:
+          COMPANY_NAME_MAP[employeeData.company] || employeeData.company || "",
 
-        // normalize email
-        employeeEmail: employeeData.employeeEmail || employeeData.email || "",
+        mrms:
+          employeeData.identity === "MR"
+            ? "Mr"
+            : employeeData.identity === "MRS"
+              ? "Mrs"
+              : employeeData.identity === "MISS"
+                ? "Miss"
+                : employeeData.identity === "MX"
+                  ? "Mx"
+                  : "",
 
-        // normalize PAN
-        pan: employeeData.pan || employeeData.panNo || "",
+        employeeName: employeeData.employeeName || "",
+        employeeId: employeeData.employeeId || "",
 
-        // normalize DOB
-        dob: employeeData.dob || employeeData.dateOfBirth || "",
+        mobile: employeeData.mobileNo || employeeData.mobile || "",
 
-        // normalize address
-        currentAddress:
-          employeeData.currentAddress || employeeData.address || "",
+        employeeEmail: employeeData.email || employeeData.employeeEmail || "",
 
-        // normalize designation
-        currentDesignation:
-          employeeData.currentDesignation || employeeData.designation || "",
+        pan: employeeData.panNo || "",
+        dob: employeeData.dateOfBirth || "",
+        address: employeeData.address || "",
 
-        // normalize PF
-        offerType: employeeData.offerType || employeeData.pfType || "",
+        offerDate: employeeData.offerDate || "",
+        joiningDate: employeeData.joiningDate || "",
+
+        bankName: employeeData.bankName || "",
+        accountNo: employeeData.accountNo || "",
+
+        joiningCTC: employeeData.CTC || "",
+        currentCTC: employeeData.CTC || "",
+
+        currentDesignation: employeeData.designation || "",
+
+        joiningDesignation: employeeData.designation || "",
+
+        department: employeeData.department || "",
+
+        offerType:
+          employeeData.pfType === "WITH_PF"
+            ? "withPF"
+            : employeeData.pfType === "WITHOUT_PF"
+              ? "withoutPF"
+              : "",
       });
     }
   }, [employeeData]);
@@ -290,9 +321,16 @@ const UserDocumentFormPage = () => {
   };
 
   /* ---------------- CONDITIONAL FIELD ---------------- */
-  const shouldShowField = (field) => {
+  const shouldShowField = (field, docKey = null) => {
     if (!field.dependsOn) return true;
-    return formData[field.dependsOn.field] === field.dependsOn.value;
+
+    if (docKey) {
+      return (
+        formData?.[docKey]?.[field.dependsOn.field] === field.dependsOn.value
+      );
+    }
+
+    return formData?.[field.dependsOn.field] === field.dependsOn.value;
   };
 
   /* ---------------- FILTER DOCUMENTS ---------------- */
@@ -405,39 +443,34 @@ const UserDocumentFormPage = () => {
     try {
       setIsSaving(true);
 
-      console.log("PROFILE API PAYLOAD:", JSON.stringify(payload, null, 2));
-      console.log("FINAL FORM DATA:", formData);
-      console.log("FINAL PHONE:", formData.mobile);
+      // console.log(
+      //   "PROFILE API PAYLOAD:",
+      //   JSON.stringify(payload, null, 2)
+      // );
 
-      const response = await createProfileService(payload);
+      const response = isEditMode
+        ? await updateProfileService(userId, payload)
+        : await createProfileService(payload);
 
-      if (response.success) {
-        console.log("PROFILE CREATED SUCCESSFULLY");
+      // console.log("API RESPONSE:", response);
 
+      if (response?.success) {
         return {
           success: true,
           data: response.data,
         };
-      } else {
-        alert(response.message);
-
-        return {
-          success: false,
-        };
       }
-    } catch (error) {
-      console.error("CREATE PROFILE ERROR:", error);
-      console.log("STATUS:", error?.response?.status);
-      console.log("RESPONSE:", error?.response?.data);
-
-      alert(
-        error?.response?.data?.message ||
-          JSON.stringify(error?.response?.data) ||
-          "Failed to create profile",
-      );
 
       return {
         success: false,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.error("SAVE PROFILE ERROR:", error);
+
+      return {
+        success: false,
+        message: error?.message,
       };
     } finally {
       setIsSaving(false);
@@ -548,7 +581,8 @@ const UserDocumentFormPage = () => {
 
       // Internship Certificate
       if (docKey === "internship_certificate") {
-        payload.stipend = monthlySalary;
+        payload.stipend =
+          Number(formData?.internship_certificate?.stipend) || 0;
       }
 
       // Full & Final
@@ -614,22 +648,6 @@ const UserDocumentFormPage = () => {
         });
       }
     });
-
-    // console.log(
-    //   "INTERNSHIP DATA BEFORE BUILD:",
-    //   formData.internship_certificate
-    // );
-
-    // console.log(
-    //   "ENRICHED DATA:",
-    //   enrichedFormData.internship_certificate
-    // );
-
-    console.log("Preview Data:", formData);
-    console.log(
-      "Internship Type:",
-      formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType,
-    );
 
     const profilePayload = buildCreateProfilePayload(
       enrichedFormData,
@@ -751,6 +769,10 @@ const UserDocumentFormPage = () => {
     const value = docKey
       ? formData?.[docKey]?.[field.name] || ""
       : formData[field.name] || "";
+
+    if (!shouldShowField(field, docKey)) {
+      return null;
+    }
 
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
@@ -1204,7 +1226,7 @@ const UserDocumentFormPage = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                       {filteredFields.map((field) =>
-                        shouldShowField(field) ? (
+                        shouldShowField(field, docKey) ? (
                           <div key={field.name} className="flex flex-col gap-1">
                             <label className="text-xs font-medium text-[#475569]">
                               {field.label}
@@ -1247,7 +1269,13 @@ const UserDocumentFormPage = () => {
                 active:scale-[0.97]
               "
             >
-              {isSaving ? "Saving..." : "Save Profile"}
+              {isSaving
+                ? isEditMode
+                  ? "Updating..."
+                  : "Saving..."
+                : isEditMode
+                  ? "Update Profile"
+                  : "Save Profile"}
             </button>
           </div>
         </div>

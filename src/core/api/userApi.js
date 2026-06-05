@@ -38,3 +38,16 @@ export const getUserForSeparationApi = async (id) => {
   );
 
 };
+
+export const updateUserProfileService = async (id, payload) => {
+  try {
+    const response = await api.patch(
+      `/api/v2/users/${id}`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error?.response?.data || error;
+  }
+};

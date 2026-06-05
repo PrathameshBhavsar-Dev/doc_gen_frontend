@@ -99,10 +99,17 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
 
   if (hasDocument("INTERNSHIP_CERTIFICATE")) {
     documentData["INTERNSHIP_CERTIFICATE"] = {
-      internshipType: internshipTypeMap[formData.internshipType] || null,
-      startDate: formData.startDate || null,
-      endDate: formData.endDate || null,
-      issueDate: formData.issueDate || null,
+      internshipType:
+        internshipTypeMap[formData?.internship_certificate?.internshipType] ||
+        null,
+
+      stipend: Number(formData?.internship_certificate?.stipend) || 0,
+
+      startDate: formData?.internship_certificate?.startDate || null,
+
+      endDate: formData?.internship_certificate?.endDate || null,
+
+      issueDate: formData?.internship_certificate?.issueDate || null,
     };
   }
 
