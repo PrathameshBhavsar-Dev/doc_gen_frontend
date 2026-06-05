@@ -14,11 +14,13 @@ import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
-import { createProfileService, updateProfileService } from "../../core/services/v2/userService";
+import {
+  createProfileService,
+  updateProfileService,
+} from "../../core/services/v2/userService";
 import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
-/* ---------------- BASIC FIELDS ---------------- */
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
   {
@@ -87,7 +89,7 @@ const UserDocumentFormPage = () => {
   const location = useLocation();
   const isEditMode = location.state?.isEditMode || false;
   const userId = location.state?.userId;
-
+  const [previewData, setPreviewData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
   const incomingDocs = location.state?.selectedDocs || [];
@@ -110,9 +112,7 @@ const UserDocumentFormPage = () => {
         ...employeeData,
 
         company:
-          COMPANY_NAME_MAP[employeeData.company] ||
-          employeeData.company ||
-          "",
+          COMPANY_NAME_MAP[employeeData.company] || employeeData.company || "",
 
         mrms:
           employeeData.identity === "MR"
@@ -128,15 +128,9 @@ const UserDocumentFormPage = () => {
         employeeName: employeeData.employeeName || "",
         employeeId: employeeData.employeeId || "",
 
-        mobile:
-          employeeData.mobileNo ||
-          employeeData.mobile ||
-          "",
+        mobile: employeeData.mobileNo || employeeData.mobile || "",
 
-        employeeEmail:
-          employeeData.email ||
-          employeeData.employeeEmail ||
-          "",
+        employeeEmail: employeeData.email || employeeData.employeeEmail || "",
 
         pan: employeeData.panNo || "",
         dob: employeeData.dateOfBirth || "",
@@ -151,14 +145,11 @@ const UserDocumentFormPage = () => {
         joiningCTC: employeeData.CTC || "",
         currentCTC: employeeData.CTC || "",
 
-        currentDesignation:
-          employeeData.designation || "",
+        currentDesignation: employeeData.designation || "",
 
-        joiningDesignation:
-          employeeData.designation || "",
+        joiningDesignation: employeeData.designation || "",
 
-        department:
-          employeeData.department || "",
+        department: employeeData.department || "",
 
         offerType:
           employeeData.pfType === "WITH_PF"
@@ -330,9 +321,16 @@ const UserDocumentFormPage = () => {
   };
 
   /* ---------------- CONDITIONAL FIELD ---------------- */
-  const shouldShowField = (field) => {
+  const shouldShowField = (field, docKey = null) => {
     if (!field.dependsOn) return true;
-    return formData[field.dependsOn.field] === field.dependsOn.value;
+
+    if (docKey) {
+      return (
+        formData?.[docKey]?.[field.dependsOn.field] === field.dependsOn.value
+      );
+    }
+
+    return formData?.[field.dependsOn.field] === field.dependsOn.value;
   };
 
   /* ---------------- FILTER DOCUMENTS ---------------- */
@@ -342,6 +340,7 @@ const UserDocumentFormPage = () => {
     (doc) => !excludedDocIds.includes(doc.id),
   );
 
+  //Hello
   /* ---------------- REMOVE DUPLICATE FIELDS ---------------- */
   const basicFieldNames = useMemo(() => basicFields.map((f) => f.name), []);
 
@@ -439,72 +438,6 @@ const UserDocumentFormPage = () => {
 
     return yearly;
   };
-
-  // const saveProfileToBackend = async (payload) => {
-
-
-  //   try {
-
-  //     setIsSaving(true);
-
-  //     console.log(
-  //       "PROFILE API PAYLOAD:",
-  //       JSON.stringify(payload, null, 2)
-  //     );
-  //     console.log("FINAL FORM DATA:", formData);
-  //     console.log("FINAL PHONE:", formData.mobile);
-
-  //     // const response = await createProfileService(payload);
-  //     let response;
-
-  //     if (isEditMode) {
-  //       console.log("UPDATE PROFILE API");
-
-  //       response = await updateProfileService(
-  //         userId,
-  //         payload
-  //       );
-  //     } else {
-  //       console.log("CREATE PROFILE API");
-
-  //       response = await createProfileService(
-  //         payload
-  //       );
-  //     }
-
-  //     if (response.success) {
-
-  //       console.log("PROFILE CREATED SUCCESSFULLY");
-
-  //       return {
-  //         success: true,
-  //         data: response.data,
-  //       };
-
-  //     } else {
-
-  //       alert(response.message);
-
-  //       return {
-  //         success: false,
-  //       };
-  //     }
-
-  //   } catch (error) {
-
-  //     console.error("CREATE PROFILE ERROR:", error);
-
-  //     alert("Failed to create profile");
-
-  //     return {
-  //       success: false,
-  //     };
-
-  //   } finally {
-
-  //     setIsSaving(false);
-  //   }
-  // };
 
   const saveProfileToBackend = async (payload) => {
     try {
@@ -604,21 +537,16 @@ const UserDocumentFormPage = () => {
     const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
     // let payload = { ...formData };
-    const payload = buildCreateProfilePayload(
-      formData,
-      selectedDocs
-    );
+    const payload = buildCreateProfilePayload(formData, selectedDocs);
 
-    payload.documentData = {};
+    payload.documentData = payload.documentData || {};
 
     // ✅ GLOBAL CTC FIX
     payload.annualCTC = yearlySalary;
     payload.monthlyCTC = monthlySalary;
 
     // ✅ HANDLE MULTIPLE DOCS
-    const docsToProcess = selectedDocs.find(
-      (d) => d.id === ALL_DOC_ID
-    )
+    const docsToProcess = selectedDocs.find((d) => d.id === ALL_DOC_ID)
       ? filteredDocuments
       : selectedDocs;
 
@@ -653,7 +581,8 @@ const UserDocumentFormPage = () => {
 
       // Internship Certificate
       if (docKey === "internship_certificate") {
-        payload.stipend = monthlySalary;
+        payload.stipend =
+          Number(formData?.internship_certificate?.stipend) || 0;
       }
 
       // Full & Final
@@ -710,6 +639,21 @@ const UserDocumentFormPage = () => {
 
     const enrichedFormData = { ...formData };
 
+    setPreviewData(enrichedFormData);
+    if (formData?.internship_certificate?.stipend) {
+      const stipend = Number(formData.internship_certificate.stipend);
+
+      enrichedFormData.stipend = stipend;
+      enrichedFormData.internshipType =
+        formData.internship_certificate.internshipType;
+
+      // force preview to use stipend
+      enrichedFormData.salary = stipend;
+      enrichedFormData.totalSalary = stipend;
+      enrichedFormData.monthlyCTC = stipend;
+      enrichedFormData.currentCTC = stipend;
+    }
+
     docsToProcess.forEach((doc) => {
       const docKey = normalizeDocName(doc.name);
 
@@ -720,27 +664,10 @@ const UserDocumentFormPage = () => {
       }
     });
 
-    // console.log(
-    //   "INTERNSHIP DATA BEFORE BUILD:",
-    //   formData.internship_certificate
-    // );
-
-    // console.log(
-    //   "ENRICHED DATA:",
-    //   enrichedFormData.internship_certificate
-    // );
-
-    // console.log("Preview Data:", formData);
-    // console.log(
-    //   "Internship Type:",
-    //   formData?.documentData?.INTERNSHIP_CERTIFICATE?.internshipType
-    // );
-
-    const profilePayload =
-      buildCreateProfilePayload(
-        enrichedFormData,
-        docsToProcess
-      );
+    const profilePayload = buildCreateProfilePayload(
+      enrichedFormData,
+      docsToProcess,
+    );
 
     console.log("PROFILE API PAYLOAD:", profilePayload);
 
@@ -784,13 +711,13 @@ const UserDocumentFormPage = () => {
       const backendDocKey = docKey.toUpperCase();
       if (!formData[docKey]) return;
       payload.documentData[backendDocKey] = {
-        ...formData[docKey]
+        ...formData[docKey],
       };
     });
 
     console.log(
       "//PROFILE DOCUMENT DATA",
-      JSON.stringify(profilePayload.documentData, null, 2)
+      JSON.stringify(profilePayload.documentData, null, 2),
     );
 
     // SAVE PROFILE TO BACKEND
@@ -802,7 +729,7 @@ const UserDocumentFormPage = () => {
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData: payload,
+        previewData: enrichedFormData,
         selectedDocs: enrichedDocs, // ✅ FIXED
         salarySlipMonths,
         previewCompany: selectedCompany,
@@ -835,20 +762,21 @@ const UserDocumentFormPage = () => {
   bg-white/70 backdrop-blur-md
   border text-sm outline-none
   transition-all duration-300
-  ${hasError
-        ? `
+  ${
+    hasError
+      ? `
         border-red-400
         bg-red-50/60
         shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
         focus:ring-red-300
         animate-[shake_0.25s_ease-in-out]
       `
-        : `
+      : `
         border-[#E2E8F0]
         focus:border-[#6366F1]
         focus:ring-[#6366F1]/20
       `
-      }
+  }
   focus:ring-4
 `;
 
@@ -856,6 +784,10 @@ const UserDocumentFormPage = () => {
     const value = docKey
       ? formData?.[docKey]?.[field.name] || ""
       : formData[field.name] || "";
+
+    if (!shouldShowField(field, docKey)) {
+      return null;
+    }
 
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
@@ -894,15 +826,15 @@ const UserDocumentFormPage = () => {
 
           {field.name === "company"
             ? companies.map((c) => (
-              <option key={c.id} value={c.name}>
-                {c.name}
-              </option>
-            ))
+                <option key={c.id} value={c.name}>
+                  {c.name}
+                </option>
+              ))
             : field.options?.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
         </select>
       );
     }
@@ -1009,7 +941,6 @@ const UserDocumentFormPage = () => {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
-
         {/* ---------------- DOCUMENT SELECTOR ---------------- */}
         <div className="mb-6">
           <h3 className="text-sm font-semibold text-[#475569] mb-2">
@@ -1034,21 +965,24 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     <FiFileText
-                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
-                        }`}
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
                     />
                   </div>
 
@@ -1079,21 +1013,24 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${isActive
-                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                      : "bg-white border-[#E2E8F0]"
+                    ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                        : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                      ? "bg-white/20"
-                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                      }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
+                      isActive
+                        ? "bg-white/20"
+                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                    }`}
                   >
                     <FiEye
-                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
-                        }`}
+                      className={`text-sm ${
+                        isActive ? "text-white" : "text-[#6366F1]"
+                      }`}
                     />
                   </div>
 
@@ -1304,7 +1241,7 @@ const UserDocumentFormPage = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                       {filteredFields.map((field) =>
-                        shouldShowField(field) ? (
+                        shouldShowField(field, docKey) ? (
                           <div key={field.name} className="flex flex-col gap-1">
                             <label className="text-xs font-medium text-[#475569]">
                               {field.label}
@@ -1347,15 +1284,13 @@ const UserDocumentFormPage = () => {
                 active:scale-[0.97]
               "
             >
-              {
-                isSaving
-                  ? isEditMode
-                    ? "Updating..."
-                    : "Saving..."
-                  : isEditMode
-                    ? "Update Profile"
-                    : "Save Profile"
-              }
+              {isSaving
+                ? isEditMode
+                  ? "Updating..."
+                  : "Saving..."
+                : isEditMode
+                  ? "Update Profile"
+                  : "Save Profile"}
             </button>
           </div>
         </div>
@@ -1587,7 +1522,7 @@ const UserDocumentFormPage = () => {
 
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
-                        previewData: formData,
+                        previewData,
                         selectedDocs: enrichedDocs, // ✅ FIXED
                         salarySlipMonths,
                         previewCompany: selectedCompany,
