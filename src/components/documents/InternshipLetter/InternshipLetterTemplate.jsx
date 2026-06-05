@@ -10,10 +10,10 @@ const InternshipLetterTemplate = ({ company, data }) => {
   const internshipType =
     internshipData?.internshipType;
 
-  console.log("INTERNSHIP DATA", data);
-  console.log("INTERNSHIP CERTIFICATE", internshipData);
-  console.log("INTERNSHIP TYPE", internshipType);
-  console.log("FULL DATA RECEIVED", data);
+  // console.log("INTERNSHIP DATA", data);
+  // console.log("INTERNSHIP CERTIFICATE", internshipData);
+  // console.log("INTERNSHIP TYPE", internshipType);
+  // console.log("FULL DATA RECEIVED", data);
 
   if (!internshipType) {
     return <div>Internship type not selected</div>;
