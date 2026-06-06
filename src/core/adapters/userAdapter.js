@@ -1,8 +1,4 @@
-export const buildCreateProfilePayload = (
-  formData,
-  selectedDocuments = []
-) => {
-
+export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
   // ================= ENUM MAPPINGS =================
   const identityMap = {
     Mr: "MR",
@@ -43,28 +39,25 @@ export const buildCreateProfilePayload = (
 
   // ================= NORMALIZE DOCUMENTS =================
 
-  const normalizedDocs = selectedDocuments.map((doc) =>
-    doc.name
-      ?.trim()
-      .toUpperCase()
-      .replace(/&/g, "_AND_")
-      .replace(/\s+/g, "_")
-  );
+  const normalizedDocs = selectedDocuments
+    .map((doc) =>
+      doc?.name
+        ?.trim()
+        .toUpperCase()
+        .replace(/&/g, "_AND_")
+        .replace(/\s+/g, "_"),
+    )
+    .filter(Boolean);
 
   console.log("NORMALIZED DOCS:", normalizedDocs);
 
-  const hasDocument = (docName) =>
-    normalizedDocs.includes(docName?.trim());
+  const hasDocument = (docName) => normalizedDocs.includes(docName?.trim());
 
   const documentData = {};
 
-  const rawIdentity =
-    formData.mrms ||
-    formData.identity ||
-    "";
+  const rawIdentity = formData.mrms || formData.identity || "";
 
-  const normalizedIdentity =
-    rawIdentity.toString().trim();
+  const normalizedIdentity = rawIdentity.toString().trim();
 
   const getDocField = (docKey, fieldName) => {
     return formData?.[docKey]?.[fieldName] ?? null;
@@ -73,84 +66,62 @@ export const buildCreateProfilePayload = (
   // ================= OFFER LETTER =================
 
   if (hasDocument("OFFER_LETTER")) {
-
     documentData["OFFER_LETTER"] = {
-      issueDate:
-        getDocField("offer_letter", "issueDate"),
+      issueDate: getDocField("offer_letter", "issueDate"),
 
-      probationPeriod:
-        getDocField("offer_letter", "probationPeriod")
-          ? Number(
-            getDocField(
-              "offer_letter",
-              "probationPeriod"
-            )
-          )
-          : null,
+      probationPeriod: getDocField("offer_letter", "probationPeriod")
+        ? Number(getDocField("offer_letter", "probationPeriod"))
+        : null,
     };
   }
 
   // ================= APPOINTMENT LETTER =================
 
   if (hasDocument("APPOINTMENT_LETTER")) {
-
     documentData["APPOINTMENT_LETTER"] = {
-      issueDate:
-        getDocField(
-          "appointment_letter",
-          "issueDate"
-        ),
+      issueDate: getDocField("appointment_letter", "issueDate"),
 
-      probationPeriod:
-        getDocField(
-          "appointment_letter",
-          "probationPeriod"
-        )
-          ? Number(
-            getDocField(
-              "appointment_letter",
-              "probationPeriod"
-            )
-          )
-          : null,
+      probationPeriod: getDocField("appointment_letter", "probationPeriod")
+        ? Number(getDocField("appointment_letter", "probationPeriod"))
+        : null,
     };
   }
 
   // ================= INCREMENT LETTER =================
 
   if (hasDocument("INCREMENT_LETTER")) {
-
     documentData["INCREMENT_LETTER"] = {
-      issueDate: formData.increment_letter?.issueDate || null
+      issueDate: formData.increment_letter?.issueDate || null,
     };
   }
 
   // ================= INTERNSHIP LETTER =================
 
   if (hasDocument("INTERNSHIP_CERTIFICATE")) {
-
     documentData["INTERNSHIP_CERTIFICATE"] = {
       internshipType:
-        internshipTypeMap[formData.internshipType] || null,
-      startDate: formData.startDate || null,
-      endDate: formData.endDate || null,
-      issueDate: formData.issueDate || null,
+        internshipTypeMap[formData?.internship_certificate?.internshipType] ||
+        null,
+
+      stipend: Number(formData?.internship_certificate?.stipend) || 0,
+
+      startDate: formData?.internship_certificate?.startDate || null,
+
+      endDate: formData?.internship_certificate?.endDate || null,
+
+      issueDate: formData?.internship_certificate?.issueDate || null,
     };
   }
 
   // ================= COMPLETION LETTER =================
 
   if (hasDocument("COMPLETION_CERTIFICATE")) {
-
     documentData["COMPLETION_CERTIFICATE"] = {
-      startDate:
-        formData.startDate || null,
+      startDate: formData.startDate || null,
 
-      completionDate:
-        formData.completionDate || null,
+      completionDate: formData.completionDate || null,
 
-      issueDate:
-        formData.issueDate || null,
+      issueDate: formData.issueDate || null,
     };
   }
 
@@ -159,7 +130,6 @@ export const buildCreateProfilePayload = (
   // ================= CONFIRMATION LETTER =================
 
   if (hasDocument("CONFIRMATION_LETTER")) {
-
     documentData["CONFIRMATION_LETTER"] = {
       effectiveDate:
         formData.confirmation_letter?.effectiveDate ||
@@ -167,18 +137,14 @@ export const buildCreateProfilePayload = (
         null,
 
       issueDate:
-        formData.confirmation_letter?.issueDate ||
-        formData.issueDate ||
-        null,
+        formData.confirmation_letter?.issueDate || formData.issueDate || null,
     };
   }
 
   // ================= EXPERIENCE LETTER =================
 
   if (hasDocument("EXPERIENCE_LETTER")) {
-
     documentData["EXPERIENCE_LETTER"] = {
-
       relievingDate:
         formData.experience_letter?.relievingDate ||
         formData.experienceRelievingDate ||
@@ -194,9 +160,7 @@ export const buildCreateProfilePayload = (
   // ================= RELIEVING LETTER =================
 
   if (hasDocument("RELIEVING_LETTER")) {
-
     documentData["RELIEVING_LETTER"] = {
-
       relievingDate:
         formData.relieving_letter?.lastWorkingDay ||
         formData.relieving_letter?.relievingDate ||
@@ -205,103 +169,66 @@ export const buildCreateProfilePayload = (
         null,
 
       issueDate:
-        formData.relieving_letter?.issueDate ||
-        formData.issueDate ||
-        null,
+        formData.relieving_letter?.issueDate || formData.issueDate || null,
     };
   }
 
   // ================= FULL & FINAL =================
 
-  console.log(
-    "FORM DATA JSON",
-    JSON.stringify(formData, null, 2)
-  );
+  console.log("FORM DATA JSON", JSON.stringify(formData, null, 2));
 
   if (hasDocument("FULL_AND_FINAL_LETTER")) {
-
     documentData["FULL_AND_FINAL_LETTER"] = {
+      fnfDate: formData.full_and_final_letter?.date || null,
 
-      fnfDate:
-        formData.full_and_final_letter?.date || null,
+      issueDate: formData.full_and_final_letter?.date || null,
 
-      issueDate:
-        formData.full_and_final_letter?.date || null,
-
-      month:
-        formData.full_and_final_letter?.month || null,
+      month: formData.full_and_final_letter?.month || null,
 
       resignationDate:
         formData.full_and_final_letter?.dateofresignation || null,
 
-      leavingDate:
-        formData.full_and_final_letter?.dateofleaving || null,
+      leavingDate: formData.full_and_final_letter?.dateofleaving || null,
 
-      paidDays:
-        formData.full_and_final_letter?.paiddays
-          ? Number(formData.full_and_final_letter.paiddays)
-          : null,
+      paidDays: formData.full_and_final_letter?.paiddays
+        ? Number(formData.full_and_final_letter.paiddays)
+        : null,
 
-      totalDaysInMonth:
-        formData.full_and_final_letter?.workdays
-          ? Number(formData.full_and_final_letter.workdays)
-          : null,
+      totalDaysInMonth: formData.full_and_final_letter?.workdays
+        ? Number(formData.full_and_final_letter.workdays)
+        : null,
     };
   }
   // ================= SALARY SLIP =================
 
   if (hasDocument("SALARY_SLIP")) {
-
     documentData["SALARY_SLIP"] = {
+      startMonth: formData.salarySlipStartMonth || null,
 
-      startMonth:
-        formData.salarySlipStartMonth || null,
+      endMonth: formData.salarySlipEndMonth || null,
 
-      endMonth:
-        formData.salarySlipEndMonth || null,
-
-      salaryWorkdays:
-        formData.salaryWorkdays || {},
+      salaryWorkdays: formData.salaryWorkdays || {},
     };
   }
 
   // ================= FINAL PAYLOAD =================
 
   return {
-
     // BASIC INFO
-    employeeName:
-      formData.employeeName || null,
+    employeeName: formData.employeeName || null,
 
-    employeeId:
-      formData.employeeId || null,
+    employeeId: formData.employeeId || null,
 
-    email:
-      formData.employeeEmail ||
-      formData.email ||
-      null,
+    email: formData.employeeEmail || formData.email || null,
 
-    mobileNo:
-      formData.mobile ||
-      formData.phone ||
-      formData.mobileNo ||
-      null,
+    mobileNo: formData.mobile || formData.phone || formData.mobileNo || null,
 
     // PERSONAL INFO
-    panNo:
-      formData.pan ||
-      formData.panNo ||
-      null,
+    panNo: formData.pan || formData.panNo || null,
 
-    dateOfBirth:
-      formData.dob ||
-      formData.dateOfBirth ||
-      null,
+    dateOfBirth: formData.dob || formData.dateOfBirth || null,
 
-    address:
-      formData.currentAddress ||
-      formData.address ||
-      null,
+    address: formData.currentAddress || formData.address || null,
 
     // JOB INFO
     designation:
@@ -310,40 +237,26 @@ export const buildCreateProfilePayload = (
       formData.designation ||
       null,
 
-    department:
-      formData.department || null,
+    department: formData.department || null,
 
-    offerDate:
-      formData.offerDate || null,
+    offerDate: formData.offerDate || null,
 
-    joiningDate:
-      formData.joiningDate || null,
+    joiningDate: formData.joiningDate || null,
 
     // CTC
-    CTC:
-      formData.salary
-        ? Number(formData.salary)
-        : 0,
+    CTC: formData.salary ? Number(formData.salary) : 0,
 
     // BANK INFO
-    bankName:
-      formData.bankName || null,
+    bankName: formData.bankName || null,
 
-    accountNo:
-      formData.accountNo || null,
+    accountNo: formData.accountNo || null,
 
     // ENUMS
-    identity:
-      identityMap[normalizedIdentity] || null,
+    identity: identityMap[normalizedIdentity] || null,
 
-    pfType:
-      pfTypeMap[
-      formData.offerType ||
-      formData.pfType
-      ] || null,
+    pfType: pfTypeMap[formData.offerType || formData.pfType] || null,
 
-    company:
-      companyMap[formData.company] || null,
+    company: companyMap[formData.company] || null,
 
     // DOCUMENTS
     documents: normalizedDocs,
