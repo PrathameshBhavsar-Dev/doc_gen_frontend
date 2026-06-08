@@ -24,10 +24,13 @@ class ROUTES {
   static USER_SETTINGS = `${this.USER_BASE}/settings`;
   static USERDOCUMENT_DETAIL = `${this.USER_BASE}/document-detail`;
   static USER_FORM = `${this.USER_BASE}/form`;
+  static USER_EMPLOYEE_DATA = `${this.USER_BASE}/employee-data`;
+  static USER_EMPLOYEE_DOCUMENTS = `${this.USER_BASE}/employee-documents`;
 
   // Documents
   static DOCUMENT_CREATE = `${this.DOCUMENT_BASE}/create`;
   static DOCUMENT_PREVIEW = `${this.DOCUMENT_BASE}/preview`;
+  static PROFILE_PREVIEW = `${this.DOCUMENT_BASE}/profile/preview`;
   // static DOCUMENT_PREVIEW_BY_ID = `${this.DOCUMENT_BASE}/preview/:id`;
   static DOCUMENT_PREVIEW_BY_ID = "/document/preview/:docType/:id";
   static DOCUMENT_GENERATE = `${this.DOCUMENT_BASE}/generate`;

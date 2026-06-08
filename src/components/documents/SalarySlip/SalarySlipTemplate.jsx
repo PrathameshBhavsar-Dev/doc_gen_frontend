@@ -4,10 +4,9 @@ import React from "react";
 import WithPFLetterTemplate from "./WithPF/CompanyWisePFLetter/WithPFLetterTemplate";
 import WithoutPFLetterTemplate from "./WithoutPF/WithoutPFLetterTemplate";
 
-
 const SalarySlipLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
-  const SalaryType = data?.salaryType; // "paid" | "unpaid"
+  const SalaryType = data.salaryType || data.pfType; // "paid" | "unpaid"
 
   if (!SalaryType) {
     return <div>PFTypename type not selected</div>;

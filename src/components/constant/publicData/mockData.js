@@ -171,8 +171,8 @@ export const companies = [
     CEO: smartmatrix_CEO,
     stamp: smartmatrix_stamp,
     watermark: null,
-    headerImage: null,
-    footerImage: null,
+    headerImage: smartmatrix_header,
+    footerImage: smartmatrix_footer,
     watermarkImage: null,
     address:
       "Office No. 102-A, First Floor Ganesham - A Commercial, BRTS Road, Pimple Saudagar, Pune- 411027",
@@ -1820,7 +1820,12 @@ export const documentTypes = [
         type: "number",
         required: true,
       },
-      // { name: 'employeeId', label: 'Employee ID', type: 'text', required: false },
+      {
+        name: "employeeId",
+        label: "Employee ID",
+        type: "text",
+        required: false,
+      },
       {
         name: "effectiveDate",
         label: "Effective Date",

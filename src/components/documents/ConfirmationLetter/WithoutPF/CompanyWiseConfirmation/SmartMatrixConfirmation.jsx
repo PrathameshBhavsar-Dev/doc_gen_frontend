@@ -94,9 +94,10 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(num);
 
-  // 🔹 Source of Truth → Monthly Salary entered by user
+  // 🔹 Source of Truth → Annual Salary entered by user
   const annualCTC = round0(Number(data.totalSalary || 0));
   const monthlyCTC = round0(annualCTC / 12);
+
   // ================= PERCENTAGE BREAKUP =================
   const basicMonthly = round0(monthlyCTC * 0.4);
   const hraMonthly = round0(monthlyCTC * 0.18);

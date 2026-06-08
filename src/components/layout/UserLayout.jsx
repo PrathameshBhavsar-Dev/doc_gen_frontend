@@ -4,13 +4,11 @@ import UserNavbar from "../public/UserNavbar";
 import UserSidebar from "../public/UserSidebar";
 
 const UserLayout = () => {
-
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-[#FFFEF8]">
-
+    <div className="flex h-screen w-full overflow-hidden bg-white">
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
@@ -22,28 +20,39 @@ const UserLayout = () => {
       {/* Sidebar */}
       <div
         className={`
-        fixed lg:relative z-50
-        transition-transform duration-300
-        ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0
-        ${collapsed ? "w-20" : "w-64"}
+          fixed lg:relative z-50
+          h-screen
+          transition-transform duration-300
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+          ${collapsed ? "w-20" : "w-64"}
+          flex-shrink-0
         `}
       >
-        <UserSidebar
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-        />
+        <UserSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content */}
+      <div
+        className="
+          flex flex-1 flex-col
+          min-w-0
+          overflow-hidden
+        "
+      >
         <UserNavbar setMobileOpen={setMobileOpen} />
 
-        <div className="flex-1 p-6 overflow-y-auto">
+        <main
+          className="
+            flex-1
+            overflow-y-auto
+            overflow-x-hidden
+            p-3 sm:p-6 md:p-10
+          "
+        >
           <Outlet />
-        </div>
+        </main>
       </div>
-
     </div>
   );
 };

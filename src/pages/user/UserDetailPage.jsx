@@ -15,13 +15,26 @@ import { generatePDF } from "../../utils/pdfUtils"; // adjust path as needed
 import { getTemplateComponent } from "../../utils/templateResolver.js";
 import ApiService from "../../core/services/api.service.jsx";
 import ServerUrl from "../../core/constants/serverURL.constant.jsx";
-import { resolveCompany, resolveTypeField } from "../../utils/companyRegistry.js";
+import {
+  resolveCompany,
+  resolveTypeField,
+} from "../../utils/companyRegistry.js";
 import ROUTES from "../../core/constants/routes.constant.jsx";
 
 const UserDetailPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const [doc, setDoc] = useState(state?.document || null);
+  const [doc, setDoc] = useState(
+    state?.document ||
+      state?.previewData || // 🔥 from preview
+      state?.documentData || // 🔥 fallback
+      null,
+  );
+
+  const company =
+    state?.selectedCompany ||
+    state?.previewCompany ||
+    resolveCompany(doc?.company);
   const [downloadingId, setDownloadingId] = useState(null);
 
   const mapDocTypeToRoute = (type) => {
@@ -110,8 +123,7 @@ const UserDetailPage = () => {
         ? item.documentType?.name
         : item.documentType;
 
-    const safeEmployee =
-      item.employeeName?.replace(/\s+/g, "_") || "Employee";
+    const safeEmployee = item.employeeName?.replace(/\s+/g, "_") || "Employee";
 
     const fileName = `${safeType || "document"}-${safeEmployee}`;
 
@@ -123,7 +135,7 @@ const UserDetailPage = () => {
       await generatePDF(
         TemplateComponent,
         { data: enrichedData, company: companyObject },
-        fileName
+        fileName,
       );
     } catch (err) {
       console.error("❌ Download failed:", err);
@@ -162,12 +174,15 @@ const UserDetailPage = () => {
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        documentData: doc,
-        selectedDocType: {
-          template: normalizedType, // Use the mapped type
-          name: rawType,
-        },
-        selectedCompany: companyObject,
+        previewData: doc,
+        selectedDocs: [
+          {
+            template: normalizedType,
+            name: rawType,
+            id: doc?.id || doc?._id,
+          },
+        ],
+        previewCompany: companyObject,
       },
     });
   };
@@ -192,9 +207,9 @@ const UserDetailPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100" ref={documentRef}>
+    <div className="" ref={documentRef}>
       {/* ================= PAGE CONTENT ================= */}
-      <div className="p-4 sm:p-6">
+      <div className="">
         {/* Back */}
         <div
           onClick={() => navigate(-1)}
@@ -223,7 +238,7 @@ const UserDetailPage = () => {
             </h1>
 
             <div className="flex flex-wrap gap-3 mt-2 text-sm items-center">
-              <span className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full">
+              <span className="flex items-center gap-1 font-semibold bg-white/20 px-3 py-1 rounded-full">
                 <CheckCircle size={14} />
                 Completed
               </span>
@@ -232,10 +247,10 @@ const UserDetailPage = () => {
                 Generated on{" "}
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </span>
             </div>
@@ -249,9 +264,9 @@ const UserDetailPage = () => {
             <div className="flex items-center gap-3 mb-4">
               <div
                 className="p-2 rounded-lg"
-                style={{ backgroundColor: "#E7E9FF" }}
+                style={{ backgroundColor: "#E0E7FF" }}
               >
-                <User size={18} color="#0E145E" />
+                <User size={18} color="#4F39F6" />
               </div>
 
               <h2 className="font-semibold text-lg">Employee Information</h2>
@@ -276,7 +291,7 @@ const UserDetailPage = () => {
             </div>
 
             <p className="text-sm text-gray-500">Company Name</p>
-            <p className="font-medium">{doc?.company}</p>
+            <p className="font-medium">{company?.name || doc?.company}</p>
           </div>
         </div>
 
@@ -310,10 +325,10 @@ const UserDetailPage = () => {
               <p className="font-medium mt-2">
                 {doc?.createdAt
                   ? new Date(doc.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
                   : "—"}
               </p>
             </div>
@@ -337,7 +352,7 @@ const UserDetailPage = () => {
           <button
             onClick={(e) => handleDownload(e, doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
-            text-white px-6 py-3 rounded-xl shadow transition
+            text-white px-6 py-3 rounded-xl font-semibold shadow transition
             bg-gradient-to-r from-[#0E145E] to-[#B37BD6]
             hover:opacity-90"
           >
@@ -348,7 +363,7 @@ const UserDetailPage = () => {
           <button
             onClick={() => handlePreview(doc)}
             className="w-full sm:w-auto flex justify-center items-center gap-2
-            bg-gray-200 text-gray-700 px-6 py-3 rounded-xl
+            bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-xl
             hover:bg-gray-300 transition"
           >
             <Eye size={18} />

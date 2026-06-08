@@ -31,9 +31,7 @@ const SalaryStructureTable = ({
     const food = round0(monthlyCTC * 0.06);
 
     let basic = round0(monthlyCTC - (hra + da + special + food + pf));
-
-   
-
+    
     basic = round0(monthlyCTC - (hra + da + special + food + pf));
 
     const totalMonthly = round0(basic + hra + da + special + food + pf);

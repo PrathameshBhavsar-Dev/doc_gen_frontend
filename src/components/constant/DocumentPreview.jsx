@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Typography, Snackbar, Alert } from "@mui/material";
-import { Download, Edit, ArrowBack, Description, ContentCopy } from "@mui/icons-material";
+import {
+  Download,
+  Edit,
+  ArrowBack,
+  Description,
+  ContentCopy,
+} from "@mui/icons-material";
 import { useAuth } from "../../core/contexts/AuthContext";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -9,8 +15,11 @@ import { generatePDF } from "../../utils/pdfUtils";
 import ROUTES from "../../core/constants/routes.constant";
 import ApiService from "../../core/services/api.service";
 import API from "../../core/constants/serverURL.constant";
-import { buildPayload, normalizeTemplateKey } from "../../utils/documentPayloadBuilder";
-
+import {
+  buildPayload,
+  normalizeTemplateKey,
+} from "../../utils/documentPayloadBuilder";
+import { FiFileText } from "react-icons/fi";
 // Templates
 import ExperienceLetterTemplate from "../documents/ExperienceLetter/ExperienceLetterTemplate";
 import RelievingLetterTemplate from "../documents/RelievingLetter/RelievingLetteTemplate";
@@ -336,12 +345,60 @@ const DOC_LABELS = {
 const DocumentPreview = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const location = useLocation();
+  const state = location.state || {};
+  console.log("FULL LOCATION STATE");
+  console.log(state);
 
-  const previewData = location.state?.documentData;
-  const previewDocType = location.state?.selectedDocType;
-  const previewCompany = location.state?.selectedCompany;
+  console.log("PREVIEW DATA");
+  console.log(state.previewData);
 
+  console.log("SELECTED DOCS");
+  console.log(state.selectedDocs);
+
+  console.log("PREVIEW COMPANY");
+  console.log(state.previewCompany);
+  const flowType = state.flowType || "DIRECT"; // default fallback
+
+  const handleEdit = () => {
+    if (!previewData) return;
+
+    if (flowType === "PROFILE") {
+      navigate(ROUTES.USER_FORM, {
+        state: {
+          document: previewData,
+          flowType: "PROFILE",
+          isEdit: true,
+        },
+      });
+    } else {
+      navigate("/document/create", {
+        state: {
+          document: previewData,
+          flowType: "DIRECT",
+          isEdit: true,
+        },
+      });
+    }
+  };
+
+  const previewData = state.previewData;
+  const selectedDocsRaw = state.selectedDocs;
+
+  const selectedDocs = Array.isArray(selectedDocsRaw)
+    ? selectedDocsRaw
+    : selectedDocsRaw
+      ? [selectedDocsRaw]
+      : [];
+  const previewCompany = state.previewCompany;
+  const salarySlipMonths = state.salarySlipMonths || [];
+
+  const [activeDocId, setActiveDocId] = useState(null);
+  const previewDocType =
+    selectedDocs.length > 0
+      ? selectedDocs.find((d) => d?.id === activeDocId) || selectedDocs[0]
+      : null;
   const documentRef = useRef(null);
   const apiService = new ApiService();
 
@@ -353,8 +410,253 @@ const DocumentPreview = () => {
   const [snackSev, setSnackSev] = useState("success");
   const [zoom, setZoom] = useState(100);
 
-  const key = normalizeTemplateKey(previewDocType?.template);
-  const payload = buildPayload(key, previewData, user, previewCompany);
+  const getGenderFromTitle = (title) => {
+    switch (title?.trim()) {
+      case "Mr":
+      case "Mr.":
+        return "Male";
+
+      case "Mrs":
+      case "Mrs.":
+      case "Miss":
+      case "Miss.":
+        return "Female";
+
+      case "Mx":
+      case "Mx.":
+        return "Other";
+
+      default:
+        return "Other";
+    }
+  };
+
+  const generateSalarySlipDocs = (formData, months) => {
+    if (!months || months.length === 0) return [];
+
+    return months.map((month) => ({
+      ...formData,
+
+      month: month.value,
+      workdays: formData.salaryWorkdays?.[month.value] || 0,
+
+      // ✅ FIX ALL MISSING FIELDS
+      salaryType:
+        formData.salaryType ||
+        formData.offerType ||
+        formData.pfType ||
+        "withPF",
+      doj: formData.joiningDate,
+      gender: getGenderFromTitle(formData.mrms),
+      totalSalary:
+        formData.totalSalary ?? formData.newCTC ?? formData.salary ?? 0,
+      mode: formData.bankName,
+    }));
+  };
+  // const key = normalizeTemplateKey(previewDocType?.template);
+  console.log("previewDocType", previewDocType);
+  const key =
+    normalizeTemplateKey(previewDocType?.template) ||
+    normalizeTemplateKey(
+      previewDocType?.name
+        ?.toLowerCase()
+        .replace(/&/g, "and")
+        .replace(/\s+/g, "_"),
+    );
+
+  if (!key) {
+    console.error("Invalid doc type:", previewDocType);
+    console.log("Selected Doc:", selectedDoc);
+    console.log("Doc Name:", selectedDoc?.name);
+    return null; // don't crash UI
+  }
+
+  // ALWAYS rebuild fresh data
+  const baseData = Array.isArray(previewData)
+    ? previewData[0]?.data || {}
+    : previewData;
+
+  console.log("REACHED BASE DATA SECTION");
+  let freshData = { ...baseData };
+
+  freshData.panNo = freshData.panNo || freshData.pan;
+  freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob;
+
+  freshData.pan = freshData.pan || freshData.panNo;
+
+  freshData.dob = freshData.dob || freshData.dateOfBirth;
+
+  // ✅ FORCE CTC FIX (CRITICAL)
+  // ✅ DO NOT OVERRIDE MONTHLY SALARY
+  if (freshData.totalSalary == null) {
+    freshData.totalSalary = 0;
+  }
+
+  // ✅ Annual salary should remain untouched for
+  // offer / appointment / confirmation / increment
+
+  // ✅ Annual docs
+  if (
+    key === "offer_letter" ||
+    key === "appointment_letter" ||
+    key === "confirmation_letter"
+  ) {
+    freshData.salary = Number(freshData.annualCTC || freshData.salary || 0);
+
+    // VERY IMPORTANT
+    freshData.newCTC = Number(
+      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+    );
+
+    freshData.totalSalary = Number(
+      freshData.annualCTC || freshData.salary || 0,
+    );
+  }
+
+  // ✅ Increment uses newCTC
+  if (key === "increment_letter") {
+    freshData.newCTC = Number(
+      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+    );
+  }
+
+  // ✅ Monthly docs only
+  // ✅ Monthly docs only
+  if (key === "salaryslip_letter") {
+    freshData.totalSalary = Number(
+      freshData.monthlyCTC || freshData.totalSalary || 0,
+    );
+  }
+
+  if (key === "fullandfinal_letter") {
+    freshData.totalSalary = Number(
+      freshData.monthlyCTC || freshData.totalSalary || 0,
+    );
+  }
+
+  if (key === "internshipcertificate_letter") {
+    freshData.stipend = Number(freshData.stipend || freshData.monthlyCTC || 0);
+  }
+
+  // ✅ CRITICAL FIX: flatten nested doc data
+  Object.keys(baseData).forEach((key) => {
+    if (
+      typeof baseData[key] === "object" &&
+      baseData[key] !== null &&
+      !Array.isArray(baseData[key])
+    ) {
+      Object.entries(baseData[key]).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") {
+          if (!freshData[k]) {
+            freshData[k] = v; // don't overwrite valid top-level values
+          }
+        }
+      });
+    }
+  });
+  // ✅ FIX required fields
+  freshData.employeeId = freshData.employeeId || freshData.employeeNumber;
+
+  freshData.issuedTo =
+    freshData.employeeId || freshData.employeeNumber || freshData.employeeEmail;
+
+  freshData.issuedBy = user?._id;
+  freshData.title = freshData.mrms;
+
+  const docKeyName = normalizeTemplateKey(previewDocType?.template);
+
+  const docIssueDate =
+    freshData[`${docKeyName}_issueDate`] || freshData.issueDate;
+
+  freshData.issueDate = docIssueDate || new Date().toISOString();
+
+  freshData.totalSalary = Number(freshData.totalSalary || 0);
+  freshData.newCTC = Number(freshData.newCTC || 0);
+  freshData.salary = Number(freshData.salary || 0);
+  // ✅ build payload
+  let payload = buildPayload(key, freshData, user, previewCompany);
+  // console.log("Selected Docs:", selectedDocs);
+  // console.log("Document Type:", selectedDocs?.[0]?.template);
+
+  // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
+  payload.issuedTo = freshData.issuedTo;
+
+  // console.log("🚀 FINAL PAYLOAD:", payload);
+  // console.log(JSON.stringify(payload, null, 2));
+
+  const isSalarySlip = key === "salaryslip_letter";
+
+  let salarySlipDocs = [previewData];
+
+  if (isSalarySlip) {
+    if (salarySlipMonths.length > 0) {
+      salarySlipDocs = generateSalarySlipDocs(previewData, salarySlipMonths);
+    } else {
+      salarySlipDocs = [previewData];
+    }
+  }
+
+  useEffect(() => {
+    if (!previewData || !user || !previewCompany) return;
+
+    const baseData = Array.isArray(previewData)
+      ? previewData[0]?.data || {}
+      : previewData;
+
+    let cleanedData = { ...baseData };
+
+    // ✅ REQUIRED FIELD FIXES (CRITICAL)
+    cleanedData.title = cleanedData.mrms; // 👈 required enum
+    cleanedData.issuedTo =
+      cleanedData.employeeId ||
+      cleanedData.employeeNumber ||
+      cleanedData.employeeEmail; // fallback
+    //     cleanedData.issuedBy = user?._id; // 👈 REQUIRED
+
+    // ✅ ensure issueDate
+    if (!cleanedData.issueDate) {
+      cleanedData.issueDate = new Date().toISOString();
+    }
+
+    // ✅ salary cleanup
+    if (key !== "salaryslip_letter" && key !== "fullandfinal_letter") {
+      delete cleanedData.totalSalary;
+      delete cleanedData.salaryType;
+      delete cleanedData.salarySlipMonths;
+      delete cleanedData.salaryWorkdays;
+    }
+
+    // ✅ OPTIONAL FIELD MAPPING
+    cleanedData.position =
+      cleanedData.position ||
+      cleanedData.designation ||
+      cleanedData.joiningDesignation;
+
+    // ✅ JOINING DATE NORMALIZATION
+    cleanedData.doj =
+      cleanedData.doj || cleanedData.joiningDate || cleanedData.dateOfJoining;
+
+    cleanedData.joiningDate =
+      cleanedData.joiningDate || cleanedData.doj || cleanedData.dateOfJoining;
+
+    cleanedData.dateOfJoining =
+      cleanedData.dateOfJoining || cleanedData.joiningDate || cleanedData.doj;
+
+    // ✅ FINAL PAYLOAD
+    let payload = null;
+
+    if (key) {
+      payload = buildPayload(key, cleanedData, user, previewCompany);
+    }
+    // console.log("🔥 FINAL PAYLOAD:", payload);
+    // console.log(payload);
+  }, [previewData, user, previewCompany, key]);
+
+  useEffect(() => {
+    if (selectedDocs.length > 0 && selectedDocs[0]?.id) {
+      setActiveDocId(selectedDocs[0].id);
+    }
+  }, [selectedDocs]);
 
   /* ── ALWAYS inject/re-inject styles on every mount ── */
   useEffect(() => {
@@ -374,82 +676,117 @@ const DocumentPreview = () => {
     };
   }, []); // runs on mount, cleans up on unmount
 
+  // const {
+  //   formData,
+  //   selectedDocs,
+  //   salarySlipMonths,
+  //   companyData,
+  // } = location.state || {};
+
+  // console.log("Preview Data:", {
+  //   previewData,
+  //   selectedDocs,
+  //   salarySlipMonths,
+  //   previewCompany,
+  // });
   /* ── Auth guard ── */
   useEffect(() => {
-    if (!user) { navigate("/login"); return; }
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     if (!previewCompany || !previewDocType || !previewData)
       navigate(ROUTES.USER_DASHBOARD);
   }, [user, previewCompany, previewDocType, previewData, navigate]);
 
   /* ── Template renderer ── */
   const renderTemplate = () => {
-    const p = { data: previewData, company: previewCompany };
-    const map = {
-      salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
-      internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
-      offer_letter: <OfferTemplate {...p} />,
-      completion_certificate: <CertificationLetterTemplate {...p} />,
-      increment_letter: <IncrementTemplate {...p} />,
-      appointment_letter: <AppointmentLetterTemplate {...p} />,
-      experience_letter: <ExperienceLetterTemplate {...p} />,
-      relieving_letter: <RelievingLetterTemplate {...p} />,
-      fullandfinal_letter: <FullandfinalLetterTemplate {...p} />,
-      confirmation_letter: <ConfirmationLetterTemplate {...p} />,
-    };
-    return map[previewDocType?.template] || (
-      <Typography sx={{ p: 4, color: "#999" }}>Template not found</Typography>
-    );
+    // ✅ ALWAYS MAKE IT ARRAY
+    const docsArray =
+      key === "salaryslip_letter"
+        ? salarySlipDocs.map((doc) => ({
+            docKey: "salaryslip_letter",
+            data: doc,
+          }))
+        : Array.isArray(previewData)
+          ? previewData
+          : [{ docKey: previewDocType?.template, data: previewData }];
+
+    // console.log("TEMPLATE DATA", freshData);
+    // console.log(
+    //   "INTERNSHIP TYPE FROM FRESH DATA",
+    //   freshData.internshipType
+    // );
+    // console.log("FRESH DATA BEFORE TEMPLATE", freshData);
+
+    return docsArray.map((doc, index) => {
+      const p = {
+        data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
+        company: previewCompany,
+      };
+      console.log(
+        "INTERNSHIP DOCUMENT DATA",
+        freshData.documentData?.INTERNSHIP_CERTIFICATE,
+      );
+      const map = {
+        salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
+        internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
+        offer_letter: <OfferTemplate {...p} />,
+        completion_certificate: <CertificationLetterTemplate {...p} />,
+        increment_letter: <IncrementTemplate {...p} />,
+        appointment_letter: <AppointmentLetterTemplate {...p} />,
+        experience_letter: <ExperienceLetterTemplate {...p} />,
+        relieving_letter: <RelievingLetterTemplate {...p} />,
+        fullandfinal_letter: <FullandfinalLetterTemplate {...p} />,
+        confirmation_letter: <ConfirmationLetterTemplate {...p} />,
+      };
+
+      return (
+        <div key={index}>
+          {map[doc.docKey] || <div>Template not found</div>}
+        </div>
+      );
+    });
   };
 
   const toast = (msg, sev = "success") => {
-    setSnackMsg(msg); setSnackSev(sev); setSnackOpen(true);
+    setSnackMsg(msg);
+    setSnackSev(sev);
+    setSnackOpen(true);
   };
 
-  /* ── Download PDF (full) ── */
-  // const handleDownloadPDF = async () => {
-  //   if (!documentRef.current) return;
+  // ✅ PF NORMALIZATION
+  const normalizePfType = (value) => {
+    if (!value) return "";
 
-  //   setLoading(true);
-  //   setLoadingLabel("Saving & generating PDF…");
-  //   setError("");
+    const normalized = value.toString().toLowerCase();
 
-  //   try {
-  //     const key = normalizeTemplateKey(previewDocType?.template);
+    if (normalized === "with_pf" || normalized === "withpf") {
+      return "withPF";
+    }
 
-  //     if (!key) throw new Error("Missing doc type key");
+    if (normalized === "without_pf" || normalized === "withoutpf") {
+      return "withoutPF";
+    }
 
-  //     console.log("🔥 NORMALIZED KEY:", key);
+    return value;
+  };
 
-  //     // ✅ SINGLE SOURCE OF TRUTH
-  //     const payload = buildPayload(
-  //       key,
-  //       previewData,
-  //       user,
-  //       previewCompany
-  //     );
+  freshData.offerType = normalizePfType(freshData.offerType);
 
-  //     console.log("🔥 FINAL PAYLOAD:", payload);
+  freshData.incrementType = normalizePfType(
+    freshData.incrementType || freshData.offerType,
+  );
 
-  //     await apiService.apipost(API.generateDoc(key), payload);
+  freshData.appointmentType = normalizePfType(
+    freshData.appointmentType || freshData.offerType,
+  );
 
-  //     // ✅ GENERATE PDF
-  //     window.scrollTo(0, 0);
-  //     await new Promise((r) => setTimeout(r, 300));
+  freshData.salaryType = normalizePfType(
+    freshData.salaryType || freshData.offerType,
+  );
 
-  //     const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
-  //       }-${new Date().toISOString().slice(0, 10)}.pdf`;
-
-  //     await generatePDF(documentRef.current, filename);
-
-  //     toast("PDF saved & downloaded ✓");
-  //   } catch (err) {
-  //     console.error("❌ ERROR:", err);
-  //     setError("Failed to save or generate PDF.");
-  //     toast("Export failed", "error");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  freshData.pfType = normalizePfType(freshData.pfType || freshData.offerType);
 
   const handleDownloadPDF = async () => {
     setLoading(true);
@@ -457,50 +794,240 @@ const DocumentPreview = () => {
     setError("");
 
     try {
+      // =========================
+      // NORMALIZE TEMPLATE KEY
+      // =========================
       const key = normalizeTemplateKey(previewDocType?.template);
-      if (!key) throw new Error("Missing doc type key");
 
-      console.log("🔥 NORMALIZED KEY:", key);
+      if (!key) {
+        throw new Error("Missing document template key");
+      }
 
-      const payload = buildPayload(key, previewData, user, previewCompany);
-      console.log("🔥 FINAL PAYLOAD:", payload);
+      // console.log("NORMALIZED KEY:", key);
 
-      await apiService.apipost(API.generateDoc(key), payload);
+      // =========================
+      // BASE DATA
+      // =========================
+      const baseData = Array.isArray(previewData)
+        ? previewData[0]?.data || {}
+        : previewData || {};
 
-      // ✅ Template component map
+      // console.log("BASE DATA", baseData);
+
+      // =========================
+      // FLATTEN DOCUMENT DATA
+      // =========================
+      let freshData = { ...baseData };
+      // console.log("BASE DATA", baseData);
+      // console.log("FRESH DATA", freshData);
+
+      Object.keys(baseData).forEach((parentKey) => {
+        if (
+          typeof baseData[parentKey] === "object" &&
+          baseData[parentKey] !== null &&
+          !Array.isArray(baseData[parentKey])
+        ) {
+          Object.entries(baseData[parentKey]).forEach(([k, v]) => {
+            if (v !== undefined && v !== null && v !== "") {
+              freshData[k] = v;
+            }
+          });
+        }
+      });
+
+      console.log("FRESH DATA BEFORE FIX:", freshData);
+
+      // =========================
+      // PF NORMALIZATION
+      // =========================
+      const normalizePfType = (value) => {
+        if (!value) return "";
+
+        const normalized = value.toString().trim().toLowerCase();
+
+        if (normalized === "with_pf" || normalized === "withpf") {
+          return "withPF";
+        }
+
+        if (normalized === "without_pf" || normalized === "withoutpf") {
+          return "withoutPF";
+        }
+
+        return value;
+      };
+
+      freshData.offerType = normalizePfType(
+        freshData.offerType || freshData.pfType,
+      );
+
+      freshData.incrementType = normalizePfType(
+        freshData.incrementType || freshData.offerType,
+      );
+
+      freshData.salaryType = normalizePfType(
+        freshData.salaryType || freshData.offerType,
+      );
+
+      freshData.appointmentType = normalizePfType(
+        freshData.appointmentType || freshData.offerType,
+      );
+
+      freshData.pfType = normalizePfType(
+        freshData.pfType || freshData.offerType,
+      );
+
+      // =========================
+      // REQUIRED FIELD FIXES
+      // =========================
+      freshData.employeeId =
+        freshData.employeeId ||
+        freshData.employeeNumber ||
+        freshData.employeeEmail ||
+        "EMP001";
+
+      freshData.issuedTo = freshData.employeeId;
+
+      freshData.issuedBy = user?._id || "SYSTEM";
+
+      freshData.title = freshData.mrms || freshData.identity || "Mr";
+
+      // =========================
+      // DOJ FIXES
+      // =========================
+      freshData.doj =
+        freshData.doj || freshData.joiningDate || freshData.dateOfJoining;
+
+      freshData.joiningDate =
+        freshData.joiningDate || freshData.doj || freshData.dateOfJoining;
+
+      freshData.dateOfJoining =
+        freshData.dateOfJoining || freshData.joiningDate || freshData.doj;
+
+      // =========================
+      // ISSUE DATE FIX
+      // =========================
+      if (!freshData.issueDate) {
+        freshData.issueDate = new Date().toISOString().split("T")[0];
+      }
+
+      // =========================
+      // COMPLETION CERTIFICATE FIX
+      // =========================
+      if (key === "completion_certificate" && !freshData.trainingType) {
+        freshData.trainingType = "General Training";
+      }
+
+      console.log("SALARY SLIP DEBUG", {
+        key,
+        offerType: freshData.offerType,
+        salaryType: freshData.salaryType,
+        pfType: freshData.pfType,
+        freshData,
+      });
+      // =========================
+      // BUILD PAYLOAD
+      // =========================
+      const payload = buildPayload(key, freshData, user, previewCompany);
+
+      // console.log(
+      //   "FINAL PAYLOAD:",
+      //   payload
+      // );
+
+      try {
+        // console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
+        // TEMPORARY DISABLE
+        // await apiService.apipost(API.generateDoc(key), payload);
+      } catch (apiErr) {
+        console.error("❌ API ERROR:", apiErr);
+      }
+
+      // =========================
+      // TEMPLATE MAP
+      // =========================
       const templateMap = {
         salaryslip_letter: SalarySlipLetterTemplate,
+
         internshipcertificate_letter: InternshipLetterTemplate,
+
         offer_letter: OfferTemplate,
+
         completion_certificate: CertificationLetterTemplate,
+
         increment_letter: IncrementTemplate,
+
         appointment_letter: AppointmentLetterTemplate,
+
         experience_letter: ExperienceLetterTemplate,
+
         relieving_letter: RelievingLetterTemplate,
+
         fullandfinal_letter: FullandfinalLetterTemplate,
+
         confirmation_letter: ConfirmationLetterTemplate,
       };
 
+      // =========================
+      // GET TEMPLATE
+      // =========================
       const TemplateComponent = templateMap[key];
 
       if (!TemplateComponent) {
         throw new Error(`No template found for key: ${key}`);
       }
 
-      const filename = `${previewDocType?.name || "Document"}-${previewData?.employeeName || "User"
-        }-${new Date().toISOString().slice(0, 10)}`;
+      // =========================
+      // DEBUG LOGS
+      // =========================
+      // console.log(
+      //   "TEMPLATE COMPONENT:",
+      //   TemplateComponent
+      // );
 
-      // ✅ Pass component + props, NOT the DOM ref
-      await generatePDF(
-        TemplateComponent,
-        { data: previewData, company: previewCompany },
-        filename
-      );
+      // console.log(
+      //   "PDF DATA:",
+      //   freshData
+      // );
+
+      // console.log(
+      //   "COMPANY:",
+      //   previewCompany
+      // );
+
+      // =========================
+      // FILE NAME
+      // =========================
+      const filename = `${previewDocType?.name || "Document"}-${
+        freshData?.employeeName || "User"
+      }-${new Date().toISOString().slice(0, 10)}`;
+
+      // =========================
+      // GENERATE PDF
+      // =========================
+      try {
+        await generatePDF(
+          TemplateComponent,
+          {
+            data: freshData,
+            company: previewCompany,
+          },
+          filename,
+        );
+      } catch (pdfError) {
+        console.error("❌ PDF GENERATION FAILED:");
+        console.error(pdfError);
+
+        alert(pdfError.message || "PDF generation failed");
+      }
 
       toast("PDF saved & downloaded ✓");
     } catch (err) {
-      console.error("❌ ERROR:", err);
-      setError("Failed to save or generate PDF.");
+      console.error("FULL DOWNLOAD ERROR:", err);
+
+      console.error("BACKEND ERROR:", err?.response?.data);
+
+      setError(err?.message || "Failed to generate PDF");
+
       toast("Export failed", "error");
     } finally {
       setLoading(false);
@@ -510,26 +1037,35 @@ const DocumentPreview = () => {
   /* ── Download PDF (content only) ── */
   const handleDownloadPDFWord = async () => {
     if (!documentRef.current) return;
-    setLoading(true); setLoadingLabel("Generating content-only PDF…"); setError("");
+    setLoading(true);
+    setLoadingLabel("Generating content-only PDF…");
+    setError("");
     try {
       const content = documentRef.current.querySelector(".a4-content-only");
       if (!content) throw new Error("Missing .a4-content-only");
       const canvas = await html2canvas(content, {
-        scale: 3, useCORS: true, backgroundColor: "#ffffff",
-        ignoreElements: el => {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        ignoreElements: (el) => {
           const alt = el?.getAttribute?.("alt")?.toLowerCase() || "";
           return alt.includes("signature") || alt.includes("stamp");
         },
       });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      const iw = 210, ph = 297;
+      const iw = 210,
+        ph = 297;
       const ih = (canvas.height * iw) / canvas.width;
-      let left = ih, pos = 0;
-      pdf.addImage(imgData, "PNG", 0, pos, iw, ih); left -= ph;
+      let left = ih,
+        pos = 0;
+      pdf.addImage(imgData, "PNG", 0, pos, iw, ih);
+      left -= ph;
       while (left > 0) {
-        pos = -(ih - left); pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, pos, iw, ih); left -= ph;
+        pos = -(ih - left);
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, pos, iw, ih);
+        left -= ph;
       }
       pdf.save(`${previewDocType.name}-ContentOnly.pdf`);
       toast("Content-only PDF downloaded ✓");
@@ -537,16 +1073,18 @@ const DocumentPreview = () => {
       console.error(err);
       setError("Failed to generate content-only PDF.");
       toast("Export failed", "error");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!previewCompany || !previewDocType || !previewData) return null;
 
-  const docLabel = DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
+  const docLabel =
+    DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
 
   return (
     <div className="dp-root">
-
       {/* ── Top Bar ── */}
       <header className="dp-topbar">
         <div className="dp-topbar-left">
@@ -575,13 +1113,24 @@ const DocumentPreview = () => {
         </div>
 
         <div className="dp-topbar-right">
-          <button className="dp-btn dp-btn-ghost" onClick={() => navigate("/document/create")}>
+          <button
+            className="dp-btn dp-btn-ghost"
+            onClick={() => navigate("/document/create")}
+          >
             <Edit sx={{ fontSize: 13 }} /> Edit
           </button>
-          <button className="dp-btn dp-btn-sec" onClick={handleDownloadPDFWord} disabled={loading}>
+          <button
+            className="dp-btn dp-btn-sec"
+            onClick={handleDownloadPDFWord}
+            disabled={loading}
+          >
             <ContentCopy sx={{ fontSize: 13 }} /> Content PDF
           </button>
-          <button className="dp-btn dp-btn-pri" onClick={handleDownloadPDF} disabled={loading}>
+          <button
+            className="dp-btn dp-btn-pri"
+            onClick={handleDownloadPDF}
+            disabled={loading}
+          >
             <Download sx={{ fontSize: 13 }} /> Download PDF
           </button>
         </div>
@@ -595,9 +1144,71 @@ const DocumentPreview = () => {
 
       {/* ── Layout ── */}
       <div className="dp-layout">
-
         {/* ── Sidebar ── */}
         <aside className="dp-sidebar">
+          <div className="dp-card">
+            <div className="dp-card-label">Documents</div>
+
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              {selectedDocs.map((doc) => {
+                const isActive = activeDocId === doc.id;
+
+                return (
+                  <button
+                    key={doc.id}
+                    onClick={() => setActiveDocId(doc.id)}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "10px 12px",
+                      borderRadius: "10px",
+                      fontFamily: "DM Sans",
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      transition: "all 0.18s",
+                      border: isActive
+                        ? "1px solid rgba(124,58,237,0.35)"
+                        : "1px solid rgba(124,58,237,0.12)",
+                      background: isActive
+                        ? "linear-gradient(135deg, rgba(124,58,237,0.12), rgba(91,33,182,0.08))"
+                        : "transparent",
+                      color: isActive ? "#5B21B6" : "#6B5E8A",
+                    }}
+                  >
+                    {/* Icon circle (like your UI style) */}
+                    {/* React Icon */}
+                    <div
+                      style={{
+                        width: "26px",
+                        height: "26px",
+                        borderRadius: "8px",
+                        background: isActive
+                          ? "linear-gradient(135deg, #7C3AED, #5B21B6)"
+                          : "#EDE9FE",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: isActive ? "#fff" : "#5B21B6",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <FiFileText size={14} />
+                    </div>
+
+                    {/* Text */}
+                    <span style={{ flex: 1, textAlign: "left" }}>
+                      {doc.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <div className="dp-card">
             <div className="dp-card-label">Status</div>
             <div className="dp-status-pill">
@@ -627,7 +1238,9 @@ const DocumentPreview = () => {
               <div className="dp-card-label">Issue Date</div>
               <div className="dp-card-val">
                 {new Date(previewData.issueDate).toLocaleDateString("en-IN", {
-                  day: "2-digit", month: "short", year: "numeric",
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
                 })}
               </div>
             </div>
@@ -636,24 +1249,51 @@ const DocumentPreview = () => {
           <div className="dp-card">
             <div className="dp-card-label">Preview Zoom</div>
             <div className="dp-zoom-row">
-              <button className="dp-zoom-btn" onClick={() => setZoom(z => Math.max(50, z - 10))}>−</button>
+              <button
+                className="dp-zoom-btn"
+                onClick={() => setZoom((z) => Math.max(50, z - 10))}
+              >
+                −
+              </button>
               <span className="dp-zoom-val">{zoom}%</span>
-              <button className="dp-zoom-btn" onClick={() => setZoom(z => Math.min(150, z + 10))}>+</button>
+              <button
+                className="dp-zoom-btn"
+                onClick={() => setZoom((z) => Math.min(150, z + 10))}
+              >
+                +
+              </button>
             </div>
           </div>
 
           <div className="dp-card">
             <div className="dp-card-label">Quick Actions</div>
-            <button className="dp-qa-btn" onClick={handleDownloadPDF} disabled={loading}>
-              <div className="dp-qa-icon"><Download sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={handleDownloadPDF}
+              disabled={loading}
+            >
+              <div className="dp-qa-icon">
+                <Download sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Download PDF
             </button>
-            <button className="dp-qa-btn" onClick={handleDownloadPDFWord} disabled={loading}>
-              <div className="dp-qa-icon"><ContentCopy sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={handleDownloadPDFWord}
+              disabled={loading}
+            >
+              <div className="dp-qa-icon">
+                <ContentCopy sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Content Only
             </button>
-            <button className="dp-qa-btn" onClick={() => navigate("/document/create")}>
-              <div className="dp-qa-icon"><Edit sx={{ fontSize: 13, color: "#fff" }} /></div>
+            <button
+              className="dp-qa-btn"
+              onClick={() => navigate("/document/create")}
+            >
+              <div className="dp-qa-icon">
+                <Edit sx={{ fontSize: 13, color: "#fff" }} />
+              </div>
               Edit Document
             </button>
           </div>
@@ -670,16 +1310,39 @@ const DocumentPreview = () => {
             </div>
           </div>
 
-          <div className="dp-page-wrap" style={{ transform: `scale(${zoom / 100})` }}>
-            <div className="dp-a4" ref={documentRef}>
-              {renderTemplate()}
-            </div>
-          </div>
+          <div
+            className="dp-page-wrap"
+            style={{
+              transform: `scale(${zoom / 100})`,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {isSalarySlip ? (
+              salarySlipDocs.map((doc, index) => (
+                <div
+                  key={index}
+                  className="dp-a4"
+                  style={{ marginBottom: "20px" }}
+                >
+                  <SalarySlipLetterTemplate
+                    data={doc}
+                    company={previewCompany}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="dp-a4" ref={documentRef}>
+                {renderTemplate()}
+              </div>
+            )}
 
-          <div className="dp-page-ind">
-            <span className="dp-page-ind-text">Page 1</span>
-            <span className="dp-pip active" />
-            <span className="dp-pip" />
+            <div className="dp-page-ind">
+              <span className="dp-page-ind-text">Page 1</span>
+              <span className="dp-pip active" />
+              <span className="dp-pip" />
+            </div>
           </div>
         </main>
       </div>
