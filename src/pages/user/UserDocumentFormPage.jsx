@@ -101,64 +101,119 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
-  // console.log("location", location.state);
-  // console.log("EDIT MODE:", isEditMode);
-  // console.log("USER ID:", userId);
-  // console.log("EDIT DATA", location.state?.employeeData);
 
   useEffect(() => {
-    if (employeeData) {
-      setFormData({
-        ...employeeData,
+    if (!employeeData) return;
 
-        company:
-          COMPANY_NAME_MAP[employeeData.company] || employeeData.company || "",
+    const docs = employeeData.documents || {};
 
-        mrms:
-          employeeData.identity === "MR"
-            ? "Mr"
-            : employeeData.identity === "MRS"
-              ? "Mrs"
-              : employeeData.identity === "MISS"
-                ? "Miss"
-                : employeeData.identity === "MX"
-                  ? "Mx"
-                  : "",
+    setFormData({
+      ...employeeData,
 
-        employeeName: employeeData.employeeName || "",
-        employeeId: employeeData.employeeId || "",
+      company:
+        COMPANY_NAME_MAP[employeeData.company] ||
+        employeeData.company ||
+        "",
 
-        mobile: employeeData.mobileNo || employeeData.mobile || "",
+      mrms:
+        employeeData.identity === "MR"
+          ? "Mr"
+          : employeeData.identity === "MRS"
+            ? "Mrs"
+            : employeeData.identity === "MISS"
+              ? "Miss"
+              : employeeData.identity === "MX"
+                ? "Mx"
+                : "",
 
-        employeeEmail: employeeData.email || employeeData.employeeEmail || "",
+      employeeName: employeeData.employeeName || "",
+      employeeId: employeeData.employeeId || "",
 
-        pan: employeeData.panNo || "",
-        dob: employeeData.dateOfBirth || "",
-        address: employeeData.address || "",
+      mobile:
+        employeeData.mobileNo ||
+        employeeData.mobile ||
+        "",
 
-        offerDate: employeeData.offerDate || "",
-        joiningDate: employeeData.joiningDate || "",
+      employeeEmail:
+        employeeData.email ||
+        employeeData.employeeEmail ||
+        "",
 
-        bankName: employeeData.bankName || "",
-        accountNo: employeeData.accountNo || "",
+      pan: employeeData.panNo || "",
+      dob: employeeData.dateOfBirth || "",
 
-        joiningCTC: employeeData.CTC || "",
-        currentCTC: employeeData.CTC || "",
+      joiningCTC: employeeData.CTC || "",
+      currentCTC: employeeData.CTC || "",
 
-        currentDesignation: employeeData.designation || "",
+      joiningDesignation:
+        employeeData.designation || "",
 
-        joiningDesignation: employeeData.designation || "",
+      currentDesignation:
+        employeeData.designation || "",
 
-        department: employeeData.department || "",
+      offerType:
+        employeeData.pfType === "WITH_PF"
+          ? "withPF"
+          : "withoutPF",
 
-        offerType:
-          employeeData.pfType === "WITH_PF"
-            ? "withPF"
-            : employeeData.pfType === "WITHOUT_PF"
-              ? "withoutPF"
-              : "",
-      });
-    }
+      // 🔥 DOCUMENT DATA MAPPING
+
+      salarySlipStartMonth:
+        docs.SALARY_SLIP?.data?.startMonth || "",
+
+      salarySlipEndMonth:
+        docs.SALARY_SLIP?.data?.endMonth || "",
+
+      offer_letter:
+        docs.OFFER_LETTER?.data || {},
+
+      appointment_letter:
+        docs.APPOINTMENT_LETTER?.data || {},
+
+      confirmation_letter:
+        docs.CONFIRMATION_LETTER?.data || {},
+
+      increment_letter:
+        docs.INCREMENT_LETTER?.data || {},
+
+      experience_letter:
+        docs.EXPERIENCE_LETTER?.data || {},
+
+      relieving_letter: {
+        ...docs.RELIEVING_LETTER?.data,
+
+        lastWorkingDay:
+          docs.RELIEVING_LETTER?.data?.relievingDate || "",
+      },
+
+      internship_certificate: {
+        ...docs.INTERNSHIP_LETTER?.data,
+        internshipType:
+          docs.INTERNSHIP_LETTER?.data?.internshipType?.toLowerCase() || "",
+      },
+      completion_certificate:
+        docs.COMPLETION_LETTER?.data || {},
+
+      full_and_final_letter: {
+        date:
+          docs.FULL_AND_FINAL?.data?.fnfDate || "",
+
+        month:
+          docs.FULL_AND_FINAL?.data?.month || "",
+
+        dateofresignation:
+          docs.FULL_AND_FINAL?.data?.resignationDate || "",
+
+        dateofleaving:
+          docs.FULL_AND_FINAL?.data?.leavingDate || "",
+
+        paiddays:
+          docs.FULL_AND_FINAL?.data?.paidDays || "",
+
+        workdays:
+          docs.FULL_AND_FINAL?.data?.totalDaysInMonth || "",
+      },
+    });
   }, [employeeData]);
 
   /* ---------------- HANDLE INPUT ---------------- */
@@ -439,86 +494,13 @@ const UserDocumentFormPage = () => {
     return yearly;
   };
 
-  // const saveProfileToBackend = async (payload) => {
-
-
-  //   try {
-
-  //     setIsSaving(true);
-
-  //     console.log(
-  //       "PROFILE API PAYLOAD:",
-  //       JSON.stringify(payload, null, 2)
-  //     );
-  //     console.log("FINAL FORM DATA:", formData);
-  //     console.log("FINAL PHONE:", formData.mobile);
-
-  //     // const response = await createProfileService(payload);
-  //     let response;
-
-  //     if (isEditMode) {
-  //       console.log("UPDATE PROFILE API");
-
-  //       response = await updateProfileService(
-  //         userId,
-  //         payload
-  //       );
-  //     } else {
-  //       console.log("CREATE PROFILE API");
-
-  //       response = await createProfileService(
-  //         payload
-  //       );
-  //     }
-
-  //     if (response.success) {
-
-  //       console.log("PROFILE CREATED SUCCESSFULLY");
-
-  //       return {
-  //         success: true,
-  //         data: response.data,
-  //       };
-
-  //     } else {
-
-  //       alert(response.message);
-
-  //       return {
-  //         success: false,
-  //       };
-  //     }
-
-  //   } catch (error) {
-
-  //     console.error("CREATE PROFILE ERROR:", error);
-
-  //     alert("Failed to create profile");
-
-  //     return {
-  //       success: false,
-  //     };
-
-  //   } finally {
-
-  //     setIsSaving(false);
-  //   }
-  // };
-
   const saveProfileToBackend = async (payload) => {
     try {
       setIsSaving(true);
 
-      // console.log(
-      //   "PROFILE API PAYLOAD:",
-      //   JSON.stringify(payload, null, 2)
-      // );
-
       const response = isEditMode
         ? await updateProfileService(userId, payload)
         : await createProfileService(payload);
-
-      // console.log("API RESPONSE:", response);
 
       if (response?.success) {
         return {
@@ -828,21 +810,20 @@ const UserDocumentFormPage = () => {
   bg-white/70 backdrop-blur-md
   border text-sm outline-none
   transition-all duration-300
-  ${
-    hasError
-      ? `
+  ${hasError
+        ? `
         border-red-400
         bg-red-50/60
         shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
         focus:ring-red-300
         animate-[shake_0.25s_ease-in-out]
       `
-      : `
+        : `
         border-[#E2E8F0]
         focus:border-[#6366F1]
         focus:ring-[#6366F1]/20
       `
-  }
+      }
   focus:ring-4
 `;
 
@@ -870,6 +851,13 @@ const UserDocumentFormPage = () => {
       }
     };
 
+    console.log(
+      "FIELD",
+      docKey,
+      field.name,
+      formData?.[docKey]
+    );
+
     if (field.type === "select") {
       return (
         <select
@@ -892,15 +880,15 @@ const UserDocumentFormPage = () => {
 
           {field.name === "company"
             ? companies.map((c) => (
-                <option key={c.id} value={c.name}>
-                  {c.name}
-                </option>
-              ))
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))
             : field.options?.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
         </select>
       );
     }
@@ -983,6 +971,45 @@ const UserDocumentFormPage = () => {
     return "";
   };
 
+  useEffect(() => {
+    if (!isEditMode || !employeeData?.documents) return;
+
+    const generatedDocs = [];
+
+    Object.entries(employeeData.documents).forEach(
+      ([key, value]) => {
+        if (value.generated) {
+          const doc = filteredDocuments.find((d) => {
+            const generatedKey = d.name
+              .toUpperCase()
+              .replace(/&/g, "_AND_")
+              .replace(/\s+/g, "_");
+
+            const backendMap = {
+              INTERNSHIP_CERTIFICATE:
+                "INTERNSHIP_LETTER",
+              COMPLETION_CERTIFICATE:
+                "COMPLETION_LETTER",
+              FULL_AND_FINAL_LETTER:
+                "FULL_AND_FINAL",
+            };
+
+            return (
+              (backendMap[generatedKey] ||
+                generatedKey) === key
+            );
+          });
+
+          if (doc) {
+            generatedDocs.push(doc);
+          }
+        }
+      }
+    );
+
+    setSelectedDocs(generatedDocs);
+  }, [employeeData, isEditMode]);
+
   // ================= NORMALIZE DOCUMENTS =================
   const normalizeDocName = (name) =>
     name
@@ -1004,6 +1031,14 @@ const UserDocumentFormPage = () => {
     increment_letter: "salary",
     experience_letter: "salary",
   };
+
+  useEffect(() => {
+    console.log(
+      "FORM DATA",
+      JSON.stringify(formData, null, 2)
+    );
+  }, [formData]);
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
@@ -1031,24 +1066,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      }`}
                   >
                     <FiFileText
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
@@ -1079,24 +1111,21 @@ const UserDocumentFormPage = () => {
                     hover:-translate-y-[2px]
                     active:scale-[0.97]
                     group
-                    ${
-                      isActive
-                        ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
-                        : "bg-white border-[#E2E8F0]"
+                    ${isActive
+                      ? "bg-gradient-to-br from-[#0E145E] to-[#B37BD6] text-white border-transparent"
+                      : "bg-white border-[#E2E8F0]"
                     }
                   `}
                 >
                   <div
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${
-                      isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
-                    }`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      }`}
                   >
                     <FiEye
-                      className={`text-sm ${
-                        isActive ? "text-white" : "text-[#6366F1]"
-                      }`}
+                      className={`text-sm ${isActive ? "text-white" : "text-[#6366F1]"
+                        }`}
                     />
                   </div>
 
@@ -1578,7 +1607,6 @@ const UserDocumentFormPage = () => {
                       ? filteredDocuments
                       : selectedDocs;
 
-                    // 🔥 ALWAYS map from documentTypes
                     const enrichedDocs = docsToProcess.map((doc) => {
                       const fullDoc = documentTypes.find(
                         (d) => d.id === doc.id,
