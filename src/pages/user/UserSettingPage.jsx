@@ -63,22 +63,6 @@ const UserSettingPage = () => {
               </div>
               <span className="text-gray-400 text-lg">›</span>
             </div>
-
-            {/* Delete Account */}
-            {/* <div className="flex items-center justify-between bg-red-50 p-3 sm:p-4 rounded-xl hover:bg-red-100 transition cursor-pointer">
-              <div className="flex items-center gap-3">
-                <Trash2 className="w-4 h-4 text-red-600" />
-                <div>
-                  <p className="text-sm font-medium text-red-600">
-                    Delete Account
-                  </p>
-                  <p className="text-xs text-red-400">
-                    Permanently delete data
-                  </p>
-                </div>
-              </div>
-              <span className="text-red-400 text-lg">›</span>
-            </div> */}
           </div>
 
           {/* ================= Security ================= */}
@@ -107,33 +91,6 @@ const UserSettingPage = () => {
               <span className="text-gray-400 text-lg">›</span>
             </div>
           </div>
-
-          {/* ================= Preferences ================= */}
-          {/* <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition duration-300 p-5 sm:p-6 space-y-5 md:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-3">
-              <div className="bg-purple-100 p-2 rounded-lg">
-                <Globe className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <h2 className="font-semibold text-gray-800 text-base sm:text-lg">
-                  Preferences
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-500">
-                  Customize your experience
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-gray-600">Language</label>
-              <select className="w-full border border-gray-300 rounded-xl p-2 sm:p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
-                <option>English</option>
-                <option>Hindi</option>
-                <option>Spanish</option>
-              </select>
-            </div>
-          </div> */}
-
         </div>
       </div>
     </div>
