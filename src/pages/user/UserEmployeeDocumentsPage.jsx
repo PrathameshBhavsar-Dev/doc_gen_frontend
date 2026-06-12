@@ -44,7 +44,7 @@ const UserEmployeeDocumentsPage = () => {
       "Offer Letter": "offer_letter",
       "Appointment Letter": "appointment_letter",
       "Confirmation Letter": "confirmation_letter",
-      "Increment Letter": "increment_letter", 
+      "Increment Letter": "increment_letter",
       "Experience Letter": "experience_letter",
       "Relieving Letter": "relieving_letter",
       "Internship Certificate": "internshipcertificate_letter",
@@ -136,6 +136,13 @@ const UserEmployeeDocumentsPage = () => {
     console.log("PROFILE DATA STATE", profileData);
   }, [profileData]);
 
+  useEffect(() => {
+    console.log(
+      "DOCUMENTS FROM API",
+      profileData?.documents
+    );
+  }, [profileData]);
+
   if (loading) {
     return (
       <div className="p-6">
@@ -207,8 +214,12 @@ const UserEmployeeDocumentsPage = () => {
 
                 navigate(ROUTES.USER_FORM, {
                   state: {
-                    selectedDocs: pendingDocs,
-                    employeeData: state, // profile info
+                    employeeData: profileData,
+                    // selectedDocs: generatedDocs,
+                    isEditMode: true,
+                    userId: profileData.id,
+                    selectedDocs: [doc],
+                    employeeData: state,
                   },
                 });
               }}
@@ -361,11 +372,6 @@ const UserEmployeeDocumentsPage = () => {
                       if (isMultiSelect) return;
 
                       if (doc.status === "Generated") {
-                        // console.log("DOC OBJECT");
-                        // console.log(doc);
-
-                        // console.log("DOCUMENT DATA");
-                        // console.log(doc.documentData);
                         navigate(ROUTES.DOCUMENT_PREVIEW, {
                           state: {
                             selectedDocs: [doc],
