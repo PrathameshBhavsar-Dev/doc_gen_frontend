@@ -1,11 +1,6 @@
 import React from "react";
-// import CubeageUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/CubeageUnPaidInternshipLetter";
 import PentaUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/PentaUnPaidInternshipLetter"
-// import RPUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/RPUnPaidInternshipLetter";
-// import SmartMatrixUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartMatrixUnPaidInternshipLetter";
-// import NimbjaUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/NimbjaUnPaidInternshipLetter";
-// import DevconsUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/DevconsUnPaidInternshipLetter";
-import QuickUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/QuickUnpaidInternshipLetter";
+import QuickUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/QuickUnPaidInternshipLetter";
 import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
 import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter"; // ✅ uncommented
 import NeweageUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/NeweageUnPaidInternshipLetter";
