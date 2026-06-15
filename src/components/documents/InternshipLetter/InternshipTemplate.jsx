@@ -15,7 +15,7 @@ const InternshipLetterTemplate = ({ company, data }) => {
   if (internshipType === "paid" || internshipType === "PAID") {
     return <PaidInternshipLetterTemplate company={company} data={data} />;
   }
-
+ 
   if (internshipType === "unpaid" || internshipType === "UNPAID") {
     return <UnPaidInternshipLetterTemplate company={company} data={data} />;
   }
