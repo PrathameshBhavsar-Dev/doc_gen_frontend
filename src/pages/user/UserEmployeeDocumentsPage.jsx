@@ -215,11 +215,9 @@ const UserEmployeeDocumentsPage = () => {
                 navigate(ROUTES.USER_FORM, {
                   state: {
                     employeeData: profileData,
-                    // selectedDocs: generatedDocs,
                     isEditMode: true,
                     userId: profileData.id,
-                    selectedDocs: [doc],
-                    employeeData: state,
+                    selectedDocs: pendingDocs,
                   },
                 });
               }}
