@@ -1,8 +1,8 @@
 import React from "react";
 import PentaUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/PentaUnPaidInternshipLetter"
 import QuickUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/QuickUnPaidInternshipLetter";
-import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
-import JDITUnPaidInternshipLetter from "./CompanyWiseUnPaidInternshipLetter/JDITUnPaidInternshipLetter"; // ✅ uncommented
+import SmartSoftwareUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/SmartSoftwareUnPaidInternshipLetter";
+import JDITUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/JDITUnPaidInternshipLetter"; // ✅ uncommented
 import NeweageUnPaidInternshipLetter from "./CompanyWiseUnpaidInternshipLetter/NeweageUnPaidInternshipLetter";
 
 const companyComponentMap = {
