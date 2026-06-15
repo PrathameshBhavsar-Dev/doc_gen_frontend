@@ -1,8 +1,6 @@
 import React from "react";
 import PaidInternshipLetterTemplate from "./PaidIntershipLetter/PaidInternshipTemplate";
-import UnPaidInternshipLetterTemplate from "./UnpaidInternshipLetter/UnPaidInternshipTemplate";
-
-
+import UnPaidInternshipLetterTemplate from "./UnpaidIntershipLetter/UnpaidinternshipTemplate";
 
 const InternshipLetterTemplate = ({ company, data }) => {
   // 🔑 This value must come from form / documentData
