@@ -275,8 +275,6 @@ const styles = {
   signImg: { height: 58, marginTop: 25 },
   stampImgInline: { height: 82, marginTop: 25 },
 
-  hrName: { fontSize: 11 },
-
   candidateBlock: { textAlign: "left", fontSize: 11, marginTop: 130 },
   paragraph1: { textAlign: "center", marginTop: 130 },
 
@@ -305,22 +303,6 @@ const styles = {
     padding: "5px",
     textAlign: "center",
   },
-
-  annexureSignRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: 80,
-    fontFamily: "Verdana",
-    fontSize: 11,
-  },
-
-
-
-  annexureRight: { textAlign: "right" },
-
-  hrSignWrap: { display: "flex", alignItems: "center", gap: 10 },
-  signInline: { height: 36 },
-  stampInline: { height: 48, marginLeft: -6 },
 
   /* ===== PAGE-2 SIGNATURE (FINAL FIX) ===== */
 
@@ -362,9 +344,5 @@ const styles = {
     height: "70px",
     opacity: 0.9,
   },
-
-
-
-
 
 };
