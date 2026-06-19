@@ -17,7 +17,7 @@ const HeroDashBoardSection = () => {
       try {
         // First call to get total and page count
         const firstRes = await axiosInstance.get(
-          `/v1${ServerUrl.API_ALL_DOCUMENTS}?page=1`,
+          `${ServerUrl.API_ALL_DOCUMENTS}?page=1`,
         );
 
         const total = firstRes.data.total;
@@ -27,7 +27,7 @@ const HeroDashBoardSection = () => {
         // Fetch remaining pages to get all documents
         for (let i = 2; i <= totalPages; i++) {
           const res = await axiosInstance.get(
-            `/v1${ServerUrl.API_ALL_DOCUMENTS}?page=${i}`,
+            `${ServerUrl.API_ALL_DOCUMENTS}?page=${i}`,
           );
           allDocs = [...allDocs, ...res.data.data];
         }
