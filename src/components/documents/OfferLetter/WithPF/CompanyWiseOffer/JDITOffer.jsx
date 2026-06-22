@@ -76,6 +76,43 @@ const JDITOffer = ({ company, data }) => {
   const totalMonthly = monthlyCTC;
   const totalAnnual = monthlyCTC * 12;
 
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_STYLE = {
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+    width: "100%",
+    color: "#fff",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "#000",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #333",
+    fontSize: "9.75pt",
+    padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 1.2,
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+    pt: "0px",
+    color: "#fff !important",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#000",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -181,7 +218,7 @@ const JDITOffer = ({ company, data }) => {
         </Typography>
 
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
-        <Typography sx={{ ...TEXT, mb: 2 }}>
+        <Typography sx={{ ...TEXT, mb: 1 }}>
           <b>Name : {employeeName}</b>
           <span style={{ marginLeft: "120px" }}>
             <b>Designation :{position}</b>
@@ -189,150 +226,61 @@ const JDITOffer = ({ company, data }) => {
         </Typography>
 
         <TableContainer sx={{ mb: "4mm" }}>
-          <Table
-            size="small"
-            sx={{
-              border: "1px solid #333",       // 🔽 thinner outer border
-              borderCollapse: "collapse",
-              width: "100%",
-              color: "#ffff !important",
-            }}
-          >
+          <Table size="small" sx={TABLE_STYLE}>
             <TableHead>
-              <TableRow sx={{
-                backgroundColor: "#000 !important",
-                "& th": {
-                  color: "#fff !important",
-                  fontWeight: 600,
-                  fontSize: "10pt",
-                  border: "1px solid #333",
-                  py: "0.4mm",
-                },
-              }}>
-                <TableCell
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",          // 🔽 smaller font
-                    color: "#fff !important",
-                    py: "0.4mm",               // 🔽 compact header height
-                  }}
-                >
+              <TableRow sx={HEADER_ROW}>
+                <TableCell sx={CELL_HEAD}>
                   Salary Components
                 </TableCell>
 
-                <TableCell
-                  align="center"
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",
-                    color: "#fff !important",
-                    py: "0.4mm",
-                  }}
-                >
+                <TableCell align="center" sx={CELL_HEAD}>
                   Per month (Rs.)
                 </TableCell>
 
-                <TableCell
-                  align="center"
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",
-                    color: "#fff !important",
-                    py: "0.4mm",
-                  }}
-                >
+                <TableCell align="center" sx={CELL_HEAD}>
                   Per Annum (Rs.)
                 </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {/* 🔽 Removed tall blank row – keeps table compact */}
-
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell
-                    sx={{
-                      border: "1px solid #333",
-                      fontSize: "9.75pt",       // 🔽 smaller body text
-                      py: "0.35mm",             // 🔽 tight rows
-                    }}
-                  >
+                  <TableCell sx={CELL_BASE}>
                     {row.name}
                   </TableCell>
 
                   <TableCell
                     align="center"
-                    sx={{
-                      border: "1px solid #333",
-                      fontSize: "9.75pt",
-                      py: "0.35mm",
-                    }}
+                    sx={CELL_BASE}
                   >
                     {formatCurrency(row.monthly)}
                   </TableCell>
 
                   <TableCell
                     align="center"
-                    sx={{
-                      border: "1px solid #333",
-                      fontSize: "9.75pt",
-                      py: "0.35mm",
-                    }}
+                    sx={CELL_BASE}
                   >
                     {formatCurrency(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
-              {/* Totals Row */}
-              <TableRow sx={{
-                backgroundColor: "#000 !important",
-                "& td": {
-                  color: "#fff !important",
-                  fontWeight: 600,
-                  fontSize: "10pt",
-                  border: "1px solid #333",
-                  py: "0.4mm",
-                },
-              }}>
-                <TableCell
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",
-                    py: "0.4mm",
-                    // color: "#fff !important",
-                  }}
-                >
+              <TableRow sx={TOTAL_ROW}>
+                <TableCell sx={TOTAL_CELL}>
                   Total Monthly Gross Salary
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",
-                    py: "0.4mm",
-                    // color: "#fff !important",
-                  }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalMonthly)}
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    fontWeight: 600,
-                    border: "1px solid #333",
-                    fontSize: "10pt",
-                    py: "0.4mm",
-                    // color: "#fff !important",
-                  }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalAnnual)}
                 </TableCell>

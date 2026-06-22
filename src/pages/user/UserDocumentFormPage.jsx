@@ -16,14 +16,20 @@ import { FiX } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
-/* ---------------- BASIC FIELDS ---------------- */
+import {
+  createProfileService,
+  updateProfileService,
+} from "../../core/services/v2/userService";
+import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
+
 const basicFields = [
   { name: "company", label: "Company", type: "select", required: true },
   {
     name: "mrms",
     label: "Identity",
     type: "select",
-    options: ["Mr.", "Mrs.", "Miss.", "Mx."],
+    options: ["Mr", "Mrs", "Miss", "Mx"],
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
@@ -83,6 +89,10 @@ const basicFields = [
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
+  const isEditMode = location.state?.isEditMode || false;
+  const userId = location.state?.userId;
+  const [previewData, setPreviewData] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const incomingDocs = location.state?.selectedDocs || [];
@@ -94,6 +104,120 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!employeeData) return;
+
+    const docs = employeeData.documents || {};
+
+    setFormData({
+      ...employeeData,
+
+      company:
+        COMPANY_NAME_MAP[employeeData.company] ||
+        employeeData.company ||
+        "",
+
+      mrms:
+        employeeData.identity === "MR"
+          ? "Mr"
+          : employeeData.identity === "MRS"
+            ? "Mrs"
+            : employeeData.identity === "MISS"
+              ? "Miss"
+              : employeeData.identity === "MX"
+                ? "Mx"
+                : "",
+
+      employeeName: employeeData.employeeName || "",
+      employeeId: employeeData.employeeId || "",
+
+      mobile:
+        employeeData.mobileNo ||
+        employeeData.mobile ||
+        "",
+
+      employeeEmail:
+        employeeData.email ||
+        employeeData.employeeEmail ||
+        "",
+
+      pan: employeeData.panNo || "",
+      dob: employeeData.dateOfBirth || "",
+
+      joiningCTC: employeeData.CTC || "",
+      currentCTC: employeeData.CTC || "",
+
+      joiningDesignation:
+        employeeData.designation || "",
+
+      currentDesignation:
+        employeeData.designation || "",
+
+      offerType:
+        employeeData.pfType === "WITH_PF"
+          ? "withPF"
+          : "withoutPF",
+
+      // 🔥 DOCUMENT DATA MAPPING
+
+      salarySlipStartMonth:
+        docs.SALARY_SLIP?.data?.startMonth || "",
+
+      salarySlipEndMonth:
+        docs.SALARY_SLIP?.data?.endMonth || "",
+
+      offer_letter:
+        docs.OFFER_LETTER?.data || {},
+
+      appointment_letter:
+        docs.APPOINTMENT_LETTER?.data || {},
+
+      confirmation_letter:
+        docs.CONFIRMATION_LETTER?.data || {},
+
+      increment_letter:
+        docs.INCREMENT_LETTER?.data || {},
+
+      experience_letter:
+        docs.EXPERIENCE_LETTER?.data || {},
+
+      relieving_letter: {
+        ...docs.RELIEVING_LETTER?.data,
+
+        lastWorkingDay:
+          docs.RELIEVING_LETTER?.data?.relievingDate || "",
+      },
+
+      internship_certificate: {
+        ...docs.INTERNSHIP_LETTER?.data,
+        internshipType:
+          docs.INTERNSHIP_LETTER?.data?.internshipType?.toLowerCase() || "",
+      },
+      completion_certificate:
+        docs.COMPLETION_LETTER?.data || {},
+
+      full_and_final_letter: {
+        date:
+          docs.FULL_AND_FINAL?.data?.fnfDate || "",
+
+        month:
+          docs.FULL_AND_FINAL?.data?.month || "",
+
+        dateofresignation:
+          docs.FULL_AND_FINAL?.data?.resignationDate || "",
+
+        dateofleaving:
+          docs.FULL_AND_FINAL?.data?.leavingDate || "",
+
+        paiddays:
+          docs.FULL_AND_FINAL?.data?.paidDays || "",
+
+        workdays:
+          docs.FULL_AND_FINAL?.data?.totalDaysInMonth || "",
+      },
+    });
+  }, [employeeData]);
 
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
@@ -255,9 +379,16 @@ const UserDocumentFormPage = () => {
   };
 
   /* ---------------- CONDITIONAL FIELD ---------------- */
-  const shouldShowField = (field) => {
+  const shouldShowField = (field, docKey = null) => {
     if (!field.dependsOn) return true;
-    return formData[field.dependsOn.field] === field.dependsOn.value;
+
+    if (docKey) {
+      return (
+        formData?.[docKey]?.[field.dependsOn.field] === field.dependsOn.value
+      );
+    }
+
+    return formData?.[field.dependsOn.field] === field.dependsOn.value;
   };
 
   /* ---------------- FILTER DOCUMENTS ---------------- */
@@ -267,6 +398,7 @@ const UserDocumentFormPage = () => {
     (doc) => !excludedDocIds.includes(doc.id),
   );
 
+  //Hello
   /* ---------------- REMOVE DUPLICATE FIELDS ---------------- */
   const basicFieldNames = useMemo(() => basicFields.map((f) => f.name), []);
 
@@ -284,6 +416,8 @@ const UserDocumentFormPage = () => {
       employeePhone: "mobile",
       employeeNumber: "mobile",
       phone: "mobile",
+      mobileNo: "mobile",
+      mobile: "mobile",
 
       // ✅ ADDRESS
       address: "address",
@@ -363,7 +497,38 @@ const UserDocumentFormPage = () => {
     return yearly;
   };
 
-  const handleSave = () => {
+  const saveProfileToBackend = async (payload) => {
+    try {
+      setIsSaving(true);
+
+      const response = isEditMode
+        ? await updateProfileService(userId, payload)
+        : await createProfileService(payload);
+
+      if (response?.success) {
+        return {
+          success: true,
+          data: response.data,
+        };
+      }
+
+      return {
+        success: false,
+        message: response?.message,
+      };
+    } catch (error) {
+      console.error("SAVE PROFILE ERROR:", error);
+
+      return {
+        success: false,
+        message: error?.message,
+      };
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSave = async () => {
     let newErrors = {};
 
     basicFields.forEach((field) => {
@@ -422,7 +587,10 @@ const UserDocumentFormPage = () => {
     const yearlySalary = Number(formData.salary || 0);
     const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
-    let payload = { ...formData };
+    // let payload = { ...formData };
+    const payload = buildCreateProfilePayload(formData, selectedDocs);
+
+    payload.documentData = payload.documentData || {};
 
     // ✅ GLOBAL CTC FIX
     payload.annualCTC = yearlySalary;
@@ -464,7 +632,8 @@ const UserDocumentFormPage = () => {
 
       // Internship Certificate
       if (docKey === "internship_certificate") {
-        payload.stipend = monthlySalary;
+        payload.stipend =
+          Number(formData?.internship_certificate?.stipend) || 0;
       }
 
       // Full & Final
@@ -518,12 +687,46 @@ const UserDocumentFormPage = () => {
     });
 
     console.log("FINAL PAYLOAD:", payload);
+
+    const enrichedFormData = { ...formData };
+
+    setPreviewData(enrichedFormData);
+    if (formData?.internship_certificate?.stipend) {
+      const stipend = Number(formData.internship_certificate.stipend);
+
+      enrichedFormData.stipend = stipend;
+      enrichedFormData.internshipType =
+        formData.internship_certificate.internshipType;
+
+      // force preview to use stipend
+      enrichedFormData.salary = stipend;
+      enrichedFormData.totalSalary = stipend;
+      enrichedFormData.monthlyCTC = stipend;
+      enrichedFormData.currentCTC = stipend;
+    }
+
+    docsToProcess.forEach((doc) => {
+      const docKey = normalizeDocName(doc.name);
+
+      if (formData[docKey]) {
+        Object.entries(formData[docKey]).forEach(([key, value]) => {
+          enrichedFormData[key] = value;
+        });
+      }
+    });
+
+    const profilePayload = buildCreateProfilePayload(
+      enrichedFormData,
+      docsToProcess,
+    );
+
+    console.log("PROFILE API PAYLOAD:", profilePayload);
+
     // ✅ F&F DOJ FIX
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
     payload.joiningDate = payload.joiningDate || payload.doj;
     // ✅ store payload temporarily
-    // setFormData(payload);
 
     // ✅ show popup instead of navigating
     setShowGeneratePopup(true);
@@ -556,22 +759,28 @@ const UserDocumentFormPage = () => {
 
     docsToProcess.forEach((doc) => {
       const docKey = normalizeDocName(doc.name);
-
-      if (formData[docKey]) {
-        Object.entries(formData[docKey]).forEach(([key, value]) => {
-          const normalizedKey = normalizeFieldName(key);
-          if (key === "issueDate") {
-            payload[`${docKey}_issueDate`] = value; // 👈 unique per doc
-          } else {
-            payload[normalizedKey] = value;
-          }
-        });
-      }
+      const backendDocKey = docKey.toUpperCase();
+      if (!formData[docKey]) return;
+      payload.documentData[backendDocKey] = {
+        ...formData[docKey],
+      };
     });
+
+    console.log(
+      "//PROFILE DOCUMENT DATA",
+      JSON.stringify(profilePayload.documentData, null, 2),
+    );
+
+    // SAVE PROFILE TO BACKEND
+    const saveResponse = await saveProfileToBackend(profilePayload);
+
+    if (!saveResponse.success) {
+      return;
+    }
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData: payload,
+        previewData: enrichedFormData,
         selectedDocs: enrichedDocs, // ✅ FIXED
         salarySlipMonths,
         previewCompany: selectedCompany,
@@ -604,21 +813,20 @@ const UserDocumentFormPage = () => {
   bg-white/70 backdrop-blur-md
   border text-sm outline-none
   transition-all duration-300
-  ${
-    hasError
-      ? `
+  ${hasError
+        ? `
         border-red-400
         bg-red-50/60
         shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
         focus:ring-red-300
         animate-[shake_0.25s_ease-in-out]
       `
-      : `
+        : `
         border-[#E2E8F0]
         focus:border-[#6366F1]
         focus:ring-[#6366F1]/20
       `
-  }
+      }
   focus:ring-4
 `;
 
@@ -626,6 +834,10 @@ const UserDocumentFormPage = () => {
     const value = docKey
       ? formData?.[docKey]?.[field.name] || ""
       : formData[field.name] || "";
+
+    if (!shouldShowField(field, docKey)) {
+      return null;
+    }
 
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
@@ -641,6 +853,13 @@ const UserDocumentFormPage = () => {
         handleChange(field.name, val);
       }
     };
+
+    console.log(
+      "FIELD",
+      docKey,
+      field.name,
+      formData?.[docKey]
+    );
 
     if (field.type === "select") {
       return (
@@ -709,6 +928,7 @@ const UserDocumentFormPage = () => {
     if (!value) return "Please fill the required fields";
 
     switch (name) {
+      case "employeeName":
       case "fullName":
         if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
         break;
@@ -719,6 +939,7 @@ const UserDocumentFormPage = () => {
         break;
 
       case "email":
+      case "employeeEmail":
         if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
         break;
 
@@ -753,6 +974,46 @@ const UserDocumentFormPage = () => {
     return "";
   };
 
+  useEffect(() => {
+    if (!isEditMode || !employeeData?.documents) return;
+
+    const generatedDocs = [];
+
+    Object.entries(employeeData.documents).forEach(
+      ([key, value]) => {
+        if (value.generated) {
+          const doc = filteredDocuments.find((d) => {
+            const generatedKey = d.name
+              .toUpperCase()
+              .replace(/&/g, "_AND_")
+              .replace(/\s+/g, "_");
+
+            const backendMap = {
+              INTERNSHIP_CERTIFICATE:
+                "INTERNSHIP_LETTER",
+              COMPLETION_CERTIFICATE:
+                "COMPLETION_LETTER",
+              FULL_AND_FINAL_LETTER:
+                "FULL_AND_FINAL",
+            };
+
+            return (
+              (backendMap[generatedKey] ||
+                generatedKey) === key
+            );
+          });
+
+          if (doc) {
+            generatedDocs.push(doc);
+          }
+        }
+      }
+    );
+
+    setSelectedDocs(generatedDocs);
+  }, [employeeData, isEditMode]);
+
+  // ================= NORMALIZE DOCUMENTS =================
   const normalizeDocName = (name) =>
     name
       ?.toLowerCase()
@@ -773,6 +1034,14 @@ const UserDocumentFormPage = () => {
     increment_letter: "salary",
     experience_letter: "salary",
   };
+
+  useEffect(() => {
+    console.log(
+      "FORM DATA",
+      JSON.stringify(formData, null, 2)
+    );
+  }, [formData]);
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <div className="max-w-[1350px] mx-auto">
@@ -808,8 +1077,8 @@ const UserDocumentFormPage = () => {
                 >
                   <div
                     className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
                       }`}
                   >
                     <FiFileText
@@ -853,8 +1122,8 @@ const UserDocumentFormPage = () => {
                 >
                   <div
                     className={`w-8 h-8 flex items-center justify-center rounded-lg mb-2 ${isActive
-                        ? "bg-white/20"
-                        : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
+                      ? "bg-white/20"
+                      : "bg-[#EEF2FF] group-hover:bg-[#E0E7FF]"
                       }`}
                   >
                     <FiEye
@@ -1070,7 +1339,7 @@ const UserDocumentFormPage = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                       {filteredFields.map((field) =>
-                        shouldShowField(field) ? (
+                        shouldShowField(field, docKey) ? (
                           <div key={field.name} className="flex flex-col gap-1">
                             <label className="text-xs font-medium text-[#475569]">
                               {field.label}
@@ -1100,6 +1369,7 @@ const UserDocumentFormPage = () => {
           <div className="mt-8 flex justify-end">
             <button
               onClick={handleSave}
+              disabled={isSaving}
               className="
                 px-6 py-2.5 
                 rounded-xl 
@@ -1112,7 +1382,13 @@ const UserDocumentFormPage = () => {
                 active:scale-[0.97]
               "
             >
-              Save Profile
+              {isSaving
+                ? isEditMode
+                  ? "Updating..."
+                  : "Saving..."
+                : isEditMode
+                  ? "Update Profile"
+                  : "Save Profile"}
             </button>
           </div>
         </div>
@@ -1334,7 +1610,6 @@ const UserDocumentFormPage = () => {
                       ? filteredDocuments
                       : selectedDocs;
 
-                    // 🔥 ALWAYS map from documentTypes
                     const enrichedDocs = docsToProcess.map((doc) => {
                       const fullDoc = documentTypes.find(
                         (d) => d.id === doc.id,
@@ -1344,7 +1619,7 @@ const UserDocumentFormPage = () => {
 
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
-                        previewData: formData,
+                        previewData,
                         selectedDocs: enrichedDocs, // ✅ FIXED
                         salarySlipMonths,
                         previewCompany: selectedCompany,

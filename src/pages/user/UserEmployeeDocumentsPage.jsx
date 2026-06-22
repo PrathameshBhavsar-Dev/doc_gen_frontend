@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiEdit, FiFileText } from "react-icons/fi";
 import { documentTypes } from "../../components/constant/publicData/mockData";
 import ROUTES from "../../core/constants/routes.constant";
+import { getUserForSeparationService } from "../../core/services/v2/userService";
 
 const UserEmployeeDocumentsPage = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [selectedDocs, setSelectedDocs] = useState([]);
   const isMultiSelect = selectedDocs.length > 1;
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   if (!state) return <div className="p-6">No data found</div>;
 
@@ -18,13 +21,67 @@ const UserEmployeeDocumentsPage = () => {
     (doc) => !excludedDocIds.includes(doc.id),
   );
 
-  const docs = filteredDocuments.map((doc, index) => ({
-    id: doc.id,
-    name: doc.name,
-    status: index % 2 === 0 ? "Generated" : "Pending",
-    createdAt: index % 2 === 0 ? "12 Feb 2026" : "-",
-    // payment: index % 2 === 0 ? "Paid" : "Pending",
-  }));
+  const backendDocumentKeyMap = {
+    INTERNSHIP_CERTIFICATE: "INTERNSHIP_LETTER",
+    COMPLETION_CERTIFICATE: "COMPLETION_LETTER",
+    FULL_AND_FINAL_LETTER: "FULL_AND_FINAL",
+  };
+
+  const docs = filteredDocuments.map((doc) => {
+    const generatedKey = doc.name
+      ?.toUpperCase()
+      .replace(/&/g, "_AND_")
+      .replace(/\s+/g, "_");
+
+    const backendKey =
+      backendDocumentKeyMap[generatedKey] ||
+      generatedKey;
+
+    const backendDoc =
+      profileData?.documents?.[backendKey];
+
+    const templateMap = {
+      "Offer Letter": "offer_letter",
+      "Appointment Letter": "appointment_letter",
+      "Confirmation Letter": "confirmation_letter",
+      "Increment Letter": "increment_letter",
+      "Experience Letter": "experience_letter",
+      "Relieving Letter": "relieving_letter",
+      "Internship Certificate": "internshipcertificate_letter",
+      "Completion Certificate": "completion_certificate",
+      "Full & Final Letter": "fullandfinal_letter",
+    };
+
+    return {
+      id: doc.id,
+      name: doc.name,
+
+      template: templateMap[doc.name],
+
+      status:
+        backendDoc?.generated
+          ? "Generated"
+          : "Pending",
+
+      createdAt:
+        backendDoc?.data?.issueDate ||
+        "-",
+
+      documentData: {
+        ...backendDoc?.data,
+
+        pfType: profileData?.pfType,
+
+        employeeId: profileData?.employeeId,
+        employeeName: profileData?.employeeName,
+
+        designation: profileData?.designation,
+        department: profileData?.department,
+
+        employeeEmail: profileData?.email,
+      },
+    };
+  });
 
   // ✅ Toggle single doc
   const toggleDoc = (id) => {
@@ -39,6 +96,60 @@ const UserEmployeeDocumentsPage = () => {
   const toggleAll = () => {
     setSelectedDocs(allSelected ? [] : docs.map((d) => d.id));
   };
+
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response =
+          await getUserForSeparationService(
+            state.id
+          );
+        // console.log(
+        //   "SEPARATION RESPONSE:",
+        //   response
+        // );
+        if (response.success) {
+          setProfileData(
+            response.data
+          );
+          console.log("PROFILE DATA", response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (state?.id) {
+      fetchProfile();
+    }
+  }, [state]);
+
+  console.log(
+    "PROFILE DATA FROM API",
+    JSON.stringify(profileData, null, 2)
+  );
+
+  useEffect(() => {
+    console.log("PROFILE DATA STATE", profileData);
+  }, [profileData]);
+
+  useEffect(() => {
+    console.log(
+      "DOCUMENTS FROM API",
+      profileData?.documents
+    );
+  }, [profileData]);
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -59,27 +170,67 @@ const UserEmployeeDocumentsPage = () => {
 
             <div>
               <h2 className="text-[20px] font-semibold text-[#1E293B]">
-                {state.fullName || state.name}
+                {profileData?.employeeName}
               </h2>
-              <p className="text-[14px] text-[#64748B]">{state.company}</p>
+              <p className="text-[14px] text-[#64748B]">{profileData?.company}</p>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <button className="px-4 py-2 rounded-xl bg-white/70 backdrop-blur text-[14px] flex items-center gap-1 shadow-sm hover:shadow transition">
+            <button
+              onClick={() =>
+                navigate(ROUTES.USER_FORM, {
+                  state: {
+                    employeeData: profileData,
+                    // selectedDocs: generatedDocs,
+                    isEditMode: true,
+                    userId: profileData.id,
+                  },
+                })
+              }
+              className="px-4 py-2 rounded-xl bg-white/70 backdrop-blur text-[14px] flex items-center gap-1 shadow-sm hover:shadow transition"
+            >
               <FiEdit /> Edit
             </button>
 
             <button
-              disabled={selectedDocs.length === 0}
-              onClick={() => navigate(ROUTES.USER_FORM)}
+              disabled={
+                !selectedDocs.some((id) => {
+                  const doc = docs.find((d) => d.id === id);
+                  return doc.status !== "Generated";
+                })
+              }
+              onClick={() => {
+                const selectedDocObjects = docs.filter((d) =>
+                  selectedDocs.includes(d.id),
+                );
+
+                // Only take docs that need generation (Pending)
+                const pendingDocs = selectedDocObjects.filter(
+                  (d) => d.status !== "Generated",
+                );
+
+                if (pendingDocs.length === 0) return;
+
+                navigate(ROUTES.USER_FORM, {
+                  state: {
+                    employeeData: profileData,
+                    isEditMode: true,
+                    userId: profileData.id,
+                    selectedDocs: pendingDocs,
+                  },
+                });
+              }}
               className={`
-                px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
-                ${selectedDocs.length === 0
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
+    px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
+    ${selectedDocs.some((id) => {
+                const doc = docs.find((d) => d.id === id);
+                return doc.status !== "Generated";
+              })
+                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }
-              `}
+  `}
             >
               <FiFileText />
               Generate {selectedDocs.length > 0 && `(${selectedDocs.length})`}
@@ -95,14 +246,30 @@ const UserEmployeeDocumentsPage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-7 gap-x-12">
             {[
-              { label: "Full Name", value: state.fullName || state.name },
-              { label: "Email", value: state.email },
-              { label: "Mobile", value: state.mobile },
-              { label: "PAN", value: state.pan },
-              { label: "DOB", value: state.dob },
-              { label: "Department", value: state.department },
-              { label: "Joining Date", value: state.joiningDate },
-              { label: "CTC", value: state.currentCTC },
+              { label: "Employee Name", value: profileData?.employeeName },
+              { label: "Employee ID", value: profileData?.employeeId },
+              { label: "Email", value: profileData?.email },
+              { label: "Mobile", value: profileData?.mobileNo },
+
+              { label: "PAN", value: profileData?.panNo },
+              { label: "DOB", value: profileData?.dateOfBirth },
+              { label: "Address", value: profileData?.address },
+
+              { label: "Offer Date", value: profileData?.offerDate },
+              { label: "Joining Date", value: profileData?.joiningDate },
+
+              { label: "CTC", value: profileData?.CTC },
+
+              { label: "Designation", value: profileData?.designation },
+              { label: "Department", value: profileData?.department },
+
+              { label: "Bank Name", value: profileData?.bankName },
+              { label: "Account Number", value: profileData?.accountNo },
+
+              { label: "Company", value: profileData?.company },
+              { label: "Identity", value: profileData?.identity },
+              { label: "PF Type", value: profileData?.pfType },
+
             ].map((item) => (
               <div key={item.label}>
                 <p className="text-[12px] text-[#64748B]">{item.label}</p>
@@ -199,10 +366,29 @@ const UserEmployeeDocumentsPage = () => {
                     disabled={isMultiSelect}
                     onClick={(e) => {
                       e.stopPropagation();
+
                       if (isMultiSelect) return;
-                      console.log(
-                        doc.status === "Generated" ? "View" : "Generate",
-                      );
+
+                      if (doc.status === "Generated") {
+                        navigate(ROUTES.DOCUMENT_PREVIEW, {
+                          state: {
+                            selectedDocs: [doc],
+
+                            previewData: doc.documentData,
+
+                            previewCompany: {
+                              name: profileData?.company,
+                            },
+                          },
+                        });
+                      } else {
+                        navigate(ROUTES.USER_FORM, {
+                          state: {
+                            selectedDocs: [doc],
+                            employeeData: state,
+                          },
+                        });
+                      }
                     }}
                     className={`
     text-[14px] font-semibold transition
@@ -212,7 +398,9 @@ const UserEmployeeDocumentsPage = () => {
                       }
   `}
                   >
-                    {doc.status === "Generated" ? "View" : "Generate"}
+                    {doc.status === "Generated"
+                      ? "View"
+                      : "Generate"}
                   </button>
                 </div>
               </div>
@@ -243,16 +431,27 @@ const UserEmployeeDocumentsPage = () => {
                 return doc.status === "Generated";
               })
             }
-            className={`
-        px-3 py-1.5 rounded-lg text-sm font-medium transition
-        ${selectedDocs.every((id) => {
-              const doc = docs.find((d) => d.id === id);
-              return doc.status === "Generated";
-            })
-                ? "bg-[#EEF2FF] text-[#2e2f85] hover:bg-[#E0E7FF]"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }
-      `}
+            onClick={() => {
+              const selectedGeneratedDocs = docs.filter(
+                (doc) =>
+                  selectedDocs.includes(doc.id) &&
+                  doc.status === "Generated"
+              );
+
+              if (!selectedGeneratedDocs.length) return;
+
+              navigate(ROUTES.DOCUMENT_PREVIEW, {
+                state: {
+                  selectedDocs: selectedGeneratedDocs,
+                  previewData:
+                    selectedGeneratedDocs[0].documentData,
+                  previewCompany: {
+                    name: profileData?.company,
+                  },
+                },
+              });
+            }}
+            className={`...`}
           >
             View
           </button>

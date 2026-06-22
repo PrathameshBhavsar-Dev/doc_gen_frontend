@@ -8,9 +8,10 @@ export const normalizeTemplateKey = (template) => {
 
   // ✅ Fix missing suffix cases
   const map = {
-    internshipcertificate: "internship_certificate", // ✅ FIXED
-    internship_certificate: "internship_certificate", // ✅ IMPORTANT
+    internshipcertificate: "internship_certificate",
+    internship_certificate: "internship_certificate",
     salaryslip: "salaryslip_letter",
+    salary_slip: "salaryslip_letter",
     offer: "offer_letter",
     increment: "increment_letter",
     appointment: "appointment_letter",
@@ -22,6 +23,16 @@ export const normalizeTemplateKey = (template) => {
 
   return map[normalized] || normalized;
 };
+
+// if (baseData?.documentData?.INTERNSHIP_CERTIFICATE) {
+//   const internship =
+//     baseData.documentData.INTERNSHIP_CERTIFICATE;
+
+//   freshData.internshipType = internship.internshipType;
+//   freshData.startDate = internship.startDate;
+//   freshData.endDate = internship.endDate;
+//   freshData.issueDate = internship.issueDate;
+// }
 
 export const buildPayload = (
   key,
@@ -41,6 +52,11 @@ export const buildPayload = (
 
     issuedTo: previewData.employeeId,
     issuedBy: user?._id,
+
+    pfType:
+      previewData.pfType === "withPF"
+        ? "WITH_PF"
+        : "WITHOUT_PF",
   };
 
   const validSalaryTypes = ["withPF", "withoutPF"];
