@@ -265,7 +265,7 @@ export const generatePDF = async (
 
       heightLeft -= pageHeight;
 
-      while (heightLeft > 0) {
+      while (heightLeft > 0.1) {
 
         position = heightLeft - imgHeight;
 

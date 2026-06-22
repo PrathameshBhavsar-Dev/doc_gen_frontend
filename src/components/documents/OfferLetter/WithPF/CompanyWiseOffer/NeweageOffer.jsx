@@ -25,7 +25,6 @@ const formatDate = (date) =>
     })
     : "";
 
-/* ================= TEXT STYLE (MATCH IMAGE) ================= */
 /* ================= TEXT STYLE (IMAGE MATCH) ================= */
 const TEXT = {
   fontFamily: '"Cambria", "Georgia", serif',
@@ -38,6 +37,20 @@ const SMALL_TEXT = {
   fontFamily: '"Cambria", "Georgia", serif',
   fontSize: "14.5px",
   lineHeight: 1.6,
+};
+
+const CELL_BASE = {
+  border: "1px solid #000",
+  verticalAlign: "top",   // force explicit, MUI default is unreliable here
+  lineHeight: 1.4,           // explicit line-height, don't let it inherit
+  padding: "0px 12px 12px 12px",
+  fontFamily: "Arial, sans-serif"
+};
+
+const CELL_HEAD = {
+  ...CELL_BASE,
+  fontWeight: 600,
+  backgroundColor: "#3dd6f1",
 };
 
 const NeweageOffer = ({ company, data }) => {
@@ -106,6 +119,7 @@ const NeweageOffer = ({ company, data }) => {
               ...TEXT,
               fontWeight: 600,
               textDecoration: "underline",
+              textUnderlineOffset: "8px",
               mb: 1,
             }}
           >
@@ -244,83 +258,25 @@ const NeweageOffer = ({ company, data }) => {
           >
             <TableHead>
               <TableRow>
-                <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    backgroundColor: "#3dd6f1",
-                    fontWeight: 600,
-                  }}
-                >
-                  Salary Components
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 600,
-                    backgroundColor: "#3dd6f1",
-                  }}
-                >
-                  Per month (Rs.)
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 600,
-                    backgroundColor: "#3dd6f1",
-                  }}
-                >
-                  Per Annum (Rs.)
-                </TableCell>
+                <TableCell sx={CELL_HEAD}>Salary Components</TableCell>
+                <TableCell align="center" sx={CELL_HEAD}>Per month (Rs.)</TableCell>
+                <TableCell align="center" sx={CELL_HEAD}>Per Annum (Rs.)</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell sx={{ border: "1px solid #000" }}>
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
-                    {formatCurrency(row.monthly)}
-                  </TableCell>
-                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
-                    {formatCurrency(row.annual)}
-                  </TableCell>
+                  <TableCell sx={CELL_BASE}>{row.name}</TableCell>
+                  <TableCell align="center" sx={CELL_BASE}>{formatCurrency(row.monthly)}</TableCell>
+                  <TableCell align="center" sx={CELL_BASE}>{formatCurrency(row.annual)}</TableCell>
                 </TableRow>
               ))}
 
               <TableRow>
-                <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 600,
-                    backgroundColor: "#3dd6f1",
-                  }}
-                >
-                  Total Monthly Gross Salary
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 600,
-                    backgroundColor: "#3dd6f1",
-                  }}
-                >
-                  {formatCurrency(monthlyCTC)}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 600,
-                    backgroundColor: "#3dd6f1",
-                  }}
-                >
-                  {formatCurrency(annualCTC)}
-                </TableCell>
+                <TableCell sx={CELL_HEAD}>Total Monthly Gross Salary</TableCell>
+                <TableCell align="center" sx={CELL_HEAD}>{formatCurrency(monthlyCTC)}</TableCell>
+                <TableCell align="center" sx={CELL_HEAD}>{formatCurrency(annualCTC)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

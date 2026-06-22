@@ -58,8 +58,8 @@ import A4Page from "../../../../layout/A4Page";
 const cell = {
   border: "1px solid #000",
   fontSize: "13px",      // smaller text
-  padding: "3px 5px",    // less spacing
-  // lineHeight: 1.2,       
+  padding: "0px 12px 12px 12px",
+  lineHeight: 1,       
 };
 
 const bold = { fontWeight: 700 };
@@ -196,7 +196,7 @@ const JditFullAndFinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                {company.name}
+                {company.name}  
               </TableCell>
             </TableRow>
 

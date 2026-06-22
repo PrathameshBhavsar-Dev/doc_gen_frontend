@@ -18,10 +18,10 @@ import {
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
 const fmt = (n) =>
@@ -33,9 +33,9 @@ const fmt = (n) =>
 /* ================= STYLES ================= */
 const CELL = {
   border: "1px solid #000",
-  padding: "4px 5px",
+  padding: "0px 12px 12px 12px",
   fontSize: "11.5px",
-  lineHeight: 1.2,
+  lineHeight: 1,
 };
 
 /* ================= COMPONENT ================= */
