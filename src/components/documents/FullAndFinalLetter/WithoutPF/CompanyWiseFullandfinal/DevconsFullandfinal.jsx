@@ -16,7 +16,8 @@ import A4Page from "../../../../layout/A4Page";
 const cell = {
   border: "1px solid #000",
   fontSize: "12px",
-  padding: "6px 6px",   // ✅ more space
+  padding: "0px 12px 12px 12px",
+ // padding: "6px 6px",   // ✅ more space
   lineHeight: 1.4,
   verticalAlign: "middle",
 

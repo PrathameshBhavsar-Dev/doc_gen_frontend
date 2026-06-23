@@ -40,7 +40,40 @@ const NimbjaAppointment = ({ company, data }) => {
 
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs Per Annum`;
   };
+/* ================= TABLE STYLES ================= */
 
+const TABLE_STYLE = {
+  width: "100%",
+  border: "1px solid #333",
+  borderCollapse: "collapse",
+};
+
+const HEADER_ROW = {
+  backgroundColor: "#a0ed64",
+};
+
+const CELL_BASE = {
+  border: "1px solid #333",
+  fontSize: "9.75pt",
+  pb: "4.2mm",
+  verticalAlign: "top",
+  lineHeight: 0.8,
+  fontFamily: "Bahnschrift",
+};
+
+const CELL_HEAD = {
+  ...CELL_BASE,
+  fontWeight: 600,
+  fontSize: "10pt",
+};
+
+const TOTAL_ROW = {
+  backgroundColor: "#a0ed64",
+};
+
+const TOTAL_CELL = {
+  ...CELL_HEAD,
+};
   
   // ================= SALARY TABLE =================
 const annualCTC = Number(data.salary || 0);

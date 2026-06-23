@@ -218,7 +218,8 @@ export default function SmartsoftwareConfirmation({ company, data }) {
             color: "#000",
             border: "1px solid #333",
             fontSize: "10pt",
-            padding: "6px",   // ✅ reduced padding
+           // padding: "6px",   // ✅ reduced padding
+           padding: "0px 12px 12px 12px",
           },
         }}
       >
@@ -256,7 +257,8 @@ export default function SmartsoftwareConfirmation({ company, data }) {
           "& td": {
             fontWeight: "bold",
             border: "1px solid #333",
-            padding: "6px",
+          //  padding: "6px",
+          padding: "0px 12px 12px 12px",                                                                                                                                                          
           },
         }}
       >
