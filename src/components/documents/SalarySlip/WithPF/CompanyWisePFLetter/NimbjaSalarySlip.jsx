@@ -106,25 +106,89 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
 
   const round0 = (num) => Math.round(num);
 
- const monthlyCTC = round0(totalSalary);
- const annualCTC = round0(monthlyCTC * 12);
+  const monthlyCTC = round0(totalSalary);
+  const annualCTC = round0(monthlyCTC * 12);
 
- const PF = 3750;
+  const PF = 3750;
 
- const HRA = round0(monthlyCTC * 0.18);
- const DA = round0(monthlyCTC * 0.12);
- const SPECIAL = round0(monthlyCTC * 0.16);
- const FOOD = round0(monthlyCTC * 0.06);
+  const HRA = round0(monthlyCTC * 0.18);
+  const DA = round0(monthlyCTC * 0.12);
+  const SPECIAL = round0(monthlyCTC * 0.16);
+  const FOOD = round0(monthlyCTC * 0.06);
 
- const BASIC = round0(monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF));
+  const BASIC = round0(monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF));
 
- const totalEarning = round0(BASIC + HRA + DA + SPECIAL + FOOD + PF);
+  const totalEarning = round0(BASIC + HRA + DA + SPECIAL + FOOD + PF);
 
- // ✅ FIXED HERE
- const pt = getProfessionalTax(month, monthlyCTC);
+  // ✅ FIXED HERE
+  const pt = getProfessionalTax(month, monthlyCTC);
 
- const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
- const netPay = round0(totalEarning - totalDeduction);
+  const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
+  const netPay = round0(totalEarning - totalDeduction);
+
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_CONTAINER_STYLE = {
+    border: "1px solid #333",
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    boxShadow: "none",
+  };
+  
+  const TABLE_STYLE = {
+    width: "100%",
+    borderCollapse: "collapse",
+  };
+  
+  const CELL_BASE = {
+    border: "1px solid #333",
+    borderRadius: 0,
+    fontSize: "9.75pt",
+    padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 1,
+    fontFamily: "Bahnschrift",
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+    textAlign: "center",
+  };
+
+  const COMPANY_NAME_CELL = {
+    ...CELL_HEAD,
+    fontSize: "14pt",
+  };
+
+  const COMPANY_ADDRESS_CELL = {
+    ...CELL_HEAD,
+  };
+
+  const TITLE_CELL = {
+    ...CELL_HEAD,
+  };
+
+  const LABEL_CELL = {
+    ...CELL_BASE,
+    fontWeight: 600,
+  };
+
+  const VALUE_CELL = {
+    ...CELL_BASE,
+    // textAlign: "center",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
+
+  const SIGNATURE_CELL = {
+    ...CELL_BASE,
+    // textAlign: "center",
+  };
+
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       {/* WATERMARK (same as Full & Final) */}
@@ -154,25 +218,15 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
       >
         <TableContainer
           component={Paper}
-          sx={{
-            border: "1px solid black",
-            borderRadius: 0,
-            backgroundColor: "transparent",
-            boxShadow: "none",
-            "& .MuiTableCell-root": {
-              border: "1px solid black",
-              padding: "4px 6px",
-              fontFamily: "Bahnschrift",
-            },
-          }}
+          sx={TABLE_CONTAINER_STYLE}
         >
-          <Table size="small">
+          <Table size="small" sx={TABLE_STYLE}>
             <TableBody>
               <TableRow>
                 <TableCell
                   colSpan={4}
                   align="center"
-                  sx={{ fontWeight: "bold", fontSize: "14pt" }}
+                  sx={COMPANY_NAME_CELL}
                 >
                   {company.name}
                 </TableCell>
@@ -182,7 +236,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                 <TableCell
                   colSpan={4}
                   align="center"
-                  sx={{ fontWeight: "bold" }}
+                  sx={COMPANY_ADDRESS_CELL}
                 >
                   {company.address}
                 </TableCell>
@@ -192,7 +246,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                 <TableCell
                   colSpan={4}
                   align="center"
-                  sx={{ fontWeight: "bold" }}
+                  sx={TITLE_CELL}
                 >
                   Salary Slip {salaryMonth}
                 </TableCell>
@@ -200,142 +254,209 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
 
               {/* Employee Info */}
               <TableRow>
-                <TableCell>Employee Name</TableCell>
-                <TableCell align="center">{employeeName}</TableCell>
-                <TableCell>Employee ID</TableCell>
-                <TableCell align="center">{employeeId}</TableCell>
+                <TableCell sx={LABEL_CELL}>Employee Name</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {employeeName}
+                </TableCell>
+
+                <TableCell sx={LABEL_CELL}>Employee ID</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {employeeId}
+                </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Gender</TableCell>
-                <TableCell align="center">{gender}</TableCell>
-                <TableCell>Department</TableCell>
-                <TableCell align="center">{department}</TableCell>
+                <TableCell sx={LABEL_CELL}>Gender</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {gender}
+                </TableCell>
+
+                <TableCell sx={LABEL_CELL}>Department</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {department}
+                </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>DOJ</TableCell>
-                <TableCell align="center">{doj}</TableCell>
-                <TableCell>PAN</TableCell>
-                <TableCell align="center">{pan}</TableCell>
+                <TableCell sx={LABEL_CELL}>DOJ</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {doj}
+                </TableCell>
+
+                <TableCell sx={LABEL_CELL}>PAN</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {pan}
+                </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Designation</TableCell>
-                <TableCell align="center">{designation}</TableCell>
-                <TableCell>DOB</TableCell>
-                <TableCell align="center">{dob}</TableCell>
+                <TableCell sx={LABEL_CELL}>Designation</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {designation}
+                </TableCell>
+
+                <TableCell sx={LABEL_CELL}>DOB</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {dob}
+                </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Mode</TableCell>
-                <TableCell align="center">{mode}</TableCell>
-                <TableCell>Working Days</TableCell>
-                <TableCell align="center">{workdays}</TableCell>
+                <TableCell sx={LABEL_CELL}>Mode</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {mode}
+                </TableCell>
+
+                <TableCell sx={LABEL_CELL}>Working Days</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {workdays}
+                </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Account No.</TableCell>
-                <TableCell align="center">{accountNo}</TableCell>
-                <TableCell />
-                <TableCell />
+                <TableCell sx={LABEL_CELL}>Account No.</TableCell>
+                <TableCell align="center" sx={VALUE_CELL}>
+                  {accountNo}
+                </TableCell>
+
+                <TableCell sx={VALUE_CELL} />
+                <TableCell sx={VALUE_CELL} />
               </TableRow>
 
               {/* Earnings */}
               <TableRow>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={CELL_HEAD}>
                   Earnings
                 </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={CELL_HEAD}>
                   Amount
                 </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={CELL_HEAD}>
                   Deductions
                 </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={CELL_HEAD}>
                   Amount
                 </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Basic</TableCell>
-                <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
-                <TableCell align="center">PF</TableCell>
-                <TableCell align="center">{formatCurrency(PF)}</TableCell>
+                <TableCell sx={CELL_BASE}>Basic</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(BASIC)}</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >PF</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(PF)}</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Bouqet Of Benefits</TableCell>
-                <TableCell align="center">{formatCurrency(HRA)}</TableCell>
-                <TableCell align="center">PT</TableCell>
-                <TableCell align="center">{formatCurrency(pt)}</TableCell>
+                <TableCell sx={CELL_BASE}>Bouqet Of Benefits</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(HRA)}</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >PT</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(pt)}</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>HRA</TableCell>
-                <TableCell align="center">{formatCurrency(DA)}</TableCell>
-                <TableCell align="center">Other Deduction</TableCell>
-                <TableCell align="center">
+                <TableCell sx={CELL_BASE}>HRA</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(DA)}</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >Other Deduction</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >
                   {formatCurrency(otherDeduction)}
                 </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>City Allowance</TableCell>
-                <TableCell align="center">{formatCurrency(SPECIAL)}</TableCell>
-                <TableCell />
-                <TableCell />
+                <TableCell sx={CELL_BASE}>City Allowance</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(SPECIAL)}</TableCell>
+                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE}/>
               </TableRow>
 
               <TableRow>
-                <TableCell>Superannuation Fund</TableCell>
-                <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
-                <TableCell />
-                <TableCell />
+                <TableCell sx={CELL_BASE}>Superannuation Fund</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >{formatCurrency(FOOD)}</TableCell>
+                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE}/>
               </TableRow>
 
               <TableRow>
-                <TableCell>PF</TableCell>
-                <TableCell align="center">
+                <TableCell sx={CELL_BASE}>PF</TableCell>
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >
                   {formatCurrency(PF)}
                 </TableCell>
-                <TableCell />
-                <TableCell />
+                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE}/>
               </TableRow>
 
               {/* Totals */}
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={TOTAL_CELL}>Total</TableCell>
+                <TableCell sx={CELL_HEAD}>
                   {formatCurrency(totalEarning)}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>
+                <TableCell sx={TOTAL_CELL}>
                   Total Deduction
                 </TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={CELL_HEAD}>
                   {formatCurrency(totalDeduction)}
                 </TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                <TableCell sx={TOTAL_CELL}>Net Pay</TableCell>
+                <TableCell sx={CELL_HEAD}>
                   {formatCurrency(netPay)}
                 </TableCell>
-                <TableCell />
-                <TableCell />
+                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE}/>
               </TableRow>
 
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }}>In Words</TableCell>
-                <TableCell colSpan={3}>{numberToWords(netPay)}</TableCell>
+                <TableCell sx={TOTAL_CELL}>In Words</TableCell>
+                <TableCell sx={CELL_BASE}colSpan={3}>{numberToWords(netPay)}</TableCell>
               </TableRow>
 
               {/* Signature */}
               <TableRow>
-                <TableCell />
-                <TableCell />
-                <TableCell align="center">
+                <TableCell sx={SIGNATURE_CELL} />
+                <TableCell sx={SIGNATURE_CELL} />
+                <TableCell
+                  align="center"
+                  sx={SIGNATURE_CELL}
+                >
                   {company.stamp && (
                     <img
                       src={company.stamp}
@@ -349,7 +470,10 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                     />
                   )}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell
+                  align="center"
+                  sx={VALUE_CELL}
+                >
                   {company.signature && (
                     <img
                       src={company.signature}
