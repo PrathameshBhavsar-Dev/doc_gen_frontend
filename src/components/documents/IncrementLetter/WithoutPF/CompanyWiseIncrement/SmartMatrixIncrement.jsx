@@ -98,6 +98,58 @@ const SmartMatrixIncrement = ({ company, data }) => {
       type: "total",
     },
   ];
+
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_CONTAINER_STYLE = {
+    marginBottom: "20px",
+    border: "0.5px solid #000",
+    borderRadius: 0,
+    boxShadow: "none",
+    "& *": {
+      fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
+    },
+  };
+
+  const TABLE_STYLE = {
+    tableLayout: "fixed",
+    width: "100%",
+    borderCollapse: "collapse",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #000",
+    fontSize: "10pt",
+    padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 0.8,
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    backgroundColor: "#f68b1f",
+    fontWeight: 600,
+  };
+
+  const COMPONENT_CELL = {
+    ...CELL_BASE,
+    width: "40%",
+  };
+
+  const AMOUNT_CELL = {
+    ...CELL_BASE,
+    textAlign: "center",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#f68b1f",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_BASE,
+    fontWeight: 600,
+  };
+
   return (
     <>
       {/* ======================================================
@@ -285,100 +337,67 @@ const SmartMatrixIncrement = ({ company, data }) => {
             <strong>Effective Date :</strong> {formatDate(data.effectiveDate)}
           </p>
         </Box>
+
         <TableContainer
           component={Paper}
-          sx={{
-            marginBottom: "20px",
-            border: "0.5px solid #000",
-            borderRadius: 0,
-            boxShadow: "none",
-            "& *": {
-              fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
-            },
-          }}
+          sx={TABLE_CONTAINER_STYLE}
         >
-          <Table size="small" sx={{ tableLayout: "fixed" }}>
-            {/* TABLE HEADER */}
+          <Table
+            size="small"
+            sx={TABLE_STYLE}
+          >
             <TableHead>
               <TableRow>
                 <TableCell
                   sx={{
-                    border: "1px solid #000",
-                    backgroundColor: "#f68b1f",
-                    fontWeight: "bold",
-                    fontSize: "15px",
+                    ...CELL_HEAD,
                     width: "40%",
                   }}
                 >
                   Salary Components
                 </TableCell>
+
                 <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    backgroundColor: "#f68b1f",
-                    fontWeight: "bold",
-                    fontSize: "15px",
-                    textAlign: "center",
-                    width: "22.5%",
-                  }}
+                  align="center"
+                  sx={CELL_HEAD}
                 >
                   Per month (Rs.)
                 </TableCell>
+
                 <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    backgroundColor: "#f68b1f",
-                    fontWeight: "bold",
-                    fontSize: "15px",
-                    textAlign: "center",
-                    width: "22.5%",
-                  }}
+                  align="center"
+                  sx={CELL_HEAD}
                 >
                   Per Annum (Rs.)
                 </TableCell>
               </TableRow>
             </TableHead>
 
-            {/* TABLE BODY */}
             <TableBody>
               {salaryRows.map((row, index) => {
                 const isTotal = row.type === "total";
+
                 return (
                   <TableRow
                     key={index}
-                    sx={{
-                      backgroundColor: isTotal ? "#f68b1f" : "#fff",
-                    }}
+                    sx={isTotal ? TOTAL_ROW : {}}
                   >
                     <TableCell
-                      sx={{
-                        border: "1.5px solid #000",
-                        fontWeight: isTotal ? "bold" : "normal",
-                        fontSize: "14px",
-                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
-                      }}
+                      sx={isTotal ? TOTAL_CELL : COMPONENT_CELL}
                     >
                       {row.label}
                     </TableCell>
+
                     <TableCell
-                      sx={{
-                        border: "1.5px solid #000",
-                        textAlign: "center",
-                        fontWeight: isTotal ? "bold" : "normal",
-                        fontSize: "14px",
-                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
-                      }}
+                      align="center"
+                      sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
                       {formatCurrency(row.monthly)}
                     </TableCell>
+
                     <TableCell
-                      sx={{
-                        border: "1.5px solid #000",
-                        textAlign: "center",
-                        fontWeight: isTotal ? "bold" : "normal",
-                        fontSize: "14px",
-                        fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
-                      }}
+                      align="center"
+                      sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
                       {formatCurrency(row.annual)}
                     </TableCell>

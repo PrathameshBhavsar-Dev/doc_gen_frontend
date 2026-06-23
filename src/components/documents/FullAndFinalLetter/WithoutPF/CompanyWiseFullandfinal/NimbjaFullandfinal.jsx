@@ -12,7 +12,7 @@ import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png"
 const cell = {
   border: "1px solid #000",
   fontSize: "12px", // slightly smaller for fit
-  padding: "4px 6px",
+  padding: "0px 12px 12px 12px", // adjusted padding for better spacing
   wordBreak: "break-word", // prevents overflow
 };
 

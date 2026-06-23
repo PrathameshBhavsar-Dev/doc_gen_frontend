@@ -75,13 +75,6 @@ const annualCTC = Number(data.newCTC || 0);
           }}
         />
 
-        {/* CONTENT */}
-        {/* <Box
-          className="a4-content-only"
-          sx={{
-            
-          }}
-        > */}
         <Box
           sx={{
             px: "25mm",
