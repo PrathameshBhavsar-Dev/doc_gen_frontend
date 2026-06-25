@@ -13,7 +13,7 @@ import A4Page from "../../../../layout/A4Page";
 const tableCell = {
   border: "1px solid #000",
   fontSize: "12px",
-  padding: "6px",
+  padding: "0px 12px 12px 12px",
 };
 
 const centerBold = { ...tableCell, fontWeight: 700, textAlign: "center" };
@@ -168,28 +168,28 @@ const NeweageFullandfinal = ({ company, data }) => {
               <TableCell sx={centerBold}>Actual</TableCell>
               <TableCell sx={centerBold}>Earned</TableCell>
             </TableRow>
-{[
-  ["Basic", basicActual, basicEarned],
-  ["HRA", hraActual, hraEarned],
-  ["Dearness Allowance", daActual, daEarned],
-  ["Special Allowance", specialActual, specialEarned],
-  ["Food Allowance", foodActual, foodEarned],
-  ["PF", pfMonthly, pfMonthly],
-].map(([label, actVal, earnVal]) => (
-  <TableRow key={label}>
-    <TableCell sx={tableCell} colSpan={2}>
-      {label}
-    </TableCell>
+            {[
+              ["Basic", basicActual, basicEarned],
+              ["HRA", hraActual, hraEarned],
+              ["Dearness Allowance", daActual, daEarned],
+              ["Special Allowance", specialActual, specialEarned],
+              ["Food Allowance", foodActual, foodEarned],
+              ["PF", pfMonthly, pfMonthly],
+            ].map(([label, actVal, earnVal]) => (
+              <TableRow key={label}>
+                <TableCell sx={tableCell} colSpan={2}>
+                  {label}
+                </TableCell>
 
-    <TableCell sx={centerCell}>
-      {formatAmt(actVal)}
-    </TableCell>
+                <TableCell sx={centerCell}>
+                  {formatAmt(actVal)}
+                </TableCell>
 
-    <TableCell sx={centerCell}>
-      {formatAmt(earnVal)}
-    </TableCell>
-  </TableRow>
-))}
+                <TableCell sx={centerCell}>
+                  {formatAmt(earnVal)}
+                </TableCell>
+              </TableRow>
+            ))}
 
             <TableRow>
               <TableCell sx={boldCell} colSpan={2}>Total</TableCell>
@@ -205,11 +205,11 @@ const NeweageFullandfinal = ({ company, data }) => {
             </TableRow>
 
 
-               <TableRow>
-                        <TableCell sx={{ ...tableCell, textAlign: "center" }}colSpan={2}>Provident Fund</TableCell>
-                        <TableCell sx={rightCell}></TableCell>
-                        <TableCell sx={rightCell}>{formatAmt(pf)}</TableCell>
-                </TableRow>
+            <TableRow>
+              <TableCell sx={{ ...tableCell, textAlign: "center" }} colSpan={2}>Provident Fund</TableCell>
+              <TableCell sx={rightCell}></TableCell>
+              <TableCell sx={rightCell}>{formatAmt(pf)}</TableCell>
+            </TableRow>
 
             <TableRow>
               <TableCell sx={{ ...tableCell, textAlign: "center" }} colSpan={2}>

@@ -84,7 +84,8 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const tableCell = {
     border: "1px solid #333",
     fontSize: "10pt",
-    padding: "6px",
+    //padding: "6px",
+    padding: "0px 12px 12px 12px",
   };
 
   /* ================= PAGE STYLES ================= */

@@ -473,7 +473,8 @@ const RPOffer = ({ company, data }) => {
               borderCollapse: "collapse",
               "& th, & td": {
                 border: "1px solid #000",
-                padding: "6px",
+padding: "0px 12px 12px 12px",
+              //  padding: "6px",
                 fontSize: "15px",
               },
             }}

@@ -211,7 +211,8 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
             "& th, & td": {
               border: "1px solid #000",
               fontSize: 14,
-              padding: "6px",
+             // padding: "6px",
+             padding: "0px 12px 12px 12px",
             },
           }}
         >

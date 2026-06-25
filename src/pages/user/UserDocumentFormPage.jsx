@@ -5,12 +5,13 @@ import {
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
+import { buildCreateProfilePayload } from "../../utils/buildCreateProfilePayload";
 import { FiZap } from "react-icons/fi";
-import { FiCheck } from "react-icons/fi";
-import { FiFileText } from "react-icons/fi";
+import { FiFileText } from "react-icons/fi";  
 import { FiAlertTriangle } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
 import { FiX } from "react-icons/fi";
+ import { FiCheck } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
@@ -18,7 +19,7 @@ import {
   createProfileService,
   updateProfileService,
 } from "../../core/services/v2/userService";
-import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+// import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
@@ -92,6 +93,7 @@ const UserDocumentFormPage = () => {
   const [previewData, setPreviewData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const incomingDocs = location.state?.selectedDocs || [];
   const employeeData = location.state?.employeeData;
   const [selectedDocs, setSelectedDocs] = useState(incomingDocs);

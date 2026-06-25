@@ -320,7 +320,7 @@ const finalData = calculateSalaryBreakup(annualCTC);
               "& .MuiTableCell-root": {
                 border: "1px solid #000",
                 fontSize: 13,
-                padding: "6px 8px",
+                padding: "0px 12px 12px 12px",
               },
             }}
           >

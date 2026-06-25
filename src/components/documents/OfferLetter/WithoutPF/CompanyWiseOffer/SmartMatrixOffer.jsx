@@ -1,24 +1,3 @@
-// // NimbjaOffer.jsx
-// import React from "react";
-// import SmartMatrixOfferPage1 from "../../../ExperienceLetter/CompanyWiseExperience/SmartMatrixOfferTemplates/SmartMatrixOfferPage1";
-// import SmartMatrixOfferPage2 from "../../../ExperienceLetter/CompanyWiseExperience/SmartMatrixOfferTemplates/SmartMatrixOfferPage2";
-
-// const SmartMatrixOffer = ({ company, data }) => {
-//   if (!company || !data) return null;
-
-//   return (
-//     <>
-//       {/* ================= PAGE 1 : OFFER LETTER ================= */}
-//       <SmartMatrixOfferPage1 company={company} data={data} />
-
-//       {/* ================= PAGE 2 : ANNEXURE / SALARY ================= */}
-//       <SmartMatrixOfferPage2 company={company} data={data} />
-//     </>
-//   );
-// };
-
-// export default SmartMatrixOffer;
-
 import React from "react";
 import {
   Typography,
@@ -120,10 +99,10 @@ const SmartMatrixOffer = ({ data, company }) => {
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
   const offerDate = fmtDate(data.issueDate);
@@ -184,6 +163,41 @@ const SmartMatrixOffer = ({ data, company }) => {
 
   const totalMonthly = monthlyGross;
   const totalAnnual = annualCTC;
+
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_STYLE = {
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+    width: "100%",
+    color: "#fff",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "#f28c28",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #333",
+    fontSize: "9.75pt",
+    padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 0.8,
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#f28c28",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
   /* ================= RETURN ================= */
   return (
     <>
@@ -371,54 +385,24 @@ const SmartMatrixOffer = ({ data, company }) => {
         >
           <Table
             size="small"
-            sx={{
-              border: "2px solid #000",
-              borderCollapse: "collapse",
-              width: "100%",
-              "& th, & td": {
-                border: "1px solid #000",
-                padding: "8px 8px",
-                fontSize: "14px",
-                lineHeight: 1.3,
-              },
-            }}
+            sx={TABLE_STYLE}
           >
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#f28c28" }}>
-                <TableCell
-                  sx={{
-                    width: "50%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
-                >
+              <TableRow sx={HEADER_ROW}>
+                <TableCell sx={CELL_HEAD}>
                   Salary Components
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    width: "25%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
+                  sx={CELL_HEAD}
                 >
                   Per month (Rs.)
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    width: "25%",
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
+                  sx={CELL_HEAD}
                 >
                   Per Annum (Rs.)
                 </TableCell>
@@ -428,73 +412,41 @@ const SmartMatrixOffer = ({ data, company }) => {
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "14px",
-                      padding: "10px 6px",
-                    }}
-                  >
+                  <TableCell sx={CELL_BASE}>
                     {row.name}
                   </TableCell>
 
                   <TableCell
                     align="center"
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "14px",
-                      padding: "3px 6px",
-                    }}
+                    sx={CELL_BASE}
                   >
                     {formatCurrency(row.monthly)}
                   </TableCell>
 
                   <TableCell
                     align="center"
-                    sx={{
-                      border: "1px solid #000",
-                      fontSize: "14px",
-                      padding: "3px 6px",
-                    }}
+                    sx={CELL_BASE}
                   >
                     {formatCurrency(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
-              {/* TOTAL ROW */}
-              <TableRow sx={{ backgroundColor: "#f28c28" }}>
-                <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
-                >
+              <TableRow sx={TOTAL_ROW}>
+                <TableCell sx={TOTAL_CELL}>
                   Total Monthly Gross Salary
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalMonthly)}
                 </TableCell>
 
                 <TableCell
                   align="center"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: 700,
-                    fontSize: "14px",
-                    padding: "7px 6px",
-                  }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalAnnual)}
                 </TableCell>

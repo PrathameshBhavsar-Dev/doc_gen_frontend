@@ -125,7 +125,8 @@ const numberToWords = (num) => {
 /* ---------- Styles ---------- */
 const cell = {
   border: "1px solid #000",
-  padding: "6px",
+ // padding: "6px",
+ padding: "0px 12px 12px 12px",
   fontSize: "13px",
 };
 

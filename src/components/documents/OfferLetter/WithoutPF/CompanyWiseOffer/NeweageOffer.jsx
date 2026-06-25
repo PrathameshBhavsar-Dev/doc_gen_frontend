@@ -226,6 +226,7 @@ const NeweageOffer = ({ company, data }) => {
                 border: "1px solid #000",
                 borderCollapse: "collapse",
                 width: "100%",
+                
               }}
             >
               <TableHead>

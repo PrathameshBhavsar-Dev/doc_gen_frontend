@@ -173,7 +173,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
       <TableContainer
         component={Paper}
         sx={{
-          border: "1.5px solid black",
+          border: "1px solid black",
           borderRadius: 0,
           mt: "20mm",
           mb: "15mm",
@@ -181,7 +181,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
           "& .MuiTableCell-root": {
             border: "1px solid black",
             fontSize: "11pt",
-            padding: "6px 8px",
+            padding: "0px 12px 12px 12px", 
             verticalAlign: "middle",
           },
         }}

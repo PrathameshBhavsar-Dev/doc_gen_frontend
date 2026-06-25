@@ -90,7 +90,9 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
           mt: "8mm",
         }}
       >
-        <Table size="small">
+        <Table size="small" sx={{
+          padding: "0px 12px 12px 12px",
+        }}>
           <colgroup>
             <col style={{ width: "22%" }} />
             <col style={{ width: "28%" }} />

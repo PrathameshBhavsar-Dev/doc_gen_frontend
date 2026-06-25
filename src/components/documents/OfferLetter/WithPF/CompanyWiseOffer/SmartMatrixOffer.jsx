@@ -177,6 +177,41 @@ const SmartMatrixOffer = ({ company, data }) => {
       ? (annualCTC / 100000).toString()
       : (annualCTC / 100000).toFixed(1);
 
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_STYLE = {
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+    width: "100%",
+    color: "#fff",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "#f28c28",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #333",
+    fontSize: "9.75pt",
+    pb: "4.2mm",
+    verticalAlign: "top",
+    lineHeight: 0.8,
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#f28c28",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -273,35 +308,33 @@ const SmartMatrixOffer = ({ company, data }) => {
           Annexure A Salary Structure
         </Typography>
 
-        <TableContainer>
+        <TableContainer
+          sx={{
+            mt: "10mm",
+            mb: "8mm",
+            fontFamily: "Times New Roman",
+          }}
+        >
           <Table
             size="small"
-            sx={{
-              border: "2px solid #000",
-              borderCollapse: "collapse",
-              width: "100%",
-              "& th, & td": {
-                border: "1px solid #000",
-                padding: "8px 8px", // 🔥 reduces height
-                fontSize: "14px", // 🔥 smaller text
-                lineHeight: 1.3, // 🔥 tighter spacing
-              },
-            }}
+            sx={TABLE_STYLE}
           >
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#f28c28" }}>
-                <TableCell sx={{ border: "1px solid #000", fontWeight: 700 }}>
+              <TableRow sx={HEADER_ROW}>
+                <TableCell sx={CELL_HEAD}>
                   Salary Components
                 </TableCell>
+
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid #000", fontWeight: 700 }}
+                  sx={CELL_HEAD}
                 >
                   Per month (Rs.)
                 </TableCell>
+
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid #000", fontWeight: 700 }}
+                  sx={CELL_HEAD}
                 >
                   Per Annum (Rs.)
                 </TableCell>
@@ -311,31 +344,41 @@ const SmartMatrixOffer = ({ company, data }) => {
             <TableBody>
               {salaryComponents.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell sx={{ border: "1px solid #000" }}>
+                  <TableCell sx={CELL_BASE}>
                     {row.name}
                   </TableCell>
-                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
+
+                  <TableCell
+                    align="center"
+                    sx={CELL_BASE}
+                  >
                     {formatCurrency(row.monthly)}
                   </TableCell>
-                  <TableCell align="center" sx={{ border: "1px solid #000" }}>
+
+                  <TableCell
+                    align="center"
+                    sx={CELL_BASE}
+                  >
                     {formatCurrency(row.annual)}
                   </TableCell>
                 </TableRow>
               ))}
 
-              <TableRow sx={{ backgroundColor: "#f28c28" }}>
-                <TableCell sx={{ border: "1px solid #000", fontWeight: 700 }}>
+              <TableRow sx={TOTAL_ROW}>
+                <TableCell sx={TOTAL_CELL}>
                   Total Monthly Gross Salary
                 </TableCell>
+
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid #000", fontWeight: 700 }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalMonthly)}
                 </TableCell>
+
                 <TableCell
                   align="center"
-                  sx={{ border: "1px solid #000", fontWeight: 700 }}
+                  sx={TOTAL_CELL}
                 >
                   {formatCurrency(totalAnnual)}
                 </TableCell>
@@ -344,58 +387,6 @@ const SmartMatrixOffer = ({ company, data }) => {
           </Table>
         </TableContainer>
 
-        {/* ✅ Replace TableContainer/Table with plain HTML table */}
-        {/* <table style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          border: "2px solid #000",
-          fontSize: "14px",
-          fontFamily: "Calibri, sans-serif",
-        }}>
-          <thead>
-            <tr style={{ backgroundColor: "#f28c28" }}>
-              {["Salary Components", "Per month (Rs.)", "Per Annum (Rs.)"].map((h, i) => (
-                <th key={i} style={{
-                  border: "1px solid #000",
-                  padding: "10px 12px",
-                  fontWeight: 700,
-                  textAlign: i === 0 ? "left" : "center",
-                  verticalAlign: "middle",
-                  height: "40px",
-                }}>
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {salaryComponents.map((row, i) => (
-              <tr key={i}>
-                <td style={{ border: "1px solid #000", padding: "10px 12px", verticalAlign: "middle", height: "38px" }}>
-                  {row.name}
-                </td>
-                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
-                  {formatCurrency(row.monthly)}
-                </td>
-                <td style={{ border: "1px solid #000", padding: "10px 12px", textAlign: "center", verticalAlign: "middle", height: "38px" }}>
-                  {formatCurrency(row.annual)}
-                </td>
-              </tr>
-            ))}
-            <tr style={{ backgroundColor: "#f28c28" }}>
-              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, verticalAlign: "middle", height: "40px" }}>
-                Total Monthly Gross Salary
-              </td>
-              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
-                {formatCurrency(totalMonthly)}
-              </td>
-              <td style={{ border: "1px solid #000", padding: "10px 12px", fontWeight: 700, textAlign: "center", verticalAlign: "middle", height: "40px" }}>
-                {formatCurrency(totalAnnual)}
-              </td>
-            </tr>
-          </tbody>
-        </table> */}
-        
         {/* Signature Block */}
         <Typography sx={{ mt: "20mm" }}>
           <strong>{company.name}</strong>

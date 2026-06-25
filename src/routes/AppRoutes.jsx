@@ -11,7 +11,6 @@ import AdminLayout from "../components/layout/AdminLayout";
 
 /* ======================= AUTH ======================= */
 const Login = lazy(() => import("../pages/auth/Login"));
-// const Signup = lazy(() => import("../pages/auth/Signup"));
 
 /* ======================= ADMIN ======================= */
 const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
@@ -70,60 +69,34 @@ const AppRoutes = () => {
       <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
 
       {/* ================= USER ROUTES ================= */}
+      {/* ================= USER ROUTES ================= */}
       <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+
+        {/* ✅ Routes WITH UserLayout */}
         <Route element={<UserLayout />}>
-          <Route
-            path={ROUTES.USER_DASHBOARD}
-            element={<LazyLoad component={UserDashboardPage} />}
-          />
-          <Route
-            path={ROUTES.USER_HISTORY}
-            element={<LazyLoad component={UserHistoryPage} />}
-          />
-          <Route
-            path={ROUTES.USERDOCUMENT_DETAIL}
-            element={<LazyLoad component={UserDetailPage} />}
-          />
-          <Route
-            path={ROUTES.USER_FORM}
-            element={<LazyLoad component={UserDocumentFormPage} />}
-          />
-          <Route
-            path={ROUTES.USER_PROFILE}
-            element={<LazyLoad component={UserProfilePage} />}
-          />
-          <Route
-            path={ROUTES.USER_SETTINGS}
-            element={<LazyLoad component={UserSettingsPage} />}
-          />
-          <Route
-            path={ROUTES.DOCUMENT_CREATE}
-            element={<LazyLoad component={DocumentCreate} />}
-          />
-          <Route
-            path={ROUTES.EDIT_DOCUMENT}
-            element={<LazyLoad component={DocumentCreate} />}
-          />
-          <Route
-            path={ROUTES.USER_EMPLOYEE_DATA}
-            element={<LazyLoad component={UserEmployeePage} />}
-          />
-          <Route
-            path={ROUTES.USER_EMPLOYEE_DOCUMENTS}
-            element={<LazyLoad component={UserEmployeeDocumentsPage} />}
-          />
-          {/* <Route
-            path={ROUTES.PROFILE_PREVIEW}
-            element={<LazyLoad component={UserDocumentFormPage} />}
-          /> */}
+          <Route path={ROUTES.USER_DASHBOARD} element={<LazyLoad component={UserDashboardPage} />} />
+          <Route path={ROUTES.USER_HISTORY} element={<LazyLoad component={UserHistoryPage} />} />
+          <Route path={ROUTES.USERDOCUMENT_DETAIL} element={<LazyLoad component={UserDetailPage} />} />
+          <Route path={ROUTES.USER_FORM} element={<LazyLoad component={UserDocumentFormPage} />} />
+          <Route path={ROUTES.USER_PROFILE} element={<LazyLoad component={UserProfilePage} />} />
+          <Route path={ROUTES.USER_SETTINGS} element={<LazyLoad component={UserSettingsPage} />} />
+          <Route path={ROUTES.DOCUMENT_CREATE} element={<LazyLoad component={DocumentCreate} />} />
+          <Route path={ROUTES.EDIT_DOCUMENT} element={<LazyLoad component={DocumentCreate} />} />
+          <Route path={ROUTES.USER_EMPLOYEE_DATA} element={<LazyLoad component={UserEmployeePage} />} />
+          <Route path={ROUTES.USER_EMPLOYEE_DOCUMENTS} element={<LazyLoad component={UserEmployeeDocumentsPage} />} />
         </Route>
+
+        {/* ✅ Routes WITHOUT UserLayout (full screen, own layout) */}
+        <Route path={ROUTES.DOCUMENT_PREVIEW} element={<LazyLoad component={DocumentPreview} />} />
+        <Route path={ROUTES.DOCUMENT_PREVIEW_BY_ID} element={<LazyLoad component={DocumentPreview} />} />
+
       </Route>
 
       {/* ================= ADMIN ROUTES ================= */}
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route
-            path={ROUTES.ADMIN_DASHBOARD} l
+            path={ROUTES.ADMIN_DASHBOARD}
             element={<LazyLoad component={AdminDashboard} />}
           />
           <Route
@@ -150,19 +123,17 @@ const AppRoutes = () => {
             path={ROUTES.ADMIN_COMPANY_DETAILS}
             element={<LazyLoad component={AdminCompanyDetails} />}
           />
-        </Route>
-      </Route>
 
-      {/* ================= DOCUMENT ROUTES ================= */}
-      <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
-        <Route
-          path={ROUTES.DOCUMENT_PREVIEW}
-          element={<LazyLoad component={DocumentPreview} />}
-        />
-        <Route
-          path={ROUTES.DOCUMENT_PREVIEW_BY_ID}
-          element={<LazyLoad component={DocumentPreview} />}
-        />
+          {/* ✅ Preview routes also inside AdminLayout for admin access */}
+          <Route
+            path={ROUTES.DOCUMENT_PREVIEW}
+            element={<LazyLoad component={DocumentPreview} />}
+          />
+          <Route
+            path={ROUTES.DOCUMENT_PREVIEW_BY_ID}
+            element={<LazyLoad component={DocumentPreview} />}
+          />
+        </Route>
       </Route>
 
       {/* ================= 404 ================= */}

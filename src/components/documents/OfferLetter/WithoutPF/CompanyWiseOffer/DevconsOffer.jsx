@@ -260,7 +260,7 @@ const totalAnnual = round0(
                   borderCollapse: "collapse",
                   "& th, & td": {
                     border: "1px solid #000",
-                    padding: "7px",
+                    padding: "0px 12px 12px 12px",
                     fontSize: "15px",
                   },
                 }}

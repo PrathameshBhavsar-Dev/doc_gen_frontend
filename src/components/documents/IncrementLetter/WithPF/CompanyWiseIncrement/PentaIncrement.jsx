@@ -267,7 +267,7 @@ const PentaIncrement = ({ company, data }) => {
                             borderCollapse: "collapse",
                             "& th, & td": {
                                 border: "1px solid #000",
-                                padding: "4px 6px",
+                                padding: "0px 12px 12px 12px",
                                 fontSize: "15px",
                                 fontFamily: `"Times New Roman", Times, serif`,
                                 lineHeight: 1.2,

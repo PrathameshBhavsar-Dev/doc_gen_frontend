@@ -43,7 +43,7 @@ const numberToWords = (num) => {
 /* ===================== STYLES ===================== */
 const cell = {
   border: "1px solid #000",
-  padding: "6px 8px",
+  padding: "0px 12px 12px 12px",
   fontSize: "13px",
   display: "flex",
   alignItems: "center",
@@ -98,19 +98,19 @@ const PentaSalarySlip = ({ company, data = {} }) => {
 
         {/* HEADER */}
         <Box sx={{ border: "1px solid #000" }}>
-          <Box sx={{ borderBottom: "1px solid #000", p: "4px" }}>
+          <Box sx={{ borderBottom: "1px solid #000", p: "0px 12px 12px 12px" }}>
             <Typography align="center" fontWeight="bold">
               {company.name?.toUpperCase()}
             </Typography>
           </Box>
 
-          <Box sx={{ borderBottom: "1px solid #000", p: "4px" }}>
+          <Box sx={{ borderBottom: "1px solid #000", p: "0px 12px 12px 12px" }}>
             <Typography align="center" fontSize={12} fontWeight="bold">
               {company.address}
             </Typography>
           </Box>
 
-          <Box sx={{ p: "4px" }}>
+          <Box sx={{ p: "0px 12px 12px 12px" }}>
             <Typography align="center" fontWeight="bold">
               Salary Slip {formatMonthYear(monthValue)}
             </Typography>

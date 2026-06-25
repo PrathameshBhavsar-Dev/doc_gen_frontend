@@ -16,7 +16,8 @@ import A4Page from "../../../../layout/A4Page";
 const cell = {
   border: "1px solid #000",
   fontSize: "13px",
-  padding: "4px 6px",
+  padding: "0px 12px 12px 12px",
+  lineHeight: "1"
 };
 
 const bold = { fontWeight: 700 };

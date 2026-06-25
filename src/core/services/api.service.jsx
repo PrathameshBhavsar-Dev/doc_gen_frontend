@@ -36,13 +36,16 @@ class ApiService {
       (error) => {
         // 🔥 Handle Unauthorized (Token expired / invalid)
         if (error.response?.status === 401) {
-          console.warn("Unauthorized! Logging out...");
 
-          localStorage.removeItem("user");
-          localStorage.removeItem("token");
+          console.warn("Unauthorized!");
 
-          // Redirect to login
-          window.location.href = "/login";
+          console.log(
+            "Token:",
+            localStorage.getItem("token")
+          );
+
+          // TEMPORARY
+          // window.location.href = "/login";
         }
 
         // 🔥 Handle Forbidden
@@ -132,7 +135,8 @@ class ApiService {
         responseType: "blob",
       });
 
-      const blob = new Blob([response]);
+      // const blob = new Blob([response]);
+      const blob = new Blob([response.data]);
       const urlBlob = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");

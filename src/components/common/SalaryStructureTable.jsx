@@ -31,7 +31,7 @@ const SalaryStructureTable = ({
     const food = round0(monthlyCTC * 0.06);
 
     let basic = round0(monthlyCTC - (hra + da + special + food + pf));
-    
+
     basic = round0(monthlyCTC - (hra + da + special + food + pf));
 
     const totalMonthly = round0(basic + hra + da + special + food + pf);
@@ -67,25 +67,25 @@ const SalaryStructureTable = ({
       ? salaryRows
       : salaryData
         ? [
-            ["Basic", salaryData.monthly.basic, salaryData.annual.basic],
-            [
-              "Bouqet Of Benefits",
-              salaryData.monthly.hra,
-              salaryData.annual.hra,
-            ],
-            ["HRA", salaryData.monthly.da, salaryData.annual.da],
-            [
-              "City Allowance",
-              salaryData.monthly.special,
-              salaryData.annual.special,
-            ],
-            ["Superannuation Fund", salaryData.monthly.food, salaryData.annual.food],
-            [
-              "Provident Fund (PF)",
-              salaryData.monthly.pf,
-              salaryData.annual.pf,
-            ],
-          ]
+          ["Basic", salaryData.monthly.basic, salaryData.annual.basic],
+          [
+            "Bouqet Of Benefits",
+            salaryData.monthly.hra,
+            salaryData.annual.hra,
+          ],
+          ["HRA", salaryData.monthly.da, salaryData.annual.da],
+          [
+            "City Allowance",
+            salaryData.monthly.special,
+            salaryData.annual.special,
+          ],
+          ["Superannuation Fund", salaryData.monthly.food, salaryData.annual.food],
+          [
+            "Provident Fund (PF)",
+            salaryData.monthly.pf,
+            salaryData.annual.pf,
+          ],
+        ]
         : [];
 
   // ✅ totals
@@ -94,6 +94,42 @@ const SalaryStructureTable = ({
 
   const finalAnnual =
     salaryRows.length > 0 ? totalAnnual : salaryData?.annual.total || 0;
+
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_STYLE = {
+    width: "100%",
+    border: "1px solid #000",
+    borderCollapse: "collapse",
+    fontFamily: "Bahnschrift",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "#a0ed64",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #000",
+    fontSize: "9.75pt",
+  padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 0.8,
+    fontFamily: "Bahnschrift",
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 700,
+    fontSize: "10pt",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#a0ed64",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
 
   return (
     <>
@@ -106,29 +142,19 @@ const SalaryStructureTable = ({
         Annexure A Salary Structure
       </Typography>
 
-      <Table
-        sx={{
-          width: "100%",
-          border: "1px solid #000",
-          fontFamily: "Bahnschrift",
-          "& th, & td": {
-            border: "1px solid #000",
-            padding: "6px",
-            fontSize: "14px",
-            fontFamily: "Bahnschrift",
-          },
-        }}
-      >
+      <Table sx={TABLE_STYLE}>
         <TableHead>
-          <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-            <TableCell>
-              <b>Salary Components</b>
+          <TableRow sx={HEADER_ROW}>
+            <TableCell sx={CELL_HEAD}>
+              Salary Components
             </TableCell>
-            <TableCell align="right">
-              <b>Per month (Rs.)</b>
+
+            <TableCell align="right" sx={CELL_HEAD}>
+              Per month (Rs.)
             </TableCell>
-            <TableCell align="right">
-              <b>Per Annum (Rs.)</b>
+
+            <TableCell align="right" sx={CELL_HEAD}>
+              Per Annum (Rs.)
             </TableCell>
           </TableRow>
         </TableHead>
@@ -136,21 +162,31 @@ const SalaryStructureTable = ({
         <TableBody>
           {rows.map(([name, monthly, annual], i) => (
             <TableRow key={i}>
-              <TableCell>{name}</TableCell>
-              <TableCell align="right">{formatCurrency(monthly)}</TableCell>
-              <TableCell align="right">{formatCurrency(annual)}</TableCell>
+              <TableCell sx={CELL_BASE}>
+                {name}
+              </TableCell>
+
+              <TableCell align="right" sx={CELL_BASE}>
+                {formatCurrency(monthly)}
+              </TableCell>
+
+              <TableCell align="right" sx={CELL_BASE}>
+                {formatCurrency(annual)}
+              </TableCell>
             </TableRow>
           ))}
 
-          <TableRow sx={{ backgroundColor: "#a0ed64" }}>
-            <TableCell>
-              <b>Total Monthly Gross Salary</b>
+          <TableRow sx={TOTAL_ROW}>
+            <TableCell sx={TOTAL_CELL}>
+              Total Monthly Gross Salary
             </TableCell>
-            <TableCell align="right">
-              <b>{formatCurrency(finalMonthly)}</b>
+
+            <TableCell align="right" sx={TOTAL_CELL}>
+              {formatCurrency(finalMonthly)}
             </TableCell>
-            <TableCell align="right">
-              <b>{formatCurrency(finalAnnual)}</b>
+
+            <TableCell align="right" sx={TOTAL_CELL}>
+              {formatCurrency(finalAnnual)}
             </TableCell>
           </TableRow>
         </TableBody>

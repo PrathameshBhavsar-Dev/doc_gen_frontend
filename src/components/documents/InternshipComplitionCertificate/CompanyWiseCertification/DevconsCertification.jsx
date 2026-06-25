@@ -40,6 +40,7 @@ const DevconsProjectCompletion = ({ company, data }) => {
               textAlign: "center",
               fontWeight: 700,
               textTransform: "uppercase",
+              
               mb: 6,
               letterSpacing: "0.5px",
             }}

@@ -19,16 +19,75 @@ import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.p
 
 const FONT = "Cambria, 'Times New Roman', serif";
 
-const cell = {
+const TABLE_CONTAINER_STYLE = {
+  border: "1px solid #000",
+  borderRadius: 0,
+  boxShadow: "none",
+  // mt: "5mm",
+};
+
+const TABLE_STYLE = {
+  width: "100%",
+  tableLayout: "fixed",
+  borderCollapse: "collapse",
+};
+
+const CELL_BASE = {
   border: "1px solid #000",
   fontFamily: FONT,
   fontSize: "9.5pt",
-  padding: "3px 5px",
+  padding: "0px 0px 8px 12px",
   verticalAlign: "middle",
 };
 
-const bold = { ...cell, fontWeight: 600 };
-const centerBold = { ...bold, textAlign: "center" };
+const CELL_LABEL = {
+  ...CELL_BASE,
+  fontWeight: 600,
+};
+
+const CELL_VALUE = {
+  ...CELL_BASE,
+};
+
+const CELL_CENTER = {
+  ...CELL_BASE,
+  textAlign: "center",
+};
+
+const CELL_CENTER_BOLD = {
+  ...CELL_CENTER,
+  fontWeight: 600,
+};
+
+const CELL_HIGHLIGHT = {
+  ...CELL_BASE,
+  backgroundColor: "#efe2b8",
+};
+
+const CELL_HIGHLIGHT_CENTER = {
+  ...CELL_HIGHLIGHT,
+  textAlign: "center",
+};
+
+const TITLE_CELL = {
+  ...CELL_CENTER_BOLD,
+  fontSize: "12pt",
+};
+
+const COMPANY_CELL = {
+  ...CELL_CENTER_BOLD,
+  fontSize: "12pt",
+};
+
+const ADDRESS_CELL = {
+  ...CELL_CENTER_BOLD,
+  fontSize: "13px",
+};
+
+const SIGNATURE_CELL = {
+  ...CELL_CENTER,
+  height: "40px",
+};
 
 const FullandFinalPF = ({ company = {}, data = {} }) => {
   if (!company || !data) return null;
@@ -38,8 +97,8 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
   const [year, monthNum] = (data.month || "").split("-");
   const monthName = year
     ? new Date(year, monthNum - 1).toLocaleString("en-IN", {
-        month: "long",
-      })
+      month: "long",
+    })
     : "";
 
   /* ================= BASIC DETAILS ================= */
@@ -98,135 +157,126 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
       <TableContainer
         component={Paper}
-        sx={{
-          border: "1px solid #000",
-          borderRadius: 0,
-          boxShadow: "none",
-          mt: "5mm",
-        }}
+        sx={TABLE_CONTAINER_STYLE}
       >
         <Table
           size="small"
-          sx={{
-            width: "100%",
-            tableLayout: "fixed",
-            borderCollapse: "collapse",
-          }}
+          sx={TABLE_STYLE}
         >
           {" "}
           <TableBody>
             {/* TITLE */}
             <TableRow>
-              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "12pt" }}>
+              <TableCell colSpan={4} sx={TITLE_CELL}>
                 <strong>Full & Final Settlement Statement</strong>
               </TableCell>
             </TableRow>
 
             {/* COMPANY */}
             <TableRow>
-              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "12pt" }}>
+              <TableCell colSpan={4} sx={COMPANY_CELL}>
                 <strong>{company.name}</strong>
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={4} sx={{ ...centerBold, fontSize: "13px" }}>
+              <TableCell colSpan={4} sx={ADDRESS_CELL}>
                 <strong>{company.address}</strong>
               </TableCell>
             </TableRow>
 
             {/* EMPLOYEE DETAILS */}
             <TableRow>
-              <TableCell sx={bold}>Employee Name</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Employee Name</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {data.employeeName}
               </TableCell>
-              <TableCell sx={bold}>F&F Date</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>F&F Date</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {ffDate}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={bold}>Employee ID</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Employee ID</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {data.employeeId}
               </TableCell>
-              <TableCell sx={bold}>Joining Date</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Joining Date</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {joiningDate}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={bold}>Designation</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Designation</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {data.designation}
               </TableCell>
-              <TableCell sx={bold}>Date of Resignation</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Date of Resignation</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {resignationDate}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell sx={bold}>Department</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Department</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {data.department}
               </TableCell>
-              <TableCell sx={bold}>Date of Leaving</TableCell>
-              <TableCell sx={{ ...cell, background: "#efe2b8" }}>
+              <TableCell sx={CELL_LABEL}>Date of Leaving</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT}>
                 {leavingDate}
               </TableCell>
             </TableRow>
 
             {/* SALARY HEADER */}
             <TableRow>
-              <TableCell colSpan={2} sx={centerBold}>
+              <TableCell colSpan={2} sx={CELL_CENTER_BOLD}>
                 Salary Particulars
               </TableCell>
 
-              <TableCell sx={centerBold}>For the month</TableCell>
+              <TableCell sx={CELL_CENTER_BOLD}>For the month</TableCell>
 
-              <TableCell sx={{ ...centerBold, background: "#efe2b8" }}>
+              <TableCell sx={CELL_HIGHLIGHT_CENTER}>
                 {monthName}
               </TableCell>
             </TableRow>
 
             {/* DAYS */}
             <TableRow>
-              <TableCell sx={centerBold}>Total Days in the month</TableCell>
-              <TableCell sx={{ ...centerBold, background: "#efe2b8" }}>
+              <TableCell sx={CELL_CENTER_BOLD}>Total Days in the month</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT_CENTER}>
                 {totalDays}
               </TableCell>
-              <TableCell sx={centerBold}>Paid Days</TableCell>
-              <TableCell sx={{ ...centerBold, background: "#efe2b8" }}>
+              <TableCell sx={CELL_CENTER_BOLD}>Paid Days</TableCell>
+              <TableCell sx={CELL_HIGHLIGHT_CENTER}>
                 {paidDays}
               </TableCell>
             </TableRow>
 
             {/* EARNINGS HEADER */}
             <TableRow>
-              <TableCell colSpan={2} sx={bold}>
+              <TableCell colSpan={2} sx={CELL_LABEL}>
                 Earnings
               </TableCell>
 
-              <TableCell sx={centerBold}>Actual</TableCell>
+              <TableCell sx={CELL_CENTER_BOLD}>Actual</TableCell>
 
-              <TableCell sx={centerBold}>Earned</TableCell>
+              <TableCell sx={CELL_CENTER_BOLD}>Earned</TableCell>
             </TableRow>
 
             {earningsRows.map(([label, value]) => (
               <TableRow key={label}>
-                <TableCell colSpan={2} sx={cell}>
+                <TableCell colSpan={2} sx={CELL_VALUE}>
                   {label}
                 </TableCell>
 
-                <TableCell sx={{ ...cell, textAlign: "center" }}>
+                <TableCell sx={CELL_CENTER}>
                   {formatCurrency(value)}
                 </TableCell>
 
-                <TableCell sx={{ ...cell, textAlign: "center" }}>
+                <TableCell sx={CELL_CENTER}>
                   {label === "PF ALLOWANCE"
                     ? formatCurrency(pfAllowance)
                     : formatCurrency(Math.round(earned(value)))}
@@ -236,118 +286,118 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
 
             {/* TOTAL */}
             <TableRow>
-              <TableCell colSpan={2} sx={bold}>
+              <TableCell colSpan={2} sx={CELL_LABEL}>
                 Total
               </TableCell>
 
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(totalActual)}
               </TableCell>
 
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(Math.round(totalEarned))}
               </TableCell>
             </TableRow>
 
             {/* DEDUCTIONS */}
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={CELL_CENTER_BOLD}>
                 Less Deductions(-)
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell colSpan={2} sx={CELL_CENTER}>
                 Provident Fund
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(pf)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell colSpan={2} sx={CELL_CENTER}>
                 Professional Tax
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(pt)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell colSpan={2} sx={CELL_CENTER}>
                 Others
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(others)}
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={centerBold}>
+              <TableCell colSpan={2} sx={CELL_CENTER_BOLD}>
                 Total Deductions
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(totalDeductions)}
               </TableCell>
             </TableRow>
 
             {/* OTHER EARNINGS */}
             <TableRow>
-              <TableCell colSpan={4} sx={centerBold}>
+              <TableCell colSpan={4} sx={CELL_CENTER_BOLD}>
                 Other Earnings
               </TableCell>
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell colSpan={2} sx={CELL_CENTER}>
                 Leave Encashment
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(leaveEncashment)}
               </TableCell>
             </TableRow>
 
             {/* TOTAL */}
             <TableRow>
-              <TableCell colSpan={2} sx={centerBold}>
+              <TableCell colSpan={2} sx={CELL_CENTER_BOLD}>
                 Total
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(Math.round(totalEarned))}
               </TableCell>
             </TableRow>
 
             {/* NET PAYABLE */}
             <TableRow>
-              <TableCell colSpan={2} sx={centerBold}>
+              <TableCell colSpan={2} sx={CELL_CENTER_BOLD}>
                 Net Payable (Rs)
               </TableCell>
-              <TableCell sx={cell}></TableCell>
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_VALUE}></TableCell>
+              <TableCell sx={CELL_CENTER}>
                 {formatCurrency(Math.round(netPayable))}
               </TableCell>
             </TableRow>
 
             {/* WORDS */}
             <TableRow>
-              <TableCell sx={bold}>Amount in Words</TableCell>
-              <TableCell colSpan={3} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_LABEL}>Amount in Words</TableCell>
+              <TableCell colSpan={3} sx={CELL_CENTER}>
                 {numberToWords(Math.round(netPayable))}
               </TableCell>
             </TableRow>
 
             {/* SIGNATURE */}
             <TableRow>
-              <TableCell sx={{ ...cell, height: "40px" }}></TableCell>
+              <TableCell sx={SIGNATURE_CELL}></TableCell>
 
-              <TableCell sx={{ ...cell, textAlign: "center" }}>
+              <TableCell sx={CELL_CENTER}>
                 <img
                   src={stampImg}
                   width={90}
@@ -356,7 +406,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
                 />
               </TableCell>
 
-              <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              <TableCell colSpan={2} sx={CELL_CENTER}>
                 <img
                   src={signImg}
                   width={120}
@@ -368,15 +418,15 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
 
             {/* SIGN TITLES */}
             <TableRow>
-              <TableCell align="center" sx={bold}>
+              <TableCell align="center" sx={CELL_LABEL}>
                 Prepared By
               </TableCell>
 
-              <TableCell align="center" sx={bold}>
+              <TableCell align="center" sx={CELL_LABEL}>
                 Verified By
               </TableCell>
 
-              <TableCell colSpan={2} align="center" sx={bold}>
+              <TableCell colSpan={2} align="center" sx={CELL_LABEL}>
                 Approved By
               </TableCell>
             </TableRow>

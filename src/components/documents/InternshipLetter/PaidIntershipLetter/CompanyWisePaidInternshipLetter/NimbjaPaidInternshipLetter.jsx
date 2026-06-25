@@ -341,7 +341,7 @@ const NimbjaPaidInternshipLetter = ({ company, data }) => {
               border: "1px solid #000",
               "& th, & td": {
                 border: "1px solid #000",
-                padding: "4px 6px",
+                padding: "0px 12px 12px 12px",
                 fontSize: "16px",
                 fontFamily: "Bahnschrift",
               },
