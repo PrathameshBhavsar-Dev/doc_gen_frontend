@@ -5,7 +5,6 @@ import {
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
-import { createProfileService } from "../../core/services/v2/userService.js";
 import { buildCreateProfilePayload } from "../../utils/buildCreateProfilePayload";
 import { FiZap } from "react-icons/fi";
 import { FiFileText } from "react-icons/fi";  
@@ -20,7 +19,7 @@ import {
   createProfileService,
   updateProfileService,
 } from "../../core/services/v2/userService";
-import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+// import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
