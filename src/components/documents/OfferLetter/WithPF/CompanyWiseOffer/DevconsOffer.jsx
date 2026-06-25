@@ -17,104 +17,104 @@ import A4Page from "../../../../layout/A4Page";
 const DevconsOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-//   // ================= HELPERS =================
-//   const round0 = (num) => Math.round(num);
+  //   // ================= HELPERS =================
+  //   const round0 = (num) => Math.round(num);
 
-//   // ================= CTC =================
-//   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
+  //   // ================= CTC =================
+  //   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
 
-//   // ================= UPDATED PERCENTAGES =================
-// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
+  //   // ================= UPDATED PERCENTAGES =================
+  // const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+  // const hraMonthly = round0(monthlyCTC * 0.18);
+  // const daMonthly = round0(monthlyCTC * 0.12);
+  // const specialMonthly = round0(monthlyCTC * 0.16);
+  // const foodMonthly = round0(monthlyCTC * 0.06);
 
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
+  // // ================= STATIC PF =================
+  // const pfMonthly = 3750;
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = basicMonthly * 12;
-// const hraAnnual = hraMonthly * 12;
-// const daAnnual = daMonthly * 12;
-// const specialAnnual = specialMonthly * 12;
-// const foodAnnual = foodMonthly * 12;
-// const pfAnnual = pfMonthly * 12;
+  // // ================= ANNUAL VALUES =================
+  // const basicAnnual = basicMonthly * 12;
+  // const hraAnnual = hraMonthly * 12;
+  // const daAnnual = daMonthly * 12;
+  // const specialAnnual = specialMonthly * 12;
+  // const foodAnnual = foodMonthly * 12;
+  // const pfAnnual = pfMonthly * 12;
 
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-// ];
+  // // ================= SALARY TABLE =================
+  // const salaryRows = [
+  //   ["Basic", basicMonthly, basicAnnual],
+  //   ["House Rent Allowance", hraMonthly, hraAnnual],
+  //   ["Dearness Allowance", daMonthly, daAnnual],
+  //   ["Special Allowance", specialMonthly, specialAnnual],
+  //   ["Food Allowance", foodMonthly, foodAnnual],
+  //   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  // ];
 
-// // ================= TOTAL EARNINGS =================
-// const totalMonthly =
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly;
+  // // ================= TOTAL EARNINGS =================
+  // const totalMonthly =
+  //   basicMonthly +
+  //   hraMonthly +
+  //   daMonthly +
+  //   specialMonthly +
+  //   foodMonthly;
 
-// const totalAnnual = totalMonthly * 12;
+  // const totalAnnual = totalMonthly * 12;
 
-////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////
 
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-// ================= ANNUAL CTC INPUT =================
-const annualCTC = round0(Number(data.salary || 0));
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.salary || 0));
 
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-// ================= FIXED PERCENTAGES =================
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= ADJUSTED BASIC =================
-const basicMonthly = round0(
-  monthlyCTC -
-  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-);
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-// ================= ANNUAL =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const pfAnnual = round0(pfMonthly * 12);
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual],
-];
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
 
-// ================= TOTAL =================
-const totalMonthly = round0(
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly
-);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
 
-const totalAnnual = round0(totalMonthly * 12);
+  const totalAnnual = round0(totalMonthly * 12);
 
 
   const firstName = data.employeeName?.trim().split(" ")[0];
@@ -160,8 +160,8 @@ const totalAnnual = round0(totalMonthly * 12);
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-  <b>Subject</b> : Letter of intent for the position of <b>{data.position}</b>
-</Typography>
+              <b>Subject</b> : Letter of intent for the position of <b>{data.position}</b>
+            </Typography>
 
 
             <Typography sx={{ mb: 3 }}>
@@ -170,7 +170,7 @@ const totalAnnual = round0(totalMonthly * 12);
 
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
               <b style={{ textTransform: "uppercase" }}>{company.name}</b> is delighted to offer you the full-time position of{" "}
-              <b>{data.position}</b> with an anticipated start date of{" "} 
+              <b>{data.position}</b> with an anticipated start date of{" "}
               <b> {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 day: "2-digit",
                 month: "long",
@@ -251,18 +251,18 @@ const totalAnnual = round0(totalMonthly * 12);
           </Typography>
 
           <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 0 }}>
-                        <Table
-                          sx={{
-                            width: "100%",
-                            border: "1px solid #000",
-                            borderCollapse: "collapse",
-                            "& th, & td": {
-                              border: "1px solid #000",
-                              padding: "7px",
-                              fontSize: "15px",
-                            },
-                          }}
-                        >
+            <Table
+              sx={{
+                width: "100%",
+                border: "1px solid #000",
+                borderCollapse: "collapse",
+                "& th, & td": {
+                  border: "1px solid #000",
+                  padding: "0px 12px 12px 12px",
+                   fontSize: "15px",
+                },
+              }}
+            >
               <TableHead>
                 <TableRow sx={{ backgroundColor: "#ffc000" }}>
                   <TableCell sx={{ fontWeight: 700 }}>
@@ -278,17 +278,17 @@ const totalAnnual = round0(totalMonthly * 12);
               </TableHead>
 
               <TableBody>
-                 {salaryRows.map(([name, monthly, annual], i) => (
-                              <TableRow key={i}>
-                                <TableCell>{name}</TableCell>
-                                <TableCell align="right">
-                                  {formatCurrency(monthly)}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {formatCurrency(annual)}
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                {salaryRows.map(([name, monthly, annual], i) => (
+                  <TableRow key={i}>
+                    <TableCell>{name}</TableCell>
+                    <TableCell align="right">
+                      {formatCurrency(monthly)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatCurrency(annual)}
+                    </TableCell>
+                  </TableRow>
+                ))}
 
                 {/* <TableRow>
                   <TableCell sx={{ fontWeight: 700 }}>
@@ -314,7 +314,7 @@ const totalAnnual = round0(totalMonthly * 12);
                   </TableCell>
                 </TableRow>
 
-                
+
               </TableBody>
             </Table>
           </TableContainer>

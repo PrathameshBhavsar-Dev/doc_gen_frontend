@@ -96,7 +96,8 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            padding: "6px",
+           // padding: "6px",
+           padding: "0px 12px 12px 12px",
             fontFamily: "Bahnschrift",
           },
         }}

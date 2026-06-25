@@ -134,7 +134,8 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
           "& .MuiTableCell-root": {
             border: "1px solid black",
             fontSize: "11pt",
-            padding: "6px 8px",
+           // padding: "6px 8px",
+           padding: "0px 12px 12px 12px",
           },
         }}
       >

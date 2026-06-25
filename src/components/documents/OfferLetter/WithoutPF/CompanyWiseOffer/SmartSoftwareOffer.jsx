@@ -104,7 +104,10 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     fontSize: "13px",
     lineHeight: 1.4,
     border: "1px solid #000",
-    padding: "4px 6px",
+   // padding: "4px 6px",
+   padding: "0px 12px 12px 12px",
+   
+   
   };
 
   const tableHeader = {

@@ -494,7 +494,8 @@ const totalAnnual = round0(totalMonthly * 12);
             border: "1px solid #000",
             "& th, & td": {
               border: "1px solid #000",
-              padding: "7px",
+              // padding: "7px",
+              padding: "0px 12px 12px 12px",
               fontSize: "14px",
             },
           }}
