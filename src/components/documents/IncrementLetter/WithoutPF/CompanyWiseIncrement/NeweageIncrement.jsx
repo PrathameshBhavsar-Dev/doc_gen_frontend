@@ -241,6 +241,7 @@ const NeweageIncrement = ({ company, data }) => {
             border: "0.5px solid #000",
             borderRadius: 0,
             boxShadow: "none",
+
           }}
         >
           <Table size="small">

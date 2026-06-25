@@ -34,7 +34,7 @@ const fmt = (n) =>
 
 /* ── Cell style helper ────────────────────────────────────── */
 const C = (extra = {}) => ({
-  border: "1px solid #aaa",
+  border: "1px solid black",
   padding: "6px 10px",
   fontSize: "13px",
   ...extra,
@@ -164,8 +164,8 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             width: "100%",
             borderCollapse: "collapse",
             "& td": {
-              border: "1px solid #aaa",
-              padding: "6px 10px",
+              border: "1px solid black",
+              padding: "0px 12px 12px 12px",
               fontSize: "13px",
             },
           }}

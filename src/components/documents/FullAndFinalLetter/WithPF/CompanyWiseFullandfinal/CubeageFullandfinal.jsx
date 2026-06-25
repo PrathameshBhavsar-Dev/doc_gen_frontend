@@ -25,7 +25,7 @@ const round2 = (n) => Math.round(n * 100) / 100;
 
 const C = (extra = {}) => ({
   border: "1px solid #000",
-  padding: "5px 8px",
+  padding: "0px 12px 12px 12px",
   fontSize: "12.5px",
   height: "35px",
   verticalAlign: "middle",

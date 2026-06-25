@@ -104,7 +104,7 @@ const CubeageIncrement = ({ company, data }) => {
 
   const TC = (extra = {}) => ({
     border: "1px solid #000",
-    padding: "8px",
+    padding: "0px 12px 12px 12px",
     ...extra,
   });
 

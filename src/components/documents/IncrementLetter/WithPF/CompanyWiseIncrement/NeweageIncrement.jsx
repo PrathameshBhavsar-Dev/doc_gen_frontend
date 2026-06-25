@@ -107,6 +107,37 @@ const NeweageIncrement = ({ company, data }) => {
     },
   ];
 
+  const TABLE_STYLE = {
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+    width: "100%",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "rgba(3, 171, 197, 0.95)",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #000",
+    fontSize: "14px",
+    textAlign: "center",
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: "bold",
+    color: "#000",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "rgba(3, 171, 197, 0.95)",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_BASE,
+    fontWeight: "bold",
+  };
+
   return (
     <>
       {/* ================= PAGE 1 – INCREMENT LETTER ================= */}
@@ -262,7 +293,7 @@ const NeweageIncrement = ({ company, data }) => {
         <TableContainer
           component={Paper}
           sx={{
-            border: "0.5px solid #000",
+            // border: "0.5px solid #000",
             borderRadius: 0,
             boxShadow: "none",
           }}
@@ -272,29 +303,32 @@ const NeweageIncrement = ({ company, data }) => {
               <TableRow>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1.5px solid #000",
                     backgroundColor: "rgba(3, 171, 197, 0.95)",
                     fontWeight: "bold",
+                    padding: "0px 12px 12px 12px",
                   }}
                 >
                   Salary Components
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1.5px solid #000",
                     backgroundColor: "rgba(3, 171, 197, 0.95)",
                     fontWeight: "bold",
                     textAlign: "center",
+                    padding: "0px 12px 12px 12px",
                   }}
                 >
                   Per month (Rs.)
                 </TableCell>
                 <TableCell
                   sx={{
-                    border: "2px solid #000",
+                    border: "1.5px solid #000",
                     backgroundColor: "rgba(3, 171, 197, 0.95)",
                     fontWeight: "bold",
                     textAlign: "center",
+                    padding: "0px 12px 12px 12px",
                   }}
                 >
                   Per Annum (Rs.)
@@ -312,30 +346,34 @@ const NeweageIncrement = ({ company, data }) => {
                       backgroundColor: isTotal
                         ? "rgba(3, 171, 197, 0.95)"
                         : "#fff",
+                      padding: "0px 12px 12px 12px",
                     }}
                   >
                     <TableCell
                       sx={{
-                        border: "1.5px solid #000",
+                        border: "1px solid #000",
                         fontWeight: isTotal ? "bold" : "normal",
+                        padding: "0px 12px 12px 12px",
                       }}
                     >
                       {row.label}
                     </TableCell>
                     <TableCell
                       sx={{
-                        border: "1.5px solid #000",
+                        border: "1px solid #000",
                         textAlign: "center",
                         fontWeight: isTotal ? "bold" : "normal",
+                        padding: "0px 12px 12px 12px",
                       }}
                     >
                       {formatCurrency(row.monthly)}
                     </TableCell>
                     <TableCell
                       sx={{
-                        border: "1.5px solid #000",
+                        border: "1px solid #000",
                         textAlign: "center",
                         fontWeight: isTotal ? "bold" : "normal",
+                        padding: "0px 12px 12px 12px",
                       }}
                     >
                       {formatCurrency(row.annual)}

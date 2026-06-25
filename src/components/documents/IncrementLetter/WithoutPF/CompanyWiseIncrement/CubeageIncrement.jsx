@@ -256,7 +256,7 @@ const CubeageIncrement = ({ company, data }) => {
               "& th, & td": {
                 border: "1px solid #000",
                 fontSize: "11.5pt",
-                padding: "8px",
+                padding: "0px 12px 12px 12px",
               },
             }}
           >

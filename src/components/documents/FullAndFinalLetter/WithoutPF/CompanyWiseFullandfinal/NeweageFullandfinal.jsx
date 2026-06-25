@@ -13,7 +13,7 @@ import A4Page from "../../../../layout/A4Page";
 const tableCell = {
   border: "1px solid #000",
   fontSize: "12px",
-  padding: "6px",
+  padding: "0px 12px 12px 12px",
 };
 
 const centerBold = { ...tableCell, fontWeight: 700, textAlign: "center" };

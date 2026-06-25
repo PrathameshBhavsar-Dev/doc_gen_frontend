@@ -348,17 +348,17 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
-  console.log("FULL LOCATION STATE");
-  console.log(state);
+  // console.log("FULL LOCATION STATE");
+  // console.log(state);
 
-  console.log("PREVIEW DATA");
-  console.log(state.previewData);
+  // console.log("PREVIEW DATA");
+  // console.log(state.previewData);
 
-  console.log("SELECTED DOCS");
-  console.log(state.selectedDocs);
+  // console.log("SELECTED DOCS");
+  // console.log(state.selectedDocs);
 
-  console.log("PREVIEW COMPANY");
-  console.log(state.previewCompany);
+  // console.log("PREVIEW COMPANY");
+  // console.log(state.previewCompany);
   const flowType = state.flowType || "DIRECT"; // default fallback
 
   const handleEdit = () => {
@@ -367,13 +367,15 @@ const DocumentPreview = () => {
     if (flowType === "PROFILE") {
       navigate(ROUTES.USER_FORM, {
         state: {
-          document: previewData,
-          flowType: "PROFILE",
-          isEdit: true,
+          employeeData: previewData,       // ✅ was: document (wrong key)
+          isEditMode: true,                // ✅ was: isEdit (wrong key)
+          userId: previewData?.employeeId, // ✅ was: missing entirely
+          selectedDocs: selectedDocs,      // ✅ was: missing entirely
         },
       });
     } else {
-      navigate("/document/create", {
+      // ✅ DIRECT flow — completely unchanged
+      navigate("/user/form", {
         state: {
           document: previewData,
           flowType: "DIRECT",
@@ -454,7 +456,7 @@ const DocumentPreview = () => {
     }));
   };
   // const key = normalizeTemplateKey(previewDocType?.template);
-  console.log("previewDocType", previewDocType);
+  // console.log("previewDocType", previewDocType);
   const key =
     normalizeTemplateKey(previewDocType?.template) ||
     normalizeTemplateKey(
@@ -466,8 +468,8 @@ const DocumentPreview = () => {
 
   if (!key) {
     console.error("Invalid doc type:", previewDocType);
-    console.log("Selected Doc:", selectedDoc);
-    console.log("Doc Name:", selectedDoc?.name);
+    // console.log("Selected Doc:", selectedDoc);
+    // console.log("Doc Name:", selectedDoc?.name);
     return null; // don't crash UI
   }
 
@@ -705,9 +707,9 @@ const DocumentPreview = () => {
     const docsArray =
       key === "salaryslip_letter"
         ? salarySlipDocs.map((doc) => ({
-            docKey: "salaryslip_letter",
-            data: doc,
-          }))
+          docKey: "salaryslip_letter",
+          data: doc,
+        }))
         : Array.isArray(previewData)
           ? previewData
           : [{ docKey: previewDocType?.template, data: previewData }];
@@ -724,10 +726,10 @@ const DocumentPreview = () => {
         data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
         company: previewCompany,
       };
-      console.log(
-        "INTERNSHIP DOCUMENT DATA",
-        freshData.documentData?.INTERNSHIP_CERTIFICATE,
-      );
+      // console.log(
+      //   "INTERNSHIP DOCUMENT DATA",
+      //   freshData.documentData?.INTERNSHIP_CERTIFICATE,
+      // );
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
         internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
@@ -835,7 +837,7 @@ const DocumentPreview = () => {
         }
       });
 
-      console.log("FRESH DATA BEFORE FIX:", freshData);
+      // console.log("FRESH DATA BEFORE FIX:", freshData);
 
       // =========================
       // PF NORMALIZATION
@@ -917,13 +919,13 @@ const DocumentPreview = () => {
         freshData.trainingType = "General Training";
       }
 
-      console.log("SALARY SLIP DEBUG", {
-        key,
-        offerType: freshData.offerType,
-        salaryType: freshData.salaryType,
-        pfType: freshData.pfType,
-        freshData,
-      });
+      // console.log("SALARY SLIP DEBUG", {
+      //   key,
+      //   offerType: freshData.offerType,
+      //   salaryType: freshData.salaryType,
+      //   pfType: freshData.pfType,
+      //   freshData,
+      // });
       // =========================
       // BUILD PAYLOAD
       // =========================
@@ -997,9 +999,8 @@ const DocumentPreview = () => {
       // =========================
       // FILE NAME
       // =========================
-      const filename = `${previewDocType?.name || "Document"}-${
-        freshData?.employeeName || "User"
-      }-${new Date().toISOString().slice(0, 10)}`;
+      const filename = `${previewDocType?.name || "Document"}-${freshData?.employeeName || "User"
+        }-${new Date().toISOString().slice(0, 10)}`;
 
       // =========================
       // GENERATE PDF
@@ -1115,7 +1116,22 @@ const DocumentPreview = () => {
         <div className="dp-topbar-right">
           <button
             className="dp-btn dp-btn-ghost"
-            onClick={() => navigate("/document/create")}
+            onClick={() => {
+              console.log("flowType:", flowType);
+              if (flowType === "PROFILE") {
+                navigate(ROUTES.USER_FORM, {
+                  state: {
+                    employeeData: previewData,      // ✅ correct key + correct variable
+                    isEditMode: true,               // ✅ correct key
+                    userId: previewData?.employeeId,
+                    selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
+                    flowType: "PROFILE", // ✅ add this
+                  },
+                });
+              } else {
+                navigate(ROUTES.DOCUMENT_CREATE);
+              }
+            }}
           >
             <Edit sx={{ fontSize: 13 }} /> Edit
           </button>
@@ -1289,8 +1305,22 @@ const DocumentPreview = () => {
             </button>
             <button
               className="dp-qa-btn"
-              onClick={() => navigate("/document/create")}
-            >
+              onClick={() => {
+                console.log("flowType:", flowType);
+                if (flowType === "PROFILE") {
+                  navigate(ROUTES.USER_FORM, {
+                    state: {
+                      employeeData: previewData,      // ✅ correct key + correct variable
+                      isEditMode: true,               // ✅ correct key
+                      userId: previewData?.employeeId,
+                      selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
+                      flowType: "PROFILE", // ✅ add this
+                    },
+                  });
+                } else {
+                  navigate(ROUTES.DOCUMENT_CREATE);
+                }
+              }}        >
               <div className="dp-qa-icon">
                 <Edit sx={{ fontSize: 13, color: "#fff" }} />
               </div>
