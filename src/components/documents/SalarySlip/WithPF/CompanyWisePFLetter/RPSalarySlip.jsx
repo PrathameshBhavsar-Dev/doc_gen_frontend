@@ -105,7 +105,8 @@ const netPay = round0(totalEarning - totalDeduction);
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-            padding: "4px 6px",
+           // padding: "4px 6px",
+           padding: "0px 12px 12px 12px",
             fontFamily: "Bahnschrift",
           },
         }}

@@ -30,6 +30,18 @@ const Login = () => {
 
       console.log("Login result:", result);
 
+      // ✅ CHECK TOKEN
+      console.log(
+        "TOKEN AFTER LOGIN:",
+        localStorage.getItem("token")
+      );
+
+      // ✅ CHECK USER
+      console.log(
+        "USER AFTER LOGIN:",
+        localStorage.getItem("user")
+      );
+
       if (result.success && result.user) {
         const role = result.user.role;
 
@@ -83,7 +95,7 @@ const Login = () => {
               document generator.
             </h2>
           </div>
-        </div> 
+        </div>
 
         {/* RIGHT SIDE */}
         <div className="flex items-center justify-center">

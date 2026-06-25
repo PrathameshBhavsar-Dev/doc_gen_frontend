@@ -632,7 +632,8 @@ const styles = {
     minHeight: "297mm",
     background: "#fff",
     margin: "auto",
-    padding: "40px",
+   padding: "40px",
+  //  padding: "0px 12px 12px 12px",
     fontSize: baseFont,
     position: "relative",
   },
@@ -723,7 +724,7 @@ const styles = {
 
   th: {
     border: "1px solid #000",
-    padding: "5px",
+    padding: "0px 12px 12px 12px",
     backgroundColor: "#00AEEF",
     textAlign: "center",
     fontSize: baseFont,
@@ -731,7 +732,7 @@ const styles = {
 
   td: {
     border: "1px solid #000",
-    padding: "5px",
+    padding: "0px 12px 12px 12px",
     textAlign: "center",
     fontSize: baseFont,
   },

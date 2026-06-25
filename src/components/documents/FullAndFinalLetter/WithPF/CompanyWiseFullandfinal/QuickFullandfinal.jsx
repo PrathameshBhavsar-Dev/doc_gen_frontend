@@ -16,7 +16,8 @@ const totalBg = "#E1EEF9";
 /* ---------------- STYLES ---------------- */
 const cell = {
   border: "1px solid #000",
-  padding: "4px",
+ // padding: "4px",
+ padding: "0px 12px 12px 12px",
   fontSize: "12px",
   lineHeight: 1.2,
 };
