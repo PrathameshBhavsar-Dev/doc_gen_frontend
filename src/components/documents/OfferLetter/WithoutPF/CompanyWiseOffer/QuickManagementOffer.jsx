@@ -293,14 +293,14 @@ const styles = {
 
   th: {
     border: "1px solid #000",
-    padding: "5px",
+    padding: "0px 12px 12px 12px",
     backgroundColor: "#00AEEF",
     textAlign: "center",
   },
 
   td: {
     border: "1px solid #000",
-    padding: "5px",
+    padding: "0px 12px 12px 12px",
     textAlign: "center",
   },
 
