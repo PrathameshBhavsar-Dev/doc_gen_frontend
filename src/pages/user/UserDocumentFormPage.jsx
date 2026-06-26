@@ -1,17 +1,17 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   companies,
   documentTypes,
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
-import { buildCreateProfilePayload } from "../../utils/buildCreateProfilePayload";
+// import { buildCreateProfilePayload } from "../../utils/buildCreateProfilePayload";
 import { FiZap } from "react-icons/fi";
-import { FiFileText } from "react-icons/fi";  
+import { FiFileText } from "react-icons/fi";
 import { FiAlertTriangle } from "react-icons/fi";
 import { FiArrowRight } from "react-icons/fi";
 import { FiX } from "react-icons/fi";
- import { FiCheck } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import ROUTES from "../../core/constants/routes.constant";
 
@@ -19,7 +19,7 @@ import {
   createProfileService,
   updateProfileService,
 } from "../../core/services/v2/userService";
-// import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
@@ -103,6 +103,7 @@ const UserDocumentFormPage = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
+  const enrichedFormDataRef = useRef(null);
 
   useEffect(() => {
     if (!employeeData) return;
@@ -114,109 +115,158 @@ const UserDocumentFormPage = () => {
 
       company:
         COMPANY_NAME_MAP[employeeData.company] ||
-        employeeData.company ||
-        "",
+        employeeData.company || "",
 
+      // ✅ handle both mrms (previewData) and identity (backend)
       mrms:
-        employeeData.identity === "MR"
-          ? "Mr"
-          : employeeData.identity === "MRS"
-            ? "Mrs"
-            : employeeData.identity === "MISS"
-              ? "Miss"
-              : employeeData.identity === "MX"
-                ? "Mx"
-                : "",
+        employeeData.mrms ||
+        (employeeData.identity === "MR" ? "Mr"
+          : employeeData.identity === "MRS" ? "Mrs"
+            : employeeData.identity === "MISS" ? "Miss"
+              : employeeData.identity === "MX" ? "Mx"
+                : ""),
 
       employeeName: employeeData.employeeName || "",
       employeeId: employeeData.employeeId || "",
 
+      // ✅ handle both mobile (previewData) and mobileNo (backend)
       mobile:
-        employeeData.mobileNo ||
         employeeData.mobile ||
-        "",
+        employeeData.mobileNo || "",
 
+      // ✅ handle both employeeEmail (previewData) and email (backend)
       employeeEmail:
-        employeeData.email ||
         employeeData.employeeEmail ||
-        "",
+        employeeData.email || "",
 
-      pan: employeeData.panNo || "",
-      dob: employeeData.dateOfBirth || "",
+      // ✅ handle both pan (previewData) and panNo (backend)
+      pan:
+        employeeData.pan ||
+        employeeData.panNo || "",
 
-      joiningCTC: employeeData.CTC || "",
-      currentCTC: employeeData.CTC || "",
+      // ✅ handle both dob (previewData) and dateOfBirth (backend)
+      dob:
+        employeeData.dob ||
+        employeeData.dateOfBirth || "",
 
+      currentAddress:
+        employeeData.currentAddress || "",
+
+      address:
+        employeeData.address || "",
+
+      offerDate:
+        employeeData.offerDate || "",
+
+      // ✅ handle both joiningDate (previewData) and doj (backend)
+      joiningDate:
+        employeeData.joiningDate ||
+        employeeData.doj || "",
+
+      // ✅ handle both joiningCTC (previewData) and CTC (backend)
+      joiningCTC:
+        employeeData.joiningCTC ||
+        employeeData.CTC || "",
+
+      // ✅ handle both salary (previewData) and CTC (backend)
+      salary:
+        employeeData.salary ||
+        employeeData.currentCTC ||
+        employeeData.CTC || "",
+
+      // ✅ handle both joiningDesignation (previewData) and designation (backend)
       joiningDesignation:
+        employeeData.joiningDesignation ||
         employeeData.designation || "",
 
+      // ✅ handle both currentDesignation (previewData) and designation (backend)
       currentDesignation:
+        employeeData.currentDesignation ||
         employeeData.designation || "",
 
+      department:
+        employeeData.department || "",
+
+      bankName:
+        employeeData.bankName ||
+        employeeData.mode || "",
+
+      accountNo:
+        employeeData.accountNo || "",
+
+      // ✅ handle both offerType (previewData) and pfType (backend)
       offerType:
-        employeeData.pfType === "WITH_PF"
-          ? "withPF"
-          : "withoutPF",
+        employeeData.offerType ||
+        (employeeData.pfType === "WITH_PF" ? "withPF" : "withoutPF"),
 
-      // 🔥 DOCUMENT DATA MAPPING
-
+      // ✅ DOCUMENT DATA MAPPING - handle both previewData and backend
       salarySlipStartMonth:
+        employeeData.salarySlipStartMonth ||
         docs.SALARY_SLIP?.data?.startMonth || "",
 
       salarySlipEndMonth:
+        employeeData.salarySlipEndMonth ||
         docs.SALARY_SLIP?.data?.endMonth || "",
 
       offer_letter:
+        employeeData.offer_letter ||
         docs.OFFER_LETTER?.data || {},
 
       appointment_letter:
+        employeeData.appointment_letter ||
         docs.APPOINTMENT_LETTER?.data || {},
 
       confirmation_letter:
+        employeeData.confirmation_letter ||
         docs.CONFIRMATION_LETTER?.data || {},
 
       increment_letter:
+        employeeData.increment_letter ||
         docs.INCREMENT_LETTER?.data || {},
 
       experience_letter:
+        employeeData.experience_letter ||
         docs.EXPERIENCE_LETTER?.data || {},
 
-      relieving_letter: {
-        ...docs.RELIEVING_LETTER?.data,
+      relieving_letter:
+        employeeData.relieving_letter || {
+          ...docs.RELIEVING_LETTER?.data,
+          lastWorkingDay:
+            docs.RELIEVING_LETTER?.data?.relievingDate || "",
+        },
 
-        lastWorkingDay:
-          docs.RELIEVING_LETTER?.data?.relievingDate || "",
-      },
+      internship_certificate:
+        employeeData.internship_certificate || {
+          ...docs.INTERNSHIP_LETTER?.data,
+          internshipType:
+            docs.INTERNSHIP_LETTER?.data?.internshipType?.toLowerCase() || "",
+        },
 
-      internship_certificate: {
-        ...docs.INTERNSHIP_LETTER?.data,
-        internshipType:
-          docs.INTERNSHIP_LETTER?.data?.internshipType?.toLowerCase() || "",
-      },
       completion_certificate:
+        employeeData.completion_certificate ||
         docs.COMPLETION_LETTER?.data || {},
 
-      full_and_final_letter: {
-        date:
-          docs.FULL_AND_FINAL?.data?.fnfDate || "",
-
-        month:
-          docs.FULL_AND_FINAL?.data?.month || "",
-
-        dateofresignation:
-          docs.FULL_AND_FINAL?.data?.resignationDate || "",
-
-        dateofleaving:
-          docs.FULL_AND_FINAL?.data?.leavingDate || "",
-
-        paiddays:
-          docs.FULL_AND_FINAL?.data?.paidDays || "",
-
-        workdays:
-          docs.FULL_AND_FINAL?.data?.totalDaysInMonth || "",
-      },
+      full_and_final_letter:
+        employeeData.full_and_final_letter || {
+          date: docs.FULL_AND_FINAL?.data?.fnfDate || "",
+          month: docs.FULL_AND_FINAL?.data?.month || "",
+          dateofresignation: docs.FULL_AND_FINAL?.data?.resignationDate || "",
+          dateofleaving: docs.FULL_AND_FINAL?.data?.leavingDate || "",
+          paiddays: docs.FULL_AND_FINAL?.data?.paidDays || "",
+          workdays: docs.FULL_AND_FINAL?.data?.totalDaysInMonth || "",
+        },
     });
   }, [employeeData]);
+
+  // ✅ Add this after your existing useEffect for employeeData
+  useEffect(() => {
+    if (!formData.company) return;
+
+    const companyObj = companies.find((c) => c.name === formData.company);
+    if (companyObj) {
+      setSelectedCompany(companyObj);
+    }
+  }, [formData.company]);
 
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
@@ -578,7 +628,7 @@ const UserDocumentFormPage = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      console.log("VALIDATION FAILED:", newErrors);
+      // console.log("VALIDATION FAILED:", newErrors);
       setShowValidationPopup(true);
       return;
     }
@@ -685,9 +735,10 @@ const UserDocumentFormPage = () => {
       payload.doj = formData.joiningDate;
     });
 
-    console.log("FINAL PAYLOAD:", payload);
-
+    // console.log("FINAL PAYLOAD:", payload);
     const enrichedFormData = { ...formData };
+    enrichedFormDataRef.current = enrichedFormData; // ✅ store in ref
+    setPreviewData(enrichedFormData);
 
     setPreviewData(enrichedFormData);
     if (formData?.internship_certificate?.stipend) {
@@ -719,7 +770,7 @@ const UserDocumentFormPage = () => {
       docsToProcess,
     );
 
-    console.log("PROFILE API PAYLOAD:", profilePayload);
+    // console.log("PROFILE API PAYLOAD:", profilePayload);
 
     // ✅ F&F DOJ FIX
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
@@ -765,10 +816,10 @@ const UserDocumentFormPage = () => {
       };
     });
 
-    console.log(
-      "//PROFILE DOCUMENT DATA",
-      JSON.stringify(profilePayload.documentData, null, 2),
-    );
+    // console.log(
+    //   "//PROFILE DOCUMENT DATA",
+    //   JSON.stringify(profilePayload.documentData, null, 2),
+    // );
 
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
@@ -777,13 +828,17 @@ const UserDocumentFormPage = () => {
       return;
     }
 
+    console.log("=== GENERATE BUTTON CLICKED ===");
+    console.log("selectedCompany:", selectedCompany);
+    console.log("previewData state:", previewData);
+
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData: enrichedFormData,
-        selectedDocs: enrichedDocs, // ✅ FIXED
+        previewData,
+        selectedDocs: enrichedDocs,
         salarySlipMonths,
         previewCompany: selectedCompany,
-        flowType: "PROFILE",
+        flowType: "PROFILE", // is this here?
       },
     });
   };
@@ -853,12 +908,12 @@ const UserDocumentFormPage = () => {
       }
     };
 
-    console.log(
-      "FIELD",
-      docKey,
-      field.name,
-      formData?.[docKey]
-    );
+    // console.log(
+    //   "FIELD",
+    //   docKey,
+    //   field.name,
+    //   formData?.[docKey]
+    // );
 
     if (field.type === "select") {
       return (
@@ -1293,10 +1348,10 @@ const UserDocumentFormPage = () => {
                                     },
                                   };
 
-                                  console.log(
-                                    "Updated State:",
-                                    updated.salaryWorkdays,
-                                  );
+                                  // console.log(
+                                  //   "Updated State:",
+                                  //   updated.salaryWorkdays,
+                                  // );
                                   return updated;
                                 });
                               }}
@@ -1618,10 +1673,11 @@ const UserDocumentFormPage = () => {
 
                     navigate(ROUTES.DOCUMENT_PREVIEW, {
                       state: {
-                        previewData,
+                        previewData: enrichedFormDataRef.current, // ✅ use ref, not state
                         selectedDocs: enrichedDocs, // ✅ FIXED
                         salarySlipMonths,
                         previewCompany: selectedCompany,
+                        flowType: "PROFILE", // ✅ add this
                       },
                     });
                   }}
@@ -1668,7 +1724,7 @@ const UserDocumentFormPage = () => {
                 <button
                   onClick={() => {
                     setShowSavePopup(false);
-                    console.log("Profile Saved:", formData);
+                    // console.log("Profile Saved:", formData);
                   }}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white text-sm font-medium shadow-[0_6px_18px_rgba(99,102,241,0.25)] hover:shadow-[0_10px_25px_rgba(99,102,241,0.35)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
                 >

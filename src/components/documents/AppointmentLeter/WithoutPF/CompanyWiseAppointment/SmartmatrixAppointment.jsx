@@ -62,7 +62,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           <div
             style={{
               position: "absolute",
-              top: "-20mm",
+              top: "-15mm",
               right: "0",
               fontSize: "11pt",
               fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
@@ -70,9 +70,20 @@ const SmartMatrixAppointment = ({ company, data }) => {
           >
             {formatDate(data.issueDate)}
           </div>
-
+          <p
+            style={{
+              textAlign: "center",
+              fontWeight: 700,
+              textDecoration: "underline",
+              marginTop: "15mm",
+              fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
+              fontSize: "12pt",
+            }}
+          >
+            Letter of Appointment
+          </p>
           {/* ================= ADDRESS ================= */}
-          <p style={{ marginTop: "20mm", marginBottom: "6mm" }}>
+          <p style={{ marginTop: "10mm", marginBottom: "6mm" }}>
             {data.mrms} {data.employeeName}
             <br />
             {data.address}
@@ -84,18 +95,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           </p>
 
           {/* ================= TITLE ================= */}
-          <p
-            style={{
-              textAlign: "center",
-              fontWeight: 700,
-              textDecoration: "underline",
-              marginBottom: "10mm",
-              fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
-              fontSize: "12pt",
-            }}
-          >
-            Letter of Appointment
-          </p>
+
 
           {/* ================= BODY ================= */}
           <p
@@ -105,9 +105,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong>{formatDate(data.issueDate)}</strong>, we are pleased to
+            <strong>{formatDate(data.joiningDate)}</strong>, we are pleased to
             appoint you in our organization with effect from{" "}
-            <strong>{formatDate(data.joiningDate)}</strong>, under the terms and
+            <strong>{formatDate(data.issueDate)}</strong>, under the terms and
             conditions given below:-
           </p>
 
@@ -494,7 +494,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                 <Typography>Designation : {data.position}</Typography>
                 <br />
                 <Typography>
-                  Date of Joining : {formatDate(data.joiningDate)}
+                  Date of Joining : {formatDate(data.issueDate)}
                 </Typography>
                 <br />
                 <Typography>EMP ID : {data.employeeId}</Typography>
@@ -527,7 +527,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Salary Components
@@ -540,7 +540,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Per month (Rs.)
@@ -553,7 +553,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Per Annum (Rs.)
@@ -568,7 +568,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                          padding: "0px 12px 12px 12px",
                           }}
                         >
                           {row.name}
@@ -579,7 +579,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                          padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.monthly)}
@@ -590,7 +590,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                          padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.annual)}
@@ -605,7 +605,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >
@@ -618,7 +618,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >
@@ -631,7 +631,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >

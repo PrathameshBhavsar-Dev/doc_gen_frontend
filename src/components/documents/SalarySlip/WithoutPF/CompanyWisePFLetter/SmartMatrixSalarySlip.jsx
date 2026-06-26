@@ -24,7 +24,7 @@ const cell = {
   border: "1px solid #000",
   fontFamily: FONT,
   fontSize: "10.5pt",
-  padding: "4px 6px",
+  padding: "0px 12px 10px 12px",
   verticalAlign: "middle",
 };
 
@@ -87,11 +87,11 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
           border: "1px solid #000",
           borderRadius: 0,
           boxShadow: "none",
-          mt: "8mm",
+          mt: "0mm",
         }}
       >
         <Table size="small" sx={{
-          padding: "0px 12px 12px 12px",
+          // padding: "0px 12px 12px 12px",
         }}>
           <colgroup>
             <col style={{ width: "22%" }} />

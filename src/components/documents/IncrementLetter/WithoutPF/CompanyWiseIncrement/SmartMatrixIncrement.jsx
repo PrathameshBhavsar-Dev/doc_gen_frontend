@@ -188,7 +188,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
               fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
             }}
           >
-            Dear {data.employeeName},
+            Dear {data.employeeName?.split(" ")[0]},
           </Typography>
 
           {/* PARAGRAPH 1 */}

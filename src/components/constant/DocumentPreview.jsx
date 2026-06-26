@@ -678,19 +678,8 @@ const DocumentPreview = () => {
     };
   }, []); // runs on mount, cleans up on unmount
 
-  // const {
-  //   formData,
-  //   selectedDocs,
-  //   salarySlipMonths,
-  //   companyData,
-  // } = location.state || {};
+  const isNavigatingAway = useRef(false); // ✅ add this near top
 
-  // console.log("Preview Data:", {
-  //   previewData,
-  //   selectedDocs,
-  //   salarySlipMonths,
-  //   previewCompany,
-  // });
   /* ── Auth guard ── */
   useEffect(() => {
     if (!user) {
@@ -1098,8 +1087,10 @@ const DocumentPreview = () => {
 
           <button
             className="dp-btn dp-btn-ghost"
-            style={{ padding: "5px 11px", fontSize: "12px" }}
-            onClick={() => navigate("/document/create")}
+            onClick={() => {
+              isNavigatingAway.current = true; // ✅ add this
+              navigate("/document/create");
+            }}
           >
             <ArrowBack sx={{ fontSize: 13 }} />
             Back
@@ -1116,19 +1107,21 @@ const DocumentPreview = () => {
         <div className="dp-topbar-right">
           <button
             className="dp-btn dp-btn-ghost"
+            // Topbar Edit button
             onClick={() => {
               console.log("flowType:", flowType);
               if (flowType === "PROFILE") {
+                isNavigatingAway.current = true; // ✅ add this
                 navigate(ROUTES.USER_FORM, {
                   state: {
-                    employeeData: previewData,      // ✅ correct key + correct variable
-                    isEditMode: true,               // ✅ correct key
+                    employeeData: previewData,
+                    isEditMode: true,
                     userId: previewData?.employeeId,
-                    selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
-                    flowType: "PROFILE", // ✅ add this
+                    selectedDocs: selectedDocs,
                   },
                 });
               } else {
+                isNavigatingAway.current = true; // ✅ add this
                 navigate(ROUTES.DOCUMENT_CREATE);
               }
             }}
@@ -1305,22 +1298,24 @@ const DocumentPreview = () => {
             </button>
             <button
               className="dp-qa-btn"
+              // Topbar Edit button
               onClick={() => {
                 console.log("flowType:", flowType);
                 if (flowType === "PROFILE") {
+                  isNavigatingAway.current = true; // ✅ add this
                   navigate(ROUTES.USER_FORM, {
                     state: {
-                      employeeData: previewData,      // ✅ correct key + correct variable
-                      isEditMode: true,               // ✅ correct key
+                      employeeData: previewData,
+                      isEditMode: true,
                       userId: previewData?.employeeId,
-                      selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
-                      flowType: "PROFILE", // ✅ add this
+                      selectedDocs: selectedDocs,
                     },
                   });
                 } else {
+                  isNavigatingAway.current = true; // ✅ add this
                   navigate(ROUTES.DOCUMENT_CREATE);
                 }
-              }}        >
+              }}      >
               <div className="dp-qa-icon">
                 <Edit sx={{ fontSize: 13, color: "#fff" }} />
               </div>
