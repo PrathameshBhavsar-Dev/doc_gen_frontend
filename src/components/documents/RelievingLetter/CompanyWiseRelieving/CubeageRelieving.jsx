@@ -24,6 +24,8 @@ const CubeageRelieving = ({ company, data }) => {
   const hisHer = isNeutral ? "their" : isFemale ? "her" : "his";
   const wasWere = isNeutral ? "were" : "was";
 
+   const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+
   return (
     <div
       className="a4-content-only"
@@ -67,7 +69,7 @@ const CubeageRelieving = ({ company, data }) => {
       >
         {/* ================= DATE ================= */}
         <p style={{ textAlign: "right", marginBottom: "2mm", marginTop: "-10mm" }}>
-          Date: {formatDate(data.issueDate)}
+          Date: {formatDate(issueDate)}
         </p>
 
         <p
@@ -95,7 +97,7 @@ const CubeageRelieving = ({ company, data }) => {
           <strong>
             {data.mrms} {data.employeeName}
           </strong>{" "}
-          was working with us as <strong>{data.designation}</strong> from{" "}
+          was working with us as <strong>{data.currentDesignation ?? data.designation}</strong> from{" "}
           <strong>{formatDate(data.joiningDate)}</strong> to{" "}
           <strong>{formatDate(data.lastWorkingDay || data.relievingDate)}</strong> in the{" "}
           <strong>{data.department}</strong> Department.
