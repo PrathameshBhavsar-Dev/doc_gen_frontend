@@ -17,6 +17,7 @@ const formatDate = (date) => {
 };
 
 const PentaRelieving = ({ company, data }) => {
+   const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <Box
       sx={{
@@ -49,7 +50,7 @@ const PentaRelieving = ({ company, data }) => {
         {/* Date (Right aligned like Word document) */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 4 }}>
           <Typography sx={{ fontSize: "14px" }}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
         </Box>
 
@@ -67,7 +68,7 @@ const PentaRelieving = ({ company, data }) => {
 
         {/* Designation */}
         <Typography sx={{ fontSize: "14px", mb: 6 }}>
-          {data.designation}
+          {data.currentDesignation ?? data.designation}
         </Typography>
 
         {/* Salutation */}

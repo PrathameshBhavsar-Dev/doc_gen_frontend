@@ -24,7 +24,6 @@ const NeweageRelieving = ({ company, data }) => {
   if (!company || !data) return null;
 
   const {
-    issueDate = "",
     employeeName = "",
     designation = "",
     joiningDate = "",
@@ -41,7 +40,7 @@ const NeweageRelieving = ({ company, data }) => {
     : "";
 
   const COMPANY_NAME = (company.name || "").toUpperCase();
-
+ const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <A4Layout
       headerSrc={company.headerImage}
@@ -62,7 +61,7 @@ const NeweageRelieving = ({ company, data }) => {
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 4 }}>
-        <b>{designation}</b>
+        <b>{data.currentDesignation ?? data.designation}</b>
       </Typography>
 
       {/* ================= GREETING ================= */}
