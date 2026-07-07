@@ -32,6 +32,8 @@ const SmartMatrixExperience = ({ company, data }) => {
     possessivePronoun = "their";
   }
 
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+
   return (
     <div
       className="a4-content-only"
@@ -84,7 +86,7 @@ const SmartMatrixExperience = ({ company, data }) => {
       >
         {/* DATE – moved BELOW title, position unchanged (right aligned) */}
         <div style={{ textAlign: "right", fontSize: "14pt" }}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </div>
         {/* TITLE */}
         <p
@@ -113,7 +115,7 @@ const SmartMatrixExperience = ({ company, data }) => {
             fontSize: "13pt",
           }}
         >
-          {data.designation}
+          {data.currentDesignation ?? data.designation}
         </strong>
         <br />
         <br />
@@ -124,7 +126,7 @@ const SmartMatrixExperience = ({ company, data }) => {
           {/* (Employee ID: <strong>{data.employeeId}</strong>) as{" "}
           <strong>{data.designation}</strong> with our company,{" "} */}
           was under the employer of <strong>{company.name}</strong> as{" "}
-          <strong>{data.designation}</strong> in the{" "}
+          <strong>{data.currentDesignation ?? data.designation}</strong> in the{" "}
           <strong>{data.department} Department </strong>from{" "}
           <strong>{formatDate(data.joiningDate)}</strong> to{" "}
           <strong>{formatDate(data.relievingDate)}</strong>.<br></br>

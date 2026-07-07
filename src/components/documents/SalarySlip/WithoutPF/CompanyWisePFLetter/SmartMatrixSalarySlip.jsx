@@ -143,7 +143,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
 
             <TableRow>
               <TableCell sx={bold}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation ?? data.designation}</TableCell>
               <TableCell sx={bold}>DOB</TableCell>
               <TableCell sx={cell}>{data.dob}</TableCell>
             </TableRow>

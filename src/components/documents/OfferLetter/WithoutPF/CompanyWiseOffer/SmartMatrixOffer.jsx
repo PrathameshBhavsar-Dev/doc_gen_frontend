@@ -105,9 +105,10 @@ const SmartMatrixOffer = ({ data, company }) => {
       })
       : "";
 
-  const offerDate = fmtDate(data.issueDate);
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  const offerDate = fmtDate(issueDate);
   const joiningDate = fmtDate(data.joiningDate);
-  const position = data.position;
+  const position = data.joiningDesignation ?? data.position;
   const lpa = (annualCTC / 100000).toFixed(1);
 
   /* ================= PAGE 2 LOGIC ================= */

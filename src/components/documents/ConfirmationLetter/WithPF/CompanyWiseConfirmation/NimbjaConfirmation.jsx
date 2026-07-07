@@ -1,17 +1,3 @@
-// import React from 'react'
-// import A4Page from '../../../../layout/A4Page'
-
-// const NimbjaConfirmation = ({ company, data }) => {
-//   return (
-//     <>
-//       <A4Page headerSrc={company.header} footerSrc={company.footer}></A4Page>
-//       <A4Page headerSrc={company.header} footerSrc={company.footer}></A4Page>
-//     </>
-//   );
-// }
-
-// export default NimbjaConfirmation
-
 import React from "react";
 import {
   Box,
@@ -38,10 +24,10 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   const numberToWords = (num = 0) => {
@@ -117,10 +103,11 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
 
 
   // ================= MONTHLY CTC =================
- const annualCTC = Number(
-   data.newCTC || data.salary || data.ctc || data.totalSalary || 0,
- );
+  const annualCTC = Number(
+    data.newCTC || data.salary || data.ctc || data.totalSalary || 0,
+  );
 
+  const issueDate = data?.confirmation_letter?.issueDate ?? data?.issueDate;
 
   return (
     <>
@@ -155,7 +142,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             mb={5}
             sx={{ fontFamily: "Bahnschrift", mt: "-10mm", mb: "8mm" }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
           <Typography
             sx={{
@@ -177,7 +164,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
           </Typography>
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.position}</strong>
+            as <strong>{data.joiningDesignation ?? data.position}</strong>
           </Typography>
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
             Dear {firstName},
@@ -188,7 +175,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
             sx={{ fontFamily: "Bahnschrift" }}
           >
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with{" "}
+            <strong>{data.joiningDesignation ?? data.position}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
             date <strong>{formatDate(data.effectiveDate)}</strong>, considering
             your performance and support towards the organization.
@@ -298,7 +285,7 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
           <Typography
             sx={{ mb: "6mm", fontSize: "11pt", fontFamily: "Bahnschrift" }}

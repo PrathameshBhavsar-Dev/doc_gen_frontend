@@ -228,23 +228,38 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
 
     dateOfBirth: formData.dob || formData.dateOfBirth || null,
 
-    address: formData.currentAddress || formData.address || null,
+    currentAddress:
+      formData.currentAddress || null,
+
+    permanentAddress:
+      formData.permanentAddress || null,
 
     // JOB INFO
-    designation:
-      formData.currentDesignation ||
-      formData.joiningDesignation ||
-      formData.designation ||
-      null,
+    joiningDesignation:
+      formData.joiningDesignation || null,
 
-    department: formData.department || null,
+    currentDesignation:
+      formData.currentDesignation || null,
 
-    offerDate: formData.offerDate || null,
+    department:
+      formData.department || null,
 
-    joiningDate: formData.joiningDate || null,
+    offerDate:
+      formData.offerDate || null,
+
+    joiningDate:
+      formData.joiningDate || null,
 
     // CTC
-    CTC: formData.salary ? Number(formData.salary) : 0,
+    joiningCTC:
+      formData.joiningCTC != null
+        ? Number(formData.joiningCTC)
+        : null,
+
+    currentCTC:
+      formData.currentCTC != null
+        ? Number(formData.currentCTC)
+        : null,
 
     // BANK INFO
     bankName: formData.bankName || null,
@@ -263,4 +278,9 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
 
     documentData,
   };
+
+  console.log(
+  "FINAL PAYLOAD",
+  JSON.stringify(payload, null, 2)
+);
 };

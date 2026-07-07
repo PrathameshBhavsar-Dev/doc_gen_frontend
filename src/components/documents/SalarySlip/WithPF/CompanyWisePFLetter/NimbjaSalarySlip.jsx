@@ -80,22 +80,25 @@ const numberToWords = (numVal = 0) => {
 };
 
 const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
-  const {
-    employeeName = "-",
-    employeeId = "-",
-    gender = "-",
-    department = "-",
-    designation = "-",
-    doj = "-",
-    dob = "-",
-    pan = "-",
-    workdays = "-",
-    mode = "-",
-    accountNo = "-",
-    month = "-",
-    totalSalary = 0,
-    otherDeduction = 2000,
-  } = data;
+const {
+  employeeName = "-",
+  employeeId = "-",
+  gender = "-",
+  department = "-",
+  currentDesignation,
+  designation,
+  doj = "-",
+  dob = "-",
+  pan = "-",
+  workdays = "-",
+  mode = "-",
+  accountNo = "-",
+  month = "-",
+  totalSalary = 0,
+  otherDeduction = 2000,
+} = data;
+
+const finalDesignation = currentDesignation || designation || "-";
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
@@ -292,7 +295,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Designation</TableCell>
                 <TableCell align="center" sx={VALUE_CELL}>
-                  {designation}
+                  {finalDesignation}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>DOB</TableCell>

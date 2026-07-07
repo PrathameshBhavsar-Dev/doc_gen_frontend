@@ -41,6 +41,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
   // 🔥 Input salary is MONTHLY
   // INPUT = Annual CTC
   const annualSalary = Number(data.salary || 0);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   // Convert to monthly
   const monthlySalary = annualSalary / 12;
@@ -68,7 +69,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
               fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </div>
           <p
             style={{
@@ -112,7 +113,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
-            1. Your Designation will be <strong>“{data.position}”</strong>.
+            1. Your Designation will be <strong>“{data.joiningDesignation ?? data.position}”</strong>.
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
@@ -491,7 +492,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   Name : {data.mrms} {data.employeeName}
                 </Typography>
                 <br />
-                <Typography>Designation : {data.position}</Typography>
+                <Typography>Designation : {data.joiningDesignation ?? data.position}</Typography>
                 <br />
                 <Typography>
                   Date of Joining : {formatDate(data.issueDate)}
@@ -568,7 +569,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {row.name}
@@ -579,7 +580,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.monthly)}
@@ -590,7 +591,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.annual)}

@@ -341,6 +341,21 @@ const DOC_LABELS = {
   confirmation_letter: "Confirmation Letter",
 };
 
+// ✅ Add this helper in DocumentPreview.jsx
+const formatTitle = (title) => {
+  const displayMap = {
+    MR: "Mr.",
+    MRS: "Mrs.",
+    MISS: "Miss.",
+    MX: "Mx.",
+    Mr: "Mr.",
+    Mrs: "Mrs.",
+    Miss: "Miss.",
+    Mx: "Mx.",
+  };
+  return displayMap[title] || title || "";
+};
+
 /* ═══════════════════════════════════════════════════════════ */
 const DocumentPreview = () => {
   const { user } = useAuth();
@@ -348,17 +363,7 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
-  // console.log("FULL LOCATION STATE");
-  // console.log(state);
 
-  // console.log("PREVIEW DATA");
-  // console.log(state.previewData);
-
-  // console.log("SELECTED DOCS");
-  // console.log(state.selectedDocs);
-
-  // console.log("PREVIEW COMPANY");
-  // console.log(state.previewCompany);
   const flowType = state.flowType || "DIRECT"; // default fallback
 
   const handleEdit = () => {
@@ -455,8 +460,7 @@ const DocumentPreview = () => {
       mode: formData.bankName,
     }));
   };
-  // const key = normalizeTemplateKey(previewDocType?.template);
-  // console.log("previewDocType", previewDocType);
+
   const key =
     normalizeTemplateKey(previewDocType?.template) ||
     normalizeTemplateKey(
@@ -468,8 +472,6 @@ const DocumentPreview = () => {
 
   if (!key) {
     console.error("Invalid doc type:", previewDocType);
-    // console.log("Selected Doc:", selectedDoc);
-    // console.log("Doc Name:", selectedDoc?.name);
     return null; // don't crash UI
   }
 
@@ -531,8 +533,10 @@ const DocumentPreview = () => {
   }
 
   if (key === "fullandfinal_letter") {
+    const yearlySalary = Number(freshData.salary || freshData.annualCTC || 0);
+    const monthlySalary = Math.round(yearlySalary / 12);
     freshData.totalSalary = Number(
-      freshData.monthlyCTC || freshData.totalSalary || 0,
+      freshData.monthlyCTC || monthlySalary || freshData.totalSalary || 0
     );
   }
 
@@ -563,7 +567,7 @@ const DocumentPreview = () => {
     freshData.employeeId || freshData.employeeNumber || freshData.employeeEmail;
 
   freshData.issuedBy = user?._id;
-  freshData.title = freshData.mrms;
+  freshData.title = formatTitle(freshData.mrms || freshData.title || freshData.identity);
 
   const docKeyName = normalizeTemplateKey(previewDocType?.template);
 
@@ -577,14 +581,9 @@ const DocumentPreview = () => {
   freshData.salary = Number(freshData.salary || 0);
   // ✅ build payload
   let payload = buildPayload(key, freshData, user, previewCompany);
-  // console.log("Selected Docs:", selectedDocs);
-  // console.log("Document Type:", selectedDocs?.[0]?.template);
 
   // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
   payload.issuedTo = freshData.issuedTo;
-
-  // console.log("🚀 FINAL PAYLOAD:", payload);
-  // console.log(JSON.stringify(payload, null, 2));
 
   const isSalarySlip = key === "salaryslip_letter";
 
@@ -703,22 +702,12 @@ const DocumentPreview = () => {
           ? previewData
           : [{ docKey: previewDocType?.template, data: previewData }];
 
-    // console.log("TEMPLATE DATA", freshData);
-    // console.log(
-    //   "INTERNSHIP TYPE FROM FRESH DATA",
-    //   freshData.internshipType
-    // );
-    // console.log("FRESH DATA BEFORE TEMPLATE", freshData);
-
     return docsArray.map((doc, index) => {
       const p = {
         data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
         company: previewCompany,
       };
-      // console.log(
-      //   "INTERNSHIP DOCUMENT DATA",
-      //   freshData.documentData?.INTERNSHIP_CERTIFICATE,
-      // );
+
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
         internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
@@ -908,27 +897,13 @@ const DocumentPreview = () => {
         freshData.trainingType = "General Training";
       }
 
-      // console.log("SALARY SLIP DEBUG", {
-      //   key,
-      //   offerType: freshData.offerType,
-      //   salaryType: freshData.salaryType,
-      //   pfType: freshData.pfType,
-      //   freshData,
-      // });
       // =========================
       // BUILD PAYLOAD
       // =========================
       const payload = buildPayload(key, freshData, user, previewCompany);
 
-      // console.log(
-      //   "FINAL PAYLOAD:",
-      //   payload
-      // );
-
       try {
-        // console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
-        // TEMPORARY DISABLE
-        // await apiService.apipost(API.generateDoc(key), payload);
+
       } catch (apiErr) {
         console.error("❌ API ERROR:", apiErr);
       }
@@ -970,20 +945,6 @@ const DocumentPreview = () => {
       // =========================
       // DEBUG LOGS
       // =========================
-      // console.log(
-      //   "TEMPLATE COMPONENT:",
-      //   TemplateComponent
-      // );
-
-      // console.log(
-      //   "PDF DATA:",
-      //   freshData
-      // );
-
-      // console.log(
-      //   "COMPANY:",
-      //   previewCompany
-      // );
 
       // =========================
       // FILE NAME
@@ -1073,6 +1034,9 @@ const DocumentPreview = () => {
   const docLabel =
     DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
 
+  console.log("previewData:", previewData);
+  console.log("freshData:", freshData);
+
   return (
     <div className="dp-root">
       {/* ── Top Bar ── */}
@@ -1109,14 +1073,14 @@ const DocumentPreview = () => {
             className="dp-btn dp-btn-ghost"
             // Topbar Edit button
             onClick={() => {
-              console.log("flowType:", flowType);
+              // console.log("flowType:", flowType);
               if (flowType === "PROFILE") {
                 isNavigatingAway.current = true; // ✅ add this
                 navigate(ROUTES.USER_FORM, {
                   state: {
                     employeeData: previewData,
                     isEditMode: true,
-                    userId: previewData?.employeeId,
+                    userId: previewData?._id || previewData?.id, // ✅ backend uses 'id'
                     selectedDocs: selectedDocs,
                   },
                 });
@@ -1300,7 +1264,7 @@ const DocumentPreview = () => {
               className="dp-qa-btn"
               // Topbar Edit button
               onClick={() => {
-                console.log("flowType:", flowType);
+                // console.log("flowType:", flowType);
                 if (flowType === "PROFILE") {
                   isNavigatingAway.current = true; // ✅ add this
                   navigate(ROUTES.USER_FORM, {

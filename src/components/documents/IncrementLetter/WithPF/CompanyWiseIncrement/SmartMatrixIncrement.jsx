@@ -140,6 +140,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
     fontWeight: 600,
   };
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -160,7 +162,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
             align="right"
             sx={{ mb: "12mm", mt: "4mm", fontFamily: "Bahnschrift" }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography sx={{ mb: "8mm", fontFamily: "Bahnschrift" }}>

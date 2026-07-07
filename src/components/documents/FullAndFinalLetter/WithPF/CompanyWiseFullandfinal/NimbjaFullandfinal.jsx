@@ -215,12 +215,12 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
               <TableCell sx={cell}>Employee ID</TableCell>
               <TableCell sx={cell}>{data.employeeId}</TableCell>
               <TableCell sx={cell}>Joining Date</TableCell>
-              <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
+              <TableCell sx={cell}>{formatDate(data.joiningDate)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={cell}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={cell}>Date of Resignation</TableCell>
               <TableCell sx={cell}>
                 {formatDate(data.dateofresignation)}

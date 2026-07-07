@@ -18,18 +18,20 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
   const round0 = (num) => Math.round(num);
 
   // ================= MONTHLY CTC =================
-const annualCTC = Number(data.newCTC || 0);
+  const annualCTC = Number(data.newCTC || 0);
 
   // ================= SALARY TABLE =================
 
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
+
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>
@@ -95,7 +97,7 @@ const annualCTC = Number(data.newCTC || 0);
               fontFamily: "Bahnschrift",
             }}
           >
-            {new Date(data.issueDate).toLocaleDateString("en-US", {
+            {new Date(issueDate).toLocaleDateString("en-US", {
               month: "long",
               day: "2-digit",
               year: "numeric",
@@ -216,7 +218,7 @@ const annualCTC = Number(data.newCTC || 0);
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography

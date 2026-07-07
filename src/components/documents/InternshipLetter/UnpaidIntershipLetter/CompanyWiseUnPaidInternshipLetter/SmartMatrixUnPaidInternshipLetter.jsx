@@ -14,6 +14,10 @@ const formatDate = (date) =>
 
 
 const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
+
+  const issueDate =
+    data?.internship_certificate?.issueDate ?? data?.issueDate;
+    
   console.log("FINAL TEMPLATE DATA", data);
   return (
     <A4Layout headerSrc={company.header} footerSrc={company.footer}>
@@ -29,7 +33,7 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
           fontFamily: "Bahnschrift",
         }}
       >
-        <strong> {formatDate(data.issueDate)}</strong>
+        <strong> {formatDate(issueDate)}</strong>
       </Box>
 
       {/* ================= TITLE ================= */}
@@ -56,7 +60,7 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
           <strong>Subject :</strong>{" "}
           <u>
             Letter of intent for the Internship of position as{" "}
-            <strong>{data.designation}</strong>.
+            <strong>{data.joiningDesignation ?? data.designation}</strong>.
           </u>
           <br />
           <br />
@@ -67,7 +71,7 @@ const SmartMatrixUnPaidInternshipLetter = ({ company, data }) => {
       {/* ================= BODY ================= */}
       <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
         We are pleased to offer you the Internship of position as{" "}
-        <strong>{data.designation}</strong> with <strong>{company.name}</strong>{" "}
+        <strong>{data.joiningDesignation ?? data.designation}</strong> with <strong>{company.name}</strong>{" "}
         with effective date <strong>{formatDate(data.startDate)}</strong>{" "}
         considering your performance and support towards the organization.
       </Typography>

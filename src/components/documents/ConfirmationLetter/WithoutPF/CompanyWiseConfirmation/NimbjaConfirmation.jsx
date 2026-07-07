@@ -17,10 +17,10 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   const numberToWords = (num = 0) => {
@@ -92,38 +92,40 @@ const NimbjaConfirmation = ({ company = {}, data = {} }) => {
     return `${inWords(Math.round(num))} Rupees Only`;
   };
 
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-// ✅ ANNUAL INPUT
-const annualCTC = round0(Number(data.totalSalary || 0));
+  // ✅ ANNUAL INPUT
+  const annualCTC = round0(Number(data.totalSalary || 0));
 
-// ✅ MONTHLY
-const monthlyCTC = round0(annualCTC / 12);
+  // ✅ MONTHLY
+  const monthlyCTC = round0(annualCTC / 12);
 
-// ✅ BREAKUP (LAST = ADJUSTMENT)
-let salaryRows = [
-  ["Basic", round0(monthlyCTC * 0.4)],
-  ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
-  ["HRA", round0(monthlyCTC * 0.12)],
-  ["City Allowance", round0(monthlyCTC * 0.16)],
-  ["Superannuation Fund", round0(monthlyCTC * 0.06)],
-  ["Performance Bonus", 0], // 🔥 IMPORTANT
-];
-  
-// ✅ FIX ROUNDING
-const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
-salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
+  // ✅ BREAKUP (LAST = ADJUSTMENT)
+  let salaryRows = [
+    ["Basic", round0(monthlyCTC * 0.4)],
+    ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+    ["HRA", round0(monthlyCTC * 0.12)],
+    ["City Allowance", round0(monthlyCTC * 0.16)],
+    ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+    ["Performance Bonus", 0], // 🔥 IMPORTANT
+  ];
 
-// ✅ FINAL ROWS (WITH ANNUAL)
-const finalSalaryRows = salaryRows.map(([name, monthly]) => [
-  name,
-  monthly,
-  monthly * 12,
-]);
+  // ✅ FIX ROUNDING
+  const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+  salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
-// ✅ TOTALS (MATCH OFFER LOGIC)
-const totalMonthly = monthlyCTC;
-const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
+  // ✅ FINAL ROWS (WITH ANNUAL)
+  const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+    name,
+    monthly,
+    monthly * 12,
+  ]);
+
+  // ✅ TOTALS (MATCH OFFER LOGIC)
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
+
+  const issueDate = data?.confirmation_letter?.issueDate ?? data?.issueDate;
 
   return (
     <>
@@ -158,7 +160,7 @@ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
             mb={5}
             sx={{ fontFamily: "Bahnschrift", mt: "-10mm" }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography
@@ -184,7 +186,7 @@ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
 
           <Typography mb={3} sx={{ fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for continued services
-            as <strong>{data.position}</strong>
+            as <strong>{data.joiningDesignation ?? data.position}</strong>
           </Typography>
 
           <Typography mb={2} sx={{ fontFamily: "Bahnschrift" }}>
@@ -197,7 +199,7 @@ const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
             sx={{ fontFamily: "Bahnschrift" }}
           >
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with{" "}
+            <strong>{data.joiningDesignation ?? data.position}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
             date <strong>{formatDate(data.effectiveDate)}</strong>, considering
             your performance and support towards the organization.

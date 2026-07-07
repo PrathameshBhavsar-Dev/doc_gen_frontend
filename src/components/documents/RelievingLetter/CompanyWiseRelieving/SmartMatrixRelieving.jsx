@@ -10,6 +10,9 @@ const SmartMatrixRelieving = ({ company, data }) => {
       year: "numeric",
     });
   };
+
+  const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+
   return (
     <div
       className="a4-content-only"
@@ -72,7 +75,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
             fontFamily: "Bahnschrift",
           }}
         >
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </div>
         {/* ================= TITLE ================= */}
         <div
@@ -93,7 +96,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
             {data.mrms} {data.employeeName}
           </strong>
           <br />
-          <b>{data.designation}</b>
+          <b>{data.currentDesignation ?? data.designation}</b>
         </div>
 
         {/* ================= SALUTATION ================= */}
@@ -103,7 +106,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         {/* ================= BODY ================= */}
         <p style={{ textAlign: "justify" }}>
           This is to certify that <strong>{data.employeeName}</strong>,{" "}
-          <strong>{data.designation}</strong> was employed with{" "}
+          <strong>{data.currentDesignation ?? data.designation}</strong> was employed with{" "}
           <strong>{company.name}</strong> from{" "}
           <strong>
             {new Date(data.joiningDate).toLocaleDateString("en-US", {

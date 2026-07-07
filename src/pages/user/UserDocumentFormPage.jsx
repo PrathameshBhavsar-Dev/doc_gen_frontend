@@ -28,7 +28,7 @@ const basicFields = [
     name: "mrms",
     label: "Identity",
     type: "select",
-    options: ["Mr", "Mrs", "Miss", "Mx"],
+    options: ["Mr.", "Mrs.", "Miss.", "Mx."],
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
@@ -89,7 +89,7 @@ const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
   const isEditMode = location.state?.isEditMode || false;
-  const userId = location.state?.userId;
+  const userId = location.state?.userId || location.state?.employeeData?.id; // ✅ fallback to id
   const [previewData, setPreviewData] = useState({});
   const [isSaving, setIsSaving] = useState(false);
 
@@ -104,20 +104,50 @@ const UserDocumentFormPage = () => {
   const [showValidationPopup, setShowValidationPopup] = useState(false);
   const navigate = useNavigate();
   const enrichedFormDataRef = useRef(null);
+  const freshMonthsRef = useRef([]);
 
   useEffect(() => {
     if (!employeeData) return;
 
+    // ✅ data lives inside employeeData.documents
     const docs = employeeData.documents || {};
 
-    setFormData({
-      ...employeeData,
+    const fnfData = docs.FULL_AND_FINAL?.data || {};
+    const salarySlipData = docs.SALARY_SLIP?.data || {};
+    const offerLetterData = docs.OFFER_LETTER?.data || {};
+    const appointmentLetterData = docs.APPOINTMENT_LETTER?.data || {};
+    const confirmationLetterData = docs.CONFIRMATION_LETTER?.data || {};
+    const incrementLetterData = docs.INCREMENT_LETTER?.data || {};
+    const experienceLetterData = docs.EXPERIENCE_LETTER?.data || {};
+    const relievingLetterData = docs.RELIEVING_LETTER?.data || {};
+    const internshipLetterData = docs.INTERNSHIP_LETTER?.data || {};
+    const completionLetterData = docs.COMPLETION_LETTER?.data || {};
 
+    // ✅ Helper to convert month name to YYYY-MM
+    const monthNameToYYYYMM = (monthName, year) => {
+      if (!monthName) return "";
+      if (/^\d{4}-\d{2}$/.test(monthName)) return monthName;
+      const months = {
+        january: "01", february: "02", march: "03", april: "04",
+        may: "05", june: "06", july: "07", august: "08",
+        september: "09", october: "10", november: "11", december: "12",
+      };
+      const monthNum = months[monthName?.toLowerCase()];
+      if (!monthNum) return "";
+      const y = year || new Date().getFullYear();
+      return `${y}-${monthNum}`;
+    };
+
+    // ✅ get year from joiningDate
+    const joiningYear = employeeData.joiningDate?.split("-")[0] || new Date().getFullYear();
+    // ✅ get year from fnfDate
+    const fnfYear = fnfData.fnfDate?.split("-")[0] || joiningYear;
+
+    setFormData({
       company:
         COMPANY_NAME_MAP[employeeData.company] ||
         employeeData.company || "",
 
-      // ✅ handle both mrms (previewData) and identity (backend)
       mrms:
         employeeData.mrms ||
         (employeeData.identity === "MR" ? "Mr"
@@ -129,132 +159,191 @@ const UserDocumentFormPage = () => {
       employeeName: employeeData.employeeName || "",
       employeeId: employeeData.employeeId || "",
 
-      // ✅ handle both mobile (previewData) and mobileNo (backend)
       mobile:
         employeeData.mobile ||
-        employeeData.mobileNo || "",
+        employeeData.mobileNo ||
+        employeeData.phone || "",
 
-      // ✅ handle both employeeEmail (previewData) and email (backend)
       employeeEmail:
         employeeData.employeeEmail ||
         employeeData.email || "",
 
-      // ✅ handle both pan (previewData) and panNo (backend)
       pan:
         employeeData.pan ||
         employeeData.panNo || "",
 
-      // ✅ handle both dob (previewData) and dateOfBirth (backend)
       dob:
         employeeData.dob ||
         employeeData.dateOfBirth || "",
 
       currentAddress:
-        employeeData.currentAddress || "",
+        employeeData.currentAddress ||
+        employeeData.Address || "",
 
-      address:
-        employeeData.address || "",
+      address: employeeData.address || "",
+      offerDate: employeeData.offerDate || "",
 
-      offerDate:
-        employeeData.offerDate || "",
-
-      // ✅ handle both joiningDate (previewData) and doj (backend)
       joiningDate:
         employeeData.joiningDate ||
         employeeData.doj || "",
 
-      // ✅ handle both joiningCTC (previewData) and CTC (backend)
       joiningCTC:
         employeeData.joiningCTC ||
         employeeData.CTC || "",
 
-      // ✅ handle both salary (previewData) and CTC (backend)
       salary:
         employeeData.salary ||
         employeeData.currentCTC ||
         employeeData.CTC || "",
 
-      // ✅ handle both joiningDesignation (previewData) and designation (backend)
       joiningDesignation:
         employeeData.joiningDesignation ||
         employeeData.designation || "",
 
-      // ✅ handle both currentDesignation (previewData) and designation (backend)
       currentDesignation:
         employeeData.currentDesignation ||
         employeeData.designation || "",
 
-      department:
-        employeeData.department || "",
+      department: employeeData.department || "",
+      bankName: employeeData.bankName || employeeData.mode || "",
+      accountNo: employeeData.accountNo || "",
 
-      bankName:
-        employeeData.bankName ||
-        employeeData.mode || "",
-
-      accountNo:
-        employeeData.accountNo || "",
-
-      // ✅ handle both offerType (previewData) and pfType (backend)
       offerType:
         employeeData.offerType ||
         (employeeData.pfType === "WITH_PF" ? "withPF" : "withoutPF"),
 
-      // ✅ DOCUMENT DATA MAPPING - handle both previewData and backend
+      // ✅ salary slip - read from documents.SALARY_SLIP.data
       salarySlipStartMonth:
         employeeData.salarySlipStartMonth ||
-        docs.SALARY_SLIP?.data?.startMonth || "",
+        monthNameToYYYYMM(salarySlipData.startMonth, joiningYear) || "",
 
       salarySlipEndMonth:
         employeeData.salarySlipEndMonth ||
-        docs.SALARY_SLIP?.data?.endMonth || "",
+        monthNameToYYYYMM(salarySlipData.endMonth, joiningYear) || "",
 
-      offer_letter:
-        employeeData.offer_letter ||
-        docs.OFFER_LETTER?.data || {},
+      // ✅ offer_letter - read from documents.OFFER_LETTER.data
+      offer_letter: {
+        issueDate:
+          employeeData.offer_letter?.issueDate ||
+          offerLetterData.issueDate || "",
+        probationPeriod:
+          employeeData.offer_letter?.probationPeriod ||
+          offerLetterData.probationPeriod || "",
+        employmentType:
+          employeeData.offer_letter?.employmentType ||
+          offerLetterData.employmentType || "",
+        workLocation:
+          employeeData.offer_letter?.workLocation ||
+          offerLetterData.workLocation || "",
+        workHours:
+          employeeData.offer_letter?.workHours ||
+          offerLetterData.workHours || "",
+        reportingManager:
+          employeeData.offer_letter?.reportingManager ||
+          offerLetterData.reportingManager || "",
+        offerValidTill:
+          employeeData.offer_letter?.offerValidTill ||
+          offerLetterData.offerValidTill || "",
+      },
 
-      appointment_letter:
-        employeeData.appointment_letter ||
-        docs.APPOINTMENT_LETTER?.data || {},
+      // ✅ appointment_letter
+      appointment_letter: {
+        issueDate:
+          employeeData.appointment_letter?.issueDate ||
+          appointmentLetterData.issueDate || "",
+        probationPeriod:
+          employeeData.appointment_letter?.probationPeriod ||
+          appointmentLetterData.probationPeriod || "",
+      },
 
-      confirmation_letter:
-        employeeData.confirmation_letter ||
-        docs.CONFIRMATION_LETTER?.data || {},
+      // ✅ confirmation_letter
+      confirmation_letter: {
+        issueDate:
+          employeeData.confirmation_letter?.issueDate ||
+          confirmationLetterData.issueDate || "",
+        ...confirmationLetterData,
+        ...employeeData.confirmation_letter,
+      },
 
-      increment_letter:
-        employeeData.increment_letter ||
-        docs.INCREMENT_LETTER?.data || {},
+      // ✅ increment_letter
+      increment_letter: {
+        issueDate:
+          employeeData.increment_letter?.issueDate ||
+          incrementLetterData.issueDate || "",
+        newCTC:
+          employeeData.increment_letter?.newCTC ||
+          incrementLetterData.newCTC || "",
+        ...incrementLetterData,
+        ...employeeData.increment_letter,
+      },
 
-      experience_letter:
-        employeeData.experience_letter ||
-        docs.EXPERIENCE_LETTER?.data || {},
+      // ✅ experience_letter - read from documents.EXPERIENCE_LETTER.data
+      experience_letter: {
+        issueDate:
+          employeeData.experience_letter?.issueDate ||
+          experienceLetterData.issueDate || "",
+        relievingDate:
+          employeeData.experience_letter?.relievingDate ||
+          experienceLetterData.relievingDate || "",
+        conductAndPerformance:
+          employeeData.experience_letter?.conductAndPerformance ||
+          experienceLetterData.conductAndPerformance || "",
+      },
 
-      relieving_letter:
-        employeeData.relieving_letter || {
-          ...docs.RELIEVING_LETTER?.data,
-          lastWorkingDay:
-            docs.RELIEVING_LETTER?.data?.relievingDate || "",
-        },
+      // ✅ relieving_letter
+      relieving_letter: {
+        lastWorkingDay:
+          employeeData.relieving_letter?.lastWorkingDay ||
+          relievingLetterData.relievingDate || "",
+        issueDate:
+          employeeData.relieving_letter?.issueDate ||
+          relievingLetterData.issueDate || "",
+        ...relievingLetterData,
+        ...employeeData.relieving_letter,
+      },
 
-      internship_certificate:
-        employeeData.internship_certificate || {
-          ...docs.INTERNSHIP_LETTER?.data,
-          internshipType:
-            docs.INTERNSHIP_LETTER?.data?.internshipType?.toLowerCase() || "",
-        },
+      // ✅ internship_certificate
+      internship_certificate: {
+        internshipType:
+          employeeData.internship_certificate?.internshipType ||
+          internshipLetterData.internshipType?.toLowerCase() || "",
+        stipend:
+          employeeData.internship_certificate?.stipend ||
+          internshipLetterData.stipend || "",
+        ...internshipLetterData,
+        ...employeeData.internship_certificate,
+      },
 
-      completion_certificate:
-        employeeData.completion_certificate ||
-        docs.COMPLETION_LETTER?.data || {},
+      // ✅ completion_certificate
+      completion_certificate: {
+        ...completionLetterData,
+        ...employeeData.completion_certificate,
+      },
 
-      full_and_final_letter:
-        employeeData.full_and_final_letter || {
-          date: docs.FULL_AND_FINAL?.data?.fnfDate || "",
-          month: docs.FULL_AND_FINAL?.data?.month || "",
-          dateofresignation: docs.FULL_AND_FINAL?.data?.resignationDate || "",
-          dateofleaving: docs.FULL_AND_FINAL?.data?.leavingDate || "",
-          paiddays: docs.FULL_AND_FINAL?.data?.paidDays || "",
-          workdays: docs.FULL_AND_FINAL?.data?.totalDaysInMonth || "",
-        },
+      // ✅ full_and_final_letter - read from documents.FULL_AND_FINAL.data
+      full_and_final_letter: {
+        date:
+          employeeData.full_and_final_letter?.date ||
+          fnfData.fnfDate || "",
+        month:
+          employeeData.full_and_final_letter?.month ||
+          monthNameToYYYYMM(fnfData.month, fnfYear) || "",
+        dateofresignation:
+          employeeData.full_and_final_letter?.dateofresignation ||
+          fnfData.resignationDate || "",
+        dateofleaving:
+          employeeData.full_and_final_letter?.dateofleaving ||
+          fnfData.leavingDate || "",
+        paiddays:
+          employeeData.full_and_final_letter?.paiddays ||
+          fnfData.paidDays || "",
+        workdays:
+          employeeData.full_and_final_letter?.workdays ||
+          fnfData.totalDaysInMonth || "",
+        issueDate:
+          employeeData.full_and_final_letter?.issueDate ||
+          fnfData.issueDate || "",
+      },
     });
   }, [employeeData]);
 
@@ -349,24 +438,11 @@ const UserDocumentFormPage = () => {
     }));
   }, [formData.salarySlipStartMonth, formData.salarySlipEndMonth]);
 
-  const getWorkingDays = (monthStr) => {
-    const [year, month] = monthStr.split("-");
+  const getDaysInMonth = (monthStr) => {
+    const [year, month] = monthStr.split("-").map(Number);
 
-    const date = new Date(year, month - 1, 1);
-    let workingDays = 0;
-
-    while (date.getMonth() === month - 1) {
-      const day = date.getDay();
-
-      // 0 = Sunday, 6 = Saturday
-      if (day !== 0 && day !== 6) {
-        workingDays++;
-      }
-
-      date.setDate(date.getDate() + 1);
-    }
-
-    return workingDays;
+    // month is 1-12
+    return new Date(year, month, 0).getDate();
   };
 
   useEffect(() => {
@@ -378,7 +454,7 @@ const UserDocumentFormPage = () => {
 
       salarySlipMonths.forEach((month) => {
         if (!updated[month.value]) {
-          updated[month.value] = getWorkingDays(month.value); // 👈 dynamic
+          updated[month.value] = getDaysInMonth(month.value);
         }
       });
 
@@ -699,7 +775,7 @@ const UserDocumentFormPage = () => {
         relieving_letter: "pfType",
         internship_certificate: "pfType",
         completion_certificate: "pfType",
-        fullandfinal_letter: "pfType",
+        full_and_final_letter: "pfType", // ✅ was: fullandfinal_letter (wrong key)
         confirmation_letter: "pfType",
       };
 
@@ -735,7 +811,6 @@ const UserDocumentFormPage = () => {
       payload.doj = formData.joiningDate;
     });
 
-    // console.log("FINAL PAYLOAD:", payload);
     const enrichedFormData = { ...formData };
     enrichedFormDataRef.current = enrichedFormData; // ✅ store in ref
     setPreviewData(enrichedFormData);
@@ -770,8 +845,6 @@ const UserDocumentFormPage = () => {
       docsToProcess,
     );
 
-    // console.log("PROFILE API PAYLOAD:", profilePayload);
-
     // ✅ F&F DOJ FIX
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
@@ -781,26 +854,40 @@ const UserDocumentFormPage = () => {
     // ✅ show popup instead of navigating
     setShowGeneratePopup(true);
 
+    // ✅ Fix the salary slip validation in handleSave
+    // ✅ First do salary slip validation
+    const freshMonths = [];
     if (isSalarySlipSelected()) {
       if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) {
         alert("Please select salary slip start and end month");
         return;
       }
 
-      if (!salarySlipMonths.length) {
+      const generated = generateMonthsArray(
+        formData.salarySlipStartMonth,
+        formData.salarySlipEndMonth,
+      );
+
+      if (!generated.length) {
         alert("Invalid month range");
         return;
       }
 
-      for (let month of salarySlipMonths) {
+      for (let month of generated) {
         const days = formData.salaryWorkdays?.[month.value];
-
         if (!days || Number(days) <= 0) {
           alert(`Enter valid workdays for ${month.label}`);
           return;
         }
       }
+
+      freshMonths.push(...generated);
+      freshMonthsRef.current = generated; // ✅ add this
+      setSalarySlipMonths(generated); // ✅ update state too
     }
+
+    // ✅ Only show popup after validation passes
+    setShowGeneratePopup(true);
 
     const enrichedDocs = docsToProcess.map((doc) => {
       const fullDoc = documentTypes.find((d) => d.id === doc.id);
@@ -816,11 +903,6 @@ const UserDocumentFormPage = () => {
       };
     });
 
-    // console.log(
-    //   "//PROFILE DOCUMENT DATA",
-    //   JSON.stringify(profilePayload.documentData, null, 2),
-    // );
-
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
 
@@ -828,20 +910,30 @@ const UserDocumentFormPage = () => {
       return;
     }
 
-    console.log("=== GENERATE BUTTON CLICKED ===");
-    console.log("selectedCompany:", selectedCompany);
-    console.log("previewData state:", previewData);
-
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
         previewData,
         selectedDocs: enrichedDocs,
-        salarySlipMonths,
+        salarySlipMonths: freshMonthsRef.current, // ✅ ref not state
         previewCompany: selectedCompany,
         flowType: "PROFILE", // is this here?
       },
     });
   };
+
+  // ✅ Add this useEffect after the selectedCompany useEffect
+  useEffect(() => {
+    if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) return;
+
+    const months = generateMonthsArray(
+      formData.salarySlipStartMonth,
+      formData.salarySlipEndMonth,
+    );
+
+    if (months.length > 0) {
+      setSalarySlipMonths(months);
+    }
+  }, [formData.salarySlipStartMonth, formData.salarySlipEndMonth]);
 
   const focusField = (fieldName) => {
     const field = document.querySelector(`[name="${fieldName}"]`);
@@ -1675,7 +1767,7 @@ const UserDocumentFormPage = () => {
                       state: {
                         previewData: enrichedFormDataRef.current, // ✅ use ref, not state
                         selectedDocs: enrichedDocs, // ✅ FIXED
-                        salarySlipMonths,
+                        salarySlipMonths: freshMonthsRef.current, // ✅ ref not state
                         previewCompany: selectedCompany,
                         flowType: "PROFILE", // ✅ add this
                       },

@@ -109,7 +109,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
   const grossSalary = Number(data.totalSalary || 0);
 
   const ffDate = data.date || "";
-  const joiningDate = data.doj || "";
+  const joiningDate = data.joiningDate || "";
   const resignationDate = data.dateofresignation || "";
   const leavingDate = data.dateofleaving || "";
 
@@ -211,7 +211,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell sx={CELL_LABEL}>Designation</TableCell>
               <TableCell sx={CELL_HIGHLIGHT}>
-                {data.designation}
+                {data.currentDesignation}
               </TableCell>
               <TableCell sx={CELL_LABEL}>Date of Resignation</TableCell>
               <TableCell sx={CELL_HIGHLIGHT}>

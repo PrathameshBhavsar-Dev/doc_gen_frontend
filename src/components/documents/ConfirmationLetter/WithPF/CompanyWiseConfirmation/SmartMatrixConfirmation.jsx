@@ -17,10 +17,10 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   const numberToWords = (num = 0) => {
@@ -113,7 +113,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   // ================= ADJUSTED BASIC =================
   const basicMonthly = round0(
     monthlyCTC -
-      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
   );
 
   // ================= ANNUAL VALUES =================
@@ -136,14 +136,15 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
   // ================= TOTAL (WITH PF) =================
   const totalMonthly = round0(
     basicMonthly +
-      hraMonthly +
-      daMonthly +
-      specialMonthly +
-      foodMonthly +
-      pfMonthly,
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly,
   );
 
   const totalAnnual = totalMonthly * 12;
+  const issueDate = data?.confirmation_letter?.issueDate ?? data?.issueDate;
 
   return (
     <>
@@ -157,7 +158,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
           }}
         >
           <Typography align="right" mb={3}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography
@@ -183,7 +184,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
             <strong>Subject :</strong>{" "}
             <u>
               Letter of intent for continued services as{" "}
-              <strong>{data.position}.</strong>
+              <strong>{data.joiningDesignation ?? data.position}.</strong>
             </u>
           </Typography>
 
@@ -191,7 +192,7 @@ const SmartMatrixConfirmation = ({ company = {}, data = {} }) => {
 
           <Typography mb={2} textAlign="justify">
             We are pleased to confirm your continued services at the position of{" "}
-            <strong>{data.position}</strong> with
+            <strong>{data.joiningDesignation ?? data.position}</strong> with
             <strong> SmartMatrix Digital Services Pvt Ltd. </strong>with
             effective date <strong>{formatDate(data.effectiveDate)}</strong>{" "}
             considering your performance and support towards the organization.

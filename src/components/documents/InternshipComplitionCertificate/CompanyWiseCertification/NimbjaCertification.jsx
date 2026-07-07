@@ -12,6 +12,11 @@ const NimbjaCertification = ({ company, data }) => {
 
   const title = (data?.mrms || "").toLowerCase().trim();
 
+  const issueDate = formatDate(
+    data.completion_certificate?.issueDate ??
+    data.issueDate ??
+    "");
+
   const pronouns =
     title === "miss." || title === "mrs."
       ? { subject: "She", object: "her", possessive: "her" }
@@ -88,7 +93,7 @@ const NimbjaCertification = ({ company, data }) => {
             performance exceeded our expectations and{" "}
             {pronouns.subject.toLowerCase()} was able to complete the given
             tasks on time. {pronouns.subject} was designated as{" "}
-            <strong>{data.role}.</strong> We wish {pronouns.object} all the best
+            <strong>{data.joiningDesignation ?? data.role}.</strong> We wish {pronouns.object} all the best
             for {pronouns.possessive} upcoming career.
           </Typography>
           {/* SIGN OFF */}

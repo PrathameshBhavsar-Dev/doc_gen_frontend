@@ -95,16 +95,20 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
+    currentDesignation,
+    designation,
     doj = "-",
     dob = "-",
     pan = "-",
+    workdays = "-",
     mode = "-",
-    workdays = "",
-    month = "2025-02",
+    accountNo = "-",
+    month = "-",
     totalSalary = 0,
-    otherDeduction = 500,
+    otherDeduction = 2000,
   } = data;
+
+  const finalDesignation = currentDesignation || designation || "-";
 
   /* ===== MONTH FORMAT ===== */
   const [year, monthNum] = month.split("-");
@@ -266,7 +270,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Designation</TableCell>
-              <TableCell align="center">{designation}</TableCell>
+              <TableCell align="center">{finalDesignation}</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>DOB</TableCell>
               <TableCell align="center">{dob}</TableCell>
             </TableRow>

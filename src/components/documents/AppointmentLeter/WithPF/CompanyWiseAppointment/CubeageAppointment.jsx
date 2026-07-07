@@ -40,7 +40,7 @@ const PageLayout = ({ children, company }) => (
       minHeight: "297mm",
       backgroundColor: "white",
       fontFamily: "'Calibri','Arial',sans-serif",
-      marginBottom: "20px",
+      marginBottom: "18px",
       "@media print": { marginBottom: 0, breakAfter: "page" },
     }}
   >
@@ -153,7 +153,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
         </Typography>
 
         <Typography mb={2}>
-          Employee Name: <strong>{employeeName}</strong>
+          {/* Employee Name: <strong>{employeeName}</strong> */}
         </Typography>
 
         <Typography mb={2}>

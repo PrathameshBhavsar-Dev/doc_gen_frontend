@@ -40,6 +40,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
   // INPUT = Annual CTC
   const annualSalary = Number(data.salary || 0);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   // Convert to monthly
   const monthlySalary = annualSalary / 12;
@@ -67,7 +68,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
               fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </div>
 
           {/* ================= ADDRESS ================= */}
@@ -111,7 +112,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
-            1. Your Designation will be <strong>“{data.position}”</strong>.
+            1. Your Designation will be <strong>“{data.joiningDesignation ?? data.position}”</strong>.
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
@@ -397,11 +398,11 @@ const SmartMatrixAppointment = ({ company, data }) => {
           // ================= ADJUSTED BASIC =================
           const basicMonthly = round0(
             monthlyCTC -
-              (hraMonthly +
-                daMonthly +
-                specialMonthly +
-                foodMonthly +
-                pfMonthly),
+            (hraMonthly +
+              daMonthly +
+              specialMonthly +
+              foodMonthly +
+              pfMonthly),
           );
 
           // ================= ANNUAL =================
@@ -441,11 +442,11 @@ const SmartMatrixAppointment = ({ company, data }) => {
           // ================= TOTAL =================
           const totalMonthly = round0(
             basicMonthly +
-              hraMonthly +
-              daMonthly +
-              specialMonthly +
-              foodMonthly +
-              pfMonthly,
+            hraMonthly +
+            daMonthly +
+            specialMonthly +
+            foodMonthly +
+            pfMonthly,
           );
 
           const totalAnnual = round0(totalMonthly * 12);
@@ -498,7 +499,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   Name : {data.mrms} {data.employeeName}
                 </Typography>
                 <br />
-                <Typography>Designation : {data.position}</Typography>
+                <Typography>Designation : {data.joiningDesignation ?? data.position}</Typography>
                 <br />
                 <Typography>
                   Date of Joining : {formatDate(data.joiningDate)}

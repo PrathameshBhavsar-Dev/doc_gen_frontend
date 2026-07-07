@@ -12,11 +12,14 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
+
+  const issueDate =
+    data?.internship_certificate?.issueDate ?? data?.issueDate;
 
   return (
     <Box
@@ -36,7 +39,7 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
       <A4Page
         headerSrc={company.header}
         footerSrc={company.footer}
-        // watermarkSrc={company.watermark}
+      // watermarkSrc={company.watermark}
       >
         {/* ================= CONTENT ================= */}
         <Box
@@ -73,7 +76,7 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
               mt: "-10mm",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
           <Typography
             sx={{
@@ -94,7 +97,7 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
           {/* SUBJECT */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
             <strong>Subject :</strong> Letter of intent for the Internship of
-            position as a <strong>{data.designation}</strong>
+            position as a <strong>{data.joiningDesignation ?? data.designation}</strong>
           </Typography>
           {/* GREETING */}
           <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
@@ -105,7 +108,7 @@ const NimbjaUnPaidinternshipLetter = ({ company = {}, data = {} }) => {
             sx={{ mb: 1, textAlign: "justify", fontFamily: "Bahnschrift" }}
           >
             We are pleased to offer you the internship on position as a{" "}
-            <strong>{data.designation}</strong> with{" "}
+            <strong>{data.joiningDesignation ?? data.designation}</strong> with{" "}
             <strong>Nimbja Security Solutions Pvt. Ltd.</strong> with effective
             date <strong>{formatDate(data.startDate)}</strong> considering your
             performance and support towards the organization.

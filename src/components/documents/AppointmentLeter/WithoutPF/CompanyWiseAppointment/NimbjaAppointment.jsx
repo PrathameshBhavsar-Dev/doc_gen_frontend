@@ -23,47 +23,47 @@ const NimbjaAppointment = ({ company, data }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   /* ================= SALARY LOGIC ================= */
 
- const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-const annualCTC = round0(
-  Number(data.totalSalary || data.salary || data.ctc || 0),
-);
+  const annualCTC = round0(
+    Number(data.totalSalary || data.salary || data.ctc || 0),
+  );
 
- // ✅ MONTHLY
- const monthlyCTC = round0(annualCTC / 12);
+  // ✅ MONTHLY
+  const monthlyCTC = round0(annualCTC / 12);
 
- // ✅ BREAKUP (LAST = ADJUSTMENT)
- let salaryRows = [
-   ["Basic", round0(monthlyCTC * 0.4)],
-   ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
-   ["HRA", round0(monthlyCTC * 0.12)],
-   ["City Allowance", round0(monthlyCTC * 0.16)],
-   ["Superannuation Fund", round0(monthlyCTC * 0.06)],
-   ["Performance Bonus", 0], // 🔥 IMPORTANT
- ];
+  // ✅ BREAKUP (LAST = ADJUSTMENT)
+  let salaryRows = [
+    ["Basic", round0(monthlyCTC * 0.4)],
+    ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+    ["HRA", round0(monthlyCTC * 0.12)],
+    ["City Allowance", round0(monthlyCTC * 0.16)],
+    ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+    ["Performance Bonus", 0], // 🔥 IMPORTANT
+  ];
 
- // ✅ FIX ROUNDING
- const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
- salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
+  // ✅ FIX ROUNDING
+  const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+  salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
- // ✅ FINAL ROWS (WITH ANNUAL)
- const finalSalaryRows = salaryRows.map(([name, monthly]) => [
-   name,
-   monthly,
-   monthly * 12,
- ]);
+  // ✅ FINAL ROWS (WITH ANNUAL)
+  const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+    name,
+    monthly,
+    monthly * 12,
+  ]);
 
- // ✅ TOTALS (MATCH OFFER LOGIC)
- const totalMonthly = monthlyCTC;
- const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
+  // ✅ TOTALS (MATCH OFFER LOGIC)
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
   /* ================= TERMS SPLIT ================= */
   const page1Terms = (data.terms || []).slice(0, 8);
   const page2Terms = (data.terms || []).slice(8);
@@ -75,6 +75,8 @@ const annualCTC = round0(
 
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
   };
+
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>
@@ -115,7 +117,7 @@ const annualCTC = round0(
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* ================= REF ================= */}
@@ -188,7 +190,7 @@ const annualCTC = round0(
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong> {formatDate(data.issueDate)},</strong> we are pleased to
+            <strong> {formatDate(issueDate)},</strong> we are pleased to
             appoint you in our organization with effect from
             <strong> {formatDate(data.joiningDate)},</strong> under the terms
             and conditions given below:
@@ -564,7 +566,7 @@ const annualCTC = round0(
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
           <Box
             component="img"
@@ -751,7 +753,7 @@ const annualCTC = round0(
 
           <Box minWidth="250px" sx={{ mt: 13.5, fontFamily: "Bahnschrift" }}>
             <Typography sx={{ fontFamily: "Bahnschrift" }}>
-               Signature: __________________
+              Signature: __________________
             </Typography>
             <Typography mt={2} sx={{ mt: "1", fontFamily: "Bahnschrift" }}>
               Candidate Name: {data.employeeName}
