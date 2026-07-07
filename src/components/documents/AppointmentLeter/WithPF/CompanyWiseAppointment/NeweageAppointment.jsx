@@ -64,7 +64,7 @@ const NeweageAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTCInput = Number(data.salary || 0);
+  const annualCTCInput = Number(data.joiningCTC || 0);
 
   const {
     rows: salaryRows,
@@ -72,10 +72,12 @@ const NeweageAppointment = ({ company, data }) => {
     annualGross,
   } = generateSalaryBreakup(annualCTCInput);
 
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+
   /* ================= TERMS & CONDITIONS ================= */
   const terms = [
     <>
-      Your Designation will be <strong>"{data.position}"</strong>.
+      Your Designation will be <strong>"{data.joiningDesignation ?? data.position}"</strong>.
     </>,
     <>
       Your total emoluments will be{" "}
@@ -106,7 +108,7 @@ const NeweageAppointment = ({ company, data }) => {
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
         <Box sx={{ mt: 2 }}>
           <Typography align="right" fontSize={14}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={14} mt={1}>
@@ -132,7 +134,7 @@ const NeweageAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance, Offer dated{" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you
+            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you
             in our organization with effect from{" "}
             <b>{formatDate(data.joiningDate)} </b>,under the terms and
             conditions given below: -
@@ -250,7 +252,7 @@ const NeweageAppointment = ({ company, data }) => {
 
           <Typography fontWeight="bold">Designation</Typography>
           <Typography>:</Typography>
-          <Typography>{data.position}</Typography>
+          <Typography>{data.joiningDesignation ?? data.position}</Typography>
 
           <Typography fontWeight="bold">Date of Joining</Typography>
           <Typography>:</Typography>

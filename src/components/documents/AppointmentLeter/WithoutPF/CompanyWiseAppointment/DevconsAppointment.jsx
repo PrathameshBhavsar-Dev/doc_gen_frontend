@@ -27,54 +27,10 @@ const DevconsAppointmentLetter = ({ company, data }) => {
       })
       : "";
 
-  /* ================= SALARY LOGIC ================= */
-
-  // 🔹 Round to whole number (no decimals)
-  // const round0 = (num) => Math.round(num);
-
-  // // ================= MONTHLY CTC =================
-  // const monthlyCTC = round0(Number(data.salary || 0));
-
-  // // ================= PERCENTAGE BREAKUP =================
-  // const basicMonthly = round0(monthlyCTC * 0.40);
-  // const hraMonthly = round0(monthlyCTC * 0.18);
-  // const daMonthly = round0(monthlyCTC * 0.12);
-  // const specialMonthly = round0(monthlyCTC * 0.16);
-  // const foodMonthly = round0(monthlyCTC * 0.06);
-  // const miscMonthly = round0(monthlyCTC * 0.08); // 8%
-
-  // // ================= ANNUAL VALUES =================
-  // const basicAnnual = round0(basicMonthly * 12);
-  // const hraAnnual = round0(hraMonthly * 12);
-  // const daAnnual = round0(daMonthly * 12);
-  // const specialAnnual = round0(specialMonthly * 12);
-  // const foodAnnual = round0(foodMonthly * 12);
-  // const miscAnnual = round0(miscMonthly * 12);
-
-  // // ================= SALARY TABLE STRUCTURE =================
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Misc. Allowance", miscMonthly, miscAnnual],
-  // ];
-
-  // // ================= TOTALS =================
-  // const totalMonthly = round0(
-  //   salaryRows.reduce((sum, row) => sum + row[1], 0)
-  // );
-
-  // const totalAnnual = round0(
-  //   salaryRows.reduce((sum, row) => sum + row[2], 0)
-  // );
-
-
   const round0 = (num) => Math.round(num);
 
   // Source of truth (ANNUAL CTC)
-  const annualCTC = round0(Number(data.salary || data.ctc || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.ctc || 0));
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
@@ -118,6 +74,8 @@ const DevconsAppointmentLetter = ({ company, data }) => {
   /* ================= TERMS SPLIT ================= */
   const page1Terms = (data.terms || []).slice(0, 8);
   const page2Terms = (data.terms || []).slice(8);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+  const position = data.joiningDesignation ?? data.position ?? "";
 
   const formatLakhsPerAnnum = (amount) => {
     if (!amount || isNaN(amount)) return "";
@@ -134,7 +92,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
         <Box sx={{ mt: 2 }}>
 
           <Typography align="right" fontSize={15}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={15} mt={2}>
@@ -187,7 +145,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
           <Box component="ol" sx={{ pl: 3, mt: 1 }}>
             <li>
               <Typography fontSize={14} mt={2}>
-                Your Designation will be <b>“{data.position}”</b>.
+                Your Designation will be <b>“{position}”</b>.
               </Typography>
             </li>
 
@@ -374,7 +332,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
       {/* ========================= PAGE 3 ========================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Typography align="right" mb={2}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </Typography>
 
         <Typography sx={{ mb: 2 }} fontSize={14}>
@@ -400,7 +358,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
           <b>Name:</b> {data.mrms} {data.employeeName}
         </Typography>
         <Typography mb={0.5}>
-          <b>Designation:</b> {data.position}
+          <b>Designation:</b> {position}
         </Typography>
         <Typography mb={2}>
           <b>Date of Joining:</b> {formatDate(data.joiningDate)}

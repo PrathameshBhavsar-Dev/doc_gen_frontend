@@ -88,7 +88,7 @@ const TC = (extra = {}) => ({
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
   // ================= ANNUAL CTC INPUT =================
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || 0));
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
@@ -117,10 +117,10 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
   ];
 
   const employeeName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.employeeName || "";
-  const position = data.position || "";
+  const position = data.joiningDesignation ?? data.position ?? "";
   const location = data.workLocation || company.city || "";
   const joiningDate = data.joiningDate || "";
-  const issueDate = data.issueDate || "";
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
   /* ---------------- PF Calculations ---------------- */
 
   // Fixed PF requirement

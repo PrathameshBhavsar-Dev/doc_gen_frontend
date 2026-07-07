@@ -39,7 +39,7 @@ const formatOneCurrency = (salary) => {
 const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
   // INPUT = Annual CTC
-  const annualSalary = Number(data.salary || 0);
+  const annualSalary = Number(data.joiningCTC || 0);
   const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   // Convert to monthly
@@ -381,7 +381,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           const round0 = (num) => Math.round(num);
 
           // ================= ANNUAL CTC INPUT =================
-          const annualCTC = round0(Number(data.salary || 0));
+          const annualCTC = round0(Number(data.joiningCTC || 0));
 
           // ================= MONTHLY CTC =================
           const monthlyCTC = round0(annualCTC / 12);

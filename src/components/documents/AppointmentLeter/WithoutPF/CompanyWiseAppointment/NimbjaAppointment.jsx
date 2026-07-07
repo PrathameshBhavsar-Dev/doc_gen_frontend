@@ -34,7 +34,7 @@ const NimbjaAppointment = ({ company, data }) => {
   const round0 = (num) => Math.round(num);
 
   const annualCTC = round0(
-    Number(data.totalSalary || data.salary || data.ctc || 0),
+    Number(data.joiningCTC || data.ctc || 0),
   );
 
   // ✅ MONTHLY

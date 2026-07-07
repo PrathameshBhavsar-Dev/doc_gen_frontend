@@ -16,10 +16,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 // ✅ NO .00
@@ -43,7 +43,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
 
   /* ================= SAME LOGIC AS OFFER LETTER ================= */
 
-  const totalAnnualInput = Number(data.salary) || 0;
+  const totalAnnualInput = Number(data.joiningCTC) || 0;
   const round0 = (num) => Math.round(num);
 
   const annualCTC = round0(totalAnnualInput);
@@ -58,7 +58,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
 
   const basicMonthly = round0(
     monthlyCTC -
-      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
   );
 
   const basicAnnual = round0(basicMonthly * 12);
@@ -86,11 +86,12 @@ const SmartSoftwareAppointment = ({ company, data }) => {
     (sum, item) => sum + item.annual,
     0
   );
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   /* ================= TERMS ================= */
 
- const terms = [
-    <>Your Designation will be <strong>"{data.position}"</strong>.</>,
+  const terms = [
+    <>Your Designation will be <strong>"{data.joiningDesignation ?? data.position}"</strong>.</>,
     <>Your total emoluments will be <strong>Rs. {(annualCTC / 100000).toFixed(2)}</strong> Lakhs per annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable.`,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
@@ -114,7 +115,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
     <>
       {/* PAGE 1 */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Typography align="right">{formatDate(data.issueDate)}</Typography>
+        <Typography align="right">{formatDate(issueDate)}</Typography>
 
         <Typography mt={1} fontSize={13}>
           <strong>Ref:</strong> SSS/HR/APPT/
@@ -186,13 +187,13 @@ const SmartSoftwareAppointment = ({ company, data }) => {
         <Typography align="center" fontWeight={700} mb={3}>
           Salary Structure – Break Up
         </Typography>
-         {/* Employee Info */}
-                <Box sx={{ mb: 2 }}>
-                  <Typography><strong>Employee Name:</strong> {data.employeeName}</Typography>
-                  <Typography><strong>Designation:</strong> {data.position}</Typography>
-                  <Typography><strong>Date of Joining:</strong> {formatDate(data.joiningDate)}</Typography>
-                  <Typography><strong>Employee ID:</strong> {String(data.employeeId).padStart(4, "0")}</Typography>
-                </Box>
+        {/* Employee Info */}
+        <Box sx={{ mb: 2 }}>
+          <Typography><strong>Employee Name:</strong> {data.employeeName}</Typography>
+          <Typography><strong>Designation:</strong> {data.joiningDesignation ?? data.position}</Typography>
+          <Typography><strong>Date of Joining:</strong> {formatDate(data.joiningDate)}</Typography>
+          <Typography><strong>Employee ID:</strong> {String(data.employeeId).padStart(4, "0")}</Typography>
+        </Box>
 
         <TableContainer>
           <Table size="small" sx={{ border: "1px solid #333" }}>

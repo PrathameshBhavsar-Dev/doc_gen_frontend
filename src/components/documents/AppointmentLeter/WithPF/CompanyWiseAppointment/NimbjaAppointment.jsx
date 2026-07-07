@@ -78,7 +78,7 @@ const NimbjaAppointment = ({ company, data }) => {
   const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   // ================= SALARY TABLE =================
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>

@@ -56,7 +56,7 @@ const PentaAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   const salaryRows = generateSalaryBreakup(annualCTC);
 
   /* ================= TERMS ================= */
