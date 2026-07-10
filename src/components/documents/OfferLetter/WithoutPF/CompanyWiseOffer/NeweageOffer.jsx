@@ -34,7 +34,7 @@ const NeweageOffer = ({ company, data }) => {
 
   const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
 
-  const annualCTC = round2(data.salary || 0);
+  const annualCTC = round2(data.joiningCTC || data.salary || 0);
   const monthlyGross = round2(annualCTC / 12);
 
   const PERCENT = {
@@ -92,10 +92,10 @@ const NeweageOffer = ({ company, data }) => {
     mrms = "",
     employeeName = "",
     address = "",
-    position = "",
     joiningDate = "",
-    issueDate = "",
   } = data;
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   const COMPANY_NAME = company.name.toUpperCase();
 
@@ -226,7 +226,7 @@ const NeweageOffer = ({ company, data }) => {
                 border: "1px solid #000",
                 borderCollapse: "collapse",
                 width: "100%",
-                
+
               }}
             >
               <TableHead>

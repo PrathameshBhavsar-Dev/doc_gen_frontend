@@ -709,7 +709,7 @@ const UserDocumentFormPage = () => {
       return;
     }
 
-    const yearlySalary = Number(formData.salary || 0);
+    const yearlySalary = Number(formData.salary || formData.currentCTC || 0);
     const monthlySalary = yearlySalary ? Math.round(yearlySalary / 12) : 0;
     // ✅ CREATE PAYLOAD HERE
     // let payload = { ...formData };
@@ -812,33 +812,53 @@ const UserDocumentFormPage = () => {
     });
 
     const enrichedFormData = { ...formData };
-    enrichedFormDataRef.current = enrichedFormData; // ✅ store in ref
-    setPreviewData(enrichedFormData);
 
-    setPreviewData(enrichedFormData);
+    // ✅ add gender and mode to enriched data
+    enrichedFormData.gender = (() => {
+      const t = (formData.mrms || "")?.toLowerCase()?.replace(".", "");
+      if (t === "mr") return "Male";
+      if (t === "mrs" || t === "miss") return "Female";
+      if (t === "mx") return "Other";
+      return "";
+    })();
+
+    enrichedFormData.mode = formData.bankName || "";
+
+    enrichedFormData.salary = yearlySalary;
+    enrichedFormData.annualCTC = yearlySalary;
+    enrichedFormData.currentCTC = yearlySalary;
+    enrichedFormData.monthlyCTC = monthlySalary;
+    enrichedFormData.totalSalary = monthlySalary;
+    enrichedFormData.newCTC = yearlySalary;
+
+    // ✅ DOJ fix
+    enrichedFormData.doj = formData.joiningDate || formData.doj || "";
+    enrichedFormData.joiningDate = formData.joiningDate || formData.doj || "";
+
+    // ✅ internship stipend override (must come AFTER salary defaults)
     if (formData?.internship_certificate?.stipend) {
       const stipend = Number(formData.internship_certificate.stipend);
-
       enrichedFormData.stipend = stipend;
-      enrichedFormData.internshipType =
-        formData.internship_certificate.internshipType;
-
-      // force preview to use stipend
+      enrichedFormData.internshipType = formData.internship_certificate.internshipType;
       enrichedFormData.salary = stipend;
       enrichedFormData.totalSalary = stipend;
       enrichedFormData.monthlyCTC = stipend;
       enrichedFormData.currentCTC = stipend;
     }
 
+    // ✅ flatten doc-specific fields
     docsToProcess.forEach((doc) => {
       const docKey = normalizeDocName(doc.name);
-
       if (formData[docKey]) {
         Object.entries(formData[docKey]).forEach(([key, value]) => {
           enrichedFormData[key] = value;
         });
       }
     });
+
+    // ✅ store in ref AFTER all enrichment is done
+    enrichedFormDataRef.current = enrichedFormData;
+    setPreviewData(enrichedFormData);
 
     const profilePayload = buildCreateProfilePayload(
       enrichedFormData,

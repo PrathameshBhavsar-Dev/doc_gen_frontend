@@ -88,6 +88,7 @@ const PentaSalarySlip = ({ company, data = {} }) => {
   const netPay = round2(totalEarning - totalDeduction);
 
   const netPayWords = numberToWords(Math.round(netPay));
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   return (
     <Box sx={{ width: "210mm", minHeight: "297mm", backgroundColor: "#fff", fontFamily: "Cambria, 'Times New Roman', serif" }}>
@@ -130,7 +131,7 @@ const PentaSalarySlip = ({ company, data = {} }) => {
 
           <Box sx={row}>
             <Box sx={{ ...cell, width: "25%", ...bold }}>Designation</Box>
-            <Box sx={{ ...cell, width: "25%" }}>{data.designation}</Box>
+            <Box sx={{ ...cell, width: "25%" }}>{designation}</Box>
             <Box sx={{ ...cell, width: "25%", ...bold }}>DOJ</Box>
             <Box sx={{ ...cell, width: "25%" }}>{formatDate(data.doj)}</Box>
           </Box>
@@ -229,12 +230,12 @@ const PentaSalarySlip = ({ company, data = {} }) => {
         </Box>
       </Box>
 
-       {/* FOOTER */}
-           {company.footer && (
-             <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-               <img src={company.footer} width="100%" alt="footer" />
-             </Box>
-           )}
+      {/* FOOTER */}
+      {company.footer && (
+        <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <img src={company.footer} width="100%" alt="footer" />
+        </Box>
+      )}
     </Box>
   );
 };

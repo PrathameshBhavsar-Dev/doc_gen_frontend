@@ -6,10 +6,10 @@ import A4Layout from "../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= COMMON TEXT STYLE ================= */
@@ -24,10 +24,8 @@ const NeweageExperience = ({ company, data }) => {
   if (!company || !data) return null;
 
   const {
-    issueDate = "",
     mrms = "",
     employeeName = "",
-    designation = "",
     joiningDate = "",
     relievingDate = "",
     hrName = company.hrName || "",
@@ -41,14 +39,17 @@ const NeweageExperience = ({ company, data }) => {
     title === "miss." || title === "mrs."
       ? { subject: "She", object: "her", possessive: "her" }
       : title === "mx."
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
+
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
       {/* ================= DATE ================= */}
 
-      <Typography sx={{textAlign: "center", font: "18"}}> 
+      <Typography sx={{ textAlign: "center", font: "18" }}>
         <b>Experience Letter</b>
       </Typography>
       <Typography sx={{ ...TEXT, mb: 6, textAlign: "right" }}>

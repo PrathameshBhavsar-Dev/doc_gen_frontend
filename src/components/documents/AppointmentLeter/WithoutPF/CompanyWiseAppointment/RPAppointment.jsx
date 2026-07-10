@@ -26,112 +26,45 @@ const RPAppointment = ({ company, data }) => {
       })
       : "";
 
-  // /* ================= SALARY LOGIC ================= */
-  // const round2 = (n) => Number(n.toFixed(2));
-  // const annualCTC = Number(data.salary || 0);
+  const round0 = (num) => Math.round(num);
 
-  // const basic = round2(annualCTC * 0.34);
-  // const hra = round2(annualCTC * 0.20);
-  // const da = round2(annualCTC * 0.035);
-  // const special = round2(annualCTC * 0.345);
-  // const food = round2(annualCTC * 0.06);
+  // ================= ANNUAL CTC (SOURCE) =================
+  const annualCTC = round0(Number(data.joiningCTC || 0));
 
-  // const misc = round2(
-  //   annualCTC - (basic + hra + da + special + food)
-  // );
+  // ================= PERCENTAGE BREAKUP (ANNUAL) =================
+  const basicAnnual = round0(annualCTC * 0.40);
+  const hraAnnual = round0(annualCTC * 0.18);
+  const daAnnual = round0(annualCTC * 0.12);
+  const specialAnnual = round0(annualCTC * 0.16);
+  const foodAnnual = round0(annualCTC * 0.06);
+  const miscAnnual = round0(annualCTC * 0.08); // 8%
 
-  // const salaryRows = [
-  //   ["Basic", basic / 12, basic],
-  //   ["House Rent Allowance", hra / 12, hra],
-  //   ["Dearness Allowance", da / 12, da],
-  //   ["Special Allowance", special / 12, special],
-  //   ["Food Allowance", food / 12, food],
-  //   ["Misc. Allowance", misc / 12, misc],
-  // ];
+  // ================= MONTHLY VALUES =================
+  const basicMonthly = round0(basicAnnual / 12);
+  const hraMonthly = round0(hraAnnual / 12);
+  const daMonthly = round0(daAnnual / 12);
+  const specialMonthly = round0(specialAnnual / 12);
+  const foodMonthly = round0(foodAnnual / 12);
+  const miscMonthly = round0(miscAnnual / 12);
 
-   /* ================= SALARY LOGIC ================= */
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Misc. Allowance", miscMonthly, miscAnnual],
+  ];
 
-  // 🔹 Round to whole number (no decimals)
-// const round0 = (num) => Math.round(num);
+  // ================= TOTALS =================
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
-// // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(Number(data.salary || 0));
-
-// // ================= PERCENTAGE BREAKUP =================
-// const basicMonthly = round0(monthlyCTC * 0.40);
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
-// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
-
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = round0(basicMonthly * 12);
-// const hraAnnual = round0(hraMonthly * 12);
-// const daAnnual = round0(daMonthly * 12);
-// const specialAnnual = round0(specialMonthly * 12);
-// const foodAnnual = round0(foodMonthly * 12);
-// const miscAnnual = round0(miscMonthly * 12);
-
-// // ================= SALARY TABLE STRUCTURE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Misc. Allowance", miscMonthly, miscAnnual],
-// ];
-
-// // ================= TOTALS =================
-// const totalMonthly = round0(
-//   salaryRows.reduce((sum, row) => sum + row[1], 0)
-// );
-
-// const totalAnnual = round0(
-//   salaryRows.reduce((sum, row) => sum + row[2], 0)
-// );
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-const round0 = (num) => Math.round(num);
-
-// ================= ANNUAL CTC (SOURCE) =================
-const annualCTC = round0(Number(data.salary || 0));
-
-// ================= PERCENTAGE BREAKUP (ANNUAL) =================
-const basicAnnual = round0(annualCTC * 0.40);
-const hraAnnual = round0(annualCTC * 0.18);
-const daAnnual = round0(annualCTC * 0.12);
-const specialAnnual = round0(annualCTC * 0.16);
-const foodAnnual = round0(annualCTC * 0.06);
-const miscAnnual = round0(annualCTC * 0.08); // 8%
-
-// ================= MONTHLY VALUES =================
-const basicMonthly = round0(basicAnnual / 12);
-const hraMonthly = round0(hraAnnual / 12);
-const daMonthly = round0(daAnnual / 12);
-const specialMonthly = round0(specialAnnual / 12);
-const foodMonthly = round0(foodAnnual / 12);
-const miscMonthly = round0(miscAnnual / 12);
-
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
-
-// ================= TOTALS =================
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
-
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
 
 
 
@@ -146,6 +79,8 @@ const totalMonthly = round0(
 
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
   };
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+  const position = data.joiningDesignation ?? data.position ?? "";
 
 
   return (
@@ -162,7 +97,7 @@ const totalMonthly = round0(
         >
           {/* DATE */}
           <Typography align="right" fontSize={15}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* REF */}
@@ -223,7 +158,7 @@ const totalMonthly = round0(
           >
             <li>
               <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                Your Designation will be <b>“{data.position}”</b>.
+                Your Designation will be <b>“{position}”</b>.
               </Typography>
             </li>
 
@@ -417,7 +352,7 @@ const totalMonthly = round0(
       {/* ================= PAGE 3 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Typography align="right" mb={2}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </Typography>
 
         <Typography mb={3}>
@@ -425,17 +360,11 @@ const totalMonthly = round0(
           {String(data.employeeId).padStart(4, "0")}
         </Typography>
 
-        {/* <Typography fontWeight={700} mb={2} >
-          Salary Structure – Break Up
-        </Typography> */}
         <Typography
           align="center"
           fontWeight={700}
           mb={3}
           sx={{
-            // textDecoration: "underline",
-            // textUnderlineOffset: "4px",   // 👈 space between text and line
-            // textDecorationThickness: "1.5px", // 👈 bold underline
           }}
         >
           Salary Structure - Break Up
@@ -446,7 +375,7 @@ const totalMonthly = round0(
           <b>Name:</b> {data.mrms} {data.employeeName}
         </Typography>
         <Typography mb={0.5}>
-          <b>Designation:</b> {data.position}
+          <b>Designation:</b> {position}
         </Typography>
         <Typography mb={5}>
           <b>Date of Joining:</b> {formatDate(data.joiningDate)}
@@ -459,7 +388,7 @@ const totalMonthly = round0(
             "& th, & td": {
               border: "1px solid #000",
               padding: "0px 12px 12px 12px",
-             // padding: "6px",
+              // padding: "6px",
               fontSize: "14px",
             },
           }}

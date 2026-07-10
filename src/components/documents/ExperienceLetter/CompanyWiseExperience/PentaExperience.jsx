@@ -81,12 +81,13 @@ const PentaExperience = ({ company, data }) => {
   }
 
   // Reference Number
-  const referenceNo = `PENTA\\PUN\\RMG01\\Exp-Letter${
-    data.employeeId ? `\\${data.employeeId}` : ""
-  }`;
+  const referenceNo = `PENTA\\PUN\\RMG01\\Exp-Letter${data.employeeId ? `\\${data.employeeId}` : ""
+    }`;
 
   // Pronouns
   const pronoun = getPronounsByTitle(data.mrms);
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <Page>
@@ -99,7 +100,7 @@ const PentaExperience = ({ company, data }) => {
       <Box sx={{ px: "30mm", pt: "25mm", pb: "40mm" }}>
         {/* Date */}
         <Typography sx={{ fontSize: 13, textAlign: "right", mb: 2 }}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </Typography>
 
         {/* Reference */}
@@ -131,7 +132,7 @@ const PentaExperience = ({ company, data }) => {
           <strong>{formatDate(data.relievingDate)}</strong>. At the time of
           leaving the services of the company,{" "}
           {pronoun.subject} was designated as{" "}
-          <strong>{data.designation}</strong>.
+          <strong>{designation}</strong>.
         </Typography>
 
         <Typography sx={{ fontSize: 14, lineHeight: 2, mb: 15 }}>
@@ -143,22 +144,22 @@ const PentaExperience = ({ company, data }) => {
         <Typography sx={{ fontSize: 14, mb: 4 }}>
           For <strong>{company.name}</strong>
         </Typography>
-<Box sx={{ display: "flex", alignItems: "flex-end", gap: 2, mb: 2 }}>
-  {company.signature && (
-    <img
-      src={company.signature}
-      alt="Signature"
-      style={{ height: "30px", width: "auto" }}
-    />
-  )}
-  {company.stamp && (
-    <img
-      src={company.stamp}
-      alt="Stamp"
-      style={{ height: "80px", width: "auto" }}
-    />
-  )}
-</Box>
+        <Box sx={{ display: "flex", alignItems: "flex-end", gap: 2, mb: 2 }}>
+          {company.signature && (
+            <img
+              src={company.signature}
+              alt="Signature"
+              style={{ height: "30px", width: "auto" }}
+            />
+          )}
+          {company.stamp && (
+            <img
+              src={company.stamp}
+              alt="Stamp"
+              style={{ height: "80px", width: "auto" }}
+            />
+          )}
+        </Box>
 
         <Typography sx={{ fontSize: 14, fontWeight: "bold", mt: 2 }}>
           {company.hrName}

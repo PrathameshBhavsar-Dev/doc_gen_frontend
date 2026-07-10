@@ -80,25 +80,23 @@ const numberToWords = (numVal = 0) => {
 };
 
 const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
-const {
-  employeeName = "-",
-  employeeId = "-",
-  gender = "-",
-  department = "-",
-  currentDesignation,
-  designation,
-  doj = "-",
-  dob = "-",
-  pan = "-",
-  workdays = "-",
-  mode = "-",
-  accountNo = "-",
-  month = "-",
-  totalSalary = 0,
-  otherDeduction = 2000,
-} = data;
-
-const finalDesignation = currentDesignation || designation || "-";
+  const {
+    employeeName = "-",
+    employeeId = "-",
+    gender = "-",
+    department = "-",
+    currentDesignation,
+    doj = "-",
+    dob = "-",
+    pan = "-",
+    workdays = "-",
+    mode = "-",
+    accountNo = "-",
+    month = "-",
+    totalSalary = 0,
+    otherDeduction = 2000,
+  } = data;
+  const finalDesignation = currentDesignation || designation || "-";
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
@@ -137,12 +135,12 @@ const finalDesignation = currentDesignation || designation || "-";
     backgroundColor: "transparent",
     boxShadow: "none",
   };
-  
+
   const TABLE_STYLE = {
     width: "100%",
     borderCollapse: "collapse",
   };
-  
+
   const CELL_BASE = {
     border: "1px solid #333",
     borderRadius: 0,
@@ -398,8 +396,8 @@ const finalDesignation = currentDesignation || designation || "-";
                   align="center"
                   sx={VALUE_CELL}
                 >{formatCurrency(SPECIAL)}</TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
@@ -408,8 +406,8 @@ const finalDesignation = currentDesignation || designation || "-";
                   align="center"
                   sx={VALUE_CELL}
                 >{formatCurrency(FOOD)}</TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
@@ -420,8 +418,8 @@ const finalDesignation = currentDesignation || designation || "-";
                 >
                   {formatCurrency(PF)}
                 </TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               {/* Totals */}
@@ -443,13 +441,13 @@ const finalDesignation = currentDesignation || designation || "-";
                 <TableCell sx={CELL_HEAD}>
                   {formatCurrency(netPay)}
                 </TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
                 <TableCell sx={TOTAL_CELL}>In Words</TableCell>
-                <TableCell sx={CELL_BASE}colSpan={3}>{numberToWords(netPay)}</TableCell>
+                <TableCell sx={CELL_BASE} colSpan={3}>{numberToWords(netPay)}</TableCell>
               </TableRow>
 
               {/* Signature */}

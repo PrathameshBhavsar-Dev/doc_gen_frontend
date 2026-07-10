@@ -19,190 +19,107 @@ import A4Page from "../../../../layout/A4Page";
 const RPOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  /* =====================================================
-     SALARY LOGIC (EXACT SAME AS INCREMENT)
-  ===================================================== */
+  const round0 = (num) => Math.round(num);
 
-  // const salary = calculateSalaryBreakdown(data.salary || data.ctc || 0);
+  // ================= ANNUAL CTC (SOURCE) =================
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
-  // const {
-  //   monthly: {
-  //     basicSalary = 0,
-  //     hra = 0,
-  //     conveyanceAllowance = 0, // DA
-  //     medicalAllowance = 0,    // Food
-  //     specialAllowance = 0,
-  //     totalEarnings = 0,
-  //   },
-  //   annual: {
-  //     basicSalary: basicAnnual = 0,
-  //     hra: hraAnnual = 0,
-  //     conveyanceAllowance: daAnnual = 0,
-  //     medicalAllowance: foodAnnual = 0,
-  //     specialAllowance: specialAnnual = 0,
-  //     ctc = 0,
-  //   },
-  // } = salary;
+  // ================= PERCENTAGE BREAKUP (ANNUAL) =================
+  const basicAnnual = round0(annualCTC * 0.40);
+  const hraAnnual = round0(annualCTC * 0.18);
+  const daAnnual = round0(annualCTC * 0.12);
+  const specialAnnual = round0(annualCTC * 0.16);
+  const foodAnnual = round0(annualCTC * 0.06);
+  const miscAnnual = round0(annualCTC * 0.08); // 8%
 
-  // const salaryComponents = [
-  //   { name: "Basic", monthly: basicSalary, annual: basicAnnual },
-  //   { name: "House Rent Allowance", monthly: hra, annual: hraAnnual },
-  //   { name: "Dearness Allowance", monthly: conveyanceAllowance, annual: daAnnual },
-  //   { name: "Special Allowance", monthly: specialAllowance, annual: specialAnnual },
-  //   { name: "Food Allowance", monthly: medicalAllowance, annual: foodAnnual },
-  //   { name: "Misc. Allowance", monthly: 0, annual: 0 },
-  // ];
+  // ================= MONTHLY VALUES =================
+  const basicMonthly = round0(basicAnnual / 12);
+  const hraMonthly = round0(hraAnnual / 12);
+  const daMonthly = round0(daAnnual / 12);
+  const specialMonthly = round0(specialAnnual / 12);
+  const foodMonthly = round0(foodAnnual / 12);
+  const miscMonthly = round0(miscAnnual / 12);
 
-  // const totalMonthly = totalEarnings;
-  // const totalAnnual = ctc;
-
-  // updated code
-
-  /* =====================================================
-   SALARY LOGIC (SAME AS DEVCONS INCREMENT)
-===================================================== */
-
-// helper
-//   const round0 = (num) => Math.round(num);
-
-// // source of truth
-// const monthlyCTC = round0(Number(data.salary|| 0));
-
-//  // ================= PERCENTAGE BREAKUP =================
-// const basicMonthly = round0(monthlyCTC * 0.40);
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
-// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
-
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = round0(basicMonthly * 12);
-// const hraAnnual = round0(hraMonthly * 12);
-// const daAnnual = round0(daMonthly * 12);
-// const specialAnnual = round0(specialMonthly * 12);
-// const foodAnnual = round0(foodMonthly * 12);
-// const miscAnnual = round0(miscMonthly * 12);
-
-// // ================= SALARY TABLE STRUCTURE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Misc. Allowance", miscMonthly, miscAnnual],
-// ];
-
-// // ================= TOTALS =================
-// const totalMonthly = round0(
-//   salaryRows.reduce((sum, row) => sum + row[1], 0)
-// );
-
-// const totalAnnual = round0(
-//   salaryRows.reduce((sum, row) => sum + row[2], 0)
-// );
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-const round0 = (num) => Math.round(num);
-
-// ================= ANNUAL CTC (SOURCE) =================
-const annualCTC = round0(Number(data.salary || 0));
-
-// ================= PERCENTAGE BREAKUP (ANNUAL) =================
-const basicAnnual = round0(annualCTC * 0.40);
-const hraAnnual = round0(annualCTC * 0.18);
-const daAnnual = round0(annualCTC * 0.12);
-const specialAnnual = round0(annualCTC * 0.16);
-const foodAnnual = round0(annualCTC * 0.06);
-const miscAnnual = round0(annualCTC * 0.08); // 8%
-
-// ================= MONTHLY VALUES =================
-const basicMonthly = round0(basicAnnual / 12);
-const hraMonthly = round0(hraAnnual / 12);
-const daMonthly = round0(daAnnual / 12);
-const specialMonthly = round0(specialAnnual / 12);
-const foodMonthly = round0(foodAnnual / 12);
-const miscMonthly = round0(miscAnnual / 12);
-
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
-
-// ================= TOTALS =================
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
-
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
-
-
-
-
-
-const numberToWordsIndian = (num) => {
-  if (!num || isNaN(num)) return "Rupees Zero Only";
-
-  const ones = [
-    "", "One", "Two", "Three", "Four", "Five",
-    "Six", "Seven", "Eight", "Nine", "Ten",
-    "Eleven", "Twelve", "Thirteen", "Fourteen",
-    "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Misc. Allowance", miscMonthly, miscAnnual],
   ];
 
-  const tens = [
-    "", "", "Twenty", "Thirty", "Forty",
-    "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
-  ];
+  // ================= TOTALS =================
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
-  const convertBelowHundred = (n) => {
-    if (n < 20) return ones[n];
-    return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
+
+
+
+
+
+  const numberToWordsIndian = (num) => {
+    if (!num || isNaN(num)) return "Rupees Zero Only";
+
+    const ones = [
+      "", "One", "Two", "Three", "Four", "Five",
+      "Six", "Seven", "Eight", "Nine", "Ten",
+      "Eleven", "Twelve", "Thirteen", "Fourteen",
+      "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    ];
+
+    const tens = [
+      "", "", "Twenty", "Thirty", "Forty",
+      "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+    ];
+
+    const convertBelowHundred = (n) => {
+      if (n < 20) return ones[n];
+      return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+    };
+
+    const convertNumber = (n) => {
+      let result = "";
+
+      if (n >= 10000000) {
+        result += convertNumber(Math.floor(n / 10000000)) + " Crore ";
+        n %= 10000000;
+      }
+
+      if (n >= 100000) {
+        result += convertNumber(Math.floor(n / 100000)) + " Lakh ";
+        n %= 100000;
+      }
+
+      if (n >= 1000) {
+        result += convertNumber(Math.floor(n / 1000)) + " Thousand ";
+        n %= 1000;
+      }
+
+      if (n >= 100) {
+        result += ones[Math.floor(n / 100)] + " Hundred ";
+        n %= 100;
+      }
+
+      if (n > 0) {
+        result += convertBelowHundred(n) + " ";
+      }
+
+      return result.trim();
+    };
+
+    return `Rupees ${convertNumber(num)} Only`;
   };
 
-  const convertNumber = (n) => {
-    let result = "";
 
-    if (n >= 10000000) {
-      result += convertNumber(Math.floor(n / 10000000)) + " Crore ";
-      n %= 10000000;
-    }
-
-    if (n >= 100000) {
-      result += convertNumber(Math.floor(n / 100000)) + " Lakh ";
-      n %= 100000;
-    }
-
-    if (n >= 1000) {
-      result += convertNumber(Math.floor(n / 1000)) + " Thousand ";
-      n %= 1000;
-    }
-
-    if (n >= 100) {
-      result += ones[Math.floor(n / 100)] + " Hundred ";
-      n %= 100;
-    }
-
-    if (n > 0) {
-      result += convertBelowHundred(n) + " ";
-    }
-
-    return result.trim();
-  };
-
-  return `Rupees ${convertNumber(num)} Only`;
-};
-
-
-return (
+  return (
     <>
       <A4Page
         headerSrc={company.header}
@@ -251,7 +168,7 @@ return (
                 fontWeight: 500,
               }}
             >
-              {new Date(data.issueDate).toLocaleDateString("en-US", {
+              {new Date(issueDate).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -292,7 +209,7 @@ return (
             >
               <strong>Subject</strong> :{" "}
               <span style={{ textDecoration: "underline" }}>
-                Letter of intent for the position of {data.position}
+                Letter of intent for the position of {position}
               </span>
             </Typography>
 
@@ -304,7 +221,7 @@ return (
                 fontWeight: 500,
               }}
             >
-               Dear {data?.employeeName?.split(" ")[0]},
+              Dear {data?.employeeName?.split(" ")[0]},
             </Typography>
 
 
@@ -320,17 +237,17 @@ return (
               It was a pleasure meeting you to explore a career opportunity in{" "}
               <strong>R P BUSINESS SOLUTIONS LLP</strong>. Based on our discussions, we are
               pleased to offer you the position of{" "}
-              <strong>"{data.position}"</strong> with our organisation. The gross
+              <strong>"{position}"</strong> with our organisation. The gross
               compensation will be{" "}
               <strong>
                 INR {formatCurrency(totalAnnual)} ({numberToWordsIndian(totalAnnual)})
               </strong>{" "}
               per annum. We wish to start commencing your job from{" "}
               <strong>{new Date(data.joiningDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}</strong>. The details of the terms and conditions of
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}</strong>. The details of the terms and conditions of
               the offer of employment are detailed in the enclosed annexure-1.
             </Typography>
 
@@ -521,16 +438,16 @@ return (
 
             <TableBody>
               {salaryRows.map(([name, monthly, annual], i) => (
-                            <TableRow key={i}>
-                              <TableCell>{name}</TableCell>
-                              <TableCell align="right">
-                                {formatCurrency(monthly)}
-                              </TableCell>
-                              <TableCell align="right">
-                                {formatCurrency(annual)}
-                              </TableCell>
-                            </TableRow>
-                          ))}
+                <TableRow key={i}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(monthly)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(annual)}
+                  </TableCell>
+                </TableRow>
+              ))}
 
               <TableRow sx={{ backgroundColor: "#ff0000" }}>
                 <TableCell sx={{ fontWeight: 700 }}>

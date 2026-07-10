@@ -69,7 +69,7 @@ export const generateAnnexureSalaryStructure = (ctc) => {
  * @param {number} ctc - Cost to Company (annual amount)
  * @returns {object} - Salary breakdown with all components
  */
-  export const calculateSalaryBreakdown = (ctc) => {
+export const calculateSalaryBreakdown = (ctc) => {
   const annual = parseFloat(ctc) || 350000; // Default to 3.5 LPA
   const monthly = annual / 12;
 

@@ -21,11 +21,9 @@ const SmartSoftwareExperience = ({ company, data }) => {
 
   const {
     employeeName = "",
-    designation = "",
     department = "",
     joiningDate = "",
     relievingDate = "",
-    issueDate = new Date(),
     employeeId = "",
     mrms = "",
   } = data;
@@ -37,8 +35,11 @@ const SmartSoftwareExperience = ({ company, data }) => {
     title === "miss." || title === "mrs."
       ? { subject: "She", object: "her", possessive: "her" }
       : title === "mx."
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
+
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>

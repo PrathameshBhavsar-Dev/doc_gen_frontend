@@ -31,8 +31,11 @@ const SmartMatrixIncrement = ({ company, data }) => {
   const round2 = (num) => Number(Number(num).toFixed(2));
 
   /* ================= INPUT IS ANNUAL ================= */
-  const annualCTC = round2(Number(data.newCTC || 0));
+  const annualCTC = round2(Number(data.newCTC || data.currentCTC || 0));
   const monthlyCTC = round2(annualCTC / 12);
+  console.log("annualCTC =", annualCTC);
+  console.log("monthlyCTC =", monthlyCTC);
+  // console.log("salaryRows =", salaryRows);
 
   /* ================= STATIC PF ================= */
   const pfMonthly = 3750;
@@ -88,6 +91,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
       type: "total",
     },
   ];
+  console.log("salaryRows =", salaryRows);
+
 
   /* ================= TABLE STYLES ================= */
 

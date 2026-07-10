@@ -93,7 +93,7 @@ const SmartMatrixOffer = ({ data, company }) => {
   const round2 = (num) => Math.round((Number(num) || 0) * 100) / 100;
 
   /* ================= COMMON ================= */
-  const annualCTC = round2(data.salary || 0);
+  const annualCTC = round2(data.joiningCTC || data.salary || 0);
 
   /* ================= PAGE 1 LOGIC ================= */
   const fmtDate = (d) =>

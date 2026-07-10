@@ -15,10 +15,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
@@ -28,10 +28,10 @@ const round2 = (n) => Number(Number(n || 0).toFixed(2));
 //     minimumFractionDigits: 2,
 //     maximumFractionDigits: 2,
 //   });
- 
 
 
-  export const formatCurrency = (value) => {
+
+export const formatCurrency = (value) => {
   const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
 
   return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
@@ -63,13 +63,15 @@ const SmartSoftwareAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   const salaryRows = generateSalaryBreakup(annualCTC);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+  const position = data.joiningDesignation ?? data.position ?? "";
 
   /* ================= FULL TERMS ================= */
 
   const terms = [
-    <>Your Designation will be <strong>"{data.position}"</strong>.</>,
+    <>Your Designation will be <strong>"{position}"</strong>.</>,
     <>Your total emoluments will be <strong>Rs. {(annualCTC / 100000).toFixed(2)}</strong> Lakhs per annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable.`,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
@@ -92,55 +94,55 @@ const SmartSoftwareAppointment = ({ company, data }) => {
   return (
     <>
       {/* ================= PAGE 1 ================= */}
-<A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
-  <Box sx={{ mt: 0, fontSize: 13 }}>
-    
-    <Typography align="right" fontSize={13}>
-      {formatDate(data.issueDate)}
-    </Typography>
+      <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
+        <Box sx={{ mt: 0, fontSize: 13 }}>
 
-    <Typography mt={1} fontSize={13}>
-      <strong>Ref:</strong> SSS/HR/APPT/
-      {String(data.employeeId).padStart(4, "0")}
-    </Typography>
-
-    <Typography mt={2} fontSize={13}>
-      {data.mrms} {data.employeeName}
-      <br />
-       Address:{data.address}
-    </Typography>
-
-    <Typography mt={2} fontSize={13}>
-      Dear {firstName},
-    </Typography>
-
-    <Typography
-      align="center"
-      fontWeight={700}
-      mt={3}
-      fontSize={14}   // Slightly bigger heading
-    >
-      LETTER OF APPOINTMENT
-    </Typography>
-
-    <Typography mt={2} textAlign="justify" fontSize={13}>
-      Further to your acceptance, we are pleased to appoint you with
-      effect from <b>{formatDate(data.joiningDate)}</b> under the
-      following terms and conditions:
-    </Typography>
-
-    <Box component="ol" sx={{ pl: 3, mt: 2 }}>
-      {terms.slice(0, 10).map((t, i) => (
-        <li key={i}>
-          <Typography textAlign="justify" mb={1} fontSize={14.30}>
-            {t}
+          <Typography align="right" fontSize={13}>
+            {formatDate(issueDate)}
           </Typography>
-        </li>
-      ))}
-    </Box>
 
-  </Box>
-</A4Page>
+          <Typography mt={1} fontSize={13}>
+            <strong>Ref:</strong> SSS/HR/APPT/
+            {String(data.employeeId).padStart(4, "0")}
+          </Typography>
+
+          <Typography mt={2} fontSize={13}>
+            {data.mrms} {data.employeeName}
+            <br />
+            Address:{data.address}
+          </Typography>
+
+          <Typography mt={2} fontSize={13}>
+            Dear {firstName},
+          </Typography>
+
+          <Typography
+            align="center"
+            fontWeight={700}
+            mt={3}
+            fontSize={14}   // Slightly bigger heading
+          >
+            LETTER OF APPOINTMENT
+          </Typography>
+
+          <Typography mt={2} textAlign="justify" fontSize={13}>
+            Further to your acceptance, we are pleased to appoint you with
+            effect from <b>{formatDate(data.joiningDate)}</b> under the
+            following terms and conditions:
+          </Typography>
+
+          <Box component="ol" sx={{ pl: 3, mt: 2 }}>
+            {terms.slice(0, 10).map((t, i) => (
+              <li key={i}>
+                <Typography textAlign="justify" mb={1} fontSize={14.30}>
+                  {t}
+                </Typography>
+              </li>
+            ))}
+          </Box>
+
+        </Box>
+      </A4Page>
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
@@ -162,22 +164,22 @@ const SmartSoftwareAppointment = ({ company, data }) => {
             </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 3 }}>
-                              {company?.signature && (
-                                <img
-                                  src={company.signature}
-                                  alt="Signature"
-                                  style={{ height: 75 }}
-                                />
-                              )}
-                    
-                              {company?.stamp && (
-                                <img
-                                  src={company.stamp}
-                                  alt="Stamp"
-                                  style={{ height: 90 }}
-                                />
-                              )}
-                            </Box>
+              {company?.signature && (
+                <img
+                  src={company.signature}
+                  alt="Signature"
+                  style={{ height: 75 }}
+                />
+              )}
+
+              {company?.stamp && (
+                <img
+                  src={company.stamp}
+                  alt="Stamp"
+                  style={{ height: 90 }}
+                />
+              )}
+            </Box>
 
             <Typography mt={1}>{company.hrName}</Typography>
             <Typography fontSize={14.30}>HR Department</Typography>
@@ -201,7 +203,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
         {/* Employee Info */}
         <Box sx={{ mb: 2 }}>
           <Typography><strong>Employee Name:</strong> {data.employeeName}</Typography>
-          <Typography><strong>Designation:</strong> {data.position}</Typography>
+          <Typography><strong>Designation:</strong> {position}</Typography>
           <Typography><strong>Date of Joining:</strong> {formatDate(data.joiningDate)}</Typography>
           <Typography><strong>Employee ID:</strong> {String(data.employeeId).padStart(4, "0")}</Typography>
         </Box>
@@ -212,8 +214,8 @@ const SmartSoftwareAppointment = ({ company, data }) => {
             "& th, & td": {
               border: "1px solid #000",
               fontSize: 14,
-             // padding: "6px",
-             padding: "0px 12px 12px 12px",
+              // padding: "6px",
+              padding: "0px 12px 12px 12px",
             },
           }}
         >

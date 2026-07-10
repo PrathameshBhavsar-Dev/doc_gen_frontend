@@ -123,8 +123,6 @@ const SmartMatrixExperience = ({ company, data }) => {
         {/* BODY – paragraph 1 */}
         <p style={{ textAlign: "justify", fontSize: "17px" }}>
           It is certified that <strong>{data.employeeName}</strong>{" "}
-          {/* (Employee ID: <strong>{data.employeeId}</strong>) as{" "}
-          <strong>{data.designation}</strong> with our company,{" "} */}
           was under the employer of <strong>{company.name}</strong> as{" "}
           <strong>{data.currentDesignation ?? data.designation}</strong> in the{" "}
           <strong>{data.department} Department </strong>from{" "}

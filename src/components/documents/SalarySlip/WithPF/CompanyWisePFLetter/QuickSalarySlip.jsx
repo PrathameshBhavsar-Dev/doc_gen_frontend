@@ -30,11 +30,11 @@ const formatDate = (date) =>
   date ? new Date(date).toLocaleDateString("en-GB") : "";
 
 const numberFormat = (num) =>
-  Math.round(Number(num || 0)).toLocaleString("en-IN", 
+  Math.round(Number(num || 0)).toLocaleString("en-IN",
     {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
 
 const safe = (val) => (val !== undefined && val !== null ? val : "");
 
@@ -130,8 +130,8 @@ const numberToWords = (num) => {
 /* ---------- Styles ---------- */
 const cell = {
   border: "1px solid #000",
- // padding: "6px",
- padding: "0px 12px 12px 12px",
+  // padding: "6px",
+  padding: "0px 12px 12px 12px",
   fontSize: "13px",
 };
 
@@ -155,7 +155,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
   ];
 
- const totalEarning = Number(data.totalSalary || 0);
+  const totalEarning = Number(data.totalSalary || 0);
   const totalDeduction = deductions.reduce(
     (sum, d) => sum + Number(d.value || 0),
     0
@@ -163,15 +163,16 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
 
   const netPay = totalEarning - totalDeduction;
   const maxRows = Math.max(earnings.length, deductions.length);
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   return (
     <Box
-       sx={{
-    width: "210mm",
-    minHeight: "297mm",
-    pt: "16mm",   // reduce top padding
-    px: "20mm",
-    pb: "20mm",
+      sx={{
+        width: "210mm",
+        minHeight: "297mm",
+        pt: "16mm",   // reduce top padding
+        px: "20mm",
+        pb: "20mm",
       }}
     >
       {/* ---------- HEADER IMAGE ---------- */}
@@ -235,7 +236,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Designation</TableCell>
             <TableCell sx={cell} colSpan={3}>
-              {safe(data.designation)}
+              {safe(designation)}
             </TableCell>
           </TableRow>
 

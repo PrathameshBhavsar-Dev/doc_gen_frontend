@@ -23,6 +23,7 @@ const NimbjaExperience = ({ company, data }) => {
         : { subject: "He", object: "him", possessive: "his" };
 
   const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <div
@@ -112,7 +113,7 @@ const NimbjaExperience = ({ company, data }) => {
           <strong>{formatDate(data.relievingDate)}</strong>. {pronouns.subject}{" "}
           was efficient and hardworking in this tenure. At the time of leaving
           the services of the company, {pronouns.subject.toLowerCase()} was
-          designated as <strong>{data.currentDesignation ?? data.designation}</strong>.
+          designated as <strong>{designation}</strong>.
         </p>
 
         {/* PARAGRAPH 2 */}

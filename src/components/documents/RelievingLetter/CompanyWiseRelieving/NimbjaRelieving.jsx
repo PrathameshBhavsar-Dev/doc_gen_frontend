@@ -86,7 +86,7 @@ const NimbjaRelieving = ({ company, data }) => {
             textDecoration: "underline",
           }}
         >
-          Releiving Letter.
+          Releiving Letter
         </div>
 
         {/* ================= RECEIVER ================= */}
@@ -103,7 +103,7 @@ const NimbjaRelieving = ({ company, data }) => {
 
         {/* ================= SALUTATION ================= */}
         <p style={{ marginBottom: "10mm", marginTop: "-15mm" }}>
-          Dear {data.employeeName.split(" ")[0]},
+          Dear {data.employeeName?.split(" ")[0] || ""},
         </p>
 
         {/* ================= BODY ================= */}

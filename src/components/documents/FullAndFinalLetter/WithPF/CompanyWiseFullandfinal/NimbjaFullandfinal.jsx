@@ -14,6 +14,7 @@ const cell = {
   fontSize: "12px", // slightly reduce size
   padding: "0px 12px 12px 12px",
   wordBreak: "break-word", // prevents overflow
+  lineHeight: 0.99,
 };
 
 const bold = { fontWeight: 700 };

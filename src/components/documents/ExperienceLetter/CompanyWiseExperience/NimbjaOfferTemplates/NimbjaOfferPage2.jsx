@@ -23,11 +23,13 @@ const NimbjaOfferPage2 = ({
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-IN", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  const offerDate = formatDate(issueDate);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -64,7 +66,7 @@ const NimbjaOfferPage2 = ({
             fontFamily: "Bahnschrift",
           }}
         >
-          {formatDate(data.offerDate)}
+          {formatDate(offerDate)}
         </Typography>
         <SalaryStructureTable
           salaryRows={salaryRows}

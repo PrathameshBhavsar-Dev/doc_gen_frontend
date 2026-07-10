@@ -173,7 +173,19 @@ const DP_STYLES = `
   }
 
   /* ── Sidebar ── */
-  .dp-sidebar { width: 224px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; }
+  .dp-sidebar {
+    width: 224px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: sticky;
+    top: 90px;               /* below your 62px topbar */
+    align-self: flex-start;
+    overflow-y: hidden;
+  }
 
   .dp-card {
     background: var(--white);
@@ -483,6 +495,8 @@ const DocumentPreview = () => {
   console.log("REACHED BASE DATA SECTION");
   let freshData = { ...baseData };
 
+
+
   freshData.panNo = freshData.panNo || freshData.pan;
   freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob;
 
@@ -520,7 +534,7 @@ const DocumentPreview = () => {
   // ✅ Increment uses newCTC
   if (key === "increment_letter") {
     freshData.newCTC = Number(
-      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+      freshData.annualCTC || freshData.newCTC || freshData.salary || freshData.currentCTC || 0,
     );
   }
 
@@ -783,8 +797,6 @@ const DocumentPreview = () => {
         throw new Error("Missing document template key");
       }
 
-      // console.log("NORMALIZED KEY:", key);
-
       // =========================
       // BASE DATA
       // =========================
@@ -792,14 +804,10 @@ const DocumentPreview = () => {
         ? previewData[0]?.data || {}
         : previewData || {};
 
-      // console.log("BASE DATA", baseData);
-
       // =========================
       // FLATTEN DOCUMENT DATA
       // =========================
       let freshData = { ...baseData };
-      // console.log("BASE DATA", baseData);
-      // console.log("FRESH DATA", freshData);
 
       Object.keys(baseData).forEach((parentKey) => {
         if (
@@ -815,46 +823,42 @@ const DocumentPreview = () => {
         }
       });
 
-      // console.log("FRESH DATA BEFORE FIX:", freshData);
-
       // =========================
       // PF NORMALIZATION
       // =========================
       const normalizePfType = (value) => {
         if (!value) return "";
-
         const normalized = value.toString().trim().toLowerCase();
-
-        if (normalized === "with_pf" || normalized === "withpf") {
-          return "withPF";
-        }
-
-        if (normalized === "without_pf" || normalized === "withoutpf") {
-          return "withoutPF";
-        }
-
+        if (normalized === "with_pf" || normalized === "withpf") return "withPF";
+        if (normalized === "without_pf" || normalized === "withoutpf") return "withoutPF";
         return value;
       };
 
-      freshData.offerType = normalizePfType(
-        freshData.offerType || freshData.pfType,
-      );
+      // ✅ GENDER fix - derive from mrms/title
+      const getGenderFromTitle = (title) => {
+        const t = title?.toLowerCase()?.replace(".", "");
+        if (t === "mr") return "Male";
+        if (t === "mrs" || t === "miss") return "Female";
+        if (t === "mx") return "Other";
+        return "";
+      };
 
-      freshData.incrementType = normalizePfType(
-        freshData.incrementType || freshData.offerType,
-      );
+      freshData.gender =
+        freshData.gender ||
+        getGenderFromTitle(freshData.mrms || freshData.title || freshData.identity) ||
+        "";
 
-      freshData.salaryType = normalizePfType(
-        freshData.salaryType || freshData.offerType,
-      );
+      // ✅ MODE fix - bank name
+      freshData.mode =
+        freshData.mode ||
+        freshData.bankName ||
+        "";
 
-      freshData.appointmentType = normalizePfType(
-        freshData.appointmentType || freshData.offerType,
-      );
-
-      freshData.pfType = normalizePfType(
-        freshData.pfType || freshData.offerType,
-      );
+      freshData.offerType = normalizePfType(freshData.offerType || freshData.pfType);
+      freshData.incrementType = normalizePfType(freshData.incrementType || freshData.offerType);
+      freshData.salaryType = normalizePfType(freshData.salaryType || freshData.offerType);
+      freshData.appointmentType = normalizePfType(freshData.appointmentType || freshData.offerType);
+      freshData.pfType = normalizePfType(freshData.pfType || freshData.offerType);
 
       // =========================
       // REQUIRED FIELD FIXES
@@ -866,28 +870,104 @@ const DocumentPreview = () => {
         "EMP001";
 
       freshData.issuedTo = freshData.employeeId;
-
       freshData.issuedBy = user?._id || "SYSTEM";
 
-      freshData.title = freshData.mrms || freshData.identity || "Mr";
+      // =========================
+      // TITLE WITH DOT
+      // =========================
+      const formatTitle = (title) => {
+        const displayMap = {
+          MR: "Mr.", MRS: "Mrs.", MISS: "Miss.", MX: "Mx.",
+          Mr: "Mr.", Mrs: "Mrs.", Miss: "Miss.", Mx: "Mx.",
+        };
+        return displayMap[title] || title || "";
+      };
+      freshData.title = formatTitle(
+        freshData.mrms || freshData.title || freshData.identity
+      );
 
       // =========================
       // DOJ FIXES
       // =========================
       freshData.doj =
         freshData.doj || freshData.joiningDate || freshData.dateOfJoining;
-
       freshData.joiningDate =
         freshData.joiningDate || freshData.doj || freshData.dateOfJoining;
-
       freshData.dateOfJoining =
         freshData.dateOfJoining || freshData.joiningDate || freshData.doj;
+
+      // =========================
+      // PAN / DOB FIXES
+      // =========================
+      freshData.pan = freshData.pan || freshData.panNo || "";
+      freshData.panNo = freshData.panNo || freshData.pan || "";
+      freshData.dob = freshData.dob || freshData.dateOfBirth || "";
+      freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob || "";
 
       // =========================
       // ISSUE DATE FIX
       // =========================
       if (!freshData.issueDate) {
         freshData.issueDate = new Date().toISOString().split("T")[0];
+      }
+
+      // =========================
+      // SALARY FIXES
+      // =========================
+      const yearlySalary = Number(
+        freshData.annualCTC ||
+        freshData.salary ||
+        freshData.currentCTC ||
+        freshData.newCTC ||
+        0
+      );
+      const monthlySalary = Math.round(yearlySalary / 12);
+
+      console.log("=== PDF SALARY DEBUG ===");
+      console.log("yearlySalary:", yearlySalary);
+      console.log("freshData.annualCTC:", freshData.annualCTC);
+      console.log("freshData.salary:", freshData.salary);
+      console.log("freshData.currentCTC:", freshData.currentCTC);
+      console.log("freshData.newCTC:", freshData.newCTC);
+      console.log("freshData.monthlyCTC:", freshData.monthlyCTC);
+
+      // ✅ Annual docs
+      if (
+        key === "offer_letter" ||
+        key === "appointment_letter" ||
+        key === "confirmation_letter"
+      ) {
+        freshData.salary = yearlySalary;
+        freshData.newCTC = yearlySalary;
+        freshData.totalSalary = yearlySalary;
+      }
+
+      // ✅ Increment letter
+      if (key === "increment_letter") {
+        freshData.newCTC = yearlySalary;
+        freshData.salary = yearlySalary;
+        freshData.annualCTC = yearlySalary;
+      }
+
+      // ✅ Monthly docs
+      if (key === "salaryslip_letter") {
+        freshData.totalSalary = Number(
+          freshData.monthlyCTC || monthlySalary || 0
+        );
+      }
+
+      if (key === "fullandfinal_letter") {
+        freshData.totalSalary = Number(
+          freshData.monthlyCTC || monthlySalary || 0
+        );
+        freshData.doj = freshData.doj || freshData.joiningDate || "";
+      }
+
+      // ✅ Internship
+      if (key === "internshipcertificate_letter") {
+        freshData.stipend = Number(
+          freshData.stipend || freshData.monthlyCTC || 0
+        );
       }
 
       // =========================
@@ -903,7 +983,6 @@ const DocumentPreview = () => {
       const payload = buildPayload(key, freshData, user, previewCompany);
 
       try {
-
       } catch (apiErr) {
         console.error("❌ API ERROR:", apiErr);
       }
@@ -913,23 +992,14 @@ const DocumentPreview = () => {
       // =========================
       const templateMap = {
         salaryslip_letter: SalarySlipLetterTemplate,
-
         internshipcertificate_letter: InternshipLetterTemplate,
-
         offer_letter: OfferTemplate,
-
         completion_certificate: CertificationLetterTemplate,
-
         increment_letter: IncrementTemplate,
-
         appointment_letter: AppointmentLetterTemplate,
-
         experience_letter: ExperienceLetterTemplate,
-
         relieving_letter: RelievingLetterTemplate,
-
         fullandfinal_letter: FullandfinalLetterTemplate,
-
         confirmation_letter: ConfirmationLetterTemplate,
       };
 
@@ -943,10 +1013,6 @@ const DocumentPreview = () => {
       }
 
       // =========================
-      // DEBUG LOGS
-      // =========================
-
-      // =========================
       // FILE NAME
       // =========================
       const filename = `${previewDocType?.name || "Document"}-${freshData?.employeeName || "User"
@@ -955,30 +1021,60 @@ const DocumentPreview = () => {
       // =========================
       // GENERATE PDF
       // =========================
+      // =========================
+      // GENERATE PDF
+      // =========================
       try {
-        await generatePDF(
-          TemplateComponent,
-          {
-            data: freshData,
-            company: previewCompany,
-          },
-          filename,
-        );
+        if (isSalarySlip && salarySlipDocs.length > 0) {
+          // ✅ Generate one PDF with all salary slip months
+          for (let i = 0; i < salarySlipDocs.length; i++) {
+            const slipData = salarySlipDocs[i];
+
+            const slipFreshData = {
+              ...freshData,
+              month: slipData.month,
+              workdays: slipData.workdays,
+              totalSalary: slipData.totalSalary ?? freshData.totalSalary,
+              salaryType: slipData.salaryType || freshData.salaryType,
+              doj: slipData.doj || freshData.doj,
+              gender: slipData.gender || freshData.gender,
+              mode: slipData.mode || freshData.mode,
+            };
+
+            const slipFilename = `${previewDocType?.name || "Salary_Slip"}-${freshData?.employeeName || "User"
+              }-${slipData.month || new Date().toISOString().slice(0, 7)}`;
+
+            await generatePDF(
+              TemplateComponent,
+              {
+                data: slipFreshData,
+                company: previewCompany,
+              },
+              slipFilename,
+            );
+          }
+        } else {
+          // ✅ All other docs — single PDF
+          await generatePDF(
+            TemplateComponent,
+            {
+              data: freshData,
+              company: previewCompany,
+            },
+            filename,
+          );
+        }
       } catch (pdfError) {
         console.error("❌ PDF GENERATION FAILED:");
         console.error(pdfError);
-
         alert(pdfError.message || "PDF generation failed");
       }
 
       toast("PDF saved & downloaded ✓");
     } catch (err) {
       console.error("FULL DOWNLOAD ERROR:", err);
-
       console.error("BACKEND ERROR:", err?.response?.data);
-
       setError(err?.message || "Failed to generate PDF");
-
       toast("Export failed", "error");
     } finally {
       setLoading(false);

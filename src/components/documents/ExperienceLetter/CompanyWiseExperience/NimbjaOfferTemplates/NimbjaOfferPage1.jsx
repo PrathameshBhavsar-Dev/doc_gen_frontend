@@ -120,7 +120,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
           journey in which every employee contributes. We invite you to be part
           of this journey! This has reference to your application and subsequent
           interviews you had with us. We are pleased to offer you the role of{" "}
-          <b>{data.currentDesignation} </b>
+          <b>{data.joiningDesignation ?? data.position} </b>
           {/* {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",

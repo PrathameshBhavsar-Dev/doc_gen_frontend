@@ -45,7 +45,6 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
     doj = "-",
     dob = "-",
     pan = "-",
@@ -62,6 +61,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
   const salaryMonth = `${monthName} ${year}`;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   /* ================= EARNINGS BREAKUP (100%) ================= */
  const round0 = (num) => Math.round(num);

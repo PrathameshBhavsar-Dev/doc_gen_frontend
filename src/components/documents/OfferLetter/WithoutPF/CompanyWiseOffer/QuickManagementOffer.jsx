@@ -25,9 +25,11 @@ const salaryStructure = [
 const QuickManagementOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const { mrms, employeeName, address, position, salary, issueDate } = data;
+  const { mrms, employeeName, address, } = data;
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
-  const annualCTC = Number(salary || 0);
+  const annualCTC = Number(data.joiningCTC || data.salary || 0);
   const monthlyCTC = Math.round(annualCTC / 12);
 
   return (
@@ -180,7 +182,7 @@ const QuickManagementOffer = ({ company, data }) => {
                 <img src={company.stamp} alt="Stamp" style={styles.stampInline} />
               )}
             </div>
- 
+
             <div>HR Department, Pune</div>
           </div>
 
@@ -231,7 +233,7 @@ const styles = {
 
   detailRow: {
     display: "grid",
-    gridTemplateColumns: "80px 10px 1fr", 
+    gridTemplateColumns: "80px 10px 1fr",
     columnGap: "4px",
     marginBottom: 4,
     alignItems: "start",

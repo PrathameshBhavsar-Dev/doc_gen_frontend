@@ -106,7 +106,7 @@ const SmartMatrixOffer = ({ company, data }) => {
   const round0 = (num) => Math.round(num);
 
   // ================= ANNUAL CTC INPUT =================
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
