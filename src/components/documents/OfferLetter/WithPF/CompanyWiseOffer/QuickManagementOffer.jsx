@@ -338,6 +338,7 @@ const styles = {
   th: {
     border: "1px solid #000",
     padding: "0px 12px 12px 12px",
+    padding: "0px 12px 12px 12px",
     backgroundColor: "#00AEEF",
     textAlign: "center",
     fontSize: baseFont,
@@ -345,6 +346,7 @@ const styles = {
 
   td: {
     border: "1px solid #000",
+    padding: "0px 12px 12px 12px",
     padding: "0px 12px 12px 12px",
     textAlign: "center",
     fontSize: baseFont,

@@ -109,6 +109,43 @@ const JDITOffer = ({ company, data }) => {
     ...CELL_HEAD,
   };
 
+  /* ================= TABLE STYLES ================= */
+
+  const TABLE_STYLE = {
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+    width: "100%",
+    color: "#fff",
+  };
+
+  const HEADER_ROW = {
+    backgroundColor: "#000",
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #333",
+    fontSize: "9.75pt",
+    padding: "0px 12px 12px 12px",
+    verticalAlign: "top",
+    lineHeight: 1.2,
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+    pt: "0px",
+    color: "#fff !important",
+  };
+
+  const TOTAL_ROW = {
+    backgroundColor: "#000",
+  };
+
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}

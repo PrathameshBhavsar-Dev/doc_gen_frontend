@@ -111,7 +111,11 @@ const SalaryStructureTable = ({
   const CELL_BASE = {
     border: "1px solid #000",
     fontSize: "9.75pt",
+<<<<<<< HEAD
     padding: "0px 12px 12px 12px",
+=======
+  padding: "0px 12px 12px 12px",
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
     verticalAlign: "top",
     lineHeight: 0.8,
     fontFamily: "Bahnschrift",

@@ -135,12 +135,10 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     backgroundColor: "transparent",
     boxShadow: "none",
   };
-
   const TABLE_STYLE = {
     width: "100%",
     borderCollapse: "collapse",
   };
-
   const CELL_BASE = {
     border: "1px solid #333",
     borderRadius: 0,

@@ -19,7 +19,7 @@ import {
   createProfileService,
   updateProfileService,
 } from "../../core/services/v2/userService";
-import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+// import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
