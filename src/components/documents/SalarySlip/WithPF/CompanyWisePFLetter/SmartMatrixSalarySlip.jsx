@@ -102,7 +102,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
   const empId = data.employeeId || "-";
   const gender = data.gender || "-";
   const dept = data.department || "-";
-  const desg = data.designation || "-";
+  const desg = data.currentDesignation || data.designation;
   const doj = data.doj || "-";
   const dob = data.dob || "-";
   const pan = data.pan || "-";
@@ -175,7 +175,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
         sx={{
           border: "1px solid black",
           borderRadius: 0,
-          mt: "20mm",
+          mt: "10mm",
           mb: "15mm",
           boxShadow: "none",
           "& .MuiTableCell-root": {
@@ -263,6 +263,18 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
               <TableCell>{totalWorkdays}</TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Earnings</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                {/* {bankMode}
+                <br></br>
+                {data.accountNo} */}
+                Amount
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Deductions</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Amount</TableCell>
             </TableRow>
 
             {/* Earnings & Deduction Section */}

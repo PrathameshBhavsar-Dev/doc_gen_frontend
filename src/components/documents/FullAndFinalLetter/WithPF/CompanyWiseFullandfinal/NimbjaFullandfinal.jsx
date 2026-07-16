@@ -14,6 +14,7 @@ const cell = {
   fontSize: "12px", // slightly reduce size
   padding: "0px 12px 12px 12px",
   wordBreak: "break-word", // prevents overflow
+  lineHeight: 0.99,
 };
 
 const bold = { fontWeight: 700 };
@@ -215,12 +216,12 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
               <TableCell sx={cell}>Employee ID</TableCell>
               <TableCell sx={cell}>{data.employeeId}</TableCell>
               <TableCell sx={cell}>Joining Date</TableCell>
-              <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
+              <TableCell sx={cell}>{formatDate(data.joiningDate)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={cell}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={cell}>Date of Resignation</TableCell>
               <TableCell sx={cell}>
                 {formatDate(data.dateofresignation)}

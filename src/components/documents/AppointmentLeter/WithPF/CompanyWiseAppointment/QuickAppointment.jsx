@@ -15,12 +15,12 @@ const formatDate = (date) =>
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
 const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", 
-  //   {
-  //   minimumFractionDigits: 2,
-  //   maximumFractionDigits: 2,
-  // }
-);
+  Number(v || 0).toLocaleString("en-IN",
+    //   {
+    //   minimumFractionDigits: 2,
+    //   maximumFractionDigits: 2,
+    // }
+  );
 
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (annualCTC) => {
@@ -63,12 +63,13 @@ const QuickAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   const salaryRows = generateSalaryBreakup(annualCTC);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   /* ================= TERMS ================= */
   const terms = [
-    <> Your Designation will be <strong>"{data.position}"</strong>.   </>,
+    <> Your Designation will be <strong>"{data.joiningDesignation ?? data.position}"</strong>.   </>,
     <>Your total emoluments will be <strong>Rs. {annualCTC / 100000} </strong>Lakhs Per Annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
@@ -96,7 +97,7 @@ const QuickAppointment = ({ company, data }) => {
 
         <Box sx={{ mt: 2 }}>
           <Typography align="right" fontSize={14}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={15} mt={1}>
@@ -134,7 +135,7 @@ const QuickAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance offer dated,{" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
           </Typography>
 
           <Box component="ol" sx={{ pl: 3, mt: 2 }}>
@@ -181,38 +182,38 @@ const QuickAppointment = ({ company, data }) => {
                 For {company.name}
               </Typography>
 
-             <Box
-  sx={{
-    display: "flex",
-    alignItems: "flex-end", // 🔥 aligns bottom properly
-    gap: 2,
-    mt: 5,
-  }}
->
-  {company.signature && (
-    <Box
-      component="img"
-      src={company.signature}
-      alt="sign"
-      sx={{
-        height: 50,   // ✅ controlled size
-        objectFit: "contain",
-      }}
-    />
-  )}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end", // 🔥 aligns bottom properly
+                  gap: 2,
+                  mt: 5,
+                }}
+              >
+                {company.signature && (
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="sign"
+                    sx={{
+                      height: 50,   // ✅ controlled size
+                      objectFit: "contain",
+                    }}
+                  />
+                )}
 
-  {company.stamp && (
-    <Box
-      component="img"
-      src={company.stamp}
-      alt="stamp"
-      sx={{
-        height: 100,   // ✅ slightly bigger than sign
-        objectFit: "contain",
-      }}
-    />
-  )}
-</Box>
+                {company.stamp && (
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="stamp"
+                    sx={{
+                      height: 100,   // ✅ slightly bigger than sign
+                      objectFit: "contain",
+                    }}
+                  />
+                )}
+              </Box>
 
               <Typography fontWeight={600} mt={1}>
                 {company.hrName}
@@ -240,10 +241,10 @@ const QuickAppointment = ({ company, data }) => {
       {/* ================= PAGE 3 ================= */}
       <A4Page headerSrc={company.header}>
 
-           <Typography fontSize={15} mt={2}>
-            <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
-            {String(data.employeeId).padStart(4, "0")}
-          </Typography>
+        <Typography fontSize={15} mt={2}>
+          <strong>Ref:</strong> QMS\VER1.1\PUN\PIMSAU\ADM-CTRL/
+          {String(data.employeeId).padStart(4, "0")}
+        </Typography>
         <Typography align="center" fontWeight={700} mb={3} mt={5}>
           Salary Structure – Break Up
         </Typography>
@@ -263,7 +264,7 @@ const QuickAppointment = ({ company, data }) => {
 
           <Typography fontWeight="bold">Designation</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.position}</Typography>
+          <Typography>{data.joiningDesignation ?? data.position}</Typography>
 
           <Typography fontWeight="bold">Date of Joining</Typography>
           <Typography fontWeight="bold">:</Typography>
@@ -283,7 +284,7 @@ const QuickAppointment = ({ company, data }) => {
               border: "1px solid #000",
               fontSize: 14,
               //padding: "6px",
-             padding: "0px 12px 12px 12px",
+              padding: "0px 12px 12px 12px",
 
 
             },

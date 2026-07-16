@@ -50,7 +50,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
   const grossSalary = Number(data.totalSalary || 0);
 
   const ffDate = data.date || "";
-  const joiningDate = data.doj || "";
+  const joiningDate = data.joiningDate || "";
   const resignationDate = data.dateofresignation || "";
   const leavingDate = data.dateofleaving || "";
 
@@ -161,7 +161,7 @@ const Fullandfinal = ({ company = {}, data = {} }) => {
               <TableRow>
                 <TableCell sx={bold}>Designation</TableCell>
                 <TableCell sx={{ ...cell, background: "#efe2b8" }}>
-                  {data.designation}
+                  {data.currentDesignation}
                 </TableCell>
                 <TableCell sx={bold}>Date of Resignation</TableCell>
                 <TableCell sx={{ ...cell, background: "#efe2b8" }}>

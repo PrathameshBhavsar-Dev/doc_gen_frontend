@@ -57,7 +57,7 @@ const NeweageOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
   const round0 = (num) => Math.round(Number(num) || 0);
-  const annualCTC = round0(data.salary || 0);
+  const annualCTC = round0(data.joiningCTC || data.salary || 0);
   const monthlyCTC = round0(annualCTC / 12);
 
   const pfMonthly = 3750;
@@ -95,10 +95,11 @@ const NeweageOffer = ({ company, data }) => {
 
   const {
     employeeName = "",
-    position = "",
-    issueDate = "",
     joiningDate = "",
   } = data;
+
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   return (
     <>

@@ -248,7 +248,7 @@ transition-all duration-300
                   Role
                 </span>
 
-                <div className="text-[13px] text-[#475569]">{profile.designation || "N/A"}</div>
+                <div className="text-[13px] text-[#475569]">{profile.currentDesignation || "N/A"}</div>
               </div>
 
               {/* PAYMENT */}

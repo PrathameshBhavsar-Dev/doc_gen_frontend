@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 
 const DevconsExperience = ({ company, data }) => {
+  const designation = data.currentDesignation ?? data.designation ?? "";
+
   return (
     <Box
       sx={{
@@ -49,16 +51,16 @@ const DevconsExperience = ({ company, data }) => {
         </Typography>
 
         {/* GREETING (MATCHED) */}
-        <Typography sx={{ mb: 2, color: "#000",  }}>
+        <Typography sx={{ mb: 2, color: "#000", }}>
           Dear{" "}
           <Box component="span" sx={{ fontWeight: 600 }}>
             {data.employeeName}
           </Box>{" "}
-          ({data.designation}),
+          ({designation}),
         </Typography>
 
         {/* PARAGRAPH 1 */}
-        <Typography sx={{ mb: 2, textAlign: "justify", color: "#000",  }}>
+        <Typography sx={{ mb: 2, textAlign: "justify", color: "#000", }}>
           You have worked in our organization from{" "}
           {new Date(data.joiningDate).toLocaleDateString("en-GB", {
             day: "2-digit",
@@ -75,14 +77,14 @@ const DevconsExperience = ({ company, data }) => {
         </Typography>
 
         {/* PARAGRAPH 2 */}
-        <Typography sx={{ mb: 2, textAlign: "justify", color: "#000"  }}>
+        <Typography sx={{ mb: 2, textAlign: "justify", color: "#000" }}>
           Your performance during the employment has been appreciated in
           evaluations each year and your contribution towards the organization
           have always been valued.
         </Typography>
 
         {/* PARAGRAPH 3 */}
-        <Typography sx={{ mb: 9, color: "#000",  }}>
+        <Typography sx={{ mb: 9, color: "#000", }}>
           We wish you all the best for your future endeavors.
         </Typography>
 
@@ -110,13 +112,13 @@ const DevconsExperience = ({ company, data }) => {
         </Box>
 
         {/* HR DETAILS (ALL BOLD, GROUPED) */}
-        <Typography sx={{ fontWeight: 600, color: "#000",  }}>
+        <Typography sx={{ fontWeight: 600, color: "#000", }}>
           {company.hrName}
         </Typography>
-        <Typography sx={{ fontSize: "15px", fontWeight: 600, color: "#000",  }}>
+        <Typography sx={{ fontSize: "15px", fontWeight: 600, color: "#000", }}>
           HR Relations Lead
         </Typography>
-        <Typography sx={{ fontSize: "15px", fontWeight: 600, color: "#000",  }}>
+        <Typography sx={{ fontSize: "15px", fontWeight: 600, color: "#000", }}>
           Department of HR Relations
         </Typography>
       </Box>

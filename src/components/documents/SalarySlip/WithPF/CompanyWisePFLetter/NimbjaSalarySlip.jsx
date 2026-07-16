@@ -85,7 +85,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
+    currentDesignation,
     doj = "-",
     dob = "-",
     pan = "-",
@@ -96,6 +96,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
+  const finalDesignation = currentDesignation || designation || "-";
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", {
@@ -134,12 +135,10 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
     backgroundColor: "transparent",
     boxShadow: "none",
   };
-  
   const TABLE_STYLE = {
     width: "100%",
     borderCollapse: "collapse",
   };
-  
   const CELL_BASE = {
     border: "1px solid #333",
     borderRadius: 0,
@@ -255,65 +254,64 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               {/* Employee Info */}
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Employee Name</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {employeeName}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>Employee ID</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {employeeId}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Gender</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {gender}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>Department</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {department}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>DOJ</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {doj}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>PAN</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {pan}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Designation</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
-                  {designation}
+                <TableCell sx={VALUE_CELL}>
+                  {finalDesignation}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>DOB</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {dob}
                 </TableCell>
               </TableRow>
 
-              <TableRow>
-                <TableCell sx={LABEL_CELL}>Mode</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
-                  {mode}
-                </TableCell>
+            <TableRow>
+              <TableCell sx={LABEL_CELL}>Mode</TableCell>
+              <TableCell sx={VALUE_CELL}>
+                Bank Name- {mode}
+                <br />
+                Bank Account No.- {accountNo}
+              </TableCell>
+              <TableCell sx={LABEL_CELL}>Working days</TableCell>
+              <TableCell sx={VALUE_CELL}>{data.workdays}</TableCell>
+            </TableRow>
 
-                <TableCell sx={LABEL_CELL}>Working Days</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
-                  {workdays}
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
+              {/* <TableRow>
                 <TableCell sx={LABEL_CELL}>Account No.</TableCell>
                 <TableCell align="center" sx={VALUE_CELL}>
                   {accountNo}
@@ -321,7 +319,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
 
                 <TableCell sx={VALUE_CELL} />
                 <TableCell sx={VALUE_CELL} />
-              </TableRow>
+              </TableRow> */}
 
               {/* Earnings */}
               <TableRow>
@@ -395,8 +393,8 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                   align="center"
                   sx={VALUE_CELL}
                 >{formatCurrency(SPECIAL)}</TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
@@ -405,8 +403,8 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                   align="center"
                   sx={VALUE_CELL}
                 >{formatCurrency(FOOD)}</TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
@@ -417,8 +415,8 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                 >
                   {formatCurrency(PF)}
                 </TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               {/* Totals */}
@@ -440,13 +438,13 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
                 <TableCell sx={CELL_HEAD}>
                   {formatCurrency(netPay)}
                 </TableCell>
-                <TableCell sx={CELL_BASE}/>
-                <TableCell sx={CELL_BASE}/>
+                <TableCell sx={CELL_BASE} />
+                <TableCell sx={CELL_BASE} />
               </TableRow>
 
               <TableRow>
                 <TableCell sx={TOTAL_CELL}>In Words</TableCell>
-                <TableCell sx={CELL_BASE}colSpan={3}>{numberToWords(netPay)}</TableCell>
+                <TableCell sx={CELL_BASE} colSpan={3}>{numberToWords(netPay)}</TableCell>
               </TableRow>
 
               {/* Signature */}

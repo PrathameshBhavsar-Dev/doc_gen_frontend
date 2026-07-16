@@ -12,7 +12,6 @@ const DevconsRelieving = ({ company, data }) => {
         backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
-        fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
         "& *": {
           fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
         },
@@ -58,7 +57,7 @@ const DevconsRelieving = ({ company, data }) => {
          {data.mrms} {data.employeeName}
         </Typography>
         <Typography sx={{ fontWeight: 600, mb: 3 }}>
-          {data.designation}
+          {data.currentDesignation ?? data.designation}
         </Typography>
 
         {/* GREETING */}
@@ -78,7 +77,7 @@ const DevconsRelieving = ({ company, data }) => {
           </Box>{" "}
           as{" "}
           <Box component="span" sx={{ fontWeight: 600 }}>
-            {data.designation}
+            {data.currentDesignation ?? data.designation}
           </Box>{" "}
           from{" "}
           <Box component="span" sx={{ fontWeight: 600,  }}>

@@ -46,13 +46,13 @@ const JDITSalarySlip = ({ company, data }) => {
     doj,
     department,
     pan,
-    designation,
     dob,
     mode,
     accountNo,
     workdays,
     totalSalary,
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   
 /* ================= SALARY CALCULATION ================= */

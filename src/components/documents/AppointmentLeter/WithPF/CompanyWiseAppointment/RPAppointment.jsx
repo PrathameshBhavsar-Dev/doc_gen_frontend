@@ -18,169 +18,64 @@ const RPAppointment = ({ company, data }) => {
 
   /* ================= HELPERS ================= */
 
-//     const round2 = (num) => Number(Number(num).toFixed(2));
+  //     const round2 = (num) => Number(Number(num).toFixed(2));
 
-   const firstName = data.employeeName?.split(" ")[0] || "";
+  const firstName = data.employeeName?.split(" ")[0] || "";
 
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
-//    /* ================= SALARY LOGIC ================= */
+  const round0 = (num) => Math.round(num);
 
-//   const round0 = (num) => Math.round(num);
+  // ================= ANNUAL CTC =================
+  const annualCTC = round0(Number(data.joiningCTC || 0));
 
-// // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(Number(data.salary || 0));
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// // ================= UPDATED PERCENTAGES =================
-// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= UPDATED PERCENTAGES =================
+  const basicMonthly = round0(monthlyCTC * 0.48);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = basicMonthly * 12;
-// const hraAnnual = hraMonthly * 12;
-// const daAnnual = daMonthly * 12;
-// const specialAnnual = specialMonthly * 12;
-// const foodAnnual = foodMonthly * 12;
-// const pfAnnual = pfMonthly * 12;
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = basicMonthly * 12;
+  const hraAnnual = hraMonthly * 12;
+  const daAnnual = daMonthly * 12;
+  const specialAnnual = specialMonthly * 12;
+  const foodAnnual = foodMonthly * 12;
+  const pfAnnual = pfMonthly * 12;
 
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-// ];
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
 
-// // ================= TOTAL EARNINGS =================
-// const totalMonthly =
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly;
+  // ================= TOTAL EARNINGS =================
+  const totalMonthly =
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly;
 
-// const totalAnnual = totalMonthly * 12;
-
-/////////////////////////// monthly - Annually ////////////////////////////////////
-
-const round0 = (num) => Math.round(num);
-
-// ================= ANNUAL CTC =================
-const annualCTC = round0(Number(data.salary || 0));
-
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
-
-// ================= UPDATED PERCENTAGES =================
-const basicMonthly = round0(monthlyCTC * 0.48);
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
-
-// ================= STATIC PF =================
-const pfMonthly = 3750;
-
-// ================= ANNUAL VALUES =================
-const basicAnnual = basicMonthly * 12;
-const hraAnnual = hraMonthly * 12;
-const daAnnual = daMonthly * 12;
-const specialAnnual = specialMonthly * 12;
-const foodAnnual = foodMonthly * 12;
-const pfAnnual = pfMonthly * 12;
-
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual],
-];
-
-// ================= TOTAL EARNINGS =================
-const totalMonthly =
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly;
-
-const totalAnnual = totalMonthly * 12;
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
-
-// const round0 = (num) => Math.round(num);
-
-// // ================= ANNUAL CTC INPUT =================
-// const annualCTC = round0(Number(data.salary || 0));
-
-// // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(annualCTC / 12);
-
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
-
-// // ================= FIXED PERCENTAGES =================
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
-
-// // ================= ADJUSTED BASIC =================
-// const basicMonthly = round0(
-//   monthlyCTC -
-//   (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-// );
-
-// // ================= ANNUAL =================
-// const basicAnnual = round0(basicMonthly * 12);
-// const hraAnnual = round0(hraMonthly * 12);
-// const daAnnual = round0(daMonthly * 12);
-// const specialAnnual = round0(specialMonthly * 12);
-// const foodAnnual = round0(foodMonthly * 12);
-// const pfAnnual = round0(pfMonthly * 12);
-
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual],
-// ];
-
-// // ================= TOTAL =================
-// const totalMonthly = round0(
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly +
-//   pfMonthly
-// );
-
-// const totalAnnual = round0(totalMonthly * 12);
-
+  const totalAnnual = totalMonthly * 12;
 
   const formatLakhsPerAnnum = (amount) => {
     if (!amount || isNaN(amount)) return "";
@@ -188,151 +83,153 @@ const totalAnnual = totalMonthly * 12;
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
   };
 
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-              <Box
-                sx={{
-                  mt: 2,
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {/* DATE */}
-                <Typography align="right" fontSize={15}>
-                  {formatDate(data.issueDate)}
-                </Typography>
-      
-                {/* REF */}
-                <Typography mt={2} fontSize={15}>
-                  <b>Ref:</b> RPB/VER1.1/PUN/PIMGUR/ADM-TEST/
-                  {String(data.employeeId).padStart(4, "0")}
-                </Typography>
-      
-                {/* NAME & ADDRESS */}
-                <Typography mt={2} fontSize={15}>
-                  {data.mrms} {data.employeeName}
-                  <br />
-                  {data.address}
-                </Typography>
-      
-                {/* SALUTATION */}
-                <Typography mt={2} fontSize={15}>
-                  Dear {firstName},
-                </Typography>
-      
-                {/* TITLE */}
-                <Typography
-                  align="center"
-                  fontWeight={700}
-                  mt={2}
-                  fontSize={16}
-                  sx={{
-                    textDecoration: "underline",
-                    textUnderlineOffset: "4px",
-                    textDecorationThickness: "1.5px",
-                  }}
-                >
-                  Letter of Appointment
-                </Typography>
-      
-                {/* INTRO */}
-                <Typography mt={2} textAlign="justify" fontSize={15}>
-                  Further to your acceptance of our Letter of Offer dated{" "}
-                  <b>{formatDate(data.offerDate)}</b>. we are pleased to appoint you in
-                  our organization with effect from{" "}
-                  <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
-                  given below:
-                </Typography>
-      
-                {/* TERMS LIST */}
-                <Box
-                  component="ol"
-                  sx={{
-                    pl: 3,
-                    mt: 2,
-                    "& li": {
-                      marginBottom: "6px", // 🔑 controlled spacing
-                    },
-                    "& li::marker": {
-                      fontWeight: 500,
-                    },
-                  }}
-                >
-                  <li>
-                    <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                     1. Your Designation will be <b>“{data.position}”</b>.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                     2. Your total emoluments will <b>{formatLakhsPerAnnum(totalAnnual)}.</b>
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                     3. Full details of your pay package are given in the enclosure to this
-                      letter. However, please note that LTA is payable after completion of
-                      one year of service, subject to your getting confirmed in the service.
-                      If the company provides accommodation / transit accommodation,
-                      appropriate deductions will be made for the same, as per the rules
-                      applicable.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                    4. Whilst you are located abroad, the terms applicable will be intimated
-                      at the relevant point of time.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
-                    5. You shall be due for salary revision not before one year from your
-                      date of joining.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                   6. The Management reserves the right to change the different
-                      components/allowances in the total emoluments package, at its own
-                      discretion, at any time in future. However, your total monthly salary
-                      will be protected.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                   7. You will be on probation for a period of six months from the first of
-                      the calendar month following the date of your joining, after which
-                      you will be confirmed if your work is found satisfactory.
-                    </Typography>
-                  </li>
-      
-                  <li>
-                    <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
-                    8. Your services are terminable with one month’s notice on either side.
-                      The Company may, at its discretion, choose to terminate your services
-                      with one month’s total salary in lieu of notice period.
-                    </Typography>
-                  </li>
-                  <li>
-                    <Typography fontSize={15} textAlign="justify">
-                  9.  The Company shall have the right to terminate your service without notice,
-                      if the information given by you at a time of interview or in the application
-                      is found to be incorrect or in case of any serious misconduct or if reference
-                      check leads to an adverse report of your credentials.
-                    </Typography>
-                  </li>
-                </Box>
-              </Box>
-            </A4Page>
+        <Box
+          sx={{
+            mt: 2,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* DATE */}
+          <Typography align="right" fontSize={15}>
+            {formatDate(issueDate)}
+          </Typography>
+
+          {/* REF */}
+          <Typography mt={2} fontSize={15}>
+            <b>Ref:</b> RPB/VER1.1/PUN/PIMGUR/ADM-TEST/
+            {String(data.employeeId).padStart(4, "0")}
+          </Typography>
+
+          {/* NAME & ADDRESS */}
+          <Typography mt={2} fontSize={15}>
+            {data.mrms} {data.employeeName}
+            <br />
+            {data.address}
+          </Typography>
+
+          {/* SALUTATION */}
+          <Typography mt={2} fontSize={15}>
+            Dear {firstName},
+          </Typography>
+
+          {/* TITLE */}
+          <Typography
+            align="center"
+            fontWeight={700}
+            mt={2}
+            fontSize={16}
+            sx={{
+              textDecoration: "underline",
+              textUnderlineOffset: "4px",
+              textDecorationThickness: "1.5px",
+            }}
+          >
+            Letter of Appointment
+          </Typography>
+
+          {/* INTRO */}
+          <Typography mt={2} textAlign="justify" fontSize={15}>
+            Further to your acceptance of our Letter of Offer dated{" "}
+            <b>{formatDate(data.offerDate)}</b>. we are pleased to appoint you in
+            our organization with effect from{" "}
+            <b>{formatDate(data.joiningDate)}</b>, under the terms and conditions
+            given below:
+          </Typography>
+
+          {/* TERMS LIST */}
+          <Box
+            component="ol"
+            sx={{
+              pl: 3,
+              mt: 2,
+              "& li": {
+                marginBottom: "6px", // 🔑 controlled spacing
+              },
+              "& li::marker": {
+                fontWeight: 500,
+              },
+            }}
+          >
+            <li>
+              <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
+                1. Your Designation will be <b>“{data.joiningDesignation ?? data.position}”</b>.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
+                2. Your total emoluments will <b>{formatLakhsPerAnnum(totalAnnual)}.</b>
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
+                3. Full details of your pay package are given in the enclosure to this
+                letter. However, please note that LTA is payable after completion of
+                one year of service, subject to your getting confirmed in the service.
+                If the company provides accommodation / transit accommodation,
+                appropriate deductions will be made for the same, as per the rules
+                applicable.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
+                4. Whilst you are located abroad, the terms applicable will be intimated
+                at the relevant point of time.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} sx={{ margin: 0, lineHeight: 1.4 }}>
+                5. You shall be due for salary revision not before one year from your
+                date of joining.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
+                6. The Management reserves the right to change the different
+                components/allowances in the total emoluments package, at its own
+                discretion, at any time in future. However, your total monthly salary
+                will be protected.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
+                7. You will be on probation for a period of six months from the first of
+                the calendar month following the date of your joining, after which
+                you will be confirmed if your work is found satisfactory.
+              </Typography>
+            </li>
+
+            <li>
+              <Typography fontSize={15} textAlign="justify" sx={{ margin: 0, lineHeight: 1.4 }}>
+                8. Your services are terminable with one month’s notice on either side.
+                The Company may, at its discretion, choose to terminate your services
+                with one month’s total salary in lieu of notice period.
+              </Typography>
+            </li>
+            <li>
+              <Typography fontSize={15} textAlign="justify">
+                9.  The Company shall have the right to terminate your service without notice,
+                if the information given by you at a time of interview or in the application
+                is found to be incorrect or in case of any serious misconduct or if reference
+                check leads to an adverse report of your credentials.
+              </Typography>
+            </li>
+          </Box>
+        </Box>
+      </A4Page>
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -453,43 +350,43 @@ const totalAnnual = totalMonthly * 12;
       </A4Page>
 
       {/* ================= PAGE 3 ================= */}
-      
-        <A4Page headerSrc={company.header} footerSrc={company.footer}>
-                <Typography align="right" mb={2}>
-                  {formatDate(data.issueDate)}
-                </Typography>
-        
-                <Typography mb={3}>
-                  <b>Ref:</b> RPB/VER1.1/PUN/PIMGUR/ADM-TEST/
-                  {String(data.employeeId).padStart(4, "0")}
-                </Typography>
-        
-                {/* <Typography fontWeight={700} mb={2} >
+
+      <A4Page headerSrc={company.header} footerSrc={company.footer}>
+        <Typography align="right" mb={2}>
+          {formatDate(issueDate)}
+        </Typography>
+
+        <Typography mb={3}>
+          <b>Ref:</b> RPB/VER1.1/PUN/PIMGUR/ADM-TEST/
+          {String(data.employeeId).padStart(4, "0")}
+        </Typography>
+
+        {/* <Typography fontWeight={700} mb={2} >
                   Salary Structure – Break Up
                 </Typography> */}
-                <Typography
-                  align="center"
-                  fontWeight={700}
-                  mb={3}
-                  sx={{
-                    // textDecoration: "underline",
-                    // textUnderlineOffset: "4px",   // 👈 space between text and line
-                    // textDecorationThickness: "1.5px", // 👈 bold underline
-                  }}
-                >
-                  Salary Structure - Break Up
-        
-                </Typography>
-        
-                <Typography mb={0.5}>
-                  <b>Name:</b> {data.mrms} {data.employeeName}
-                </Typography>
-                <Typography mb={0.5}>
-                  <b>Designation:</b> {data.position}
-                </Typography>
-                <Typography mb={5}>
-                  <b>Date of Joining:</b> {formatDate(data.joiningDate)}
-                </Typography>
+        <Typography
+          align="center"
+          fontWeight={700}
+          mb={3}
+          sx={{
+            // textDecoration: "underline",
+            // textUnderlineOffset: "4px",   // 👈 space between text and line
+            // textDecorationThickness: "1.5px", // 👈 bold underline
+          }}
+        >
+          Salary Structure - Break Up
+
+        </Typography>
+
+        <Typography mb={0.5}>
+          <b>Name:</b> {data.mrms} {data.employeeName}
+        </Typography>
+        <Typography mb={0.5}>
+          <b>Designation:</b> {data.joiningDesignation ?? data.position}
+        </Typography>
+        <Typography mb={5}>
+          <b>Date of Joining:</b> {formatDate(data.joiningDate)}
+        </Typography>
 
         <Table
           sx={{
@@ -497,8 +394,8 @@ const totalAnnual = totalMonthly * 12;
             border: "1px solid #000",
             "& th, & td": {
               border: "1px solid #000",
-             // padding: "6px",
-             padding: "0px 12px 12px 12px",
+              // padding: "6px",
+              padding: "0px 12px 12px 12px",
               fontSize: "14px",
             },
           }}
@@ -529,17 +426,6 @@ const totalAnnual = totalMonthly * 12;
                 </TableCell>
               </TableRow>
             ))}
-
-            {/* ✅ PF Row Added */}
-            {/* <TableRow>
-              <TableCell>Provident Fund (PF)</TableCell>
-              <TableCell align="right">
-                {formatCurrency(pfMonthly)}
-              </TableCell>
-              <TableCell align="right">
-                {formatCurrency(pfAnnual)}
-              </TableCell>
-            </TableRow> */}
 
             <TableRow sx={{ backgroundColor: "#ff0000" }}>
               <TableCell sx={{ color: "#fff" }}>

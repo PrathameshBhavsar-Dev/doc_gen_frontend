@@ -12,7 +12,8 @@ const RPRelieving = ({ company, data }) => {
     : "";
 
 const title = data?.mrms || "";
-
+ const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+ 
   return (
     <Box
       sx={{
@@ -95,7 +96,7 @@ const title = data?.mrms || "";
             {data.mrms} {data.employeeName}
           </Typography>
           <Typography sx={{ mb: 3 }}>
-            <strong>{data.designation}</strong>
+            <strong>{data.currentDesignation ?? data.designationdesignation}</strong>
           </Typography>
 
           {/* GREETING */}

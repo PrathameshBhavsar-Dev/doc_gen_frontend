@@ -173,7 +173,19 @@ const DP_STYLES = `
   }
 
   /* ── Sidebar ── */
-  .dp-sidebar { width: 224px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; }
+  .dp-sidebar {
+    width: 224px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: sticky;
+    top: 90px;               /* below your 62px topbar */
+    align-self: flex-start;
+    overflow-y: hidden;
+  }
 
   .dp-card {
     background: var(--white);
@@ -341,6 +353,21 @@ const DOC_LABELS = {
   confirmation_letter: "Confirmation Letter",
 };
 
+// ✅ Add this helper in DocumentPreview.jsx
+const formatTitle = (title) => {
+  const displayMap = {
+    MR: "Mr.",
+    MRS: "Mrs.",
+    MISS: "Miss.",
+    MX: "Mx.",
+    Mr: "Mr.",
+    Mrs: "Mrs.",
+    Miss: "Miss.",
+    Mx: "Mx.",
+  };
+  return displayMap[title] || title || "";
+};
+
 /* ═══════════════════════════════════════════════════════════ */
 const DocumentPreview = () => {
   const { user } = useAuth();
@@ -348,6 +375,9 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
+<<<<<<< HEAD
+
+=======
   // console.log("FULL LOCATION STATE");
   // console.log(state);
 
@@ -359,6 +389,7 @@ const DocumentPreview = () => {
 
   // console.log("PREVIEW COMPANY");
   // console.log(state.previewCompany);
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
   const flowType = state.flowType || "DIRECT"; // default fallback
 
   const handleEdit = () => {
@@ -455,8 +486,12 @@ const DocumentPreview = () => {
       mode: formData.bankName,
     }));
   };
+<<<<<<< HEAD
+
+=======
   // const key = normalizeTemplateKey(previewDocType?.template);
   // console.log("previewDocType", previewDocType);
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
   const key =
     normalizeTemplateKey(previewDocType?.template) ||
     normalizeTemplateKey(
@@ -468,8 +503,11 @@ const DocumentPreview = () => {
 
   if (!key) {
     console.error("Invalid doc type:", previewDocType);
+<<<<<<< HEAD
+=======
     // console.log("Selected Doc:", selectedDoc);
     // console.log("Doc Name:", selectedDoc?.name);
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
     return null; // don't crash UI
   }
 
@@ -480,6 +518,8 @@ const DocumentPreview = () => {
 
   console.log("REACHED BASE DATA SECTION");
   let freshData = { ...baseData };
+
+
 
   freshData.panNo = freshData.panNo || freshData.pan;
   freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob;
@@ -518,7 +558,7 @@ const DocumentPreview = () => {
   // ✅ Increment uses newCTC
   if (key === "increment_letter") {
     freshData.newCTC = Number(
-      freshData.annualCTC || freshData.newCTC || freshData.salary || 0,
+      freshData.annualCTC || freshData.newCTC || freshData.salary || freshData.currentCTC || 0,
     );
   }
 
@@ -531,8 +571,10 @@ const DocumentPreview = () => {
   }
 
   if (key === "fullandfinal_letter") {
+    const yearlySalary = Number(freshData.salary || freshData.annualCTC || 0);
+    const monthlySalary = Math.round(yearlySalary / 12);
     freshData.totalSalary = Number(
-      freshData.monthlyCTC || freshData.totalSalary || 0,
+      freshData.monthlyCTC || monthlySalary || freshData.totalSalary || 0
     );
   }
 
@@ -563,7 +605,7 @@ const DocumentPreview = () => {
     freshData.employeeId || freshData.employeeNumber || freshData.employeeEmail;
 
   freshData.issuedBy = user?._id;
-  freshData.title = freshData.mrms;
+  freshData.title = formatTitle(freshData.mrms || freshData.title || freshData.identity);
 
   const docKeyName = normalizeTemplateKey(previewDocType?.template);
 
@@ -577,14 +619,9 @@ const DocumentPreview = () => {
   freshData.salary = Number(freshData.salary || 0);
   // ✅ build payload
   let payload = buildPayload(key, freshData, user, previewCompany);
-  // console.log("Selected Docs:", selectedDocs);
-  // console.log("Document Type:", selectedDocs?.[0]?.template);
 
   // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
   payload.issuedTo = freshData.issuedTo;
-
-  // console.log("🚀 FINAL PAYLOAD:", payload);
-  // console.log(JSON.stringify(payload, null, 2));
 
   const isSalarySlip = key === "salaryslip_letter";
 
@@ -678,19 +715,8 @@ const DocumentPreview = () => {
     };
   }, []); // runs on mount, cleans up on unmount
 
-  // const {
-  //   formData,
-  //   selectedDocs,
-  //   salarySlipMonths,
-  //   companyData,
-  // } = location.state || {};
+  const isNavigatingAway = useRef(false); // ✅ add this near top
 
-  // console.log("Preview Data:", {
-  //   previewData,
-  //   selectedDocs,
-  //   salarySlipMonths,
-  //   previewCompany,
-  // });
   /* ── Auth guard ── */
   useEffect(() => {
     if (!user) {
@@ -714,22 +740,19 @@ const DocumentPreview = () => {
           ? previewData
           : [{ docKey: previewDocType?.template, data: previewData }];
 
-    // console.log("TEMPLATE DATA", freshData);
-    // console.log(
-    //   "INTERNSHIP TYPE FROM FRESH DATA",
-    //   freshData.internshipType
-    // );
-    // console.log("FRESH DATA BEFORE TEMPLATE", freshData);
-
     return docsArray.map((doc, index) => {
       const p = {
         data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
         company: previewCompany,
       };
+<<<<<<< HEAD
+
+=======
       // console.log(
       //   "INTERNSHIP DOCUMENT DATA",
       //   freshData.documentData?.INTERNSHIP_CERTIFICATE,
       // );
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
         internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
@@ -805,8 +828,6 @@ const DocumentPreview = () => {
         throw new Error("Missing document template key");
       }
 
-      // console.log("NORMALIZED KEY:", key);
-
       // =========================
       // BASE DATA
       // =========================
@@ -814,14 +835,10 @@ const DocumentPreview = () => {
         ? previewData[0]?.data || {}
         : previewData || {};
 
-      // console.log("BASE DATA", baseData);
-
       // =========================
       // FLATTEN DOCUMENT DATA
       // =========================
       let freshData = { ...baseData };
-      // console.log("BASE DATA", baseData);
-      // console.log("FRESH DATA", freshData);
 
       Object.keys(baseData).forEach((parentKey) => {
         if (
@@ -837,46 +854,47 @@ const DocumentPreview = () => {
         }
       });
 
+<<<<<<< HEAD
+=======
       // console.log("FRESH DATA BEFORE FIX:", freshData);
 
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       // =========================
       // PF NORMALIZATION
       // =========================
       const normalizePfType = (value) => {
         if (!value) return "";
-
         const normalized = value.toString().trim().toLowerCase();
-
-        if (normalized === "with_pf" || normalized === "withpf") {
-          return "withPF";
-        }
-
-        if (normalized === "without_pf" || normalized === "withoutpf") {
-          return "withoutPF";
-        }
-
+        if (normalized === "with_pf" || normalized === "withpf") return "withPF";
+        if (normalized === "without_pf" || normalized === "withoutpf") return "withoutPF";
         return value;
       };
 
-      freshData.offerType = normalizePfType(
-        freshData.offerType || freshData.pfType,
-      );
+      // ✅ GENDER fix - derive from mrms/title
+      const getGenderFromTitle = (title) => {
+        const t = title?.toLowerCase()?.replace(".", "");
+        if (t === "mr") return "Male";
+        if (t === "mrs" || t === "miss") return "Female";
+        if (t === "mx") return "Other";
+        return "";
+      };
 
-      freshData.incrementType = normalizePfType(
-        freshData.incrementType || freshData.offerType,
-      );
+      freshData.gender =
+        freshData.gender ||
+        getGenderFromTitle(freshData.mrms || freshData.title || freshData.identity) ||
+        "";
 
-      freshData.salaryType = normalizePfType(
-        freshData.salaryType || freshData.offerType,
-      );
+      // ✅ MODE fix - bank name
+      freshData.mode =
+        freshData.mode ||
+        freshData.bankName ||
+        "";
 
-      freshData.appointmentType = normalizePfType(
-        freshData.appointmentType || freshData.offerType,
-      );
-
-      freshData.pfType = normalizePfType(
-        freshData.pfType || freshData.offerType,
-      );
+      freshData.offerType = normalizePfType(freshData.offerType || freshData.pfType);
+      freshData.incrementType = normalizePfType(freshData.incrementType || freshData.offerType);
+      freshData.salaryType = normalizePfType(freshData.salaryType || freshData.offerType);
+      freshData.appointmentType = normalizePfType(freshData.appointmentType || freshData.offerType);
+      freshData.pfType = normalizePfType(freshData.pfType || freshData.offerType);
 
       // =========================
       // REQUIRED FIELD FIXES
@@ -888,22 +906,39 @@ const DocumentPreview = () => {
         "EMP001";
 
       freshData.issuedTo = freshData.employeeId;
-
       freshData.issuedBy = user?._id || "SYSTEM";
 
-      freshData.title = freshData.mrms || freshData.identity || "Mr";
+      // =========================
+      // TITLE WITH DOT
+      // =========================
+      const formatTitle = (title) => {
+        const displayMap = {
+          MR: "Mr.", MRS: "Mrs.", MISS: "Miss.", MX: "Mx.",
+          Mr: "Mr.", Mrs: "Mrs.", Miss: "Miss.", Mx: "Mx.",
+        };
+        return displayMap[title] || title || "";
+      };
+      freshData.title = formatTitle(
+        freshData.mrms || freshData.title || freshData.identity
+      );
 
       // =========================
       // DOJ FIXES
       // =========================
       freshData.doj =
         freshData.doj || freshData.joiningDate || freshData.dateOfJoining;
-
       freshData.joiningDate =
         freshData.joiningDate || freshData.doj || freshData.dateOfJoining;
-
       freshData.dateOfJoining =
         freshData.dateOfJoining || freshData.joiningDate || freshData.doj;
+
+      // =========================
+      // PAN / DOB FIXES
+      // =========================
+      freshData.pan = freshData.pan || freshData.panNo || "";
+      freshData.panNo = freshData.panNo || freshData.pan || "";
+      freshData.dob = freshData.dob || freshData.dateOfBirth || "";
+      freshData.dateOfBirth = freshData.dateOfBirth || freshData.dob || "";
 
       // =========================
       // ISSUE DATE FIX
@@ -913,12 +948,73 @@ const DocumentPreview = () => {
       }
 
       // =========================
+      // SALARY FIXES
+      // =========================
+      const yearlySalary = Number(
+        freshData.annualCTC ||
+        freshData.salary ||
+        freshData.currentCTC ||
+        freshData.newCTC ||
+        0
+      );
+      const monthlySalary = Math.round(yearlySalary / 12);
+
+      console.log("=== PDF SALARY DEBUG ===");
+      console.log("yearlySalary:", yearlySalary);
+      console.log("freshData.annualCTC:", freshData.annualCTC);
+      console.log("freshData.salary:", freshData.salary);
+      console.log("freshData.currentCTC:", freshData.currentCTC);
+      console.log("freshData.newCTC:", freshData.newCTC);
+      console.log("freshData.monthlyCTC:", freshData.monthlyCTC);
+
+      // ✅ Annual docs
+      if (
+        key === "offer_letter" ||
+        key === "appointment_letter" ||
+        key === "confirmation_letter"
+      ) {
+        freshData.salary = yearlySalary;
+        freshData.newCTC = yearlySalary;
+        freshData.totalSalary = yearlySalary;
+      }
+
+      // ✅ Increment letter
+      if (key === "increment_letter") {
+        freshData.newCTC = yearlySalary;
+        freshData.salary = yearlySalary;
+        freshData.annualCTC = yearlySalary;
+      }
+
+      // ✅ Monthly docs
+      if (key === "salaryslip_letter") {
+        freshData.totalSalary = Number(
+          freshData.monthlyCTC || monthlySalary || 0
+        );
+      }
+
+      if (key === "fullandfinal_letter") {
+        freshData.totalSalary = Number(
+          freshData.monthlyCTC || monthlySalary || 0
+        );
+        freshData.doj = freshData.doj || freshData.joiningDate || "";
+      }
+
+      // ✅ Internship
+      if (key === "internshipcertificate_letter") {
+        freshData.stipend = Number(
+          freshData.stipend || freshData.monthlyCTC || 0
+        );
+      }
+
+      // =========================
       // COMPLETION CERTIFICATE FIX
       // =========================
       if (key === "completion_certificate" && !freshData.trainingType) {
         freshData.trainingType = "General Training";
       }
 
+<<<<<<< HEAD
+=======
       // console.log("SALARY SLIP DEBUG", {
       //   key,
       //   offerType: freshData.offerType,
@@ -926,20 +1022,13 @@ const DocumentPreview = () => {
       //   pfType: freshData.pfType,
       //   freshData,
       // });
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       // =========================
       // BUILD PAYLOAD
       // =========================
       const payload = buildPayload(key, freshData, user, previewCompany);
 
-      // console.log(
-      //   "FINAL PAYLOAD:",
-      //   payload
-      // );
-
       try {
-        // console.log("🚀 GENERATE DOC API PAYLOAD:", payload);
-        // TEMPORARY DISABLE
-        // await apiService.apipost(API.generateDoc(key), payload);
       } catch (apiErr) {
         console.error("❌ API ERROR:", apiErr);
       }
@@ -949,23 +1038,14 @@ const DocumentPreview = () => {
       // =========================
       const templateMap = {
         salaryslip_letter: SalarySlipLetterTemplate,
-
         internshipcertificate_letter: InternshipLetterTemplate,
-
         offer_letter: OfferTemplate,
-
         completion_certificate: CertificationLetterTemplate,
-
         increment_letter: IncrementTemplate,
-
         appointment_letter: AppointmentLetterTemplate,
-
         experience_letter: ExperienceLetterTemplate,
-
         relieving_letter: RelievingLetterTemplate,
-
         fullandfinal_letter: FullandfinalLetterTemplate,
-
         confirmation_letter: ConfirmationLetterTemplate,
       };
 
@@ -979,24 +1059,6 @@ const DocumentPreview = () => {
       }
 
       // =========================
-      // DEBUG LOGS
-      // =========================
-      // console.log(
-      //   "TEMPLATE COMPONENT:",
-      //   TemplateComponent
-      // );
-
-      // console.log(
-      //   "PDF DATA:",
-      //   freshData
-      // );
-
-      // console.log(
-      //   "COMPANY:",
-      //   previewCompany
-      // );
-
-      // =========================
       // FILE NAME
       // =========================
       const filename = `${previewDocType?.name || "Document"}-${freshData?.employeeName || "User"
@@ -1005,30 +1067,60 @@ const DocumentPreview = () => {
       // =========================
       // GENERATE PDF
       // =========================
+      // =========================
+      // GENERATE PDF
+      // =========================
       try {
-        await generatePDF(
-          TemplateComponent,
-          {
-            data: freshData,
-            company: previewCompany,
-          },
-          filename,
-        );
+        if (isSalarySlip && salarySlipDocs.length > 0) {
+          // ✅ Generate one PDF with all salary slip months
+          for (let i = 0; i < salarySlipDocs.length; i++) {
+            const slipData = salarySlipDocs[i];
+
+            const slipFreshData = {
+              ...freshData,
+              month: slipData.month,
+              workdays: slipData.workdays,
+              totalSalary: slipData.totalSalary ?? freshData.totalSalary,
+              salaryType: slipData.salaryType || freshData.salaryType,
+              doj: slipData.doj || freshData.doj,
+              gender: slipData.gender || freshData.gender,
+              mode: slipData.mode || freshData.mode,
+            };
+
+            const slipFilename = `${previewDocType?.name || "Salary_Slip"}-${freshData?.employeeName || "User"
+              }-${slipData.month || new Date().toISOString().slice(0, 7)}`;
+
+            await generatePDF(
+              TemplateComponent,
+              {
+                data: slipFreshData,
+                company: previewCompany,
+              },
+              slipFilename,
+            );
+          }
+        } else {
+          // ✅ All other docs — single PDF
+          await generatePDF(
+            TemplateComponent,
+            {
+              data: freshData,
+              company: previewCompany,
+            },
+            filename,
+          );
+        }
       } catch (pdfError) {
         console.error("❌ PDF GENERATION FAILED:");
         console.error(pdfError);
-
         alert(pdfError.message || "PDF generation failed");
       }
 
       toast("PDF saved & downloaded ✓");
     } catch (err) {
       console.error("FULL DOWNLOAD ERROR:", err);
-
       console.error("BACKEND ERROR:", err?.response?.data);
-
       setError(err?.message || "Failed to generate PDF");
-
       toast("Export failed", "error");
     } finally {
       setLoading(false);
@@ -1084,6 +1176,9 @@ const DocumentPreview = () => {
   const docLabel =
     DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
 
+  console.log("previewData:", previewData);
+  console.log("freshData:", freshData);
+
   return (
     <div className="dp-root">
       {/* ── Top Bar ── */}
@@ -1098,8 +1193,10 @@ const DocumentPreview = () => {
 
           <button
             className="dp-btn dp-btn-ghost"
-            style={{ padding: "5px 11px", fontSize: "12px" }}
-            onClick={() => navigate("/document/create")}
+            onClick={() => {
+              isNavigatingAway.current = true; // ✅ add this
+              navigate("/document/create");
+            }}
           >
             <ArrowBack sx={{ fontSize: 13 }} />
             Back
@@ -1116,6 +1213,23 @@ const DocumentPreview = () => {
         <div className="dp-topbar-right">
           <button
             className="dp-btn dp-btn-ghost"
+<<<<<<< HEAD
+            // Topbar Edit button
+            onClick={() => {
+              // console.log("flowType:", flowType);
+              if (flowType === "PROFILE") {
+                isNavigatingAway.current = true; // ✅ add this
+                navigate(ROUTES.USER_FORM, {
+                  state: {
+                    employeeData: previewData,
+                    isEditMode: true,
+                    userId: previewData?._id || previewData?.id, // ✅ backend uses 'id'
+                    selectedDocs: selectedDocs,
+                  },
+                });
+              } else {
+                isNavigatingAway.current = true; // ✅ add this
+=======
             onClick={() => {
               console.log("flowType:", flowType);
               if (flowType === "PROFILE") {
@@ -1129,6 +1243,7 @@ const DocumentPreview = () => {
                   },
                 });
               } else {
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
                 navigate(ROUTES.DOCUMENT_CREATE);
               }
             }}
@@ -1305,6 +1420,26 @@ const DocumentPreview = () => {
             </button>
             <button
               className="dp-qa-btn"
+<<<<<<< HEAD
+              // Topbar Edit button
+              onClick={() => {
+                // console.log("flowType:", flowType);
+                if (flowType === "PROFILE") {
+                  isNavigatingAway.current = true; // ✅ add this
+                  navigate(ROUTES.USER_FORM, {
+                    state: {
+                      employeeData: previewData,
+                      isEditMode: true,
+                      userId: previewData?.employeeId,
+                      selectedDocs: selectedDocs,
+                    },
+                  });
+                } else {
+                  isNavigatingAway.current = true; // ✅ add this
+                  navigate(ROUTES.DOCUMENT_CREATE);
+                }
+              }}      >
+=======
               onClick={() => {
                 console.log("flowType:", flowType);
                 if (flowType === "PROFILE") {
@@ -1321,6 +1456,7 @@ const DocumentPreview = () => {
                   navigate(ROUTES.DOCUMENT_CREATE);
                 }
               }}        >
+>>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
               <div className="dp-qa-icon">
                 <Edit sx={{ fontSize: 13, color: "#fff" }} />
               </div>

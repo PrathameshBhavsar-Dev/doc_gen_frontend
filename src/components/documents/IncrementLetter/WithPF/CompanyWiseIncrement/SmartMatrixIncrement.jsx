@@ -31,8 +31,11 @@ const SmartMatrixIncrement = ({ company, data }) => {
   const round2 = (num) => Number(Number(num).toFixed(2));
 
   /* ================= INPUT IS ANNUAL ================= */
-  const annualCTC = round2(Number(data.newCTC || 0));
+  const annualCTC = round2(Number(data.newCTC || data.currentCTC || 0));
   const monthlyCTC = round2(annualCTC / 12);
+  console.log("annualCTC =", annualCTC);
+  console.log("monthlyCTC =", monthlyCTC);
+  // console.log("salaryRows =", salaryRows);
 
   /* ================= STATIC PF ================= */
   const pfMonthly = 3750;
@@ -88,6 +91,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
       type: "total",
     },
   ];
+  console.log("salaryRows =", salaryRows);
+
 
   /* ================= TABLE STYLES ================= */
 
@@ -140,6 +145,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
     fontWeight: 600,
   };
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -160,7 +167,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
             align="right"
             sx={{ mb: "12mm", mt: "4mm", fontFamily: "Bahnschrift" }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography sx={{ mb: "8mm", fontFamily: "Bahnschrift" }}>

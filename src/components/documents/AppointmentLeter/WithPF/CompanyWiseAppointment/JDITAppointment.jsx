@@ -96,11 +96,10 @@ const JDITAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  // const annualCTC = Number(data.salary || 0);
   // const salaryRows = generateSalaryBreakup(annualCTC);
 
 
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
 
   const {
     salaryComponents,
@@ -110,11 +109,11 @@ const JDITAppointment = ({ company, data }) => {
     pfAnnual,
   } = generateSalaryBreakup(annualCTC);
 
-
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   /* ================= TERMS ================= */
   const terms = [
-    <> 1. Your Designation will be <strong>"{data.position}"</strong>.   </>,
+    <> 1. Your Designation will be <strong>"{data.joiningDesignation ?? data.position}"</strong>.   </>,
     <>2. Your total emoluments will be <strong>Rs. {totalAnnual.toLocaleString('en-IN')} </strong> per annum.</>,
     `3. Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `4. Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
@@ -142,7 +141,7 @@ const JDITAppointment = ({ company, data }) => {
         footerSrc={company.footer}>
         <Box sx={{ mt: -5 }}>
           <Typography align="right" fontSize={14} >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={14} >
@@ -264,10 +263,6 @@ const JDITAppointment = ({ company, data }) => {
               <Typography mt={1}>Signature: _____________</Typography>
               <Typography mt={4}>Name: {data.employeeName}</Typography>
               <Typography mt={1}>Date: _____________</Typography>
-              {/* <Typography align="right" fontSize={14}>
-                {formatDate(data.issueDate)}
-              </Typography> */}
-
             </Box>
           </Box>
         </Box>
@@ -278,7 +273,7 @@ const JDITAppointment = ({ company, data }) => {
         headerSrc={company.headerImage}
         footerSrc={company.footer}>
         <Typography align="right" fontSize={14} marginTop={2}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </Typography>
         <Typography align="center" fontWeight={700} mb={3}>
           Salary Structure - Break Up
@@ -300,7 +295,7 @@ const JDITAppointment = ({ company, data }) => {
 
           <Typography fontWeight="bold">Designation</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.position}</Typography>
+          <Typography>{data.joiningDesignation ?? data.position}</Typography>
 
           <Typography fontWeight="bold">Date of Joining</Typography>
           <Typography fontWeight="bold">:</Typography>

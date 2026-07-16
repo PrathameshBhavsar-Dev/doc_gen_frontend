@@ -86,7 +86,7 @@ const TC = (extra = {}) => ({
 /* ============================================================ */
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
   const monthlyCTC = round0(annualCTC / 12);
 
   const basic = round0(monthlyCTC * 0.40);
@@ -107,12 +107,12 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
 
   const employeeName = data.employeeName || data.employeeName || "";
   const displayName = employeeName ? `${data.mrms || "Mr."} ${employeeName}`.trim() : "";
-  const position = data.position || "Software Test Engineer";
   const location = data.location || data.workLocation || company.city || "Pune";
   const joiningDate = data.joiningDate || "25 July 2023";
-  const issueDate = data.issueDate || "";
   const workSchedule = data.workSchedule || "Monday to Friday";
   const workingHours = data.workingHours || "10 AM to 7 PM";
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   return (
     <Box>

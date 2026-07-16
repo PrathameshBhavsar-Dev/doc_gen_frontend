@@ -16,121 +16,75 @@ const DevconsConfirmationLetter = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
-
   const numberToWords = (num = 0) => {
-  if (!num) return "Zero Rupees Only";
+    if (!num) return "Zero Rupees Only";
 
-  const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
-  const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
-  const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+    const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
-  const inWords = (n) => {
-    if (n < 10) return ones[n];
-    if (n < 20) return teens[n - 10];
-    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
-    if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
+    const inWords = (n) => {
+      if (n < 10) return ones[n];
+      if (n < 20) return teens[n - 10];
+      if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+      if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
+      if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
+      if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
+      return inWords(Math.floor(n / 10000000)) + " Crore";
+    };
 
-  return `${inWords(Math.round(num))} Rupees Only`;
+    return `${inWords(Math.round(num))} Rupees Only`;
 
-}
+  }
 
-//   /* ================= SALARY LOGIC ================= */
+  const round0 = (num) => Math.round(num);
 
-//   // 🔹 Round to whole number (no decimals)
-// const round0 = (num) => Math.round(num);
+  // Source of truth (ANNUAL CTC)
+  const annualCTC = round0(Number(data.totalSalary || data.ctc || 0));
 
-// // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(Number(data.totalSalary || 0));1
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// // ================= PERCENTAGE BREAKUP =================
-// const basicMonthly = round0(monthlyCTC * 0.40);
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
-// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+  // ================= PERCENTAGE BREAKUP (MONTHLY) =================
+  const basicMonthly = round0(monthlyCTC * 0.40);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
+  const miscMonthly = round0(monthlyCTC * 0.08);
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = round0(basicMonthly * 12);
-// const hraAnnual = round0(hraMonthly * 12);
-// const daAnnual = round0(daMonthly * 12);
-// const specialAnnual = round0(specialMonthly * 12);
-// const foodAnnual = round0(foodMonthly * 12);
-// const miscAnnual = round0(miscMonthly * 12);
+  // ================= ANNUAL VALUES =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const miscAnnual = round0(miscMonthly * 12);
 
-// // ================= SALARY TABLE STRUCTURE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Misc. Allowance", miscMonthly, miscAnnual],
-// ];
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Misc. Allowance", miscMonthly, miscAnnual],
+  ];
 
-// // ================= TOTALS =================
-// const totalMonthly = round0(
-//   salaryRows.reduce((sum, row) => sum + row[1], 0)
-// );
+  // ================= TOTALS =================
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
 
-// const totalAnnual = round0(
-//   salaryRows.reduce((sum, row) => sum + row[2], 0)
-// );
-
-const round0 = (num) => Math.round(num);
-
-// Source of truth (ANNUAL CTC)
-const annualCTC = round0(Number(data.totalSalary || data.ctc || 0));
-
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
-
-// ================= PERCENTAGE BREAKUP (MONTHLY) =================
-const basicMonthly = round0(monthlyCTC * 0.40);
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
-const miscMonthly = round0(monthlyCTC * 0.08);
-
-// ================= ANNUAL VALUES =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const miscAnnual = round0(miscMonthly * 12);
-
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
-
-// ================= TOTALS =================
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
-
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
-
-
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
   return (
     <>
@@ -145,7 +99,7 @@ const totalAnnual = round0(
             <strong>Name :</strong> {data.employeeName}
           </Typography>
 
-           <Typography mb={1}>
+          <Typography mb={1}>
             <strong>Address</strong> {data.address}
           </Typography>
 
@@ -168,14 +122,14 @@ const totalAnnual = round0(
           </Typography>
 
           <Typography mb={3} textAlign="justify">
-  Your total Gross salary will be Rs.{" "}
-  <strong>
-    {formatCurrency(totalAnnual)} (
-    {numberToWords(Number(totalAnnual))}
-    )
-  </strong>{" "}
-  per year.
-</Typography>
+            Your total Gross salary will be Rs.{" "}
+            <strong>
+              {formatCurrency(totalAnnual)} (
+              {numberToWords(Number(totalAnnual))}
+              )
+            </strong>{" "}
+            per year.
+          </Typography>
 
 
           <Typography mb={3} textAlign="justify">

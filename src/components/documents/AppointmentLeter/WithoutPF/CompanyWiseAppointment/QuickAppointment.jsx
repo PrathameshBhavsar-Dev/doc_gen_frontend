@@ -48,12 +48,14 @@ const QuickAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   const salaryRows = generateSalaryBreakup(annualCTC);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+  const position = data.joiningDesignation ?? data.position ?? "";
 
   /* ================= TERMS ================= */
   const terms = [
-    <> Your Designation will be <strong>"{data.position}"</strong>.   </>,
+    <> Your Designation will be <strong>"{position}"</strong>.   </>,
     <>Your total emoluments will be <strong>Rs. {annualCTC / 100000} </strong>Lakhs Per Annum.</>,
     `Full details of your pay package are given in the enclosure to this letter. However, please note that, LTA is payable after completion of one year of service, subject to your getting confirmed in the service. If the company provides accommodation/transit accommodation, appropriate deductions will be made for the same, as per the rules applicable. `,
     `Whilst you are located abroad, the terms applicable will be intimated to you at the relevant point of time.`,
@@ -81,7 +83,7 @@ const QuickAppointment = ({ company, data }) => {
 
         <Box sx={{ mt: 2 }}>
           <Typography align="right" fontSize={14}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={15} mt={1}>
@@ -119,7 +121,7 @@ const QuickAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance offer dated,{" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
           </Typography>
 
           <Box component="ol" sx={{ pl: 3, mt: 2 }}>
@@ -243,7 +245,7 @@ const QuickAppointment = ({ company, data }) => {
 
           <Typography fontWeight="bold">Designation</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.position}</Typography>
+          <Typography>{position}</Typography>
 
           <Typography fontWeight="bold">Date of Joining</Typography>
           <Typography fontWeight="bold">:</Typography>

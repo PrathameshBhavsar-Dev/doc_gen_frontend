@@ -19,12 +19,9 @@ import {
 
 export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
-    issueDate = new Date(),
     employeeName = "",
     address = "",
-    position = "",
     joiningDate = "",
-    salary = 0,
     mrms = "",
   } = data;
 
@@ -49,20 +46,20 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
   /* ================= FORMATTED VALUES ================= */
 
-  const displayTitle = mrms ? `${mrms}.` : "";
+  const displayTitle = mrms ? `${mrms}` : "";
 
   const firstName = employeeName?.split(" ")[0] || "";
 
   const formattedJoiningDate = joiningDate
     ? new Date(joiningDate).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
   /* ================= SALARY BREAKUP ================= */
-  const totalAnnual = Number(salary) || 0;
+  const totalAnnual = Number(data.joiningCTC || data.salary) || 0;
 
   const salaryComponents = useMemo(() => {
     const round0 = (num) => Math.round(num);
@@ -79,7 +76,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
     const basicMonthly = round0(
       monthlyCTC -
-        (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
     );
 
     const basicAnnual = round0(basicMonthly * 12);
@@ -115,6 +112,8 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   );
 
   const salaryInWords = numberToWords(totalAnnual);
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   /* ================= REMOVE .00 LOGIC (ADDED ONLY) */
   const NoDecimal = (value) => {
@@ -142,8 +141,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     fontSize: "13px",
     lineHeight: 1.4,
     border: "1px solid #000",
-   // padding: "4px 6px",
-   padding: "0px 12px 12px 12px",
+    padding: "0px 12px 12px 12px",
   };
 
   const tableHeader = {

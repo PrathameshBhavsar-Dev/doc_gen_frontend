@@ -150,6 +150,8 @@ const SmartMatrixIncrement = ({ company, data }) => {
     fontWeight: 600,
   };
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* ======================================================
@@ -176,7 +178,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
               mt: "8mm",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* GREETING */}
@@ -188,7 +190,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
               fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
             }}
           >
-            Dear {data.employeeName},
+            Dear {data.employeeName?.split(" ")[0]},
           </Typography>
 
           {/* PARAGRAPH 1 */}

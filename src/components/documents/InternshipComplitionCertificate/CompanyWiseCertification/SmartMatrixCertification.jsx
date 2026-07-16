@@ -9,13 +9,17 @@ const SmartMatrixCertification = ({ company, data }) => {
   const formatDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        })
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
       : "";
 
-  const issueDate = formatDate(data.issueDate);
+  const issueDate = formatDate(
+    data.completion_certificate?.issueDate ??
+    data.issueDate ??
+    ""); 
+    
   const startDate = formatDate(data.startDate);
   const endDate = formatDate(data.completionDate);
 
@@ -54,7 +58,7 @@ const SmartMatrixCertification = ({ company, data }) => {
       {/* BODY CONTENT */}
       <Box sx={{ fontSize: "11pt", lineHeight: 1.6 }}>
         <Typography sx={{ mb: "6mm" }}>
-          We are pleased to certify that{data.employeeName}, has joined our
+          We are pleased to certify that {data.employeeName}, has joined our
           group to work on internship with organization{" "}
           <strong>{company.name}</strong> The internship program held on{" "}
           {startDate} to {endDate}.
@@ -63,7 +67,7 @@ const SmartMatrixCertification = ({ company, data }) => {
         <Typography sx={{ mb: "6mm" }}>
           During the internship period, <strong>{data.employeeName}</strong> was
           actively participated in project related tasks, shown their skills and
-          abilities as <strong>{data.designation}</strong>.
+          abilities as <strong>{data.joiningDesignation ?? data.designation}</strong>.
         </Typography>
 
         <Typography sx={{ mb: "6mm" }}>

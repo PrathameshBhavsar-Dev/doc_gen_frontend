@@ -1,6 +1,9 @@
 import React from "react";
 
 const NimbjaRelieving = ({ company, data }) => {
+
+  const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+
   return (
     <div
       className="a4-content-only"
@@ -59,7 +62,7 @@ const NimbjaRelieving = ({ company, data }) => {
           marginRight: "12mm",
         }}
       >
-        {new Date(data.issueDate).toLocaleDateString("en-US", {
+        {new Date(issueDate).toLocaleDateString("en-US", {
           month: "long",
           day: "2-digit",
           year: "numeric",
@@ -83,7 +86,7 @@ const NimbjaRelieving = ({ company, data }) => {
             textDecoration: "underline",
           }}
         >
-          Releiving Letter.
+          Releiving Letter
         </div>
 
         {/* ================= RECEIVER ================= */}
@@ -95,12 +98,12 @@ const NimbjaRelieving = ({ company, data }) => {
         >
           <strong>{data.employeeName}</strong>
           <br />
-          <strong>{data.designation}</strong>
+          <strong>{data.currentDesignation ?? data.designation}</strong>
         </div>
 
         {/* ================= SALUTATION ================= */}
         <p style={{ marginBottom: "10mm", marginTop: "-15mm" }}>
-          Dear {data.employeeName.split(" ")[0]},
+          Dear {data.employeeName?.split(" ")[0] || ""},
         </p>
 
         {/* ================= BODY ================= */}
@@ -112,7 +115,7 @@ const NimbjaRelieving = ({ company, data }) => {
         >
           This letter confirms that we accept your voluntary and irrevocable
           resignation from employment of your position as{" "}
-          <strong>{data.designation}</strong> Engineer in the Department of{" "}
+          <strong>{data.currentDesignation ?? data.designation}</strong> Engineer in the Department of{" "}
           <strong>{data.department}</strong>. Your last day of employment will
           be{" "}
           <strong>

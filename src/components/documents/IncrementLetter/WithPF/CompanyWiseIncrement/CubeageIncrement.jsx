@@ -92,7 +92,7 @@ const CubeageIncrement = ({ company, data }) => {
   const pageStyle = {
     width: "210mm",
     minHeight: "297mm",
-    padding: "25mm 20mm",
+    padding: "5mm 20mm",
     fontFamily: "Cambria",
     fontSize: "12pt",
     lineHeight: "1.7",

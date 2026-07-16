@@ -56,13 +56,15 @@ const PentaAppointment = ({ company, data }) => {
   if (!company || !data) return null;
 
   const firstName = data.employeeName?.split(" ")[0] || "";
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   const salaryRows = generateSalaryBreakup(annualCTC);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+  const position = data.joiningDesignation ?? data.position ?? "";
 
   /* ================= TERMS ================= */
   const terms = [
     <>
-      Your Designation will be <strong>"{data.position}"</strong>.
+      Your Designation will be <strong>"{position}"</strong>.
     </>,
     <>Your total emoluments will be <strong>Rs. {
       annualCTC / 100000
@@ -96,7 +98,7 @@ const PentaAppointment = ({ company, data }) => {
       >
         <Box mt={1}>
           <Typography align="right" fontSize={14}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography fontSize={15} mt={1}>
@@ -134,7 +136,7 @@ const PentaAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance, Offer dated {" "}
-            <b>{formatDate(data.issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
           </Typography>
 
           <Box component="ol" sx={{ pl: 3, mt: 1 }}>
@@ -232,7 +234,7 @@ const PentaAppointment = ({ company, data }) => {
         footerSrc={company.footer}
       >
         <Typography align="right" fontSize={14} mt={5}>
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </Typography>
 
         <Typography fontSize={15} mt={5}>
@@ -258,7 +260,7 @@ const PentaAppointment = ({ company, data }) => {
 
           <Typography fontWeight="bold">Designation</Typography>
           <Typography fontWeight="bold">:</Typography>
-          <Typography>{data.position}</Typography>
+          <Typography>{position}</Typography>
 
           <Typography fontWeight="bold">Date of Joining</Typography>
           <Typography fontWeight="bold">:</Typography>

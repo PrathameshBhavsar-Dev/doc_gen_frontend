@@ -69,7 +69,7 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
             fontFamily: "Bahnschrift",
           }}
         >
-          {formatDate(data.issueDate)}
+          {formatDate(data.internship_certificate.issueDate)}
         </Box>
 
         {/* NAME + SUBJECT */}
@@ -79,7 +79,7 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
 
         <Typography sx={{ fontFamily: "Bahnschrift", mb: 3 }}>
           <strong>Subject :</strong> Letter of intent for the Internship of
-          position as <strong>{data.designation}</strong>.
+          position as <strong>{data.joiningDesignation}</strong>.
         </Typography>
 
         <Typography sx={{ fontFamily: "Bahnschrift", mb: 2 }}>
@@ -89,7 +89,7 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
         {/* BODY */}
         <Typography paragraph sx={{ fontFamily: "Bahnschrift" }}>
           We are pleased to offer you the Internship of position as{" "}
-          <strong>{data.designation}</strong> with {company.name} with effective
+          <strong>{data.joiningDesignation}</strong> with {company.name} with effective
           date <strong>{formatDate(data.startDate)}</strong> considering your
           performance and support towards the organization.
         </Typography>

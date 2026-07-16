@@ -40,7 +40,8 @@ const SmartMatrixAppointment = ({ company, data }) => {
   if (!company || !data) return null;
   // 🔥 Input salary is MONTHLY
   // INPUT = Annual CTC
-  const annualSalary = Number(data.salary || 0);
+  const annualSalary = Number(data.joiningCTC || 0);
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   // Convert to monthly
   const monthlySalary = annualSalary / 12;
@@ -62,17 +63,28 @@ const SmartMatrixAppointment = ({ company, data }) => {
           <div
             style={{
               position: "absolute",
-              top: "-20mm",
+              top: "-15mm",
               right: "0",
               fontSize: "11pt",
               fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </div>
-
+          <p
+            style={{
+              textAlign: "center",
+              fontWeight: 700,
+              textDecoration: "underline",
+              marginTop: "15mm",
+              fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
+              fontSize: "12pt",
+            }}
+          >
+            Letter of Appointment
+          </p>
           {/* ================= ADDRESS ================= */}
-          <p style={{ marginTop: "20mm", marginBottom: "6mm" }}>
+          <p style={{ marginTop: "10mm", marginBottom: "6mm" }}>
             {data.mrms} {data.employeeName}
             <br />
             {data.address}
@@ -84,18 +96,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           </p>
 
           {/* ================= TITLE ================= */}
-          <p
-            style={{
-              textAlign: "center",
-              fontWeight: 700,
-              textDecoration: "underline",
-              marginBottom: "10mm",
-              fontFamily: '"Yu Gothic","Yu Gothic UI",sans-serif',
-              fontSize: "12pt",
-            }}
-          >
-            Letter of Appointment
-          </p>
+
 
           {/* ================= BODY ================= */}
           <p
@@ -105,14 +106,14 @@ const SmartMatrixAppointment = ({ company, data }) => {
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong>{formatDate(data.issueDate)}</strong>, we are pleased to
+            <strong>{formatDate(data.joiningDate)}</strong>, we are pleased to
             appoint you in our organization with effect from{" "}
-            <strong>{formatDate(data.joiningDate)}</strong>, under the terms and
+            <strong>{formatDate(data.issueDate)}</strong>, under the terms and
             conditions given below:-
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
-            1. Your Designation will be <strong>“{data.position}”</strong>.
+            1. Your Designation will be <strong>“{data.joiningDesignation ?? data.position}”</strong>.
           </p>
 
           <p style={{ marginBottom: "6mm" }}>
@@ -382,7 +383,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
           const round2 = (num) => Number(num.toFixed(2));
 
           // ✅ INPUT IS ANNUAL CTC
-          const annualCTC = round2(Number(data.salary || 0));
+          const annualCTC = round2(Number(data.joiningCTC || 0));
 
           // Convert to Monthly
           const monthlyCTC = round2(annualCTC / 12);
@@ -491,10 +492,10 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   Name : {data.mrms} {data.employeeName}
                 </Typography>
                 <br />
-                <Typography>Designation : {data.position}</Typography>
+                <Typography>Designation : {data.joiningDesignation ?? data.position}</Typography>
                 <br />
                 <Typography>
-                  Date of Joining : {formatDate(data.joiningDate)}
+                  Date of Joining : {formatDate(data.issueDate)}
                 </Typography>
                 <br />
                 <Typography>EMP ID : {data.employeeId}</Typography>
@@ -527,7 +528,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Salary Components
@@ -540,7 +541,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Per month (Rs.)
@@ -553,7 +554,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
                       >
                         Per Annum (Rs.)
@@ -568,7 +569,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {row.name}
@@ -579,7 +580,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.monthly)}
@@ -590,7 +591,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                            padding: "0px 12px 12px 12px",
                           }}
                         >
                           {formatCurrency(row.annual)}
@@ -605,7 +606,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >
@@ -618,7 +619,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >
@@ -631,7 +632,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
                       >

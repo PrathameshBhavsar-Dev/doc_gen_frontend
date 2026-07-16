@@ -35,20 +35,17 @@ const JDITOffer = ({ company, data }) => {
 
   /* 🔥 OFFER LETTER FIELD NAMES */
   const {
-    issueDate,
     employeeName,
-    position,
     joiningDate,
     employeeId,
     signatoryName,
     signatoryDesignation,
     newCTC,
-    salary,          // Annual CTC
     location,
   } = data;
 
   /* 🔥 DERIVED VALUES */
-  const annualCTC = Number(salary || 0);
+  const annualCTC = Number(data.joiningCTC || data.salary || 0);
   const monthlyCTC = Math.round(annualCTC / 12);
 
   const hraMonthly = Math.round(monthlyCTC * 0.18);
@@ -75,7 +72,9 @@ const JDITOffer = ({ company, data }) => {
 
   const totalMonthly = monthlyCTC;
   const totalAnnual = monthlyCTC * 12;
-
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  
   /* ================= TABLE STYLES ================= */
 
   const TABLE_STYLE = {
@@ -175,11 +174,11 @@ const JDITOffer = ({ company, data }) => {
 
         {/* ================= OFFER DETAILS ================= */}
         <Box sx={{ mb: 2 }}>
-          {employeeId && (
+
             <Typography sx={{ ...TEXT, mb: 0.5 }}>
               ➢ Offer ID / Employee ID: <b>{employeeId}</b>
             </Typography>
-          )}
+        
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
             ➢ Position: <b>{position}</b>
           </Typography>

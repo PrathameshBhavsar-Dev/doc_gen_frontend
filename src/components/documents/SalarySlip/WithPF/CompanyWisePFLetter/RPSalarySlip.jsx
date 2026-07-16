@@ -46,7 +46,6 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
     doj = "-",
     dob = "-",
     pan = "-",
@@ -58,6 +57,7 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
     totalSalary = 0,
     otherDeduction = 2000
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   /* ===== MONTH FORMAT ===== */
   const [year, monthNum] = month.split("-");
@@ -67,33 +67,33 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
   /* ================= EARNINGS BREAKUP (100%) ================= */
   const round0 = (num) => Math.round(num);
 
-// ================= MONTHLY INPUT =================
-const monthlyCTC = round0(totalSalary);
+  // ================= MONTHLY INPUT =================
+  const monthlyCTC = round0(totalSalary);
 
-// ================= FIXED PF =================
-const PF = 3750;
-const PF_DISPLAY = 3750; // ✅ ADD THIS
+  // ================= FIXED PF =================
+  const PF = 3750;
+  const PF_DISPLAY = 3750; // ✅ ADD THIS
 
-// ================= COMPONENTS =================
-const HRA = round0(monthlyCTC * 0.18);
-const DA = round0(monthlyCTC * 0.12);
-const SPECIAL = round0(monthlyCTC * 0.16);
-const FOOD = round0(monthlyCTC * 0.06);
+  // ================= COMPONENTS =================
+  const HRA = round0(monthlyCTC * 0.18);
+  const DA = round0(monthlyCTC * 0.12);
+  const SPECIAL = round0(monthlyCTC * 0.16);
+  const FOOD = round0(monthlyCTC * 0.06);
 
-// ================= ADJUSTED BASIC =================
-const BASIC = round0(
-  monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
-);
+  // ================= ADJUSTED BASIC =================
+  const BASIC = round0(
+    monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
+  );
 
-// ================= TOTAL EARNINGS =================
-const totalEarning = round0(
-  BASIC + HRA + DA + SPECIAL + FOOD + PF
-);
+  // ================= TOTAL EARNINGS =================
+  const totalEarning = round0(
+    BASIC + HRA + DA + SPECIAL + FOOD + PF
+  );
 
-// ================= NET PAY =================
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
-const netPay = round0(totalEarning - totalDeduction);
+  // ================= NET PAY =================
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
+  const netPay = round0(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -105,8 +105,8 @@ const netPay = round0(totalEarning - totalDeduction);
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-           // padding: "4px 6px",
-           padding: "0px 12px 12px 12px",
+            // padding: "4px 6px",
+            padding: "0px 12px 12px 12px",
             fontFamily: "Bahnschrift",
           },
         }}
@@ -257,8 +257,8 @@ const netPay = round0(totalEarning - totalDeduction);
               <TableCell />
               <TableCell />
               <TableCell align="center"
-              sx={{ padding: "15px !important" }}
-   >
+                sx={{ padding: "15px !important" }}
+              >
                 {company.stamp && (
                   <img src={company.stamp} width={90} alt="Stamp" />
                 )}

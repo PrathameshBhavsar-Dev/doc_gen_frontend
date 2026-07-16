@@ -21,6 +21,8 @@ const RPExperience = ({ company, data }) => {
         ? { subject: "They", object: "them", possessive: "their" }
         : { subject: "He", object: "him", possessive: "his" };
 
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <Box
@@ -56,7 +58,7 @@ const RPExperience = ({ company, data }) => {
       >
         {/* DATE */}
         <Typography sx={{ textAlign: "right", mb: 3, color: "#000" }}>
-          {new Date(data.issueDate).toLocaleDateString("en-US", {
+          {new Date(issueDate).toLocaleDateString("en-US", {
             month: "long",
             day: "2-digit",
             year: "numeric",
@@ -106,7 +108,7 @@ const RPExperience = ({ company, data }) => {
           . {pronouns.subject} was efficient and hardworking in this tenure. At the time of
           leaving the services of the company,{" "}
           {pronouns.subject.toLowerCase()} was designated as{" "}
-          <strong>{data.designation}</strong>.
+          <strong>{designation}</strong>.
         </Typography>
 
         <Typography sx={{ mb: 13, mt: 8, color: "#000" }}>

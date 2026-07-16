@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCurrency  } from "../../../../../utils/salaryCalculations";
+import { formatCurrency } from "../../../../../utils/salaryCalculations";
 import A4Page from "../../../../layout/A4Page";
 import {
   Box,
@@ -27,50 +27,52 @@ const formatDate = (date) => {
 
 const NimbjaIncrement = ({ company, data }) => {
   /* ================= SALARY LOGIC (DEVCONS – CUSTOM ANNEXURE) ================= */
-    console.log("FINAL DATA:", data);
- const round0 = (num) => Math.round(num);
+  console.log("FINAL DATA:", data);
+  const round0 = (num) => Math.round(num);
 
 
 
-const annualCTC = round0(
-  Number(data?.newCTC ?? data?.totalSalary ?? data?.salary ?? data?.ctc ?? 0),
-);
+  const annualCTC = round0(
+    Number(data?.newCTC ?? data?.totalSalary ?? data?.salary ?? data?.ctc ?? 0),
+  );
 
- // ✅ MONTHLY
- const monthlyCTC = round0(annualCTC / 12);
+  // ✅ MONTHLY
+  const monthlyCTC = round0(annualCTC / 12);
 
- // ✅ BREAKUP (LAST = ADJUSTMENT)
- let salaryRows = [
-   ["Basic", round0(monthlyCTC * 0.4)],
-   ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
-   ["HRA", round0(monthlyCTC * 0.12)],
-   ["City Allowance", round0(monthlyCTC * 0.16)],
-   ["Superannuation Fund", round0(monthlyCTC * 0.06)],
-   ["Performance Bonus", 0], // 🔥 IMPORTANT
- ];
+  // ✅ BREAKUP (LAST = ADJUSTMENT)
+  let salaryRows = [
+    ["Basic", round0(monthlyCTC * 0.4)],
+    ["Bouqet Of Benefits", round0(monthlyCTC * 0.18)],
+    ["HRA", round0(monthlyCTC * 0.12)],
+    ["City Allowance", round0(monthlyCTC * 0.16)],
+    ["Superannuation Fund", round0(monthlyCTC * 0.06)],
+    ["Performance Bonus", 0], // 🔥 IMPORTANT
+  ];
 
- // ✅ FIX ROUNDING
- const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
- salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
+  // ✅ FIX ROUNDING
+  const usedMonthly = salaryRows.reduce((sum, row) => sum + row[1], 0);
+  salaryRows[salaryRows.length - 1][1] += monthlyCTC - usedMonthly;
 
- // ✅ FINAL ROWS (WITH ANNUAL)
- const finalSalaryRows = salaryRows.map(([name, monthly]) => [
-   name,
-   monthly,
-   monthly * 12,
- ]);
+  // ✅ FINAL ROWS (WITH ANNUAL)
+  const finalSalaryRows = salaryRows.map(([name, monthly]) => [
+    name,
+    monthly,
+    monthly * 12,
+  ]);
 
- // ✅ TOTALS (MATCH OFFER LOGIC)
- const totalMonthly = monthlyCTC;
- const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
+  // ✅ TOTALS (MATCH OFFER LOGIC)
+  const totalMonthly = monthlyCTC;
+  const totalAnnual = finalSalaryRows.reduce((sum, row) => sum + row[2], 0);
 
- const formatLakhsPerAnnum = (amount) => {
-   if (!amount || isNaN(amount)) return "0";
+  const formatLakhsPerAnnum = (amount) => {
+    if (!amount || isNaN(amount)) return "0";
 
-   const lakhs = amount / 100000;
+    const lakhs = amount / 100000;
 
-   return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
- };
+    return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs per annum`;
+  };
+
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>
@@ -141,7 +143,7 @@ const annualCTC = round0(
               fontFamily: "Bahnschrift",
             }}
           >
-            {new Date(data.issueDate).toLocaleDateString("en-US", {
+            {new Date(issueDate).toLocaleDateString("en-US", {
               month: "long",
               day: "2-digit",
               year: "numeric",
@@ -260,7 +262,7 @@ const annualCTC = round0(
               mb: 2,
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* Ref */}

@@ -91,7 +91,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
           to extend our warmest congratulations as we offer you the exciting
           opportunity to join our esteemed team as our
           <strong> {data.designation || data.field} </strong>
-          from <strong>{formatDate(data.startDate)}.</strong>{" "}
+          from <strong>{formatDate(data.startDate)}</strong> to <strong>{formatDate(data.endDate)}.</strong>{" "}
         </Typography>
 
         <Typography sx={{ fontFamily: "Book Antiqua" }}>

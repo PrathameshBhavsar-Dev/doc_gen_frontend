@@ -17,60 +17,16 @@ import A4Page from "../../../../layout/A4Page";
 const DevconsOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  //   // ================= HELPERS =================
-  //   const round0 = (num) => Math.round(num);
-
-  //   // ================= CTC =================
-  //   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
-
-  //   // ================= UPDATED PERCENTAGES =================
-  // const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  // const hraMonthly = round0(monthlyCTC * 0.18);
-  // const daMonthly = round0(monthlyCTC * 0.12);
-  // const specialMonthly = round0(monthlyCTC * 0.16);
-  // const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // // ================= STATIC PF =================
-  // const pfMonthly = 3750;
-
-  // // ================= ANNUAL VALUES =================
-  // const basicAnnual = basicMonthly * 12;
-  // const hraAnnual = hraMonthly * 12;
-  // const daAnnual = daMonthly * 12;
-  // const specialAnnual = specialMonthly * 12;
-  // const foodAnnual = foodMonthly * 12;
-  // const pfAnnual = pfMonthly * 12;
-
-  // // ================= SALARY TABLE =================
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  // ];
-
-  // // ================= TOTAL EARNINGS =================
-  // const totalMonthly =
-  //   basicMonthly +
-  //   hraMonthly +
-  //   daMonthly +
-  //   specialMonthly +
-  //   foodMonthly;
-
-  // const totalAnnual = totalMonthly * 12;
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-
   const round0 = (num) => Math.round(num);
 
   // ================= ANNUAL CTC INPUT =================
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
 
+  // ================= MONTHLY CTC =================
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
 
+  // ================= STATIC PF =================
   // ================= STATIC PF =================
   const pfMonthly = 3750;
 
@@ -79,6 +35,7 @@ const DevconsOffer = ({ company, data }) => {
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
   const foodMonthly = round0(monthlyCTC * 0.06);
+
 
   // ================= ADJUSTED BASIC =================
   const basicMonthly = round0(
@@ -115,7 +72,8 @@ const DevconsOffer = ({ company, data }) => {
   );
 
   const totalAnnual = round0(totalMonthly * 12);
-
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   const firstName = data.employeeName?.trim().split(" ")[0];
 
@@ -131,13 +89,6 @@ const DevconsOffer = ({ company, data }) => {
       // watermarkSrc={company.watermark}
       >
 
-
-        {/* =====================================================
-    PAGE 1 – OFFER LETTER (FIXED LIKE INCREMENT)
-===================================================== */}
-        {/* =====================================================
-    PAGE 1 – OFFER LETTER (FIXED LIKE INCREMENT)
-===================================================== */}
         <Box
         >
 
@@ -160,7 +111,7 @@ const DevconsOffer = ({ company, data }) => {
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-              <b>Subject</b> : Letter of intent for the position of <b>{data.position}</b>
+              <b>Subject</b> : Letter of intent for the position of {position}
             </Typography>
 
 
@@ -170,7 +121,7 @@ const DevconsOffer = ({ company, data }) => {
 
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
               <b style={{ textTransform: "uppercase" }}>{company.name}</b> is delighted to offer you the full-time position of{" "}
-              <b>{data.position}</b> with an anticipated start date of{" "}
+              <b>{position}</b> with an anticipated start date of{" "}
               <b> {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 day: "2-digit",
                 month: "long",
@@ -179,7 +130,7 @@ const DevconsOffer = ({ company, data }) => {
             </Typography>
 
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
-              As the <b>{data.position}</b>, you will be responsible for responsibilities
+              As the <b>{position}</b>, you will be responsible for responsibilities
               and expectations.
             </Typography>
 
@@ -190,7 +141,7 @@ const DevconsOffer = ({ company, data }) => {
 
             <Typography sx={{ mb: 1, textAlign: "justify" }}>
               The starting salary for this position is{" "}
-              <b>{formatCurrency(data.salary)}</b> per annum. Payment is on monthly basis
+              <b>{formatCurrency(data.joiningCTC)}</b> per annum. Payment is on monthly basis
               by direct deposit.
             </Typography>
 
@@ -259,7 +210,7 @@ const DevconsOffer = ({ company, data }) => {
                 "& th, & td": {
                   border: "1px solid #000",
                   padding: "0px 12px 12px 12px",
-                   fontSize: "15px",
+                  fontSize: "15px",
                 },
               }}
             >
@@ -278,6 +229,17 @@ const DevconsOffer = ({ company, data }) => {
               </TableHead>
 
               <TableBody>
+                {salaryRows.map(([name, monthly, annual], i) => (
+                  <TableRow key={i}>
+                    <TableCell>{name}</TableCell>
+                    <TableCell align="right">
+                      {formatCurrency(monthly)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatCurrency(annual)}
+                    </TableCell>
+                  </TableRow>
+                ))}
                 {salaryRows.map(([name, monthly, annual], i) => (
                   <TableRow key={i}>
                     <TableCell>{name}</TableCell>
@@ -315,9 +277,23 @@ const DevconsOffer = ({ company, data }) => {
                 </TableRow>
 
 
+
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
+            {company?.signature && (
+              <img src={company.signature} alt="Signature" style={{ height: 60 }} />
+            )}
+            {company?.stamp && (
+              <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
+            )}
+          </Box>
+
+          <Typography sx={{ fontWeight: 600 }}>{company.hrName}</Typography>
+          <Typography>HR Manager</Typography>
+          
         </Box>
       </A4Page>
     </>

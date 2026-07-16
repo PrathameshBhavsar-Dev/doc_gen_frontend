@@ -6,10 +6,10 @@ import A4Layout from "../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= MAIN COMPONENT ================= */
@@ -17,10 +17,8 @@ const JDITExperience = ({ company, data }) => {
   if (!company || !data) return null;
 
   const {
-    issueDate = "",
     employeeId = "",
     employeeName = "",
-    designation = "",
     department = "IT",
     startDate = "",
     endDate = "",
@@ -35,8 +33,10 @@ const JDITExperience = ({ company, data }) => {
     title === "miss." || title === "mrs."
       ? { subject: "She", object: "her", possessive: "her" }
       : title === "mx."
-      ? { subject: "They", object: "them", possessive: "their" }
-      : { subject: "He", object: "him", possessive: "his" };
+        ? { subject: "They", object: "them", possessive: "their" }
+        : { subject: "He", object: "him", possessive: "his" };
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
 
   return (
     <A4Layout
@@ -82,7 +82,7 @@ const JDITExperience = ({ company, data }) => {
       {/* ================= PARAGRAPH 3 ================= */}
       <Typography sx={{ mb: 3, textAlign: "justify" }}>
         We are sure {pronouns.possessive} passion and dedication will help {pronouns.object} excel in whatever {pronouns.subject.toLowerCase()} chooses to do next. {pronouns.subject} has shown a high level of commitment throughout {pronouns.possessive} time with our company.
-      </Typography> 
+      </Typography>
 
       {/* ================= CLOSING ================= */}
       <Typography sx={{ mb: 6, textAlign: "justify" }}>

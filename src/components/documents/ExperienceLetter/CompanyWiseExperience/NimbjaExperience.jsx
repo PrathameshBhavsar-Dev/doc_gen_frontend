@@ -22,6 +22,9 @@ const NimbjaExperience = ({ company, data }) => {
         ? { subject: "They", object: "them", possessive: "their" }
         : { subject: "He", object: "him", possessive: "his" };
 
+  const issueDate = data.experience_letter?.issueDate ?? data.issueDate;
+  const designation = data.currentDesignation ?? data.designation ?? "";
+
   return (
     <div
       className="a4-content-only"
@@ -78,7 +81,7 @@ const NimbjaExperience = ({ company, data }) => {
             marginTop: "-8mm",
           }}
         >
-          {formatDate(data.issueDate)}
+          {formatDate(issueDate)}
         </div>
         {/* DATE — TOP RIGHT */}
         {/* TITLE */}
@@ -110,7 +113,7 @@ const NimbjaExperience = ({ company, data }) => {
           <strong>{formatDate(data.relievingDate)}</strong>. {pronouns.subject}{" "}
           was efficient and hardworking in this tenure. At the time of leaving
           the services of the company, {pronouns.subject.toLowerCase()} was
-          designated as <strong>{data.designation}</strong>.
+          designated as <strong>{designation}</strong>.
         </p>
 
         {/* PARAGRAPH 2 */}
@@ -173,7 +176,7 @@ const NimbjaExperience = ({ company, data }) => {
                 src={company.stamp}
                 alt="Company Stamp"
                 style={{
-                  width: "120px",
+                  width: "100px",
                   display: "block",
                   marginLeft: "-15mm",
                 }}

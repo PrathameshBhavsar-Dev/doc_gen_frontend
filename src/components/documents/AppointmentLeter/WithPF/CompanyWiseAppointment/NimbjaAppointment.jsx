@@ -27,10 +27,10 @@ const NimbjaAppointment = ({ company, data }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   const formatLakhsPerAnnum = (amount) => {
@@ -40,43 +40,45 @@ const NimbjaAppointment = ({ company, data }) => {
 
     return `${lakhs % 1 === 0 ? lakhs : lakhs.toFixed(1)} Lakhs Per Annum`;
   };
-/* ================= TABLE STYLES ================= */
+  /* ================= TABLE STYLES ================= */
 
-const TABLE_STYLE = {
-  width: "100%",
-  border: "1px solid #333",
-  borderCollapse: "collapse",
-};
+  const TABLE_STYLE = {
+    width: "100%",
+    border: "1px solid #333",
+    borderCollapse: "collapse",
+  };
 
-const HEADER_ROW = {
-  backgroundColor: "#a0ed64",
-};
+  const HEADER_ROW = {
+    backgroundColor: "#a0ed64",
+  };
 
-const CELL_BASE = {
-  border: "1px solid #333",
-  fontSize: "9.75pt",
-  pb: "4.2mm",
-  verticalAlign: "top",
-  lineHeight: 0.8,
-  fontFamily: "Bahnschrift",
-};
+  const CELL_BASE = {
+    border: "1px solid #333",
+    fontSize: "9.75pt",
+    pb: "4.2mm",
+    verticalAlign: "top",
+    lineHeight: 0.8,
+    fontFamily: "Bahnschrift",
+  };
 
-const CELL_HEAD = {
-  ...CELL_BASE,
-  fontWeight: 600,
-  fontSize: "10pt",
-};
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    fontSize: "10pt",
+  };
 
-const TOTAL_ROW = {
-  backgroundColor: "#a0ed64",
-};
+  const TOTAL_ROW = {
+    backgroundColor: "#a0ed64",
+  };
 
-const TOTAL_CELL = {
-  ...CELL_HEAD,
-};
-  
+  const TOTAL_CELL = {
+    ...CELL_HEAD,
+  };
+
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
+
   // ================= SALARY TABLE =================
-const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || 0);
   return (
     <>
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -115,12 +117,12 @@ const annualCTC = Number(data.salary || 0);
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* ================= REF ================= */}
           <Typography
-            sx={{ mb: "mm", fontSize: "11pt", fontFamily: "Bahnschrift",mt:"-2mm" }}
+            sx={{ mb: "mm", fontSize: "11pt", fontFamily: "Bahnschrift", mt: "-2mm" }}
           >
             <strong>
               Ref:NSS\VER1.1\PUN\PIMGUR\ADM-TEST\{data.employeeId}
@@ -188,7 +190,7 @@ const annualCTC = Number(data.salary || 0);
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong> {formatDate(data.issueDate)},</strong> we are pleased to
+            <strong> {formatDate(issueDate)},</strong> we are pleased to
             appoint you in our organization with effect from
             <strong> {formatDate(data.joiningDate)},</strong> under the terms
             and conditions given below:
@@ -200,7 +202,7 @@ const annualCTC = Number(data.salary || 0);
               <Typography
                 sx={{ mb: "3mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                1. Your Designation will be <strong>{data.position}</strong>.
+                1. Your Designation will be <strong>{data.joiningDesignation ?? data.position}</strong>.
               </Typography>
             </li>
 
@@ -563,7 +565,7 @@ const annualCTC = Number(data.salary || 0);
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography

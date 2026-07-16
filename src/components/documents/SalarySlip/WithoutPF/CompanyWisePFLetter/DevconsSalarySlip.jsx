@@ -43,7 +43,6 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
     doj = "-",
     dob = "-",
     pan = "-",
@@ -53,6 +52,8 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
+
 
   /* ===== MONTH FORMAT ===== */
   const [year, monthNum] = month.split("-");
@@ -100,7 +101,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
     <A4Page
       headerSrc={company.header}
       footerSrc={company.footer}
-      // watermarkSrc={company.watermark}
+    // watermarkSrc={company.watermark}
     >
       <Box
         sx={{
@@ -117,9 +118,9 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
           },
         }}
       >
-        <Table size="small" sx={{ 
-          borderCollapse: "collapse", 
-          width: "100%", 
+        <Table size="small" sx={{
+          borderCollapse: "collapse",
+          width: "100%",
           tableLayout: "fixed", // Force fixed layout for perfect alignment
           "& .MuiTableCell-root": {
             width: "25%", // Each of the 4 columns gets exactly 25%

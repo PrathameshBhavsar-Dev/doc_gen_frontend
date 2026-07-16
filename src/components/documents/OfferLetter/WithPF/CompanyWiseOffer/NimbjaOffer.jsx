@@ -21,12 +21,13 @@ const NimbjaOffer = ({ company, data }) => {
   const round0 = (num) => Math.round(num);
          
   // ================= CTC =================
- const annualCTC = Number(data.salary || data.ctc || 0);
+ const annualCTC = Number(data.joiningCTC || data.salary || 0);
 
   // ================= SALARY TABLE =================
   
 
   const firstName = data.employeeName?.trim().split(" ")[0];
+    const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   const formatDate = (date) =>
     date
@@ -85,7 +86,7 @@ const NimbjaOffer = ({ company, data }) => {
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography
@@ -111,7 +112,7 @@ const NimbjaOffer = ({ company, data }) => {
 
           {/* SUBJECT */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-            Subject : Letter of intent for the position of {data.position}
+            Subject : Letter of intent for the position of {data.joiningDesignation  ?? data.position}
           </Typography>
 
           <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
@@ -125,7 +126,7 @@ const NimbjaOffer = ({ company, data }) => {
             journey in which every employee contributes. We invite you to be
             part of this journey! This has reference to your application and
             subsequent interviews you had with us. We are pleased to offer you
-            the role of <b>{data.position} </b>
+            the role of <b>{data.joiningDesignation  ?? data.position} </b>
             {/* {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",
@@ -243,7 +244,7 @@ const NimbjaOffer = ({ company, data }) => {
               fontFamily: "Bahnschrift",
             }}
           >
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           {/* <Typography

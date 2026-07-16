@@ -16,7 +16,6 @@ const JDITRelieving = ({ company, data }) => {
   if (!company || !data) return null;
 
   const {
-    issueDate = "",
     employeeId = "",
     employeeName = "",
     designation = "",
@@ -37,6 +36,8 @@ const JDITRelieving = ({ company, data }) => {
         ? { subject: "They", object: "them", possessive: "their" }
         : { subject: "He", object: "him", possessive: "his" };
 
+
+         const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <A4Layout
       headerSrc={company.headerImage}
@@ -63,7 +64,7 @@ const JDITRelieving = ({ company, data }) => {
         <b>{mrms ? `${mrms} ${employeeName}` : employeeName}</b> has been
         relieved from duties with <b>JDIT SOFTWARE SOLUTIONS PVT. LTD.</b> {pronouns.subject} joined our
         organization on <b>{formatDate(joiningDate)}</b> and served as{" "}
-        <b>{designation}</b> until <b>{formatDate(lastWorkingDay)}</b>.
+        <b>{data.currentDesignation ?? data.designation}</b> until <b>{formatDate(lastWorkingDay)}</b>.
       </Typography>
 
 

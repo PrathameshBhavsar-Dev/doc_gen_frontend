@@ -97,15 +97,16 @@ const SmartMatrixOffer = ({ company, data }) => {
       })
       : "";
 
-  const offerDate = fmtDate(data.issueDate);
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  const offerDate = fmtDate(issueDate);
   const joiningDate = fmtDate(data.joiningDate);
-  const position = data.position;
+  const position = data.joiningDesignation  ?? data.position;
 
   /* ================= CORRECTED LOGIC ================= */
   const round0 = (num) => Math.round(num);
 
   // ================= ANNUAL CTC INPUT =================
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
@@ -117,7 +118,8 @@ const SmartMatrixOffer = ({ company, data }) => {
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
-  const foodMonthly = round0(monthlyCTC * 0.06);
+  // const foodMonthly = round0(monthlyCTC * 0.06);
+  const foodMonthly = 3800;
 
   // ================= ADJUSTED BASIC =================
   const basicMonthly = round0(

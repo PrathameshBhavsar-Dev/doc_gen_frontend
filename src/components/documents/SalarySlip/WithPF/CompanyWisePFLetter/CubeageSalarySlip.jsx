@@ -42,7 +42,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
   const name = data.employeeName || "";
   const mrms = data.mrms || "";
   const empId = data.employeeId || "";
-  const desg = data.designation || "";
+  const desg = data.currentDesignation || data.designation;
 
   /* ── Format Date Helper ── */
   const formatDate = (dateStr) => {

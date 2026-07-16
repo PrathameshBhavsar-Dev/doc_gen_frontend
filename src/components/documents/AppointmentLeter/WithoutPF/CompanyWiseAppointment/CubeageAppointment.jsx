@@ -30,7 +30,6 @@ const formatDate = (date) => {
       year: "numeric",
     });
 };
-
 /* ---------------- Page Layout ---------------- */
 
 const PageLayout = ({ children, company }) => (
@@ -87,7 +86,7 @@ const TC = (extra = {}) => ({
 /* ============================================================ */
 
 const CubeageOffer = ({ company = {}, data = {} }) => {
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || 0));
   const monthlyCTC = round0(annualCTC / 12);
 
   const basic = round0(monthlyCTC * 0.40);
@@ -109,10 +108,10 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
   ];
 
   const employeeName = data.employeeName ? `${data.mrms || ""} ${data.employeeName}`.trim() : data.employeeName || "";
-  const position = data.position || "";
+  const position = data.joiningDesignation ?? data.position ?? "";
   const location = data.workLocation || company.city || "";
   const joiningDate = data.joiningDate || "";
-  const issueDate = data.issueDate || "";
+  const issueDate = data.appointment_letter?.issueDate ?? data.issueDate;
 
   return (
     <Box>

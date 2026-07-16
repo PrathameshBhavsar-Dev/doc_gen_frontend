@@ -17,6 +17,8 @@ const formatDate = (date) => {
 };
 
 const QuickRelieving = ({ company, data = {} }) => {
+
+   const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <Box
       sx={{
@@ -71,7 +73,7 @@ const QuickRelieving = ({ company, data = {} }) => {
 
         {/* Designation */}
         <Typography sx={{ fontSize: "14px", mb: 6, fontWeight: "bold" }}>
-          {data.designation}
+          {data.currentDesignation ?? data.designation}
         </Typography>
 
         {/* Salutation */}
@@ -88,7 +90,7 @@ const QuickRelieving = ({ company, data = {} }) => {
             mb: 10,
           }}
         >
-          With reference to your resignation letter dated <strong>{formatDate(data.issueDate)}</strong> , we would like to
+          With reference to your resignation letter dated <strong>{formatDate(issueDate)}</strong> , we would like to
           inform you that your resignation has been accepted and you are relieved
           from the company at the closing of working hours on{" "}
           <strong>{formatDate(data.lastWorkingDay || data.relievingDate)}</strong>.

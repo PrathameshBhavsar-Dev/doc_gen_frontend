@@ -15,7 +15,7 @@ const NimbjaOffer = ({ company, data }) => {
   // 👉 MOVE SALARY LOGIC HERE
   const round0 = (num) => Math.round(num);
 
-  const annualCTC = round0(Number(data.salary || data.ctc || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
   const monthlyCTC = round0(annualCTC / 12);
 
   const salaryRows = [

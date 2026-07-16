@@ -28,16 +28,12 @@ const formatIndianCurrency = (value) => {
   return Number(value).toLocaleString("en-IN");
 };
 
-// const NimbjaOfferPage1 = ({ company, data }) => {
-//   const offerDate = formatDate(data.issueDate);
-//   const joiningDate = formatDate(data.joiningDate);
-//   const firstName = data.employeeName?.split(" ")[0] || "";
   /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
 
 const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
-  const offerDate = formatDate(data.issueDate);
-  
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  const offerDate = formatDate(issueDate);  
 
 const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
   return (
@@ -109,7 +105,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
 
         {/* SUBJECT */}
         <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-          Subject : Letter of intent for the position of {data.position}
+          Subject : Letter of intent for the position of {data.joiningDesignation  ?? data.position}
         </Typography>
 
         <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
@@ -124,7 +120,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
           journey in which every employee contributes. We invite you to be part
           of this journey! This has reference to your application and subsequent
           interviews you had with us. We are pleased to offer you the role of{" "}
-          <b>{data.position} </b>
+          <b>{data.joiningDesignation ?? data.position} </b>
           {/* {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",

@@ -17,14 +17,13 @@ const SmartSoftwareRelieving = ({ company, data }) => {
   const {
     employeeName = "",
     designation = "",
-    issueDate = "",
-    lastWorkingDay = "",
+      lastWorkingDay = "",
     employeeId = "",
     mrms = "",
   } = data;
 
   const firstName = employeeName.split(" ")[0] || "";
-
+ const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <Box
       sx={{
@@ -102,7 +101,7 @@ const SmartSoftwareRelieving = ({ company, data }) => {
         </Typography>
 
         <Typography sx={{ mb: 4 }}>
-          <b>{designation}</b>
+          <b>{ data.currentDesignation ?? data.designationdesignation}</b>
         </Typography>
 
         <Typography sx={{ mb: 3 }}>

@@ -19,57 +19,10 @@ import A4Page from "../../../../layout/A4Page";
 const RPOffer = ({ company, data }) => {
   if (!company || !data) return null;
 
-  //   /* ================= SALARY LOGIC ================= */
-
-  //   const round0 = (num) => Math.round(num);
-
-  //   const monthlyCTC = round0(Number(data.salary || data.ctc || 0));
-
-  //    // ================= UPDATED PERCENTAGES =================
-  // const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-  // const hraMonthly = round0(monthlyCTC * 0.18);
-  // const daMonthly = round0(monthlyCTC * 0.12);
-  // const specialMonthly = round0(monthlyCTC * 0.16);
-  // const foodMonthly = round0(monthlyCTC * 0.06);
-
-  // // ================= STATIC PF =================
-  // const pfMonthly = 3750;
-
-  // // ================= ANNUAL VALUES =================
-  // const basicAnnual = basicMonthly * 12;
-  // const hraAnnual = hraMonthly * 12;
-  // const daAnnual = daMonthly * 12;
-  // const specialAnnual = specialMonthly * 12;
-  // const foodAnnual = foodMonthly * 12;
-  // const pfAnnual = pfMonthly * 12;
-
-  // // ================= SALARY TABLE =================
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-  // ];
-
-  // // ================= TOTAL EARNINGS =================
-  // const totalMonthly =
-  //   basicMonthly +
-  //   hraMonthly +
-  //   daMonthly +
-  //   specialMonthly +
-  //   foodMonthly;
-
-  // const totalAnnual = totalMonthly * 12;
-
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-
   const round0 = (num) => Math.round(num);
 
   // ================= ANNUAL CTC INPUT =================
-  const annualCTC = round0(Number(data.salary || 0));
+  const annualCTC = round0(Number(data.joiningCTC || data.salary || 0));
 
   // ================= MONTHLY CTC =================
   const monthlyCTC = round0(annualCTC / 12);
@@ -118,6 +71,8 @@ const RPOffer = ({ company, data }) => {
   );
 
   const totalAnnual = round0(totalMonthly * 12);
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   /* ================= PF (STATIC ADDED) ================= */
 
@@ -229,7 +184,7 @@ const RPOffer = ({ company, data }) => {
                 fontWeight: 500,
               }}
             >
-              {new Date(data.issueDate).toLocaleDateString("en-US", {
+              {new Date(issueDate).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -270,7 +225,7 @@ const RPOffer = ({ company, data }) => {
             >
               <strong>Subject</strong> :{" "}
               <span style={{ textDecoration: "underline" }}>
-                Letter of intent for the position of {data.position}
+                Letter of intent for the position of {position}
               </span>
             </Typography>
 
@@ -298,7 +253,7 @@ const RPOffer = ({ company, data }) => {
               It was a pleasure meeting you to explore a career opportunity in{" "}
               <strong>R P BUSINESS SOLUTIONS LLP</strong>. Based on our discussions, we are
               pleased to offer you the position of{" "}
-              <strong>"{data.position}"</strong> with our organisation. The gross
+              <strong>"{position}"</strong> with our organisation. The gross
               compensation will be{" "}
               <strong>
                 INR {formatCurrency(totalAnnual)} ({numberToWordsIndian(totalAnnual)})
@@ -473,8 +428,8 @@ const RPOffer = ({ company, data }) => {
               borderCollapse: "collapse",
               "& th, & td": {
                 border: "1px solid #000",
-padding: "0px 12px 12px 12px",
-              //  padding: "6px",
+                padding: "0px 12px 12px 12px",
+                //  padding: "6px",
                 fontSize: "15px",
               },
             }}

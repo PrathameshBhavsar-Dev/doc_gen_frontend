@@ -75,8 +75,16 @@ const UserEmployeeDocumentsPage = () => {
         employeeId: profileData?.employeeId,
         employeeName: profileData?.employeeName,
 
-        designation: profileData?.designation,
+        joiningDesignation: profileData?.joiningDesignation,
+        currentDesignation: profileData?.currentDesignation,
+
         department: profileData?.department,
+
+        joiningCTC: profileData?.joiningCTC,
+        currentCTC: profileData?.currentCTC,
+
+        currentAddress: profileData?.currentAddress,
+        permanentAddress: profileData?.permanentAddress,
 
         employeeEmail: profileData?.email,
       },
@@ -106,15 +114,11 @@ const UserEmployeeDocumentsPage = () => {
           await getUserForSeparationService(
             state.id
           );
-        // console.log(
-        //   "SEPARATION RESPONSE:",
-        //   response
-        // );
+
         if (response.success) {
           setProfileData(
             response.data
           );
-          console.log("PROFILE DATA", response.data);
         }
       } catch (error) {
         console.error(error);
@@ -126,11 +130,6 @@ const UserEmployeeDocumentsPage = () => {
       fetchProfile();
     }
   }, [state]);
-
-  console.log(
-    "PROFILE DATA FROM API",
-    JSON.stringify(profileData, null, 2)
-  );
 
   useEffect(() => {
     console.log("PROFILE DATA STATE", profileData);
@@ -201,39 +200,30 @@ const UserEmployeeDocumentsPage = () => {
                 })
               }
               onClick={() => {
-                const selectedDocObjects = docs.filter((d) =>
-                  selectedDocs.includes(d.id),
-                );
-
-                // Only take docs that need generation (Pending)
-                const pendingDocs = selectedDocObjects.filter(
-                  (d) => d.status !== "Generated",
-                );
-
+                const selectedDocObjects = docs.filter((d) => selectedDocs.includes(d.id));
+                const pendingDocs = selectedDocObjects.filter((d) => d.status !== "Generated");
                 if (pendingDocs.length === 0) return;
 
                 navigate(ROUTES.USER_FORM, {
                   state: {
-                    employeeData: profileData,
-                    isEditMode: true,
-                    userId: profileData.id,
                     selectedDocs: pendingDocs,
+                    employeeData: profileData, // ✅ was: state
+                    userId: profileData?.id,   // ✅ add this
                   },
                 });
               }}
               className={`
-    px-4 py-2 rounded-xl text-[14px] flex items-center gap-1 transition
+    px-4 py-1.5 rounded-lg text-sm font-medium transition
     ${selectedDocs.some((id) => {
                 const doc = docs.find((d) => d.id === id);
                 return doc.status !== "Generated";
               })
-                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white shadow-md hover:shadow-lg"
+                  ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }
   `}
             >
-              <FiFileText />
-              Generate {selectedDocs.length > 0 && `(${selectedDocs.length})`}
+              Generate
             </button>
           </div>
         </div>
@@ -245,39 +235,51 @@ const UserEmployeeDocumentsPage = () => {
           </h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-7 gap-x-12">
-            {[
-              { label: "Employee Name", value: profileData?.employeeName },
-              { label: "Employee ID", value: profileData?.employeeId },
-              { label: "Email", value: profileData?.email },
-              { label: "Mobile", value: profileData?.mobileNo },
+            {
+              [
+                { label: "Employee Name", value: profileData?.employeeName },
+                { label: "Employee ID", value: profileData?.employeeId },
+                { label: "Email", value: profileData?.email },
+                { label: "Mobile", value: profileData?.mobileNo },
 
-              { label: "PAN", value: profileData?.panNo },
-              { label: "DOB", value: profileData?.dateOfBirth },
-              { label: "Address", value: profileData?.address },
+                { label: "PAN", value: profileData?.panNo },
+                { label: "DOB", value: profileData?.dateOfBirth },
 
-              { label: "Offer Date", value: profileData?.offerDate },
-              { label: "Joining Date", value: profileData?.joiningDate },
+                { label: "Current Address", value: profileData?.currentAddress },
+                { label: "Permanent Address", value: profileData?.permanentAddress },
 
-              { label: "CTC", value: profileData?.CTC },
+                { label: "Offer Date", value: profileData?.offerDate },
+                { label: "Joining Date", value: profileData?.joiningDate },
 
-              { label: "Designation", value: profileData?.designation },
-              { label: "Department", value: profileData?.department },
+                { label: "Joining CTC", value: profileData?.joiningCTC },
+                { label: "Current CTC", value: profileData?.currentCTC },
 
-              { label: "Bank Name", value: profileData?.bankName },
-              { label: "Account Number", value: profileData?.accountNo },
+                {
+                  label: "Joining Designation",
+                  value: profileData?.joiningDesignation,
+                },
+                {
+                  label: "Current Designation",
+                  value: profileData?.currentDesignation,
+                },
 
-              { label: "Company", value: profileData?.company },
-              { label: "Identity", value: profileData?.identity },
-              { label: "PF Type", value: profileData?.pfType },
+                { label: "Department", value: profileData?.department },
 
-            ].map((item) => (
-              <div key={item.label}>
-                <p className="text-[12px] text-[#64748B]">{item.label}</p>
-                <p className="text-[15px] font-medium text-[#1E293B]">
-                  {item.value || "-"}
-                </p>
-              </div>
-            ))}
+                { label: "Bank Name", value: profileData?.bankName },
+                { label: "Account Number", value: profileData?.accountNo },
+
+                { label: "Company", value: profileData?.company },
+                { label: "Identity", value: profileData?.identity },
+                { label: "PF Type", value: profileData?.pfType },
+              ]
+                .map((item) => (
+                  <div key={item.label}>
+                    <p className="text-[12px] text-[#64748B]">{item.label}</p>
+                    <p className="text-[15px] font-medium text-[#1E293B]">
+                      {item.value || "-"}
+                    </p>
+                  </div>
+                ))}
           </div>
         </div>
 
@@ -366,26 +368,22 @@ const UserEmployeeDocumentsPage = () => {
                     disabled={isMultiSelect}
                     onClick={(e) => {
                       e.stopPropagation();
-
                       if (isMultiSelect) return;
 
                       if (doc.status === "Generated") {
                         navigate(ROUTES.DOCUMENT_PREVIEW, {
                           state: {
                             selectedDocs: [doc],
-
                             previewData: doc.documentData,
-
-                            previewCompany: {
-                              name: profileData?.company,
-                            },
+                            previewCompany: { name: profileData?.company },
                           },
                         });
                       } else {
                         navigate(ROUTES.USER_FORM, {
                           state: {
                             selectedDocs: [doc],
-                            employeeData: state,
+                            employeeData: profileData, // ✅ was: state
+                            userId: profileData?.id,   // ✅ add this
                           },
                         });
                       }
@@ -465,21 +463,15 @@ const UserEmployeeDocumentsPage = () => {
               })
             }
             onClick={() => {
-              const selectedDocObjects = docs.filter((d) =>
-                selectedDocs.includes(d.id),
-              );
-
-              // Only take docs that need generation (Pending)
-              const pendingDocs = selectedDocObjects.filter(
-                (d) => d.status !== "Generated",
-              );
-
+              const selectedDocObjects = docs.filter((d) => selectedDocs.includes(d.id));
+              const pendingDocs = selectedDocObjects.filter((d) => d.status !== "Generated");
               if (pendingDocs.length === 0) return;
 
               navigate(ROUTES.USER_FORM, {
                 state: {
                   selectedDocs: pendingDocs,
-                  employeeData: state, // profile info
+                  employeeData: profileData, // ✅ was: state
+                  userId: profileData?.id,   // ✅ add this
                 },
               });
             }}
@@ -489,7 +481,7 @@ const UserEmployeeDocumentsPage = () => {
               const doc = docs.find((d) => d.id === id);
               return doc.status !== "Generated";
             })
-                ? "bg-gradient-to-r from-[#2e2f85] to-[#A78BFA] text-white"
+                ? "bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }
   `}

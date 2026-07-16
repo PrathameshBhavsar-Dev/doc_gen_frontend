@@ -18,20 +18,17 @@ import {
 
 export default function SmartSoftwareOffer({ company = {}, data = {} }) {
   const {
-    issueDate = new Date(),
     employeeName = "",
     address = "",
-    position = "",
     joiningDate = "",
-    salary = 0,
     mrms = "",
   } = data;
 
   const formatCurrency = (value) => {
-  const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
+    const num = Math.round(Number(value) || 0); // 🔥 removes decimal completely
 
-  return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
-};
+    return num.toLocaleString("en-IN"); // 🔥 formats like 8,667
+  };
   /* ================= TITLE & PRONOUNS ================= */
   const title = (mrms || "").toLowerCase().trim();
 
@@ -57,8 +54,10 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     : "";
 
   /* ================= SALARY BREAKUP ================= */
-  const totalAnnual = Number(salary) || 0;
+  const totalAnnual = Number(data.joiningCTC || data.salary) || 0;
   const totalMonthly = Math.round(totalAnnual / 12);
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   const salaryComponents = useMemo(() => {
     const basic = Math.round(totalAnnual * 0.40);
@@ -104,10 +103,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
     fontSize: "13px",
     lineHeight: 1.4,
     border: "1px solid #000",
-   // padding: "4px 6px",
-   padding: "0px 12px 12px 12px",
-   
-   
+    padding: "0px 12px 12px 12px",
   };
 
   const tableHeader = {

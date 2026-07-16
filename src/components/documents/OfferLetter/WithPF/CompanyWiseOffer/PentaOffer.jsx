@@ -24,7 +24,7 @@ const calculateSalaryBreakup = (annualCTC) => {
     return { salaryBreakup: [], totalPerMonth: 0, totalPerYear: 0 };
   }
 
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
   // ✅ Monthly CTC
   // const monthlyCTC = round0(annualCTC / 12);
 
@@ -33,11 +33,11 @@ const round0 = (num) => Math.round(num);
   const pfAnnual = round0(pfMonthly * 12);
 
   // ✅ Other components (% based)
- const monthlyCTC = round0(annualCTC / 12);
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const foodMonthly = round0(monthlyCTC * 0.16);
-const specialMonthly = round0(monthlyCTC * 0.06);
+  const monthlyCTC = round0(annualCTC / 12);
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const foodMonthly = round0(monthlyCTC * 0.16);
+  const specialMonthly = round0(monthlyCTC * 0.06);
 
   // ✅ TOTAL of all except Basic
   const totalOthers =
@@ -55,7 +55,7 @@ const specialMonthly = round0(monthlyCTC * 0.06);
     specialMonthly +
     pfMonthly;
 
-basicMonthly += Math.round(monthlyCTC - finalCheck);
+  basicMonthly += Math.round(monthlyCTC - finalCheck);
 
   // ✅ Annual values
   const basicAnnual = round0(basicMonthly * 12);
@@ -75,12 +75,12 @@ basicMonthly += Math.round(monthlyCTC - finalCheck);
 
   // ✅ Total WITHOUT PF (Gross)
   const totalPerMonth = round0(
-  basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
-);
+    basicMonthly + hraMonthly + daMonthly + foodMonthly + specialMonthly + pfMonthly
+  );
 
- const totalPerYear = round0(
-  basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
-);
+  const totalPerYear = round0(
+    basicAnnual + hraAnnual + daAnnual + foodAnnual + specialAnnual + pfAnnual
+  );
 
   return { salaryBreakup, totalPerMonth, totalPerYear };
 };
@@ -170,44 +170,44 @@ const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
       </Box>
 
       {/* CANDIDATE SIGN */}
-     {showCandidate && (
-  <Box
-    sx={{
-      width: 320,
-      ml: "auto",
-      textAlign: "right",
-    }}
-  >
-    {/* Signature */}
-    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-      Signature: ______________________
-    </Typography>
+      {showCandidate && (
+        <Box
+          sx={{
+            width: 320,
+            ml: "auto",
+            textAlign: "right",
+          }}
+        >
+          {/* Signature */}
+          <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+            Signature: ______________________
+          </Typography>
 
-    {/* Candidate Name */}
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        fontSize: 16,
-        mt: 0.5,
-      }}
-    >
-      <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
-        Candidate Name:
-      </Box>
+          {/* Candidate Name */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              fontSize: 16,
+              mt: 0.5,
+            }}
+          >
+            <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
+              Candidate Name:
+            </Box>
 
-      <Box
-        sx={{
-          maxWidth: 180,              // controls when it wraps
-          wordBreak: "break-word",
-          textAlign: "left",          // keeps wrapping clean
-        }}
-      >
-        {employeeName}
-      </Box>
-    </Box>
-  </Box>
-)}
+            <Box
+              sx={{
+                maxWidth: 180,              // controls when it wraps
+                wordBreak: "break-word",
+                textAlign: "left",          // keeps wrapping clean
+              }}
+            >
+              {employeeName}
+            </Box>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };
@@ -222,8 +222,10 @@ const PentaOffer = ({ company, data }) => {
     );
   }
 
-  const annualCTC = Number(data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || data.salary || 0);
   const finalData = calculateSalaryBreakup(annualCTC);
+  const position = data.joiningDesignation ?? data.position ?? "";
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   return (
     <>
@@ -256,7 +258,7 @@ const PentaOffer = ({ company, data }) => {
           <Typography fontWeight="bold">:</Typography>
           <Typography>
             Letter of intent for the position of{" "}
-            <strong>{data.position}</strong>.
+            <strong>{position}</strong>.
           </Typography>
         </Box>
 
@@ -273,7 +275,7 @@ const PentaOffer = ({ company, data }) => {
 
         <Typography sx={{ fontSize: 14, lineHeight: 1.6, mb: 2 }}>
           We are pleased to offer you a position of{" "}
-          <strong>{data.position}</strong> at{" "}
+          <strong>{position}</strong> at{" "}
           <strong>{company.name}</strong>.where you will be an integral part of highly technical engineering
           workforce that works on latest, innovative and cutting edge technologies.
           Your total Gross salary will be{" "}

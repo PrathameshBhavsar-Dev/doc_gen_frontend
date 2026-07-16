@@ -125,8 +125,8 @@ const numberToWords = (num) => {
 /* ---------- Styles ---------- */
 const cell = {
   border: "1px solid #000",
- // padding: "6px",
- padding: "0px 12px 12px 12px",
+  // padding: "6px",
+  padding: "0px 12px 12px 12px",
   fontSize: "13px",
 };
 
@@ -134,7 +134,7 @@ const bold = { fontWeight: "bold" };
 
 const QuickSalarySlip = ({ data = {}, company = {} }) => {
   const salary = getSalaryBreakup(data);
-
+  
   const earnings = [
     { label: "BASIC", value: salary.basic },
     { label: "HRA", value: salary.hra },
@@ -143,24 +143,25 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     { label: "FOOD ALLOWANCE", value: salary.food },
     { label: "MISC ALLOWANCE", value: salary.misc },
   ];
-
+  
   const deductions = [
     { label: "PT", value: salary.pt },
     { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
   ];
-
+  
   const totalEarning = earnings.reduce(
     (sum, e) => sum + Number(e.value || 0),
     0
   );
-
+  
   const totalDeduction = deductions.reduce(
     (sum, d) => sum + Number(d.value || 0),
     0
   );
-
+  
   const netPay = totalEarning - totalDeduction;
   const maxRows = Math.max(earnings.length, deductions.length);
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   return (
     <Box
@@ -238,7 +239,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Designation</TableCell>
             <TableCell sx={cell} colSpan={3}>
-              {safe(data.designation)}
+              {safe(designation)}
             </TableCell>
           </TableRow>
 

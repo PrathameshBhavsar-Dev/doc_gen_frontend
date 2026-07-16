@@ -42,13 +42,13 @@ const NeweageSalarySlip = ({ company, data }) => {
     doj,
     department,
     pan,
-    designation,
     dob,
     mode,
     accountNo,
     workdays,
     totalSalary,
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   /* ================= SMARTMATRIX SALARY LOGIC ================= */
 
