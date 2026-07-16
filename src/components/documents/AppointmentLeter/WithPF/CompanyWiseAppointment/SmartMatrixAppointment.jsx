@@ -285,17 +285,17 @@ const SmartMatrixAppointment = ({ company, data }) => {
                   <Grid item>
                     <Box
                       component="img"
-                      src={sign}
-                      alt="Signature"
-                      sx={{ width: 140, mt: "26mm", ml: "-2mm" }}
+                      src={company?.stamp}
+                      alt="Stamp"
+                      sx={{ width: 110 }}
                     />
                   </Grid>
                   <Grid item>
                     <Box
                       component="img"
-                      src={company?.stamp}
-                      alt="Stamp"
-                      sx={{ width: 110 }}
+                      src={sign}
+                      alt="Signature"
+                      sx={{ width: 140, mt: "26mm", ml: "-2mm" }}
                     />
                   </Grid>
                 </Grid>
@@ -474,8 +474,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
               {/* ================= EMPLOYEE DETAILS ================= */}
               <Box
                 sx={{
-                  fontFamily:
-                    '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+                  fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                   fontSize: "11pt",
                   lineHeight: "1.6",
                   mb: "6mm",
@@ -488,24 +487,26 @@ const SmartMatrixAppointment = ({ company, data }) => {
                     fontWeight: "bold",
                     textAlign: "center",
                     mb: "6mm",
-                    fontFamily:
-                      '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+                    fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+
                     textDecoration: "underline",
                   }}
                 >
                   Salary Structure - Break Up
                 </Typography>
-                <Typography>
+                <Typography sx={{ fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif', }}>
                   Name : {data.mrms} {data.employeeName}
                 </Typography>
                 <br />
-                <Typography>Designation : {data.joiningDesignation ?? data.position}</Typography>
+                <Typography sx={{ fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif', }}>
+                  Designation : {data.joiningDesignation ?? data.position}</Typography>
                 <br />
-                <Typography>
+                <Typography sx={{ fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif', }}>
                   Date of Joining : {formatDate(data.joiningDate)}
                 </Typography>
                 <br />
-                <Typography>EMP ID : {data.employeeId}</Typography>
+                <Typography sx={{ fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif', }}>
+                  EMP ID : {data.employeeId}</Typography>
               </Box>
 
               {/* ================= SALARY TABLE ================= */}
@@ -513,7 +514,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                 sx={{
                   mt: "8mm",
                   mb: "6mm",
-                  fontFamily: "Calibri, 'Segoe UI', sans-serif",
+                  fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif'
                 }}
               >
                 <Table
@@ -535,9 +536,10 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
+                          fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif'
                         }}
-                      >
+                        >
                         Salary Components
                       </TableCell>
 
@@ -546,11 +548,12 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           width: "27.5%",
                           fontWeight: 700,
+                          fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                         }}
-                      >
+                        >
                         Per month (Rs.)
                       </TableCell>
 
@@ -561,9 +564,10 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           fontWeight: 700,
                           fontSize: "14px",
                           border: "1px solid #000",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
+                          fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                         }}
-                      >
+                        >
                         Per Annum (Rs.)
                       </TableCell>
                     </TableRow>
@@ -575,10 +579,11 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         <TableCell
                           sx={{
                             border: "1px solid #000",
+                            fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                             fontSize: "14px",
-                            padding: "5px 8px",
+                          padding: "0px 12px 12px 12px",
                           }}
-                        >
+                          >
                           {row.name}
                         </TableCell>
 
@@ -587,9 +592,10 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           sx={{
                             border: "1px solid #000",
                             fontSize: "14px",
-                            padding: "5px 8px",
+                            fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
+                          padding: "0px 12px 12px 12px",
                           }}
-                        >
+                          >
                           {formatCurrency(row.monthly)}
                         </TableCell>
 
@@ -597,10 +603,11 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           align="center"
                           sx={{
                             border: "1px solid #000",
+                            fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                             fontSize: "14px",
-                            padding: "5px 8px",
+                          padding: "0px 12px 12px 12px",
                           }}
-                        >
+                          >
                           {formatCurrency(row.annual)}
                         </TableCell>
                       </TableRow>
@@ -611,12 +618,13 @@ const SmartMatrixAppointment = ({ company, data }) => {
                       <TableCell
                         sx={{
                           border: "1px solid #000",
+                          fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                      >
+                        >
                         Monthly Gross Salary
                       </TableCell>
 
@@ -626,10 +634,10 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           fontWeight: 700,
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                      >
+                        >
                         {formatCurrency(totalMonthly)}
                       </TableCell>
 
@@ -638,11 +646,12 @@ const SmartMatrixAppointment = ({ company, data }) => {
                         sx={{
                           border: "1px solid #000",
                           fontWeight: 700,
+                          fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                           fontSize: "14px",
-                          padding: "6px 8px",
+                          padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                      >
+                        >
                         {formatCurrency(totalAnnual)}
                       </TableCell>
                     </TableRow>

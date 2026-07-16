@@ -174,11 +174,11 @@ const JDITOffer = ({ company, data }) => {
 
         {/* ================= OFFER DETAILS ================= */}
         <Box sx={{ mb: 2 }}>
-          {employeeId && (
+
             <Typography sx={{ ...TEXT, mb: 0.5 }}>
               ➢ Offer ID / Employee ID: <b>{employeeId}</b>
             </Typography>
-          )}
+        
           <Typography sx={{ ...TEXT, mb: 0.5 }}>
             ➢ Position: <b>{position}</b>
           </Typography>

@@ -12,7 +12,6 @@ const DevconsRelieving = ({ company, data }) => {
         backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
-        fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
         "& *": {
           fontFamily: `"Bahnschrift", "Yu Gothic", "Segoe UI", Arial, sans-serif`,
         },

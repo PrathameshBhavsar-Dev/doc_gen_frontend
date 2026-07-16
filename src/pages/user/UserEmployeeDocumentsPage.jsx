@@ -114,15 +114,11 @@ const UserEmployeeDocumentsPage = () => {
           await getUserForSeparationService(
             state.id
           );
-        // console.log(
-        //   "SEPARATION RESPONSE:",
-        //   response
-        // );
+
         if (response.success) {
           setProfileData(
             response.data
           );
-          // console.log("PROFILE DATA", response.data);
         }
       } catch (error) {
         console.error(error);
@@ -134,11 +130,6 @@ const UserEmployeeDocumentsPage = () => {
       fetchProfile();
     }
   }, [state]);
-
-  // console.log(
-  //   "PROFILE DATA FROM API",
-  //   JSON.stringify(profileData, null, 2)
-  // );
 
   useEffect(() => {
     console.log("PROFILE DATA STATE", profileData);

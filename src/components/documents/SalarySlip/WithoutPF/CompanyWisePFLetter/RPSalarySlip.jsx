@@ -42,7 +42,6 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
     doj = "-",
     dob = "-",
     pan = "-",
@@ -52,6 +51,7 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
@@ -134,8 +134,8 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
           "& .MuiTableCell-root": {
             border: "1px solid black",
             fontSize: "11pt",
-           // padding: "6px 8px",
-           padding: "0px 12px 12px 12px",
+            // padding: "6px 8px",
+            padding: "0px 12px 12px 12px",
           },
         }}
       >
@@ -272,7 +272,7 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell />
               <TableCell />
               <TableCell align="center"
-              sx={{ padding: "13px !important" }}>
+                sx={{ padding: "13px !important" }}>
                 {company.stamp && (
                   <img src={company.stamp} width={90} alt="Stamp" />
                 )}

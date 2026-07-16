@@ -266,6 +266,19 @@ const DevconsOffer = ({ company, data }) => {
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 4, mt: 3 }}>
+            {company?.signature && (
+              <img src={company.signature} alt="Signature" style={{ height: 60 }} />
+            )}
+            {company?.stamp && (
+              <img src={company.stamp} alt="Stamp" style={{ height: 90 }} />
+            )}
+          </Box>
+
+          <Typography sx={{ fontWeight: 600 }}>{company.hrName}</Typography>
+          <Typography>HR Manager</Typography>
+          
         </Box>
       </A4Page>
     </>

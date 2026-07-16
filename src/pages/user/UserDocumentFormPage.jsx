@@ -150,10 +150,10 @@ const UserDocumentFormPage = () => {
 
       mrms:
         employeeData.mrms ||
-        (employeeData.identity === "MR" ? "Mr"
-          : employeeData.identity === "MRS" ? "Mrs"
-            : employeeData.identity === "MISS" ? "Miss"
-              : employeeData.identity === "MX" ? "Mx"
+        (employeeData.identity === "MR" ? "Mr."
+          : employeeData.identity === "MRS" ? "Mrs."
+            : employeeData.identity === "MISS" ? "Miss."
+              : employeeData.identity === "MX" ? "Mx."
                 : ""),
 
       employeeName: employeeData.employeeName || "",

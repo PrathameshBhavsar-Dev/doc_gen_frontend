@@ -15,102 +15,58 @@ import { formatCurrency } from "../../../../../utils/salaryCalculations";
 
 const DevconsIncrement = ({ company = {}, data = {} }) => {
 
-  /* ================= HELPER ================= */
-//   const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-//   // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(Number(data.newCTC  || 0));
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.newCTC || 0));
 
-// // ================= UPDATED PERCENTAGES =================
-// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = basicMonthly * 12;
-// const hraAnnual = hraMonthly * 12;
-// const daAnnual = daMonthly * 12;
-// const specialAnnual = specialMonthly * 12;
-// const foodAnnual = foodMonthly * 12;
-// const pfAnnual = pfMonthly * 12;
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-// ];
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-// // ================= TOTAL EARNINGS =================
-// const totalMonthly =
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly;
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
-// const totalAnnual = totalMonthly * 12;
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
 
-const round0 = (num) => Math.round(num);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
 
-// ================= ANNUAL CTC INPUT =================
-const annualCTC = round0(Number(data.newCTC  || 0));
-
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
-
-// ================= STATIC PF =================
-const pfMonthly = 3750;
-
-// ================= FIXED PERCENTAGES =================
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
-
-// ================= ADJUSTED BASIC =================
-const basicMonthly = round0(
-  monthlyCTC -
-  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-);
-
-// ================= ANNUAL =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const pfAnnual = round0(pfMonthly * 12);
-
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual],
-];
-
-// ================= TOTAL =================
-const totalMonthly = round0(
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly
-);
-
-const totalAnnual = round0(totalMonthly * 12);
+  const totalAnnual = round0(totalMonthly * 12);
 
   return (
     <>
@@ -124,7 +80,6 @@ const totalAnnual = round0(totalMonthly * 12);
           backgroundColor: "#fff",
           display: "flex",
           flexDirection: "column",
-          fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
           "& *": {
             fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
           },
@@ -160,7 +115,7 @@ const totalAnnual = round0(totalMonthly * 12);
               })}
             </strong>.
             Your salary will increase to{" "}
-            <strong>{formatCurrency(data.newCTC )}</strong> per annum.
+            <strong>{formatCurrency(data.newCTC)}</strong> per annum.
           </Typography>
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
@@ -207,7 +162,9 @@ const totalAnnual = round0(totalMonthly * 12);
           display: "flex",
           flexDirection: "column",
           pageBreakBefore: "always",
-          fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
+          "& *": {
+            fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
+          },
           color: "#000",
         }}
       >
@@ -249,10 +206,12 @@ const totalAnnual = round0(totalMonthly * 12);
               borderCollapse: "collapse",
               "& th, & td": {
                 border: "1px solid #000",
-              //  padding: "4px 6px",
-              padding: "0px 12px 12px 12px",
+                //  padding: "4px 6px",
+                padding: "0px 12px 12px 12px",
                 fontSize: "15px",
-                fontFamily: `"Times New Roman", Times, serif`,
+                "& *": {
+                  fontFamily: `"Bahnschrift", "Segoe UI", Arial, sans-serif`,
+                },
               },
             }}
           >

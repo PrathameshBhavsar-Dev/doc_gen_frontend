@@ -64,37 +64,37 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
   const designation = data.currentDesignation ?? data.position ?? "";
 
   /* ================= EARNINGS BREAKUP (100%) ================= */
- const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-// ================= MONTHLY INPUT =================
-const monthlyCTC = round0(totalSalary);
+  // ================= MONTHLY INPUT =================
+  const monthlyCTC = round0(totalSalary);
 
-// ================= ANNUAL =================
-const annualCTC = round0(monthlyCTC * 12);
+  // ================= ANNUAL =================
+  const annualCTC = round0(monthlyCTC * 12);
 
-// ================= FIXED PF =================
-const PF = 3750;
+  // ================= FIXED PF =================
+  const PF = 3750;
 
-// ================= OTHER COMPONENTS =================
-const HRA = round0(monthlyCTC * 0.18);
-const DA = round0(monthlyCTC * 0.12);
-const SPECIAL = round0(monthlyCTC * 0.16);
-const FOOD = round0(monthlyCTC * 0.06);
+  // ================= OTHER COMPONENTS =================
+  const HRA = round0(monthlyCTC * 0.18);
+  const DA = round0(monthlyCTC * 0.12);
+  const SPECIAL = round0(monthlyCTC * 0.16);
+  const FOOD = round0(monthlyCTC * 0.06);
 
-// ================= ADJUSTED BASIC =================
-const BASIC = round0(
-  monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
-);
+  // ================= ADJUSTED BASIC =================
+  const BASIC = round0(
+    monthlyCTC - (HRA + DA + SPECIAL + FOOD + PF)
+  );
 
-// ================= TOTAL EARNINGS =================
-const totalEarning = round0(
-  BASIC + HRA + DA + SPECIAL + FOOD + PF
-);
+  // ================= TOTAL EARNINGS =================
+  const totalEarning = round0(
+    BASIC + HRA + DA + SPECIAL + FOOD + PF
+  );
 
-// ================= NET PAY =================
-const pt = getProfessionalTax(month, totalEarning);
-const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
-const netPay = round0(totalEarning - totalDeduction);
+  // ================= NET PAY =================
+  const pt = getProfessionalTax(month, totalEarning);
+  const totalDeduction = round0(PF + pt + Number(otherDeduction || 0));
+  const netPay = round0(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -105,16 +105,16 @@ const netPay = round0(totalEarning - totalDeduction);
           boxSizing: "border-box",
           "& .MuiTableCell-root": {
             border: "1px solid black",
-           // padding: "4px 6px",
-           padding: "0px 12px 12px 12px",
+            // padding: "4px 6px",
+            padding: "0px 12px 12px 12px",
             fontFamily: "Bahnschrift",
             color: "#000",
           },
         }}
       >
-        <Table size="small" sx={{ 
-          borderCollapse: "collapse", 
-          width: "100%", 
+        <Table size="small" sx={{
+          borderCollapse: "collapse",
+          width: "100%",
           tableLayout: "fixed", // Force fixed layout for perfect alignment
           "& .MuiTableCell-root": {
             width: "25%", // Each of the 4 columns gets exactly 25%
@@ -150,17 +150,14 @@ const netPay = round0(totalEarning - totalDeduction);
             </TableRow>
 
             <TableRow>
-              <TableCell>Gender</TableCell>
-              <TableCell>{gender}</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell>{department}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>DOJ</TableCell>
-              <TableCell>{doj}</TableCell>
-              <TableCell>PAN</TableCell>
-              <TableCell>{pan}</TableCell>
+              <TableCell>Gender <br/>DOJ</TableCell>
+              <TableCell>
+                {gender} <br/>{doj}
+              </TableCell>
+              <TableCell>Department  <br/>Pan Number</TableCell>
+              <TableCell>
+                {department} <br/>{pan}
+              </TableCell>
             </TableRow>
 
             <TableRow>
@@ -172,16 +169,13 @@ const netPay = round0(totalEarning - totalDeduction);
 
             <TableRow>
               <TableCell>Mode</TableCell>
-              <TableCell>{mode}</TableCell>
-              <TableCell>Working Days</TableCell>
-              <TableCell>{workdays}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>Account No.</TableCell>
-              <TableCell>{accountNo}</TableCell>
-              <TableCell />
-              <TableCell />
+              <TableCell>
+                Bank Name- {mode}
+                <br />
+                Bank Account No.- {accountNo}
+              </TableCell>
+              <TableCell>Working days</TableCell>
+              <TableCell>{data.workdays}</TableCell>
             </TableRow>
 
             {/* EARNINGS / DEDUCTIONS */}
@@ -194,61 +188,60 @@ const netPay = round0(totalEarning - totalDeduction);
 
             <TableRow>
               <TableCell>BASIC</TableCell>
-              <TableCell align="right">{formatCurrency(BASIC)}</TableCell>
+              <TableCell align="center">{formatCurrency(BASIC)}</TableCell>
               <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>HRA</TableCell>
-              <TableCell align="right">{formatCurrency(HRA)}</TableCell>
+              <TableCell align="center">{formatCurrency(HRA)}</TableCell>
               <TableCell>PT</TableCell>
-              <TableCell align="right">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">{formatCurrency(pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>DEARNESS ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(DA)}</TableCell>
+              <TableCell align="center">{formatCurrency(DA)}</TableCell>
               <TableCell>Other Deduction</TableCell>
-              <TableCell align="right">{formatCurrency(otherDeduction)}</TableCell>
+              <TableCell align="center">{formatCurrency(otherDeduction)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>SPECIAL ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(SPECIAL)}</TableCell>
+              <TableCell align="center">{formatCurrency(SPECIAL)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>FOOD ALLOWANCE</TableCell>
-              <TableCell align="right">{formatCurrency(FOOD)}</TableCell>
+              <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
               <TableCell>PF</TableCell>
-              <TableCell align="right">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">{formatCurrency(PF)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>
-
             {/* TOTAL */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalEarning)}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Total Deduction</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(totalDeduction)}
               </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Net Pay</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
                 {formatCurrency(netPay)}
               </TableCell>
               <TableCell />

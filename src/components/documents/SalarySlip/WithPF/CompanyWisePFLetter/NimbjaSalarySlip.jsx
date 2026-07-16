@@ -256,65 +256,64 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
               {/* Employee Info */}
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Employee Name</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {employeeName}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>Employee ID</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {employeeId}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Gender</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {gender}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>Department</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {department}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>DOJ</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {doj}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>PAN</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {pan}
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell sx={LABEL_CELL}>Designation</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {finalDesignation}
                 </TableCell>
 
                 <TableCell sx={LABEL_CELL}>DOB</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
+                <TableCell sx={VALUE_CELL}>
                   {dob}
                 </TableCell>
               </TableRow>
 
-              <TableRow>
-                <TableCell sx={LABEL_CELL}>Mode</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
-                  {mode}
-                </TableCell>
+            <TableRow>
+              <TableCell sx={LABEL_CELL}>Mode</TableCell>
+              <TableCell sx={VALUE_CELL}>
+                Bank Name- {mode}
+                <br />
+                Bank Account No.- {accountNo}
+              </TableCell>
+              <TableCell sx={LABEL_CELL}>Working days</TableCell>
+              <TableCell sx={VALUE_CELL}>{data.workdays}</TableCell>
+            </TableRow>
 
-                <TableCell sx={LABEL_CELL}>Working Days</TableCell>
-                <TableCell align="center" sx={VALUE_CELL}>
-                  {workdays}
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
+              {/* <TableRow>
                 <TableCell sx={LABEL_CELL}>Account No.</TableCell>
                 <TableCell align="center" sx={VALUE_CELL}>
                   {accountNo}
@@ -322,7 +321,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
 
                 <TableCell sx={VALUE_CELL} />
                 <TableCell sx={VALUE_CELL} />
-              </TableRow>
+              </TableRow> */}
 
               {/* Earnings */}
               <TableRow>

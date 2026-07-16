@@ -40,7 +40,6 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     employeeId = "-",
     gender = "-",
     department = "-",
-    designation = "-",
     doj = "-",
     dob = "-",
     pan = "-",
@@ -51,6 +50,7 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
+  const designation = data.currentDesignation ?? data.position ?? "";
 
   /* ================= MONTH ================= */
   const [year, monthNum] = month ? month.split("-") : ["", ""];
@@ -96,8 +96,8 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
 
           "& .MuiTableCell-root": {
             border: "1px solid black",
-           // padding: "6px",
-           padding: "0px 12px 12px 12px",
+            // padding: "6px",
+            padding: "0px 12px 12px 12px",
             fontFamily: "Bahnschrift",
           },
         }}

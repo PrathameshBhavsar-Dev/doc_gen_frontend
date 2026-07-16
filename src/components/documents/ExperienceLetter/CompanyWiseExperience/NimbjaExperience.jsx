@@ -176,7 +176,7 @@ const NimbjaExperience = ({ company, data }) => {
                 src={company.stamp}
                 alt="Company Stamp"
                 style={{
-                  width: "120px",
+                  width: "100px",
                   display: "block",
                   marginLeft: "-15mm",
                 }}

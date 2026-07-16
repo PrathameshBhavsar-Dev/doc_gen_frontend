@@ -118,7 +118,7 @@ const NimbjaIncrement = ({ company = {}, data = {} }) => {
           </Typography>
 
           <Typography sx={{ mb: 4, fontFamily: "Bahnschrift" }}>
-            Dear {data.employeeName},
+            Dear {data.employeeName.split(" ")[0]},
           </Typography>
 
           <Typography
