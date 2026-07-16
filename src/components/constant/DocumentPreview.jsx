@@ -375,21 +375,6 @@ const DocumentPreview = () => {
 
   const location = useLocation();
   const state = location.state || {};
-<<<<<<< HEAD
-
-=======
-  // console.log("FULL LOCATION STATE");
-  // console.log(state);
-
-  // console.log("PREVIEW DATA");
-  // console.log(state.previewData);
-
-  // console.log("SELECTED DOCS");
-  // console.log(state.selectedDocs);
-
-  // console.log("PREVIEW COMPANY");
-  // console.log(state.previewCompany);
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
   const flowType = state.flowType || "DIRECT"; // default fallback
 
   const handleEdit = () => {
@@ -486,12 +471,6 @@ const DocumentPreview = () => {
       mode: formData.bankName,
     }));
   };
-<<<<<<< HEAD
-
-=======
-  // const key = normalizeTemplateKey(previewDocType?.template);
-  // console.log("previewDocType", previewDocType);
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
   const key =
     normalizeTemplateKey(previewDocType?.template) ||
     normalizeTemplateKey(
@@ -503,11 +482,6 @@ const DocumentPreview = () => {
 
   if (!key) {
     console.error("Invalid doc type:", previewDocType);
-<<<<<<< HEAD
-=======
-    // console.log("Selected Doc:", selectedDoc);
-    // console.log("Doc Name:", selectedDoc?.name);
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
     return null; // don't crash UI
   }
 
@@ -745,14 +719,6 @@ const DocumentPreview = () => {
         data: doc.docKey === "salaryslip_letter" ? doc.data : freshData,
         company: previewCompany,
       };
-<<<<<<< HEAD
-
-=======
-      // console.log(
-      //   "INTERNSHIP DOCUMENT DATA",
-      //   freshData.documentData?.INTERNSHIP_CERTIFICATE,
-      // );
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       const map = {
         salaryslip_letter: <SalarySlipLetterTemplate {...p} />,
         internshipcertificate_letter: <InternshipLetterTemplate {...p} />,
@@ -854,11 +820,6 @@ const DocumentPreview = () => {
         }
       });
 
-<<<<<<< HEAD
-=======
-      // console.log("FRESH DATA BEFORE FIX:", freshData);
-
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       // =========================
       // PF NORMALIZATION
       // =========================
@@ -1013,16 +974,6 @@ const DocumentPreview = () => {
         freshData.trainingType = "General Training";
       }
 
-<<<<<<< HEAD
-=======
-      // console.log("SALARY SLIP DEBUG", {
-      //   key,
-      //   offerType: freshData.offerType,
-      //   salaryType: freshData.salaryType,
-      //   pfType: freshData.pfType,
-      //   freshData,
-      // });
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
       // =========================
       // BUILD PAYLOAD
       // =========================
@@ -1213,7 +1164,6 @@ const DocumentPreview = () => {
         <div className="dp-topbar-right">
           <button
             className="dp-btn dp-btn-ghost"
-<<<<<<< HEAD
             // Topbar Edit button
             onClick={() => {
               // console.log("flowType:", flowType);
@@ -1229,21 +1179,6 @@ const DocumentPreview = () => {
                 });
               } else {
                 isNavigatingAway.current = true; // ✅ add this
-=======
-            onClick={() => {
-              console.log("flowType:", flowType);
-              if (flowType === "PROFILE") {
-                navigate(ROUTES.USER_FORM, {
-                  state: {
-                    employeeData: previewData,      // ✅ correct key + correct variable
-                    isEditMode: true,               // ✅ correct key
-                    userId: previewData?.employeeId,
-                    selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
-                    flowType: "PROFILE", // ✅ add this
-                  },
-                });
-              } else {
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
                 navigate(ROUTES.DOCUMENT_CREATE);
               }
             }}
@@ -1420,7 +1355,6 @@ const DocumentPreview = () => {
             </button>
             <button
               className="dp-qa-btn"
-<<<<<<< HEAD
               // Topbar Edit button
               onClick={() => {
                 // console.log("flowType:", flowType);
@@ -1439,24 +1373,6 @@ const DocumentPreview = () => {
                   navigate(ROUTES.DOCUMENT_CREATE);
                 }
               }}      >
-=======
-              onClick={() => {
-                console.log("flowType:", flowType);
-                if (flowType === "PROFILE") {
-                  navigate(ROUTES.USER_FORM, {
-                    state: {
-                      employeeData: previewData,      // ✅ correct key + correct variable
-                      isEditMode: true,               // ✅ correct key
-                      userId: previewData?.employeeId,
-                      selectedDocs: selectedDocs,     // ✅ correct variable (from location.state)
-                      flowType: "PROFILE", // ✅ add this
-                    },
-                  });
-                } else {
-                  navigate(ROUTES.DOCUMENT_CREATE);
-                }
-              }}        >
->>>>>>> 7080851ddb4ac3c1b6b7617e6714604f36d34e7d
               <div className="dp-qa-icon">
                 <Edit sx={{ fontSize: 13, color: "#fff" }} />
               </div>
