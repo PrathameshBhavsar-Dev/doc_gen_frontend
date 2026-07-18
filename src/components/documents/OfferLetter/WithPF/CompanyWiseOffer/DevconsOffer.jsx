@@ -240,30 +240,6 @@ const DevconsOffer = ({ company, data }) => {
                     </TableCell>
                   </TableRow>
                 ))}
-                {salaryRows.map(([name, monthly, annual], i) => (
-                  <TableRow key={i}>
-                    <TableCell>{name}</TableCell>
-                    <TableCell align="right">
-                      {formatCurrency(monthly)}
-                    </TableCell>
-                    <TableCell align="right">
-                      {formatCurrency(annual)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-
-                {/* <TableRow>
-                  <TableCell sx={{ fontWeight: 700 }}>
-                    Professional Tax (PT)
-                  </TableCell>
-                  <TableCell align="right">
-                    {formatCurrency(ptMonthly)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {formatCurrency(ptAnnual)}
-                  </TableCell>
-                </TableRow> */}
-
                 <TableRow sx={{ backgroundColor: "#ffc000" }}>
                   <TableCell sx={{ fontWeight: 700 }}>
                     Total Monthly Gross Salary
@@ -275,9 +251,6 @@ const DevconsOffer = ({ company, data }) => {
                     {formatCurrency(totalAnnual)}
                   </TableCell>
                 </TableRow>
-
-
-
               </TableBody>
             </Table>
           </TableContainer>

@@ -2,9 +2,11 @@ import {
   createProfileApi,
   getAllUsersApi,
   getUserForSeparationApi,
+  updateProfileApi,
 } from "../../api/userApi";
 
-// CREATE PROFILE SERVICE
+// ================= CREATE PROFILE =================
+
 export const createProfileService = async (payload) => {
   try {
     const response = await createProfileApi(payload);
@@ -24,16 +26,15 @@ export const createProfileService = async (payload) => {
   }
 };
 
-// GET ALL USERS SERVICE
+// ================= GET ALL USERS =================
+
 export const getAllUsersService = async ({
   page = 0,
   size = 5,
   sortBy = "id",
   direction = "desc",
 }) => {
-
   try {
-
     const response = await getAllUsersApi({
       page,
       size,
@@ -47,9 +48,7 @@ export const getAllUsersService = async ({
       message: response.data.message,
       data: response.data.data,
     };
-
   } catch (error) {
-
     return {
       success: false,
       statusCode: error.response?.status,
@@ -61,14 +60,11 @@ export const getAllUsersService = async ({
   }
 };
 
-// GET USER FOR SEPARATION
+// ================= GET USER =================
 
 export const getUserForSeparationService = async (id) => {
-
   try {
-
-    const response =
-      await getUserForSeparationApi(id);
+    const response = await getUserForSeparationApi(id);
 
     return {
       success: response.data.success,
@@ -76,34 +72,35 @@ export const getUserForSeparationService = async (id) => {
       message: response.data.message,
       data: response.data.data,
     };
-
   } catch (error) {
-
     return {
-
       success: false,
-
-      statusCode:
-        error.response?.status,
-
+      statusCode: error.response?.status,
       message:
         error.response?.data?.message ||
         "Failed to fetch profile",
-
       data: null,
     };
   }
 };
 
+// ================= UPDATE PROFILE =================
+
 export const updateProfileService = async (userId, payload) => {
   try {
-    const response = await api.patch(
-      `/api/v2/users/${userId}`,
-      payload
-    );
+    const response = await updateProfileApi(userId, payload);
 
-    return response.data;
+    return {
+      success: response.data.success,
+      message: response.data.message,
+      data: response.data.data,
+    };
   } catch (error) {
-    throw error;
+    return {
+      success: false,
+      message:
+        error.response?.data?.message ||
+        "Failed to update profile",
+    };
   }
 };

@@ -404,6 +404,8 @@ const DocumentPreview = () => {
   const previewData = state.previewData;
   const selectedDocsRaw = state.selectedDocs;
 
+  console.log("Preview Data", previewData);
+
   const selectedDocs = Array.isArray(selectedDocsRaw)
     ? selectedDocsRaw
     : selectedDocsRaw
