@@ -257,9 +257,9 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
               <TableCell>
-                {bankMode}
+                Bank Name - {bankMode}
                 <br></br>
-                {data.accountNo}
+                Bank Account No - {data.accountNo}
               </TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
               <TableCell>{totalWorkdays}</TableCell>

@@ -74,7 +74,7 @@ const JDITOffer = ({ company, data }) => {
   const totalAnnual = monthlyCTC * 12;
   const position = data.joiningDesignation ?? data.position ?? "";
   const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
-  
+
   /* ================= TABLE STYLES ================= */
 
   const TABLE_STYLE = {
@@ -173,22 +173,22 @@ const JDITOffer = ({ company, data }) => {
         />
 
         {/* ================= OFFER DETAILS ================= */}
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mt:4,  mb: 2 }}>
 
-            <Typography sx={{ ...TEXT, mb: 0.5 }}>
-              ➢ Offer ID / Employee ID: <b>{employeeId}</b>
-            </Typography>
-        
-          <Typography sx={{ ...TEXT, mb: 0.5 }}>
+          <Typography sx={{ ...TEXT, mb: 1.5 }}>
+            ➢ Offer ID / Employee ID: <b>{employeeId}</b>
+          </Typography>
+
+          <Typography sx={{ ...TEXT, mb: 1.5 }}>
             ➢ Position: <b>{position}</b>
           </Typography>
-          <Typography sx={{ ...TEXT, mb: 0.5 }}>
+          <Typography sx={{ ...TEXT, mb: 1.5 }}>
             ➢ Employee’s Name: <b>{employeeName}</b>
           </Typography>
-          <Typography sx={{ ...TEXT, mb: 0.5 }}>
+          <Typography sx={{ ...TEXT, mb: 1.5 }}>
             ➢ Business / Work Hours per Day: <b>As per business requirement of the client.</b>
           </Typography>
-          <Typography sx={{ ...TEXT, mb: 0.5 }}>
+          <Typography sx={{ ...TEXT, mb: 1.5 }}>
             ➢ Payment Date of Salary: <b>On the 7th Working day of the next month.</b>
           </Typography>
         </Box>
@@ -216,6 +216,7 @@ const JDITOffer = ({ company, data }) => {
           therein should be treated as personal and confidential.
         </Typography>
 
+        <br/>
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
         <Typography sx={{ ...TEXT, mb: 1 }}>
           <b>Name : {employeeName}</b>
@@ -224,6 +225,12 @@ const JDITOffer = ({ company, data }) => {
           </span>
         </Typography>
 
+
+      </A4Layout>
+
+      {/* ================= PAGE 2 ================= */}
+      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
+        {/* ================= RETENTION BONUS ================= */}
         <TableContainer sx={{ mb: "4mm" }}>
           <Table size="small" sx={TABLE_STYLE}>
             <TableHead>
@@ -287,11 +294,6 @@ const JDITOffer = ({ company, data }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </A4Layout>
-
-      {/* ================= PAGE 2 ================= */}
-      <A4Layout headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        {/* ================= RETENTION BONUS ================= */}
         <Typography sx={{ ...TEXT, fontWeight: "bold", mt: 3, mb: 1 }}>
           Niche Skill Retention Bonus:
         </Typography>
@@ -303,7 +305,7 @@ const JDITOffer = ({ company, data }) => {
           Please note, this amount is not payable in case of project ramp down or
           closure, contract completion, termination due to code of conduct or for
           what so ever is the reason. It is Mandatory to be on project and billable
-          at the time payout after 42 months completion at People Prime.
+          at the time payout after 42 months completion at JDIT.
         </Typography>
 
         {/* ================= BACKGROUND CHECK ================= */}
@@ -358,7 +360,7 @@ const JDITOffer = ({ company, data }) => {
 
         {/* ================= PAYMENT OF SALARY ================= */}
 
-        <Typography sx={{ ...TEXT }}>
+        <Typography sx={{ ...TEXT, mb: 1 }}>
           a) The employee shall be paid his/her salary on the date specified in the
           main details of this agreement. JDIT shall not be responsible for any
           delays in payment of salary of the employee caused by his or her late
@@ -367,7 +369,7 @@ const JDITOffer = ({ company, data }) => {
           him/her.
         </Typography>
 
-        <Typography sx={{ ...TEXT }}>
+        <Typography sx={{ ...TEXT, mb: 1 }}>
           b) It is agreed by the employee, that this present engagement on contract
           shall be co-terminus with Terms of Business/Main Contract between JDIT and
           its Client where being placed in terms of this engagement. In case, same
@@ -379,11 +381,11 @@ const JDITOffer = ({ company, data }) => {
         </Typography>
 
         {/* ================= JOB ROLES ================= */}
-        <Typography sx={{ ...TEXT, fontWeight: "bold" }}>
+        <Typography sx={{ ...TEXT, fontWeight: "bold", mb: 1 }}>
           Job Roles & Responsibilities:
         </Typography>
 
-        <Typography sx={{ ...TEXT }}>
+        <Typography sx={{ ...TEXT, mb: 1 }}>
           You shall be responsible for the performance of the functions expected as{" "}
           <b>{position}</b> and any additional functions and duties that may be
           assigned to you in connection with the business and operations of the
@@ -394,7 +396,7 @@ const JDITOffer = ({ company, data }) => {
         </Typography>
 
         {/* ================= TERMINATION ================= */}
-        <Typography sx={{ ...TEXT, fontWeight: "bold" }}>
+        <Typography sx={{ ...TEXT, fontWeight: "bold", mb: 1 }}>
           Termination of Employment:
         </Typography>
 
