@@ -385,7 +385,7 @@ const DocumentPreview = () => {
         state: {
           employeeData: previewData,       // ✅ was: document (wrong key)
           isEditMode: true,                // ✅ was: isEdit (wrong key)
-          userId: previewData?.employeeId, // ✅ was: missing entirely
+          userId: previewData?.id || previewData?.userId,
           selectedDocs: selectedDocs,      // ✅ was: missing entirely
         },
       });
@@ -403,8 +403,6 @@ const DocumentPreview = () => {
 
   const previewData = state.previewData;
   const selectedDocsRaw = state.selectedDocs;
-
-  console.log("Preview Data", previewData);
 
   const selectedDocs = Array.isArray(selectedDocsRaw)
     ? selectedDocsRaw
@@ -492,7 +490,7 @@ const DocumentPreview = () => {
     ? previewData[0]?.data || {}
     : previewData;
 
-  console.log("REACHED BASE DATA SECTION");
+  // console.log("REACHED BASE DATA SECTION");
   let freshData = { ...baseData };
 
 
@@ -922,14 +920,6 @@ const DocumentPreview = () => {
       );
       const monthlySalary = Math.round(yearlySalary / 12);
 
-      console.log("=== PDF SALARY DEBUG ===");
-      console.log("yearlySalary:", yearlySalary);
-      console.log("freshData.annualCTC:", freshData.annualCTC);
-      console.log("freshData.salary:", freshData.salary);
-      console.log("freshData.currentCTC:", freshData.currentCTC);
-      console.log("freshData.newCTC:", freshData.newCTC);
-      console.log("freshData.monthlyCTC:", freshData.monthlyCTC);
-
       // ✅ Annual docs
       if (
         key === "offer_letter" ||
@@ -1129,8 +1119,8 @@ const DocumentPreview = () => {
   const docLabel =
     DOC_LABELS[previewDocType?.template] || previewDocType?.name || "Document";
 
-  console.log("previewData:", previewData);
-  console.log("freshData:", freshData);
+  // console.log("previewData:", previewData);
+  // console.log("freshData:", freshData);
 
   return (
     <div className="dp-root">

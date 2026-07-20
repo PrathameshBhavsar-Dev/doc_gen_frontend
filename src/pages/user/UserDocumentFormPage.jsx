@@ -180,7 +180,7 @@ const UserDocumentFormPage = () => {
         employeeData.currentAddress ||
         employeeData.Address || "",
 
-      address: employeeData.address || "",
+      address: employeeData.permanentAddress || employeeData.address || "",
       offerDate: employeeData.offerDate || "",
 
       joiningDate:
@@ -649,9 +649,7 @@ const UserDocumentFormPage = () => {
         documentData: mappedDocumentData,
       };
 
-      console.log("userId =", userId);
-      console.log("isEditMode =", isEditMode);
-      console.log("employeeData =", employeeData);
+      console.log("updateProfileService userId =", userId);
 
       const response = isEditMode
         ? await updateProfileService(userId, updatePayload) // ✅ use updatePayload
@@ -840,6 +838,9 @@ const UserDocumentFormPage = () => {
 
     const enrichedFormData = { ...formData };
 
+    enrichedFormData.id = userId;       // the real DB id resolved at top of component
+    enrichedFormData.userId = userId;
+
     // ✅ add gender and mode to enriched data
     enrichedFormData.gender = (() => {
       const t = (formData.mrms || "")?.toLowerCase()?.replace(".", "");
@@ -952,6 +953,10 @@ const UserDocumentFormPage = () => {
 
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
+
+    console.log("SAVE RESPONSE");
+    console.log(saveResponse);
+    console.log(saveResponse.data);
 
     if (!saveResponse.success) {
       return;
