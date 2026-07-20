@@ -232,7 +232,7 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
       formData.currentAddress || null,
 
     permanentAddress:
-      formData.permanentAddress || null,
+      formData.address || null,
 
     // JOB INFO
     joiningDesignation:

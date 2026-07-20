@@ -51,7 +51,7 @@ const DevconsInternshipOffer = ({ company, data }) => {
         {/* SUBJECT */}
         <Typography sx={{ mb: 3 }}>
           <strong>Subject :</strong> Letter of intent for the Internship of position
-          as a <strong>{data.designation}</strong>
+          as a <strong>{data.joiningDesignation}</strong>
         </Typography>
 
         {/* GREETING */}
@@ -62,7 +62,7 @@ const DevconsInternshipOffer = ({ company, data }) => {
         {/* BODY */}
         <Typography sx={{ mb: 2, textAlign: "justify" }}>
           We are pleased to offer you the internship on position as a{" "}
-          <strong>{data.designation}</strong> with{" "}
+          <strong>{data.joiningDesignation}</strong> with{" "}
           <strong>Devcons Software Solutions Pvt. Ltd.</strong> with effective date{" "}
           <strong>{formatDate(data.startDate)}</strong> considering your
           performance and support towards the organization.

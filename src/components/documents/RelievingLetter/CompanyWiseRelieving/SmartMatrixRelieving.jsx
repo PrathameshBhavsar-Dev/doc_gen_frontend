@@ -11,6 +11,9 @@ const SmartMatrixRelieving = ({ company, data }) => {
     });
   };
 
+  const employeeName = data?.employeeName ?? "Employee";
+  const firstName = employeeName.trim().split(/\s+/)[0];
+
   const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
 
   return (
@@ -100,7 +103,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         </div>
 
         {/* ================= SALUTATION ================= */}
-        <p>Dear {data.employeeName.split(" ")[0]},</p>
+        <p>Dear {firstName},</p>
         <br />
 
         {/* ================= BODY ================= */}
@@ -128,7 +131,7 @@ const SmartMatrixRelieving = ({ company, data }) => {
         <br />
 
         <p style={{ textAlign: "justify" }}>
-          {data.employeeName.split(" ")[0]} has completed the required handover,
+          {firstName} has completed the required handover,
           cleared company property and obligation and relieved from duties
           effective{" "}
           <strong>

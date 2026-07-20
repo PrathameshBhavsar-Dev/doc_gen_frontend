@@ -19,7 +19,7 @@ import {
   createProfileService,
   updateProfileService,
 } from "../../core/services/v2/userService";
-// import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
+import { buildCreateProfilePayload } from "../../core/adapters/userAdapter";
 import { COMPANY_NAME_MAP } from "../../utils/companyWithEnum";
 
 const basicFields = [
@@ -180,7 +180,7 @@ const UserDocumentFormPage = () => {
         employeeData.currentAddress ||
         employeeData.Address || "",
 
-      address: employeeData.address || "",
+      address: employeeData.permanentAddress || employeeData.address || "",
       offerDate: employeeData.offerDate || "",
 
       joiningDate:
@@ -622,13 +622,38 @@ const UserDocumentFormPage = () => {
     return yearly;
   };
 
+  const updateDocumentMap = {
+    INTERNSHIP_CERTIFICATE: "INTERNSHIP_LETTER",
+    COMPLETION_CERTIFICATE: "COMPLETION_LETTER",
+    FULL_AND_FINAL_LETTER: "FULL_AND_FINAL",
+  };
+
   const saveProfileToBackend = async (payload) => {
     try {
       setIsSaving(true);
 
+      const mappedDocuments = payload.documents.map(
+        (doc) => updateDocumentMap[doc] || doc
+      );
+
+      const mappedDocumentData = {};
+
+      Object.entries(payload.documentData).forEach(([key, value]) => {
+        const mappedKey = updateDocumentMap[key] || key;
+        mappedDocumentData[mappedKey] = value;
+      });
+
+      const updatePayload = {
+        ...payload,
+        documents: mappedDocuments,
+        documentData: mappedDocumentData,
+      };
+
+      console.log("updateProfileService userId =", userId);
+
       const response = isEditMode
-        ? await updateProfileService(userId, payload)
-        : await createProfileService(payload);
+        ? await updateProfileService(userId, updatePayload) // ✅ use updatePayload
+        : await createProfileService(payload);              // ✅ create uses original payload
 
       if (response?.success) {
         return {
@@ -813,6 +838,9 @@ const UserDocumentFormPage = () => {
 
     const enrichedFormData = { ...formData };
 
+    enrichedFormData.id = userId;       // the real DB id resolved at top of component
+    enrichedFormData.userId = userId;
+
     // ✅ add gender and mode to enriched data
     enrichedFormData.gender = (() => {
       const t = (formData.mrms || "")?.toLowerCase()?.replace(".", "");
@@ -926,13 +954,17 @@ const UserDocumentFormPage = () => {
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
 
+    console.log("SAVE RESPONSE");
+    console.log(saveResponse);
+    console.log(saveResponse.data);
+
     if (!saveResponse.success) {
       return;
     }
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
       state: {
-        previewData,
+        previewData: enrichedFormDataRef.current, // ✅ use ref, not state
         selectedDocs: enrichedDocs,
         salarySlipMonths: freshMonthsRef.current, // ✅ ref not state
         previewCompany: selectedCompany,
