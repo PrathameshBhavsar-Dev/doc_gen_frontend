@@ -78,7 +78,7 @@ const title = data?.mrms || "";
         <Box sx={{ position: "relative", zIndex: 1 }}>
           {/* DATE */}
           <Typography sx={{ textAlign: "right", mb: 7 }}>
-            {new Date(data.issueDate).toLocaleDateString("en-US", {
+            {new Date(issueDate).toLocaleDateString("en-US", {
               month: "long",
               day: "2-digit",
               year: "numeric",
@@ -100,7 +100,7 @@ const title = data?.mrms || "";
           </Typography>
 
           {/* GREETING */}
-          <Typography sx={{ mb: 4 }}>
+          <Typography sx={{ mb: 1 }}>
            Dear  {firstName},
 
             </Typography>

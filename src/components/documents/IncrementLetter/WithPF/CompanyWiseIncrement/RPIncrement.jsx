@@ -138,6 +138,8 @@ const totalMonthly = round0(
 );
 
 const totalAnnual = round0(totalMonthly * 12);
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
 
   return (
     <>
@@ -146,7 +148,7 @@ const totalAnnual = round0(totalMonthly * 12);
         <Box sx={{ color: "#000" }}>
 
           <Typography align="right" mb={4}>
-            {formatDate(data.issueDate)}
+            {formatDate(issueDate)}
           </Typography>
 
           <Typography mb={3}>

@@ -115,6 +115,9 @@ const totalMonthly = round0(
   salaryRows.reduce((sum, row) => sum + row[1], 0)
 );
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
+
   return (
 
 
@@ -129,7 +132,7 @@ const totalMonthly = round0(
       ====================================================== */}
         <Box sx={{ position: "relative", zIndex: 1, color: "#000" }}>
           <Typography align="right" mb={4}>
-            {new Date(data.issueDate).toLocaleDateString("en-US", {
+            {new Date(issueDate).toLocaleDateString("en-US", {
               month: "long",
               day: "2-digit",
               year: "numeric",
@@ -147,7 +150,7 @@ const totalMonthly = round0(
           <Typography mb={3}>
             Your performance has been reviewed and your performance banding for
             the year{" "}
-            {getFinancialYear(data.effectiveDate)}{" "}
+            {getFinancialYear(issueDate)}{" "}
             is <strong>"Met Expectation".</strong>
           </Typography>
 
@@ -156,7 +159,7 @@ const totalMonthly = round0(
             In recognition of your performance your compensation has been
             revised to{" "}<strong>{formatCurrency(totalAnnual)}</strong> per annum effective{" "}
             <strong>
-              {new Date(data.effectiveDate).toLocaleDateString("en-US", {
+              {new Date(issueDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",
                 year: "numeric",

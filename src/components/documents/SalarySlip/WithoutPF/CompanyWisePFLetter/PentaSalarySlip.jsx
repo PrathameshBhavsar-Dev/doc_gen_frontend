@@ -119,7 +119,7 @@ const PentaSalarySlip = ({ company, data = {} }) => {
         </Box>
 
         {/* TABLE */}
-        <Box sx={{ border: "1px solid #000", borderTop: "none" }}>
+        <Box sx={{ borderTop: "none" }}>
 
           {/* EMP */}
           <Box sx={row}>

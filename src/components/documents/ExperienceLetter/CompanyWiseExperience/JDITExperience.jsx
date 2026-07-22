@@ -51,7 +51,7 @@ const JDITExperience = ({ company, data }) => {
 
       {/* ================= REFERENCE ================= */}
       <Typography sx={{ mb: 4 }}>
-        <b>Ref:JDIT/PUN/RMG01/Exp-Letter/JDIT {employeeId}</b>
+        <b>Ref:JDIT/PUN/RMG01/Exp-Letter/{employeeId}</b>
       </Typography>
 
       {/* ================= TITLE ================= */}

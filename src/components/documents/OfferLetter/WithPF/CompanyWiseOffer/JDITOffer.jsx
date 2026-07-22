@@ -176,7 +176,7 @@ const JDITOffer = ({ company, data }) => {
         <Box sx={{ mt:4,  mb: 2 }}>
 
           <Typography sx={{ ...TEXT, mb: 1.5 }}>
-            ➢ Offer ID / Employee ID: <b>{employeeId}</b>
+            {/* ➢ Offer ID / Employee ID: <b>{employeeId}</b> */}
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 1.5 }}>

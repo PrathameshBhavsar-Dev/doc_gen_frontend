@@ -40,7 +40,7 @@ const NeweageRelieving = ({ company, data }) => {
     : "";
 
   const COMPANY_NAME = (company.name || "").toUpperCase();
- const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+  const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
   return (
     <A4Layout
       headerSrc={company.headerImage}
@@ -88,9 +88,8 @@ const NeweageRelieving = ({ company, data }) => {
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 2 }}>
-        Your tenure with <b>{COMPANY_NAME}</b> ends on{" "}
-        <b>{formatDate(relievingDate)}</b>. Your last working day will be{" "}
-        <b>{formatDate(lastWorkingDay)}</b>.
+        Your tenure with <b>{COMPANY_NAME}</b> will conclude on{" "}
+        <b>{formatDate(relievingDate)}</b>, which will be your last working day with the company.
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 6 }}>

@@ -32,8 +32,7 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "employeeId", label: "Employee ID", type: "text", required: true },
-
+  { name: "employeeId", label: "Employee ID", type: "text", required: false, readOnly: true },
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
@@ -681,10 +680,12 @@ const UserDocumentFormPage = () => {
   const handleSave = async () => {
     let newErrors = {};
 
-    basicFields.forEach((field) => {
-      const error = validateField(field.name, formData[field.name]);
-      if (error) newErrors[field.name] = error;
-    });
+    basicFields
+      .filter((field) => field.name !== "employeeId")
+      .forEach((field) => {
+        const error = validateField(field.name, formData[field.name]);
+        if (error) newErrors[field.name] = error;
+      });
 
     const docsToCheck = selectedDocs.find((d) => d.id === ALL_DOC_ID)
       ? filteredDocuments
@@ -954,12 +955,20 @@ const UserDocumentFormPage = () => {
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
 
-    console.log("SAVE RESPONSE");
-    console.log(saveResponse);
-    console.log(saveResponse.data);
-
     if (!saveResponse.success) {
       return;
+    }
+
+    const generatedEmployeeId = saveResponse.data?.employeeId;
+
+    if (generatedEmployeeId) {
+      // update formData so the field displays it if the user stays on this page
+      setFormData((prev) => ({ ...prev, employeeId: generatedEmployeeId }));
+
+      // update the already-built enrichedFormData/ref so DocumentPreview shows the right ID
+      enrichedFormData.employeeId = generatedEmployeeId;
+      enrichedFormDataRef.current = enrichedFormData;
+      setPreviewData(enrichedFormData);
     }
 
     navigate(ROUTES.DOCUMENT_PREVIEW, {
@@ -1037,6 +1046,20 @@ const UserDocumentFormPage = () => {
       return null;
     }
 
+    if (field.readOnly) {
+      return (
+        <input
+          name={field.name}
+          type="text"
+          className={`${baseClass} bg-[#F1F5F9] text-[#64748B] cursor-not-allowed`}
+          value={value ?? ""}
+          placeholder="Auto-generated"
+          readOnly
+          disabled
+        />
+      );
+    }
+
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
       if (docKey) {
@@ -1051,13 +1074,6 @@ const UserDocumentFormPage = () => {
         handleChange(field.name, val);
       }
     };
-
-    // console.log(
-    //   "FIELD",
-    //   docKey,
-    //   field.name,
-    //   formData?.[docKey]
-    // );
 
     if (field.type === "select") {
       return (

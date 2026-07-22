@@ -45,13 +45,14 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
     doj = "-",
     dob = "-",
     pan = "-",
-    mode = "Bank Transfer",
     workdays = "-",
     month = "",
     totalSalary = 0,
     otherDeduction = 2000,
   } = data;
   const designation = data.currentDesignation ?? data.position ?? "";
+  const bankMode = data.mode || "Bank Transfer";
+
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
@@ -109,27 +110,18 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
   const totalDeduction = round2(pt + Number(otherDeduction || 0));
   const netPay = round2(totalEarning - totalDeduction);
 
-
-
   return (
     <A4Page
       headerSrc={company.header}
       footerSrc={company.footer}
-
-
     >
-
-
-
-
-
       {/* CONTENT */}
       <TableContainer
         component={Paper}
         sx={{
           border: "1.5px solid black",
           borderRadius: 0,
-          mt: "5mm",
+          mt: "-10mm",
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid black",
@@ -190,8 +182,12 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ fontWeight: 600 }}>Mode</TableCell>
-              <TableCell>{mode}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
+              <TableCell>
+                Bank Name - {bankMode}
+                <br></br>
+                Bank Account No - {data.accountNo}
+              </TableCell>
               <TableCell>Working Days</TableCell>
               <TableCell>{workdays}</TableCell>
             </TableRow>
