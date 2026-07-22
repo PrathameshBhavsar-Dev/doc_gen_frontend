@@ -55,7 +55,7 @@ const JDITRelieving = ({ company, data }) => {
 
       {/* ================= REFERENCE ================= */}
       <Typography sx={{ mb: 4 }}>
-        <b>Ref:JDIT/PUN/RMG01/Relieving-Letter/JDIT{employeeId}</b>
+        <b>Ref:JDIT/PUN/RMG01/Relieving-Letter/{employeeId}</b>
       </Typography>
 
       {/* ================= BODY ================= */}

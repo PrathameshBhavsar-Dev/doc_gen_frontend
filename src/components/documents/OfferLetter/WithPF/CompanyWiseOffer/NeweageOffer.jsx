@@ -126,7 +126,7 @@ const NeweageOffer = ({ company, data }) => {
           >
             Offer Letter
           </Typography>
-          <Typography sx={{ ...TEXT, mb: 1 }}>
+          <Typography sx={{ ...TEXT, mb: 1, textAlign: "right" }}>
             {formatDate(issueDate)}
           </Typography>
 

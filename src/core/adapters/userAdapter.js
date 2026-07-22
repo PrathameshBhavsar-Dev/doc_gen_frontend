@@ -25,14 +25,14 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
   };
 
   const companyMap = {
-    "SmartMatrix Digital Services Pvt. Ltd.": "SMT",
-    "Devcons Software Solutions Pvt. Ltd.": "DCS",
-    "Penta Software Consultancy Services (I) Pvt Ltd": "PSS",
+    "SmartMatrix Digital Services Pvt. Ltd.": "SMDS",
+    "Devcons Software Solutions Pvt. Ltd.": "DSS",
+    "Penta Software Consultancy Services (I) Pvt Ltd": "PSCS",
     "Cubeage Technologies Services Pvt. Ltd.": "CTS",
     "Quick Management Services": "QMS",
-    "Neweage Cloud Solution Pvt. Ltd.": "NCS",
-    "RP Business Solutions LLP": "RBS",
-    "JDIT Software Solutions Pvt. Ltd.": "JDT",
+    "Neweage Cloud Solution Pvt. Ltd.": "NCSS",
+    "RP Business Solutions LLP": "RPBS",
+    "JDIT Software Solutions Pvt. Ltd.": "JDIT",
     "NIMBJA SECURITY SOLUTIONS Pvt. Ltd.": "NSS",
     "Smart Software Services (I) Pvt. Ltd.": "SSS",
   };
@@ -280,7 +280,7 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
   };
 
   console.log(
-  "FINAL PAYLOAD",
-  JSON.stringify(payload, null, 2)
-);
+    "FINAL PAYLOAD",
+    JSON.stringify(payload, null, 2)
+  );
 };

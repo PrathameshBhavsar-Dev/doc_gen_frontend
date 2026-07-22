@@ -98,8 +98,6 @@ const totalAnnual = round0(
       // watermarkSrc={company.watermark}
       >
 
-
-
         <Box>
           <Typography align="right" mb={3}>
             {formatDate(data.issueDate)}
@@ -110,8 +108,8 @@ const totalAnnual = round0(
           </Typography>
 
           <Typography mb={3}>
-            <strong>Subject :</strong> Letter of intent for the Internship of position
-            as <strong>{data.designation}</strong>
+            <strong>Subject :</strong> Letter of Intent for the Internship of Position
+            as {data.designation}.
           </Typography>
 
           <Typography mb={2}>Dear {firstName},</Typography>
@@ -140,7 +138,7 @@ const totalAnnual = round0(
           </Typography>
 
           <Typography mb={2} textAlign="justify">
-            We welcome you to <strong>Devcons Software Solutions Pvt. Ltd.</strong>
+            We welcome you to <strong>Devcons Software Solutions Pvt. Ltd. </strong>
             family and hope it would be the beginning of a long and mutually
             beneficial association.
           </Typography>
@@ -218,7 +216,7 @@ const totalAnnual = round0(
               border: "1px solid #000",
               "& th, & td": {
                 border: "1px solid #000",
-                padding: "4px 6px",
+                padding: "0px 12px 12px 12px",
                 fontSize: "16px",
               },
             }}
