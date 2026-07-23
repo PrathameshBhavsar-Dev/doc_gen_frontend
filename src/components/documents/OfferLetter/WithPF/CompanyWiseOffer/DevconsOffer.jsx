@@ -111,7 +111,7 @@ const DevconsOffer = ({ company, data }) => {
 
             {/* SUBJECT */}
             <Typography sx={{ mb: 4 }}>
-              <b>Subject</b> : Letter of intent for the position of {position}
+              <b>Subject</b> : Letter of Intent for the Position of {position}
             </Typography>
 
 

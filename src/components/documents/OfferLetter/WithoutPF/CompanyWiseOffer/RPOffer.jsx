@@ -209,7 +209,7 @@ const RPOffer = ({ company, data }) => {
             >
               <strong>Subject</strong> :{" "}
               <span style={{ textDecoration: "underline" }}>
-                Letter of intent for the position of {position}
+                Letter of Intent for the Position of {position}
               </span>
             </Typography>
 

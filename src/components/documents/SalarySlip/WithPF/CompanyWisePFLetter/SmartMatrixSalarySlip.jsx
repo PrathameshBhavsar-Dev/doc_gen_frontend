@@ -181,7 +181,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
           "& .MuiTableCell-root": {
             border: "1px solid black",
             fontSize: "11pt",
-            padding: "0px 12px 12px 12px", 
+            padding: "0px 12px 10px 12px", 
             verticalAlign: "middle",
           },
         }}

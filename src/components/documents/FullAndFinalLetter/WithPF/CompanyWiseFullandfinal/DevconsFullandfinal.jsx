@@ -16,7 +16,7 @@ const cell = {
   border: "1px solid #000",
   fontSize: "13px",      // smaller text
  // padding: "0px 12px 12px 12px",
- padding: "3px 5px",    // less spacing
+ padding: "0px 12px 6px 12px",    // less spacing
   // lineHeight: 1.2,
 };
 
@@ -100,7 +100,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
 
-      <Box sx={{ width: "95%", my: 5 }}>
+      <Box sx={{ width: "95%", my: 3 }}>
         <Table sx={{ borderCollapse: "collapse" }}>
           <TableBody>
 

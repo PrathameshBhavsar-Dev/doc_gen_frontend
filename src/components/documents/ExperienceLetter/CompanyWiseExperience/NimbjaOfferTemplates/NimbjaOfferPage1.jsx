@@ -105,7 +105,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
 
         {/* SUBJECT */}
         <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-          Subject : Letter of intent for the position of {data.joiningDesignation  ?? data.position}
+          Subject : Letter of Intent for the Position of {data.joiningDesignation  ?? data.position}
         </Typography>
 
         <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
@@ -137,7 +137,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
             component="span"
             sx={{ fontWeight: 600, fontFamily: "Bahnschrift" }}
           >
-            Rs. {formatIndianCurrency(data.salary || data.ctc)}/-
+            Rs. {formatIndianCurrency(data.ctc || data.joiningCTC)}/-
           </Typography>{" "}
           as per Annexure A. This offer is made on the basis of your having
           furnished to the Company information and documents in support of your

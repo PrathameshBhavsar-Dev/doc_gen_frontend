@@ -144,7 +144,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           <Typography sx={{ mt: "12px" }}>
             <Box component="span" sx={labelStyle}>Subject</Box> :
             <Box component="span" sx={{ textDecoration: "underline", ml: 1 }}>
-              Letter of intent for the position of {position}.
+              Letter of Intent for the Position of {position}.
             </Box>
           </Typography>
 

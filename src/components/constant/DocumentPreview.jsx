@@ -763,7 +763,7 @@ const DocumentPreview = () => {
     return value;
   };
 
-  freshData.offerType = normalizePfType(freshData.offerType);
+  freshData.offerType = normalizePfType(freshData.offerType || freshData.pfType);
 
   freshData.incrementType = normalizePfType(
     freshData.incrementType || freshData.offerType,

@@ -83,7 +83,7 @@ const PentaSalarySlip = ({ company, data = {} }) => {
 
   const otherDeduction = Number(data.otherDeduction) || 2000;
 
-  const totalDeduction = round2(pf + pt + otherDeduction);
+  const totalDeduction = round2( pt + otherDeduction);
 
   const netPay = round2(totalEarning - totalDeduction);
 
@@ -155,9 +155,9 @@ const PentaSalarySlip = ({ company, data = {} }) => {
           </Box>
 
           {[
-            ["BASIC", basic, "PF", pf],
-            ["HRA", hra, "PT", pt],
-            ["DA", da, "Other Deduction", otherDeduction],
+            ["BASIC", basic, "PT", pt],
+            ["HRA", hra, "Other Deduction", otherDeduction],
+            ["DA", da],
             ["SPECIAL", special, "", ""],
             ["FOOD", food, "", ""],
           ].map((r, i) => (

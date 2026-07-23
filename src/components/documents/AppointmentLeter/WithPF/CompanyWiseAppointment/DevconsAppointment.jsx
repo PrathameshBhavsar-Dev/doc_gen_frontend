@@ -105,7 +105,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
           </Typography>
 
           <Typography fontSize={15} mt={2}>
-            <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/DSS
+            <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/
             {String(data.employeeId).padStart(4, "0")}
           </Typography>
 
