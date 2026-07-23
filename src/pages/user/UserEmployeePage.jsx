@@ -16,7 +16,10 @@ const ProfileListPage = () => {
   const [pageSize] = useState(8);
 
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const navigate = useNavigate();
+
   const GRID_LAYOUT =
     "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
 
@@ -238,7 +241,7 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-{profile.company}
+                  {profile.company?.trim().split(/\s+/).slice(0, 3).join(" ") || "N/A"}
                 </div>
               </div>
 
@@ -318,10 +321,10 @@ transition-all duration-300
                 {/* VIEW */}
                 <div className="relative group">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log("View clicked");
-                    }}
+                    key={profile.id}
+                    onClick={() =>
+                      navigate(ROUTES.USER_EMPLOYEE_DOCUMENTS, { state: profile })
+                    }
                     className="p-2 rounded-md hover:bg-[#EEF2FF] transition"
                   >
                     <FiEye className="text-[16px] text-[#6366F1]" />
@@ -346,7 +349,13 @@ transition-all duration-300
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("View clicked");
+                      navigate(ROUTES.USER_FORM, {
+                        state: {
+                          employeeData: profiles.find((p) => p.id === profile.id),
+                          isEditMode: true,
+                          userId: profiles.id,
+                        },
+                      });
                     }}
                     className="p-2 rounded-md hover:bg-[#EEF2FF] transition"
                   >

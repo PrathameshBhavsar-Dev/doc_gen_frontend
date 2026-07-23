@@ -1046,19 +1046,19 @@ const UserDocumentFormPage = () => {
       return null;
     }
 
-    if (field.readOnly) {
-      return (
-        <input
-          name={field.name}
-          type="text"
-          className={`${baseClass} bg-[#F1F5F9] text-[#64748B] cursor-not-allowed`}
-          value={value ?? ""}
-          placeholder="Auto-generated"
-          readOnly
-          disabled
-        />
-      );
-    }
+    // if (field.readOnly) {
+    //   return (
+    //     <input
+    //       name={field.name}
+    //       type="text"
+    //       className={`${baseClass} bg-[#F1F5F9] text-[#64748B] cursor-not-allowed`}
+    //       value={value ?? ""}
+    //       placeholder="Auto-generated"
+    //       readOnly
+    //       disabled
+    //     />
+    //   );
+    // }
 
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {

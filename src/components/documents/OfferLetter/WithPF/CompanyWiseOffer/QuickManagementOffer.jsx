@@ -100,7 +100,7 @@ const QuickManagementOffer = ({ company, data }) => {
             <span style={styles.label}>Subject</span>
             <span style={styles.colon}>:</span>
             <span style={styles.value}>
-              Letter of Intent for the position of {position}
+              Letter of Intent for the Position of {position}
             </span>
           </div>
 

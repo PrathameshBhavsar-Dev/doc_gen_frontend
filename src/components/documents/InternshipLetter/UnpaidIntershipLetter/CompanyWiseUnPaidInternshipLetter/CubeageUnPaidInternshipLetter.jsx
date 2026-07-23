@@ -75,7 +75,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ fontFamily: "Book Antiqua", mb: 2 }}>
-            <strong>Subject :</strong> Letter of intent for the Internship of{" "}
+            <strong>Subject :</strong> Letter of Intent for the Internship of{" "}
             {data.designation || data.field}
             <br />
             Dear {firstName},

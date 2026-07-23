@@ -7,88 +7,57 @@ const PentaIncrement = ({ company, data }) => {
   /* ================= SALARY LOGIC (DEVCONS – CUSTOM ANNEXURE) ================= */
 
   // Helper to keep 2 decimals everywhere
-  // const round0 = (num) => Math.round(num);
+  const round = (num) => Math.round(num);
 
-  // // Source of truth
-  // const monthlyCTC = round0(Number(data.newCTC || 0));
-  // // ================= PERCENTAGE BREAKUP =================
-  // const basicMonthly = round0(monthlyCTC * 0.40);
-  // const hraMonthly = round0(monthlyCTC * 0.18);
-  // const daMonthly = round0(monthlyCTC * 0.12);
-  // const specialMonthly = round0(monthlyCTC * 0.16);
-  // const foodMonthly = round0(monthlyCTC * 0.06);
-  // const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+  // Source of truth
+  const annualCTC = round(Number(data.newCTC || 0));
 
-  // // ================= ANNUAL VALUES =================
-  // const basicAnnual = round0(basicMonthly * 12);
-  // const hraAnnual = round0(hraMonthly * 12);
-  // const daAnnual = round0(daMonthly * 12);
-  // const specialAnnual = round0(specialMonthly * 12);
-  // const foodAnnual = round0(foodMonthly * 12);
-  // const miscAnnual = round0(miscMonthly * 12);
+  // Fixed annual components (percent based)
+  const basicAnnual = round(annualCTC * 0.40);
+  const hraAnnual = round(annualCTC * 0.18);
+  const daAnnual = round(annualCTC * 0.12);
+  const specialAnnual = round(annualCTC * 0.16);
+  const foodAnnual = round(annualCTC * 0.06);
 
-  // // ================= SALARY TABLE STRUCTURE =================
-  // const salaryRows = [
-  //   ["Basic", basicMonthly, basicAnnual],
-  //   ["House Rent Allowance", hraMonthly, hraAnnual],
-  //   ["Dearness Allowance", daMonthly, daAnnual],
-  //   ["Special Allowance", specialMonthly, specialAnnual],
-  //   ["Food Allowance", foodMonthly, foodAnnual],
-  //   ["Misc. Allowance", miscMonthly, miscAnnual],
-  // ];
-
-  // // ================= TOTALS =================
-  // const totalMonthly = round0(
-  //   salaryRows.reduce((sum, row) => sum + row[1], 0)
-  // );
-
-  // const totalAnnual = round0(
-  //   salaryRows.reduce((sum, row) => sum + row[2], 0)
-  // );
-
-  /* ================= SALARY LOGIC ================= */
-
-  // data.newCTC is Annual CTC
-  const annualCTC = Math.round(Number(data.newCTC || 0));
-
-  // Calculate monthly CTC from annual CTC
-  const monthlyCTC = Math.round(annualCTC / 12);
-
-  // ================= PERCENTAGE BREAKUP =================
-
-  const basicMonthly = Math.round(monthlyCTC * 0.40);
-  const hraMonthly = Math.round(monthlyCTC * 0.18);
-  const daMonthly = Math.round(monthlyCTC * 0.12);
-  const specialMonthly = Math.round(monthlyCTC * 0.16);
-  const foodMonthly = Math.round(monthlyCTC * 0.06);
-  const miscMonthly = Math.round(monthlyCTC * 0.08);
-
-  // ================= ANNUAL VALUES =================
-
-  const basicAnnual = basicMonthly * 12;
-  const hraAnnual = hraMonthly * 12;
-  const daAnnual = daMonthly * 12;
-  const specialAnnual = specialMonthly * 12;
-  const foodAnnual = foodMonthly * 12;
-  const miscAnnual = miscMonthly * 12;
-
-  // ================= TOTALS =================
-
-  const totalMonthly =
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    specialMonthly +
-    foodMonthly +
-    miscMonthly;
-
-  const totalAnnual =
+  // Sum of fixed components
+  const usedAnnual =
     basicAnnual +
     hraAnnual +
     daAnnual +
     specialAnnual +
-    foodAnnual +
-    miscAnnual;
+    foodAnnual;
+
+  // ✅ Adjustment component (prevents ₹1 mismatch)
+  const miscAnnual = round(annualCTC - usedAnnual);
+
+  // Monthly breakup (derived ONLY from final annual values)
+  const basicMonthly = round(basicAnnual / 12);
+  const hraMonthly = round(hraAnnual / 12);
+  const daMonthly = round(daAnnual / 12);
+  const specialMonthly = round(specialAnnual / 12);
+  const foodMonthly = round(foodAnnual / 12);
+  const miscMonthly = round(miscAnnual / 12);
+
+  // Table rows (UI remains SAME)
+  const salaryComponents = [
+    { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
+    { name: "House Rent Allowance", monthly: hraMonthly, annual: hraAnnual },
+    { name: "Dearness Allowance", monthly: daMonthly, annual: daAnnual },
+    { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
+    { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
+    { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
+  ];
+
+  // Totals (guaranteed to match CTC)
+  const totalMonthly = round(
+    salaryComponents.reduce((sum, row) => sum + row.monthly, 0)
+  );
+
+  const totalAnnual = round(
+    salaryComponents.reduce((sum, row) => sum + row.annual, 0)
+  );
+
+
 
   return (
     <>
@@ -126,36 +95,36 @@ const PentaIncrement = ({ company, data }) => {
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
             In recognition of your previous years of service with{" "}
-            , we are pleased to offer you a salary
+          , we are pleased to offer you a salary
             increment effective {" "}
+           
 
-
-
+                
             . Your salary will increase to{" "}
-            <strong>{formatCurrency(data.currentCTC)}</strong> per annum. Effective from <strong> {new Date(data.effectiveDate).toLocaleDateString("en-US", {
-              month: "long",
-              day: "2-digit",
-              year: "numeric",
-            })}
-            </strong>
+            <strong>{formatCurrency(data.newCTC)}</strong> per annum. Effective from <strong> {new Date(data.effectiveDate).toLocaleDateString("en-US", {
+                month: "long",
+                day: "2-digit",
+                year: "numeric",
+              })}
+          </strong>
           </Typography>
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
-            If you have any questions or would like to discuss this further, please do not hesitate to reach out to us. We appreciate your significant contributions
+           If you have any questions or would like to discuss this further, please do not hesitate to reach out to us. We appreciate your significant contributions
             to the company and anticipate your continued success in your role.
           </Typography>
 
-
+          
 
           <Typography sx={{ mb: 1 }}>Best Regards,</Typography>
-          <Typography sx={{ mb: 2 }}> <strong>Jaya Bharati</strong></Typography>
+           <Typography  sx={{ mb: 2 }}> <strong>Jaya Bharati</strong></Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.jaya_sign && (
               <img
                 src={company.jaya_sign}
                 alt="Signature"
-                style={{ height: 30 }}
+                style={{ height: 60 }}
               />
             )}
 
@@ -222,7 +191,7 @@ const PentaIncrement = ({ company, data }) => {
               borderCollapse: "collapse",
               "& th, & td": {
                 border: "1px solid #000",
-                padding: "0px 12px 12px 12px",
+                padding: "4px 6px",
                 fontSize: "15px",
                 fontFamily: `"Times New Roman", Times, serif`,
                 lineHeight: 1.2,
@@ -231,80 +200,64 @@ const PentaIncrement = ({ company, data }) => {
           >
             <TableBody>
               <TableRow sx={{ backgroundColor: "#358dd0" }}>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  Yearly Component
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: 700 }} align="right">
-                  Amount (Rs.)
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: 700 }}>
-                  Monthly Component
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: 700 }} align="right">
-                  Amount (Rs.)
-                </TableCell>
+                 <TableCell sx={{ fontWeight: 700 }}>Yearly Component</TableCell>
+                <TableCell sx={{ fontWeight: 700 }} align="right">Amount (Rs.)</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Monthly Component</TableCell>
+                <TableCell sx={{ fontWeight: 700 }} align="right">Amount (Rs.)</TableCell>
+               
               </TableRow>
 
               <TableRow>
-                <TableCell>Basic</TableCell>
-                <TableCell align="right">{basicAnnual}</TableCell>
                 <TableCell>Basic</TableCell>
                 <TableCell align="right">{basicMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{basicAnnual}</TableCell>
               </TableRow>
 
+
               <TableRow>
-                <TableCell>House Rent Allowance</TableCell>
-                <TableCell align="right">{hraAnnual}</TableCell>
                 <TableCell>House Rent Allowance</TableCell>
                 <TableCell align="right">{hraMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{hraAnnual}</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Dearness Allowance</TableCell>
-                <TableCell align="right">{daAnnual}</TableCell>
                 <TableCell>Dearness Allowance</TableCell>
                 <TableCell align="right">{daMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{daAnnual}</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Special Allowance</TableCell>
-                <TableCell align="right">{specialAnnual}</TableCell>
                 <TableCell>Special Allowance</TableCell>
                 <TableCell align="right">{specialMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{specialAnnual}</TableCell>
               </TableRow>
 
               <TableRow>
-                <TableCell>Food Allowance</TableCell>
-                <TableCell align="right">{foodAnnual}</TableCell>
                 <TableCell>Food Allowance</TableCell>
                 <TableCell align="right">{foodMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{foodAnnual}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Misc. Allowance</TableCell>
-                <TableCell align="right">{miscAnnual}</TableCell>
-                <TableCell>Misc. Allowance</TableCell>
                 <TableCell align="right">{miscMonthly}</TableCell>
+                <TableCell></TableCell>
+                <TableCell align="right">{miscAnnual}</TableCell>
               </TableRow>
 
               <TableRow sx={{ backgroundColor: "#358dd0" }}>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  Annual CTC
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: 700 }} align="right">
-                  {totalAnnual}
-                </TableCell>
-
-                <TableCell sx={{ fontWeight: 700 }}>
-                  Monthly Gross
-                </TableCell>
-
+                <TableCell sx={{ fontWeight: 700 }}>Monthly Gross</TableCell>
                 <TableCell sx={{ fontWeight: 700 }} align="right">
                   {totalMonthly}
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Annual CTC</TableCell>
+                <TableCell sx={{ fontWeight: 700 }} align="right">
+                  {totalAnnual}
                 </TableCell>
               </TableRow>
 

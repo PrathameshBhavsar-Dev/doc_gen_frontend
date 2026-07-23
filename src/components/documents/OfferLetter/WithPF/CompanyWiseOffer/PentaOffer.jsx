@@ -257,7 +257,7 @@ const PentaOffer = ({ company, data }) => {
           <Typography fontWeight="bold">Subject</Typography>
           <Typography fontWeight="bold">:</Typography>
           <Typography>
-            Letter of intent for the position of{" "}
+            Letter of Intent for the Position of{" "}
             <strong>{position}</strong>.
           </Typography>
         </Box>
