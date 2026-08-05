@@ -273,6 +273,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
                 rowSpan={3}
                 sx={{
                   width: "50%",
+                  height: "0px",
                   verticalAlign: "middle",
                   padding: 2,
                 }}
@@ -282,7 +283,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
-                    height: "180px",
+                    height: "0px",
                   }}
                 >
                   {/* Stamp */}
@@ -295,6 +296,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
                           height: 85,
                           width: "auto",
                           maxWidth: "100%",
+                          marginTop: "10px"
                         }}
                       />
                     )}
@@ -310,6 +312,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
                           height: 50,
                           width: "auto",
                           maxWidth: "100%",
+                          margin: "0 auto"
                         }}
                       />
                     )}
