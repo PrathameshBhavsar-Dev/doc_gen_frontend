@@ -69,7 +69,7 @@ const QuickUnPaidInternshipLetter = ({ company, data }) => {
   const {
     mrms = "Ms.",
     employeeName = "",
-    designation = "Trainee",
+    designation = data.joiningDesignation ?? data.designation,
     startDate,
     endDate,
   } = data;

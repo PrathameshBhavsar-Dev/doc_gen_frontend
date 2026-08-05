@@ -76,7 +76,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
 
           <Typography sx={{ fontFamily: "Book Antiqua", mb: 2 }}>
             <strong>Subject :</strong> Letter of Intent for the Internship of{" "}
-            {data.designation || data.field}
+            {data.joiningDesignation ?? data.designation}
             <br />
             Dear {firstName},
           </Typography>
@@ -89,9 +89,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
         <Typography paragraph sx={{ fontFamily: "Book Antiqua" }}>
           On behalf of <strong>{company.name}</strong> family, We are thrilled
           to extend our warmest congratulations as we offer you the exciting
-          opportunity to join our esteemed team as our
-          <strong> {data.designation || data.field} </strong>
-          from <strong>{formatDate(data.startDate)}</strong> to <strong>{formatDate(data.endDate)}.</strong>{" "}
+          opportunity to join our esteemed team as our <strong>{data.joiningDesignation ?? data.designation}</strong> from <strong>{formatDate(data.startDate)}</strong> to <strong>{formatDate(data.endDate)}.</strong>{" "}
         </Typography>
 
         <Typography sx={{ fontFamily: "Book Antiqua" }}>
