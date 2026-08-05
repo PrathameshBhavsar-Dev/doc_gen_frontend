@@ -955,6 +955,10 @@ const UserDocumentFormPage = () => {
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
 
+    console.log("SAVE RESPONSE");
+    console.log(saveResponse);
+    console.log(saveResponse.data);
+
     if (!saveResponse.success) {
       return;
     }

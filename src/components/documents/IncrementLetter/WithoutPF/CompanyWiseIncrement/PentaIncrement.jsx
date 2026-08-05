@@ -95,11 +95,11 @@ const PentaIncrement = ({ company, data }) => {
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
             In recognition of your previous years of service with{" "}
-          , we are pleased to offer you a salary
+            , we are pleased to offer you a salary
             increment effective {" "}
-           
 
-                
+
+
             . Your salary will increase to{" "}
             <strong>{formatCurrency(data.newCTC)}</strong> per annum. Effective from <strong> {new Date(data.effectiveDate).toLocaleDateString("en-US", {
                 month: "long",
@@ -110,14 +110,14 @@ const PentaIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ mb: 4, textAlign: "justify" }}>
-           If you have any questions or would like to discuss this further, please do not hesitate to reach out to us. We appreciate your significant contributions
+            If you have any questions or would like to discuss this further, please do not hesitate to reach out to us. We appreciate your significant contributions
             to the company and anticipate your continued success in your role.
           </Typography>
 
-          
+
 
           <Typography sx={{ mb: 1 }}>Best Regards,</Typography>
-           <Typography  sx={{ mb: 2 }}> <strong>Jaya Bharati</strong></Typography>
+          <Typography sx={{ mb: 2 }}> <strong>Jaya Bharati</strong></Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2 }}>
             {company?.jaya_sign && (
@@ -200,64 +200,80 @@ const PentaIncrement = ({ company, data }) => {
           >
             <TableBody>
               <TableRow sx={{ backgroundColor: "#358dd0" }}>
-                 <TableCell sx={{ fontWeight: 700 }}>Yearly Component</TableCell>
-                <TableCell sx={{ fontWeight: 700 }} align="right">Amount (Rs.)</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Monthly Component</TableCell>
-                <TableCell sx={{ fontWeight: 700 }} align="right">Amount (Rs.)</TableCell>
-               
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Yearly Component
+                </TableCell>
+
+                <TableCell sx={{ fontWeight: 700 }} align="right">
+                  Amount (Rs.)
+                </TableCell>
+
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Monthly Component
+                </TableCell>
+
+                <TableCell sx={{ fontWeight: 700 }} align="right">
+                  Amount (Rs.)
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Basic</TableCell>
-                <TableCell align="right">{basicMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{basicAnnual}</TableCell>
+                <TableCell>Basic</TableCell>
+                <TableCell align="right">{basicMonthly}</TableCell>
               </TableRow>
-
 
               <TableRow>
                 <TableCell>House Rent Allowance</TableCell>
-                <TableCell align="right">{hraMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{hraAnnual}</TableCell>
+                <TableCell>House Rent Allowance</TableCell>
+                <TableCell align="right">{hraMonthly}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Dearness Allowance</TableCell>
-                <TableCell align="right">{daMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{daAnnual}</TableCell>
+                <TableCell>Dearness Allowance</TableCell>
+                <TableCell align="right">{daMonthly}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Special Allowance</TableCell>
-                <TableCell align="right">{specialMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{specialAnnual}</TableCell>
+                <TableCell>Special Allowance</TableCell>
+                <TableCell align="right">{specialMonthly}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Food Allowance</TableCell>
-                <TableCell align="right">{foodMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{foodAnnual}</TableCell>
+                <TableCell>Food Allowance</TableCell>
+                <TableCell align="right">{foodMonthly}</TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Misc. Allowance</TableCell>
-                <TableCell align="right">{miscMonthly}</TableCell>
-                <TableCell></TableCell>
                 <TableCell align="right">{miscAnnual}</TableCell>
+                <TableCell>Misc. Allowance</TableCell>
+                <TableCell align="right">{miscMonthly}</TableCell>
               </TableRow>
 
               <TableRow sx={{ backgroundColor: "#358dd0" }}>
-                <TableCell sx={{ fontWeight: 700 }}>Monthly Gross</TableCell>
-                <TableCell sx={{ fontWeight: 700 }} align="right">
-                  {totalMonthly}
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Annual CTC
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Annual CTC</TableCell>
+
                 <TableCell sx={{ fontWeight: 700 }} align="right">
                   {totalAnnual}
+                </TableCell>
+
+                <TableCell sx={{ fontWeight: 700 }}>
+                  Monthly Gross
+                </TableCell>
+
+                <TableCell sx={{ fontWeight: 700 }} align="right">
+                  {totalMonthly}
                 </TableCell>
               </TableRow>
 
