@@ -36,7 +36,7 @@ const SmartSoftwareUnPaidInternshipLetter = ({ company, data }) => {
   const {
     mrms = "Ms.",
     employeeName = "",
-    designation = "Internship Trainee",
+    designation = data.joiningDesignation ?? data.designation,
     startDate,
     endDate,
   } = data;

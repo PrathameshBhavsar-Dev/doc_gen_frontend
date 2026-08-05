@@ -267,26 +267,92 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Net Salary */}
-            <TableRow sx={{ height: "80px" }}>
-              <TableCell colSpan={2} rowSpan={3}></TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Net Salary</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(totalEarnings)}</TableCell>
-            </TableRow>
+            <TableRow>
+              <TableCell
+                colSpan={2}
+                rowSpan={3}
+                sx={{
+                  width: "50%",
+                  verticalAlign: "middle",
+                  padding: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    height: "180px",
+                  }}
+                >
+                  {/* Stamp */}
+                  <Box sx={{ textAlign: "center" }}>
+                    {company?.stamp && (
+                      <img
+                        src={company.stamp}
+                        alt="Stamp"
+                        style={{
+                          height: 85,
+                          width: "auto",
+                          maxWidth: "100%",
+                        }}
+                      />
+                    )}
+                  </Box>
 
-            {/* Issued Salary */}
-            <TableRow sx={{ height: "40px" }}>
-              <TableCell sx={{ fontWeight: "bold" }}>Issued Salary</TableCell>
-              <TableCell align="center" sx={{ fontWeight: "bold" }}>{fmt(netPay)}</TableCell>
-            </TableRow>
+                  {/* Signature */}
+                  <Box sx={{ textAlign: "center" }}>
+                    {company?.signature && (
+                      <img
+                        src={company.signature}
+                        alt="Signature"
+                        style={{
+                          height: 50,
+                          width: "auto",
+                          maxWidth: "100%",
+                        }}
+                      />
+                    )}
 
-            {/* Balance Salary */}
-            <TableRow sx={{ height: "50px" }}>
-              <TableCell sx={{ fontWeight: "bold" }}>Balance Salary</TableCell>
-              <TableCell align="center">
-                {parseFloat(data.balanceSalary || 0) === 0 ? "Nil" : fmt(parseFloat(data.balanceSalary || 0))}
+                    <Typography fontWeight="bold">
+                      Signature
+                    </Typography>
+                  </Box>
+                </Box>
+              </TableCell>
+
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Net Salary
+              </TableCell>
+
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                {fmt(totalEarnings)}
               </TableCell>
             </TableRow>
 
+            {/* Issued Salary */}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Issued Salary
+              </TableCell>
+
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                {fmt(netPay)}
+              </TableCell>
+            </TableRow>
+
+            {/* Balance Salary */}
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                Balance Salary
+              </TableCell>
+
+              <TableCell align="center">
+                {parseFloat(data.balanceSalary || 0) === 0
+                  ? "Nil"
+                  : fmt(parseFloat(data.balanceSalary || 0))}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
 

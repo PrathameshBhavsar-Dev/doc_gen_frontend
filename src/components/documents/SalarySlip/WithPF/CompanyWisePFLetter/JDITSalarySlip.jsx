@@ -168,8 +168,8 @@ const JDITSalarySlip = ({ company, data }) => {
               sx={{ ...CELL, textAlign: "center", fontSize: "12px" }}
             >
               <b>
-                401 A, 4rd Floor, Sai Villa Commercial Apartment, Sr. No. 166,
-                Malwadi Road, Opp. Sahyadri Hospital, Hadapsar, Pune - 411028.
+                301 A, 3rd Floor, Sai Villa Commercial Appartment, Sr No 166, Malwadi Road,
+                Opp. to Sahyadri Hospital, Hadapsar, Pune - 411028
               </b>
             </TableCell>
           </TableRow>
