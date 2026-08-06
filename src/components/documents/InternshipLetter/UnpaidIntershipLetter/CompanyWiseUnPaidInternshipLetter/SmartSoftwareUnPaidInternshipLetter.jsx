@@ -90,7 +90,7 @@ const SmartSoftwareUnPaidInternshipLetter = ({ company, data }) => {
 
          <Typography sx={{ fontSize: 15, lineHeight: 2, mb: 2 }}>
         From <strong>{formatDate(startDate)}</strong> –{" "}
-        <strong>{formatDate(endDate)}</strong>.{" "}
+        <strong>{formatDate(endDate)}</strong>{" "}
         {pronoun.subject} was designated as{" "}
         <strong>{designation}</strong>.
       </Typography>
