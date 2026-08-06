@@ -33,49 +33,89 @@ const formatDate = (date) => {
 
 /* ---------------- Page Layout ---------------- */
 
-const PageLayout = ({ children, company }) => (
-  <Box
-    sx={{
-      width: "210mm",
-      minHeight: "297mm",
-      backgroundColor: "white",
-      fontFamily: "'Calibri','Arial',sans-serif",
-      marginBottom: "18px",
-      "@media print": { marginBottom: 0, breakAfter: "page" },
-    }}
-  >
+const PageLayout = ({ children, company }) => {
+  return (
     <Box
       sx={{
+        width: "210mm",
+        height: "297mm",
+        backgroundColor: "#fff",
+        fontFamily: "'Calibri', 'Arial', sans-serif",
         display: "flex",
-        alignItems: "flex-start",
-        gap: 2,
-        px: 4,
-        py: 2,
-        borderBottom: "2px solid #000",
+        flexDirection: "column",
+        overflow: "hidden",
+        marginBottom: "18px",
+
+        "@media print": {
+          marginBottom: 0,
+          pageBreakAfter: "always",
+          breakAfter: "page",
+        },
       }}
     >
-      <Box>
+      {/* Header */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: 2,
+          px: 4,
+          py: 2,
+          borderBottom: "2px solid #000",
+          flexShrink: 0,
+        }}
+      >
         {company.logo && (
-          <img src={company.logo} alt="logo" style={{ height: 70 }} />
+          <Box>
+            <img
+              src={company.logo}
+              alt="logo"
+              style={{
+                height: 70,
+                objectFit: "contain",
+              }}
+            />
+          </Box>
         )}
+
+        <Box>
+          <Typography fontWeight="bold" fontSize="18px">
+            {company.name}
+          </Typography>
+
+          <Typography fontSize="11px">
+            {company.address}
+          </Typography>
+
+          <Typography fontSize="11px">
+            Contact No: {company.phone}
+          </Typography>
+
+          <Typography fontSize="11px">
+            Email: {company.email}
+          </Typography>
+        </Box>
       </Box>
-      <Box>
-        <Typography fontWeight="bold" fontSize="18px">
-          {company.name}
-        </Typography>
-        <Typography fontSize="11px">{company.address}</Typography>
-        <Typography fontSize="11px">
-          Contact No: {company.phone}
-        </Typography>
-        <Typography fontSize="11px">
-          Email: {company.email}
-        </Typography>
+
+      {/* Content */}
+      <Box
+        sx={{
+          flex: 1,
+          px: 7,
+          py: 3,
+          overflow: "hidden",
+
+          "@media print": {
+            pageBreakInside: "avoid",
+            breakInside: "avoid",
+          },
+        }}
+      >
+        {children}
       </Box>
     </Box>
-
-    <Box sx={{ px: 7, py: 3 }}>{children}</Box>
-  </Box>
-);
+  );
+};
 
 const TC = (extra = {}) => ({
   border: "1px solid #000",
@@ -278,13 +318,13 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             at the request of the Company at any time during the course of your employment.
           </Typography>
 
-          <Typography textAlign="justify">
+          {/* <Typography textAlign="justify">
             9.4 Confidential Information means information relating to the business, products,
             affairs and finances of the Company or any of its associated company or subsidiary
             for the time being confidential to it or to them and trade secrets (including without
             limitation, technical data and know-how) relating to the business of the Company or
             of any of its Associated Company/ies or of any of its or their suppliers, clients or customers.
-          </Typography>
+          </Typography> */}
         </Box>
 
       </PageLayout>
@@ -431,19 +471,24 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             width: "100%",
             borderCollapse: "collapse",
             border: "2px solid #000",
+                                      padding: "0px 12px 12px 12px",
+
           }}
         >
           <TableBody>
 
             {/* Header */}
             <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
-              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" ,                          padding: "0px 12px 12px 12px",
+})}>
                 Components
               </TableCell>
-              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 Monthly (₹)
               </TableCell>
-              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 Annual (₹)
               </TableCell>
             </TableRow>
@@ -451,11 +496,14 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             {/* Earnings */}
             {rows.map(([label, value]) => (
               <TableRow key={label}>
-                <TableCell sx={TC()}>{label}</TableCell>
-                <TableCell sx={TC({ textAlign: "center" })}>
+                <TableCell sx={TC({                          padding: "0px 12px 12px 12px",
+})}>{label}</TableCell>
+                <TableCell sx={TC({ textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                   {fmt(value)}
                 </TableCell>
-                <TableCell sx={TC({ textAlign: "center" })}>
+                <TableCell sx={TC({ textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                   {fmt(value * 12)}
                 </TableCell>
               </TableRow>
@@ -463,24 +511,30 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
 
             {/* PF */}
             <TableRow>
-              <TableCell sx={TC()}>PROVIDENT FUND</TableCell>
-              <TableCell sx={TC({ textAlign: "center" })}>
+              <TableCell sx={TC({                          padding: "0px 12px 12px 12px",
+})}>PROVIDENT FUND</TableCell>
+              <TableCell sx={TC({ textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 {fmt(employeePF)}
               </TableCell>
-              <TableCell sx={TC({ textAlign: "center" })}>
+              <TableCell sx={TC({ textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 {fmt(employeePF * 12)}
               </TableCell>
             </TableRow>
 
             {/* Final CTC */}
             <TableRow sx={{ backgroundColor: "#e8e8e8" }}>
-              <TableCell sx={TC({ fontWeight: "bold", fontSize: "15px" })}>
+              <TableCell sx={TC({ fontWeight: "bold", fontSize: "15px",                          padding: "0px 12px 12px 12px",
+ })}>
                 Total CTC
               </TableCell>
-              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 {fmt(totalCTCMonthly)}
               </TableCell>
-              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center" })}>
+              <TableCell sx={TC({ fontWeight: "bold", textAlign: "center",                          padding: "0px 12px 12px 12px",
+ })}>
                 {fmt(totalCTCAnnual)}
               </TableCell>
             </TableRow>

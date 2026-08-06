@@ -98,18 +98,32 @@ const DevconsAppointmentLetter = ({ company, data }) => {
 
       {/* ========================= PAGE 1 ========================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 0 }}>
 
           <Typography align="right" fontSize={15}>
             {formatDate(issueDate)}
           </Typography>
+          
+          <Box sx={{ textAlign: "center", width: "100%" }}>
+            <Typography
+              fontWeight={700}
+              mt={1}
+              sx={{
+                display: "inline-block",
+                borderBottom: "2px solid black",
+                paddingBottom: "4px",
+              }}
+            >
+              Letter of Appointment
+            </Typography>
+          </Box>
 
           <Typography fontSize={15} mt={2}>
             <strong>Ref:</strong> DSS\VER1.1\PUN\PIMSAU\ADM-CTRL/
             {String(data.employeeId).padStart(4, "0")}
           </Typography>
 
-          <Typography fontSize={15} mt={2}>
+          <Typography fontSize={15} mt={0}>
             {data.mrms} {data.employeeName}
             <br />
             <span
@@ -129,20 +143,6 @@ const DevconsAppointmentLetter = ({ company, data }) => {
             Dear {firstName},
           </Typography>
 
-          <Box sx={{ textAlign: "center", width: "100%" }}>
-            <Typography
-              fontWeight={700}
-              mt={1}
-              sx={{
-                display: "inline-block",
-                borderBottom: "2px solid black",
-                paddingBottom: "4px",
-              }}
-            >
-              Letter of Appointment
-            </Typography>
-          </Box>
-
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance of our Letter of Offer dated{" "}
             <b>{formatDate(data.offerDate)}</b>, we are pleased to appoint you in our
@@ -151,7 +151,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
             given below:
           </Typography>
 
-          <Box component="ol" sx={{ pl: 3, mt: 4 }}>
+          <Box component="ol" sx={{ pl: 3, mt: 1 }}>
             <li>
               <Typography fontSize={14}>
                 1. Your Designation will be <b>“{data.joiningDesignation ?? data.position}”</b>.
