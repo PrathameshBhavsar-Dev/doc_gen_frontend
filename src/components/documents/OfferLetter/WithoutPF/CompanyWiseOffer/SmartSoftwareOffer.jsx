@@ -132,18 +132,47 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
               year: "numeric",
             })}
           </Typography>
+          <Typography
+            sx={{
+              mt: "24px",
+              display: "grid",
+              gridTemplateColumns: "145px 15px 1fr",
+            }}
+          >
+            {/* Name */}
+            <Box component="span" sx={labelStyle}>
+              Name
+            </Box>
+            <Box component="span">:</Box>
+            <Box component="span">
+              {displayTitle} {employeeName}
+            </Box>
 
-          <Typography sx={{ mt: "24px" }}>
-            <Box component="span" sx={labelStyle}>Name</Box> : {displayTitle} {employeeName}
-          </Typography>
+            {/* Address */}
+            <Box component="span" sx={{ ...labelStyle, mt: "12px" }}>
+              Address
+            </Box>
+            <Box component="span" sx={{ mt: "12px" }}>
+              :
+            </Box>
+            <Box component="span" sx={{ mt: "12px" }}>
+              {address}
+            </Box>
 
-          <Typography sx={{ mt: "12px" }}>
-            <Box component="span" sx={labelStyle}>Address</Box> : {address}
-          </Typography>
-
-          <Typography sx={{ mt: "12px" }}>
-            <Box component="span" sx={labelStyle}>Subject</Box> :
-            <Box component="span" sx={{ textDecoration: "underline", ml: 1 }}>
+            {/* Subject */}
+            <Box component="span" sx={{ ...labelStyle, mt: "12px" }}>
+              Subject
+            </Box>
+            <Box component="span" sx={{ mt: "12px" }}>
+              :
+            </Box>
+            <Box
+              component="span"
+              sx={{
+                mt: "12px",
+                textDecoration: "underline",
+              }}
+            >
               Letter of Intent for the Position of {position}.
             </Box>
           </Typography>
@@ -196,8 +225,14 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {employeeName}</Typography>
-            </Box>
+              <Typography
+                sx={{
+                  whiteSpace: "nowrap",
+                  fontSize: "16px",
+                }}
+              >
+                Candidate Name : {employeeName}
+              </Typography>            </Box>
           </Box>
         </Box>
       </A4Layout>
@@ -259,8 +294,14 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
 
             <Box sx={{ width: "45%", mt: 8 }}>
               <Typography>Signature : ___________________</Typography>
-              <Typography>Candidate Name : {employeeName}</Typography>
-            </Box>
+              <Typography
+                sx={{
+                  whiteSpace: "nowrap",
+                  fontSize: "16px",
+                }}
+              >
+                Candidate Name : {employeeName}
+              </Typography>            </Box>
           </Box>
         </Box>
       </A4Layout>

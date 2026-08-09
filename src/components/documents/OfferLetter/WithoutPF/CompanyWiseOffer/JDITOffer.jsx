@@ -214,11 +214,18 @@ const JDITOffer = ({ company, data }) => {
         </Typography>
 
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
-        <Typography sx={{ ...TEXT, mb: 2 }}>
-          <b>Name : {employeeName}</b>
-          <span style={{ marginLeft: "120px" }}>
-            <b>Designation :{position}</b>
-          </span>
+        <Typography
+          sx={{
+            ...TEXT,
+            mb: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <b>Name: {employeeName}</b>
+          <b>Designation: {position}</b>
         </Typography>
 
         <TableContainer sx={{ mb: "4mm" }}>
