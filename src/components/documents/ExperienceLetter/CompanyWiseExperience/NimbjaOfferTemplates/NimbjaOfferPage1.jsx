@@ -6,13 +6,13 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
-    
+
 
 /* ================= BASE TEXT STYLE ================= */
 const baseText = {
@@ -28,22 +28,22 @@ const formatIndianCurrency = (value) => {
   return Number(value).toLocaleString("en-IN");
 };
 
-  /* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
+/* ================= SALARY LOGIC (MONTHLY INPUT) ================= */
 
 
 const NimbjaOfferPage1 = ({ company, data, totalAnnual }) => {
   const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
-  const offerDate = formatDate(issueDate);  
+  const offerDate = formatDate(issueDate);
 
-const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
+  const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
   return (
     <A4Page
       headerSrc={company.header}
       footerSrc={company.footer}
-      // watermarkSrc={company.watermarkImage || company.watermark || null}
-      // contentTop="48mm"
-      // contentBottom="28mm"
-      // company={company}
+    // watermarkSrc={company.watermarkImage || company.watermark || null}
+    // contentTop="48mm"
+    // contentBottom="28mm"
+    // company={company}
     >
       <Box
         component="img"
@@ -76,7 +76,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
             fontWeight: 600,
             textAlign: "right",
             mb: "9mm",
-            mt: "-2mm",
+            mt: "-4mm",
           }}
         >
           {offerDate}
@@ -99,16 +99,26 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
           Name : {data.mrms} {data.employeeName}
         </Typography>
 
-        <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-          Address : {data.address}
+        <Typography
+          sx={{
+            mb: 2,
+            fontFamily: "Bahnschrift",
+            mt: "-2mm",
+            display: "flex",
+            alignItems: "flex-start",
+            textAlign: "left",
+          }}
+        >
+          <span style={{ flexShrink: 0 }}>Address :&nbsp;</span>
+          <span>{data.address}</span>
         </Typography>
 
         {/* SUBJECT */}
         <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-          Subject : Letter of Intent for the Position of {data.joiningDesignation  ?? data.position}
+          Subject : Letter of Intent for the Position of {data.joiningDesignation ?? data.position}
         </Typography>
 
-        <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
+        <Typography sx={{ mb: 1, fontFamily: "Bahnschrift" }}>
           Dear {firstName},
         </Typography>
 
@@ -251,7 +261,7 @@ const firstName = data.employeeName?.trim()?.split(" ")[0] || "Candidate";
             </Grid> */}
         {/* </Grid>
         </Box> */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
           <Box>
             <Box sx={{ display: "flex", gap: 3 }}>
               {company?.signature && (

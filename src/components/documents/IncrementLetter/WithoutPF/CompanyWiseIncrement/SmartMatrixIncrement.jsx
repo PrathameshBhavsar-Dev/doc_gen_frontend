@@ -308,7 +308,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
           sx={{
             fontWeight: "bold",
             mb: 3,
-            mt: 8,
+            mt: 2,
             fontSize: "16px",
             textDecoration: "underline",
           }}

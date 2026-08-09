@@ -220,7 +220,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             the beginning of a long and mutually beneficial association.
           </Typography>
 
-          <Typography sx={{ ...para, ml: "50px" }}>
+          <Typography sx={{ ...para, }}>
             Kindly acknowledge the duplicate copy of this letter as an
             acceptance of this offer.
           </Typography>
