@@ -19,23 +19,23 @@ const NimbjaOffer = ({ company, data }) => {
 
   // ================= HELPERS =================
   const round0 = (num) => Math.round(num);
-         
+
   // ================= CTC =================
- const annualCTC = Number(data.joiningCTC || data.salary || 0);
+  const annualCTC = Number(data.joiningCTC || data.salary || 0);
 
   // ================= SALARY TABLE =================
-  
+
 
   const firstName = data.employeeName?.trim().split(" ")[0];
-    const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
+  const issueDate = data?.offer_letter?.issueDate ?? data?.issueDate;
 
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   return (
@@ -47,7 +47,7 @@ const NimbjaOffer = ({ company, data }) => {
       <A4Page
         headerSrc={company.header}
         footerSrc={company.footer}
-        // watermarkSrc={company.watermark}
+      // watermarkSrc={company.watermark}
       >
         <Box
           component="img"
@@ -106,13 +106,23 @@ const NimbjaOffer = ({ company, data }) => {
             Name : {data.mrms} {data.employeeName}
           </Typography>
 
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-            Address : {data.address}
+          <Typography
+            sx={{
+              mb: 2,
+              fontFamily: "Bahnschrift",
+              mt: "-2mm",
+              display: "flex",
+              alignItems: "flex-start",
+              textAlign: "left",
+            }}
+          >
+            <span style={{ flexShrink: 0 }}>Address :&nbsp;</span>
+            <span>{data.address}</span>
           </Typography>
 
           {/* SUBJECT */}
           <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-            Subject : Letter of Intent for the Position of {data.joiningDesignation  ?? data.position}
+            Subject : Letter of Intent for the Position of {data.joiningDesignation ?? data.position}
           </Typography>
 
           <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>
@@ -126,7 +136,7 @@ const NimbjaOffer = ({ company, data }) => {
             journey in which every employee contributes. We invite you to be
             part of this journey! This has reference to your application and
             subsequent interviews you had with us. We are pleased to offer you
-            the role of <b>{data.joiningDesignation  ?? data.position} </b>
+            the role of <b>{data.joiningDesignation ?? data.position} </b>
             {/* {new Date(data.joiningDate).toLocaleDateString("en-US", {
                 month: "long",
                 day: "2-digit",

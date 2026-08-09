@@ -172,15 +172,13 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             the beginning of a long and mutually beneficial association.
           </Typography>
 
-          <Typography sx={{ ...para, ml: "50px" }}>
+          <Typography sx={{ ...para, }}>
             Kindly acknowledge the duplicate copy of this letter as an acceptance
             of this offer.
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>Yours Sincerely,</Typography>
           <Typography>For <b>{company.name?.toUpperCase()}</b></Typography>
-
-
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}>
             <Box>
