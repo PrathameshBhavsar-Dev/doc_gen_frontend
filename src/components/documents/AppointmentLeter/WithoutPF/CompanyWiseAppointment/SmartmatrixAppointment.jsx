@@ -106,7 +106,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong>{formatDate(data.joiningDate)}</strong>, we are pleased to
+            <strong>{formatDate(data.offerDate)}</strong>, we are pleased to
             appoint you in our organization with effect from{" "}
             <strong>{formatDate(data.issueDate)}</strong>, under the terms and
             conditions given below:-
