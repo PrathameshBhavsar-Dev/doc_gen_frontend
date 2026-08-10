@@ -182,7 +182,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
                 </TableCell>
 
                 <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
-                  {formatCurrency(value)}
+                  {Math.round(value).toLocaleString("en-IN")}
                 </TableCell>
               </TableRow>
             ))}

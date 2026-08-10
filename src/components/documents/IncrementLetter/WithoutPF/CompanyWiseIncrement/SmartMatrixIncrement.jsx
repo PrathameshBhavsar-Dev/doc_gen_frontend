@@ -394,14 +394,14 @@ const SmartMatrixIncrement = ({ company, data }) => {
                       align="center"
                       sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
-                      {formatCurrency(row.monthly)}
+                      {Math.round(row.monthly).toLocaleString("en-IN")}
                     </TableCell>
 
                     <TableCell
                       align="center"
                       sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
-                      {formatCurrency(row.annual)}
+                      {Math.round(row.annual).toLocaleString("en-IN")}
                     </TableCell>
                   </TableRow>
                 );
