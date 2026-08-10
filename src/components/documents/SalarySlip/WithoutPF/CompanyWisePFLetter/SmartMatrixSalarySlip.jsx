@@ -24,7 +24,7 @@ const cell = {
   border: "1px solid #000",
   fontFamily: FONT,
   fontSize: "10.5pt",
-  padding: "0px 12px 10px 12px",
+  padding: "0px 12px 8px 12px",
   verticalAlign: "middle",
 };
 
@@ -78,7 +78,7 @@ const SmartMatrixSalarySlip = ({ company, data }) => {
     <A4Page
       headerSrc={company.header}
       footerSrc={company.footer}
-      contentTop="45mm"
+      contentTop="40mm"
       contentBottom="30mm"
     >
       <TableContainer
