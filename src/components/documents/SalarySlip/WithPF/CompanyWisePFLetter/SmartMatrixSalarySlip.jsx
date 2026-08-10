@@ -18,7 +18,7 @@ import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.p
 
 /* ================= HELPERS ================= */
 const num = (v) => Number(v) || 0;
-const round2 = (v) => Math.round(num(v) * 100) / 100;
+const round2 = (num) => Math.round(num);
 
 /* 🔢 Number to Words (Indian system – up to Crores) */
 const numberToWords = (numVal = 0) => {
@@ -181,7 +181,7 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
           "& .MuiTableCell-root": {
             border: "1px solid black",
             fontSize: "11pt",
-            padding: "0px 12px 10px 12px", 
+            padding: "0px 12px 10px 12px",
             verticalAlign: "middle",
           },
         }}
@@ -280,26 +280,39 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
             {/* Earnings & Deduction Section */}
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>BASIC</TableCell>
-              <TableCell align="center">{formatCurrency(basic)}</TableCell>
+              <TableCell align="center">
+                {Math.round(basic).toLocaleString("en-IN")}
+              </TableCell>
+
               <TableCell sx={{ fontWeight: "bold" }}>PF</TableCell>
-              <TableCell align="center">{formatCurrency(PF)}</TableCell>
+              <TableCell align="center">
+                {Math.round(PF).toLocaleString("en-IN")}
+              </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>HRA</TableCell>
-              <TableCell align="center">{formatCurrency(hra)}</TableCell>
+              <TableCell align="center">
+                {Math.round(hra).toLocaleString("en-IN")}
+              </TableCell>
+
               <TableCell sx={{ fontWeight: "bold" }}>PT</TableCell>
-              <TableCell align="center">{formatCurrency(pt)}</TableCell>
+              <TableCell align="center">
+                {Math.round(pt).toLocaleString("en-IN")}
+              </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>
                 DEARNESS ALLOWANCE
               </TableCell>
-              <TableCell align="center">{formatCurrency(da)}</TableCell>
+              <TableCell align="center">
+                {Math.round(da).toLocaleString("en-IN")}
+              </TableCell>
+
               <TableCell sx={{ fontWeight: "bold" }}>Other Deduction</TableCell>
               <TableCell align="center">
-                {formatCurrency(otherDeduction)}
+                {Math.round(otherDeduction).toLocaleString("en-IN")}
               </TableCell>
             </TableRow>
 
@@ -307,14 +320,22 @@ const SmartMatrixSalarySlip = ({ data = {}, company = {} }) => {
               <TableCell sx={{ fontWeight: "bold" }}>
                 SPECIAL ALLOWANCE
               </TableCell>
-              <TableCell align="center">{formatCurrency(special)}</TableCell>
+              <TableCell align="center">
+                {Math.round(special).toLocaleString("en-IN")}
+              </TableCell>
+
               <TableCell />
               <TableCell />
             </TableRow>
 
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>FOOD ALLOWANCE</TableCell>
-              <TableCell align="center">{formatCurrency(food)}</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>
+                FOOD ALLOWANCE
+              </TableCell>
+              <TableCell align="center">
+                {Math.round(food).toLocaleString("en-IN")}
+              </TableCell>
+
               <TableCell />
               <TableCell />
             </TableRow>
