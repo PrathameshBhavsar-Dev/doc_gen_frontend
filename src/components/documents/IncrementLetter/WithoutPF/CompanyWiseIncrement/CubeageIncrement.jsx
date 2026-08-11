@@ -241,7 +241,7 @@ const CubeageIncrement = ({ company, data }) => {
         <div style={{ marginBottom: "6mm" }}>
           <strong>Name:</strong> <strong>{data.mrms} {data.employeeName}</strong>
           <br />
-          <strong>Designation:</strong> <strong>{data.designation}</strong>
+          <strong>Designation:</strong> <strong>{data.currentDesignation}</strong>
           <br />
           <strong>Location:</strong> <strong>{company.city}</strong>
         </div>

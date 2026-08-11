@@ -28,7 +28,7 @@ const formatDate = (date) => {
 const SmartMatrixIncrement = ({ company, data }) => {
   if (!company || !data) return null;
 
-  const round2 = (num) => Number(Number(num).toFixed(2));
+  const round2 = (num) => Math.round(num);
 
   /* ================= INPUT IS ANNUAL ================= */
   const annualCTC = round2(Number(data.newCTC || data.currentCTC || 0));
@@ -273,7 +273,7 @@ const SmartMatrixIncrement = ({ company, data }) => {
           sx={{
             fontWeight: "bold",
             mb: 3,
-            mt: 8,
+            mt: 2,
             fontSize: "16px",
             textDecoration: "underline",
             "& *": {
@@ -362,14 +362,14 @@ const SmartMatrixIncrement = ({ company, data }) => {
                       align="center"
                       sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
-                      {formatCurrency(row.monthly)}
+                      {Math.round(row.monthly).toLocaleString("en-IN")}
                     </TableCell>
 
                     <TableCell
                       align="center"
                       sx={isTotal ? TOTAL_CELL : AMOUNT_CELL}
                     >
-                      {formatCurrency(row.annual)}
+                      {Math.round(row.annual).toLocaleString("en-IN")}
                     </TableCell>
                   </TableRow>
                 );

@@ -99,6 +99,34 @@ const NeweageOffer = ({ company, data }) => {
 
   const COMPANY_NAME = company.name.toUpperCase();
 
+  /* ================= TEXT STYLE (IMAGE MATCH) ================= */
+  const TEXT = {
+    fontFamily: '"Cambria", "Georgia", serif',
+    fontSize: "14.8px",
+    lineHeight: 1.65,
+    color: "#222",
+  };
+
+  const SMALL_TEXT = {
+    fontFamily: '"Cambria", "Georgia", serif',
+    fontSize: "14.5px",
+    lineHeight: 1.6,
+  };
+
+  const CELL_BASE = {
+    border: "1px solid #000",
+    verticalAlign: "top",   // force explicit, MUI default is unreliable here
+    lineHeight: 1.4,           // explicit line-height, don't let it inherit
+    padding: "0px 12px 12px 12px",
+    fontFamily: "Arial, sans-serif"
+  };
+
+  const CELL_HEAD = {
+    ...CELL_BASE,
+    fontWeight: 600,
+    backgroundColor: "#3dd6f1",
+  };
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -186,12 +214,32 @@ const NeweageOffer = ({ company, data }) => {
                 For {COMPANY_NAME}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
                 {company.signature && (
-                  <img src={company.signature} alt="signature" height={60} />
+                  <Box
+                    component="img"
+                    src={company.signature}
+                    alt="signature"
+                    sx={{
+                      height: "60px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
                 {company.stamp && (
-                  <img src={company.stamp} alt="stamp" height={80} />
+                  <Box
+                    component="img"
+                    src={company.stamp}
+                    alt="stamp"
+                    sx={{
+                      height: "80px",
+                      width: "auto",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
+                  />
                 )}
               </Box>
 
@@ -218,7 +266,7 @@ const NeweageOffer = ({ company, data }) => {
           <Typography align="center" sx={{ ...TEXT, mb: 3, mt: 6 }}>
             <b>Annexure A Salary Structure</b>
           </Typography>
-
+                
           <TableContainer>
             <Table
               size="small"
@@ -226,7 +274,7 @@ const NeweageOffer = ({ company, data }) => {
                 border: "1px solid #000",
                 borderCollapse: "collapse",
                 width: "100%",
-
+                padding: "0px 12px 12px 12px",
               }}
             >
               <TableHead>
@@ -237,6 +285,7 @@ const NeweageOffer = ({ company, data }) => {
                       fontWeight: 600,
                       backgroundColor: "#3dd6f1",
                     }}
+                    sx={CELL_BASE}
                   >
                     Salary Components
                   </TableCell>

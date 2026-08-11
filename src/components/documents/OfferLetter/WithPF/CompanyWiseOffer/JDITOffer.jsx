@@ -173,7 +173,7 @@ const JDITOffer = ({ company, data }) => {
         />
 
         {/* ================= OFFER DETAILS ================= */}
-        <Box sx={{ mt:4,  mb: 2 }}>
+        <Box sx={{ mt: 4, mb: 2 }}>
 
           <Typography sx={{ ...TEXT, mb: 1.5 }}>
             {/* ➢ Offer ID / Employee ID: <b>{employeeId}</b> */}
@@ -216,15 +216,21 @@ const JDITOffer = ({ company, data }) => {
           therein should be treated as personal and confidential.
         </Typography>
 
-        <br/>
+        <br />
         {/* ================= PAGE 2 : SALARY (Merged) ================= */}
-        <Typography sx={{ ...TEXT, mb: 1 }}>
-          <b>Name : {employeeName}</b>
-          <span style={{ marginLeft: "120px" }}>
-            <b>Designation :{position}</b>
-          </span>
+        <Typography
+          sx={{
+            ...TEXT,
+            mb: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <b>Name: {employeeName}</b>
+          <b>Designation: {position}</b>
         </Typography>
-
 
       </A4Layout>
 

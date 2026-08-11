@@ -6,10 +6,10 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
 const JDITUnPaidInternshipLetter = ({ company, data }) => {
@@ -61,9 +61,11 @@ const JDITUnPaidInternshipLetter = ({ company, data }) => {
       <Typography sx={{ mb: 2, textAlign: "justify" }}>
         This is to certify that <strong>{data.employeeName}</strong> has done{" "}
         {pronouns.possessive} internship at{" "}
-        <strong>DEVCONS SOFTWARE SOLUTIONS PVT. LTD.</strong> from{" "}
+        <strong>JDIT SOFTWARE SOLUTIONS PVT. LTD.</strong> from{" "}
         <strong>{formatDate(data.startDate)}</strong> to{" "}
-        <strong>{formatDate(data.completionDate)}</strong>.
+        <strong>
+          {formatDate(data.completionDate ?? data.endDate)}
+        </strong>
       </Typography>
 
       <Typography sx={{ mb: 9, textAlign: "justify" }}>
@@ -73,7 +75,7 @@ const JDITUnPaidInternshipLetter = ({ company, data }) => {
           pronouns.possessive.slice(1)}{" "}
         performance exceeded our expectations and{" "}
         {pronouns.subject.toLowerCase()} was able to complete the given tasks on
-        time. {pronouns.subject} was designated as <strong>{data.role}</strong>{" "}
+        time. {pronouns.subject} was designated as <strong>{data.joiningDesignation ?? data.designation}</strong>{" "}
         with project named <strong>{data.projectName}</strong>. We wish{" "}
         {pronouns.object} all the best for {pronouns.possessive} upcoming
         career.
