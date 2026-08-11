@@ -61,7 +61,7 @@ const IncrementLetterPage = ({ company, data }) => {
         </Typography>
 
         <Box textAlign="right" mb={7}>
-          <Typography fontSize={14}>{formatDate(issueDate)}</Typography>
+          <Typography fontSize={14}>April 01, 2025</Typography>
         </Box>
 
         <Typography fontSize={13} mb={3}>
@@ -146,8 +146,8 @@ const SalaryAnnexurePage = ({ company, data }) => {
             <TableRow>
               <TableCell align="center"><b>Monthly Component</b></TableCell>
               <TableCell align="center"><b>Amount (Rs.)</b></TableCell>
-              {/* <TableCell align="center"><b>Yearly Component</b></TableCell> */}
-              <TableCell align="center"><b>Amount (Rs.)</b></TableCell>
+              <TableCell align="center"><b>Yearly Component</b></TableCell>
+              {/* <TableCell align="center"><b>Amount (Rs.)</b></TableCell> */}
             </TableRow>
           </TableHead>
 
@@ -156,23 +156,24 @@ const SalaryAnnexurePage = ({ company, data }) => {
               <TableRow key={i}>
                 <TableCell align="center">{r.name}</TableCell>
                 <TableCell align="center">
-                  {r.monthly.toLocaleString("en-IN")}
-                </TableCell>
+                  {Math.round(r.monthly).toLocaleString("en-IN")}                </TableCell>
                 {/* <TableCell>{r.name}</TableCell> */}
                 <TableCell align="center">
-                  {r.annual.toLocaleString("en-IN")}
-                </TableCell>
+                  {Math.round(r.annual).toLocaleString("en-IN")}                </TableCell>
               </TableRow>
             ))}
 
             <TableRow sx={{ backgroundColor: "#1fb5e9" }}>
-              <TableCell align="center"><b>Monthly Gross</b></TableCell>
               <TableCell align="center">
-                <b>{monthlyGross.toLocaleString("en-IN")}</b>
+                <b>Monthly Gross</b>
               </TableCell>
-              {/* <TableCell><b>Annual CTC</b></TableCell> */}
+
               <TableCell align="center">
-                <b>{annualCTC.toLocaleString("en-IN")}</b>
+                <b>{Math.round(monthlyGross).toLocaleString("en-IN")}</b>
+              </TableCell>
+
+              <TableCell align="center">
+                <b>{Math.round(annualCTC).toLocaleString("en-IN")}</b>
               </TableCell>
             </TableRow>
           </TableBody>

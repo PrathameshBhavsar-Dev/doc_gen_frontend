@@ -178,7 +178,7 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </Typography>
 
           <Typography sx={{ mt: "24px" }}>
-            Dear {displayTitle} {firstName},
+            Dear {firstName},
           </Typography>
 
           <Typography sx={para}>

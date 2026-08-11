@@ -113,7 +113,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
 
           <Typography sx={paragraph}>
             Your performance has been reviewed and your performance banding for
-            the year 2024–2025 is <b>"{performanceBand}"</b>.
+            the year 2021–2022 is <b>"{performanceBand}"</b>.
           </Typography>
 
           <Typography sx={paragraph}>
