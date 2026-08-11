@@ -134,7 +134,7 @@ const bold = { fontWeight: "bold" };
 
 const QuickSalarySlip = ({ data = {}, company = {} }) => {
   const salary = getSalaryBreakup(data);
-  
+
   const earnings = [
     { label: "BASIC", value: salary.basic },
     { label: "HRA", value: salary.hra },
@@ -143,22 +143,22 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     { label: "FOOD ALLOWANCE", value: salary.food },
     { label: "MISC ALLOWANCE", value: salary.misc },
   ];
-  
+
   const deductions = [
     { label: "PT", value: salary.pt },
     { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
   ];
-  
+
   const totalEarning = earnings.reduce(
     (sum, e) => sum + Number(e.value || 0),
     0
   );
-  
+
   const totalDeduction = deductions.reduce(
     (sum, d) => sum + Number(d.value || 0),
     0
   );
-  
+
   const netPay = totalEarning - totalDeduction;
   const maxRows = Math.max(earnings.length, deductions.length);
   const designation = data.currentDesignation ?? data.position ?? "";
@@ -300,14 +300,17 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
               <TableCell sx={{ ...cell, ...bold }}>
                 {earnings[i]?.label || ""}
               </TableCell>
+
               <TableCell sx={cell}>
-                {numberFormat(earnings[i]?.value)}
+                {Math.trunc(earnings[i]?.value || 0).toLocaleString("en-IN")}
               </TableCell>
+
               <TableCell sx={{ ...cell, ...bold }}>
                 {deductions[i]?.label || ""}
               </TableCell>
+
               <TableCell sx={cell}>
-                {numberFormat(deductions[i]?.value)}
+                {Math.trunc(deductions[i]?.value || 0).toLocaleString("en-IN")}
               </TableCell>
             </TableRow>
           ))}
@@ -315,18 +318,18 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Total</TableCell>
             <TableCell sx={{ ...cell, ...bold }}>
-              {numberFormat(totalEarning)}
+              {Math.trunc(totalEarning || 0).toLocaleString("en-IN")}
             </TableCell>
             <TableCell sx={{ ...cell, ...bold }}>Total Deduction</TableCell>
             <TableCell sx={{ ...cell, ...bold }}>
-              {numberFormat(totalDeduction)}
+              {Math.trunc(totalDeduction || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Net Pay</TableCell>
             <TableCell sx={{ ...cell, ...bold }} colSpan={3}>
-              {numberFormat(netPay)}
+              {Math.trunc(netPay || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 

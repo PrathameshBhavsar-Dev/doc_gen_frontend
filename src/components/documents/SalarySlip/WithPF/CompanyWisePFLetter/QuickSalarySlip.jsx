@@ -297,14 +297,17 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
               <TableCell sx={{ ...cell, ...bold }}>
                 {earnings[i]?.label || ""}
               </TableCell>
+
               <TableCell sx={cell}>
-                {numberFormat(earnings[i]?.value)}
+                {Math.trunc(earnings[i]?.value || 0).toLocaleString("en-IN")}
               </TableCell>
+
               <TableCell sx={{ ...cell, ...bold }}>
                 {deductions[i]?.label || ""}
               </TableCell>
+
               <TableCell sx={cell}>
-                {numberFormat(deductions[i]?.value)}
+                {Math.trunc(deductions[i]?.value || 0).toLocaleString("en-IN")}
               </TableCell>
             </TableRow>
           ))}
@@ -312,18 +315,18 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Total</TableCell>
             <TableCell sx={{ ...cell, ...bold }}>
-              {numberFormat(totalEarning)}
+              {Math.trunc(totalEarning || 0).toLocaleString("en-IN")}
             </TableCell>
             <TableCell sx={{ ...cell, ...bold }}>Total Deduction</TableCell>
             <TableCell sx={{ ...cell, ...bold }}>
-              {numberFormat(totalDeduction)}
+              {Math.trunc(totalDeduction || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell sx={{ ...cell, ...bold }}>Net Pay</TableCell>
             <TableCell sx={{ ...cell, ...bold }} colSpan={3}>
-              {numberFormat(netPay)}
+              {Math.trunc(netPay || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 
