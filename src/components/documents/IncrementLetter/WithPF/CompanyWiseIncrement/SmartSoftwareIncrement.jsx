@@ -14,10 +14,10 @@ import {
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "2-digit",
-        year: "numeric",
-      })
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
     : "";
 
 /* ================= CURRENCY FORMAT ================= */
@@ -31,7 +31,6 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const {
     employeeName = "",
     employeeId = "",
-    issueDate = "",
     effectiveDate = "",
     newCTC = 0,
     performanceBand = "Met Expectation",
@@ -57,7 +56,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
 
     const basicMonthly = round0(
       monthlyCTC -
-        (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+      (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
     );
 
     return [
@@ -124,6 +123,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   };
 
   const performanceYear = getPerformanceYear(effectiveDate);
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>
@@ -174,33 +174,33 @@ const SmartSoftwareIncrement = ({ company, data }) => {
 
           <Typography sx={{ mb: 2 }}>Yours Sincerely,</Typography>
 
-         <Box sx={{ display: "flex", alignItems: "center", gap: 3, mt: 2 }}>
-         
-                     {/* Signature */}
-                     {company.incrementSignature && (
-                       <Box
-                         component="img"
-                         src={company.incrementSignature}
-                         sx={{ height: 60 }}
-                       />
-                     )}
-         
-                     {/* Stamp */}
-                     {company.stamp && (
-                       <Box component="img" src={company.stamp} sx={{ height: 90 }} />
-                     )}
-         
-                   </Box>
-                   <Typography fontWeight="bold" sx={{ mt: 2 }}>
-                     CEO & Managing Director
-                   </Typography>
-                 </Box>
-         
-                 {company.footerImage && (
-                   <Box component="img" src={company.footerImage} sx={footerStyle} />
-                 )}
-               </Box>
-         
+          <Box sx={{ display: "flex", alignItems: "center", gap: 3, mt: 2 }}>
+
+            {/* Signature */}
+            {company.incrementSignature && (
+              <Box
+                component="img"
+                src={company.incrementSignature}
+                sx={{ height: 60 }}
+              />
+            )}
+
+            {/* Stamp */}
+            {company.stamp && (
+              <Box component="img" src={company.stamp} sx={{ height: 90 }} />
+            )}
+
+          </Box>
+          <Typography fontWeight="bold" sx={{ mt: 2 }}>
+            CEO & Managing Director
+          </Typography>
+        </Box>
+
+        {company.footerImage && (
+          <Box component="img" src={company.footerImage} sx={footerStyle} />
+        )}
+      </Box>
+
       {/* ================= PAGE BREAK ================= */}
       <Box sx={{ pageBreakBefore: "always" }} />
 

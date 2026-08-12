@@ -33,7 +33,6 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const {
     employeeName = "",
     employeeId = "",
-    issueDate = "",
     effectiveDate = "",
     newCTC = 0,
     performanceBand = "Met Expectation",
@@ -99,6 +98,8 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   };
 
   const performanceYear = getPerformanceYear(effectiveDate);
+
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>

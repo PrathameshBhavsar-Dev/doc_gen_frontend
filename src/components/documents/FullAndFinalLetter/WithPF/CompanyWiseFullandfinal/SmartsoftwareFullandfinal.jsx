@@ -27,8 +27,10 @@ const formatDate = (d) =>
 const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
+// const formatAmt = (n) =>
+//   Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Math.round(Number(n || 0)).toLocaleString("en-IN");
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -130,7 +132,7 @@ const SmartsoftwareFullAndfinal = ({ company = {}, data = {} }) => {
 
             <TableRow>
               <TableCell sx={cell}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={cell}>Date of Resignation</TableCell>
               <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
             </TableRow>
@@ -237,56 +239,56 @@ const SmartsoftwareFullAndfinal = ({ company = {}, data = {} }) => {
               <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
             </TableRow>
 
-           <TableRow>
-  <TableCell sx={{ ...cell, ...center }}></TableCell>
+            <TableRow>
+              <TableCell sx={{ ...cell, ...center }}></TableCell>
 
-  {/* STAMP */}
-  <TableCell sx={{ ...cell }}>
-    {company.stamp && (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100px", // ✅ increased to match stamp
-        }}
-      >
-        <img
-          src={company.stamp}
-          alt="Stamp"
-          style={{
-            height: "100px",   // ✅ big stamp
-            width: "auto",
-            objectFit: "contain",
-          }}
-        />
-      </Box>
-    )}
-  </TableCell>
+              {/* STAMP */}
+              <TableCell sx={{ ...cell }}>
+                {company.stamp && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100px", // ✅ increased to match stamp
+                    }}
+                  >
+                    <img
+                      src={company.stamp}
+                      alt="Stamp"
+                      style={{
+                        height: "100px",   // ✅ big stamp
+                        width: "auto",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Box>
+                )}
+              </TableCell>
 
-  {/* SIGNATURE */}
-  <TableCell colSpan={2} sx={{ ...cell }}>
-    {company.signature && (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100px", // ✅ same as stamp for alignment
-        }}
-      >
-        <img
-          src={company.signature}
-          alt="Signature"
-          style={{
-            height: "80px",   // ✅ balanced size
-            width: "auto",
-          }}
-        />
-      </Box>
-    )}
-  </TableCell>
-</TableRow>
+              {/* SIGNATURE */}
+              <TableCell colSpan={2} sx={{ ...cell }}>
+                {company.signature && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100px", // ✅ same as stamp for alignment
+                    }}
+                  >
+                    <img
+                      src={company.signature}
+                      alt="Signature"
+                      style={{
+                        height: "80px",   // ✅ balanced size
+                        width: "auto",
+                      }}
+                    />
+                  </Box>
+                )}
+              </TableCell>
+            </TableRow>
 
             <TableRow>
               <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
