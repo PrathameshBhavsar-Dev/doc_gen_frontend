@@ -450,9 +450,6 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     >
       {/* 🔹 UI CODE EXACT SAME – NOT TOUCHED */}
 
-
-
-
       {/* ---------- HEADER IMAGE ---------- */}
       {company.header && (
         <Box mt={-10} mb={3}>
