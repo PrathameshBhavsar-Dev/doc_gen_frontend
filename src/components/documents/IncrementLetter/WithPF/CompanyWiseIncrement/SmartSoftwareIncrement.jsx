@@ -107,7 +107,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const headerStyle = { position: "absolute", top: 0, width: "100%" };
   const footerStyle = { position: "absolute", bottom: 0, width: "100%" };
 
-
+  
   const getPerformanceYear = (date) => {
     if (!date) return "";
 
