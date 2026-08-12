@@ -149,6 +149,24 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
     { label: "OTHER DEDUCTION", value: data.otherDeduction || 2000 },
   ];
 
+  const uniqueDeductions = deductions.filter((deduction, index, array) => {
+    const label = deduction?.label?.trim();
+    const value = Math.trunc(Number(deduction?.value || 0));
+
+    if (!label || value === 0) {
+      return false;
+    }
+
+    return (
+      index ===
+      array.findIndex(
+        (d) =>
+          d?.label?.trim() === label &&
+          Math.trunc(Number(d?.value || 0)) === value
+      )
+    );
+  });
+
   const totalEarning = earnings.reduce(
     (sum, e) => sum + Number(e.value || 0),
     0
@@ -192,6 +210,9 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
       {/* ---------- TABLE ---------- */}
       <Table sx={{ border: "1px solid #000" }}>
         <TableBody>
+
+          {/* ================= COMPANY NAME ================= */}
+
           <TableRow>
             <TableCell
               colSpan={4}
@@ -207,141 +228,274 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
             </TableCell>
           </TableRow>
 
-          <TableRow>
-            <TableCell colSpan={4} sx={{ ...cell, textAlign: "center" }}>
-              {company.address}
-            </TableCell>
-          </TableRow>
+          {/* ================= COMPANY ADDRESS ================= */}
 
           <TableRow>
             <TableCell
               colSpan={4}
-              sx={{ ...cell, ...bold, textAlign: "center" }}
+              sx={{
+                ...cell,
+                textAlign: "center",
+              }}
+            >
+              {company.address}
+            </TableCell>
+          </TableRow>
+
+          {/* ================= SALARY SLIP ================= */}
+
+          <TableRow>
+            <TableCell
+              colSpan={4}
+              sx={{
+                ...cell,
+                ...bold,
+                textAlign: "center",
+              }}
             >
               Salary Slip {formatMonthYear(data.month)}
             </TableCell>
           </TableRow>
 
+          {/* ================= EMPLOYEE NAME ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Employee Name</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Employee Name
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(data.mrms)} {safe(data.employeeName)}
             </TableCell>
           </TableRow>
 
+          {/* ================= GENDER / DOJ ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Gender <br /> DOJ</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Gender
+              <br />
+              DOJ
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
-              {safe(data.gender)} <br /> {formatDate(data.doj)}
+              {safe(data.gender)}
+              <br />
+              {formatDate(data.doj)}
             </TableCell>
           </TableRow>
 
+          {/* ================= DESIGNATION ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Designation</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Designation
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(designation)}
             </TableCell>
           </TableRow>
 
+          {/* ================= MODE ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Mode</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Mode
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
-              {/* Bank Account No:  {safe(data.accountNo)}<br/> */}
-              Bank Name :{safe(data.mode)} {safe(data.bankName)}<br />
-              Bank Account No:  {safe(data.accountNo)}
+              Bank Name : {safe(data.mode)} {safe(data.bankName)}
+              <br />
+              Bank Account No: {safe(data.accountNo)}
             </TableCell>
           </TableRow>
 
+          {/* ================= EMPLOYEE ID ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Employee ID</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Employee ID
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(data.employeeId)}
             </TableCell>
           </TableRow>
 
+          {/* ================= DEPARTMENT ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Department</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Department
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(data.department)}
             </TableCell>
           </TableRow>
 
+          {/* ================= PAN ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>PAN Number</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              PAN Number
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(data.pan)}
             </TableCell>
           </TableRow>
 
+          {/* ================= DOB ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>DOB</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              DOB
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {formatDate(data.dob)}
             </TableCell>
           </TableRow>
 
+          {/* ================= WORKING DAYS ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Working Days</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Working Days
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {safe(data.workdays)}
             </TableCell>
           </TableRow>
 
-          {/* ---------- Earnings / Deductions ---------- */}
+          {/* ================= EARNINGS / DEDUCTIONS HEADER ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Earnings</TableCell>
-            <TableCell sx={{ ...cell, ...bold }}>Amount</TableCell>
-            <TableCell sx={{ ...cell, ...bold }}>Deductions</TableCell>
-            <TableCell sx={{ ...cell, ...bold }}>Amount</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Earnings
+            </TableCell>
+
+            <TableCell sx={{ ...cell, ...bold }}>
+              Amount
+            </TableCell>
+
+            <TableCell sx={{ ...cell, ...bold }}>
+              Deductions
+            </TableCell>
+
+            <TableCell sx={{ ...cell, ...bold }}>
+              Amount
+            </TableCell>
           </TableRow>
 
-          {Array.from({ length: maxRows }).map((_, i) => (
-            <TableRow key={i}>
-              <TableCell sx={{ ...cell, ...bold }}>
-                {earnings[i]?.label || ""}
-              </TableCell>
+          {/* ================= EARNINGS / DEDUCTIONS ROWS ================= */}
 
-              <TableCell sx={cell}>
-                {Math.trunc(earnings[i]?.value || 0).toLocaleString("en-IN")}
-              </TableCell>
+          {Array.from({
+            length: Math.max(maxRows, uniqueDeductions.length),
+          }).map((_, i) => {
 
-              <TableCell sx={{ ...cell, ...bold }}>
-                {deductions[i]?.label || ""}
-              </TableCell>
+            const earning = earnings[i];
+            const deduction = uniqueDeductions[i];
 
-              <TableCell sx={cell}>
-                {Math.trunc(deductions[i]?.value || 0).toLocaleString("en-IN")}
-              </TableCell>
-            </TableRow>
-          ))}
+            const earningValue = Math.trunc(
+              Number(earning?.value || 0)
+            );
+
+            const deductionValue = Math.trunc(
+              Number(deduction?.value || 0)
+            );
+
+            return (
+              <TableRow key={i}>
+
+                {/* ---------- EARNING NAME ---------- */}
+
+                <TableCell sx={{ ...cell, ...bold }}>
+                  {earning?.label || ""}
+                </TableCell>
+
+                {/* ---------- EARNING AMOUNT ---------- */}
+
+                <TableCell sx={cell}>
+                  {earning
+                    ? earningValue.toLocaleString("en-IN")
+                    : ""}
+                </TableCell>
+
+                {/* ---------- DEDUCTION NAME ---------- */}
+
+                <TableCell sx={{ ...cell, ...bold }}>
+                  {deduction?.label || ""}
+                </TableCell>
+
+                {/* ---------- DEDUCTION AMOUNT ---------- */}
+
+                <TableCell sx={cell}>
+                  {deduction
+                    ? deductionValue.toLocaleString("en-IN")
+                    : ""}
+                </TableCell>
+
+              </TableRow>
+            );
+          })}
+
+          {/* ================= TOTAL ================= */}
 
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Total</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Total
+            </TableCell>
+
             <TableCell sx={{ ...cell, ...bold }}>
               {Math.trunc(totalEarning || 0).toLocaleString("en-IN")}
             </TableCell>
-            <TableCell sx={{ ...cell, ...bold }}>Total Deduction</TableCell>
+
+            <TableCell sx={{ ...cell, ...bold }}>
+              Total Deduction
+            </TableCell>
+
             <TableCell sx={{ ...cell, ...bold }}>
               {Math.trunc(totalDeduction || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 
+          {/* ================= NET PAY ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>Net Pay</TableCell>
-            <TableCell sx={{ ...cell, ...bold }} colSpan={3}>
+            <TableCell sx={{ ...cell, ...bold }}>
+              Net Pay
+            </TableCell>
+
+            <TableCell
+              sx={{ ...cell, ...bold }}
+              colSpan={3}
+            >
               {Math.trunc(netPay || 0).toLocaleString("en-IN")}
             </TableCell>
           </TableRow>
 
+          {/* ================= AMOUNT IN WORDS ================= */}
+
           <TableRow>
-            <TableCell sx={{ ...cell, ...bold }}>In Words</TableCell>
+            <TableCell sx={{ ...cell, ...bold }}>
+              In Words
+            </TableCell>
+
             <TableCell sx={cell} colSpan={3}>
               {numberToWords(Math.round(netPay))} Rs Only
             </TableCell>
           </TableRow>
 
+          {/* ================= STAMP / SIGNATURE ================= */}
 
           <TableRow>
+
+            {/* ---------- STAMP ---------- */}
+
             <TableCell
               colSpan={2}
               sx={{
@@ -363,12 +517,18 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
                 >
                   <img
                     src={company.stamp}
-                    style={{ height: "90px", width: "auto" }}
+                    style={{
+                      height: "90px",
+                      width: "auto",
+                    }}
                     alt="Stamp"
                   />
                 </Box>
               )}
             </TableCell>
+
+            {/* ---------- SIGNATURE ---------- */}
+
             <TableCell
               colSpan={2}
               sx={{
@@ -390,16 +550,25 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
                 >
                   <img
                     src={company.signature}
-                    style={{ height: "75px", width: "auto" }}
+                    style={{
+                      height: "75px",
+                      width: "auto",
+                    }}
                     alt="Signature"
                   />
-                  <Typography fontSize={12} fontWeight="bold">
+
+                  <Typography
+                    fontSize={12}
+                    fontWeight="bold"
+                  >
                     Signature
                   </Typography>
                 </Box>
               )}
             </TableCell>
+
           </TableRow>
+
         </TableBody>
       </Table>
     </Box>

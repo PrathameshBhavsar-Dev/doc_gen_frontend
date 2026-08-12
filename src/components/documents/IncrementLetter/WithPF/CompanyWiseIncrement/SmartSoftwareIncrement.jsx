@@ -108,6 +108,23 @@ const SmartSoftwareIncrement = ({ company, data }) => {
   const headerStyle = { position: "absolute", top: 0, width: "100%" };
   const footerStyle = { position: "absolute", bottom: 0, width: "100%" };
 
+  
+  const getPerformanceYear = (date) => {
+    if (!date) return "";
+
+    const year = new Date(date).getFullYear();
+    const month = new Date(date).getMonth(); // 0 = January
+
+    // April onwards belongs to the next financial year
+    if (month >= 3) {
+      return `${year}-${year + 1}`;
+    }
+
+    return `${year - 1}-${year}`;
+  };
+
+  const performanceYear = getPerformanceYear(effectiveDate);
+
   return (
     <>
       {/* ================= PAGE 1 : INCREMENT LETTER ================= */}
@@ -130,8 +147,8 @@ const SmartSoftwareIncrement = ({ company, data }) => {
           </Typography>
 
           <Typography sx={paragraph}>
-            Your performance has been reviewed and your performance banding for
-            the year 2024–2025 is <b>"{performanceBand}"</b>.
+            Your performance has been reviewed and your performance banding for the
+            year {performanceYear} is <b>"{performanceBand}"</b>.
           </Typography>
 
           {/* ✅ FIXED HERE */}
