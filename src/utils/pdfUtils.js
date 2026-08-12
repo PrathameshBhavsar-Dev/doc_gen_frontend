@@ -4,10 +4,29 @@ import html2canvas from "html2canvas";
 import { createRoot } from "react-dom/client";
 import React from "react";
 
+const formatSalaryMonth = (month) => {
+  if (!month) return "";
+
+  const date = new Date(`${month}-01`);
+
+  return date.toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+};
+
+const sanitizeFileName = (name) => {
+  return String(name || "")
+    .trim()
+    .replace(/[<>:"/\\|?*]/g, "")
+    .replace(/\s+/g, " ");
+};
+
 export const generatePDF = async (
   TemplateComponent,
   props,
-  fileName
+  fileName,
+  includeMonth = true
 ) => {
 
   return new Promise(async (resolve, reject) => {
@@ -284,11 +303,67 @@ export const generatePDF = async (
       }
 
       // =========================
+      // GENERATE FILE NAME
+      // =========================
+
+      const employeeName =
+        safeProps?.data?.employeeName || "Employee";
+
+      // Remove any existing employee name/date accidentally
+      // included in fileName
+      const cleanDocumentName = String(fileName || "Document")
+        .replace(
+          new RegExp(
+            `[-_ ]*${employeeName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
+            "gi"
+          ),
+          ""
+        )
+        // full date YYYY-MM-DD
+        .replace(/[-_ ]*\d{4}-\d{2}-\d{2}/g, "")
+        // YYYY-MM
+        .replace(/[-_ ]*\d{4}-\d{2}\b/g, "")
+        // Month name + year, e.g. "July 2026" / "Jul 2026"
+        .replace(
+          /[-_ ]*(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s*\d{4}/gi,
+          ""
+        )
+        .replace(/[-_ ]+/g, " ")
+        .trim();
+
+      let finalFileName;
+
+      if (includeMonth) {
+        // =========================
+        // SALARY SLIP
+        // =========================
+
+        const salaryMonth =
+          safeProps?.data?.month || "";
+
+        const formattedMonth =
+          formatSalaryMonth(salaryMonth);
+
+        finalFileName = sanitizeFileName(
+          `${cleanDocumentName}-${employeeName}-${formattedMonth}`
+        );
+      } else {
+        // =========================
+        // OTHER DOCUMENTS
+        // =========================
+
+        finalFileName = sanitizeFileName(
+          `${cleanDocumentName}-${employeeName}`
+        );
+      }
+
+      // =========================
       // SAVE PDF
       // =========================
 
-      pdf.save(`${fileName}.pdf`);
+      pdf.save(`${finalFileName}.pdf`);
 
+      console.log("📄 FINAL PDF NAME:", `${finalFileName}.pdf`);
       console.log("✅ PDF SAVED");
 
       // =========================
