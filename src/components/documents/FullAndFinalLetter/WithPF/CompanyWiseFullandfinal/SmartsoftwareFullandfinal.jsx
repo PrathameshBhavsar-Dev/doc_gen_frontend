@@ -175,8 +175,8 @@ const SmartsoftwareFullAndfinal = ({ company = {}, data = {} }) => {
             ].map(([label, val]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>{label}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>
+                <TableCell sx={{ ...cell, ...center }}>{formatAmt(val)}</TableCell>
+                <TableCell sx={{ ...cell, ...center }}>
                   {label === "PF Allowance" ? formatAmt(pfAllowance) : formatAmt(earned(val))}
                 </TableCell>
               </TableRow>
@@ -184,8 +184,8 @@ const SmartsoftwareFullAndfinal = ({ company = {}, data = {} }) => {
 
             <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...center }}>{formatAmt(totalActual)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...center }}>{formatAmt(totalEarned)}</TableCell>
             </TableRow>
 
             {/* Deductions */}
