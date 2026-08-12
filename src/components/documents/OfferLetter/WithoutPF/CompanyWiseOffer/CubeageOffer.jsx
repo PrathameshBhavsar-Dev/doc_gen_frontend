@@ -36,8 +36,9 @@ const formatDate = (date) => {
 const PageLayout = ({ children, company }) => (
   <Box
     sx={{
+      // mt: "-10px",
       width: "210mm",
-      minHeight: "297mm",
+      minHeight: "290mm",
       backgroundColor: "white",
       fontFamily: "'Calibri','Arial',sans-serif",
       marginBottom: "20px",
@@ -176,7 +177,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       {/* ================= PAGE 2 ================= */}
       <PageLayout company={company}>
 
-        <Typography align="center" fontWeight="bold" fontSize="18px" sx={{ textDecoration: "underline" }} mb={5}>
+        <Typography align="center" fontWeight="bold" fontSize="18px" sx={{ textDecoration: "underline" }} mb={4} mt={-2}>
           Compensation Structure
         </Typography>
 

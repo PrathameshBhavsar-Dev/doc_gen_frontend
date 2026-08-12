@@ -243,7 +243,7 @@ const totalMonthly = round0(
                 borderCollapse: "collapse",
                 "& th, & td": {
                   border:"1px solid black",
-                  padding:"5px",
+                  padding:"0px 12px 10px 12px",
                   fontSize:"15px",
                   lineHeight:1.2,
                 },
