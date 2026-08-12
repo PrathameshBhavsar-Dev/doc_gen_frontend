@@ -294,21 +294,31 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
 
           {Array.from({ length: maxRows }).map((_, i) => (
             <TableRow key={i}>
+
+              {/* EARNING NAME */}
               <TableCell sx={{ ...cell, ...bold }}>
                 {earnings[i]?.label || ""}
               </TableCell>
 
+              {/* EARNING AMOUNT */}
               <TableCell sx={cell}>
-                {Math.trunc(earnings[i]?.value || 0).toLocaleString("en-IN")}
+                {earnings[i]
+                  ? Math.trunc(earnings[i].value || 0).toLocaleString("en-IN")
+                  : ""}
               </TableCell>
 
+              {/* DEDUCTION NAME */}
               <TableCell sx={{ ...cell, ...bold }}>
                 {deductions[i]?.label || ""}
               </TableCell>
 
+              {/* DEDUCTION AMOUNT */}
               <TableCell sx={cell}>
-                {Math.trunc(deductions[i]?.value || 0).toLocaleString("en-IN")}
+                {deductions[i]
+                  ? Math.trunc(deductions[i].value || 0).toLocaleString("en-IN")
+                  : ""}
               </TableCell>
+
             </TableRow>
           ))}
 
