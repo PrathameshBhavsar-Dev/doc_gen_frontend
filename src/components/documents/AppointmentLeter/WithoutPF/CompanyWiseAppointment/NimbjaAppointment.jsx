@@ -202,7 +202,7 @@ const NimbjaAppointment = ({ company, data }) => {
               <Typography
                 sx={{ mb: "2mm", fontSize: "12pt", fontFamily: "Bahnschrift" }}
               >
-                1. Your Designation will be <strong>{data.position}</strong>.
+                1. Your Designation will be <strong>{data.joiningDesignation ?? data.position}</strong>.
               </Typography>
             </li>
 

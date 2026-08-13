@@ -86,7 +86,7 @@ const NimbjaRelieving = ({ company, data }) => {
             textDecoration: "underline",
           }}
         >
-          Releiving Letter
+          Relieving Letter
         </div>
 
         {/* ================= RECEIVER ================= */}
