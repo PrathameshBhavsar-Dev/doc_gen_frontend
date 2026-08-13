@@ -205,14 +205,16 @@ const RPOffer = ({ company, data }) => {
 
             <Typography
               sx={{
-                mb: 1,
                 fontFamily: `"Yu Gothic", "Segoe UI", Arial, sans-serif`,
                 fontSize: "15px",
-                fontWeight: 500,
-
+                mt: "-2mm",
+                display: "flex",
+                alignItems: "flex-start",
+                textAlign: "left",
               }}
             >
-              <strong>Address</strong> : {data.address}
+              <span style={{ flexShrink: 0 }}><strong>Address</strong> :&nbsp;</span>
+              <span style={{ fontWeight: 500, }} >{data.address}</span>
             </Typography>
 
             <Typography
