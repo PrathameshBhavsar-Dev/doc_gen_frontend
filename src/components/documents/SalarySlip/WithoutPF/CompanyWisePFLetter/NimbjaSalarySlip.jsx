@@ -276,9 +276,14 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
             </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Mode</TableCell>
-              <TableCell align="center">{mode}</TableCell>
-              <TableCell sx={{ fontWeight: "bold" }}>Working Days</TableCell>
-              <TableCell align="center">{workdays}</TableCell>
+              <TableCell align="">
+                Bank Name- {mode}
+                <br />
+                Bank Account No.- {accountNo}
+              </TableCell>
+
+              <TableCell sx={{ fontWeight: "bold" }}>Working days</TableCell>
+              <TableCell align="center">{data.workdays}</TableCell>
             </TableRow>
             {/* ===== EARNINGS / DEDUCTIONS ===== */}
             <TableRow>
