@@ -56,8 +56,12 @@ const RPSalarySlip = ({ company = {}, data = {} }) => {
 
   const [year, monthNum] = month.split("-");
   const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
-  const salaryMonth = `${monthName} ${year}`;
-
+let salaryMonth = "-";
+if (month && month.includes("-")) {
+  const [year, monthNum] = month.split("-");
+  const monthName = new Date(year, monthNum - 1).toLocaleString("en-IN", { month: "long" });
+  salaryMonth = `${monthName} ${year}`;
+}
   // /* ===== DEVCONS SALARY LOGIC (USED FOR RP) ===== */
   // const grossSalary = Number(totalSalary);
 

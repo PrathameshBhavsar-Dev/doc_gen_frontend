@@ -184,7 +184,7 @@ const RPOffer = ({ company, data }) => {
                 color: "#000"
               }}
             >
-              <strong>Name</strong> : {data.mrms} {data.employeeName}
+              <strong>Name</strong>     : {data.mrms} {data.employeeName}
             </Typography>
 
             <Typography
@@ -209,7 +209,7 @@ const RPOffer = ({ company, data }) => {
                 fontWeight: 500,
               }}
             >
-              <strong>Subject</strong> :{" "}
+              <strong>Subject</strong>  :{" "}
               <span style={{ textDecoration: "underline" }}>
                 Letter of Intent for the Position of {position}
               </span>
