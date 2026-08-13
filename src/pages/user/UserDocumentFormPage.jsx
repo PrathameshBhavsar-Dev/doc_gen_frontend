@@ -73,8 +73,8 @@ const basicFields = [
   },
   { name: "department", label: "Department", type: "text", required: true },
 
-  { name: "bankName", label: "Bank Name", type: "text", required: true },
-  { name: "accountNo", label: "Account No", type: "text", required: true },
+  { name: "bankName", label: "Bank Name", type: "text", required: false },
+  { name: "accountNo", label: "Account No", type: "text", required: false },
   {
     name: "offerType",
     label: "PF Type",
@@ -1142,47 +1142,116 @@ const UserDocumentFormPage = () => {
     ? filteredDocuments
     : selectedDocs;
 
+  // const validateField = (name, value) => {
+  //   if (!value) return "Please fill the required fields";
+
+  //   switch (name) {
+  //     case "employeeName":
+  //     case "fullName":
+  //       if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
+  //       break;
+
+  //     case "mobile":
+  //       if (!/^[6-9]\d{9}$/.test(value))
+  //         return "Enter valid 10-digit mobile number";
+  //       break;
+
+  //     case "email":
+  //     case "employeeEmail":
+  //       if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
+  //       break;
+
+  //     case "pan":
+  //       if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value))
+  //         return "Enter valid PAN (ABCDE1234F)";
+  //       break;
+
+  //     case "accountNo":
+  //       if (!/^\d{9,18}$/.test(value))
+  //         return "Account number must be 9-18 digits";
+  //       break;
+
+  //     case "joiningCTC":
+  //     case "salary":
+  //       if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
+  //       break;
+
+  //     case "dob":
+  //       if (new Date(value) > new Date()) return "DOB cannot be future date";
+  //       break;
+
+  //     case "joiningDate":
+  //     case "offerDate":
+  //       if (isNaN(new Date(value))) return "Invalid date";
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   return "";
+  // };
+
   const validateField = (name, value) => {
+    // Bank name and account number are temporarily optional
+    if (name === "bankName" || name === "accountNo") {
+      if (!value) return "";
+
+      // Only validate account number if user entered something
+      if (name === "accountNo" && !/^\d{9,18}$/.test(value)) {
+        return "Account number must be 9-18 digits";
+      }
+
+      return "";
+    }
+
     if (!value) return "Please fill the required fields";
 
     switch (name) {
       case "employeeName":
       case "fullName":
-        if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
+        if (!/^[A-Za-z\s]+$/.test(value)) {
+          return "Only alphabets allowed";
+        }
         break;
 
       case "mobile":
-        if (!/^[6-9]\d{9}$/.test(value))
+        if (!/^[6-9]\d{9}$/.test(value)) {
           return "Enter valid 10-digit mobile number";
+        }
         break;
 
       case "email":
       case "employeeEmail":
-        if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
+        if (!/^\S+@\S+\.\S+$/.test(value)) {
+          return "Enter valid email address";
+        }
         break;
 
       case "pan":
-        if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value))
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value)) {
           return "Enter valid PAN (ABCDE1234F)";
-        break;
-
-      case "accountNo":
-        if (!/^\d{9,18}$/.test(value))
-          return "Account number must be 9-18 digits";
+        }
         break;
 
       case "joiningCTC":
       case "salary":
-        if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
+        if (isNaN(value) || Number(value) <= 0) {
+          return "Enter valid amount";
+        }
         break;
 
       case "dob":
-        if (new Date(value) > new Date()) return "DOB cannot be future date";
+        if (new Date(value) > new Date()) {
+          return "DOB cannot be future date";
+        }
         break;
 
       case "joiningDate":
       case "offerDate":
-        if (isNaN(new Date(value))) return "Invalid date";
+        if (isNaN(new Date(value))) {
+          return "Invalid date";
+        }
         break;
 
       default:
