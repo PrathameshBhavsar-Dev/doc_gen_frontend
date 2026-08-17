@@ -145,24 +145,28 @@ const SalaryAnnexurePage = ({ company, data }) => {
             {rows.map((r, i) => (
               <TableRow key={i}>
                 <TableCell align="center">{r.name}</TableCell>
+
                 <TableCell align="center">
-                  {r.monthly.toLocaleString("en-IN")}
+                  {Math.round(r.monthly).toLocaleString("en-IN")}
                 </TableCell>
-                {/* <TableCell>{r.name}</TableCell> */}
+
                 <TableCell align="center">
-                  {r.annual.toLocaleString("en-IN")}
+                  {Math.round(r.annual).toLocaleString("en-IN")}
                 </TableCell>
               </TableRow>
             ))}
 
             <TableRow sx={{ backgroundColor: "#1fb5e9" }}>
-              <TableCell align="center"><b>Monthly Gross</b></TableCell>
               <TableCell align="center">
-                <b>{monthlyGross.toLocaleString("en-IN")}</b>
+                <b>Monthly Gross</b>
               </TableCell>
-              {/* <TableCell><b>Annual CTC</b></TableCell> */}
+
               <TableCell align="center">
-                <b>{annualCTC.toLocaleString("en-IN")}</b>
+                <b>{Math.round(monthlyGross).toLocaleString("en-IN")}</b>
+              </TableCell>
+
+              <TableCell align="center">
+                <b>{Math.round(annualCTC).toLocaleString("en-IN")}</b>
               </TableCell>
             </TableRow>
           </TableBody>

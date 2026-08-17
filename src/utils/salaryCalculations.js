@@ -300,20 +300,15 @@ export const calculateIncrement = (currentCTC, incrementPercentage) => {
  * @param {number} amount - Amount to format
  * @returns {string} - Formatted currency string
  */
-
 export const formatCurrency = (amount) => {
-  if (amount == null || isNaN(amount)) return "0";
-
-  return Number(amount).toLocaleString("en-IN", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  });
-
-
-  return new Intl.NumberFormat("en-IN", {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  }).format(amount);
+  if (amount === null || amount === undefined || amount === "") {
+    return "0";
+  }
+  const num = Number(amount);
+  if (!Number.isFinite(num)) {
+    return "0";
+  }
+  return Math.round(num).toLocaleString("en-IN");
 };
 /**
  * Convert number to words (Indian format)

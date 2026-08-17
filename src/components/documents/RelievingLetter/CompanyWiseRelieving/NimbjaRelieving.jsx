@@ -102,7 +102,7 @@ const NimbjaRelieving = ({ company, data }) => {
         </div>
 
         {/* ================= SALUTATION ================= */}
-        <p style={{ marginBottom: "10mm", marginTop: "-1mm" }}>
+        <p style={{ marginBottom: "1mm", marginTop: "-15mm" }}>
           Dear {data.employeeName?.split(" ")[0] || ""},
         </p>
 

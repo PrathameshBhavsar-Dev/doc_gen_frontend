@@ -184,19 +184,21 @@ const RPOffer = ({ company, data }) => {
                 color: "#000"
               }}
             >
-              <strong>Name</strong> : {data.mrms} {data.employeeName}
+              <strong>Name</strong>     : {data.mrms} {data.employeeName}
             </Typography>
 
             <Typography
               sx={{
-                mb: 1,
                 fontFamily: `"Yu Gothic", "Segoe UI", Arial, sans-serif`,
                 fontSize: "15px",
-                fontWeight: 500,
-
+                mt: "-2mm",
+                display: "flex",
+                alignItems: "flex-start",
+                textAlign: "left",
               }}
             >
-              <strong>Address</strong> : {data.address}
+              <span style={{ flexShrink: 0 }}><strong>Address</strong> :&nbsp;</span>
+              <span style={{ fontWeight: 500, }} >{data.address}</span>
             </Typography>
 
             <Typography
@@ -207,7 +209,7 @@ const RPOffer = ({ company, data }) => {
                 fontWeight: 500,
               }}
             >
-              <strong>Subject</strong> :{" "}
+              <strong>Subject</strong>  :{" "}
               <span style={{ textDecoration: "underline" }}>
                 Letter of Intent for the Position of {position}
               </span>

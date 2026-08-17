@@ -305,7 +305,7 @@ const QuickSalarySlip = ({ data = {}, company = {} }) => {
             </TableCell>
 
             <TableCell sx={cell} colSpan={3}>
-              Bank Name : {safe(data.mode)} {safe(data.bankName)}
+              Bank Name : {safe(data.bankName)}
               <br />
               Bank Account No: {safe(data.accountNo)}
             </TableCell>
