@@ -86,7 +86,7 @@ const NimbjaRelieving = ({ company, data }) => {
             textDecoration: "underline",
           }}
         >
-          Releiving Letter
+          Relieving Letter
         </div>
 
         {/* ================= RECEIVER ================= */}
@@ -115,7 +115,7 @@ const NimbjaRelieving = ({ company, data }) => {
         >
           This letter confirms that we accept your voluntary and irrevocable
           resignation from employment of your position as{" "}
-          <strong>{data.currentDesignation ?? data.designation}</strong> Engineer in the Department of{" "}
+          <strong>{data.currentDesignation ?? data.designation}</strong> in the Department of{" "}
           <strong>{data.department}</strong>. Your last day of employment will
           be{" "}
           <strong>

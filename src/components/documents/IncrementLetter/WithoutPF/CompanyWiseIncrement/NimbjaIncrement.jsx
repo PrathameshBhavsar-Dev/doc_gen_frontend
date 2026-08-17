@@ -257,12 +257,16 @@ const NimbjaIncrement = ({ company, data }) => {
           <Typography
             sx={{
               textAlign: "right",
-              fontSize: "11pt",
+              mb: 6,
+              mt: "-12mm",
               fontFamily: "Bahnschrift",
-              mb: 2,
             }}
           >
-            {formatDate(issueDate)}
+            {new Date(issueDate).toLocaleDateString("en-US", {
+              month: "long",
+              day: "2-digit",
+              year: "numeric",
+            })}
           </Typography>
 
           {/* Ref */}
@@ -301,7 +305,7 @@ const NimbjaIncrement = ({ company, data }) => {
               fontFamily: "Bahnschrift",
               "& th, & td": {
                 border: "1px solid #000",
-                padding: "6px",
+                padding: "0px 12px 8px 12px",
                 fontSize: "14px",
                 fontFamily: "Bahnschrift",
               },
