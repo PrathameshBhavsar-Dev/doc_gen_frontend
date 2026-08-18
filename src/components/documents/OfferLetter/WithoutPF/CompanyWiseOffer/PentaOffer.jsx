@@ -232,6 +232,7 @@ const PentaOffer = ({ company, data }) => {
 
         {/* REST OF CONTENT UNCHANGED */}
         <Typography sx={{ fontSize: 14, mb: 1 }}>
+          <br />
           Dear {data.employeeName?.split(" ")[0]},
         </Typography>
 

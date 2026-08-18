@@ -195,7 +195,7 @@ const NimbjaSalarySlip = ({ company = {}, data = {} }) => {
           boxShadow: "none",
           "& .MuiTableCell-root": {
             border: "1px solid #000",
-            padding: "0px 12px 12px 12px",
+            padding: "0px 10px 10px 10px",
             fontFamily: "Bahnschrift",
             fontSize: "10.5pt",
           },
