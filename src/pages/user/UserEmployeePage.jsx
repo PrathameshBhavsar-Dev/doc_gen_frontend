@@ -286,7 +286,13 @@ transition-all duration-300
                 </span>
 
                 <div className="text-[13px] text-[#475569]">
-                  {profile.joiningDate || "N/A"}
+                  {profile.createdAt
+                    ? new Date(profile.createdAt).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                    : "N/A"}
                 </div>
               </div>
 

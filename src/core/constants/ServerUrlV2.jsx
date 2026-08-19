@@ -8,7 +8,7 @@ class ServerUrlV2 {
 
   // GET ALL USERS
   static GET_ALL_USERS =
-    `${this.API_USERS}`;
+    `${this.API_USERS}`;  
 
   // GET USER BY ID
   static GET_USER_BY_ID = (id) =>
