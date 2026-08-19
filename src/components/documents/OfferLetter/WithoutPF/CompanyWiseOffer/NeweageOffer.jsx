@@ -169,7 +169,7 @@ const NeweageOffer = ({ company, data }) => {
           <Typography sx={{ ...TEXT, mb: 2 }}>Dear {employeeName},</Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
-            Congratulations! <b>{COMPANY_NAME}</b> is excited to call you our
+            Congratulations! <b>NEWEAGE CLOUD SOFTWARE SERVICES Pvt. Ltd.</b> is excited to call you our
             new {position}.
           </Typography>
 
@@ -186,7 +186,7 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           <Typography sx={{ ...TEXT, mb: 2 }}>
-            <b>{COMPANY_NAME}</b> will start you out at{" "}
+            <b>NEWEAGE CLOUD SOFTWARE SERVICES Pvt. Ltd.</b> will start you out at{" "}
             <b>Rs. {formatCurrency(totalAnnual)}</b> per year. You can expect to
             receive payment monthly.
           </Typography>
@@ -211,7 +211,7 @@ const NeweageOffer = ({ company, data }) => {
             {/* COMPANY */}
             <Box>
               <Typography fontWeight={700} fontSize={15} marginTop={2}>
-                For {COMPANY_NAME}
+                For NEWEAGE CLOUD SOFTWARE SERVICES
               </Typography>
 
               <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
@@ -285,7 +285,6 @@ const NeweageOffer = ({ company, data }) => {
                       fontWeight: 600,
                       backgroundColor: "#3dd6f1",
                     }}
-                    sx={CELL_BASE}
                   >
                     Salary Components
                   </TableCell>
