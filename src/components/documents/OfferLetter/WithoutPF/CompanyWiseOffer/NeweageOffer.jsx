@@ -152,9 +152,9 @@ const NeweageOffer = ({ company, data }) => {
           </Typography>
 
           {/* Date */}
-          <Typography sx={{ ...TEXT, mb: 1 }}>
-            {formatDate(issueDate)}
-          </Typography>
+          <Typography sx={{ ...TEXT, mb: 1, textAlign: "right" }}>
+  {formatDate(issueDate)}
+</Typography>
 
           {/* Name & Designation */}
           <Typography sx={{ ...TEXT, mb: 1 }}>

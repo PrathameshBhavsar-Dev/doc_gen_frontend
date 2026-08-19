@@ -315,7 +315,7 @@ const NeweageSalarySlip = ({ company, data }) => {
                 <img
                   src={company.stamp}
                   alt="Stamp"
-                  style={{ height: "100px" }}
+                  style={{ height: "90px" }}
                 />
               )}
             </TableCell>
