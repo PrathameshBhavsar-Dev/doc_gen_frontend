@@ -133,7 +133,7 @@ const DevconsOffer = ({ company, data }) => {
 
             <Typography sx={{ mb: 1, textAlign: "justify" }}>
               The starting salary for this position is{" "}
-              <b>{formatCurrency(data.salary)}</b> per annum. Payment is on monthly basis
+              <b>{formatCurrency(data.joiningCTC || data.salary)}</b> per annum. Payment is on monthly basis
               by direct deposit.
             </Typography>
 
