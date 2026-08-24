@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosV2Instance = axios.create({
   // baseURL: "http://localhost:8080",
-  baseURL: "https://docgen-backend-7mwl.onrender.com",
+  baseURL: "https://docgen-backend-  7mwl.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
