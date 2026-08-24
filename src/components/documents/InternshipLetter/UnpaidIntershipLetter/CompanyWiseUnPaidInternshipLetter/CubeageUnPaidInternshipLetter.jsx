@@ -32,8 +32,11 @@ const formatDate = (date) => {
 };
 
 
+
 const CubeageUnPaidInternshipLetter = ({ company, data }) => {
   const firstName = data.employeeName?.split(" ")[0] || data.internName?.split(" ")[0] || "";
+  const issueDate =
+    data?.internship_certificate?.issueDate ?? data?.issueDate;
 
   return (
     <>
@@ -50,7 +53,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
             fontFamily: "Cambria",
           }}
         >
-          <strong>Date: {data.issueDate}</strong>
+          <strong>Date: {issueDate}</strong>
         </Box>
 
         {/* ================= TITLE ================= */}

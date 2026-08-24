@@ -34,8 +34,13 @@ const formatDate = (date) => {
   return `${day} ${month} ${year}`;
 };
 
-
 const CubeageCertification = ({ company, data }) => {
+
+  const issueDate = formatDate(
+    data.completion_certificate?.issueDate ??
+    data.issueDate ??
+    "");
+
   return (
     <A4Layout headerSrc={company.header} >
       {/* ================= ISSUE DATE ================= */}
@@ -49,7 +54,7 @@ const CubeageCertification = ({ company, data }) => {
           fontWeight: "bold",
         }}
       >
-        Date: {formatDate(data.issueDate)}
+        Date: {formatDate(issueDate)}
       </Box>
 
       {/* ================= TITLE ================= */}
