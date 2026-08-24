@@ -34,9 +34,17 @@ const formatDate = (date) => {
 
 
 const CubeageUnPaidInternshipLetter = ({ company, data }) => {
-  const firstName = data.employeeName?.split(" ")[0] || data.internName?.split(" ")[0] || "";
-  const issueDate =
-    data?.internship_certificate?.issueDate ?? data?.issueDate;
+  const internshipData = data?.internship_certificate || {};
+
+  const firstName =
+    data.employeeName?.split(" ")[0] ||
+    data.internName?.split(" ")[0] ||
+    "";
+
+  const issueDate = internshipData.issueDate ?? data?.issueDate;
+
+  const startDate = internshipData.startDate;
+  const endDate = internshipData.endDate;
 
   return (
     <>
@@ -92,7 +100,7 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
         <Typography paragraph sx={{ fontFamily: "Book Antiqua" }}>
           On behalf of <strong>{company.name}</strong> family, We are thrilled
           to extend our warmest congratulations as we offer you the exciting
-          opportunity to join our esteemed team as our <strong>{data.joiningDesignation ?? data.designation}</strong> from <strong>{formatDate(data.startDate)}</strong> to <strong>{formatDate(data.endDate)}.</strong>{" "}
+          opportunity to join our esteemed team as our <strong>{data.joiningDesignation ?? data.designation}</strong> from <strong>{formatDate(startDate)}</strong> to <strong>{formatDate(endDate)}.</strong>{" "}
         </Typography>
 
         <Typography sx={{ fontFamily: "Book Antiqua" }}>
