@@ -112,7 +112,7 @@ const NimbjaAppointment = ({ company, data }) => {
             sx={{
               textAlign: "right",
               mb: "5mm",
-              mt: "-5mm",
+              mt: "-10mm",
               fontSize: "11pt",
               fontFamily: "Bahnschrift",
             }}
