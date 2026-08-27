@@ -326,11 +326,12 @@ const IncrementLetterPage = ({
 }) => {
   const {
     employeeName,
-    designation,
     issueDate,
     effectiveDate,
     newCTC,
   } = data;
+
+  const designation = data.currentDesignation ?? data.position;
 
   return (
     <A4Page company={company}>
