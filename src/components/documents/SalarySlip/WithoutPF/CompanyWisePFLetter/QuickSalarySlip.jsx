@@ -144,14 +144,23 @@ const bold = { fontWeight: "bold" };
 const QuickSalarySlip = ({ data = {}, company = {} }) => {
   const salary = getSalaryBreakup(data);
 
+  // const earnings = [
+  //   { label: "BASIC", value: salary.basic },
+  //   { label: "HRA", value: salary.hra },
+  //   { label: "DEARNESS ALLOWANCE", value: salary.da },
+  //   { label: "SPECIAL ALLOWANCE", value: salary.special },
+  //   { label: "FOOD ALLOWANCE", value: salary.food },
+  //   { label: "MISC ALLOWANCE", value: salary.misc },
+  // ];
+
   const earnings = [
-    { label: "BASIC", value: salary.basic },
-    { label: "HRA", value: salary.hra },
-    { label: "DEARNESS ALLOWANCE", value: salary.da },
-    { label: "SPECIAL ALLOWANCE", value: salary.special },
-    { label: "FOOD ALLOWANCE", value: salary.food },
-    { label: "MISC ALLOWANCE", value: salary.misc },
-  ];
+  { label: "BASIC", value: Math.trunc(salary.basic || 0) },
+  { label: "HRA", value: Math.trunc(salary.hra || 0) },
+  { label: "DEARNESS ALLOWANCE", value: Math.trunc(salary.da || 0) },
+  { label: "SPECIAL ALLOWANCE", value: Math.trunc(salary.special || 0) },
+  { label: "FOOD ALLOWANCE", value: Math.trunc(salary.food || 0) },
+  { label: "MISC ALLOWANCE", value: Math.trunc(salary.misc || 0) },
+];
 
   const deductions = [
     { label: "PT", value: salary.pt },
