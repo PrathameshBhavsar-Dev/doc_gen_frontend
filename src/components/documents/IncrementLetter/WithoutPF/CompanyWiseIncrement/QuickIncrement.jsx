@@ -166,11 +166,6 @@ const numberToWords = (value) => {
 const generateSalaryBreakup = (annualCTC) => {
   const yearlyCTC = round2(annualCTC);
 
-  // Monthly Gross
-  const monthlyGross = round2(yearlyCTC / 12);
-
-  /* ================= PERCENTAGE STRUCTURE ================= */
-
   const PERCENT = {
     basic: 0.40,
     hra: 0.18,
@@ -180,73 +175,30 @@ const generateSalaryBreakup = (annualCTC) => {
     facility: 0.08,
   };
 
-  /* ================= MONTHLY CALCULATION ================= */
+  // Calculate annual values first
+  const basicAnnual = round2(yearlyCTC * PERCENT.basic);
+  const hraAnnual = round2(yearlyCTC * PERCENT.hra);
+  const daAnnual = round2(yearlyCTC * PERCENT.da);
+  const specialAnnual = round2(yearlyCTC * PERCENT.special);
+  const foodAnnual = round2(yearlyCTC * PERCENT.food);
 
-  const basicMonthly = round2(
-    monthlyGross * PERCENT.basic
-  );
-
-  const hraMonthly = round2(
-    monthlyGross * PERCENT.hra
-  );
-
-  const daMonthly = round2(
-    monthlyGross * PERCENT.da
-  );
-
-  const specialMonthly = round2(
-    monthlyGross * PERCENT.special
-  );
-
-  const foodMonthly = round2(
-    monthlyGross * PERCENT.food
-  );
-
-  /*
-    Facility Allowance is calculated as the balance.
-
-    This ensures the total monthly salary always
-    matches monthlyGross even if rounding occurs.
-  */
-
-  const facilityMonthly = round2(
-    monthlyGross -
-    (
-      basicMonthly +
-      hraMonthly +
-      daMonthly +
-      specialMonthly +
-      foodMonthly
-    )
-  );
-
-  /* ================= ANNUAL CALCULATION ================= */
-
-  const basicAnnual = round2(
-    basicMonthly * 12
-  );
-
-  const hraAnnual = round2(
-    hraMonthly * 12
-  );
-
-  const daAnnual = round2(
-    daMonthly * 12
-  );
-
-  const specialAnnual = round2(
-    specialMonthly * 12
-  );
-
-  const foodAnnual = round2(
-    foodMonthly * 12
-  );
-
+  // Facility is the balancing component
   const facilityAnnual = round2(
-    facilityMonthly * 12
+    yearlyCTC -
+      basicAnnual -
+      hraAnnual -
+      daAnnual -
+      specialAnnual -
+      foodAnnual
   );
 
-  /* ================= RETURN ROWS ================= */
+  // Calculate monthly values
+  const basicMonthly = round2(basicAnnual / 12);
+  const hraMonthly = round2(hraAnnual / 12);
+  const daMonthly = round2(daAnnual / 12);
+  const specialMonthly = round2(specialAnnual / 12);
+  const foodMonthly = round2(foodAnnual / 12);
+  const facilityMonthly = round2(facilityAnnual / 12);
 
   return [
     {
@@ -254,38 +206,157 @@ const generateSalaryBreakup = (annualCTC) => {
       monthly: basicMonthly,
       annual: basicAnnual,
     },
-
     {
       name: "House Rent Allowance",
       monthly: hraMonthly,
       annual: hraAnnual,
     },
-
     {
       name: "Dearness Allowance",
       monthly: daMonthly,
       annual: daAnnual,
     },
-
     {
       name: "Special Allowance",
       monthly: specialMonthly,
       annual: specialAnnual,
     },
-
-    {
-      name: "MISC Allowance",
-      monthly: facilityMonthly,
-      annual: facilityAnnual,
-    },
-
     {
       name: "Food Allowance",
       monthly: foodMonthly,
       annual: foodAnnual,
     },
+    {
+      name: "MISC Allowance",
+      monthly: facilityMonthly,
+      annual: facilityAnnual,
+    },
   ];
 };
+
+// const generateSalaryBreakup = (annualCTC) => {
+//   const yearlyCTC = round2(annualCTC);
+
+//   // Monthly Gross
+//   const monthlyGross = round2(yearlyCTC / 12);
+
+//   /* ================= PERCENTAGE STRUCTURE ================= */
+
+//   const PERCENT = {
+//     basic: 0.40,
+//     hra: 0.18,
+//     da: 0.12,
+//     special: 0.16,
+//     food: 0.06,
+//     facility: 0.08,
+//   };
+
+//   /* ================= MONTHLY CALCULATION ================= */
+
+//   const basicMonthly = round2(
+//     monthlyGross * PERCENT.basic
+//   );
+
+//   const hraMonthly = round2(
+//     monthlyGross * PERCENT.hra
+//   );
+
+//   const daMonthly = round2(
+//     monthlyGross * PERCENT.da
+//   );
+
+//   const specialMonthly = round2(
+//     monthlyGross * PERCENT.special
+//   );
+
+//   const foodMonthly = round2(
+//     monthlyGross * PERCENT.food
+//   );
+
+//   /*
+//     Facility Allowance is calculated as the balance.
+
+//     This ensures the total monthly salary always
+//     matches monthlyGross even if rounding occurs.
+//   */
+
+//   const facilityMonthly = round2(
+//     monthlyGross -
+//     (
+//       basicMonthly +
+//       hraMonthly +
+//       daMonthly +
+//       specialMonthly +
+//       foodMonthly
+//     )
+//   );
+
+//   /* ================= ANNUAL CALCULATION ================= */
+
+//   const basicAnnual = round2(
+//     basicMonthly * 12
+//   );
+
+//   const hraAnnual = round2(
+//     hraMonthly * 12
+//   );
+
+//   const daAnnual = round2(
+//     daMonthly * 12
+//   );
+
+//   const specialAnnual = round2(
+//     specialMonthly * 12
+//   );
+
+//   const foodAnnual = round2(
+//     foodMonthly * 12
+//   );
+
+//   const facilityAnnual = round2(
+//     facilityMonthly * 12
+//   );
+
+//   /* ================= RETURN ROWS ================= */
+
+//   return [
+//     {
+//       name: "Basic Salary",
+//       monthly: basicMonthly,
+//       annual: basicAnnual,
+//     },
+
+//     {
+//       name: "House Rent Allowance",
+//       monthly: hraMonthly,
+//       annual: hraAnnual,
+//     },
+
+//     {
+//       name: "Dearness Allowance",
+//       monthly: daMonthly,
+//       annual: daAnnual,
+//     },
+
+//     {
+//       name: "Special Allowance",
+//       monthly: specialMonthly,
+//       annual: specialAnnual,
+//     },
+
+//     {
+//       name: "MISC Allowance",
+//       monthly: facilityMonthly,
+//       annual: facilityAnnual,
+//     },
+
+//     {
+//       name: "Food Allowance",
+//       monthly: foodMonthly,
+//       annual: foodAnnual,
+//     },
+//   ];
+// };
 
 /* =========================================================
    A4 PAGE
