@@ -274,7 +274,7 @@ const generateSalaryBreakup = (annualCTC) => {
     },
 
     {
-      name: "Facility Allowance",
+      name: "MISC Allowance",
       monthly: facilityMonthly,
       annual: facilityAnnual,
     },
@@ -571,7 +571,7 @@ const SalaryAnnexurePage = ({
             "& th, & td": {
               border: "1px solid #000",
               fontSize: 12,
-              p: "6px",
+              p: "0px 12px 12px 12px",
             },
           }}
         >
