@@ -206,7 +206,6 @@ const DevconsIncrement = ({ company = {}, data = {} }) => {
               borderCollapse: "collapse",
               "& th, & td": {
                 border: "1px solid #000",
-                //  padding: "4px 6px",
                 padding: "0px 12px 12px 12px",
                 fontSize: "15px",
                 "& *": {
@@ -216,86 +215,93 @@ const DevconsIncrement = ({ company = {}, data = {} }) => {
             }}
           >
             <TableBody>
-
               <TableRow sx={{ backgroundColor: "#f2b705" }}>
                 <TableCell sx={{ fontWeight: 700 }}>
                   Monthly Component
                 </TableCell>
+
                 <TableCell sx={{ fontWeight: 700 }} align="right">
                   Amount (Rs.)
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>
+
+                <TableCell sx={{ fontWeight: 700 }} align="right">
                   Yearly Component
-                </TableCell>
-                <TableCell sx={{ fontWeight: 700 }} align="right">
-                  Amount (Rs.)
                 </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Basic</TableCell>
-                <TableCell align="right">{formatCurrency(basicMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(basicAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(basicMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(basicAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>House Rent Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(hraMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(hraAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(hraMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(hraAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Dearness Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(daMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(daAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(daMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(daAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Special Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(specialMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(specialAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(specialMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(specialAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow>
                 <TableCell>Food Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(foodMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(foodAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(foodMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(foodAnnual)}
+                </TableCell>
               </TableRow>
-
-              {/* <TableRow>
-                <TableCell>Misc. Allowance</TableCell>
-                <TableCell align="right">{formatCurrency(miscMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(miscAnnual)}</TableCell>
-              </TableRow> */}
 
               <TableRow>
                 <TableCell>Provident Fund (PF)</TableCell>
-                <TableCell align="right">{formatCurrency(pfMonthly)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">{formatCurrency(pfAnnual)}</TableCell>
+                <TableCell align="right">
+                  {formatCurrency(pfMonthly)}
+                </TableCell>
+                <TableCell align="right">
+                  {formatCurrency(pfAnnual)}
+                </TableCell>
               </TableRow>
 
               <TableRow sx={{ backgroundColor: "#f2b705" }}>
                 <TableCell sx={{ fontWeight: 700 }}>
                   Monthly Gross
                 </TableCell>
+
                 <TableCell sx={{ fontWeight: 700 }} align="right">
                   {formatCurrency(totalMonthly)}
                 </TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>
-                  Annual CTC
-                </TableCell>
+
                 <TableCell sx={{ fontWeight: 700 }} align="right">
                   {formatCurrency(totalAnnual)}
                 </TableCell>
               </TableRow>
-
             </TableBody>
           </Table>
 

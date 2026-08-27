@@ -15,7 +15,6 @@ import A4Page from "../../../../layout/A4Page";
 const cell = {
   border: "1px solid #000",
   fontSize: "13px",      // smaller text
- // padding: "0px 12px 12px 12px",
  padding: "0px 12px 6px 12px",    // less spacing
   // lineHeight: 1.2,
 };
@@ -140,7 +139,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
             <TableRow>
               <TableCell sx={cell}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={cell}>Date of Resignation</TableCell>
               <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
             </TableRow>

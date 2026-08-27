@@ -160,7 +160,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
 
             <li>
               <Typography fontSize={14} mt={1}>
-                2. Your total emoluments will be <b>{formatLakhsPerAnnum(data.salary)}</b>.
+                2. Your total emoluments will be <b>{formatLakhsPerAnnum(annualCTC)}</b>.
               </Typography>
             </li>
 
@@ -309,7 +309,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
               </Box>
 
               {/* RIGHT SIDE */}
-              <Box sx={{ minWidth: 250, mt: 2 }}>
+              <Box sx={{ minWidth: 250, mt: 6.8 }}>
                 <Typography fontWeight={600} fontSize={15} mt={1} sx={{ minWidth: 250, textAlign: "center" }} >
                   I ACCEPT
                 </Typography>

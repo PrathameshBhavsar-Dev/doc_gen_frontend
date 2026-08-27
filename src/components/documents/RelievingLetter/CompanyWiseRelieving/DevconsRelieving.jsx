@@ -3,6 +3,8 @@ import { Box, Typography } from "@mui/material";
 
 const DevconsRelieving = ({ company, data }) => {
   const firstName = data.employeeName?.split(" ")[0];
+    const issueDate = data.relieving_letter?.issueDate ?? data.issueDate;
+
 
   return (
     <Box
@@ -44,7 +46,7 @@ const DevconsRelieving = ({ company, data }) => {
 
         {/* DATE */}
         <Typography sx={{ textAlign: "right", mb: 3 }}>
-          {new Date(data.issueDate).toLocaleDateString("en-US", {
+          {new Date(issueDate).toLocaleDateString("en-US", {
             month: "long",
             day: "2-digit",
             year: "numeric",
