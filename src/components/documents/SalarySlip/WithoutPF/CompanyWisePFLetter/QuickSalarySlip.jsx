@@ -40,7 +40,17 @@ const safe = (val) => (val !== undefined && val !== null ? val : "");
 const getSalaryBreakup = (data) => {
   const total = Number(data.totalSalary || 0);
 
-  // 🔹 Manual fallback (UNCHANGED)
+  // Check whether the selected month is February
+  const date =
+    typeof data.month === "string" && data.month.length === 7
+      ? new Date(`${data.month}-01`)
+      : new Date(data.month);
+
+  const isFebruary = !isNaN(date) && date.getMonth() === 1;
+
+  const ptAmount = isFebruary ? 300 : 200;
+
+  // Manual fallback
   if (!total) {
     return {
       basic: data.basic,
@@ -49,18 +59,17 @@ const getSalaryBreakup = (data) => {
       special: data.special,
       food: data.food,
       misc: data.misc,
-      pt: data.pt,
+      pt: ptAmount,
     };
   }
 
-  // 🔹 AUTO calculation (CORRECTED)
+  // AUTO calculation
   const basic = +(total * 0.40).toFixed(2);
   const hra = +(total * 0.18).toFixed(2);
   const da = +(total * 0.12).toFixed(2);
   const special = +(total * 0.16).toFixed(2);
   const food = +(total * 0.06).toFixed(2);
 
-  // 🔥 BALANCE → no loss, no extra
   const misc = +(
     total - (basic + hra + da + special + food)
   ).toFixed(2);
@@ -72,7 +81,7 @@ const getSalaryBreakup = (data) => {
     special,
     food,
     misc,
-    pt: data.pt ?? 200,
+    pt: ptAmount,
   };
 };
 
