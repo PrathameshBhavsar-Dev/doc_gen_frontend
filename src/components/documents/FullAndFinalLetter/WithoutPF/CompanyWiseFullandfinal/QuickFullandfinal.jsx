@@ -16,8 +16,8 @@ const totalBg = "#E1EEF9";
 /* ---------------- STYLES ---------------- */
 const cell = {
   border: "1px solid #000",
- // padding: "4px",
- padding: "0px 12px 12px 12px",
+  // padding: "4px",
+  padding: "0px 12px 12px 12px",
   fontSize: "12px",
   lineHeight: 1.2,
 };
@@ -41,10 +41,13 @@ const formatMonth = (v) => {
   return d.toLocaleDateString("en-US", { month: "long" });
 };
 
+// const numberFormat = (n) =>
+//   Number(n || 0).toLocaleString("en-IN", {
+//     minimumFractionDigits: 2,
+//   });
+
 const numberFormat = (n) =>
-  Number(n || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-  });
+  Math.round(Number(n || 0)).toLocaleString("en-IN");
 
 /* ---------------- SALARY BREAKUP ---------------- */
 const getSalaryBreakup = (totalSalary = 0) => {
@@ -220,7 +223,7 @@ const QuickFullandfinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell sx={{ ...cell, ...bold }}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={{ ...cell, ...bold }}>Date of Resignation</TableCell>
               <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
             </TableRow>
