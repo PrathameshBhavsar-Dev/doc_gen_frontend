@@ -42,34 +42,43 @@ const SmartSoftwareIncrement = ({ company, data }) => {
 
   /* ================= ACCURATE SALARY LOGIC ================= */
 
-  const round0 = (num) => Math.round(num);
+const round0 = (num) => Math.round(num);
 
-  const annualInput = round0(Number(newCTC || 0));
-  const monthlyCTC = round0(annualInput / 12);
+const annualInput = round0(Number(newCTC || 0));
 
-  // Annual breakup based on Annual CTC
-  const basicAnnual = round0(annualInput * 0.4);
-  const hraAnnual = round0(annualInput * 0.18);
-  const daAnnual = round0(annualInput * 0.12);
-  const specialAnnual = round0(annualInput * 0.16);
-  const foodAnnual = round0(annualInput * 0.06);
+const monthlyCTC = round0(annualInput / 12);
 
-  // Dynamic last component to avoid mismatch
-  const miscAnnual =
-    annualInput -
-    (basicAnnual +
-      hraAnnual +
+// Dynamic annual breakup based on Annual CTC
+const hraAnnual = round0(annualInput * 0.18);
+const daAnnual = round0(annualInput * 0.12);
+const specialAnnual = round0(annualInput * 0.16);
+const foodAnnual = round0(annualInput * 0.06);
+
+// Basic = remaining amount after other annual components
+const basicAnnual = round0(
+  annualInput -
+    (hraAnnual +
       daAnnual +
       specialAnnual +
-      foodAnnual);
+      foodAnnual)
+);
 
-  // Monthly from annual
-  const basicMonthly = round0(basicAnnual / 12);
-  const hraMonthly = round0(hraAnnual / 12);
-  const daMonthly = round0(daAnnual / 12);
-  const specialMonthly = round0(specialAnnual / 12);
-  const foodMonthly = round0(foodAnnual / 12);
-  const miscMonthly = round0(miscAnnual / 12);
+// Dynamic last component to avoid mismatch
+const miscAnnual =
+  annualInput -
+  (basicAnnual +
+    hraAnnual +
+    daAnnual +
+    specialAnnual +
+    foodAnnual);
+
+// Monthly from annual
+const basicMonthly = round0(basicAnnual / 12);
+const hraMonthly = round0(hraAnnual / 12);
+const daMonthly = round0(daAnnual / 12);
+const specialMonthly = round0(specialAnnual / 12);
+const foodMonthly = round0(foodAnnual / 12);
+const miscMonthly = round0(miscAnnual / 12);
 
   const salaryRows = [
     { name: "Basic", monthly: basicMonthly, annual: basicAnnual },
@@ -77,7 +86,7 @@ const SmartSoftwareIncrement = ({ company, data }) => {
     { name: "Conveyance Allowance", monthly: daMonthly, annual: daAnnual },
     { name: "Special Allowance", monthly: specialMonthly, annual: specialAnnual },
     { name: "Food Allowance", monthly: foodMonthly, annual: foodAnnual },
-    { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
+    // { name: "Misc. Allowance", monthly: miscMonthly, annual: miscAnnual },
   ];
 
   const monthlyGross = monthlyCTC;
