@@ -176,21 +176,36 @@ const generateSalaryBreakup = (annualCTC) => {
   };
 
   // Calculate annual values first
-  const basicAnnual = round2(yearlyCTC * PERCENT.basic);
-  const hraAnnual = round2(yearlyCTC * PERCENT.hra);
-  const daAnnual = round2(yearlyCTC * PERCENT.da);
-  const specialAnnual = round2(yearlyCTC * PERCENT.special);
-  const foodAnnual = round2(yearlyCTC * PERCENT.food);
+  // const basicAnnual = round2(yearlyCTC * PERCENT.basic);
+  // const hraAnnual = round2(yearlyCTC * PERCENT.hra);
+  // const daAnnual = round2(yearlyCTC * PERCENT.da);
+  // const specialAnnual = round2(yearlyCTC * PERCENT.special);
+  // const foodAnnual = round2(yearlyCTC * PERCENT.food);
 
-  // Facility is the balancing component
-  const facilityAnnual = round2(
-    yearlyCTC -
-      basicAnnual -
-      hraAnnual -
-      daAnnual -
-      specialAnnual -
-      foodAnnual
-  );
+  // // Facility is the balancing component
+  // const facilityAnnual = round2(
+  //   yearlyCTC -
+  //     basicAnnual -
+  //     hraAnnual -
+  //     daAnnual -
+  //     specialAnnual -
+  //     foodAnnual
+  // );
+
+  const basicAnnual = Math.round(yearlyCTC * PERCENT.basic);
+  const hraAnnual = Math.round(yearlyCTC * PERCENT.hra);
+  const daAnnual = Math.round(yearlyCTC * PERCENT.da);
+  const specialAnnual = Math.round(yearlyCTC * PERCENT.special);
+  const foodAnnual = Math.round(yearlyCTC * PERCENT.food);
+
+  // MISC Allowance balances the total exactly
+  const facilityAnnual =
+    Math.round(yearlyCTC) -
+    basicAnnual -
+    hraAnnual -
+    daAnnual -
+    specialAnnual -
+    foodAnnual;
 
   // Calculate monthly values
   const basicMonthly = round2(basicAnnual / 12);
@@ -397,12 +412,12 @@ const IncrementLetterPage = ({
 }) => {
   const {
     employeeName,
-    issueDate,
     effectiveDate,
     newCTC,
   } = data;
 
   const designation = data.currentDesignation ?? data.position;
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <A4Page company={company}>
@@ -575,11 +590,13 @@ const SalaryAnnexurePage = ({
     0
   );
 
-  const annualCTC = rows.reduce(
-    (sum, row) =>
-      sum + toNumber(row.annual),
-    0
-  );
+  // const annualCTC = rows.reduce(
+  //   (sum, row) =>
+  //     sum + toNumber(row.annual),
+  //   0
+  // );
+
+  const annualCTC = round2(data.newCTC);
 
   return (
     <A4Page company={company}>

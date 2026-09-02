@@ -41,7 +41,6 @@ export default function JDITIncrement({ company, data }) {
   const {
     employeeName = "",
     employeeId = "",
-    issueDate = "",
     effectiveDate = "",
     newCTC = 0,
   } = data || {};
@@ -120,6 +119,8 @@ export default function JDITIncrement({ company, data }) {
   const TOTAL_CELL = {
     ...CELL_HEAD,
   };
+
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   return (
     <>

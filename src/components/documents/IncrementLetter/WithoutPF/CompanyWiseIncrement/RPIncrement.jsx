@@ -117,10 +117,7 @@ const totalMonthly = round0(
 
   const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
-
   return (
-
-
     <>
       <A4Page
         headerSrc={company.header}

@@ -68,6 +68,8 @@ const DevconsIncrement = ({ company = {}, data = {} }) => {
 
   const totalAnnual = round0(totalMonthly * 12);
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* =====================================================
@@ -92,7 +94,7 @@ const DevconsIncrement = ({ company = {}, data = {} }) => {
 
         <Box sx={{ px: "25mm", py: "22mm", flexGrow: 1, fontSize: "14px", lineHeight: 1.8, color: "#000" }}>
           <Typography sx={{ textAlign: "right", mb: 6 }}>
-            {new Date(data.issueDate).toLocaleDateString("en-US", {
+            {new Date(issueDate).toLocaleDateString("en-US", {
               month: "long",
               day: "2-digit",
               year: "numeric",

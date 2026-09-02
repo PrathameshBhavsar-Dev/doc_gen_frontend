@@ -64,7 +64,7 @@ const NeweageIncrement = ({ company, data }) => {
   // Adjustment row to prevent mismatch
   const misc = monthlyGross - (basic + hra + da + special + food);
 
-    const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   const salaryRows = [
     { label: "Basic", monthly: basic, annual: round0(basic * 12) },
