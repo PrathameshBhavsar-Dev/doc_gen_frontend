@@ -105,7 +105,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
             }}
           >
             Further to your acceptance of our Letter of Offer dated{" "}
-            <strong>November 27 2024</strong>, we are pleased to
+            <strong> August 30, 2021  </strong>, we are pleased to
             appoint you in our organization with effect from{" "}
             <strong>{formatDate(data.joiningDate)}</strong>, under the terms and
             conditions given below:-
@@ -117,7 +117,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
 
           <p style={{ marginBottom: "6mm" }}>
             2. Your total emoluments will be{" "}
-            <strong>Rs. {formatOneCurrency(annualSalary)}</strong> lakh per
+            <strong>Rs. 4 LPA</strong> lakh per
             annum.
           </p>
 
