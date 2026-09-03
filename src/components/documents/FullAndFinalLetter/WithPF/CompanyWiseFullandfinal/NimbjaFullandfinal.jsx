@@ -154,7 +154,7 @@ const food = Math.round(gross * 0.06);
 
   // Actual Total will always be exactly 33,334
   const totalActual =
-    basic + hra + da + special + food;
+    basic + hra + da + special + food + pfAllowance;
 
   // Earned Total
   const totalEarned =
