@@ -137,15 +137,18 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
   const gross = Math.round(Number(data.totalSalary || 0));
 
   // Actual salary components
-  const basic = Math.round(gross * 0.48);
   const hra = Math.round(gross * 0.18);
   const da = Math.round(gross * 0.12);
   const special = Math.round(gross * 0.16);
+const food = Math.round(gross * 0.06);
 
   // Last component = balance, so total is ALWAYS exactly gross
-  const food = gross - basic - hra - da - special;
-
+  
   const pfAllowance = 3750;
+  
+  const basic = Math.round(
+    gross - (hra + da + special + food + pfAllowance)
+  );
 
   const earned = (v) => Math.round(v * ratio);
 
