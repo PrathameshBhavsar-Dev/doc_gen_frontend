@@ -210,7 +210,7 @@ const NeweageOffer = ({ company, data }) => {
           <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
             {/* COMPANY */}
             <Box>
-              <Typography fontWeight={700} fontSize={15} marginTop={2}>
+              <Typography fontWeight={700} fontSize={14} marginTop={2}>
                 For NEWEAGE CLOUD SOFTWARE SERVICES
               </Typography>
 
