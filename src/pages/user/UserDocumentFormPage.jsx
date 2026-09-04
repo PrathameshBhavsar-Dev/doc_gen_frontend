@@ -32,7 +32,7 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "employeeId", label: "Employee ID", type: "text", required: false, readOnly: true },
+  { name: "employeeId", label: "Employee ID", type: "text", required: true},
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
@@ -249,10 +249,21 @@ const UserDocumentFormPage = () => {
       appointment_letter: {
         issueDate:
           employeeData.appointment_letter?.issueDate ||
-          appointmentLetterData.issueDate || "",
+          employeeData.issueDate ||
+          appointmentLetterData.issueDate ||
+          "",
+
         probationPeriod:
           employeeData.appointment_letter?.probationPeriod ||
-          appointmentLetterData.probationPeriod || "",
+          employeeData.probationPeriod ||
+          appointmentLetterData.probationPeriod ||
+          "",
+
+        workLocation:
+          employeeData.appointment_letter?.workLocation ||
+          employeeData.workLocation ||
+          appointmentLetterData.workLocation ||
+          "",
       },
 
       // ✅ confirmation_letter

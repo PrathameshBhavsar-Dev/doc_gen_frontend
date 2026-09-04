@@ -89,7 +89,7 @@ const NeweageRelieving = ({ company, data }) => {
 
       <Typography sx={{ ...TEXT, mb: 2 }}>
         Your tenure with <b>{COMPANY_NAME}</b> will conclude on{" "}
-        <b>{formatDate(relievingDate)}</b>, which will be your last working day with the company.
+        <b>{formatDate(lastWorkingDay)}</b>, which will be your last working day with the company.
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 6 }}>

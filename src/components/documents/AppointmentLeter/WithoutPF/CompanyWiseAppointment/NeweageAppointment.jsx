@@ -134,7 +134,7 @@ const NeweageAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance, Offer dated{" "}
-            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you
+            <b>{formatDate(data.offerDate)}</b>, we are pleased to appoint you
             in our organization with effect from{" "}
             <b>{formatDate(data.joiningDate)} </b>,under the terms and
             conditions given below: -
