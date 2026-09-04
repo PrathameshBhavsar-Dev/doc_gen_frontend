@@ -89,7 +89,10 @@ const CubeageUnPaidInternshipLetter = ({ company, data }) => {
             <strong>Subject :</strong> Letter of Intent for the Internship of{" "}
             {data.joiningDesignation ?? data.designation}
             <br />
-            Dear {firstName},
+            <br />
+            <br />
+            
+            Dear {firstName}
           </Typography>
         </Box>
 
