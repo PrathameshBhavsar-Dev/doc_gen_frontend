@@ -48,7 +48,7 @@ const NeweageRelieving = ({ company, data }) => {
     >
 
       <Typography sx={{ textAlign: "center", font: "28" }}>
-        <b>Relieving Letter</b>
+        <b>RELIEVING LETTER</b>
       </Typography>
       {/* ================= DATE ================= */}
       <Typography align="right" sx={{ ...TEXT, mb: 4 }}>
@@ -88,8 +88,8 @@ const NeweageRelieving = ({ company, data }) => {
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 2 }}>
-        Your tenure with <b>{COMPANY_NAME}</b> will conclude on{" "}
-        <b>{formatDate(lastWorkingDay)}</b>, which will be your last working day with the company.
+        Your tenure with <b>NEWAGE CLOUD SOFTWARE SERVICES PVT. LTD.</b> will conclude on{" "}
+        <b>July 30, 2026</b>, which will be your last working day with the company.
       </Typography>
 
       <Typography sx={{ ...TEXT, mb: 6 }}>

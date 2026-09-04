@@ -169,7 +169,7 @@ const CubeageInternship = ({ company, data }) => {
               {data.field} Trainee.
             </Typography>
 
-            {/* <Typography
+            <Typography
                 sx={{
                   fontSize: "12pt",
                   fontWeight: 500,
@@ -178,7 +178,7 @@ const CubeageInternship = ({ company, data }) => {
                 }}
               >
                 Address: {data.address}
-              </Typography> */}
+              </Typography>
           </Box>
 
           <Typography
@@ -190,6 +190,7 @@ const CubeageInternship = ({ company, data }) => {
               fontFamily: '"Bahnschrift","Segoe UI",Arial,sans-serif',
             }}
           >
+            
             Dear {data.internName},
           </Typography>
 
