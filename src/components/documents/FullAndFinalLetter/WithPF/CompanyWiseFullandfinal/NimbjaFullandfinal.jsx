@@ -27,8 +27,11 @@ const formatDate = (d) => (d ? new Date(d).toLocaleDateString("en-GB") : "");
 const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
+// const formatAmt = (n) =>
+//   Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Math.round(Number(n || 0)).toLocaleString("en-IN");
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -102,33 +105,72 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
   const paidDays = Number(data.paiddays || 0);
   const ratio = totalDays ? paidDays / totalDays : 0;
 
-  const gross = Number(data.totalSalary || 0);
+  // const gross = Number(data.totalSalary || 0);
 
-  const basic = +(gross * 0.48).toFixed(2);
-  const hra = +(gross * 0.18).toFixed(2);
-  const da = +(gross * 0.12).toFixed(2);
-  const special = +(gross * 0.16).toFixed(2);
-  const food = +(gross * 0.06).toFixed(2);
+  // const basic = +(gross * 0.48).toFixed(2);
+  // const hra = +(gross * 0.18).toFixed(2);
+  // const da = +(gross * 0.12).toFixed(2);
+  // const special = +(gross * 0.16).toFixed(2);
+  // const food = +(gross * 0.06).toFixed(2);
 
-  // ✅ PF Allowance Static
+  // // ✅ PF Allowance Static
+  // const pfAllowance = 3750;
+
+  // const earned = (v) => +(v * ratio).toFixed(2);
+
+  // const totalActual = basic + hra + da + special + food;
+
+  // const totalEarned =
+  //   earned(basic) + earned(hra) + earned(da) + earned(special) + earned(food);
+  // //pfAllowance; // static earned
+
+  // /* ---------- DEDUCTIONS ---------- */
+  // const pf = 3750;
+  // const pt = 200;
+  // const others = 2000;
+
+  // const totalDeductions = pf + pt + others; // 5950
+
+  // // ✅ Net Pay Formula
+  // const netPay = totalEarned - totalDeductions;
+
+  const gross = Math.round(Number(data.totalSalary || 0));
+
+  // Actual salary components
+  const hra = Math.round(gross * 0.18);
+  const da = Math.round(gross * 0.12);
+  const special = Math.round(gross * 0.16);
+const food = Math.round(gross * 0.06);
+
+  // Last component = balance, so total is ALWAYS exactly gross
+  
   const pfAllowance = 3750;
+  
+  const basic = Math.round(
+    gross - (hra + da + special + food + pfAllowance)
+  );
 
-  const earned = (v) => +(v * ratio).toFixed(2);
+  const earned = (v) => Math.round(v * ratio);
 
-  const totalActual = basic + hra + da + special + food;
+  // Actual Total will always be exactly 33,334
+  const totalActual =
+    basic + hra + da + special + food + pfAllowance;
 
+  // Earned Total
   const totalEarned =
-    earned(basic) + earned(hra) + earned(da) + earned(special) + earned(food);
-  //pfAllowance; // static earned
+    earned(basic) +
+    earned(hra) +
+    earned(da) +
+    earned(special) +
+    earned(food);
 
-  /* ---------- DEDUCTIONS ---------- */
+  // Deductions
   const pf = 3750;
   const pt = 200;
   const others = 2000;
 
-  const totalDeductions = pf + pt + others; // 5950
+  const totalDeductions = pf + pt + others;
 
-  // ✅ Net Pay Formula
   const netPay = totalEarned - totalDeductions;
 
   return (
