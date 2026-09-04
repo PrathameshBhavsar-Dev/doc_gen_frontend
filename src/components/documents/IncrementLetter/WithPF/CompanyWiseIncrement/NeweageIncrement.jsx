@@ -107,7 +107,7 @@ const NeweageIncrement = ({ company, data }) => {
     },
   ];
 
-    const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   const TABLE_STYLE = {
     border: "1px solid #333",

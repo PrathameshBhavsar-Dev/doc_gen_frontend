@@ -38,32 +38,43 @@ const safe = (val) => (val !== undefined && val !== null ? val : "");
 
 /* ---------- Salary Auto + Manual Fallback Logic (FIXED ONLY) ---------- */
 const getSalaryBreakup = (data) => {
-  const total = Number(data.totalSalary || 0);
+  // Round monthly salary to the nearest rupee
+  const total = Math.round(Number(data.totalSalary || 0));
 
-  // 🔹 Manual fallback (UNCHANGED)
+  // Check whether the selected month is February
+  const date =
+    typeof data.month === "string" && data.month.length === 7
+      ? new Date(`${data.month}-01`)
+      : new Date(data.month);
+
+  const isFebruary = !isNaN(date) && date.getMonth() === 1;
+
+  const ptAmount = isFebruary ? 300 : 200;
+
+  // Manual fallback
   if (!total) {
     return {
-      basic: data.basic,
-      hra: data.hra,
-      da: data.da,
-      special: data.special,
-      food: data.food,
-      misc: data.misc,
-      pt: data.pt,
+      basic: Math.round(Number(data.basic || 0)),
+      hra: Math.round(Number(data.hra || 0)),
+      da: Math.round(Number(data.da || 0)),
+      special: Math.round(Number(data.special || 0)),
+      food: Math.round(Number(data.food || 0)),
+      misc: Math.round(Number(data.misc || 0)),
+      pt: ptAmount,
     };
   }
 
-  // 🔹 AUTO calculation (CORRECTED)
-  const basic = +(total * 0.40).toFixed(2);
-  const hra = +(total * 0.18).toFixed(2);
-  const da = +(total * 0.12).toFixed(2);
-  const special = +(total * 0.16).toFixed(2);
-  const food = +(total * 0.06).toFixed(2);
+  // AUTO calculation
+  const basic = Math.round(total * 0.40);
+  const hra = Math.round(total * 0.18);
+  const da = Math.round(total * 0.12);
+  const special = Math.round(total * 0.16);
+  const food = Math.round(total * 0.06);
 
-  // 🔥 BALANCE → no loss, no extra
-  const misc = +(
-    total - (basic + hra + da + special + food)
-  ).toFixed(2);
+  // Miscellaneous is the balancing component.
+  // This guarantees that the breakup equals total salary exactly.
+  const misc =
+    total - (basic + hra + da + special + food);
 
   return {
     basic,
@@ -72,7 +83,7 @@ const getSalaryBreakup = (data) => {
     special,
     food,
     misc,
-    pt: data.pt ?? 200,
+    pt: ptAmount,
   };
 };
 
@@ -135,13 +146,22 @@ const bold = { fontWeight: "bold" };
 const QuickSalarySlip = ({ data = {}, company = {} }) => {
   const salary = getSalaryBreakup(data);
 
+  // const earnings = [
+  //   { label: "BASIC", value: salary.basic },
+  //   { label: "HRA", value: salary.hra },
+  //   { label: "DEARNESS ALLOWANCE", value: salary.da },
+  //   { label: "SPECIAL ALLOWANCE", value: salary.special },
+  //   { label: "FOOD ALLOWANCE", value: salary.food },
+  //   { label: "MISC ALLOWANCE", value: salary.misc },
+  // ];
+
   const earnings = [
-    { label: "BASIC", value: salary.basic },
-    { label: "HRA", value: salary.hra },
-    { label: "DEARNESS ALLOWANCE", value: salary.da },
-    { label: "SPECIAL ALLOWANCE", value: salary.special },
-    { label: "FOOD ALLOWANCE", value: salary.food },
-    { label: "MISC ALLOWANCE", value: salary.misc },
+    { label: "BASIC", value: salary.basic || 0 },
+    { label: "HRA", value: salary.hra || 0 },
+    { label: "DEARNESS ALLOWANCE", value: salary.da || 0 },
+    { label: "SPECIAL ALLOWANCE", value: salary.special || 0 },
+    { label: "FOOD ALLOWANCE", value: salary.food || 0 },
+    { label: "MISC ALLOWANCE", value: salary.misc || 0 },
   ];
 
   const deductions = [

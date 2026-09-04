@@ -122,7 +122,7 @@ const DevconsOffer = ({ company, data }) => {
             <Typography sx={{ mb: 2, textAlign: "justify" }}>
               <b style={{ textTransform: "uppercase" }}>{company.name}</b> is delighted to offer you the full-time position of{" "}
               <b>{position}</b> with an anticipated start date of{" "}
-              <b> {new Date(data.joiningDate).toLocaleDateString("en-US", {
+              <b> {new Date(issueDate).toLocaleDateString("en-US", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",

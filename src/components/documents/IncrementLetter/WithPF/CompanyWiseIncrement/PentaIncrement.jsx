@@ -128,6 +128,8 @@ const PentaIncrement = ({ company, data }) => {
     const totalMonthlyFormatted = formatNumber(totalMonthly);
     const totalAnnualFormatted = formatNumber(totalAnnual);
 
+    const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
     return (
         <>
             {/* =====================================================
@@ -162,7 +164,7 @@ const PentaIncrement = ({ company, data }) => {
                     }}
                 >
                     <Typography sx={{ textAlign: "right", mb: 6 }}>
-                        {new Date(data.issueDate).toLocaleDateString("en-US", {
+                        {new Date(issueDate).toLocaleDateString("en-US", {
                             month: "long",
                             day: "2-digit",
                             year: "numeric",

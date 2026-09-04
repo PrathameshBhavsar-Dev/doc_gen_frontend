@@ -14,11 +14,11 @@ const RPIncrement = ({ company = {}, data = {} }) => {
 
 
   const getFinancialYear = (effectiveDate) => {
-  if (!effectiveDate) return "";
+    if (!effectiveDate) return "";
 
-  const year = new Date(effectiveDate).getFullYear();
-  return `${year - 1} - ${year}`;
-};
+    const year = new Date(effectiveDate).getFullYear();
+    return `${year - 1} - ${year}`;
+  };
 
   /* ================= HELPER ================= */
   const round2 = (num) => Number(Number(num).toFixed(2));
@@ -26,10 +26,10 @@ const RPIncrement = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-          month: "long",
-          day: "2-digit",
-          year: "numeric",
-        })
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+      })
       : "";
 
   // const getFinancialYear = (date) => {
@@ -41,105 +41,104 @@ const RPIncrement = ({ company = {}, data = {} }) => {
   // };
 
   /* ================= SALARY LOGIC ================= */
-//   const round0 = (num) => Math.round(num);
+  //   const round0 = (num) => Math.round(num);
 
-  
-//   const monthlyCTC = round0(Number(data.newCTC || 0));
 
-//   // ================= UPDATED PERCENTAGES =================
-// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
+  //   const monthlyCTC = round0(Number(data.newCTC || 0));
 
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
+  //   // ================= UPDATED PERCENTAGES =================
+  // const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+  // const hraMonthly = round0(monthlyCTC * 0.18);
+  // const daMonthly = round0(monthlyCTC * 0.12);
+  // const specialMonthly = round0(monthlyCTC * 0.16);
+  // const foodMonthly = round0(monthlyCTC * 0.06);
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = basicMonthly * 12;
-// const hraAnnual = hraMonthly * 12;
-// const daAnnual = daMonthly * 12;
-// const specialAnnual = specialMonthly * 12;
-// const foodAnnual = foodMonthly * 12;
-// const pfAnnual = pfMonthly * 12;
+  // // ================= STATIC PF =================
+  // const pfMonthly = 3750;
 
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-// ];
+  // // ================= ANNUAL VALUES =================
+  // const basicAnnual = basicMonthly * 12;
+  // const hraAnnual = hraMonthly * 12;
+  // const daAnnual = daMonthly * 12;
+  // const specialAnnual = specialMonthly * 12;
+  // const foodAnnual = foodMonthly * 12;
+  // const pfAnnual = pfMonthly * 12;
 
-// // ================= TOTAL EARNINGS =================
-// const totalMonthly =
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly;
+  // // ================= SALARY TABLE =================
+  // const salaryRows = [
+  //   ["Basic", basicMonthly, basicAnnual],
+  //   ["House Rent Allowance", hraMonthly, hraAnnual],
+  //   ["Dearness Allowance", daMonthly, daAnnual],
+  //   ["Special Allowance", specialMonthly, specialAnnual],
+  //   ["Food Allowance", foodMonthly, foodAnnual],
+  //   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  // ];
 
-// const totalAnnual = totalMonthly * 12;
+  // // ================= TOTAL EARNINGS =================
+  // const totalMonthly =
+  //   basicMonthly +
+  //   hraMonthly +
+  //   daMonthly +
+  //   specialMonthly +
+  //   foodMonthly;
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+  // const totalAnnual = totalMonthly * 12;
 
-const round0 = (num) => Math.round(num);
+  //////////////////////////////////////////////////////////////////////////////////////////////
 
-// ================= ANNUAL CTC INPUT =================
-const annualCTC = round0(Number(data.newCTC || 0));
+  const round0 = (num) => Math.round(num);
 
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.newCTC || 0));
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// ================= FIXED PERCENTAGES =================
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-// ================= ADJUSTED BASIC =================
-const basicMonthly = round0(
-  monthlyCTC -
-  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-);
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= ANNUAL =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const pfAnnual = round0(pfMonthly * 12);
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual],
-];
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
-// ================= TOTAL =================
-const totalMonthly = round0(
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly
-);
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
 
-const totalAnnual = round0(totalMonthly * 12);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
+
+  const totalAnnual = round0(totalMonthly * 12);
   const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
-
 
   return (
     <>
@@ -226,18 +225,18 @@ const totalAnnual = round0(totalMonthly * 12);
           </Typography>
 
           {/* EMPLOYEE INFO */}
-                      <Box mb={3} fontSize="16px">
-                        <Typography>Employee Code : {data.employeeId}</Typography>
-                        <Typography>Employee Name : {data.employeeName}</Typography>
-                        <Typography>
-                          Effective Date :{" "}
-                          {new Date(data.effectiveDate).toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "2-digit",
-                        year: "numeric",
-                      })}
-                        </Typography>
-                      </Box>
+          <Box mb={3} fontSize="16px">
+            <Typography>Employee Code : {data.employeeId}</Typography>
+            <Typography>Employee Name : {data.employeeName}</Typography>
+            <Typography>
+              Effective Date :{" "}
+              {new Date(data.effectiveDate).toLocaleDateString("en-US", {
+                month: "long",
+                day: "2-digit",
+                year: "numeric",
+              })}
+            </Typography>
+          </Box>
 
           <Table
             sx={{
@@ -338,9 +337,9 @@ const totalAnnual = round0(totalMonthly * 12);
           </Table>
 
           <Typography mt={3} fontSize="16px" textAlign="left" color="black">
-                        Please note that the details in this communication are confidential
-                        and you are requested not to share the same with others.
-                      </Typography>
+            Please note that the details in this communication are confidential
+            and you are requested not to share the same with others.
+          </Typography>
 
         </Box>
       </A4Page>

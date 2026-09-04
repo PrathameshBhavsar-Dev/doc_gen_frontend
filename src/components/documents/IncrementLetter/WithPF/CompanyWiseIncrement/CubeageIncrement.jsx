@@ -108,6 +108,8 @@ const CubeageIncrement = ({ company, data }) => {
     ...extra,
   });
 
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
+
   return (
     <>
       {/* ================= PAGE 1 ================= */}
@@ -128,7 +130,7 @@ const CubeageIncrement = ({ company, data }) => {
             textAlign: "right",
           }}
         >
-          <b>Date: {formatDate(data.issueDate)}</b>
+          <b>Date: {formatDate(issueDate)}</b>
         </div>
         {/* ================= TITLE ================= */}
         <h3

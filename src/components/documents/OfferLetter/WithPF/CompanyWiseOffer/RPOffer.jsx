@@ -259,6 +259,7 @@ const RPOffer = ({ company, data }) => {
               compensation will be{" "}
               <strong>
                 INR {formatCurrency(totalAnnual)} ({numberToWordsIndian(totalAnnual)})
+                {/* INR 1,944,000 (Rupees Nineteen Lakh Forty Four Thousand Only) */}
               </strong>{" "}
               per annum. We wish to start commencing your job from{" "}
               <strong>{new Date(data.joiningDate).toLocaleDateString("en-US", {

@@ -41,12 +41,12 @@ export default function JDITIncrement({ company, data }) {
   const {
     employeeName = "",
     employeeId = "",
-    issueDate = "",
     effectiveDate = "",
     newCTC = 0,
   } = data || {};
 
   const firstName = employeeName.split(" ")[0] || "";
+  const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
   /* ================= SALARY LOGIC ================= */
   const round0 = (num) => Math.round(num);
