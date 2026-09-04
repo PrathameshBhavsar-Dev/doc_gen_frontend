@@ -151,7 +151,7 @@ const DevconsAppointmentLetter = ({ company, data }) => {
 
             <li>
               <Typography fontSize={14} mt={1}>
-                Your total emoluments will be <b>{formatLakhsPerAnnum(data.salary)}</b>.
+                Your total emoluments will be <b>{formatLakhsPerAnnum(data.joiningCTC)}</b>.
               </Typography>
             </li>
 
