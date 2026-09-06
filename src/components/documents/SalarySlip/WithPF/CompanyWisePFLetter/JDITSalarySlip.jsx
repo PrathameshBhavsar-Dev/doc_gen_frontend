@@ -408,7 +408,7 @@ const JDITSalarySlip = ({ company, data }) => {
         <Typography fontSize="9px">
           6. Medical insurance policy valued at Rs.12,000/- must be submitted
           within 30 days of joining. If failed, the same value will be deducted
-          from the CTC as per the JDITBS policy.
+          from the CTC as per the JDIT policy.
         </Typography>
 
         <Typography fontSize="9px">

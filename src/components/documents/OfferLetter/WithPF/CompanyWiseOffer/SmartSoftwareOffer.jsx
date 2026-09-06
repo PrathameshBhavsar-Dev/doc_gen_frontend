@@ -255,40 +255,107 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              alignItems: "flex-end",
               mt: "40px",
+              width: "100%",
             }}
           >
-            <Box>
-              <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+            {/* LEFT SIDE — COMPANY SIGNATURE & HR DETAILS */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Signature and Stamp */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "20px",
+                  mb: "8px",
+                }}
+              >
                 {company.signature && (
                   <Box
                     component="img"
                     src={company.signature}
-                    sx={{ height: "80px" }}
+                    alt="Company Signature"
+                    sx={{
+                      height: "80px",
+                      width: "auto",
+                      objectFit: "contain",
+                    }}
                   />
                 )}
+
                 {company.stamp && (
                   <Box
                     component="img"
                     src={company.stamp}
-                    sx={{ height: "100px" }}
+                    alt="Company Stamp"
+                    sx={{
+                      height: "100px",
+                      width: "auto",
+                      objectFit: "contain",
+                    }}
                   />
                 )}
               </Box>
-              <Typography>{company.hrName}</Typography>
-              <Typography>HR Relations Lead</Typography>
-            </Box>
 
-            <Box sx={{ width: "45%", mt: 8 }}>
-              <Typography>Signature : ___________________</Typography>
+              {/* HR Details */}
               <Typography
                 sx={{
-                  whiteSpace: "nowrap",
                   fontSize: "16px",
+                  fontWeight: 400,
+                  mt: "5px",
+                }}
+              >
+                {company.hrName}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  fontWeight: 400,
+                }}
+              >
+                HR Relations Lead
+              </Typography>
+            </Box>
+
+            {/* RIGHT SIDE — CANDIDATE DETAILS */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                minWidth: "300px",
+                mb: "5px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: 1.5,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Signature : ___________________
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: 1.5,
+                  mt: "10px",
+                  whiteSpace: "nowrap",
                 }}
               >
                 Candidate Name : {employeeName}
-              </Typography>             </Box>
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </A4Layout>
@@ -342,39 +409,110 @@ export default function SmartSoftwareOffer({ company = {}, data = {} }) {
           </TableContainer>
         </Box>
         <Box
-          sx={{ display: "flex", justifyContent: "space-between", mt: "40px" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            mt: "40px",
+            width: "100%",
+          }}
         >
-          <Box>
-            <Box sx={{ display: "flex", gap: "20px", mb: "8px" }}>
+          {/* LEFT SIDE — COMPANY SIGNATURE & HR DETAILS */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            {/* Signature and Stamp */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                mb: "8px",
+              }}
+            >
               {company.signature && (
                 <Box
                   component="img"
                   src={company.signature}
-                  sx={{ height: "80px" }}
+                  alt="Company Signature"
+                  sx={{
+                    height: "80px",
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
                 />
               )}
+
               {company.stamp && (
                 <Box
                   component="img"
                   src={company.stamp}
-                  sx={{ height: "100px" }}
+                  alt="Company Stamp"
+                  sx={{
+                    height: "100px",
+                    width: "auto",
+                    objectFit: "contain",
+                  }}
                 />
               )}
             </Box>
-            <Typography>{company.hrName}</Typography>
-            <Typography>HR Relations Lead</Typography>
-          </Box>
 
-          <Box sx={{ width: "45%", mt: 8 }}>
-            <Typography>Signature : ___________________</Typography>
+            {/* HR Details */}
             <Typography
               sx={{
-                whiteSpace: "nowrap",
                 fontSize: "16px",
+                fontWeight: 400,
+                mt: "5px",
+              }}
+            >
+              {company.hrName}
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: 400,
+              }}
+            >
+              HR Relations Lead
+            </Typography>
+          </Box>
+
+          {/* RIGHT SIDE — CANDIDATE DETAILS */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              minWidth: "300px",
+              mb: "5px",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "16px",
+                lineHeight: 1.5,
+                whiteSpace: "nowrap",
+              }}
+            >
+              Signature : ___________________
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: "16px",
+                lineHeight: 1.5,
+                mt: "10px",
+                whiteSpace: "nowrap",
               }}
             >
               Candidate Name : {employeeName}
-            </Typography>          </Box>
+            </Typography>
+          </Box>
         </Box>
       </A4Layout>
     </>

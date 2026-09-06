@@ -273,7 +273,7 @@ export const companies = [
     footerImage: Penta_footer,
     watermarkImage: Penta_watermark,
     address:
-      "Office No. 102-C, First Floor, Ganesham Commercial -A, BRTS Road, Pimple Saudagar, Pune- 4110271",
+      "Office No. 102-C, First Floor, Ganesham Commercial -A, BRTS Road, Pimple Saudagar, Pune- 411027",
     email: "hr@pentasoftwareconsultancy.com",
     phone: "+91 7066541234",
     website: "https://pentasoftwareconsultancy.com/",

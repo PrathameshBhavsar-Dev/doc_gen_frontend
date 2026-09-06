@@ -91,25 +91,74 @@ const SmartSoftwareExperience = ({ company, data }) => {
       </Typography>
 
       {/* Signature */}
-      <Box sx={{ mt: 10 }}>
-        <Typography sx={{ fontWeight: 600 }}>
+      <Box
+        sx={{
+          mt: 10,
+          width: "100%",
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: "16px",
+            mb: 1,
+          }}
+        >
           For Smart Software Services (I) Pvt. Ltd.
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 4, mb: 2, mt: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 3,
+            height: "100px",
+          }}
+        >
           {company.signature && (
-            <img src={company.signature} alt="Signature" style={{ height: 70 }} />
+            <Box
+              component="img"
+              src={company.signature}
+              alt="Signature"
+              sx={{
+                width: "140px",
+                height: "70px",
+                objectFit: "contain",
+              }}
+            />
           )}
 
           {company.stamp && (
-            <img src={company.stamp} alt="Stamp" style={{ height: 100 }} />
+            <Box
+              component="img"
+              src={company.stamp}
+              alt="Stamp"
+              sx={{
+                width: "100px",
+                height: "100px",
+                objectFit: "contain",
+              }}
+            />
           )}
         </Box>
 
-        <Box sx={{ mt: 6 }}>
-          <Typography sx={{ fontWeight: 600 }}>Sandeep Patil</Typography>
-          <Typography>
-            <b>HR Manager – HR Shared Services</b>
+        <Box sx={{ mt: 1 }}>
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: "16px",
+            }}
+          >
+            Sandeep Patil
+          </Typography>
+
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: "16px",
+            }}
+          >
+            HR Manager – HR Shared Services
           </Typography>
         </Box>
       </Box>
