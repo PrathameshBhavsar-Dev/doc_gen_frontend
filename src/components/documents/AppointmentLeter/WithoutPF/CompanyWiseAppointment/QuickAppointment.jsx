@@ -121,7 +121,7 @@ const QuickAppointment = ({ company, data }) => {
 
           <Typography mt={2} fontSize={15} textAlign="justify">
             Further to your acceptance offer dated,{" "}
-            <b>{formatDate(issueDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
+            <b>{formatDate(data.offerDate)}</b>, we are pleased to appoint you in our organization with effect from  <b>{formatDate(data.joiningDate)} </b>,under the terms and conditions given below: -
           </Typography>
 
           <Box component="ol" sx={{ pl: 3, mt: 2 }}>

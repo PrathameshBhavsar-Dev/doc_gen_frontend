@@ -173,39 +173,33 @@ const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
       {showCandidate && (
         <Box
           sx={{
-            width: 320,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            minWidth: "230px",
             ml: "auto",
-            textAlign: "right",
+            mt: 1,
           }}
         >
-          {/* Signature */}
-          <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-            Signature: ______________________
-          </Typography>
-
-          {/* Candidate Name */}
-          <Box
+          <Typography
             sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              fontSize: 16,
-              mt: 0.5,
+              fontSize: 14,
+              fontWeight: "bold",
+              width: "100%",
             }}
           >
-            <Box sx={{ whiteSpace: "nowrap", mr: 0.5 }}>
-              Candidate Name:
-            </Box>
+            Signature: ___________________
+          </Typography>
 
-            <Box
-              sx={{
-                maxWidth: 180,              // controls when it wraps
-                wordBreak: "break-word",
-                textAlign: "left",          // keeps wrapping clean
-              }}
-            >
-              {employeeName}
-            </Box>
-          </Box>
+          <Typography
+            sx={{
+              fontSize: 14,
+              mt: 1,
+              width: "100%",
+            }}
+          >
+            Candidate Name: {employeeName}
+          </Typography>
         </Box>
       )}
     </Box>

@@ -136,7 +136,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
           LETTER OF APPOINTMENT
         </Typography>
 
-        <Box component="ol" sx={{ pl: 3, mt: 2 }}>
+        <Box component="ol" sx={{ pl: 0, mt: 2 }}>
           {terms.slice(0, 10).map((t, i) => (
             <li key={i}>
               <Typography fontSize={14} textAlign="justify" mb={1}>
@@ -149,7 +149,7 @@ const SmartSoftwareAppointment = ({ company, data }) => {
 
       {/* PAGE 2 */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Box component="ol" start={11} sx={{ pl: 3, mt: 2 }}>
+        <Box component="ol" start={11} sx={{ pl: 0, mt: 2 }}>
           {terms.slice(10).map((t, i) => (
             <li key={i}>
               <Typography fontSize={14} textAlign="justify" mb={1}>

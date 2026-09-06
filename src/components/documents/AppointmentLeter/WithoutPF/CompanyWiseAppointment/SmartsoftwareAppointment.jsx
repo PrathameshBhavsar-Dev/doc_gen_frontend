@@ -125,16 +125,16 @@ const SmartSoftwareAppointment = ({ company, data }) => {
             LETTER OF APPOINTMENT
           </Typography>
 
-          <Typography mt={2} textAlign="justify" fontSize={13}>
+          <Typography mt={2} textAlign="justify" fontSize={14}>
             Further to your acceptance, we are pleased to appoint you with
             effect from <b>{formatDate(data.joiningDate)}</b> under the
             following terms and conditions:
           </Typography>
 
-          <Box component="ol" sx={{ pl: 3, mt: 2 }}>
+        <Box component="ol" sx={{ pl: 0, mt: 2 }}>
             {terms.slice(0, 10).map((t, i) => (
               <li key={i}>
-                <Typography textAlign="justify" mb={1} fontSize={14.30}>
+                <Typography textAlign="justify" mb={1} fontSize={14}>
                   {t}
                 </Typography>
               </li>
@@ -146,10 +146,10 @@ const SmartSoftwareAppointment = ({ company, data }) => {
 
       {/* ================= PAGE 2 ================= */}
       <A4Page headerSrc={company.headerImage} footerSrc={company.footerImage}>
-        <Box component="ol" start={11} sx={{ pl: 3 }}>
+        <Box component="ol" sx={{ pl: 0, mt: 2 }}>
           {terms.slice(10).map((t, i) => (
             <li key={i}>
-              <Typography textAlign="justify" mb={1}>
+              <Typography textAlign="justify" mb={1} fontSize={14}>
                 {t}
               </Typography>
             </li>
