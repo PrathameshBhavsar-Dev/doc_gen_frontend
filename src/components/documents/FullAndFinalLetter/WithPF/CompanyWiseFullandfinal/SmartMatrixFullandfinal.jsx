@@ -8,9 +8,10 @@ import {
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
 import {
-  formatCurrency,
+  formatAmt as formatCurrency,
   numberToWords,
-} from "../../../../../utils/salaryCalculations";
+} from "../../../../../utils/salaryFormatters";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
 
 import stampImg from "../../../../../assets/images/smartmatrix/Smartmatrix_stamp.png";
 import signImg from "../../../../../assets/images/smartmatrix/Smartmatrix_sign.png";
@@ -107,50 +108,26 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
   const paidDays = Number(data.paiddays || 0);
   const ratio = totalDays ? paidDays / totalDays : 0;
   const grossSalary = Number(data.totalSalary || 0);
+  const leaveEncashment = Number(data.leaveencashment || 0);
 
   const ffDate = data.date || "";
   const joiningDate = data.joiningDate || "";
   const resignationDate = data.dateofresignation || "";
   const leavingDate = data.dateofleaving || "";
 
-  /* ================= SALARY BREAKUP ================= */
-
-  const basic = grossSalary * 0.40;
-  const hra = grossSalary * 0.18;
-  const da = grossSalary * 0.12;
-  const special = grossSalary * 0.16;
-  const food = grossSalary * 0.06;
-
-  const pfAllowance = 3750;
-
-  const earned = (val) => val * ratio;
-
-  const totalActual = basic + hra + da + special + food;
-
-  const totalEarned =
-    earned(basic) + earned(hra) + earned(da) + earned(special) + earned(food);
-
-  /* ================= DEDUCTIONS ================= */
-
-  const pf = 3750;
-  const pt = monthNum === "02" ? 300 : 200;
-  const others = 2000;
-
-  const totalDeductions = pf + pt + others;
-
-  const leaveEncashment = Number(data.leaveencashment || 0);
-
-  const netPayable = totalEarned - totalDeductions;
-
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown(
+    { salary: grossSalary * 12, workdays: totalDays, paiddays: paidDays },
+    { pt: monthNum === "02" ? 300 : 200 }
+  );
   /* ================= EARNINGS ROWS ================= */
 
   const earningsRows = [
-    ["BASIC", basic],
-    ["HRA", hra],
-    ["DEARNESS ALLOWANCE", da],
-    ["SPECIAL ALLOWANCE", special],
-    ["FOOD ALLOWANCE", food],
-    ["PF ALLOWANCE", pfAllowance],
+    ["BASIC", actual.basic, earned.basic],
+    ["HRA", actual.hra, earned.hra],
+    ["DEARNESS ALLOWANCE", actual.da, earned.da],
+    ["SPECIAL ALLOWANCE", actual.special, earned.special],
+    ["FOOD ALLOWANCE", actual.food, earned.food],
+    ["PF ALLOWANCE", actual.pfAllowance, earned.pfAllowance],
   ];
 
   return (
@@ -266,20 +243,18 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               <TableCell sx={CELL_CENTER_BOLD}>Earned</TableCell>
             </TableRow>
 
-            {earningsRows.map(([label, value]) => (
+            {earningsRows.map(([label, actVal, earnVal]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={CELL_VALUE}>
                   {label}
                 </TableCell>
 
                 <TableCell sx={CELL_CENTER}>
-                  {formatCurrency(value)}
+                  {formatCurrency(actVal)}
                 </TableCell>
 
                 <TableCell sx={CELL_CENTER}>
-                  {label === "PF ALLOWANCE"
-                    ? formatCurrency(pfAllowance)
-                    : formatCurrency(Math.round(earned(value)))}
+                  {formatCurrency(earnVal)}
                 </TableCell>
               </TableRow>
             ))}
@@ -291,11 +266,11 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
 
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(totalActual)}
+                {formatCurrency(actual.total)}
               </TableCell>
 
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(Math.round(totalEarned))}
+                {formatCurrency(Math.round(earned.total))}
               </TableCell>
             </TableRow>
 
@@ -312,7 +287,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(pf)}
+                {formatCurrency(deductions.pf)}
               </TableCell>
             </TableRow>
 
@@ -322,7 +297,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(pt)}
+                {formatCurrency(deductions.pt)}
               </TableCell>
             </TableRow>
 
@@ -332,7 +307,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(others)}
+                {formatCurrency(deductions.others)}
               </TableCell>
             </TableRow>
 
@@ -342,7 +317,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(totalDeductions)}
+                {formatCurrency(deductions.total)}
               </TableCell>
             </TableRow>
 
@@ -370,7 +345,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(Math.round(totalEarned))}
+                {formatCurrency(Math.round(deductions.total))}
               </TableCell>
             </TableRow>
 
@@ -381,7 +356,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
               </TableCell>
               <TableCell sx={CELL_VALUE}></TableCell>
               <TableCell sx={CELL_CENTER}>
-                {formatCurrency(Math.round(netPayable))}
+                {formatCurrency(Math.round(netPay))}
               </TableCell>
             </TableRow>
 
@@ -389,7 +364,7 @@ const FullandFinalPF = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell sx={CELL_LABEL}>Amount in Words</TableCell>
               <TableCell colSpan={3} sx={CELL_CENTER}>
-                {numberToWords(Math.round(netPayable))}
+                {numberToWords(Math.round(netPay))}
               </TableCell>
             </TableRow>
 

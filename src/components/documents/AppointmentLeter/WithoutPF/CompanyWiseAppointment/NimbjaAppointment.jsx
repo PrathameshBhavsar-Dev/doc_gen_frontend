@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 // import React from "react";
 // import {
 //   Box,
@@ -782,6 +784,7 @@
 // export default NimbjaAppointment;
 
 
+>>>>>>> d7bcfa57be2d557be49e25460d2d90e38c4a5f25
 
 import React from "react";
 import {
@@ -1276,9 +1279,10 @@ const NimbjaAppointment = ({ company, data }) => {
                 fontFamily: "Bahnschrift",
                 minWidth: "70mm",
               }}
-            >
+              >
               <Typography
                 sx={{
+                  mt: "80px",
                   fontFamily: "Bahnschrift",
                   textAlign: "center",
                   width: "100%",
@@ -1333,7 +1337,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     alt="Signature"
                     sx={{
                       width: 180,
-                      mt: "-17mm",
+                      mt: "-27mm",
                       ml: "-2mm",
                       height: 40,
                     }}
@@ -1347,7 +1351,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     alt="Stamp"
                     sx={{
                       width: 100,
-                      mt: "-17mm",
+                      mt: "-37mm",
                     }}
                   />
                 </Grid>
@@ -1360,7 +1364,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     fontFamily: "Bahnschrift",
                     fontWeight: "400",
                     fontSize: "4mm",
-                    mt: "-3mm",
+                    mt: "-13mm",
                   }}
                 >
                   {company?.hrName}

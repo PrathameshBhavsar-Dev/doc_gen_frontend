@@ -1,3 +1,5 @@
+
+// export default NeweageAppointment;
 import React from "react";
 import {
   Box,
@@ -172,7 +174,15 @@ const NeweageAppointment = ({ company, data }) => {
             acceptance of the above terms and conditions.
           </Typography>
 
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
+          {/* Signature Section - ALIGNED VERSION */}
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            }}
+          >
             {/* COMPANY */}
             <Box>
               <Typography fontSize={15}>Yours faithfully,</Typography>
@@ -218,12 +228,12 @@ const NeweageAppointment = ({ company, data }) => {
             </Box>
 
             {/* ACCEPTANCE */}
-            <Box>
-              <Typography fontWeight={600} mt={4}>
+            <Box textAlign="right">
+              <Typography fontWeight={600}>
                 I ACCEPT
               </Typography>
               <Typography mt={1}>Signature: ______________</Typography>
-              <Typography mt={4}>Name: {data.employeeName}</Typography>
+              <Typography mt={1}>Name: {data.employeeName}</Typography>
               <Typography mt={1}>Date: ______________</Typography>
             </Box>
           </Box>

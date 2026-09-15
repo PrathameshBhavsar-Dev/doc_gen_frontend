@@ -7,9 +7,9 @@ import {
   TableRow,
   Typography
 } from "@mui/material";
-
+import { formatAmt, numberToWords } from "../../../../../utils/salaryFormatters";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
 import A4Page from "../../../../layout/A4Page";
-
 
 /* ================== COMMON STYLES ================== */
 const cell = {
@@ -30,267 +30,210 @@ const formatDate = (d) =>
 const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
-const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN");
-
-
-/* ================== NUMBER TO WORDS ================== */
-const numberToWords = (num = 0) => {
-  if (!num) return "Zero Only";
-
-  const a = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
-  const b = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100)
-      return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000)
-      return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000)
-      return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
-
-  return `${inWords(Math.round(num))} Only`;
-};
-
 /* ================== COMPONENT ================== */
 const RPFullAndFinal = ({ company = {}, data = {} }) => {
-  
+
   const totalDays = Number(data.workdays || 0);
   const paidDays = Number(data.paiddays || 0);
+
   const ratio = totalDays ? paidDays / totalDays : 0;
-
-  const gross = Number(data.totalSalary || 0);
-
-  const basic = Math.round(gross * 0.48);
-const hra = Math.round(gross * 0.18);
-const da = Math.round(gross * 0.12);
-const special = Math.round(gross * 0.16);
-const food = Math.round(gross * 0.06);
-
-  const pfAllowance = 3750; // Static PF Allowance
-
-  const earned = (v) => +(v * ratio);
-
-  const totalActual =
-    basic + hra + da + special + food;
-
-  const totalEarned =
-    earned(basic) +
-    earned(hra) +
-    earned(da) +
-    earned(special) +
-    earned(food)
-    // pfAllowance;
-
-  /* ---------- DEDUCTIONS ---------- */
-  const pf = 3750;
-  const pt = 200;
-  const others = 2000;
-
-  const totalDeductions = pf + pt + others;
-
-  const netPay = totalEarned - totalDeductions;
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown({
+    salary: Number(data.totalSalary || 0) * 12,
+    workdays: totalDays,
+    paiddays: paidDays,
+  });
 
   return (
-        <A4Page headerSrc={company.header} footerSrc={company.footer}>
-    
+    <A4Page headerSrc={company.header} footerSrc={company.footer}>
 
-    
-        <Table sx={{ borderCollapse: "collapse" }}>
-          <TableBody>
 
-            {/* TITLE */}
-            <TableRow sx={{ background: "#d89a9a" }}>
-              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                Full & Final Settlement Statement
-              </TableCell>
-            </TableRow>
 
-            <TableRow sx={{ background: "#d89a9a" }}> 
-              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                {company.name}
-              </TableCell>
-            </TableRow>
+      <Table sx={{ borderCollapse: "collapse" }}>
+        <TableBody>
 
-            <TableRow>
-              <TableCell colSpan={4} sx={{ ...cell, ...center }}>
-                {company.address}
-              </TableCell>
-            </TableRow>
+          {/* TITLE */}
+          <TableRow sx={{ background: "#d89a9a" }}>
+            <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+              Full & Final Settlement Statement
+            </TableCell>
+          </TableRow>
 
-            {/* Employee Details */}
-            <TableRow>
-              <TableCell sx={cell}>Name of the employee</TableCell>
-              <TableCell sx={cell}>{data.employeeName}</TableCell>
-              <TableCell sx={cell}>F&F Date</TableCell>
-              <TableCell sx={cell}>{formatDate(data.date)}</TableCell>
-            </TableRow>
+          <TableRow sx={{ background: "#d89a9a" }}>
+            <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+              {company.name}
+            </TableCell>
+          </TableRow>
 
-            <TableRow>
-              <TableCell sx={cell}>Employee ID</TableCell>
-              <TableCell sx={cell}>{data.employeeId}</TableCell>
-              <TableCell sx={cell}>Joining Date</TableCell>
-              <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell sx={cell}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
-              <TableCell sx={cell}>Date of Leaving</TableCell>
-              <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
-            </TableRow>
-
-             <TableRow>
-                          <TableCell sx={cell}>Department</TableCell>
-                          <TableCell sx={cell}>{data.department}</TableCell>
-                          <TableCell sx={cell}>Date of Leaving</TableCell>
-                          <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
-                        </TableRow>
-            
-                        {/* SALARY PARTICULARS */}
-                        <TableRow>
-                          <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
-                            Salary particulars
-                          </TableCell>
-                          <TableCell sx={{ ...cell, ...bold, ...center }}>For the month</TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>{formatMonth(data.month)}</TableCell>
-                        </TableRow>
-            
-                        <TableRow>
-                          <TableCell sx={cell}>Total Day in the month</TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>{totalDays}</TableCell>
-                          <TableCell sx={cell}>Paid days</TableCell>
-                          <TableCell sx={{ ...cell, ...center }}>{paidDays}</TableCell>
-                        </TableRow>
-
-            {/* Earnings */}
-            <TableRow sx={{ background: "#f2dede" }}>
-              <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
-            </TableRow>
-
-            {[
-              ["Basic", basic],
-              ["HRA", hra],
-              ["Dearness Allowance", da],
-              ["Special Allowances", special],
-              ["Food Allowances", food],
-              ["PF Allowance", pfAllowance],
-            ].map(([label, val]) => (
-              <TableRow key={label}>
-                <TableCell colSpan={2} sx={cell}>{label}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>
-                  {label === "PF Allowance"
-                    ? formatAmt(pfAllowance)
-                    : formatAmt(earned(val))}
-                </TableCell>
-              </TableRow>
-            ))}
-
-            <TableRow>
-              <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
-            </TableRow>
-
-            {/* Deductions */}
-            <TableRow>
-              <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                Less Deductions (-)
-              </TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell colSpan={3} sx={cell}>Others</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(others)}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalDeductions)}</TableCell>
-            </TableRow>
-
-            {/* OTHER EARNINGS */}
-                        <TableRow>
-                          <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                            Other Earnings
-                          </TableCell>
-                        </TableRow>
-            
-                        <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Leave encashment  </TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                            00
-                          </TableCell>
-                        </TableRow>
-            
-                        <TableRow>
-                          <TableCell colSpan={2} sx={cell}>Total </TableCell>
-                          <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                            {formatAmt(totalEarned)}
-                          </TableCell>
-                        </TableRow>
-
-            {/* Net Pay */}
-            <TableRow>
-              <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Net Payable (Rs)</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(netPay)}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell sx={cell}>Amount in Words</TableCell>
-              <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
-            </TableRow>
-
-             {/* SIGNATURE */}
           <TableRow>
-  <TableCell sx={cell} />
-  {/* <TableCell sx={cell} /> */}
+            <TableCell colSpan={4} sx={{ ...cell, ...center }}>
+              {company.address}
+            </TableCell>
+          </TableRow>
 
-  <TableCell sx={{ ...cell, ...center }}>
-    {company.stamp && (
-      <img src={company.stamp} width={90} alt="Stamp" style={{display:"block", margin:"0 auto"}} />
-    )}
-  </TableCell>
+          {/* Employee Details */}
+          <TableRow>
+            <TableCell sx={cell}>Name of the employee</TableCell>
+            <TableCell sx={cell}>{data.employeeName}</TableCell>
+            <TableCell sx={cell}>F&F Date</TableCell>
+            <TableCell sx={cell}>{formatDate(data.date)}</TableCell>
+          </TableRow>
 
-  <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
-    {company.signature && (
-      <img src={company.signature} width={150} alt="Signature" style={{display:"block", margin:"0 auto"}}/>
-    )}
-    <Typography fontWeight="bold" fontSize="9pt">
-      Signature
-    </Typography>
-  </TableCell>
-</TableRow>
+          <TableRow>
+            <TableCell sx={cell}>Employee ID</TableCell>
+            <TableCell sx={cell}>{data.employeeId}</TableCell>
+            <TableCell sx={cell}>Joining Date</TableCell>
+            <TableCell sx={cell}>{formatDate(data.doj)}</TableCell>
+          </TableRow>
 
- <TableRow>
-              <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
-              <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
-              <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
+          <TableRow>
+            <TableCell sx={cell}>Designation</TableCell>
+            <TableCell sx={cell}>{data.designation}</TableCell>
+            <TableCell sx={cell}>Date of Leaving</TableCell>
+            <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell sx={cell}>Department</TableCell>
+            <TableCell sx={cell}>{data.department}</TableCell>
+            <TableCell sx={cell}>Date of Leaving</TableCell>
+            <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
+          </TableRow>
+
+          {/* SALARY PARTICULARS */}
+          <TableRow>
+            <TableCell colSpan={2} sx={{ ...cell, ...bold }}>
+              Salary particulars
+            </TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...center }}>For the month</TableCell>
+            <TableCell sx={{ ...cell, ...center }}>{formatMonth(data.month)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell sx={cell}>Total Day in the month</TableCell>
+            <TableCell sx={{ ...cell, ...center }}>{totalDays}</TableCell>
+            <TableCell sx={cell}>Paid days</TableCell>
+            <TableCell sx={{ ...cell, ...center }}>{paidDays}</TableCell>
+          </TableRow>
+
+          {/* Earnings */}
+          <TableRow sx={{ background: "#f2dede" }}>
+            <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Earnings</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...center }}>Actual</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...center }}>Earned</TableCell>
+          </TableRow>
+
+          {[
+            ["Basic", actual.basic, earned.basic],
+            ["HRA", actual.hra, earned.hra],
+            ["Dearness Allowance", actual.da, earned.da],
+            ["Special Allowances", actual.special, earned.special],
+            ["Food Allowances", actual.food, earned.food],
+            ["PF Allowance", actual.pfAllowance, earned.pfAllowance],
+          ].map(([label, actVal, earnVal]) => (
+            <TableRow key={label}>
+              <TableCell colSpan={2} sx={cell}>{label}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(actVal)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(earnVal)}</TableCell>
             </TableRow>
+          ))}
 
-          </TableBody>
-        </Table>
-      
+          <TableRow>
+            <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(actual.total)}</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(earned.total)}</TableCell>
+          </TableRow>
 
-     </A4Page>  
+          {/* Deductions */}
+          <TableRow>
+            <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+              Less Deductions (-)
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
+            <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pf)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
+            <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pt)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={3} sx={cell}>Others</TableCell>
+            <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.others)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(deductions.total)}</TableCell>
+          </TableRow>
+
+          {/* OTHER EARNINGS */}
+          <TableRow>
+            <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
+              Other Earnings
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={2} sx={cell}>Leave encashment  </TableCell>
+            <TableCell colSpan={2} sx={{ ...cell, ...right }}>
+              00
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell colSpan={2} sx={cell}>Total </TableCell>
+            <TableCell colSpan={2} sx={{ ...cell, ...right }}>
+              {formatAmt(earned.total)}
+            </TableCell>
+          </TableRow>
+
+          {/* Net Pay */}
+          <TableRow>
+            <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Net Payable (Rs)</TableCell>
+            <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(netPay)}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell sx={cell}>Amount in Words</TableCell>
+            <TableCell colSpan={3} sx={cell}>{numberToWords(netPay)}</TableCell>
+          </TableRow>
+
+          {/* SIGNATURE */}
+          <TableRow>
+            <TableCell sx={cell} />
+            {/* <TableCell sx={cell} /> */}
+
+            <TableCell sx={{ ...cell, ...center }}>
+              {company.stamp && (
+                <img src={company.stamp} width={90} alt="Stamp" style={{ display: "block", margin: "0 auto" }} />
+              )}
+            </TableCell>
+
+            <TableCell colSpan={2} sx={{ ...cell, textAlign: "center" }}>
+              {company.signature && (
+                <img src={company.signature} width={150} alt="Signature" style={{ display: "block", margin: "0 auto" }} />
+              )}
+              <Typography fontWeight="bold" fontSize="9pt">
+                Signature
+              </Typography>
+            </TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell sx={{ ...cell, ...center }}>Prepared By</TableCell>
+            <TableCell sx={{ ...cell, ...center }}>Verified By</TableCell>
+            <TableCell colSpan={2} sx={{ ...cell, ...center }}>Approved By</TableCell>
+          </TableRow>
+
+        </TableBody>
+      </Table>
+
+
+    </A4Page>
   );
 };
 

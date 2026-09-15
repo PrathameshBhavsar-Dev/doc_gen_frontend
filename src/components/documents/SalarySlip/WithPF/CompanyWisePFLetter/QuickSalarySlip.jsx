@@ -30,54 +30,54 @@ const formatDate = (date) =>
   date ? new Date(date).toLocaleDateString("en-GB") : "";
 
 const numberFormat = (num) =>
-  Math.round(Number(num || 0)).toLocaleString("en-IN",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+  Math.round(Number(num || 0)).toLocaleString("en-IN");
 
 const safe = (val) => (val !== undefined && val !== null ? val : "");
 
 /* ---------- Salary Auto + Manual Fallback Logic (FIXED ONLY) ---------- */
 const getSalaryBreakup = (data) => {
-  const total = Number(data.totalSalary || 0);
+  const total = Math.round(Number(data.totalSalary || 0));
 
   if (!total) {
     return {
-      basic: data.basic,
-      hra: data.hra,
-      da: data.da,
-      special: data.special,
-      food: data.food,
-      pf: data.pf ?? 3750,
-      pt: data.pt ?? 200,
+      basic: Math.round(Number(data.basic || 0)),
+      hra: Math.round(Number(data.hra || 0)),
+      da: Math.round(Number(data.da || 0)),
+      special: Math.round(Number(data.special || 0)),
+      food: Math.round(Number(data.food || 0)),
+      pf: Math.round(Number(data.pf ?? 3750)),
+      pt: Math.round(Number(data.pt ?? 200)),
     };
   }
 
-  // ✅ FIXED PF (Penta)
-  const pf = Number(data.pf ?? 3750);
+  // Fixed PF
+  const pf = Math.round(Number(data.pf ?? 3750));
 
-  // ✅ Earnings
-  const hra = +(total * 0.18).toFixed(2);
-  const da = +(total * 0.12).toFixed(2);
-  const special = +(total * 0.16).toFixed(2);
-  const food = +(total * 0.06).toFixed(2);
+  // Earnings - round every value
+  const hra = Math.round(total * 0.18);
+  const da = Math.round(total * 0.12);
+  const special = Math.round(total * 0.16);
+  const food = Math.round(total * 0.06);
 
-  // ✅ BASIC = remaining AFTER PF
-  let basic = +(total - (hra + da + special + food + pf)).toFixed(2);
+  // Basic = remaining amount after PF
+  let basic = Math.round(
+    total - (hra + da + special + food + pf)
+  );
 
-  // ✅ ROUND FIX
-  const finalCheck = basic + hra + da + special + food + pf;
-  basic += +(total - finalCheck).toFixed(2);
+  // Rounding adjustment
+  const finalCheck =
+    basic + hra + da + special + food + pf;
+
+  basic += Math.round(total - finalCheck);
 
   return {
-    basic,
-    hra,
-    da,
-    special,
-    food,
-    pf,
-    pt: Number(data.pt ?? 200),
+    basic: Math.round(basic),
+    hra: Math.round(hra),
+    da: Math.round(da),
+    special: Math.round(special),
+    food: Math.round(food),
+    pf: Math.round(pf),
+    pt: Math.round(Number(data.pt ?? 200)),
   };
 };
 

@@ -7,8 +7,13 @@ import {
   TableRow,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
+import { numberToWords, formatAmt } from "../../../../../utils/salaryFormatters";
 
 /* ================= COMMON STYLES ================= */
+
+const formatMonth = (m) =>
+  m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const tableCell = {
   border: "1px solid #000",
@@ -24,33 +29,6 @@ const rightCell = { ...tableCell, textAlign: "right" };
 const headerBg = { backgroundColor: "#ffffff" };
 const subHeaderBg = { backgroundColor: "#ffffff" };
 
-/* ================= UTILS ================= */
-
-const formatMonth = (m) =>
-  m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
-
-const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
-
-const numberToWords = (num = 0) => {
-  if (!num) return "Zero Only";
-  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen"];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
-
-  return `${inWords(Math.round(num))} Only`;
-};
-
 /* ================= COMPONENT ================= */
 
 const NeweageFullandfinal = ({ company, data }) => {
@@ -58,49 +36,15 @@ const NeweageFullandfinal = ({ company, data }) => {
   const paidDays = Number(data.paiddays || 0);
   const ratio = paidDays / totalDays;
 
-  /* ---------- SALARY LOGIC (NEWEAGE) ---------- */
-  /* ---------- SALARY LOGIC (CUBEAGE STANDARD) ---------- */
-  const round0 = (num) => Math.round(num || 0);
-
-  const getTotalDaysInMonth = (monthStr) => {
-    if (!monthStr) return 31;
-    const [year, monthNum] = monthStr.split("-");
-    return new Date(year, monthNum, 0).getDate();
-  };
-
-  const totalDaysInMonth = Number(data.workdays || getTotalDaysInMonth(data.month));
-  const paidDaysVal = Number(data.paiddays || totalDaysInMonth);
-
+  const totalDaysInMonth = Number(data.workdays || 0);
+  const paidDaysVal = Number(data.paiddays || 0);
   const monthlyCTC = parseFloat(data.totalSalary || 0);
 
-  // ACTUAL CALCULATION
-  const hraActual = round0(monthlyCTC * 0.18);
-  const daActual = round0(monthlyCTC * 0.12);
-  const specialActual = round0(monthlyCTC * 0.16);
-  const foodActual = round0(monthlyCTC * 0.06);
-  const pfMonthly = 3750;
-
-  const basicActual = round0(monthlyCTC) - (hraActual + daActual + specialActual + foodActual + pfMonthly);
-  const totalActual = basicActual + hraActual + daActual + specialActual + foodActual + pfMonthly;
-
-  // EARNED CALCULATION
-  const earnedCTC = (monthlyCTC * paidDaysVal) / totalDaysInMonth;
-
-  const hraEarned = round0(earnedCTC * 0.18);
-  const daEarned = round0(earnedCTC * 0.12);
-  const specialEarned = round0(earnedCTC * 0.16);
-  const foodEarned = round0(earnedCTC * 0.06);
-
-  const basicEarned = round0(earnedCTC) - (hraEarned + daEarned + specialEarned + foodEarned + pfMonthly);
-  const totalEarned = basicEarned + hraEarned + daEarned + specialEarned + foodEarned + pfMonthly;
-
-  /* ---------- DEDUCTIONS ---------- */
-  const pf = 3750;
-  const pt = 200;
-  const others = 2000;
-  const totalDeductions = pt + others + pf;
-
-  const netPay = totalEarned - totalDeductions;
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown({
+    salary: monthlyCTC * 12,
+    workdays: totalDaysInMonth,
+    paiddays: paidDaysVal,
+  });
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -169,12 +113,12 @@ const NeweageFullandfinal = ({ company, data }) => {
               <TableCell sx={centerBold}>Earned</TableCell>
             </TableRow>
             {[
-              ["Basic", basicActual, basicEarned],
-              ["HRA", hraActual, hraEarned],
-              ["Dearness Allowance", daActual, daEarned],
-              ["Special Allowance", specialActual, specialEarned],
-              ["Food Allowance", foodActual, foodEarned],
-              ["PF", pfMonthly, pfMonthly],
+              ["Basic", actual.basic, earned.basic],
+              ["HRA", actual.hra, earned.hra],
+              ["Dearness Allowance", actual.da, earned.da],
+              ["Special Allowance", actual.special, earned.special],
+              ["Food Allowance", actual.food, earned.food],
+              ["PF", actual.pfAllowance, earned.pfAllowance],
             ].map(([label, actVal, earnVal]) => (
               <TableRow key={label}>
                 <TableCell sx={tableCell} colSpan={2}>
@@ -193,8 +137,8 @@ const NeweageFullandfinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell sx={boldCell} colSpan={2}>Total</TableCell>
-              <TableCell sx={centerCell}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={centerCell}>{formatAmt(totalEarned)}</TableCell>
+              <TableCell sx={centerCell}>{formatAmt(actual.total)}</TableCell>
+              <TableCell sx={centerCell}>{formatAmt(earned.total)}</TableCell>
             </TableRow>
 
             {/* ================= DEDUCTIONS ================= */}
@@ -208,7 +152,7 @@ const NeweageFullandfinal = ({ company, data }) => {
             <TableRow>
               <TableCell sx={{ ...tableCell, textAlign: "center" }} colSpan={2}>Provident Fund</TableCell>
               <TableCell sx={rightCell}></TableCell>
-              <TableCell sx={rightCell}>{formatAmt(pf)}</TableCell>
+<TableCell sx={rightCell}>{formatAmt(deductions.pf)}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -216,7 +160,7 @@ const NeweageFullandfinal = ({ company, data }) => {
                 Professional Tax
               </TableCell>
               <TableCell sx={rightCell}></TableCell>
-              <TableCell sx={rightCell}>{formatAmt(pt)}</TableCell>
+              <TableCell sx={rightCell}>{formatAmt(deductions.pt)}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -224,7 +168,7 @@ const NeweageFullandfinal = ({ company, data }) => {
                 Others
               </TableCell>
               <TableCell sx={rightCell}></TableCell>
-              <TableCell sx={rightCell}>{formatAmt(others)}</TableCell>
+              <TableCell sx={rightCell}>{formatAmt(deductions.others)}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -232,7 +176,7 @@ const NeweageFullandfinal = ({ company, data }) => {
                 Total Deductions
               </TableCell>
               <TableCell sx={rightCell}></TableCell>
-              <TableCell sx={rightCell}>{formatAmt(totalDeductions)}</TableCell>
+              <TableCell sx={rightCell}>{formatAmt(deductions.total)}</TableCell>
             </TableRow>
 
             {/* ================= NET PAY ================= */}

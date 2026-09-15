@@ -131,7 +131,7 @@ const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-end",
-        mt: 6,
+        mt: 4,
       }}
     >
       {/* HR SIGNATURE + STAMP */}
