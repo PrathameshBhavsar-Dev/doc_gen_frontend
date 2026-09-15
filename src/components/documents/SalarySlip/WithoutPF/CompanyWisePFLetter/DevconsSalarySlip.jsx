@@ -167,7 +167,7 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
               <TableCell>PAN</TableCell>
               <TableCell>{pan}</TableCell>
             </TableRow>
-
+ 
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Designation</TableCell>
               <TableCell>{designation}</TableCell>
