@@ -24,11 +24,7 @@ const formatDate = (date) =>
     })
     : "";
 
-const fmt = (n) =>
-  Number(n).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+const fmt = (n) => Math.round(Number(n || 0)).toLocaleString("en-IN");
 
 /* ================= STYLES ================= */
 const CELL = {

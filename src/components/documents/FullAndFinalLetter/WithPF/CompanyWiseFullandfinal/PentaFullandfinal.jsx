@@ -8,6 +8,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { formatAmt as numberFormat, numberToWords } from "../../../../../utils/salaryFormatters";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
 
 /* ---------------- COLORS ---------------- */
 const headerBg = "#EAF4FB";
@@ -41,126 +43,30 @@ const formatMonth = (v) => {
   return d.toLocaleDateString("en-US", { month: "long" });
 };
 
-const numberFormat = (n) =>
-  Number(n || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-  });
-
-/* ---------------- SALARY BREAKUP ---------------- */
-const getSalaryBreakup = (totalSalary = 0) => {
-  const basic = +(totalSalary * 0.48).toFixed(2);
-  const hra = +(totalSalary * 0.18).toFixed(2);
-  const da = +(totalSalary * 0.12).toFixed(2);
-  const special = +(totalSalary * 0.16).toFixed(2);
-  const food = +(totalSalary * 0.06).toFixed(2);
-  // ✅ PF Allowance Static
-  const pfAllowance = 3750;
-
-
-  return {
-    basic,
-    hra,
-    da,
-    special,
-    food,
-    pf: 3750,
-    pt: 200,
-    other: 2000,
-  };
-};
-
-/* ---------------- NUMBER TO WORDS ---------------- */
-const numberToWords = (num) => {
-  if (!num) return "Zero Only";
-
-  const a = [
-    "", "One", "Two", "Three", "Four", "Five", "Six",
-    "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-    "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
-  ];
-  const b = [
-    "", "", "Twenty", "Thirty", "Forty",
-    "Fifty", "Sixty", "Seventy", "Eighty", "Ninety",
-  ];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100)
-      return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return (
-        a[Math.floor(n / 100)] +
-        " Hundred" +
-        (n % 100 ? " " + inWords(n % 100) : "")
-      );
-    if (n < 100000)
-      return (
-        inWords(Math.floor(n / 1000)) +
-        " Thousand" +
-        (n % 1000 ? " " + inWords(n % 1000) : "")
-      );
-    if (n < 10000000)
-      return (
-        inWords(Math.floor(n / 100000)) +
-        " Lakh" +
-        (n % 100000 ? " " + inWords(n % 100000) : "")
-      );
-    return (
-      inWords(Math.floor(n / 10000000)) + " Crore"
-    );
-  };
-
-  return inWords(Math.round(num)) + " Rs Only";
-};
-
 /* ---------------- COMPONENT ---------------- */
 const PentaFullandfinal = ({ company, data }) => {
+
   /* ---- Days ---- */
   const totalDays = getDaysInMonth(data.month);
   const paidDays = Number(data.paiddays || 0);
-  const paidRatio = totalDays ? paidDays / totalDays : 0;
 
-  /* ---- Salary ---- */
-  const totalSalary = Number(data.totalSalary || 0);
-  const salary = getSalaryBreakup(totalSalary);
+  const { actual, earned, deductions, netPay: netPayBase } = calculateSalaryBreakdown({
+    salary: Number(data.totalSalary || 0) * 12,
+    workdays: totalDays,
+    paiddays: paidDays,
+  });
 
-  /* ---- Earnings ---- */
-  const earnings = [
-    { label: "Basic Salary", value: salary.basic },
-    { label: "HRA", value: salary.hra },
-    { label: "Dearness Allowance", value: salary.da },
-    { label: "Special Allowance", value: salary.special },
-    { label: "Food Allowance", value: salary.food },
-    { label: "PF", value: salary.pf, excludeFromTotal: true },
-  ];
-
-  const earningsTotal = earnings.reduce(
-    (sum, item) =>
-      item.excludeFromTotal
-        ? sum
-        : sum + item.value,
-    0
-  );
-
-  const earnedTotal = Math.floor(
-    earnings.reduce(
-      (sum, item) =>
-        item.excludeFromTotal
-          ? sum
-          : sum + Math.floor(item.value * paidRatio),
-      0
-    )
-  );
-  /* ---- Deductions ---- */
-  const deductionsTotal = salary.pt + salary.other + salary.pf;
-
-  /* ---- Other Earnings ---- */
   const leaveEncashment = Number(data.leaveencashment || 0);
+  const netPay = netPayBase + leaveEncashment;
 
-  /* ---- Net Pay ---- */
-  const netPay =
-    earnedTotal - deductionsTotal + leaveEncashment;
+  const earnings = [
+    { label: "Basic Salary", actual: actual.basic, earned: earned.basic },
+    { label: "HRA", actual: actual.hra, earned: earned.hra },
+    { label: "Dearness Allowance", actual: actual.da, earned: earned.da },
+    { label: "Special Allowance", actual: actual.special, earned: earned.special },
+    { label: "Food Allowance", actual: actual.food, earned: earned.food },
+    { label: "PF", actual: actual.pfAllowance, earned: earned.pfAllowance },
+  ];
 
   return (
     <Box
@@ -266,18 +172,8 @@ const PentaFullandfinal = ({ company, data }) => {
                 <TableCell colSpan={2} sx={cell}>
                   {item.label}
                 </TableCell>
-
-                <TableCell sx={cell}>
-                  {numberFormat(item.value)}
-                </TableCell>
-
-                <TableCell sx={cell}>
-                  {numberFormat(
-                    item.label === "PF"
-                      ? item.value
-                      : Math.floor(item.value * paidRatio)
-                  )}
-                </TableCell>
+                <TableCell sx={cell}>{numberFormat(item.actual)}</TableCell>
+                <TableCell sx={cell}>{numberFormat(item.earned)}</TableCell>
               </TableRow>
             ))}
 
@@ -286,10 +182,10 @@ const PentaFullandfinal = ({ company, data }) => {
                 Total Earnings
               </TableCell>
               <TableCell sx={{ ...cell, ...bold }}>
-                {numberFormat(earningsTotal)}
+                {numberFormat(actual.total)}
               </TableCell>
               <TableCell sx={{ ...cell, ...bold }}>
-                {numberFormat(earnedTotal)}
+                {numberFormat(earned.total)}
               </TableCell>
             </TableRow>
 
@@ -302,26 +198,26 @@ const PentaFullandfinal = ({ company, data }) => {
             <TableRow>
               <TableCell sx={cell}>Provident Fund</TableCell>
               <TableCell colSpan={2} sx={cell}></TableCell>
-              <TableCell sx={cell}>{numberFormat(salary.pf)}</TableCell>
+              <TableCell sx={cell}>{numberFormat(deductions.pf)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={cell}>Professional Tax</TableCell>
               <TableCell colSpan={2} sx={cell}></TableCell>
-              <TableCell sx={cell}>{numberFormat(salary.pt)}</TableCell>
+              <TableCell sx={cell}>{numberFormat(deductions.pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={cell}>Other</TableCell>
               <TableCell colSpan={2} sx={cell}></TableCell>
-              <TableCell sx={cell}>{numberFormat(salary.other)}</TableCell>
+              <TableCell sx={cell}>{numberFormat(deductions.others)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
               <TableCell colSpan={2} sx={cell}></TableCell>
               <TableCell sx={{ ...cell, ...bold }}>
-                {numberFormat(deductionsTotal)}
+                {numberFormat(deductions.total)}
               </TableCell>
             </TableRow>
 

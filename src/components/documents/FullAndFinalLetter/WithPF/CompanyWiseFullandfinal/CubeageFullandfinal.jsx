@@ -1,28 +1,8 @@
 import React from "react";
 import { Box, Typography, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-import cubeage_stamp from "../../../../../assets/images/cubeagetechnology/cubeage_stamp.png";
-
-/* ── Number to Words ── */
-const numberToWords = (num) => {
-  if (!num || num === 0) return "Zero Rupees Only";
-  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " and " + inWords(n % 100) : "");
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return "";
-  };
-  return inWords(Math.round(num)) + " Rupees Only";
-};
-
-const fmt = (n) =>
-  Math.round(Number(n || 0)).toLocaleString("en-IN");
-const round2 = (n) => Math.round(n * 100) / 100;
+import { numberToWords, formatAmt as fmt } from "../../../../../utils/salaryFormatters";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
 
 const C = (extra = {}) => ({
   border: "1px solid #000",
@@ -67,49 +47,17 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
   };
 
   const totalDaysInMonth = Number(data.workdays || getTotalDaysInMonth(data.month));
-  const paidDays = Number(data.paiddays || totalDaysInMonth);
+  // const paidDays = Number(data.paiddays || totalDaysInMonth);
   const monthLabel = getMonthLabel(data.month);
 
-  /* ── Salary (With PF) ── */
+  const totalDays = Number(data.workdays || totalDaysInMonth);
+  const paidDays = Number(data.paiddays || totalDays);
 
-  const monthlyCTC = Math.floor(parseFloat(data.totalSalary || 0));
-
-  // Calculate actual components
-  const basicActual = Math.floor(monthlyCTC * 0.48);
-  const hraActual = Math.floor(monthlyCTC * 0.18);
-  const daActual = Math.floor(monthlyCTC * 0.12);
-  const allowActual = Math.floor(monthlyCTC * 0.16);
-
-  let pfAllowanceActual = Math.floor(monthlyCTC * 0.06);
-  const totalAfterRoundingActual = basicActual + hraActual + daActual + allowActual + pfAllowanceActual;
-  pfAllowanceActual = pfAllowanceActual + (monthlyCTC - totalAfterRoundingActual);
-  const grandTotalActual = basicActual + hraActual + daActual + allowActual + pfAllowanceActual;
-
-  // Calculate earned components (Strictly matching Salary Slip's Math.floor logic)
-  const earnedCTC = (monthlyCTC * paidDays) / totalDaysInMonth;
-
-  const basicEarned = Math.floor(earnedCTC * 0.48);
-  const hraEarned = Math.floor(earnedCTC * 0.18);
-  const daEarned = Math.floor(earnedCTC * 0.12);
-  const allowEarned = Math.floor(earnedCTC * 0.16);
-
-  // Earned PF Allowance is exactly what is left after pulling out the fixed values from the total prorated earned salary
-  const pfAllowanceEarned = Math.floor(earnedCTC) - (basicEarned + hraEarned + daEarned + allowEarned);
-  const grandTotalEarned = basicEarned + hraEarned + daEarned + allowEarned + pfAllowanceEarned;
-
-  /* ── leave encashment and total earning ── */
-  const leaveEncashment = round2(Number(data.leaveencashment || 0));
-  const totalEarned = grandTotalEarned;
-
-  /* ── Deductions ── */
-  const pf = 3750;
-  const pt = 200;
-  const otherDed = 2000;
-  const totalDeductions = round2(pf + pt + otherDed); // From screenshot, deduction section doesn't show PF explicitly
-
-  /* ── Net ── */
-  const netPayable = round2(totalEarned - totalDeductions);
-  const balanceSalary = parseFloat(data.balanceSalary || 0);
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown({
+    ...data,
+    workdays: totalDays,
+    paiddays: paidDays,
+  });
 
   return (
     <A4Page
@@ -191,37 +139,130 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
             </TableRow>
 
             {/* Salary Components */}
+
+            {/* Basic */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>Basic</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(basicActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(basicEarned)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                Basic
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.basic)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.basic)}
+              </TableCell>
             </TableRow>
+
+
+            {/* HRA */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>H.R.A.</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(hraActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(hraEarned)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                H.R.A.
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.hra)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.hra)}
+              </TableCell>
             </TableRow>
+
+
+            {/* DA */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>D.A.</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(daActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(daEarned)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                D.A.
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.da)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.da)}
+              </TableCell>
             </TableRow>
+
+
+            {/* Special Allowance */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>ALLOWANCE (Shift+Skill)</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(allowActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(allowEarned)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                Special Allowance
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.special)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.special)}
+              </TableCell>
             </TableRow>
+
+
+            {/* Food Allowance */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>Special Allowance</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(pfAllowanceActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(pfAllowanceEarned)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                Food Allowance
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.food)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.food)}
+              </TableCell>
             </TableRow>
+
+
+            {/* PF Allowance */}
+            <TableRow>
+              <TableCell colSpan={3} sx={C({ textAlign: "center" })}>
+                PF Allowance
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(actual.pfAllowance)}
+              </TableCell>
+
+              <TableCell sx={C({ textAlign: "center" })}>
+                {fmt(earned.pfAllowance)}
+              </TableCell>
+            </TableRow>
+
 
             {/* Grand Total A */}
             <TableRow>
-              <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>Grand Total "A"</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(grandTotalActual)}</TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", color: "black" })}>{fmt(grandTotalEarned)}</TableCell>
+              <TableCell
+                colSpan={3}
+                sx={C({
+                  textAlign: "center",
+                  fontWeight: "bold"
+                })}
+              >
+                Grand Total "A"
+              </TableCell>
+
+              <TableCell
+                sx={C({
+                  textAlign: "center"
+                })}
+              >
+                {fmt(actual.total)}
+              </TableCell>
+
+              <TableCell
+                sx={C({
+                  textAlign: "center"
+                })}
+              >
+                {fmt(earned.total)}
+              </TableCell>
             </TableRow>
 
             {/* Deductions Header */}
@@ -233,24 +274,24 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center" })}>Provident Fund</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(pf)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(deductions.pf)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center" })}>Professional Tax</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(pt)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(deductions.pt)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center" })}>Others</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(otherDed)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center" })}>{fmt(deductions.others)}</TableCell>
             </TableRow>
 
             {/* Total Deductions */}
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>Total Deductions</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(totalDeductions)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(deductions.total)}</TableCell>
             </TableRow>
 
             {/* Other Earnings */}
@@ -262,26 +303,24 @@ const CubeageFullAndFinal = ({ data = {}, company = {} }) => {
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>Total</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(totalEarned)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(earned.total)}</TableCell>
             </TableRow>
 
             {/* Net Payable */}
             <TableRow>
               <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>Net Payable (Rs)</TableCell>
               <TableCell colSpan={1} sx={C({ textAlign: "center" })}></TableCell>
-              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(netPayable)}</TableCell>
+              <TableCell colSpan={1} sx={C({ textAlign: "center", fontWeight: "bold" })}>{fmt(netPay)}</TableCell>
             </TableRow>
 
             {/* Amount in Words */}
             <TableRow>
               <TableCell colSpan={2} sx={C({ textAlign: "center", fontWeight: "bold" })}>Amount in Words</TableCell>
-              <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>{numberToWords(netPayable)}</TableCell>
+              <TableCell colSpan={3} sx={C({ textAlign: "center", fontWeight: "bold" })}>{numberToWords(netPay)}</TableCell>
             </TableRow>
 
           </TableBody>
         </Table>
-
-
 
         <Typography mt={3} fontSize="12px" fontStyle="italic" textAlign={"center"}>
           *Computer Generated Full &amp; Final Settlement. No Signature Required.

@@ -113,7 +113,7 @@ const SmartSoftwareRelieving = ({ company, data }) => {
           be relieved from your services on{" "}
           <b>{formatDate(lastWorkingDay)}</b>. We wish to inform you that your
           resignation has been accepted and you shall be relieved from your
-          duties as <b>{designation}</b>.
+          duties as <b>{ data.currentDesignation ?? data.designationdesignation}</b>.
         </Typography>
 
         <Typography paragraph sx={{ mb: 6, ml: "10px" }}>

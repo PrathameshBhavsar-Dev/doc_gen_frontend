@@ -7,7 +7,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
+import { formatAmt, numberToWords } from "../../../../../utils/salaryFormatters";
 import A4Page from "../../../../layout/A4Page";
 
 
@@ -15,7 +16,7 @@ import A4Page from "../../../../layout/A4Page";
 const cell = {
   border: "1px solid #000",
   fontSize: "13px",      // smaller text
- padding: "0px 12px 6px 12px",    // less spacing
+  padding: "0px 12px 6px 12px",    // less spacing
   // lineHeight: 1.2,
 };
 
@@ -30,71 +31,17 @@ const formatDate = (d) =>
 const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
-const formatAmt = (n) =>
-  Math.round(Number(n || 0)).toLocaleString("en-IN");
-
-/* ================== NUMBER TO WORDS ================== */
-const numberToWords = (num = 0) => {
-  if (!num) return "Zero Only";
-
-  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100)
-      return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000)
-      return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000)
-      return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
-
-  return `${inWords(Math.round(num))} Only`;
-};
-
 /* ================== COMPONENT ================== */
 const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
   const totalDays = Number(data.workdays || 0);
   const paidDays = Number(data.paiddays || 0);
   const ratio = totalDays ? paidDays / totalDays : 0;
 
-  const gross = Number(data.totalSalary || 0);
-
-  const basic = +(gross * 0.48);
-  const hra = +(gross * 0.18);
-  const da = +(gross * 0.12);
-  const special = +(gross * 0.16);
-  const food = +(gross * 0.06);
-
-  // ✅ PF Allowance Static
-  const pfAllowance = 3750;
-
-  const earned = (v) => +(v * ratio);
-
-  const totalActual =
-    basic + hra + da + special + food
-
-  const totalEarned =
-    earned(basic) +
-    earned(hra) +
-    earned(da) +
-    earned(special) +
-    earned(food)
-  // pfAllowance; // static earned
-
-  /* ---------- DEDUCTIONS ---------- */
-  const pf = 3750;
-  const pt = 200;
-  const others = 2000;
-
-  const totalDeductions = pf + pt + others; // 5950
-
-  // ✅ Net Pay Formula
-  const netPay = totalEarned - totalDeductions;
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown({
+    salary: Number(data.totalSalary || 0) * 12,
+    workdays: totalDays,
+    paiddays: paidDays,
+  });
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -175,28 +122,24 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
             </TableRow>
 
             {[
-              ["Basic", basic],
-              ["HRA", hra],
-              ["Dearness Allowance", da],
-              ["Special Allowances", special],
-              ["Food Allowances", food],
-              ["PF Allowance", pfAllowance], // replaced misc
-            ].map(([label, val]) => (
+              ["Basic", actual.basic, earned.basic],
+              ["HRA", actual.hra, earned.hra],
+              ["Dearness Allowance", actual.da, earned.da],
+              ["Special Allowances", actual.special, earned.special],
+              ["Food Allowances", actual.food, earned.food],
+              ["PF Allowance", actual.pfAllowance, earned.pfAllowance],
+            ].map(([label, actVal, earnVal]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>{label}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>
-                  {label === "PF Allowance"
-                    ? formatAmt(pfAllowance)
-                    : formatAmt(earned(val))}
-                </TableCell>
+                <TableCell sx={{ ...cell, ...right }}>{formatAmt(actVal)}</TableCell>
+                <TableCell sx={{ ...cell, ...right }}>{formatAmt(earnVal)}</TableCell>
               </TableRow>
             ))}
 
             <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(actual.total)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(earned.total)}</TableCell>
             </TableRow>
 
             {/* Deductions */}
@@ -208,22 +151,22 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pf)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Others</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(others)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.others)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalDeductions)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(deductions.total)}</TableCell>
             </TableRow>
 
             {/* OTHER EARNINGS */}
@@ -243,7 +186,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell colSpan={2} sx={cell}>Total </TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                {formatAmt(totalEarned)}
+                {formatAmt(earned.total)}
               </TableCell>
             </TableRow>
 
