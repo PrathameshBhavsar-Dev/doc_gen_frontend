@@ -2,9 +2,8 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
-/* ===================== HELPERS ===================== */
 const money = (v) =>
-  Number(v || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Math.round(Number(v || 0)).toLocaleString("en-IN");
 
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString("en-GB") : "";

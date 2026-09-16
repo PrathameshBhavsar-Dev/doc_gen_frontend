@@ -8,6 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import watermark from "../../../../../assets/images/Nimbja/nimbja_watermark.png";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
+import { formatDate, formatMonth, formatAmt, numberToWords } from "../../../../../utils/salaryFormatters";
+
 /* ================== COMMON STYLES ================== */
 const cell = {
   border: "1px solid #000",
@@ -21,222 +24,11 @@ const bold = { fontWeight: 700 };
 const center = { textAlign: "center" };
 const right = { textAlign: "right" };
 
-/* ================== UTILS ================== */
-const formatDate = (d) => (d ? new Date(d).toLocaleDateString("en-GB") : "");
-
-const formatMonth = (m) =>
-  m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
-
-// const formatAmt = (n) =>
-//   Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
-
-const formatAmt = (n) =>
-  Math.round(Number(n || 0)).toLocaleString("en-IN");
-
-/* ================== NUMBER TO WORDS ================== */
-const numberToWords = (num = 0) => {
-  if (!num) return "Zero Only";
-
-  const a = [
-    "",
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "Nine",
-    "Ten",
-    "Eleven",
-    "Twelve",
-    "Thirteen",
-    "Fourteen",
-    "Fifteen",
-    "Sixteen",
-    "Seventeen",
-    "Eighteen",
-    "Nineteen",
-  ];
-  const b = [
-    "",
-    "",
-    "Twenty",
-    "Thirty",
-    "Forty",
-    "Fifty",
-    "Sixty",
-    "Seventy",
-    "Eighty",
-    "Ninety",
-  ];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-    if (n < 1000)
-      return (
-        a[Math.floor(n / 100)] +
-        " Hundred" +
-        (n % 100 ? " " + inWords(n % 100) : "")
-      );
-    if (n < 100000)
-      return (
-        inWords(Math.floor(n / 1000)) +
-        " Thousand" +
-        (n % 1000 ? " " + inWords(n % 1000) : "")
-      );
-    if (n < 10000000)
-      return (
-        inWords(Math.floor(n / 100000)) +
-        " Lakh" +
-        (n % 100000 ? " " + inWords(n % 100000) : "")
-      );
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
-
-  return `${inWords(Math.round(num))} Only`;
-};
-
 /* ================== COMPONENT ================== */
 const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
-  // const gross = Number(data.totalSalary || 0);
 
-  // const basic = +(gross * 0.48).toFixed(2);
-  // const hra = +(gross * 0.18).toFixed(2);
-  // const da = +(gross * 0.12).toFixed(2);
-  // const special = +(gross * 0.16).toFixed(2);
-  // const food = +(gross * 0.06).toFixed(2);
-
-  // // ✅ PF Allowance Static
-  // const pfAllowance = 3750;
-
-  // const earned = (v) => +(v * ratio).toFixed(2);
-
-  // const totalActual = basic + hra + da + special + food;
-
-  // const totalEarned =
-  //   earned(basic) + earned(hra) + earned(da) + earned(special) + earned(food);
-  // //pfAllowance; // static earned
-
-  // /* ---------- DEDUCTIONS ---------- */
-  // const pf = 3750;
-  // const pt = 200;
-  // const others = 2000;
-
-  // const totalDeductions = pf + pt + others; // 5950
-
-  // // ✅ Net Pay Formula
-  // const netPay = totalEarned - totalDeductions;
-  const totalDays = Number(data.workdays || 0);
-  const paidDays = Number(data.paiddays || 0);
-
-  const gross = Math.round(Number(data.salary || 0) / 12);
-
-  // -----------------------------------------
-  // ACTUAL SALARY COMPONENTS
-  // -----------------------------------------
-
-  // Actual salary components
-  const hra = Math.round(gross * 0.18); // 
-  const da = Math.round(gross * 0.12);
-  const special = Math.round(gross * 0.16);
-  const food = Math.round(gross * 0.06);
-
-  const pfAllowance = 3750;
-
-  const basic = Math.round(
-    gross - (hra + da + special + food + pfAllowance)
-  );
-
-  // -----------------------------------------
-  // ACTUAL TOTAL
-  // -----------------------------------------
-
-  const totalActual =
-    basic +
-    hra +
-    da +
-    special +
-    food +
-    pfAllowance;
-
-  // -----------------------------------------
-  // EARNED CALCULATION
-  // Formula:
-  // Annual Salary / 12 / Total Days * Paid Days
-  // -----------------------------------------
-
-  const earnedTotal =
-    totalDays > 0
-      ? Math.round(
-        (Number(data.salary || 0) / 12 / totalDays) * paidDays
-      )
-      : 0;
-
-  // PF remains fixed
-  const earnedPfAllowance = pfAllowance;
-
-  // Amount available for other salary components
-  const earnedWithoutPf =
-    earnedTotal - earnedPfAllowance;
-
-  // Calculate non-PF components proportionally
-  const earnedBasic = Math.round(
-    basic * (earnedWithoutPf / (gross - pfAllowance))
-  );
-
-  const earnedHra = Math.round(
-    hra * (earnedWithoutPf / (gross - pfAllowance))
-  );
-
-  const earnedDa = Math.round(
-    da * (earnedWithoutPf / (gross - pfAllowance))
-  );
-
-  const earnedSpecial = Math.round(
-    special * (earnedWithoutPf / (gross - pfAllowance))
-  );
-
-  // Make the final component absorb rounding difference
-  const earnedFood =
-    earnedWithoutPf -
-    (
-      earnedBasic +
-      earnedHra +
-      earnedDa +
-      earnedSpecial
-    );
-
-  // -----------------------------------------
-  // FINAL TOTAL EARNED
-  // -----------------------------------------
-
-  const totalEarned =
-    earnedBasic +
-    earnedHra +
-    earnedDa +
-    earnedSpecial +
-    earnedFood +
-    earnedPfAllowance;
-
-  // -----------------------------------------
-  // DEDUCTIONS
-  // -----------------------------------------
-
-  const pf = 3750;
-  const pt = 200;
-  const others = 2000;
-
-  const totalDeductions = pf + pt + others;
-
-  // -----------------------------------------
-  // NET PAY
-  // -----------------------------------------
-
-  const netPay =
-    totalEarned - totalDeductions;
+  const { totalDays, paidDays, actual, earned, deductions, netPay } =
+    calculateSalaryBreakdown(data);
 
   return (
     <Box
@@ -372,12 +164,12 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
             </TableRow>
 
             {[
-              ["Basic", basic, earnedBasic],
-              ["Bouqet Of Benefits", hra, earnedHra],
-              ["HRA", da, earnedDa],
-              ["City Allowance", special, earnedSpecial],
-              ["Superannuation Fund", food, earnedFood],
-              ["PF Allowance", pfAllowance, earnedPfAllowance],
+              ["Basic", actual.basic, earned.basic],
+              ["Bouqet Of Benefits", actual.hra, earned.hra],
+              ["HRA", actual.da, earned.da],
+              ["City Allowance", actual.special, earned.special],
+              ["Superannuation Fund", actual.food, earned.food],
+              ["PF Allowance", actual.pfAllowance, earned.pfAllowance],
             ].map(([label, actual, earnedValue]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>
@@ -399,10 +191,10 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
                 Total
               </TableCell>
               <TableCell sx={{ ...cell, ...bold, ...right }}>
-                {formatAmt(totalActual)}
+                {formatAmt(actual.total)}
               </TableCell>
               <TableCell sx={{ ...cell, ...bold, ...right }}>
-                {formatAmt(totalEarned)}
+                {formatAmt(earned.total)}
               </TableCell>
             </TableRow>
 
@@ -417,14 +209,14 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
               <TableCell colSpan={3} sx={cell}>
                 Provident Fund
               </TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pf)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>
                 Professional Tax
               </TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pt)}</TableCell>
             </TableRow>
 
             <TableRow>
@@ -432,7 +224,7 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
                 Others
               </TableCell>
               <TableCell sx={{ ...cell, ...right }}>
-                {formatAmt(others)}
+                {formatAmt(deductions.others)}
               </TableCell>
             </TableRow>
 
@@ -441,7 +233,7 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
                 Total Deductions
               </TableCell>
               <TableCell sx={{ ...cell, ...bold, ...right }}>
-                {formatAmt(totalDeductions)}
+                {formatAmt(deductions.total)}
               </TableCell>
             </TableRow>
 
@@ -466,7 +258,7 @@ const NimbjaFullAndfinal = ({ company = {}, data = {} }) => {
                 Total{" "}
               </TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                {formatAmt(totalEarned)}
+                {formatAmt(earned.total)}
               </TableCell>
             </TableRow>
 

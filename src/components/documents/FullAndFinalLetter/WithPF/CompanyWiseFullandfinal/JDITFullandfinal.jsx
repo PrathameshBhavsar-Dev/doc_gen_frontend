@@ -9,64 +9,19 @@ import {
   Divider,
 } from "@mui/material";
 import A4Page from "../../../../layout/A4Page";
-
-/* ================= COMMON STYLES ================= */
-
-// const tableCell = {
-//   border: "1px solid #000",
-//   fontSize: "12px",
-//   padding: "6px",
-// };
-
-// const centerBold = {
-//   ...tableCell,
-//   fontWeight: 700,
-//   textAlign: "center",
-// };
-
-// const boldCell = {
-//   ...tableCell,
-//   fontWeight: 700,
-// };
-
-// const rightCell = {
-//   ...tableCell,
-//   textAlign: "right",
-// };
-
-// const centerCell = {
-//   ...tableCell,
-//   textAlign: "center",
-// };
-
-// const headerBg = {
-//   backgroundColor: "#ffffff",
-// };
-
-// const subHeaderBg = {
-//   backgroundColor: "#ffffff",
-// };
-
-// const cell = {
-//   border: "1px solid #000",
-//   fontSize: "13px",
-//   padding: "4px 6px",
-// };
-
-// const right = { textAlign: "right" };  
+import { formatAmt, numberToWords } from "../../../../../utils/salaryFormatters";
+import { calculateSalaryBreakdown } from "../../../../../utils/salaryCalculator";
 
 const cell = {
   border: "1px solid #000",
   fontSize: "13px",      // smaller text
   padding: "0px 12px 12px 12px",
-  lineHeight: 1,       
+  lineHeight: 1,
 };
 
 const bold = { fontWeight: 700 };
 const center = { textAlign: "center" };
 const right = { textAlign: "right" };
-
-
 
 /* ================== UTILS ================== */
 const formatDate = (d) =>
@@ -75,111 +30,19 @@ const formatDate = (d) =>
 const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
-const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-/* ================== NUMBER TO WORDS ================== */
-const numberToWords = (num = 0) => {
-  if (!num) return "Zero Only";
-
-  const a = [
-    "", "One", "Two", "Three", "Four", "Five", "Six",
-    "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-    "Thirteen", "Fourteen", "Fifteen", "Sixteen",
-    "Seventeen", "Eighteen", "Nineteen",
-  ];
-  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
-
-  const inWords = (n) => {
-    if (n < 20) return a[n];
-
-    if (n < 100)
-      return (
-        b[Math.floor(n / 10)] +
-        (n % 10 ? " " + a[n % 10] : "")
-      );
-
-    if (n < 1000)
-      return (
-        a[Math.floor(n / 100)] +
-        " Hundred" +
-        (n % 100 ? " " + inWords(n % 100) : "")
-      );
-
-    if (n < 100000)
-      return (
-        inWords(Math.floor(n / 1000)) +
-        " Thousand" +
-        (n % 1000 ? " " + inWords(n % 1000) : "")
-      );
-
-    if (n < 10000000)
-      return (
-        inWords(Math.floor(n / 100000)) +
-        " Lakh" +
-        (n % 100000 ? " " + inWords(n % 100000) : "")
-      );
-
-    return (
-      inWords(Math.floor(n / 10000000)) +
-      " Crore" +
-      (n % 10000000 ? " " + inWords(n % 10000000) : "")
-    );
-  };
-
-  return `${inWords(Math.round(num))} Only`;
-};
-
 /* ================= COMPONENT ================= */
 
 const JditFullAndFinal = ({ company, data }) => {
   const totalDays = Number(data.workdays || 0);
   const paidDays = Number(data.paiddays || 0);
+
+  const { actual, earned, deductions, netPay } = calculateSalaryBreakdown({
+    salary: Number(data.totalSalary || 0) * 12,
+    workdays: totalDays,
+    paiddays: paidDays,
+  });
+
   const ratio = totalDays ? paidDays / totalDays : 0;
-
-  const round0 = (num) => Math.round(Number(num || 0));
-  const gross = round0(data.totalSalary || 0);
-
-  const PERCENT = {
-    hra: 0.18,
-    da: 0.12,
-    special: 0.16,
-    food: 0.06,
-  };
-
-  const hra = round0(gross * PERCENT.hra);
-  const da = round0(gross * PERCENT.da);
-  const special = round0(gross * PERCENT.special);
-  const food = round0(gross * PERCENT.food);
-
-  // ✅ PF Allowance Static
-  const pfAllowance = 3750;
-
-  const basic = round0(gross - (hra + da + special + food + pfAllowance));
-
-  const earned = (v) => +(v * ratio);
-
-  const totalActual =
-    basic + hra + da + special + food + pfAllowance
-
-  const totalEarned =
-    earned(basic) +
-    earned(hra) +
-    earned(da) +
-    earned(special) +
-    earned(food) +
-    earned(pfAllowance)
-  // pfAllowance; // static earned
-
-  /* ---------- DEDUCTIONS ---------- */
-  const pf = 3750;
-  const pt = 200;
-  const others = 2000;
-
-  const totalDeductions = pf + pt + others; // 5950
-
-  // ✅ Net Pay Formula
-  const netPay = totalEarned - totalDeductions;
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -196,7 +59,7 @@ const JditFullAndFinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell colSpan={4} sx={{ ...cell, ...bold, ...center }}>
-                {company.name}  
+                {company.name}
               </TableCell>
             </TableRow>
 
@@ -259,28 +122,24 @@ const JditFullAndFinal = ({ company, data }) => {
             </TableRow>
 
             {[
-              ["Basic", basic],
-              ["HRA", hra],
-              ["Dearness Allowance", da],
-              ["Special Allowances", special],
-              ["Food Allowances", food],
-              ["PF Allowance", pfAllowance], // replaced misc
-            ].map(([label, val]) => (
+              ["Basic", actual.basic, earned.basic],
+              ["HRA", actual.hra, earned.hra],
+              ["Dearness Allowance", actual.da, earned.da],
+              ["Special Allowances", actual.special, earned.special],
+              ["Food Allowances", actual.food, earned.food],
+              ["PF Allowance", actual.pfAllowance, earned.pfAllowance],
+            ].map(([label, actVal, earnVal]) => (
               <TableRow key={label}>
                 <TableCell colSpan={2} sx={cell}>{label}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>{formatAmt(val)}</TableCell>
-                <TableCell sx={{ ...cell, ...right }}>
-                  {label === "PF Allowance"
-                    ? formatAmt(pfAllowance)
-                    : formatAmt(earned(val))}
-                </TableCell>
+                <TableCell sx={{ ...cell, ...right }}>{formatAmt(actVal)}</TableCell>
+                <TableCell sx={{ ...cell, ...right }}>{formatAmt(earnVal)}</TableCell>
               </TableRow>
             ))}
 
             <TableRow>
               <TableCell colSpan={2} sx={{ ...cell, ...bold }}>Total</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalActual)}</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalEarned)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(actual.total)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(earned.total)}</TableCell>
             </TableRow>
 
             {/* Deductions */}
@@ -292,22 +151,22 @@ const JditFullAndFinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Provident Fund</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pf)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pf)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Professional Tax</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(pt)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.pt)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={cell}>Others</TableCell>
-              <TableCell sx={{ ...cell, ...right }}>{formatAmt(others)}</TableCell>
+              <TableCell sx={{ ...cell, ...right }}>{formatAmt(deductions.others)}</TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell colSpan={3} sx={{ ...cell, ...bold }}>Total Deductions</TableCell>
-              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(totalDeductions)}</TableCell>
+              <TableCell sx={{ ...cell, ...bold, ...right }}>{formatAmt(deductions.total)}</TableCell>
             </TableRow>
 
             {/* OTHER EARNINGS */}
@@ -327,7 +186,7 @@ const JditFullAndFinal = ({ company, data }) => {
             <TableRow>
               <TableCell colSpan={2} sx={cell}>Total </TableCell>
               <TableCell colSpan={2} sx={{ ...cell, ...right }}>
-                {formatAmt(totalEarned)}
+                {formatAmt(earned.total)}
               </TableCell>
             </TableRow>
 
