@@ -22,7 +22,7 @@ const numberToWords = (num) => {
 };
 
 const fmt = (n) =>
-  Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  Math.round(Number(n) || 0).toLocaleString("en-IN");
 
 const C = (extra = {}) => ({
   border: "1px solid #000",

@@ -21,10 +21,7 @@ const numberToWords = (num) => {
 };
 
 const fmt = (n) =>
-  Number(n).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  Math.round(Number(n) || 0).toLocaleString("en-IN");
 const round2 = (n) => Math.round(n * 100) / 100;
 
 const C = (extra = {}) => ({

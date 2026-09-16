@@ -24,11 +24,11 @@ const formatDate = (date) =>
 
 const round2 = (n) => Number(Number(n || 0).toFixed(2));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+const formatCurrency = (value) => {
+  if (value === undefined || value === null) return "0";
+  return Number(value).toLocaleString("en-IN");
+};
+
 /* ================= SALARY BREAKUP WITH PF ================= */
 const generateSalaryBreakup = (annualCTCInput) => {
   const round0 = (n) => Math.round(Number(n) || 0);
@@ -186,11 +186,19 @@ const NeweageAppointment = ({ company, data }) => {
             {/* COMPANY */}
             <Box>
               <Typography fontSize={15}>Yours faithfully,</Typography>
+
               <Typography fontWeight={700} fontSize={15} mt={3}>
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  mt: 1,
+                  alignItems: "center",
+                }}
+              >
                 {company.signature && (
                   <Box
                     component="img"
@@ -204,6 +212,7 @@ const NeweageAppointment = ({ company, data }) => {
                     }}
                   />
                 )}
+
                 {company.stamp && (
                   <Box
                     component="img"
@@ -222,19 +231,36 @@ const NeweageAppointment = ({ company, data }) => {
               <Typography fontWeight={600}>
                 {company.hrName}
               </Typography>
+
               <Typography fontSize={13}>
                 <strong>HR Department</strong>
               </Typography>
             </Box>
 
             {/* ACCEPTANCE */}
-            <Box textAlign="right">
+            <Box
+              sx={{
+                textAlign: "left",
+                minWidth: "220px",
+              }}
+            >
               <Typography fontWeight={600}>
                 I ACCEPT
               </Typography>
-              <Typography mt={1}>Signature: ______________</Typography>
-              <Typography mt={1}>Name: {data.employeeName}</Typography>
-              <Typography mt={1}>Date: ______________</Typography>
+
+              <Box sx={{ mt: 2 }}>
+                <Typography>
+                  Signature: __________________
+                </Typography>
+
+                <Typography sx={{ mt: 2 }}>
+                  Name: {data.employeeName}
+                </Typography>
+
+                <Typography sx={{ mt: 2 }}>
+                  Date: __________________
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>

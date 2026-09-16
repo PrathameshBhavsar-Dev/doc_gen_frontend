@@ -187,14 +187,14 @@ const CubeageIncrement = ({ company, data }) => {
               <img
                 src={company.stamp}
                 alt="Company Stamp"
-                style={{ width: "35mm", marginTop: "-5mm", marginLeft: "-5mm" }}
+                style={{ width: "30mm", marginTop: "-5mm", marginLeft: "-5mm" }}
               />
             )}
             {company.signature && (
               <img
                 src={company.signature}
                 alt="HR Signature"
-                style={{ width: "40mm", marginTop: "12mm", marginLeft: "-3mm" }}
+                style={{ width: "35mm", marginTop: "10mm", marginLeft: "-3mm" }}
               />
             )}
           </div>
