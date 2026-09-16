@@ -30,7 +30,7 @@ const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 0 });
 
 const numberToWords = (num = 0) => {
   if (!num) return "Zero Only";

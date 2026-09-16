@@ -20,13 +20,13 @@ const formatDate = (date) =>
     })
     : "";
 
-const round2 = (n) => Number(Number(n || 0).toFixed(2));
+const round2 = (n) => Math.round(Number(n || 0));
 
-const formatCurrency = (v) =>
-  Number(v || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+const formatCurrency = (value) => {
+  if (value === undefined || value === null) return "0";
+  return Number(value).toLocaleString("en-IN");
+};
+
 /* ================= SALARY BREAKUP ================= */
 const generateSalaryBreakup = (monthlySalaryInput) => {
   const monthlySalary = round2(Number(monthlySalaryInput || 0));
@@ -172,36 +172,75 @@ const NeweageAppointment = ({ company, data }) => {
             acceptance of the above terms and conditions.
           </Typography>
 
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
-            {/* COMPANY */}
-            <Box>
-              <Typography fontSize={15}>Yours faithfully,</Typography>
-              <Typography fontWeight={700} fontSize={15} mt={3}>
+          <Box
+            sx={{
+              mt: 4,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              width: "100%",
+            }}
+          >
+            {/* ================= COMPANY SECTION ================= */}
+            <Box
+              sx={{
+                width: "55%",
+                fontFamily: "Bahnschrift",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  lineHeight: 1.4,
+                  mb: 2,
+                }}
+              >
+                Yours faithfully,
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  lineHeight: 1.4,
+                  mb: 1.5,
+                }}
+              >
                 For {company.name}
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
+              {/* SIGNATURE + STAMP */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                  height: "85px",
+                  mb: 1.5,
+                }}
+              >
                 {company.signature && (
                   <Box
                     component="img"
                     src={company.signature}
                     alt="signature"
                     sx={{
+                      width: "150px",
                       height: "60px",
-                      width: "auto",
                       objectFit: "contain",
                       display: "block",
                     }}
                   />
                 )}
+
                 {company.stamp && (
                   <Box
                     component="img"
                     src={company.stamp}
                     alt="stamp"
                     sx={{
+                      width: "80px",
                       height: "80px",
-                      width: "auto",
                       objectFit: "contain",
                       display: "block",
                     }}
@@ -209,24 +248,80 @@ const NeweageAppointment = ({ company, data }) => {
                 )}
               </Box>
 
-              <Typography fontWeight={600}>
-                {company.hrName}
-              </Typography>
-              <Typography fontSize={13}>
-                <strong>HR Department</strong>
-              </Typography>
+              {/* HR DETAILS */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    lineHeight: 1.4,
+                    mb: 0.5,
+                  }}
+                >
+                  {company.hrName}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: "13px",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  <strong>HR Department</strong>
+                </Typography>
+              </Box>
             </Box>
 
-            {/* ACCEPTANCE */}
-            <Box>
-              <Typography fontWeight={600} mt={4}>
+            {/* ================= ACCEPTANCE SECTION ================= */}
+            <Box
+              sx={{
+                width: "35%",
+                fontFamily: "Bahnschrift",
+                pt: 4,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  textAlign: "center",
+                  mb: 2.5,
+                }}
+              >
                 I ACCEPT
               </Typography>
-              <Typography mt={1}>Signature: ______________</Typography>
-              <Typography mt={4}>Name: {data.employeeName}</Typography>
-              <Typography mt={1}>Date: ______________</Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  lineHeight: 1.4,
+                  mb: 2,
+                }}
+              >
+                Signature: ______________
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  lineHeight: 1.4,
+                  mb: 2,
+                }}
+              >
+                Name: {data.employeeName}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  lineHeight: 1.4,
+                }}
+              >
+                Date: ______________
+              </Typography>
             </Box>
           </Box>
+
         </Box>
       </A4Page>
 
