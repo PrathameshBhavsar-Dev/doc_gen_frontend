@@ -260,110 +260,165 @@ const SmartMatrixAppointment = ({ company, data }) => {
           </p>
 
           {/* ================= SIGN-OFF ================= */}
-          <div>
-            <p style={{ marginBottom: "2mm" }}>
-              {/* ⬆️ reduced margin to lift content slightly */}
-              Yours faithfully,
-            </p>
 
-            <p style={{ marginBottom: "20mm" }}>I ACCEPT</p>
-
-            <p
-              style={{
-                marginTop: "-9mm",
-                marginBottom: "0",
-                fontWeight: "400",
-                fontFamily: "Verdana",
+          <Box
+            sx={{
+              mt: "8mm",
+              width: "100%",
+              fontFamily: "Verdana",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                width: "100%",
               }}
             >
-              {/* ⬆️ negative margin lifts company name upward */}
-              SmartMatrix Digital Services Pvt Ltd.
-            </p>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box sx={{ mt: "6mm" }}>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item>
+              {/* ================= LEFT SIDE ================= */}
+              <Box
+                sx={{
+                  width: "55%",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: "Verdana",
+                    fontSize: "14px",
+                    mb: "3mm",
+                  }}
+                >
+                  Yours faithfully,
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontFamily: "Verdana",
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    mb: "3mm",
+                  }}
+                >
+                  SmartMatrix Digital Services Pvt Ltd.
+                </Typography>
+
+                {/* SIGNATURE + STAMP */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8mm",
+                    height: "25mm",
+                    mb: "3mm",
+                  }}
+                >
+                  {/* STAMP */}
+                  {company?.stamp && (
                     <Box
                       component="img"
-                      src={company?.stamp}
+                      src={company.stamp}
                       alt="Stamp"
-                      sx={{ width: 110 }}
+                      sx={{
+                        width: "28mm",
+                        height: "22mm",
+                        objectFit: "contain",
+                        display: "block",
+                      }}
                     />
-                  </Grid>
-                  <Grid item>
+                  )}
+
+                  {/* SIGNATURE */}
+                  {sign && (
                     <Box
                       component="img"
                       src={sign}
                       alt="Signature"
-                      sx={{ width: 140, mt: "26mm", ml: "-2mm" }}
+                      sx={{
+                        width: "38mm",
+                        height: "16mm",
+                        objectFit: "contain",
+                        display: "block",
+                      }}
                     />
-                  </Grid>
-                </Grid>
+                  )}
+                </Box>
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    mt: "5mm",
-                    width: "100%",
-                  }}
-                >
-                  {/* ================= LEFT — HR DETAILS ================= */}
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontFamily: "Verdana",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {company?.hrName}
-                    </Typography>
-
-                    <Typography
-                      sx={{
-                        fontFamily: "Verdana",
-                        fontWeight: "400",
-                      }}
-                    >
-                      HR Manager-HR Services
-                    </Typography>
-                  </Box>
-
-                  {/* ================= RIGHT — NAME & DATE (SAME COLUMN) ================= */}
-                  <Box
+                {/* HR DETAILS */}
+                <Box sx={{ mt: "2mm" }}>
+                  <Typography
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "flex-end",
+                      fontFamily: "Verdana",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: 1.4,
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontFamily:
-                          '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                        textAlign: "right",
-                      }}
-                    >
-                      Name: {data.employeeName}
-                    </Typography>
+                    {company?.hrName}
+                  </Typography>
 
-                    <Typography
-                      sx={{
-                        fontFamily:
-                          '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                        mt: "2mm",
-                        textAlign: "right",
-                        ml: "42mm",
-                      }}
-                    >
-                      Date : _________________
-                    </Typography>
-                  </Box>
+                  <Typography
+                    sx={{
+                      fontFamily: "Verdana",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    HR Manager-HR Services
+                  </Typography>
                 </Box>
               </Box>
+
+              {/* ================= RIGHT SIDE ================= */}
+              <Box
+                sx={{
+                  width: "35%",
+                  pt: "2mm",
+                }}
+              >
+                {/* I ACCEPT */}
+                <Typography
+                  sx={{
+                    fontFamily: "Verdana",
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    textAlign: "center",
+                    mb: "7mm",
+                  }}
+                >
+                  I ACCEPT
+                </Typography>
+
+                {/* NAME */}
+                <Typography
+                  sx={{
+                    fontFamily:
+                      '"Yu Gothic", "Yu Gothic UI", "Segoe UI", sans-serif',
+                    fontSize: "14px",
+                    mb: "3mm",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Name: {data.employeeName}
+                </Typography>
+
+                {/* DATE */}
+                <Typography
+                  sx={{
+                    fontFamily:
+                      '"Yu Gothic", "Yu Gothic UI", "Segoe UI", sans-serif',
+                    fontSize: "14px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Date: _________________
+                </Typography>
+              </Box>
             </Box>
-          </div>
+          </Box>
+
+
         </div>
       </A4Page>
 
@@ -539,7 +594,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           padding: "0px 12px 12px 12px",
                           fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif'
                         }}
-                        >
+                      >
                         Salary Components
                       </TableCell>
 
@@ -553,7 +608,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           border: "1px solid #000",
                           padding: "0px 12px 12px 12px",
                         }}
-                        >
+                      >
                         Per month (Rs.)
                       </TableCell>
 
@@ -567,7 +622,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           padding: "0px 12px 12px 12px",
                           fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                         }}
-                        >
+                      >
                         Per Annum (Rs.)
                       </TableCell>
                     </TableRow>
@@ -581,9 +636,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                             border: "1px solid #000",
                             fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                             fontSize: "14px",
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
-                          >
+                        >
                           {row.name}
                         </TableCell>
 
@@ -593,9 +648,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                             border: "1px solid #000",
                             fontSize: "14px",
                             fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
-                          >
+                        >
                           {formatCurrency(row.monthly)}
                         </TableCell>
 
@@ -605,9 +660,9 @@ const SmartMatrixAppointment = ({ company, data }) => {
                             border: "1px solid #000",
                             fontFamily: '"Yu Gothic","Yu Gothic UI","Segoe UI",sans-serif',
                             fontSize: "14px",
-                          padding: "0px 12px 12px 12px",
+                            padding: "0px 12px 12px 12px",
                           }}
-                          >
+                        >
                           {formatCurrency(row.annual)}
                         </TableCell>
                       </TableRow>
@@ -624,7 +679,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                        >
+                      >
                         Monthly Gross Salary
                       </TableCell>
 
@@ -637,7 +692,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                        >
+                      >
                         {formatCurrency(totalMonthly)}
                       </TableCell>
 
@@ -651,7 +706,7 @@ const SmartMatrixAppointment = ({ company, data }) => {
                           padding: "0px 12px 12px 12px",
                           background: "#f28c28",
                         }}
-                        >
+                      >
                         {formatCurrency(totalAnnual)}
                       </TableCell>
                     </TableRow>

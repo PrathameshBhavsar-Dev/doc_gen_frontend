@@ -1,116 +1,3 @@
-// import React from "react";
-// import { Box, Typography, Divider } from "@mui/material";
-// import A4Page from "../../../layout/A4Page";
-
-// const NeweageCertification = ({ company, data }) => {
-//   /* ================= PRONOUN LOGIC ================= */
-//   const title = (data?.mrms || "").toLowerCase().trim();
-
-//   const pronouns =
-//     title === "miss." || title === "mrs."
-//       ? { subject: "She", object: "her", possessive: "her" }
-//       : title === "mx."
-//         ? { subject: "They", object: "them", possessive: "their" }
-//         : { subject: "He", object: "him", possessive: "his" };
-
-//   return (
-//     <A4Page headerSrc={company.header} footerSrc={company.footer}>
-//       <Box px={6} py={4}>
-//         {/* ================= TITLE ================= */}
-//         <Typography
-//           variant="h6"
-//           align="center"
-//           sx={{ fontWeight: 700, letterSpacing: 1 }}
-//         >
-//           LETTER OF INTERNSHIP
-//         </Typography>
-
-//         <Divider sx={{ my: 3 }} />
-
-//         {/* ================= CONTENT ================= */}
-//         <Typography sx={{ fontSize: "14px", lineHeight: 2 }}>
-//           This is to certify that{" "}
-//           <strong>
-//             {data.mrms} {data.employeeName}
-//           </strong>{" "}
-//           has done {pronouns.possessive} internship at{" "}
-//           <strong>NEWEAGE CLOUD SOFTWARE SERVICES PVT. LTD.</strong>{" "}
-//           from <strong>{data.startDate}</strong> to{" "}
-//           <strong>{data.completionDate}</strong>.{" "}
-//           {pronouns.subject} was designated as{" "}
-//           <strong>{data.role}</strong>.
-//         </Typography>
-
-//         <Box mt={3}>
-//           <Typography sx={{ fontSize: "14px", lineHeight: 2 }}>
-//             During the internship, {pronouns.subject.toLowerCase()} demonstrated{" "}
-//             strong skills with self-motivation to learn new skills.{" "}
-//             {pronouns.subject} performance exceeded our expectations and{" "}
-//             {pronouns.subject.toLowerCase()} was able to complete the given
-//             tasks on time. We wish {pronouns.object} all the best for{" "}
-//             {pronouns.possessive} upcoming career.
-//           </Typography>
-//         </Box>
-
-//         {/* ================= COMPANY & SIGNATURE ================= */}
-//         <Box mt={6}>
-//           <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-//             NEWEAGE CLOUD SOFTWARE SERVICES PVT. LTD.
-//           </Typography>
-
-//           <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
-//             {company.signature && (
-//               <Box
-//                 component="img"
-//                 src={company.signature}
-//                 alt="signature"
-//                 sx={{
-//                   height: "60px",
-//                   width: "auto",
-//                   objectFit: "contain",
-//                   display: "block",
-//                 }}
-//               />
-//             )}
-//             {company.stamp && (
-//               <Box
-//                 component="img"
-//                 src={company.stamp}
-//                 alt="stamp"
-//                 sx={{
-//                   height: "80px",
-//                   width: "auto",
-//                   objectFit: "contain",
-//                   display: "block",
-//                 }}
-//               />
-//             )}
-//           </Box>
-
-//           <Typography sx={{ fontSize: "14px", fontWeight: 600, mt: 2 }}>
-//             {company.hrName || "HR Relations Lead"}
-//           </Typography>
-//         </Box>
-
-//         {/* ================= CANDIDATE SIGN ================= */}
-//         <Box mt={4} textAlign="right">
-//           <Typography sx={{ fontSize: "13px" }}>
-//             Signature: ______________________
-//           </Typography>
-//         </Box>
-
-//         {/* ================= CANDIDATE NAME ================= */}
-//         <Box mt={2} textAlign="right">
-//           <Typography sx={{ fontSize: "13px" }}>
-//             Candidate Name: <strong>{data.employeeName}</strong>
-//           </Typography>
-//         </Box>
-//       </Box>
-//     </A4Page>
-//   );
-// };
-
-// export default NeweageCertification;
 import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import A4Page from "../../../layout/A4Page";
@@ -175,17 +62,33 @@ const NeweageCertification = ({ company, data }) => {
           }}
         >
           {/* COMPANY */}
-          <Box>
-            <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-              NEWEAGE CLOUD SOFTWARE SERVICES PVT. LTD.
+          <Box
+            sx={{
+              mt: 2,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 600,
+              }}
+            >
+              {company.name || "NEWEAGE CLOUD SOFTWARE SERVICES PVT. LTD."}
             </Typography>
 
-            <Box sx={{ display: "flex", gap: 2, mt: 1, alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                mt: 1,
+              }}
+            >
               {company.signature && (
                 <Box
                   component="img"
                   src={company.signature}
-                  alt="signature"
+                  alt="Company signature"
                   sx={{
                     height: "60px",
                     width: "auto",
@@ -194,11 +97,12 @@ const NeweageCertification = ({ company, data }) => {
                   }}
                 />
               )}
+
               {company.stamp && (
                 <Box
                   component="img"
                   src={company.stamp}
-                  alt="stamp"
+                  alt="Company stamp"
                   sx={{
                     height: "80px",
                     width: "auto",
@@ -209,17 +113,34 @@ const NeweageCertification = ({ company, data }) => {
               )}
             </Box>
 
-            <Typography sx={{ fontSize: "14px", fontWeight: 600, mt: 1 }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 600,
+                mt: 1,
+              }}
+            >
               {company.hrName || "HR Relations Lead"}
             </Typography>
           </Box>
 
           {/* CANDIDATE */}
-          <Box textAlign="right">
+          <Box
+            sx={{
+              textAlign: "right",
+              mt: 2,
+            }}
+          >
             <Typography sx={{ fontSize: "13px" }}>
               Signature: ______________________
             </Typography>
-            <Typography sx={{ fontSize: "13px", mt: 2 }}>
+
+            <Typography
+              sx={{
+                fontSize: "13px",
+                mt: 2,
+              }}
+            >
               Candidate Name: <strong>{data.employeeName}</strong>
             </Typography>
           </Box>
