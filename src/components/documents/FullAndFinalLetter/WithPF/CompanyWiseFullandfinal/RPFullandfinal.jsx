@@ -87,7 +87,7 @@ const RPFullAndFinal = ({ company = {}, data = {} }) => {
 
           <TableRow>
             <TableCell sx={cell}>Designation</TableCell>
-            <TableCell sx={cell}>{data.designation}</TableCell>
+            <TableCell sx={cell}>{data.currentDesignation}</TableCell>
             <TableCell sx={cell}>Date of Leaving</TableCell>
             <TableCell sx={cell}>{formatDate(data.dateofleaving)}</TableCell>
           </TableRow>

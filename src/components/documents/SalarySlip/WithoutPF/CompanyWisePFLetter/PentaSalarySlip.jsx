@@ -3,8 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { getProfessionalTax } from "../../../../../utils/salaryCalculations";
 
 /* ===================== HELPERS ===================== */
-const money = (v) =>
-  Number(v || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+const money = (n) => Math.trunc(Number(n || 0)).toLocaleString("en-IN");
 
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString("en-GB") : "";

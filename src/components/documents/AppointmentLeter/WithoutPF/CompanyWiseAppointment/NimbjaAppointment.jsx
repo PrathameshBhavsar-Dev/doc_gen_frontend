@@ -492,7 +492,7 @@ const NimbjaAppointment = ({ company, data }) => {
                 fontFamily: "Bahnschrift",
                 minWidth: "70mm",
               }}
-              >
+            >
               <Typography
                 sx={{
                   mt: "80px",
@@ -673,6 +673,12 @@ const NimbjaAppointment = ({ company, data }) => {
                 fontSize: "14px",
                 fontFamily: "Bahnschrift",
               },
+              "& th": {
+                border: "1px solid #000",
+                padding: "6px",
+                fontSize: "14px",
+                fontFamily: "Bahnschrift",
+              },
             }}
           >
             {/* HEADER */}
@@ -683,7 +689,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     border: "1px solid #000",
                     fontWeight: "bold",
                     textAlign: "left",
-                    width: "40%",
+                    width: "50%",
                   }}
                 >
                   Salary Components
@@ -694,7 +700,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     border: "1px solid #000",
                     fontWeight: "bold",
                     textAlign: "right",
-                    width: "20%",
+                    width: "25%",
                   }}
                 >
                   Per Month (₹)
@@ -705,18 +711,7 @@ const NimbjaAppointment = ({ company, data }) => {
                     border: "1px solid #000",
                     fontWeight: "bold",
                     textAlign: "right",
-                    width: "20%",
-                  }}
-                >
-                  Joining Month ({daysWorked ?? "-"} days) (₹)
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: "bold",
-                    textAlign: "right",
-                    width: "20%",
+                    width: "25%",
                   }}
                 >
                   Per Annum (₹)
@@ -755,16 +750,6 @@ const NimbjaAppointment = ({ company, data }) => {
                       padding: "6px",
                     }}
                   >
-                    {formatCurrency(proratedMonthly)}
-                  </TableCell>
-
-                  <TableCell
-                    sx={{
-                      border: "1px solid #000",
-                      textAlign: "right",
-                      padding: "6px",
-                    }}
-                  >
                     {formatCurrency(annual)}
                   </TableCell>
                 </TableRow>
@@ -789,16 +774,6 @@ const NimbjaAppointment = ({ company, data }) => {
                   }}
                 >
                   {formatCurrency(totalMonthly)}
-                </TableCell>
-
-                <TableCell
-                  align="right"
-                  sx={{
-                    border: "1px solid #000",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {formatCurrency(totalProratedMonthly)}
                 </TableCell>
 
                 <TableCell

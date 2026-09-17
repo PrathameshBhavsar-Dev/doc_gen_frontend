@@ -102,27 +102,64 @@ const NimbjaOffer = ({ company, data }) => {
             Offer Letter
           </Typography>
           {/* NAME */}
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift" }}>
-            Name : {data.mrms} {data.employeeName}
-          </Typography>
-
           <Typography
             sx={{
               mb: 2,
-              fontFamily: "Bahnschrift",
               mt: "-2mm",
+              fontFamily: "Bahnschrift",
               display: "flex",
               alignItems: "flex-start",
               textAlign: "left",
             }}
           >
-            <span style={{ flexShrink: 0 }}>Address :&nbsp;</span>
-            <span>{data.address}</span>
+            <span style={{ width: "25mm", flexShrink: 0 }}>
+              Name :
+            </span>
+
+            <span>
+              {data.mrms} {data.employeeName}
+            </span>
+          </Typography>
+
+          {/* ADDRESS */}
+          <Typography
+            sx={{
+              mb: 2,
+              mt: "-2mm",
+              fontFamily: "Bahnschrift",
+              display: "flex",
+              alignItems: "flex-start",
+              textAlign: "left",
+            }}
+          >
+            <span style={{ width: "25mm", flexShrink: 0 }}>
+              Address :
+            </span>
+
+            <span style={{ flex: 1 }}>
+              {data.address}
+            </span>
           </Typography>
 
           {/* SUBJECT */}
-          <Typography sx={{ mb: 2, fontFamily: "Bahnschrift", mt: "-2mm" }}>
-            Subject : Letter of Intent for the Position of {data.joiningDesignation ?? data.position}
+          <Typography
+            sx={{
+              mb: 2,
+              mt: "-2mm",
+              fontFamily: "Bahnschrift",
+              display: "flex",
+              alignItems: "flex-start",
+              textAlign: "left",
+            }}
+          >
+            <span style={{ width: "25mm", flexShrink: 0 }}>
+              Subject :
+            </span>
+
+            <span style={{ flex: 1 }}>
+              Letter of Intent for the Position of{" "}
+              {data.joiningDesignation ?? data.position}
+            </span>
           </Typography>
 
           <Typography sx={{ mb: 3, fontFamily: "Bahnschrift" }}>

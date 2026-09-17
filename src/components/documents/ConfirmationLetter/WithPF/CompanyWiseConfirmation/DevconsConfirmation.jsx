@@ -18,136 +18,132 @@ const DevconsConfirmationLetter = ({ company = {}, data = {} }) => {
   const formatDate = (date) =>
     date
       ? new Date(date).toLocaleDateString("en-US", {
-        day: "2-digit",  
+        day: "2-digit",
         month: "long",
         year: "numeric",
-        })
+      })
       : "";
 
-       const numberToWords = (num = 0) => {
-  if (!num) return "Zero Rupees Only";
+  const numberToWords = (num = 0) => {
+    if (!num) return "Zero Rupees Only";
 
-  const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
-  const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
-  const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+    const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
-  const inWords = (n) => {
-    if (n < 10) return ones[n];
-    if (n < 20) return teens[n - 10];
-    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
-    if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-    return inWords(Math.floor(n / 10000000)) + " Crore";
-  };
+    const inWords = (n) => {
+      if (n < 10) return ones[n];
+      if (n < 20) return teens[n - 10];
+      if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+      if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
+      if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
+      if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
+      return inWords(Math.floor(n / 10000000)) + " Crore";
+    };
 
-  return `${inWords(Math.round(num))} Rupees Only`;
+    return `${inWords(Math.round(num))} Rupees Only`;
 
-}
+  }
 
   /* ================= SALARY LOGIC ================= */
 
-//   const round0 = (num) => Math.round(num);
+  //   const round0 = (num) => Math.round(num);
 
-// // ================= MONTHLY CTC =================
-// const monthlyCTC = round0(Number(data.totalSalary || 0));
+  // // ================= MONTHLY CTC =================
+  // const monthlyCTC = round0(Number(data.totalSalary || 0));
 
-// // ================= UPDATED PERCENTAGES =================
-// const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
+  // // ================= UPDATED PERCENTAGES =================
+  // const basicMonthly = round0(monthlyCTC * 0.48); // 40% + 8%
+  // const hraMonthly = round0(monthlyCTC * 0.18);
+  // const daMonthly = round0(monthlyCTC * 0.12);
+  // const specialMonthly = round0(monthlyCTC * 0.16);
+  // const foodMonthly = round0(monthlyCTC * 0.06);
 
-// // ================= STATIC PF =================
-// const pfMonthly = 3750;
+  // // ================= STATIC PF =================
+  // const pfMonthly = 3750;
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = basicMonthly * 12;
-// const hraAnnual = hraMonthly * 12;
-// const daAnnual = daMonthly * 12;
-// const specialAnnual = specialMonthly * 12;
-// const foodAnnual = foodMonthly * 12;
-// const pfAnnual = pfMonthly * 12;
+  // // ================= ANNUAL VALUES =================
+  // const basicAnnual = basicMonthly * 12;
+  // const hraAnnual = hraMonthly * 12;
+  // const daAnnual = daMonthly * 12;
+  // const specialAnnual = specialMonthly * 12;
+  // const foodAnnual = foodMonthly * 12;
+  // const pfAnnual = pfMonthly * 12;
 
-// // ================= SALARY TABLE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
-// ];
+  // // ================= SALARY TABLE =================
+  // const salaryRows = [
+  //   ["Basic", basicMonthly, basicAnnual],
+  //   ["House Rent Allowance", hraMonthly, hraAnnual],
+  //   ["Dearness Allowance", daMonthly, daAnnual],
+  //   ["Special Allowance", specialMonthly, specialAnnual],
+  //   ["Food Allowance", foodMonthly, foodAnnual],
+  //   ["Provident Fund (PF)", pfMonthly, pfAnnual], // Separate
+  // ];
 
-// // ================= TOTAL EARNINGS =================
-// const totalMonthly =
-//   basicMonthly +
-//   hraMonthly +
-//   daMonthly +
-//   specialMonthly +
-//   foodMonthly;
+  // // ================= TOTAL EARNINGS =================
+  // const totalMonthly =
+  //   basicMonthly +
+  //   hraMonthly +
+  //   daMonthly +
+  //   specialMonthly +
+  //   foodMonthly;
 
-// const totalAnnual = totalMonthly * 12;
+  // const totalAnnual = totalMonthly * 12;
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////
 
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-// ================= ANNUAL CTC INPUT =================
-const annualCTC = round0(Number(data.totalSalary || 0));
+  // ================= ANNUAL CTC INPUT =================
+  const annualCTC = round0(Number(data.totalSalary || 0));
 
-// ================= MONTHLY CTC =================
-const monthlyCTC = round0(annualCTC / 12);
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
 
-// ================= STATIC PF =================
-const pfMonthly = 3750;
+  // ================= STATIC PF =================
+  const pfMonthly = 3750;
 
-// ================= FIXED PERCENTAGES =================
-const hraMonthly = round0(monthlyCTC * 0.18);
-const daMonthly = round0(monthlyCTC * 0.12);
-const specialMonthly = round0(monthlyCTC * 0.16);
-const foodMonthly = round0(monthlyCTC * 0.06);
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const daMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
+  const foodMonthly = round0(monthlyCTC * 0.06);
 
-// ================= ADJUSTED BASIC =================
-const basicMonthly = round0(
-  monthlyCTC -
-  (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
-);
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly)
+  );
 
-// ================= ANNUAL =================
-const basicAnnual = round0(basicMonthly * 12);
-const hraAnnual = round0(hraMonthly * 12);
-const daAnnual = round0(daMonthly * 12);
-const specialAnnual = round0(specialMonthly * 12);
-const foodAnnual = round0(foodMonthly * 12);
-const pfAnnual = round0(pfMonthly * 12);
+  // ================= ANNUAL =================
+  const basicAnnual = round0(basicMonthly * 12);
+  const hraAnnual = round0(hraMonthly * 12);
+  const daAnnual = round0(daMonthly * 12);
+  const specialAnnual = round0(specialMonthly * 12);
+  const foodAnnual = round0(foodMonthly * 12);
+  const pfAnnual = round0(pfMonthly * 12);
 
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Provident Fund (PF)", pfMonthly, pfAnnual],
-];
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Provident Fund (PF)", pfMonthly, pfAnnual],
+  ];
 
-// ================= TOTAL =================
-const totalMonthly = round0(
-  basicMonthly +
-  hraMonthly +
-  daMonthly +
-  specialMonthly +
-  foodMonthly +
-  pfMonthly
-);
+  // ================= TOTAL =================
+  const totalMonthly = round0(
+    basicMonthly +
+    hraMonthly +
+    daMonthly +
+    specialMonthly +
+    foodMonthly +
+    pfMonthly
+  );
 
-const totalAnnual = round0(totalMonthly * 12);
-
-
-
-
+  const totalAnnual = round0(totalMonthly * 12);
 
   return (
     <>
@@ -163,8 +159,8 @@ const totalAnnual = round0(totalMonthly * 12);
           </Typography>
 
           <Typography mb={1}>
-                      <strong>Address</strong> {data.address}
-                    </Typography>
+            <strong>Address</strong> {data.address}
+          </Typography>
 
           <Typography mb={3}>
             <strong>Subject :</strong>{" "}
@@ -184,15 +180,15 @@ const totalAnnual = round0(totalMonthly * 12);
             under consideration.
           </Typography>
 
-         <Typography mb={3} textAlign="justify">
-           Your total Gross salary will be Rs.{" "}
-           <strong>
-             {formatCurrency(totalAnnual)} (
-             {numberToWords(Number(totalAnnual))}
-             )
-           </strong>{" "}
-           per year.
-         </Typography>
+          <Typography mb={3} textAlign="justify">
+            Your total Gross salary will be Rs.{" "}
+            <strong>
+              {formatCurrency(totalAnnual)} (
+              {numberToWords(Number(totalAnnual))}
+              )
+            </strong>{" "}
+            per year.
+          </Typography>
 
           <Typography mb={3} textAlign="justify">
             Subject to various deductions as per company and government policy.

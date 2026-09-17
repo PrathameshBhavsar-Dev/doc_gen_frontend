@@ -354,7 +354,7 @@ const PentaOffer = ({ company, data }) => {
           }}
         >
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#3598b4" }}>
+            <TableRow sx={{ backgroundColor: "#57d2fa" }}>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Salary Components
               </TableCell>
@@ -380,7 +380,7 @@ const PentaOffer = ({ company, data }) => {
               </TableRow>
             ))}
 
-            <TableRow>
+            <TableRow sx={{ backgroundColor: "#57d2fa" }}>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Total Monthly Gross Salary
               </TableCell>
