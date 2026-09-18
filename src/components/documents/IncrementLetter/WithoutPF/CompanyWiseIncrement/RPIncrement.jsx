@@ -20,100 +20,100 @@ import {
 const RPIncrement = ({ company, data }) => {
 
 
-const getFinancialYear = (effectiveDate) => {
-  if (!effectiveDate) return "";
+  const getFinancialYear = (effectiveDate) => {
+    if (!effectiveDate) return "";
 
-  const year = new Date(effectiveDate).getFullYear();
-  return `${year - 1} - ${year}`;
-};
+    const year = new Date(effectiveDate).getFullYear();
+    return `${year - 1} - ${year}`;
+  };
 
 
 
   /* ================= SALARY LOGIC (STANDARDIZED – SAME AS DEVCONS) ================= */
 
   // Helper to keep 2 decimals everywhere
-// const round0 = (num) => Math.round(num);
+  // const round0 = (num) => Math.round(num);
 
-//   // Source of truth
-//   const monthlyCTC = round0(Number(data.newCTC || 0));
+  //   // Source of truth
+  //   const monthlyCTC = round0(Number(data.newCTC || 0));
 
-//   // ================= PERCENTAGE BREAKUP =================
-// const basicMonthly = round0(monthlyCTC * 0.40);
-// const hraMonthly = round0(monthlyCTC * 0.18);
-// const daMonthly = round0(monthlyCTC * 0.12);
-// const specialMonthly = round0(monthlyCTC * 0.16);
-// const foodMonthly = round0(monthlyCTC * 0.06);
-// const miscMonthly = round0(monthlyCTC * 0.08); // 8%
+  //   // ================= PERCENTAGE BREAKUP =================
+  // const basicMonthly = round0(monthlyCTC * 0.40);
+  // const hraMonthly = round0(monthlyCTC * 0.18);
+  // const daMonthly = round0(monthlyCTC * 0.12);
+  // const specialMonthly = round0(monthlyCTC * 0.16);
+  // const foodMonthly = round0(monthlyCTC * 0.06);
+  // const miscMonthly = round0(monthlyCTC * 0.08); // 8%
 
-// // ================= ANNUAL VALUES =================
-// const basicAnnual = round0(basicMonthly * 12);
-// const hraAnnual = round0(hraMonthly * 12);
-// const daAnnual = round0(daMonthly * 12);
-// const specialAnnual = round0(specialMonthly * 12);
-// const foodAnnual = round0(foodMonthly * 12);
-// const miscAnnual = round0(miscMonthly * 12);
+  // // ================= ANNUAL VALUES =================
+  // const basicAnnual = round0(basicMonthly * 12);
+  // const hraAnnual = round0(hraMonthly * 12);
+  // const daAnnual = round0(daMonthly * 12);
+  // const specialAnnual = round0(specialMonthly * 12);
+  // const foodAnnual = round0(foodMonthly * 12);
+  // const miscAnnual = round0(miscMonthly * 12);
 
-// // ================= SALARY TABLE STRUCTURE =================
-// const salaryRows = [
-//   ["Basic", basicMonthly, basicAnnual],
-//   ["House Rent Allowance", hraMonthly, hraAnnual],
-//   ["Dearness Allowance", daMonthly, daAnnual],
-//   ["Special Allowance", specialMonthly, specialAnnual],
-//   ["Food Allowance", foodMonthly, foodAnnual],
-//   ["Misc. Allowance", miscMonthly, miscAnnual],
-// ];
+  // // ================= SALARY TABLE STRUCTURE =================
+  // const salaryRows = [
+  //   ["Basic", basicMonthly, basicAnnual],
+  //   ["House Rent Allowance", hraMonthly, hraAnnual],
+  //   ["Dearness Allowance", daMonthly, daAnnual],
+  //   ["Special Allowance", specialMonthly, specialAnnual],
+  //   ["Food Allowance", foodMonthly, foodAnnual],
+  //   ["Misc. Allowance", miscMonthly, miscAnnual],
+  // ];
 
-// // ================= TOTALS =================
-// const totalMonthly = round0(
-//   salaryRows.reduce((sum, row) => sum + row[1], 0)
-// );
+  // // ================= TOTALS =================
+  // const totalMonthly = round0(
+  //   salaryRows.reduce((sum, row) => sum + row[1], 0)
+  // );
 
-// const totalAnnual = round0(
-//   salaryRows.reduce((sum, row) => sum + row[2], 0)
-// );
+  // const totalAnnual = round0(
+  //   salaryRows.reduce((sum, row) => sum + row[2], 0)
+  // );
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////
 
-const round0 = (num) => Math.round(num);
+  const round0 = (num) => Math.round(num);
 
-// ================= ANNUAL CTC (SOURCE) =================
-const annualCTC = round0(Number(data.newCTC || 0));
+  // ================= ANNUAL CTC (SOURCE) =================
+  const annualCTC = round0(Number(data.newCTC || 0));
 
-// ================= PERCENTAGE BREAKUP (ANNUAL) =================
-const basicAnnual = round0(annualCTC * 0.40);
-const hraAnnual = round0(annualCTC * 0.18);
-const daAnnual = round0(annualCTC * 0.12);
-const specialAnnual = round0(annualCTC * 0.16);
-const foodAnnual = round0(annualCTC * 0.06);
-const miscAnnual = round0(annualCTC * 0.08); // 8%
+  // ================= PERCENTAGE BREAKUP (ANNUAL) =================
+  const basicAnnual = round0(annualCTC * 0.40);
+  const hraAnnual = round0(annualCTC * 0.18);
+  const daAnnual = round0(annualCTC * 0.12);
+  const specialAnnual = round0(annualCTC * 0.16);
+  const foodAnnual = round0(annualCTC * 0.06);
+  const miscAnnual = round0(annualCTC * 0.08); // 8%
 
-// ================= MONTHLY VALUES =================
-const basicMonthly = round0(basicAnnual / 12);
-const hraMonthly = round0(hraAnnual / 12);
-const daMonthly = round0(daAnnual / 12);
-const specialMonthly = round0(specialAnnual / 12);
-const foodMonthly = round0(foodAnnual / 12);
-const miscMonthly = round0(miscAnnual / 12);
+  // ================= MONTHLY VALUES =================
+  const basicMonthly = round0(basicAnnual / 12);
+  const hraMonthly = round0(hraAnnual / 12);
+  const daMonthly = round0(daAnnual / 12);
+  const specialMonthly = round0(specialAnnual / 12);
+  const foodMonthly = round0(foodAnnual / 12);
+  const miscMonthly = round0(miscAnnual / 12);
 
-// ================= SALARY TABLE =================
-const salaryRows = [
-  ["Basic", basicMonthly, basicAnnual],
-  ["House Rent Allowance", hraMonthly, hraAnnual],
-  ["Dearness Allowance", daMonthly, daAnnual],
-  ["Special Allowance", specialMonthly, specialAnnual],
-  ["Food Allowance", foodMonthly, foodAnnual],
-  ["Misc. Allowance", miscMonthly, miscAnnual],
-];
+  // ================= SALARY TABLE =================
+  const salaryRows = [
+    ["Basic", basicMonthly, basicAnnual],
+    ["House Rent Allowance", hraMonthly, hraAnnual],
+    ["Dearness Allowance", daMonthly, daAnnual],
+    ["Special Allowance", specialMonthly, specialAnnual],
+    ["Food Allowance", foodMonthly, foodAnnual],
+    ["Misc. Allowance", miscMonthly, miscAnnual],
+  ];
 
-// ================= TOTALS =================
-const totalAnnual = round0(
-  salaryRows.reduce((sum, row) => sum + row[2], 0)
-);
+  // ================= TOTALS =================
+  const totalAnnual = round0(
+    salaryRows.reduce((sum, row) => sum + row[2], 0)
+  );
 
-const totalMonthly = round0(
-  salaryRows.reduce((sum, row) => sum + row[1], 0)
-);
+  const totalMonthly = round0(
+    salaryRows.reduce((sum, row) => sum + row[1], 0)
+  );
 
   const issueDate = data.increment_letter?.issueDate ?? data.issueDate;
 
@@ -225,10 +225,10 @@ const totalMonthly = round0(
               <Typography>
                 Effective Date :{" "}
                 {new Date(data.effectiveDate).toLocaleDateString("en-US", {
-              month: "long",
-              day: "2-digit",
-              year: "numeric",
-            })}
+                  month: "long",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
               </Typography>
             </Box>
 
@@ -239,10 +239,10 @@ const totalMonthly = round0(
                 border: "1px solid black",
                 borderCollapse: "collapse",
                 "& th, & td": {
-                  border:"1px solid black",
-                  padding:"0px 12px 10px 12px",
-                  fontSize:"15px",
-                  lineHeight:1.2,
+                  border: "1px solid black",
+                  padding: "0px 12px 10px 12px",
+                  fontSize: "15px",
+                  lineHeight: 1.2,
                 },
               }}
             >
@@ -251,29 +251,40 @@ const totalMonthly = round0(
                   <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
                     Monthly Component
                   </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="right">
+
+                  <TableCell
+                    sx={{ color: "#fff", fontWeight: 700 }}
+                    align="right"
+                  >
                     Amount (Rs.)
                   </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+
+                  <TableCell
+                    sx={{ color: "#fff", fontWeight: 700 }}
+                    align="right"
+                  >
                     Yearly Component
-                  </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="right">
-                    Amount (Rs.)
                   </TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>Basic</TableCell>
-                  <TableCell align="right">{formatCurrency(basicMonthly)}</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell align="right">{formatCurrency(basicAnnual)}</TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(basicMonthly)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(basicAnnual)}
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>House Rent Allowance</TableCell>
-                  <TableCell align="right">{formatCurrency(hraMonthly)}</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell align="right">{formatCurrency(hraAnnual)}</TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(hraMonthly)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(hraAnnual)}
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -281,8 +292,9 @@ const totalMonthly = round0(
                   <TableCell align="right">
                     {formatCurrency(daMonthly)}
                   </TableCell>
-                  <TableCell></TableCell>
-                  <TableCell align="right">{formatCurrency(daAnnual)}</TableCell>
+                  <TableCell align="right">
+                    {formatCurrency(daAnnual)}
+                  </TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -290,7 +302,6 @@ const totalMonthly = round0(
                   <TableCell align="right">
                     {formatCurrency(specialMonthly)}
                   </TableCell>
-                  <TableCell></TableCell>
                   <TableCell align="right">
                     {formatCurrency(specialAnnual)}
                   </TableCell>
@@ -301,7 +312,6 @@ const totalMonthly = round0(
                   <TableCell align="right">
                     {formatCurrency(foodMonthly)}
                   </TableCell>
-                  <TableCell></TableCell>
                   <TableCell align="right">
                     {formatCurrency(foodAnnual)}
                   </TableCell>
@@ -312,7 +322,6 @@ const totalMonthly = round0(
                   <TableCell align="right">
                     {formatCurrency(miscMonthly)}
                   </TableCell>
-                  <TableCell></TableCell>
                   <TableCell align="right">
                     {formatCurrency(miscAnnual)}
                   </TableCell>
@@ -322,13 +331,18 @@ const totalMonthly = round0(
                   <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
                     Monthly Gross
                   </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="right">
+
+                  <TableCell
+                    sx={{ color: "#fff", fontWeight: 700 }}
+                    align="right"
+                  >
                     {formatCurrency(totalMonthly)}
                   </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                    Annual CTC
-                  </TableCell>
-                  <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="right">
+
+                  <TableCell
+                    sx={{ color: "#fff", fontWeight: 700 }}
+                    align="right"
+                  >
                     {formatCurrency(totalAnnual)}
                   </TableCell>
                 </TableRow>

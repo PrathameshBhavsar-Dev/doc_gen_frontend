@@ -12,108 +12,96 @@ import {
 import { formatCurrency } from "../../../../../utils/salaryCalculations";
 
 const PentaIncrement = ({ company, data }) => {
-    /* ================= SALARY LOGIC ================= */
-
-    // const generateSalaryBreakup = (annualCTC) => {
-    //   const monthlyCTC = Math.round(annualCTC / 12);
-
-    //   let basic = Math.round(monthlyCTC * 0.48);
-    //   let hra = Math.round(monthlyCTC * 0.18);
-    //   let da = Math.round(monthlyCTC * 0.12);
-    //   let special = Math.round(monthlyCTC * 0.16);
-    //   let food = Math.round(monthlyCTC * 0.06);
-
-    //   const calculated = basic + hra + da + special + food;
-    //   basic += monthlyCTC - calculated; // fix rounding
-
-    //   const pfMonthly = 3750; // Static
-    //   const pfAnnual = pfMonthly * 12;
-
-    //   return [
-    //     { name: "Basic Salary", monthly: basic, annual: basic * 12 },
-    //     { name: "House Rent Allowance", monthly: hra, annual: hra * 12 },
-    //     { name: "Dearness Allowance", monthly: da, annual: da * 12 },
-    //     { name: "Special Allowance", monthly: special, annual: special * 12 },
-    //     { name: "Food Allowance", monthly: food, annual: food * 12 },
-    //     { name: "Provident Fund (PF)", monthly: pfMonthly, annual: pfAnnual }, // only display
-    //   ];
-    // };
-
-    //     // Totals
-    //   const annualCTC = Number(data.newCTC || 0);
-
-    // const salaryComponents = generateSalaryBreakup(annualCTC);
-
-    // const totalMonthly = salaryComponents
-    //   .filter((row) => row.name !== "Provident Fund (PF)")
-    //   .reduce((sum, row) => sum + row.monthly, 0);
-
-    // const totalAnnual = annualCTC; // because salary % = 100%
-
-
-
-    /* ================= SALARY LOGIC (MONTHLY BASED) ================= */
-
     const formatNumber = (num) => {
-        return Number(num || 0).toLocaleString("en-IN");
+        return Math.round(Number(num || 0)).toLocaleString("en-IN");
     };
 
-    const round0 = (num) => Math.round(num);
+    const round0 = (num) => Math.round(Number(num || 0));
 
-    // Monthly CTC
-    const monthlyCTC = round0(Number(data.newCTC || 0));
+    /* ================= ANNUAL CTC ================= */
+
+    // data.newCTC is ANNUAL
+    const annualCTC = round0(Number(data.newCTC || 0));
+
+    // Convert annual CTC to monthly
+    const monthlyCTC = annualCTC / 12;
 
 
-    // ✅ PF STATIC
+    /* ================= PF STATIC ================= */
+
     const pfMonthly = 3750;
+    const pfAnnual = pfMonthly * 12;
 
-    // % components (excluding Basic)
-    let hraMonthly = round0(monthlyCTC * 0.18);
-    let daMonthly = round0(monthlyCTC * 0.12);
-    let specialMonthly = round0(monthlyCTC * 0.16);
-    let foodMonthly = round0(monthlyCTC * 0.06);
 
-    // ✅ Add PF in total
-    const totalOthers =
-        hraMonthly +
-        daMonthly +
-        specialMonthly +
-        foodMonthly +
-        pfMonthly;
+    /* ================= MONTHLY COMPONENTS ================= */
 
-    // ✅ Basic = remaining
-    let basicMonthly = monthlyCTC - totalOthers;
+    const hraMonthly = round0(monthlyCTC * 0.18);
+    const daMonthly = round0(monthlyCTC * 0.12);
+    const specialMonthly = round0(monthlyCTC * 0.16);
+    const foodMonthly = round0(monthlyCTC * 0.06);
 
-    // ✅ Rounding Fix
-    const finalCheck =
-        basicMonthly +
-        hraMonthly +
-        daMonthly +
-        specialMonthly +
-        foodMonthly +
-        pfMonthly;
 
-    basicMonthly += (monthlyCTC - finalCheck);
+    /* ================= BASIC ================= */
 
-    // Annual
+    const basicMonthly = round0(
+        monthlyCTC -
+        (
+            hraMonthly +
+            daMonthly +
+            specialMonthly +
+            foodMonthly +
+            pfMonthly
+        )
+    );
+
+
+    /* ================= ANNUAL COMPONENTS ================= */
+
     const basicAnnual = basicMonthly * 12;
     const hraAnnual = hraMonthly * 12;
     const daAnnual = daMonthly * 12;
     const specialAnnual = specialMonthly * 12;
     const foodAnnual = foodMonthly * 12;
-    const pfAnnual = pfMonthly * 12;
 
-    // Salary Rows
+
+    /* ================= SALARY ROWS ================= */
+
     const salaryComponents = [
-        { name: "Basic", monthly: formatNumber(basicMonthly), annual: formatNumber(basicAnnual) },
-        { name: "House Rent Allowance", monthly: formatNumber(hraMonthly), annual: formatNumber(hraAnnual) },
-        { name: "Dearness Allowance", monthly: formatNumber(daMonthly), annual: formatNumber(daAnnual) },
-        { name: "Special Allowance", monthly: formatNumber(specialMonthly), annual: formatNumber(specialAnnual) },
-        { name: "Food Allowance", monthly: formatNumber(foodMonthly), annual: formatNumber(foodAnnual) },
-        { name: "Provident Fund (PF)", monthly: formatNumber(pfMonthly), annual: formatNumber(pfAnnual) },
+        {
+            name: "Basic",
+            monthly: formatNumber(basicMonthly),
+            annual: formatNumber(basicAnnual),
+        },
+        {
+            name: "House Rent Allowance",
+            monthly: formatNumber(hraMonthly),
+            annual: formatNumber(hraAnnual),
+        },
+        {
+            name: "Dearness Allowance",
+            monthly: formatNumber(daMonthly),
+            annual: formatNumber(daAnnual),
+        },
+        {
+            name: "Special Allowance",
+            monthly: formatNumber(specialMonthly),
+            annual: formatNumber(specialAnnual),
+        },
+        {
+            name: "Food Allowance",
+            monthly: formatNumber(foodMonthly),
+            annual: formatNumber(foodAnnual),
+        },
+        {
+            name: "Provident Fund (PF)",
+            monthly: formatNumber(pfMonthly),
+            annual: formatNumber(pfAnnual),
+        },
     ];
 
-    // ✅ Total INCLUDING PF (CTC)
+    /* ================= TOTAL ================= */
+
+    // Monthly total is derived from the components
     const totalMonthly =
         basicMonthly +
         hraMonthly +
@@ -122,7 +110,8 @@ const PentaIncrement = ({ company, data }) => {
         foodMonthly +
         pfMonthly;
 
-    const totalAnnual = totalMonthly * 12;
+    // Annual CTC MUST remain the original entered package
+    const totalAnnual = annualCTC;
 
     // ✅ 👉 YAHAN ADD KARO
     const totalMonthlyFormatted = formatNumber(totalMonthly);
@@ -302,10 +291,10 @@ const PentaIncrement = ({ company, data }) => {
                                     Monthly Gross
                                 </TableCell>
                                 <TableCell sx={{ fontWeight: 700 }} align="right">
-                                    {totalMonthly}
+                                    {formatNumber(totalMonthly)}
                                 </TableCell>
                                 <TableCell sx={{ fontWeight: 700 }} align="right">
-                                    {totalAnnual}
+                                    {formatNumber(totalAnnual)}
                                 </TableCell>
                             </TableRow>
                         </TableBody>

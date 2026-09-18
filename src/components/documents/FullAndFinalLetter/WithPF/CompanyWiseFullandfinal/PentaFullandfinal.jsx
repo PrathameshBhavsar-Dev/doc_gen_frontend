@@ -132,7 +132,7 @@ const PentaFullandfinal = ({ company, data }) => {
 
             <TableRow>
               <TableCell sx={{ ...cell, ...bold }}>Designation</TableCell>
-              <TableCell sx={cell}>{data.designation}</TableCell>
+              <TableCell sx={cell}>{data.currentDesignation}</TableCell>
               <TableCell sx={{ ...cell, ...bold }}>Date of Resignation</TableCell>
               <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
             </TableRow>

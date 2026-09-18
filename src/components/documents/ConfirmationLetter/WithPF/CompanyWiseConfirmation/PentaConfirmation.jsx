@@ -15,24 +15,23 @@ import A4Page from "../../../../layout/A4Page";
 const formatDate = (date) =>
   date
     ? new Date(date).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })
     : "";
 
-const round2 = (num) => Number(Number(num || 0).toFixed(2));
+const round2 = (num) =>
+  Number(Number(num || 0).toFixed(2));
 
 const formatCurrency = (num) =>
-  Number(num || 0).toLocaleString("en-IN", {
-    // minimumFractionDigits: 2,
-    // maximumFractionDigits: 2,
-  });
+  Number(num || 0).toLocaleString("en-IN");
 
 /* ================= SALARY BREAKUP ================= */
+
 const generateSalaryBreakup = (monthlyCTC) => {
 
-  // ✅ PF STATIC
+  // PF STATIC
   const pfMonthly = 3750;
 
   // % based components
@@ -41,15 +40,27 @@ const generateSalaryBreakup = (monthlyCTC) => {
   const special = Math.round(monthlyCTC * 0.16);
   const food = Math.round(monthlyCTC * 0.06);
 
-  // ✅ Step 1: sabka total
-  const totalOthers = hra + da + special + food + pfMonthly;
+  // Total other components
+  const totalOthers =
+    hra +
+    da +
+    special +
+    food +
+    pfMonthly;
 
-  // ✅ Step 2: Basic = remaining
-  let basic = monthlyCTC - totalOthers;
+  // Basic = remaining amount
+  let basic = Math.round(monthlyCTC - totalOthers);
 
-  // ✅ Safety (rounding fix)
-  const finalTotal = basic + totalOthers;
-  basic += (monthlyCTC - finalTotal);
+  // Rounding fix
+  const finalTotal =
+    basic +
+    hra +
+    da +
+    special +
+    food +
+    pfMonthly;
+
+  basic += Math.round(monthlyCTC - finalTotal);
 
   return [
     ["Basic Salary", basic, basic * 12],
@@ -60,77 +71,89 @@ const generateSalaryBreakup = (monthlyCTC) => {
     ["Provident Fund (PF)", pfMonthly, pfMonthly * 12],
   ];
 };
+
 /* ================= MAIN COMPONENT ================= */
 
 const PentaConfirmation = ({ company, data }) => {
+
   if (!company || !data) return null;
 
- const monthlyCTC = Number(data.totalSalary || 0);
-const annualCTC = monthlyCTC * 12;
+  // data.totalSalary is ANNUAL CTC
+  const annualCTC = Math.round(
+    Number(data.totalSalary || 0)
+  );
 
-const salaryRows = generateSalaryBreakup(monthlyCTC);
+  // Convert annual CTC to monthly
+  const monthlyCTC = annualCTC / 12;
 
- const monthlyGross = salaryRows
-  .reduce((sum, row) => sum + row[1], 0);
+  const salaryRows = generateSalaryBreakup(monthlyCTC);
+
+  const monthlyGross = salaryRows.reduce(
+    (sum, row) => sum + row[1],
+    0
+  );
+
+  // Keep annual CTC exactly as entered
+  const totalAnnual = annualCTC;
 
   return (
     <>
       {/* ================= PAGE 1 ================= */}
       <A4Page headerSrc={company.header} footerSrc={company.footer}>
         <Box mt={2}>
-          
 
-           <Box
-                     sx={{
-                       display: "grid",
-                       gridTemplateColumns: "100px 10px auto",
-                       rowGap: 1,
-                     }}
-                   >
-                     <Typography fontWeight={600}>Name</Typography>
-                     <Typography fontWeight={600}>:</Typography>
-                     <Typography>{data.mrms} {data.employeeName}</Typography>
-         
-                     <Typography fontWeight={600}>Address</Typography>
-                     <Typography fontWeight={600}>:</Typography>
-                     <Typography>{data.address}</Typography>
-                   </Box>
 
-        
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: "100px 10px auto",
-                      mt: 2,
-                    }}
-                  >
-                    <Typography fontWeight={600}>Subject</Typography>
-                    <Typography fontWeight={600}>:</Typography>
-                    <Typography >
-                      Letter of Confirmation for continued services as {data.position}
-                    </Typography>
-                  </Box>
-        
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "100px 10px auto",
+              rowGap: 1,
+            }}
+          >
+            <Typography fontWeight={600}>Name</Typography>
+            <Typography fontWeight={600}>:</Typography>
+            <Typography>{data.mrms} {data.employeeName}</Typography>
+
+            <Typography fontWeight={600}>Address</Typography>
+            <Typography fontWeight={600}>:</Typography>
+            <Typography>{data.address}</Typography>
+          </Box>
+
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "100px 10px auto",
+              mt: 2,
+            }}
+          >
+            <Typography fontWeight={600}>Subject</Typography>
+            <Typography fontWeight={600}>:</Typography>
+            <Typography >
+              Letter of Confirmation for continued services as {data.position}
+            </Typography>
+          </Box>
+
           <Typography fontSize={14} textAlign="justify" mt={2}>
-          <strong>Dear </strong> {data.employeeName?.split(" ")[0]},
+            <strong>Dear </strong> {data.employeeName?.split(" ")[0]},
           </Typography>
 
           <Typography fontSize={14} textAlign="justify" mt={2}>
-           We are pleased to confirm your continued services at the position of Software Test<br/>
-           Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}
-            <strong>{formatDate(data.effectiveDate)}</strong><br/> considering your performance and support towards the organization..
+            We are pleased to confirm your continued services at the position of Software Test<br />
+            Engineer with {" "}<strong>{company.name}</strong> with effective date {" "}
+            <strong>{formatDate(data.effectiveDate)}</strong><br /> considering your performance and support towards the organization..
           </Typography>
 
           <Typography fontSize={14} textAlign="justify" mt={2}>
-          If there is any change in the date of joining, changes can be taken under consideration<br/>
-          Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> per year.
+            If there is any change in the date of joining, changes can be taken under consideration<br />
+            Your total Gross salary will be {" "}<strong>Rs. {formatCurrency(annualCTC)}</strong> per year.
           </Typography>
 
-         
-   <Typography fontSize={14} textAlign="justify" mt={2}>
-           Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be
-            Specified in your letter of appointment. We welcome you throw new Error {company.name} 
-             Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
+
+          <Typography fontSize={14} textAlign="justify" mt={2}>
+            Subject to various deductions as per companies and government policy.The roles and responsibilities and other terms and conditions of your employment will be
+            Specified in your letter of appointment. We welcome you throw new Error {company.name}
+            Family and hope it would be the beginning of a long and mutually beneficial association.Kindly acknowledge the duplicate copy of this letter as an acceptance of this offer.
           </Typography>
           {/* SIGNATURE SECTION */}
           <Box
@@ -145,34 +168,34 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
                 For <strong>{company.name}</strong>
               </Typography>
 
-             <Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-               {company.signature && (
-                 <img
-                   src={company.signature}
-                   alt="Sign"
-                   style={{ height: "30px", width: "auto" }}
-                 />
-               )}
-             
-               {company.stamp && (
-                 <img
-                   src={company.stamp}
-                   alt="Stamp"
-                   style={{ height: "95px", width: "auto" }}
-                 />
-               )}
-             </Box>
+              <Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                {company.signature && (
+                  <img
+                    src={company.signature}
+                    alt="Sign"
+                    style={{ height: "30px", width: "auto" }}
+                  />
+                )}
+
+                {company.stamp && (
+                  <img
+                    src={company.stamp}
+                    alt="Stamp"
+                    style={{ height: "95px", width: "auto" }}
+                  />
+                )}
+              </Box>
 
               <Typography fontWeight={650} mt={1}>
                 {company.hrName}
               </Typography>
               <Typography fontSize={13}>
-               HR Relations Lead
+                HR Relations Lead
               </Typography>
             </Box>
 
             <Box>
-              
+
               <Typography mt={15}>Signature: ____________</Typography>
               <Typography mt={1}>Date: ____________</Typography>
             </Box>
@@ -235,19 +258,19 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
                 <strong>{formatCurrency(annualCTC)}</strong>
               </TableCell>
             </TableRow>
-            
+
           </TableBody>
-          
+
         </Table>
-                   {/* SIGNATURE SECTION */}
-          <Box
-            sx={{
-              mt: 6,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box>
+        {/* SIGNATURE SECTION */}
+        <Box
+          sx={{
+            mt: 6,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box>
             <Box mt={2} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               {company.signature && (
                 <img
@@ -256,7 +279,7 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
                   style={{ height: "30px", width: "auto" }}
                 />
               )}
-            
+
               {company.stamp && (
                 <img
                   src={company.stamp}
@@ -266,23 +289,23 @@ const salaryRows = generateSalaryBreakup(monthlyCTC);
               )}
             </Box>
 
-              <Typography fontWeight={600} mt={1}>
-                {company.hrName}
-              </Typography>
-              <Typography fontSize={13}>
-                HR Relations Lead
-              </Typography>
-            </Box>
-
-            <Box>
-              
-              <Typography mt={15}>Signature: ____________</Typography>
-              <Typography mt={1}>
-                Name: {data.employeeName}
-              </Typography>
-              {/* <Typography mt={1}>Date: ____________</Typography> */}
-            </Box>
+            <Typography fontWeight={600} mt={1}>
+              {company.hrName}
+            </Typography>
+            <Typography fontSize={13}>
+              HR Relations Lead
+            </Typography>
           </Box>
+
+          <Box>
+
+            <Typography mt={15}>Signature: ____________</Typography>
+            <Typography mt={1}>
+              Name: {data.employeeName}
+            </Typography>
+            {/* <Typography mt={1}>Date: ____________</Typography> */}
+          </Box>
+        </Box>
       </A4Page>
     </>
   );

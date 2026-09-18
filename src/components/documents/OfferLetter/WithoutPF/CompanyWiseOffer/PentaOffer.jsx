@@ -131,7 +131,7 @@ const SignatureBlock = ({ company, employeeName, showCandidate = true }) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-end",
-        mt: 4,
+        mt: 6,
       }}
     >
       {/* HR SIGNATURE + STAMP */}
@@ -302,7 +302,7 @@ const PentaOffer = ({ company, data }) => {
 
         </Typography>
 
-        <Typography sx={{ fontSize: 14, mt: 4 }}>Yours Sincerely,</Typography>
+        <Typography sx={{ fontSize: 14, mt: 2 }}>Yours Sincerely,</Typography>
 
         <Typography sx={{ fontSize: 14, mt: 1 }}>
           For <strong>{company.name}</strong>
@@ -350,7 +350,7 @@ const PentaOffer = ({ company, data }) => {
           }}
         >
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#3598b4" }}>
+            <TableRow sx={{ backgroundColor: "#57d2fa" }}>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Salary Components
               </TableCell>
@@ -376,7 +376,7 @@ const PentaOffer = ({ company, data }) => {
               </TableRow>
             ))}
 
-            <TableRow>
+            <TableRow sx={{ backgroundColor: "#57d2fa" }}>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Total Monthly Gross Salary
               </TableCell>

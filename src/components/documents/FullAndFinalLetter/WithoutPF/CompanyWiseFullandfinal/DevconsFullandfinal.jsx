@@ -35,7 +35,7 @@ const formatMonth = (m) =>
   m ? new Date(`${m}-01`).toLocaleString("default", { month: "long" }) : "";
 
 const formatAmt = (n) =>
-  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 });
+  Number(n || 0).toLocaleString("en-IN", { minimumFractionDigits: 0 });
 
 /* ================== NUMBER TO WORDS ================== */
 const numberToWords = (num = 0) => {
@@ -176,7 +176,7 @@ const DevconsFullAndFinal = ({ company = {}, data = {} }) => {
 
           <TableRow>
             <TableCell sx={cell}>Designation</TableCell>
-            <TableCell sx={cell}>{data.designation}</TableCell>
+            <TableCell sx={cell}>{data.currentDesignation}</TableCell>
             <TableCell sx={cell}>Date of Resignation</TableCell>
             <TableCell sx={cell}>{formatDate(data.dateofresignation)}</TableCell>
           </TableRow>

@@ -31,47 +31,45 @@ const SmartMatrixIncrement = ({ company, data }) => {
   const round2 = (num) => Math.round(num);
 
   /* ================= INPUT IS ANNUAL ================= */
-  const annualCTC = round2(Number(data.newCTC || data.currentCTC || 0));
-  const monthlyCTC = round2(annualCTC / 12);
-  console.log("annualCTC =", annualCTC);
-  console.log("monthlyCTC =", monthlyCTC);
-  // console.log("salaryRows =", salaryRows);
+  const annualCTC = Math.round(
+    Number(data.newCTC || data.currentCTC || 0)
+  );
 
-  /* ================= STATIC PF ================= */
+  const monthlyCTC = annualCTC / 12;
+
   const pfMonthly = 3750;
-  const pfAnnual = round2(pfMonthly * 12);
+  const pfAnnual = pfMonthly * 12;
 
-  /* ================= FIXED PERCENTAGES ================= */
-  const hraMonthly = round2(monthlyCTC * 0.18);
-  const daMonthly = round2(monthlyCTC * 0.12);
-  const specialMonthly = round2(monthlyCTC * 0.16);
-  const foodMonthly = round2(monthlyCTC * 0.06);
+  const hraMonthly = Math.round(monthlyCTC * 0.18);
+  const daMonthly = Math.round(monthlyCTC * 0.12);
+  const specialMonthly = Math.round(monthlyCTC * 0.16);
+  const foodMonthly = Math.round(monthlyCTC * 0.06);
 
-  /* ================= ADJUSTED BASIC ================= */
-  const basicMonthly = round2(
+  const basicMonthly = Math.round(
     monthlyCTC -
-    (hraMonthly + daMonthly + specialMonthly + foodMonthly + pfMonthly),
+    (hraMonthly +
+      daMonthly +
+      specialMonthly +
+      foodMonthly +
+      pfMonthly)
   );
 
-  /* ================= ANNUAL ================= */
-  const basicAnnual = round2(basicMonthly * 12);
-  const hraAnnual = round2(hraMonthly * 12);
-  const daAnnual = round2(daMonthly * 12);
-  const specialAnnual = round2(specialMonthly * 12);
-  const foodAnnual = round2(foodMonthly * 12);
+  // Annual values
+  const basicAnnual = annualCTC -
+    (hraMonthly * 12 +
+      daMonthly * 12 +
+      specialMonthly * 12 +
+      foodMonthly * 12 +
+      pfAnnual);
 
-  /* ================= TOTAL ================= */
-  const totalMonthly = round2(
-    basicMonthly +
-    hraMonthly +
-    daMonthly +
-    specialMonthly +
-    foodMonthly +
-    pfMonthly,
-  );
+  const hraAnnual = hraMonthly * 12;
+  const daAnnual = daMonthly * 12;
+  const specialAnnual = specialMonthly * 12;
+  const foodAnnual = foodMonthly * 12;
 
-  const totalAnnual = round2(totalMonthly * 12);
-
+  // Force total annual to exactly match input CTC
+  const totalAnnual = annualCTC;
+  const totalMonthly = Math.round(totalAnnual / 12);
   /* ================= SALARY ROWS ================= */
   const salaryRows = [
     { label: "Basic", monthly: basicMonthly, annual: basicAnnual },
