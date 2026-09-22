@@ -28,19 +28,10 @@ export const createProfileService = async (payload) => {
 
 // ================= GET ALL USERS =================
 
-export const getAllUsersService = async ({
-  page = 0,
-  size = 5,
-  sortBy = "id",
-  direction = "desc",
-}) => {
+export const getAllUsersService = async ({ page = 0, size = 5, sortBy = "id", direction = "desc", search = "" }) => {
+
   try {
-    const response = await getAllUsersApi({
-      page,
-      size,
-      sortBy,
-      direction,
-    });
+  const response = await getAllUsersApi({ page, size, sortBy, direction, search });
 
     return {
       success: response.data.success,
