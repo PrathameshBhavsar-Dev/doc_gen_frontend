@@ -596,21 +596,28 @@ const DocumentPreview = () => {
   }
 
   // ✅ CRITICAL FIX: flatten nested doc data
-  Object.keys(baseData).forEach((key) => {
+  Object.keys(baseData).forEach((docKey) => {
     if (
-      typeof baseData[key] === "object" &&
-      baseData[key] !== null &&
-      !Array.isArray(baseData[key])
+      typeof baseData[docKey] === "object" &&
+      baseData[docKey] !== null &&
+      !Array.isArray(baseData[docKey])
     ) {
-      Object.entries(baseData[key]).forEach(([k, v]) => {
+      Object.entries(baseData[docKey]).forEach(([k, v]) => {
         if (v !== undefined && v !== null && v !== "") {
+          // ✅ namespaced key, so each doc's issueDate stays distinct
+          const namespacedKey = `${docKey}_${k}`;
+          if (!freshData[namespacedKey]) {
+            freshData[namespacedKey] = v;
+          }
+          // still set bare key too, for fields that are genuinely meant to be shared/global
           if (!freshData[k]) {
-            freshData[k] = v; // don't overwrite valid top-level values
+            freshData[k] = v;
           }
         }
       });
     }
   });
+
   // ✅ FIX required fields
   freshData.employeeId = freshData.employeeId || freshData.employeeNumber;
 
@@ -620,18 +627,15 @@ const DocumentPreview = () => {
   freshData.issuedBy = user?._id;
   freshData.title = formatTitle(freshData.mrms || freshData.title || freshData.identity);
 
-  const docKeyName = normalizeTemplateKey(previewDocType?.template);
-
-  const docIssueDate =
-    freshData[`${docKeyName}_issueDate`] || freshData.issueDate;
-
-  freshData.issueDate = docIssueDate || new Date().toISOString();
-
   freshData.totalSalary = Number(freshData.totalSalary || 0);
   freshData.newCTC = Number(freshData.newCTC || 0);
   freshData.salary = Number(freshData.salary || 0);
-  // ✅ build payload
+
+  // ✅ build payload FIRST — its issueDate is correctly namespaced per document
   let payload = buildPayload(key, freshData, user, previewCompany);
+
+  // ✅ pull the correctly-resolved, per-document issueDate from payload
+  freshData.issueDate = payload.issueDate || new Date().toISOString();
 
   // 🚨 FINAL GUARANTEE (MOST IMPORTANT LINE)
   payload.issuedTo = freshData.issuedTo;
@@ -895,6 +899,9 @@ const DocumentPreview = () => {
       freshData.salaryType = normalizePfType(freshData.salaryType || freshData.offerType);
       freshData.appointmentType = normalizePfType(freshData.appointmentType || freshData.offerType);
       freshData.pfType = normalizePfType(freshData.pfType || freshData.offerType);
+
+      const earlyPayload = buildPayload(key, freshData, user, previewCompany);
+      freshData.issueDate = earlyPayload.issueDate || freshData.issueDate || new Date().toISOString();
 
       // =========================
       // REQUIRED FIELD FIXES

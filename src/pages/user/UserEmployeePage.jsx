@@ -10,6 +10,7 @@ import { getAllUsersService } from "../../core/services/v2/userService";
 const ProfileListPage = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -20,77 +21,57 @@ const ProfileListPage = () => {
 
   const navigate = useNavigate();
 
-  const GRID_LAYOUT =
-    "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
+  const GRID_LAYOUT = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2.5fr_1.2fr_1.5fr_1.2fr_1.3fr_1.3fr_120px]";
 
   const handlePrevious = () => {
-
-    if (currentPage > 0) {
-      setCurrentPage((prev) => prev - 1);
-    }
+    if (currentPage > 0) setCurrentPage((prev) => prev - 1);
   };
 
   const handleNext = () => {
-
-    if (currentPage < totalPages - 1) {
-      setCurrentPage((prev) => prev + 1);
-    }
+    if (currentPage < totalPages - 1) setCurrentPage((prev) => prev + 1);
   };
 
-  const filteredProfiles = profiles.filter((p) =>
-    p.employeeName
-      ?.toLowerCase()
-      .includes(search.toLowerCase())
-  );
-
-  const fetchProfiles = async (page = 0) => {
-
+  const fetchProfiles = async (page = 0, searchTerm = "") => {
     try {
-
       setLoading(true);
-
-      const result = await getAllUsersService({
-        page,
-        size: pageSize,
-      });
-
-      console.log("Users API Response:", result);
-
+      const result = await getAllUsersService({ page, size: pageSize, search: searchTerm });
       if (result.success) {
-
         setProfiles(result.data.content);
-
-        setCurrentPage(result.data.currentPage);
-
+        // setCurrentPage(result.data.currentPage);
         setTotalPages(result.data.totalPages);
-
       } else {
-
         console.log(result.message);
       }
-
     } catch (error) {
-
       console.log("Fetch Profiles Error:", error);
-
     } finally {
-
       setLoading(false);
+      setInitialLoading(false);
     }
   };
 
+  // ✅ ALL useEffects declared here, unconditionally, before any return
   useEffect(() => {
-    fetchProfiles(currentPage);
-  }, [currentPage]);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(0);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  if (loading) {
+  useEffect(() => {
+    fetchProfiles(currentPage, debouncedSearch);
+  }, [currentPage, debouncedSearch]);
+
+  // ✅ early return comes AFTER every hook is declared
+  if (initialLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         Loading profiles...
       </div>
     );
   }
-
+  
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#F6F8FF] via-[#EEF2FF] to-[#FDF4FF] px-4 sm:px-5 lg:px-6 py-4 sm:py-6">
       {" "}
@@ -190,7 +171,7 @@ px-5 py-2.5 rounded-xl
             {/* elegant divider */}
             <div className="h-[1px] bg-gradient-to-r from-transparent via-[#E2E8F0]/80 to-transparent" />
           </div>
-          {filteredProfiles.map((profile) => (
+          {profiles.map((profile) => (
             <div
               key={profile.id}
               onClick={() =>
@@ -412,7 +393,7 @@ transition-all duration-300
           ))}
 
           {/* EMPTY */}
-          {filteredProfiles.length === 0 && (
+          {profiles.length === 0 && (
             <div className="text-center py-10 text-[#94A3B8]">
               No profiles found
             </div>

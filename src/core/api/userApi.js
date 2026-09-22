@@ -15,6 +15,7 @@ export const getAllUsersApi = async ({
   size = 5,
   sortBy = "id",
   direction = "desc",
+  search = "",
 }) => {
 
   return await axiosV2Instance.get(
@@ -25,6 +26,7 @@ export const getAllUsersApi = async ({
         size,
         sortBy,
         direction,
+        search,
       },
     }
   );
