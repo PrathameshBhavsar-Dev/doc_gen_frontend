@@ -32,7 +32,7 @@ const basicFields = [
     required: true,
   },
   { name: "employeeName", label: "Full Name", type: "text", required: true },
-  { name: "employeeId", label: "Employee ID", type: "text", required: true},
+  { name: "employeeId", label: "Employee ID", type: "text", required: true },
   { name: "mobile", label: "Mobile No", type: "text", required: true },
   { name: "employeeEmail", label: "Email ID", type: "email", required: true },
   { name: "pan", label: "PAN No", type: "text", required: true },
@@ -222,36 +222,42 @@ const UserDocumentFormPage = () => {
 
       // ✅ offer_letter - read from documents.OFFER_LETTER.data
       offer_letter: {
-        issueDate:
-          employeeData.offer_letter?.issueDate ||
-          offerLetterData.issueDate || "",
+        // ✅ Offer Date → Offer Letter Issue Date
+        issueDate: employeeData.offerDate || "",
+
         probationPeriod:
           employeeData.offer_letter?.probationPeriod ||
-          offerLetterData.probationPeriod || "",
+          offerLetterData.probationPeriod ||
+          "",
+
         employmentType:
           employeeData.offer_letter?.employmentType ||
-          offerLetterData.employmentType || "",
+          offerLetterData.employmentType ||
+          "",
+
         workLocation:
           employeeData.offer_letter?.workLocation ||
-          offerLetterData.workLocation || "",
+          offerLetterData.workLocation ||
+          "",
+
         workHours:
           employeeData.offer_letter?.workHours ||
-          offerLetterData.workHours || "",
+          offerLetterData.workHours ||
+          "",
+
         reportingManager:
           employeeData.offer_letter?.reportingManager ||
-          offerLetterData.reportingManager || "",
-        offerValidTill:
-          employeeData.offer_letter?.offerValidTill ||
-          offerLetterData.offerValidTill || "",
+          offerLetterData.reportingManager ||
+          "",
+
+        // ✅ Joining Date → Offer Letter Offer Valid Till
+        offerValidTill: employeeData.joiningDate || employeeData.doj || "",
       },
 
       // ✅ appointment_letter
       appointment_letter: {
         issueDate:
-          employeeData.appointment_letter?.issueDate ||
-          employeeData.issueDate ||
-          appointmentLetterData.issueDate ||
-          "",
+          employeeData.joiningDate || employeeData.doj || "",
 
         probationPeriod:
           employeeData.appointment_letter?.probationPeriod ||
@@ -295,9 +301,10 @@ const UserDocumentFormPage = () => {
         relievingDate:
           employeeData.experience_letter?.relievingDate ||
           experienceLetterData.relievingDate || "",
-        conductAndPerformance:
-          employeeData.experience_letter?.conductAndPerformance ||
-          experienceLetterData.conductAndPerformance || "",
+        conduct:
+          employeeData.experience_letter?.conduct ||
+          experienceLetterData.conduct ||
+          "Excellent",
       },
 
       // ✅ relieving_letter
@@ -369,17 +376,37 @@ const UserDocumentFormPage = () => {
 
   /* ---------------- HANDLE INPUT ---------------- */
   const handleChange = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: value,
+      };
+
+      // ✅ Offer Date automatically becomes Offer Letter Issue Date
+      if (name === "offerDate") {
+        updated.offer_letter = {
+          ...(prev.offer_letter || {}),
+          issueDate: value,
+        };
+      }
+      if (name === "joiningDate") {
+        updated.offer_letter = {
+          ...(prev.offer_letter || {}),
+          offerValidTill: value,
+        };
+      }
+
+      return updated;
+    });
+
     const error = validateField(name, value);
 
     setErrors((prev) => ({
       ...prev,
       [name]: error,
     }));
-  };
+  };;
+
   useEffect(() => {
     if (incomingDocs.length > 0) {
       setSelectedDocs(incomingDocs);
