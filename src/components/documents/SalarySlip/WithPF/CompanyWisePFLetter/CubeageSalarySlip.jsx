@@ -195,7 +195,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
 
             {/* HRA | P.T. */}
             <TableRow>
-              <TableCell sx={C()}>H.R.A.</TableCell>
+              <TableCell sx={C()}>House Rent Allowance</TableCell>
               <TableCell sx={C({ textAlign: "center" })}>{fmt(hra)}</TableCell>
               <TableCell sx={C()}>P.T.</TableCell>
               <TableCell sx={C({ textAlign: "center" })}>{fmt(pt)}</TableCell>
@@ -203,7 +203,7 @@ const CubeageSalarySlip = ({ data = {}, company = {} }) => {
 
             {/* DA | Other Deductions */}
             <TableRow>
-              <TableCell sx={C()}>D.A.</TableCell>
+              <TableCell sx={C()}>Dearness Allowance</TableCell>
               <TableCell sx={C({ textAlign: "center" })}>{fmt(da)}</TableCell>
               <TableCell sx={C()}>Other Deductions</TableCell>
               <TableCell sx={C({ textAlign: "center" })}>{fmt(otherDed)}</TableCell>

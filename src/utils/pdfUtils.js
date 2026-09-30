@@ -257,6 +257,45 @@ export const generatePDF = async (
         format: "a4",
       });
 
+      // =========================
+      // SET CREATION DATE FROM ISSUE DATE
+      // =========================
+      const issueDateRaw = safeProps?.data?.issueDate;
+
+      console.log("=================================");
+      console.log("📅 ISSUE DATE RAW:", issueDateRaw);
+
+      if (issueDateRaw) {
+        const issueDate = new Date(issueDateRaw);
+
+        console.log("📅 ISSUE DATE OBJECT:", issueDate);
+
+        if (!isNaN(issueDate.getTime())) {
+
+          console.log(
+            "📅 ISSUE DATE ISO:",
+            issueDate.toISOString()
+          );
+
+          pdf.setCreationDate(issueDate);
+
+          console.log(
+            "📅 PDF CreationDate set to:",
+            issueDate
+          );
+
+        } else {
+
+          console.warn(
+            "⚠️ Invalid issueDate, skipping setCreationDate:",
+            issueDateRaw
+          );
+
+        }
+      }
+
+      console.log("=================================");
+
       const pageWidth =
         pdf.internal.pageSize.getWidth();
 

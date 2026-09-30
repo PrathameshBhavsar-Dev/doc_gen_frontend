@@ -59,31 +59,43 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
     : "";
   const salaryMonth = monthName && year ? `${monthName} ${year}` : "-";
 
-  /* ================= SALARY LOGIC (NO PF) ================= */
+  /* ================= SALARY LOGIC (SAME AS OFFER LETTER, NO PF) ================= */
+  const round2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
   const round0 = (v) => Math.round(Number(v) || 0);
 
-  const monthlyCTC = round0(totalSalary);
+  // totalSalary is MONTHLY gross.
+  // If your backend sends ANNUAL CTC here, use: round2(Number(totalSalary || 0) / 12)
+  const monthlyGross = round2(totalSalary);
 
-  const HRA = round0(monthlyCTC * 0.18);
-  const DA = round0(monthlyCTC * 0.12);
-  const SPECIAL = round0(monthlyCTC * 0.16);
-  const FOOD = round0(monthlyCTC * 0.06);
+  const PERCENT = {
+    basic: 0.4,
+    hra: 0.18,
+    da: 0.12,
+    special: 0.16,
+    food: 0.06,
+    // facility = remaining (8%)
+  };
 
-  const BASIC = round0(
-    monthlyCTC - (HRA + DA + SPECIAL + FOOD)
+  const BASIC = round2(monthlyGross * PERCENT.basic);
+  const HRA = round2(monthlyGross * PERCENT.hra);
+  const DA = round2(monthlyGross * PERCENT.da);
+  const SPECIAL = round2(monthlyGross * PERCENT.special);
+  const FOOD = round2(monthlyGross * PERCENT.food);
+  const FACILITY = round2(
+    monthlyGross - (BASIC + HRA + DA + SPECIAL + FOOD)
   );
 
-  const totalEarning = round0(
-    BASIC + HRA + DA + SPECIAL + FOOD
+  const totalEarning = round2(
+    BASIC + HRA + DA + SPECIAL + FOOD + FACILITY
   );
 
   const pt = month ? getProfessionalTax(month, totalEarning) : 0;
 
-  const totalDeduction = round0(
+  const totalDeduction = round2(
     pt + Number(otherDeduction || 0)
   );
 
-  const netPay = round0(totalEarning - totalDeduction);
+  const netPay = round2(totalEarning - totalDeduction);
 
   return (
     <A4Page headerSrc={company.header} footerSrc={company.footer}>
@@ -193,6 +205,14 @@ const SmartSoftwareSalarySlip = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell>FOOD ALLOWANCE</TableCell>
               <TableCell align="center">{formatCurrency(FOOD)}</TableCell>
+              <TableCell />
+              <TableCell />
+            </TableRow>
+
+            {/* NEW ROW */}
+            <TableRow>
+              <TableCell>MISC ALLOWANCE</TableCell>
+              <TableCell align="center">{formatCurrency(FACILITY)}</TableCell>
               <TableCell />
               <TableCell />
             </TableRow>

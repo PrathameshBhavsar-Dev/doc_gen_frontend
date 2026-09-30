@@ -44,21 +44,39 @@ const JDITOffer = ({ company, data }) => {
     location,
   } = data;
 
-  /* 🔥 DERIVED VALUES */
-  const annualCTC = Number(data.joiningCTC || data.salary || 0);
-  const monthlyCTC = Math.round(annualCTC / 12);
+  const round0 = (num) => Math.round(num);
 
-  const hraMonthly = Math.round(monthlyCTC * 0.18);
-  const conveyanceMonthly = Math.round(monthlyCTC * 0.12);
-  const specialMonthly = Math.round(monthlyCTC * 0.16);
-  const medicalMonthly = Math.round(monthlyCTC * 0.06);
+  // ================= ANNUAL CTC =================
+  const annualCTC = round0(
+    Number(data.joiningCTC || data.salary || 0)
+  );
 
-  // Static PF
+  // ================= MONTHLY CTC =================
+  const monthlyCTC = round0(annualCTC / 12);
+
+  // ================= STATIC PF =================
   const monthlyPF = 3750;
 
-  // Basic is the balancing figure
-  const basicMonthly = monthlyCTC - hraMonthly - conveyanceMonthly - specialMonthly - medicalMonthly - monthlyPF;
+  // ================= FIXED PERCENTAGES =================
+  const hraMonthly = round0(monthlyCTC * 0.18);
+  const conveyanceMonthly = round0(monthlyCTC * 0.12);
+  const specialMonthly = round0(monthlyCTC * 0.16);
 
+  // ================= FIXED FOOD ALLOWANCE =================
+  const medicalMonthly = 3800;
+
+  // ================= ADJUSTED BASIC =================
+  const basicMonthly = round0(
+    monthlyCTC -
+    (
+      hraMonthly +
+      conveyanceMonthly +
+      specialMonthly +
+      medicalMonthly +
+      monthlyPF
+    )
+  );
+  
   const salaryComponents = useMemo(() => {
     return [
       { name: "Basic Salary", monthly: basicMonthly, annual: basicMonthly * 12 },

@@ -118,7 +118,6 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
 
   /* ---------------- Fixed PF Deductions ---------------- */
 
-
   const employeeName = data.candidateName || data.employeeName || "";
   const displayName = employeeName ? `${data.mrms || "Mr."} ${employeeName}`.trim() : "";
   const location = data.location || data.workLocation || company.city || "Pune";

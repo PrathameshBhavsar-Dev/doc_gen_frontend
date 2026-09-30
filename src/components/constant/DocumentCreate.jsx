@@ -363,14 +363,35 @@ const DocumentCreate = () => {
       }
     } else {
       // ✅ CREATE mode — go to preview
+      // ✅ CREATE mode — go to preview
       if (!selectedDocType) {
         alert("Please select document type");
         return;
       }
 
+      const docTypeKey = selectedDocType.template?.replace(/-/g, "_");
+
+      const previewData = {
+        ...documentData,
+
+        // Keep document-specific data separately
+        [docTypeKey]: {
+          ...documentData,
+        },
+      };
+
+      console.log("=================================");
+      console.log("📄 SELECTED DOCUMENT:", selectedDocType.name);
+      console.log("🔑 DOCUMENT KEY:", docTypeKey);
+      console.log("📅 ISSUE DATE FROM FORM:", documentData.issueDate);
+      console.log("📦 PREVIEW DATA:", previewData);
+      console.log("=================================");
+      console.log("🔥 DOCUMENT DATA BEFORE PREVIEW:", documentData);
+      console.log("🔥 DOCUMENT ISSUE DATE:", documentData?.issueDate);
+
       navigate(`/document/preview`, {
         state: {
-          previewData: documentData,
+          previewData,
           selectedDocs: [
             {
               id: selectedDocType.id,

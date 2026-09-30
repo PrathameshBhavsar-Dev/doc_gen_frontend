@@ -24,16 +24,6 @@ export const normalizeTemplateKey = (template) => {
   return map[normalized] || normalized;
 };
 
-// if (baseData?.documentData?.INTERNSHIP_CERTIFICATE) {
-//   const internship =
-//     baseData.documentData.INTERNSHIP_CERTIFICATE;
-
-//   freshData.internshipType = internship.internshipType;
-//   freshData.startDate = internship.startDate;
-//   freshData.endDate = internship.endDate;
-//   freshData.issueDate = internship.issueDate;
-// }
-
 export const buildPayload = (
   key,
   previewData = {},
@@ -61,6 +51,14 @@ export const buildPayload = (
 
   const validSalaryTypes = ["withPF", "withoutPF"];
 
+  const getIssueDate = (previewData, documentKey) => {
+    return (
+      previewData?.[documentKey]?.issueDate ||
+      previewData?.issueDate ||
+      ""
+    );
+  };
+
   const payloadBuilders = {
     salaryslip_letter: () => ({
       ...base,
@@ -81,6 +79,7 @@ export const buildPayload = (
       month:
         previewData.month ||
         new Date().toLocaleString("default", { month: "long" }),
+      issueDate: new Date(),
     }),
 
     offer_letter: () => ({
@@ -96,7 +95,7 @@ export const buildPayload = (
         new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       offerType: previewData.offerType || "withPF",
       joiningDate: previewData.joiningDate,
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "offer_letter"),
     }),
 
     appointment_letter: () => ({
@@ -105,8 +104,7 @@ export const buildPayload = (
       position: previewData.position || previewData.designation,
       department: previewData.department || "General",
       joiningDate: previewData.joiningDate,
-      issueDate: previewData.issueDate,
-      salary: Number(previewData.salary) || 0,
+      issueDate: getIssueDate(previewData, "appointment_letter"),
       address: previewData.address || "",
       probationPeriod: previewData.probationPeriod || "3 months",
       workLocation: previewData.workLocation || previewData.location || "Pune",
@@ -119,7 +117,7 @@ export const buildPayload = (
       employeeEmail: previewData.employeeEmail,
       employeePhone: previewData.employeePhone,
       effectiveDate: previewData.effectiveDate,
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "confirmation_letter"),
       totalSalary: Number(previewData.totalSalary) || 0,
       address: previewData.address || "",
       position: previewData.position,
@@ -138,7 +136,7 @@ export const buildPayload = (
         ? Number(previewData.incrementPercentage)
         : undefined,
       effectiveDate: previewData.effectiveDate,
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "increment_letter"),
       incrementType: previewData.incrementType || "withPF",
     }),
 
@@ -150,7 +148,7 @@ export const buildPayload = (
       department: previewData.department || "",
       joiningDate: previewData.joiningDate,
       relievingDate: previewData.lastWorkingDay || previewData.relievingDate,
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "experience_letter"),
     }),
 
     relieving_letter: () => ({
@@ -162,7 +160,7 @@ export const buildPayload = (
       lastWorkingDay: previewData.lastWorkingDay,
       noticePeriod: previewData.noticePeriod || "",
       handoverStatus: previewData.handoverStatus || "Not Applicable",
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "relieving_letter"),
     }),
 
     internshipcertificate_letter: () => ({
@@ -174,7 +172,7 @@ export const buildPayload = (
       stipend: Number(previewData.stipend) || 0,
       startDate: previewData.startDate,
       endDate: previewData.endDate,
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "internship_certificate"),
     }),
 
     completion_certificate: () => ({
@@ -197,7 +195,7 @@ export const buildPayload = (
           ? previewData.achievements.split(",").map((a) => a.trim())
           : [],
       clientName: previewData.clientName || "",
-      issueDate: previewData.issueDate,
+      issueDate: getIssueDate(previewData, "completion_certificate"),
     }),
 
     fullandfinal_letter: () => ({
