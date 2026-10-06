@@ -169,9 +169,10 @@ const DevconsSalarySlip = ({ company = {}, data = {} }) => {
             <TableRow>
               <TableCell>Mode</TableCell>
               <TableCell>
-                Bank Name- {mode}
-                <br />
-                Bank Account No.- {accountNo}
+                Bank 
+                {/* Bank Name- {mode} */}
+                {/* <br />
+                Bank Account No.- {accountNo} */}
               </TableCell>
               <TableCell>Working days</TableCell>
               <TableCell>{data.workdays}</TableCell>

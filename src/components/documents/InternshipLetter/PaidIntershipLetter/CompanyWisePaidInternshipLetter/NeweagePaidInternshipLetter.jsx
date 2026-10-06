@@ -23,7 +23,7 @@ const formatDate = (date) =>
 
 const formatCurrency = (num = 0) =>
   Number(num).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
   });
 
 const numberToWords = (num = 0) => {
