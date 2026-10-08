@@ -1025,13 +1025,7 @@ const UserDocumentFormPage = () => {
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
     payload.joiningDate = payload.joiningDate || payload.doj;
-    // ✅ store payload temporarily
 
-    // ✅ show popup instead of navigating
-    // setShowGeneratePopup(true);
-
-    // ✅ Fix the salary slip validation in handleSave
-    // ✅ First do salary slip validation
     const freshMonths = [];
     if (isSalarySlipSelected()) {
       if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) {
@@ -1061,9 +1055,6 @@ const UserDocumentFormPage = () => {
       freshMonthsRef.current = generated; // ✅ add this
       setSalarySlipMonths(generated); // ✅ update state too
     }
-
-    // ✅ Only show popup after validation passes
-    // setShowGeneratePopup(true);
 
     const enrichedDocs = docsToProcess.map((doc) => {
       const fullDoc = documentTypes.find((d) => d.id === doc.id);
