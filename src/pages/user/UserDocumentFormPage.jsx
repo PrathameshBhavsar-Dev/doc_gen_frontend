@@ -55,6 +55,7 @@ const basicFields = [
 
   { name: "offerDate", label: "Offer Date", type: "date", required: true },
   { name: "joiningDate", label: "Joining Date", type: "date", required: true },
+  { name: "lastWorkingDate", label: "Last Working Date", type: "date", required: false },
 
   { name: "joiningCTC", label: "Joining CTC", type: "text", required: true },
   { name: "salary", label: "Current CTC", type: "text", required: true },
@@ -234,6 +235,9 @@ const UserDocumentFormPage = () => {
         employeeData.joiningDate ||
         employeeData.doj || "",
 
+      lastWorkingDate:
+        employeeData.lastWorkingDate || "",
+
       joiningCTC:
         employeeData.joiningCTC ||
         employeeData.CTC || "",
@@ -355,7 +359,8 @@ const UserDocumentFormPage = () => {
           experienceLetterData.issueDate || "",
         relievingDate:
           employeeData.experience_letter?.relievingDate ||
-          experienceLetterData.relievingDate || "",
+          experienceLetterData.relievingDate ||
+          employeeData.lastWorkingDate || "",
         conduct:
           employeeData.experience_letter?.conduct ||
           experienceLetterData.conduct ||
@@ -366,7 +371,8 @@ const UserDocumentFormPage = () => {
       relieving_letter: {
         lastWorkingDay:
           employeeData.relieving_letter?.lastWorkingDay ||
-          relievingLetterData.relievingDate || "",
+          relievingLetterData.relievingDate ||
+          employeeData.lastWorkingDate || "",
         issueDate:
           employeeData.relieving_letter?.issueDate ||
           relievingLetterData.issueDate || "",
@@ -465,6 +471,21 @@ const UserDocumentFormPage = () => {
           ...(prev.appointment_letter || {}),
           reportingManager,
         };
+      }
+
+      if (name === "lastWorkingDate") {
+        // only overwrite if the letter's date is empty or was auto-filled earlier,
+        // so a date the user typed in manually isn't clobbered
+        const sync = (letter = {}, keys) => {
+          const next = { ...letter };
+          keys.forEach((k) => {
+            if (!letter[k] || letter[k] === prev.lastWorkingDate) next[k] = value;
+          });
+          return next;
+        };
+
+        updated.experience_letter = sync(prev.experience_letter, ["relievingDate"]);
+        updated.relieving_letter = sync(prev.relieving_letter, ["relievingDate", "lastWorkingDay"]);
       }
 
       return updated;
@@ -972,6 +993,7 @@ const UserDocumentFormPage = () => {
     // ✅ DOJ fix
     enrichedFormData.doj = formData.joiningDate || formData.doj || "";
     enrichedFormData.joiningDate = formData.joiningDate || formData.doj || "";
+    enrichedFormData.lastWorkingDate = formData.lastWorkingDate || "";
 
     // ✅ internship stipend override (must come AFTER salary defaults)
     if (formData?.internship_certificate?.stipend) {
@@ -1159,20 +1181,6 @@ const UserDocumentFormPage = () => {
       return null;
     }
 
-    // if (field.readOnly) {
-    //   return (
-    //     <input
-    //       name={field.name}
-    //       type="text"
-    //       className={`${baseClass} bg-[#F1F5F9] text-[#64748B] cursor-not-allowed`}
-    //       value={value ?? ""}
-    //       placeholder="Auto-generated"
-    //       readOnly
-    //       disabled
-    //     />
-    //   );
-    // }
-
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
       if (docKey) {
@@ -1251,59 +1259,18 @@ const UserDocumentFormPage = () => {
     ? filteredDocuments
     : selectedDocs;
 
-  // const validateField = (name, value) => {
-  //   if (!value) return "Please fill the required fields";
-
-  //   switch (name) {
-  //     case "employeeName":
-  //     case "fullName":
-  //       if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
-  //       break;
-
-  //     case "mobile":
-  //       if (!/^[6-9]\d{9}$/.test(value))
-  //         return "Enter valid 10-digit mobile number";
-  //       break;
-
-  //     case "email":
-  //     case "employeeEmail":
-  //       if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
-  //       break;
-
-  //     case "pan":
-  //       if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value))
-  //         return "Enter valid PAN (ABCDE1234F)";
-  //       break;
-
-  //     case "accountNo":
-  //       if (!/^\d{9,18}$/.test(value))
-  //         return "Account number must be 9-18 digits";
-  //       break;
-
-  //     case "joiningCTC":
-  //     case "salary":
-  //       if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
-  //       break;
-
-  //     case "dob":
-  //       if (new Date(value) > new Date()) return "DOB cannot be future date";
-  //       break;
-
-  //     case "joiningDate":
-  //     case "offerDate":
-  //       if (isNaN(new Date(value))) return "Invalid date";
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-
-  //   return "";
-  // };
-
   const validateField = (name, value) => {
     // Bank name and account number are temporarily optional
     if (name === "bankName" || name === "accountNo") {
+
+      if (name === "lastWorkingDate") {
+        if (!value) return "";
+        if (isNaN(new Date(value))) return "Invalid date";
+        if (formData.joiningDate && value < formData.joiningDate)
+          return "Last working date cannot be before joining date";
+        return "";
+      }
+
       if (!value) return "";
 
       // Only validate account number if user entered something
