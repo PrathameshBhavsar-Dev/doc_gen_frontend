@@ -1,18 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import ApiService from "../services/api.service";
+import { springApi } from "../services/springApi";
+import ServerUrlV2 from "../constants/ServerUrlV2"; // same path your other files use
 
 const AuthContext = createContext(null);
-const apiService = new ApiService();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // ✅ renamed
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load user from localStorage on mount
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("user");
-
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
@@ -24,41 +23,16 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // ================= REGISTER =================
-  const register = async (userData) => {
-    try {
-      const response = await apiService.apipost("/users/register", userData);
-
-      if (response.success) {
-        return { success: true, data: response.data };
-      }
-
-      return { success: false, error: response.message };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error.response?.data?.message ||
-          error.message ||
-          "Registration failed",
-      };
-    }
-  };
-
   // ================= LOGIN =================
   const login = async (credentials) => {
     try {
-      const response = await apiService.apipost("/users/login", credentials);
+      const response = await springApi.apipost(ServerUrlV2.LOGIN, credentials);
 
       if (response.success) {
-        const { user, accessToken } = response;
+        const { user, accessToken } = response.data; // nested under data now
 
-        // ✅ Store token
         localStorage.setItem("token", accessToken);
-
-        // ✅ Store user (safe copy)
         localStorage.setItem("user", JSON.stringify(user));
-
         setUser(user);
 
         return { success: true, user };
@@ -79,31 +53,26 @@ export const AuthProvider = ({ children }) => {
   // ================= LOGOUT =================
   const logout = async () => {
     try {
-      await apiService.apipost("/users/logout"); // clear cookies (backend)
+      await springApi.apipost(ServerUrlV2.LOGOUT); // clears the refresh cookie
     } catch (error) {
       console.error("Logout API failed:", error);
     } finally {
-      // ✅ clear frontend state
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       setUser(null);
     }
   };
 
-  // ================= UPDATE PROFILE =================
+  // ================= UPDATE PROFILE (logged-in user only) =================
   const updateProfile = async (updateData) => {
     try {
       if (!user) throw new Error("No user logged in");
 
-      const response = await apiService.apiput(
-        `/users/profile/${user._id}`,
-        updateData
-      );
+      const response = await springApi.apiput(ServerUrlV2.PROFILE, updateData);
 
       if (response.success && response.data) {
         localStorage.setItem("user", JSON.stringify(response.data));
         setUser(response.data);
-
         return { success: true, data: response.data };
       }
 
@@ -119,14 +88,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ================= CONTEXT VALUE =================
   const value = {
     user,
-    isLoading,                 // ✅ matches ProtectedRoute
-    isLoggedIn: !!user,        // ✅ matches ProtectedRoute
+    isLoading,
+    isLoggedIn: !!user,
     isAdmin: user?.role === "admin",
-
-    register,
     login,
     logout,
     updateProfile,
@@ -139,14 +105,11 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ================= CUSTOM HOOK =================
 export const useAuth = () => {
   const context = useContext(AuthContext);
-
   if (!context) {
     throw new Error("useAuth must be used within AuthProvider");
   }
-
   return context;
 };
 
