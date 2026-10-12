@@ -14,7 +14,7 @@ const formatDate = (date) =>
 
 /* ================= TEXT STYLE ================= */
 const TEXT = {
-  fontFamily: "Times New Roman, serif",
+  fontFamily: '"Cambria", "Georgia", serif',
   fontSize: "14px",
   lineHeight: 1.8,
 };

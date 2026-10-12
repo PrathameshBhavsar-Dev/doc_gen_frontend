@@ -87,10 +87,10 @@ const NeweageSalarySlip = ({ company, data }) => {
 
   const earnings = [
     { label: "BASIC", value: basic },
-    { label: "H.R.A.", value: hra },
-    { label: "D.A.", value: da },
-    { label: "L.T.A.", value: lta },
-    { label: "ALLOWANCE (Shift+Skill)", value: allow },
+    { label: "HOUSE RENT ALLOWANCE", value: hra },
+    { label: "DEARNESS ALLOWANCE", value: da },
+    { label: "SPECIAL ALLOWANCE", value: lta },
+    { label: "FOOD ALLOWANCE", value: allow },
     { label: "PF ALLOWANCE", value: pfAllowance },
   ];
 

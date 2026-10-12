@@ -76,7 +76,7 @@ const NeweageFullandfinal = ({ company, data }) => {
             {[
               ["Name of the Employee", data.employeeName, "F & F Date", data.date],
               ["Employee ID", data.employeeId, "Joining Date", data.doj],
-              ["Designation", data.designation, "Date of Resignation", data.dateofresignation],
+              ["Designation", data.currentDesignation, "Date of Resignation", data.dateofresignation],
               ["Department", data.department, "Date of Leaving", data.dateofleaving],
             ].map((r, i) => (
               <TableRow key={i}>
@@ -114,7 +114,7 @@ const NeweageFullandfinal = ({ company, data }) => {
             </TableRow>
             {[
               ["Basic", actual.basic, earned.basic],
-              ["HRA", actual.hra, earned.hra],
+              ["House Rent Allowance", actual.hra, earned.hra],
               ["Dearness Allowance", actual.da, earned.da],
               ["Special Allowance", actual.special, earned.special],
               ["Food Allowance", actual.food, earned.food],

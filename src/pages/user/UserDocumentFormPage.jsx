@@ -84,6 +84,51 @@ const basicFields = [
   },
 ];
 
+// code → reporting manager
+const MANAGER_BY_COMPANY_CODE = {
+  SMDS: "Sanjay Kumar",     // SmartMatrix Digital Services
+  DSS: "Dilip Kumar",       // Devcons Software Solutions
+  PSCS: "Sahil Patil",      // Penta Software Consultancy Services (I)
+  CTS: "Sarthak Kumar",     // Cubeage Technologies Services
+  QMS: "Akshay Wadatkar",   // Quick Management Services
+  NCSS: "Kriti Kumari",     // Neweage Cloud Solution
+  RPBS: "Rajiv Kumar",      // RP Business Solutions LLP
+  JDIT: "Aditya Khade",     // JDIT Software Solutions
+  NSS: "Akshay Patil",      // Nimbja Security Solutions
+  SSS: "Satish Ingole",     // Smart Software Services (I)
+};
+
+const normalizeCompany = (name = "") =>
+  name
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")   // drops . , ( ) _ etc.
+    .replace(/\bprivate\b/g, "pvt")
+    .replace(/\blimited\b/g, "ltd")
+    .replace(/\s+/g, " ")
+    .trim();
+
+// normalized company name → manager
+const NORMALIZED_MANAGER_MAP = Object.fromEntries(
+  Object.entries(MANAGER_BY_COMPANY_CODE).map(([code, manager]) => [
+    normalizeCompany(COMPANY_NAME_MAP[code]),
+    manager,
+  ])
+);
+
+const getReportingManager = (companyName) => {
+  const key = normalizeCompany(companyName);
+  if (!key) return "";
+
+  if (NORMALIZED_MANAGER_MAP[key]) return NORMALIZED_MANAGER_MAP[key];
+
+  // loose fallback, e.g. "Quick Management Services Pvt Ltd" vs "Quick Management Services"
+  const match = Object.keys(NORMALIZED_MANAGER_MAP).find(
+    (k) => k.includes(key) || key.includes(k)
+  );
+  return match ? NORMALIZED_MANAGER_MAP[match] : "";
+};
+
 const UserDocumentFormPage = () => {
   const [formData, setFormData] = useState({});
   const location = useLocation();
@@ -107,6 +152,11 @@ const UserDocumentFormPage = () => {
 
   useEffect(() => {
     if (!employeeData) return;
+
+    const companyName =
+      COMPANY_NAME_MAP[employeeData.company] ||
+      employeeData.company ||
+      "";
 
     // ✅ data lives inside employeeData.documents
     const docs = employeeData.documents || {};
@@ -143,9 +193,7 @@ const UserDocumentFormPage = () => {
     const fnfYear = fnfData.fnfDate?.split("-")[0] || joiningYear;
 
     setFormData({
-      company:
-        COMPANY_NAME_MAP[employeeData.company] ||
-        employeeData.company || "",
+      company: companyName,
 
       mrms:
         employeeData.mrms ||
@@ -248,6 +296,7 @@ const UserDocumentFormPage = () => {
         reportingManager:
           employeeData.offer_letter?.reportingManager ||
           offerLetterData.reportingManager ||
+          getReportingManager(companyName) ||
           "",
 
         // ✅ Joining Date → Offer Letter Offer Valid Till
@@ -269,6 +318,12 @@ const UserDocumentFormPage = () => {
           employeeData.appointment_letter?.workLocation ||
           employeeData.workLocation ||
           appointmentLetterData.workLocation ||
+          "",
+
+        reportingManager:
+          employeeData.appointment_letter?.reportingManager ||
+          appointmentLetterData.reportingManager ||
+          getReportingManager(companyName) ||
           "",
       },
 
@@ -389,10 +444,26 @@ const UserDocumentFormPage = () => {
           issueDate: value,
         };
       }
+
       if (name === "joiningDate") {
         updated.offer_letter = {
           ...(prev.offer_letter || {}),
           offerValidTill: value,
+        };
+      }
+
+      // Company → Reporting Manager
+      if (name === "company") {
+        const reportingManager = getReportingManager(value);
+
+        updated.offer_letter = {
+          ...(prev.offer_letter || {}),
+          reportingManager,
+        };
+
+        updated.appointment_letter = {
+          ...(prev.appointment_letter || {}),
+          reportingManager,
         };
       }
 

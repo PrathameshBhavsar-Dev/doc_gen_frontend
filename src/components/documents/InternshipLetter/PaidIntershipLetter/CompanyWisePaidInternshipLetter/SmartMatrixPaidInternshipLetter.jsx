@@ -166,7 +166,7 @@ const SmartMatrixPaidInternshipLetter = ({ company, data }) => {
                   border: "1px solid black",
                   fontSize: "11pt",
                   fontFamily: "Bahnschrift",
-                  padding: "6px 8px",
+                  padding: "0px 8px 8px 8px",
                   color: "#000",
                 },
               }}

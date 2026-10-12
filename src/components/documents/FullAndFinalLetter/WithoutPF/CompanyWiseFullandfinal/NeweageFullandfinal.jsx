@@ -163,7 +163,7 @@ const totalEarned = Math.floor(
 
             {[
               ["Basic", basic],
-              ["HRA", hra],
+              ["House Rent Allowance", hra],
               ["Dearness Allowance", da],
               ["Special Allowance", special],
               ["Facility Allowance", facility],
