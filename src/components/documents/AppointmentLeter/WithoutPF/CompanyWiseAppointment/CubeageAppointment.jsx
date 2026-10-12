@@ -52,8 +52,10 @@ const PageLayout = ({ children, company, isLastPage = false }) => {
     <Box
       sx={{
         width: "210mm",
-        minHeight: "297mm", // was: height: "297mm"
+        height: "292mm",
+        maxHeight: "292mm",
         boxSizing: "border-box",
+        overflow: "hidden",
 
         backgroundColor: "#fff",
         fontFamily: "'Calibri', Arial, sans-serif",
@@ -65,18 +67,13 @@ const PageLayout = ({ children, company, isLastPage = false }) => {
 
         "@media print": {
           width: "210mm",
+          height: "297mm",
+          maxHeight: "297mm",
           minHeight: "297mm",
           margin: 0,
 
-          ...(isLastPage
-            ? {
-                breakAfter: "auto",
-                pageBreakAfter: "auto",
-              }
-            : {
-                breakAfter: "page",
-                pageBreakAfter: "always",
-              }),
+          breakAfter: isLastPage ? "auto" : "page",
+          pageBreakAfter: isLastPage ? "auto" : "always",
         },
       }}
     >
@@ -86,18 +83,11 @@ const PageLayout = ({ children, company, isLastPage = false }) => {
           display: "flex",
           alignItems: "center",
           gap: 2,
-
           px: 4,
           py: 2,
-
           borderBottom: "2px solid #000",
-
           flexShrink: 0,
           boxSizing: "border-box",
-
-          // Never let the header itself split across a page break
-          breakInside: "avoid",
-          pageBreakInside: "avoid",
         }}
       >
         {company.logo && (
@@ -128,15 +118,10 @@ const PageLayout = ({ children, company, isLastPage = false }) => {
           <Typography fontWeight="bold" fontSize="18px">
             {company.name}
           </Typography>
-
-          <Typography fontSize="11px">
-            {company.address}
-          </Typography>
-
+          <Typography fontSize="11px">{company.address}</Typography>
           <Typography fontSize="11px">
             Contact No: {company.phone}
           </Typography>
-
           <Typography fontSize="11px">
             Email: {company.email}
           </Typography>
@@ -148,11 +133,10 @@ const PageLayout = ({ children, company, isLastPage = false }) => {
         sx={{
           flex: 1,
           minHeight: 0,
-
           px: 6,
           py: 2,
-
           boxSizing: "border-box",
+          overflow: "hidden",
 
           "& .MuiTypography-root": {
             lineHeight: 1.4,
@@ -216,7 +200,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
     <Box>
 
       {/* ================= PAGE 1 ================= */}
-      <PageLayout company={company}>
+      <PageLayout company={company} isLastPage={false}>
 
         <Typography align="center" fontWeight="bold" fontSize="16px" mb={3}>
           Appointment Letter
@@ -292,11 +276,6 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
           </Typography>
         </Section>
 
-      </PageLayout>
-
-      {/* ================= PAGE 2 ================= */}
-      <PageLayout company={company}>
-
         <Section>
           <Typography fontWeight="bold">5. Working hours</Typography>
           <Typography>
@@ -304,6 +283,11 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
             ensure that the assigned deliverables are completed within the allocated duration.
           </Typography>
         </Section>
+
+      </PageLayout>
+
+      {/* ================= PAGE 2 ================= */}
+      <PageLayout company={company} isLastPage={false}>
 
         <Section>
           <Typography fontWeight="bold">6. Probation</Typography>
@@ -383,7 +367,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       </PageLayout>
 
       {/* ================= PAGE 3 ================= */}
-      <PageLayout company={company}>
+      <PageLayout company={company} isLastPage={false}>
 
         <Section>
           <Typography fontWeight="bold">10. Travel</Typography>
@@ -490,7 +474,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       </PageLayout>
 
       {/* ================= PAGE 4 (Annexure I) ================= */}
-      <PageLayout company={company}>
+      <PageLayout company={company} isLastPage={false}>
 
         <Typography
           align="center"
@@ -574,7 +558,7 @@ const CubeageOffer = ({ company = {}, data = {} }) => {
       </PageLayout>
 
       {/* ================= PAGE 5 (Annexure II) ================= */}
-      <PageLayout company={company} isLastPage>
+      <PageLayout company={company} isLastPage={true}>
 
         <Typography
           align="center"
