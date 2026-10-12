@@ -250,6 +250,8 @@ export const buildCreateProfilePayload = (formData, selectedDocuments = []) => {
     joiningDate:
       formData.joiningDate || null,
 
+    lastWorkingDate: formData.lastWorkingDate || null,
+
     // CTC
     joiningCTC:
       formData.joiningCTC != null

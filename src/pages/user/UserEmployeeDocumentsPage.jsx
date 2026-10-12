@@ -250,6 +250,7 @@ const UserEmployeeDocumentsPage = () => {
 
                 { label: "Offer Date", value: profileData?.offerDate },
                 { label: "Joining Date", value: profileData?.joiningDate },
+                { label: "Last Working Date", value: profileData?.lastWorkingDate },
 
                 { label: "Joining CTC", value: profileData?.joiningCTC },
                 { label: "Current CTC", value: profileData?.currentCTC },

@@ -1,61 +1,75 @@
 import axios from "axios";
+import ROUTES from "../constants/routes.constant";
 
 class ApiService {
-  constructor() {
-    // Base URL
-    this.baseURL = import.meta.env.VITE_API_URL;
+  // refreshUrl is set only for the Spring instance
+  constructor(baseURL = import.meta.env.VITE_API_URL, { refreshUrl = null } = {}) {
+    this.baseURL = baseURL;
+    this.refreshUrl = refreshUrl;
+    this.refreshPromise = null;
 
-    // Axios instance
     this.api = axios.create({
-      baseURL: this.baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // ❌ Removed withCredentials (we are using JWT headers, not cookies)
+      baseURL,
+      headers: { "Content-Type": "application/json" },
+      withCredentials: !!refreshUrl, // needed so the browser stores/sends the refresh cookie
     });
 
-    // ================= REQUEST INTERCEPTOR =================
     this.api.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("token");
-
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-
+        if (token) config.headers.Authorization = `Bearer ${token}`;
         return config;
       },
       (error) => Promise.reject(error)
     );
 
-    // ================= RESPONSE INTERCEPTOR =================
     this.api.interceptors.response.use(
-      (response) => {
-        return response.data; // Always return clean data
-      },
-      (error) => {
-        // 🔥 Handle Unauthorized (Token expired / invalid)
-        if (error.response?.status === 401) {
+      (response) => response.data,
+      async (error) => {
+        const original = error.config;
+        const status = error.response?.status;
+        const isAuthCall =
+          original?.url?.includes("/auth/login") ||
+          original?.url?.includes("/auth/refresh");
 
-          console.warn("Unauthorized!");
-
-          console.log(
-            "Token:",
-            localStorage.getItem("token")
-          );
-
-          // TEMPORARY
-          // window.location.href = "/login";
+        if (status === 401 && this.refreshUrl && original && !original._retry && !isAuthCall) {
+          original._retry = true;
+          try {
+            await this.refreshAccessToken();
+            return this.api(original); // request interceptor attaches the new token
+          } catch (refreshError) {
+            this.forceLogout();
+            return Promise.reject(error);
+          }
         }
 
-        // 🔥 Handle Forbidden
-        if (error.response?.status === 403) {
-          console.error("Access denied (403)");
-        }
-
+        if (status === 403) console.error("Access denied (403)");
         return Promise.reject(error);
       }
     );
+  }
+
+  refreshAccessToken() {
+    // one refresh at a time, even if several requests fail together
+    if (!this.refreshPromise) {
+      this.refreshPromise = axios
+        .post(this.baseURL + this.refreshUrl, {}, { withCredentials: true })
+        .then((res) => {
+          const { accessToken, user } = res.data.data;
+          localStorage.setItem("token", accessToken);
+          localStorage.setItem("user", JSON.stringify(user));
+        })
+        .finally(() => {
+          this.refreshPromise = null;
+        });
+    }
+    return this.refreshPromise;
+  }
+
+  forceLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = ROUTES.LOGIN;
   }
 
   // ================= GET =================

@@ -5,7 +5,6 @@ import {
 } from "../../components/constant/publicData/mockData";
 import { FiEye } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
-// import { buildCreateProfilePayload } from "../../utils/buildCreateProfilePayload";
 import { FiZap } from "react-icons/fi";
 import { FiFileText } from "react-icons/fi";
 import { FiAlertTriangle } from "react-icons/fi";
@@ -55,6 +54,7 @@ const basicFields = [
 
   { name: "offerDate", label: "Offer Date", type: "date", required: true },
   { name: "joiningDate", label: "Joining Date", type: "date", required: true },
+  { name: "lastWorkingDate", label: "Last Working Date", type: "date", required: false },
 
   { name: "joiningCTC", label: "Joining CTC", type: "text", required: true },
   { name: "salary", label: "Current CTC", type: "text", required: true },
@@ -234,6 +234,9 @@ const UserDocumentFormPage = () => {
         employeeData.joiningDate ||
         employeeData.doj || "",
 
+      lastWorkingDate:
+        employeeData.lastWorkingDate || "",
+
       joiningCTC:
         employeeData.joiningCTC ||
         employeeData.CTC || "",
@@ -355,7 +358,8 @@ const UserDocumentFormPage = () => {
           experienceLetterData.issueDate || "",
         relievingDate:
           employeeData.experience_letter?.relievingDate ||
-          experienceLetterData.relievingDate || "",
+          experienceLetterData.relievingDate ||
+          employeeData.lastWorkingDate || "",
         conduct:
           employeeData.experience_letter?.conduct ||
           experienceLetterData.conduct ||
@@ -366,7 +370,8 @@ const UserDocumentFormPage = () => {
       relieving_letter: {
         lastWorkingDay:
           employeeData.relieving_letter?.lastWorkingDay ||
-          relievingLetterData.relievingDate || "",
+          relievingLetterData.relievingDate ||
+          employeeData.lastWorkingDate || "",
         issueDate:
           employeeData.relieving_letter?.issueDate ||
           relievingLetterData.issueDate || "",
@@ -465,6 +470,21 @@ const UserDocumentFormPage = () => {
           ...(prev.appointment_letter || {}),
           reportingManager,
         };
+      }
+
+      if (name === "lastWorkingDate") {
+        // only overwrite if the letter's date is empty or was auto-filled earlier,
+        // so a date the user typed in manually isn't clobbered
+        const sync = (letter = {}, keys) => {
+          const next = { ...letter };
+          keys.forEach((k) => {
+            if (!letter[k] || letter[k] === prev.lastWorkingDate) next[k] = value;
+          });
+          return next;
+        };
+
+        updated.experience_letter = sync(prev.experience_letter, ["relievingDate"]);
+        updated.relieving_letter = sync(prev.relieving_letter, ["relievingDate", "lastWorkingDay"]);
       }
 
       return updated;
@@ -757,8 +777,6 @@ const UserDocumentFormPage = () => {
         documentData: mappedDocumentData,
       };
 
-      console.log("updateProfileService userId =", userId);
-
       const response = isEditMode
         ? await updateProfileService(userId, updatePayload) // ✅ use updatePayload
         : await createProfileService(payload);              // ✅ create uses original payload
@@ -775,7 +793,7 @@ const UserDocumentFormPage = () => {
         message: response?.message,
       };
     } catch (error) {
-      console.error("SAVE PROFILE ERROR:", error);
+      console.error("SAVE PROFILE ERROR:", error?.message);
 
       return {
         success: false,
@@ -829,9 +847,9 @@ const UserDocumentFormPage = () => {
           value = formData.offerType;
         }
 
-        if (field.required && shouldShowField(field)) {
+        if (field.required && shouldShowField(field, docKey)) {
           const error = validateField(field.name, value);
-          if (error) newErrors[field.name] = error;
+          if (error) newErrors[`${docKey}.${field.name}`] = error;
         }
       });
     });
@@ -839,7 +857,6 @@ const UserDocumentFormPage = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      // console.log("VALIDATION FAILED:", newErrors);
       setShowValidationPopup(true);
       return;
     }
@@ -972,6 +989,7 @@ const UserDocumentFormPage = () => {
     // ✅ DOJ fix
     enrichedFormData.doj = formData.joiningDate || formData.doj || "";
     enrichedFormData.joiningDate = formData.joiningDate || formData.doj || "";
+    enrichedFormData.lastWorkingDate = formData.lastWorkingDate || "";
 
     // ✅ internship stipend override (must come AFTER salary defaults)
     if (formData?.internship_certificate?.stipend) {
@@ -1007,13 +1025,7 @@ const UserDocumentFormPage = () => {
     payload.doj = payload.doj || payload.joiningDate || formData.joiningDate;
 
     payload.joiningDate = payload.joiningDate || payload.doj;
-    // ✅ store payload temporarily
 
-    // ✅ show popup instead of navigating
-    setShowGeneratePopup(true);
-
-    // ✅ Fix the salary slip validation in handleSave
-    // ✅ First do salary slip validation
     const freshMonths = [];
     if (isSalarySlipSelected()) {
       if (!formData.salarySlipStartMonth || !formData.salarySlipEndMonth) {
@@ -1044,9 +1056,6 @@ const UserDocumentFormPage = () => {
       setSalarySlipMonths(generated); // ✅ update state too
     }
 
-    // ✅ Only show popup after validation passes
-    setShowGeneratePopup(true);
-
     const enrichedDocs = docsToProcess.map((doc) => {
       const fullDoc = documentTypes.find((d) => d.id === doc.id);
       return fullDoc; // must include template
@@ -1064,11 +1073,10 @@ const UserDocumentFormPage = () => {
     // SAVE PROFILE TO BACKEND
     const saveResponse = await saveProfileToBackend(profilePayload);
 
-    console.log("SAVE RESPONSE");
-    console.log(saveResponse);
     console.log(saveResponse.data);
 
     if (!saveResponse.success) {
+      alert(saveResponse.message || "Failed to save profile. Please try again.");
       return;
     }
 
@@ -1109,6 +1117,13 @@ const UserDocumentFormPage = () => {
     }
   }, [formData.salarySlipStartMonth, formData.salarySlipEndMonth]);
 
+  const formatErrorLabel = (key) => {
+    const pretty = (s) => s.replace(/_/g, " ").replace(/([A-Z])/g, " $1").trim();
+    if (!key.includes(".")) return pretty(key);
+    const [docKey, fieldName] = key.split(".");
+    return `${pretty(docKey)} · ${pretty(fieldName)}`;
+  };
+
   const focusField = (fieldName) => {
     const field = document.querySelector(`[name="${fieldName}"]`);
 
@@ -1126,7 +1141,9 @@ const UserDocumentFormPage = () => {
 
   /* ---------------- FIELD RENDER ---------------- */
   const renderField = (field, docKey = null) => {
-    const hasError = errors[field.name];
+    // basic fields keep their plain name; document fields become "docKey.fieldName"
+    const errorKey = docKey ? `${docKey}.${field.name}` : field.name;
+    const hasError = errors[errorKey];
 
     const baseClass = `
   w-full h-[42px] px-4 rounded-2xl
@@ -1135,17 +1152,17 @@ const UserDocumentFormPage = () => {
   transition-all duration-300
   ${hasError
         ? `
-        border-red-400
-        bg-red-50/60
-        shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
-        focus:ring-red-300
-        animate-[shake_0.25s_ease-in-out]
-      `
+      border-red-400
+      bg-red-50/60
+      shadow-[0_0_0_4px_rgba(239,68,68,0.08)]
+      focus:ring-red-300
+      animate-[shake_0.25s_ease-in-out]
+    `
         : `
-        border-[#E2E8F0]
-        focus:border-[#6366F1]
-        focus:ring-[#6366F1]/20
-      `
+      border-[#E2E8F0]
+      focus:border-[#6366F1]
+      focus:ring-[#6366F1]/20
+    `
       }
   focus:ring-4
 `;
@@ -1159,20 +1176,6 @@ const UserDocumentFormPage = () => {
       return null;
     }
 
-    // if (field.readOnly) {
-    //   return (
-    //     <input
-    //       name={field.name}
-    //       type="text"
-    //       className={`${baseClass} bg-[#F1F5F9] text-[#64748B] cursor-not-allowed`}
-    //       value={value ?? ""}
-    //       placeholder="Auto-generated"
-    //       readOnly
-    //       disabled
-    //     />
-    //   );
-    // }
-
     // ✅ CHANGE HANDLER FIX
     const handleValueChange = (val) => {
       if (docKey) {
@@ -1183,6 +1186,12 @@ const UserDocumentFormPage = () => {
             [field.name]: val,
           },
         }));
+
+        // re-check (or clear) this document field's error as the user types
+        setErrors((prev) => ({
+          ...prev,
+          [errorKey]: field.required ? validateField(field.name, val) : "",
+        }));
       } else {
         handleChange(field.name, val);
       }
@@ -1191,10 +1200,9 @@ const UserDocumentFormPage = () => {
     if (field.type === "select") {
       return (
         <select
-          name={field.name}
+          name={errorKey}
           className={baseClass}
           value={value ?? ""}
-          placeholder={`Enter ${field.label}`}
           onChange={(e) => {
             handleValueChange(e.target.value);
 
@@ -1226,7 +1234,7 @@ const UserDocumentFormPage = () => {
     if (field.type === "textarea") {
       return (
         <textarea
-          name={field.name}
+          name={errorKey}
           className={`${baseClass} h-[80px]`}
           value={value ?? ""}
           placeholder={`Enter ${field.label}`}
@@ -1237,7 +1245,7 @@ const UserDocumentFormPage = () => {
 
     return (
       <input
-        name={field.name}
+        name={errorKey}
         type={field.type}
         className={baseClass}
         value={value ?? ""}
@@ -1251,59 +1259,19 @@ const UserDocumentFormPage = () => {
     ? filteredDocuments
     : selectedDocs;
 
-  // const validateField = (name, value) => {
-  //   if (!value) return "Please fill the required fields";
-
-  //   switch (name) {
-  //     case "employeeName":
-  //     case "fullName":
-  //       if (!/^[A-Za-z\s]+$/.test(value)) return "Only alphabets allowed";
-  //       break;
-
-  //     case "mobile":
-  //       if (!/^[6-9]\d{9}$/.test(value))
-  //         return "Enter valid 10-digit mobile number";
-  //       break;
-
-  //     case "email":
-  //     case "employeeEmail":
-  //       if (!/^\S+@\S+\.\S+$/.test(value)) return "Enter valid email address";
-  //       break;
-
-  //     case "pan":
-  //       if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value))
-  //         return "Enter valid PAN (ABCDE1234F)";
-  //       break;
-
-  //     case "accountNo":
-  //       if (!/^\d{9,18}$/.test(value))
-  //         return "Account number must be 9-18 digits";
-  //       break;
-
-  //     case "joiningCTC":
-  //     case "salary":
-  //       if (isNaN(value) || Number(value) <= 0) return "Enter valid amount";
-  //       break;
-
-  //     case "dob":
-  //       if (new Date(value) > new Date()) return "DOB cannot be future date";
-  //       break;
-
-  //     case "joiningDate":
-  //     case "offerDate":
-  //       if (isNaN(new Date(value))) return "Invalid date";
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-
-  //   return "";
-  // };
-
   const validateField = (name, value) => {
+
+    if (name === "lastWorkingDate") {
+      if (!value) return "";
+      if (isNaN(new Date(value))) return "Invalid date";
+      if (formData.joiningDate && value < formData.joiningDate)
+        return "Last working date cannot be before joining date";
+      return "";
+    }
+
     // Bank name and account number are temporarily optional
     if (name === "bankName" || name === "accountNo") {
+
       if (!value) return "";
 
       // Only validate account number if user entered something
@@ -1440,6 +1408,20 @@ const UserDocumentFormPage = () => {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
+      <style>
+        {`
+      @keyframes popup {
+        from { opacity: 0; transform: translateY(20px) scale(0.96); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        50% { transform: translateX(2px); }
+        75% { transform: translateX(-2px); }
+      }
+    `}
+      </style>
       <div className="max-w-[1350px] mx-auto">
         {/* ---------------- DOCUMENT SELECTOR ---------------- */}
         <div className="mb-6">
@@ -1679,7 +1661,6 @@ const UserDocumentFormPage = () => {
                               )}
                               onChange={(e) => {
                                 const val = e.target.value;
-                                console.log("Typing:", month.value, val);
 
                                 setFormData((prev) => {
                                   const updated = {
@@ -1690,10 +1671,6 @@ const UserDocumentFormPage = () => {
                                     },
                                   };
 
-                                  // console.log(
-                                  //   "Updated State:",
-                                  //   updated.salaryWorkdays,
-                                  // );
                                   return updated;
                                 });
                               }}
@@ -1734,26 +1711,26 @@ const UserDocumentFormPage = () => {
                     </h3>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                      {filteredFields.map((field) =>
-                        shouldShowField(field, docKey) ? (
+                      {filteredFields.map((field) => {
+                        if (!shouldShowField(field, docKey)) return null;
+
+                        const errorKey = `${docKey}.${field.name}`;
+
+                        return (
                           <div key={field.name} className="flex flex-col gap-1">
                             <label className="text-xs font-medium text-[#475569]">
                               {field.label}
-                              {field.required && (
-                                <span className="text-red-500"> *</span>
-                              )}
+                              {field.required && <span className="text-red-500"> *</span>}
                             </label>
 
                             {renderField(field, docKey)}
 
-                            {errors[field.name] && (
-                              <p className="text-red-500 text-[11px] mt-1">
-                                {errors[field.name]}
-                              </p>
+                            {errors[errorKey] && (
+                              <p className="text-red-500 text-[11px] mt-1">{errors[errorKey]}</p>
                             )}
                           </div>
-                        ) : null,
-                      )}
+                        );
+                      })}
                     </div>
                   </div>
                 );
@@ -1904,7 +1881,7 @@ const UserDocumentFormPage = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-[14px] font-semibold text-[#1E293B] capitalize">
-                          {field.replace(/([A-Z])/g, " $1")}
+                          {formatErrorLabel(field)}
                         </p>
 
                         <p className="text-[12px] text-red-500 mt-1">
@@ -1988,12 +1965,6 @@ const UserDocumentFormPage = () => {
 
                 <button
                   onClick={() => {
-                    console.log("Generate Document:", {
-                      formData,
-                      selectedDocs,
-                      salarySlipMonths,
-                      selectedCompany, // 👈 check this
-                    });
 
                     if (!selectedCompany) {
                       alert("Please select a company");
@@ -2066,7 +2037,6 @@ const UserDocumentFormPage = () => {
                 <button
                   onClick={() => {
                     setShowSavePopup(false);
-                    // console.log("Profile Saved:", formData);
                   }}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0E145E] to-[#B37BD6] text-white text-sm font-medium shadow-[0_6px_18px_rgba(99,102,241,0.25)] hover:shadow-[0_10px_25px_rgba(99,102,241,0.35)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
                 >
@@ -2079,28 +2049,6 @@ const UserDocumentFormPage = () => {
       )}
     </div>
   );
-  <style>
-    {`
-    @keyframes popup {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0px) scale(1);
-      }
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0px); }
-      25% { transform: translateX(-2px); }
-      50% { transform: translateX(2px); }
-      75% { transform: translateX(-2px); }
-      100% { transform: translateX(0px); }
-    }
-  `}
-  </style>;
 };
 
 export default UserDocumentFormPage;
