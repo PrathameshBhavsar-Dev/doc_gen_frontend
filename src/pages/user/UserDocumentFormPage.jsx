@@ -84,6 +84,10 @@ const basicFields = [
   },
 ];
 
+const DEFAULT_WORK_LOCATION = "Pune";
+const DEFAULT_WORK_HOURS = "9";
+const DEFAULT_HANDOVER_STATUS = "Completed";
+
 // code → reporting manager
 const MANAGER_BY_COMPANY_CODE = {
   SMDS: "Sanjay Kumar",     // SmartMatrix Digital Services
@@ -130,8 +134,19 @@ const getReportingManager = (companyName) => {
 };
 
 const UserDocumentFormPage = () => {
-  const [formData, setFormData] = useState({});
-  const location = useLocation();
+  const [formData, setFormData] = useState({
+    offer_letter: {
+      workLocation: DEFAULT_WORK_LOCATION,
+      workHours: DEFAULT_WORK_HOURS,
+    },
+    appointment_letter: {
+      workLocation: DEFAULT_WORK_LOCATION,
+      workHours: DEFAULT_WORK_HOURS,
+    },
+    relieving_letter: {
+      handoverStatus: DEFAULT_HANDOVER_STATUS,
+    },
+  }); const location = useLocation();
   const isEditMode = location.state?.isEditMode || false;
   const userId = location.state?.userId || location.state?.employeeData?.id; // ✅ fallback to id
   const [previewData, setPreviewData] = useState({});
@@ -286,15 +301,16 @@ const UserDocumentFormPage = () => {
           offerLetterData.employmentType ||
           "",
 
-        workLocation:
-          employeeData.offer_letter?.workLocation ||
+        location:
+          employeeData.offer_letter?.location ||
+          offerLetterData.location ||
           offerLetterData.workLocation ||
-          "",
+          DEFAULT_WORK_LOCATION,
 
         workHours:
           employeeData.offer_letter?.workHours ||
           offerLetterData.workHours ||
-          "",
+          DEFAULT_WORK_HOURS,
 
         reportingManager:
           employeeData.offer_letter?.reportingManager ||
@@ -321,13 +337,18 @@ const UserDocumentFormPage = () => {
           employeeData.appointment_letter?.workLocation ||
           employeeData.workLocation ||
           appointmentLetterData.workLocation ||
-          "",
+          DEFAULT_WORK_LOCATION,
 
         reportingManager:
           employeeData.appointment_letter?.reportingManager ||
           appointmentLetterData.reportingManager ||
           getReportingManager(companyName) ||
           "",
+
+        workHours:
+          employeeData.appointment_letter?.workHours ||
+          appointmentLetterData.workHours ||
+          DEFAULT_WORK_HOURS,
       },
 
       // ✅ confirmation_letter
@@ -355,7 +376,9 @@ const UserDocumentFormPage = () => {
       experience_letter: {
         issueDate:
           employeeData.experience_letter?.issueDate ||
-          experienceLetterData.issueDate || "",
+          experienceLetterData.issueDate ||
+          employeeData.lastWorkingDate ||
+          "",
         relievingDate:
           employeeData.experience_letter?.relievingDate ||
           experienceLetterData.relievingDate ||
@@ -372,11 +395,17 @@ const UserDocumentFormPage = () => {
           employeeData.relieving_letter?.lastWorkingDay ||
           relievingLetterData.relievingDate ||
           employeeData.lastWorkingDate || "",
-        issueDate:
-          employeeData.relieving_letter?.issueDate ||
-          relievingLetterData.issueDate || "",
         ...relievingLetterData,
         ...employeeData.relieving_letter,
+        issueDate:
+          employeeData.relieving_letter?.issueDate ||
+          relievingLetterData.issueDate ||
+          employeeData.lastWorkingDate ||
+          "",
+        handoverStatus:
+          employeeData.relieving_letter?.handoverStatus ||
+          relievingLetterData.handoverStatus ||
+          DEFAULT_HANDOVER_STATUS,
       },
 
       // ✅ internship_certificate
@@ -473,8 +502,6 @@ const UserDocumentFormPage = () => {
       }
 
       if (name === "lastWorkingDate") {
-        // only overwrite if the letter's date is empty or was auto-filled earlier,
-        // so a date the user typed in manually isn't clobbered
         const sync = (letter = {}, keys) => {
           const next = { ...letter };
           keys.forEach((k) => {
@@ -483,8 +510,15 @@ const UserDocumentFormPage = () => {
           return next;
         };
 
-        updated.experience_letter = sync(prev.experience_letter, ["relievingDate"]);
-        updated.relieving_letter = sync(prev.relieving_letter, ["relievingDate", "lastWorkingDay"]);
+        updated.experience_letter = sync(prev.experience_letter, [
+          "issueDate",
+          "relievingDate",
+        ]);
+        updated.relieving_letter = sync(prev.relieving_letter, [
+          "issueDate",
+          "relievingDate",
+          "lastWorkingDay",
+        ]);
       }
 
       return updated;
