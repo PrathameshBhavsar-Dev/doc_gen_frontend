@@ -118,8 +118,8 @@ const SmartMatrixOffer = ({ company, data }) => {
   const hraMonthly = round0(monthlyCTC * 0.18);
   const daMonthly = round0(monthlyCTC * 0.12);
   const specialMonthly = round0(monthlyCTC * 0.16);
-  // const foodMonthly = round0(monthlyCTC * 0.06);
-  const foodMonthly = 3800;
+  const foodMonthly = round0(monthlyCTC * 0.06);
+  // const foodMonthly = 3800;
 
   // ================= ADJUSTED BASIC =================
   const basicMonthly = round0(
